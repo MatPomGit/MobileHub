@@ -173,6 +173,7 @@ nav{
 .hs-n{font-size:1.55rem;font-weight:800;color:var(--jade);line-height:1}
 .hs-l{font-size:11px;color:var(--t3);margin-top:5px}
 @media(max-width:560px){.hs{padding:14px 18px}.hs-n{font-size:1.25rem}}
+@media(max-width:900px){.hero-stats .hs:nth-child(n+5){border-top:1px solid var(--border)}}
 
 /* ─── SECTION LABELS ────────────────────────────────────────────── */
 .eyebrow{
@@ -457,6 +458,135 @@ footer p{font-size:12px;color:var(--t4)}
 .foot-links a{font-size:12px;color:var(--t4);transition:color .2s}
 .foot-links a:hover{color:var(--jade)}
 
+/* ─── TOOLS ─────────────────────────────────────────────────────── */
+#tools{background:var(--bg0)}
+.tools-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
+}
+@media(max-width:900px){.tools-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:560px){.tools-grid{grid-template-columns:1fr}}
+
+.tool-card{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--rl);
+  padding:26px 22px;
+  position:relative;overflow:hidden;
+  transition:transform .2s,box-shadow .2s,border-color .2s;
+}
+.tool-card:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--border-m)}
+.tool-card::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
+  background:var(--tc-g,linear-gradient(90deg,var(--jade),var(--cyan)));
+  opacity:0;transition:opacity .25s;
+}
+.tool-card:hover::after{opacity:1}
+.tool-icon{
+  font-size:32px;margin-bottom:14px;display:block;
+  filter:drop-shadow(0 2px 8px rgba(0,0,0,.4));
+}
+.tool-card h3{font-size:.97rem;font-weight:800;color:var(--t1);margin-bottom:8px}
+.tool-card p{font-size:.86rem;line-height:1.75;margin-bottom:14px}
+.tool-badge{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11px;font-weight:700;
+  background:rgba(0,212,126,.08);color:var(--jade);
+  border:1px solid rgba(0,212,126,.2);
+  padding:3px 10px;border-radius:5px;
+}
+.tool-badge.blue{background:rgba(79,157,255,.08);color:var(--blue);border-color:rgba(79,157,255,.2)}
+.tool-badge.purple{background:rgba(160,124,252,.08);color:var(--purple);border-color:rgba(160,124,252,.2)}
+.tool-badge.amber{background:rgba(255,186,68,.08);color:var(--amber);border-color:rgba(255,186,68,.2)}
+.tool-badge.cyan{background:rgba(51,207,218,.08);color:var(--cyan);border-color:rgba(51,207,218,.2)}
+.tool-badge.rose{background:rgba(255,84,112,.08);color:var(--rose);border-color:rgba(255,84,112,.2)}
+
+/* ─── RESOURCES ─────────────────────────────────────────────────── */
+#resources{background:var(--bg1)}
+.res-grid{
+  display:grid;grid-template-columns:repeat(2,1fr);gap:16px;
+}
+@media(max-width:700px){.res-grid{grid-template-columns:1fr}}
+
+.res-group{
+  background:var(--bg3);
+  border:1px solid var(--border);
+  border-radius:var(--rl);
+  overflow:hidden;
+}
+.res-group-head{
+  display:flex;align-items:center;gap:10px;
+  padding:16px 20px;
+  border-bottom:1px solid var(--border);
+  background:rgba(255,255,255,.025);
+}
+.res-group-head span{font-size:18px}
+.res-group-head h4{font-size:.9rem;font-weight:800;color:var(--t1)}
+.res-list{list-style:none;padding:8px 0}
+.res-list li a{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 20px;font-size:.88rem;color:var(--t2);
+  transition:background .15s,color .15s;
+  gap:8px;
+}
+.res-list li a:hover{background:rgba(255,255,255,.03);color:var(--jade)}
+.res-list li a::after{
+  content:'↗';font-size:11px;color:var(--t4);flex-shrink:0;transition:color .15s;
+}
+.res-list li a:hover::after{color:var(--jade)}
+.res-tag{
+  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
+  padding:2px 7px;border-radius:4px;flex-shrink:0;
+}
+.res-tag.free{background:rgba(0,212,126,.1);color:var(--jade);border:1px solid rgba(0,212,126,.2)}
+.res-tag.doc{background:rgba(79,157,255,.1);color:var(--blue);border:1px solid rgba(79,157,255,.2)}
+.res-tag.tool{background:rgba(160,124,252,.1);color:var(--purple);border:1px solid rgba(160,124,252,.2)}
+.res-tag.api{background:rgba(255,186,68,.1);color:var(--amber);border:1px solid rgba(255,186,68,.2)}
+
+/* ─── ROADMAP EXPANDED ──────────────────────────────────────────── */
+.rm-sections{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
+  margin-top:18px;margin-bottom:18px;
+}
+@media(max-width:720px){.rm-sections{grid-template-columns:1fr}}
+
+.rm-section{
+  background:rgba(255,255,255,.025);
+  border:1px solid var(--border);
+  border-radius:10px;
+  padding:14px 16px;
+}
+.rm-section-label{
+  display:flex;align-items:center;gap:6px;
+  font-size:10px;font-weight:800;letter-spacing:.10em;
+  text-transform:uppercase;margin-bottom:8px;
+}
+.rm-section-label .dot{
+  width:6px;height:6px;border-radius:50%;flex-shrink:0;
+}
+.rm-section.learns .rm-section-label{color:#86EFAC}
+.rm-section.learns .dot{background:#86EFAC}
+.rm-section.why   .rm-section-label{color:var(--amber)}
+.rm-section.why   .dot{background:var(--amber)}
+.rm-section.when  .rm-section-label{color:var(--blue)}
+.rm-section.when  .dot{background:var(--blue)}
+
+.rm-section p{font-size:.83rem;color:var(--t2);line-height:1.75;margin:0}
+.rm-section ul{
+  list-style:none;padding:0;margin:0;
+  display:flex;flex-direction:column;gap:4px;
+}
+.rm-section ul li{
+  font-size:.82rem;color:var(--t2);line-height:1.6;
+  padding-left:14px;position:relative;
+}
+.rm-section ul li::before{
+  content:'›';position:absolute;left:0;
+  color:var(--t4);font-weight:700;
+}
+.rm-divider{
+  width:100%;height:1px;background:var(--border);margin:16px 0;
+}
+
 /* ─── BACK TOP ──────────────────────────────────────────────────── */
 #btt{
   position:fixed;bottom:26px;right:26px;z-index:100;
@@ -484,6 +614,8 @@ footer p{font-size:12px;color:var(--t4)}
       <a href="#roadmap">Roadmap</a>
       <a href="#code">Kod</a>
       <a href="#concepts">Pojęcia</a>
+      <a href="#tools">Narzędzia</a>
+      <a href="#resources">Zasoby</a>
       <a href="#faq">FAQ</a>
     </div>
     <span class="nav-badge">Kotlin + Jetpack Compose</span>
@@ -517,10 +649,12 @@ footer p{font-size:12px;color:var(--t4)}
     </div>
 
     <div class="hero-stats">
-      <div class="hs"><div class="hs-n">6</div><div class="hs-l">ćwiczeń w kursie</div></div>
+      <div class="hs"><div class="hs-n">6</div><div class="hs-l">laboratoriów</div></div>
       <div class="hs"><div class="hs-n">Kotlin</div><div class="hs-l">oficjalny język</div></div>
       <div class="hs"><div class="hs-n">MVVM</div><div class="hs-l">architektura</div></div>
       <div class="hs"><div class="hs-n">Compose</div><div class="hs-l">deklaratywny UI</div></div>
+      <div class="hs"><div class="hs-n">Room</div><div class="hs-l">lokalna baza danych</div></div>
+      <div class="hs"><div class="hs-n">Retrofit</div><div class="hs-l">sieć / REST API</div></div>
     </div>
 
   </div>
@@ -546,7 +680,7 @@ footer p{font-size:12px;color:var(--t4)}
             <h3>Ćwiczenie 1 — Podstawy Kotlina i pierwsze @Composable</h3>
             <span class="rm-dur">Lab 1</span>
           </div>
-          <p>Instalacja Android Studio, konfiguracja emulatora (AVD), struktura projektu. Pierwsze funkcje @Composable — deklaratywne opisywanie UI zamiast imperatywnego zarządzania widokami. Podstawy składni Kotlin.</p>
+          <p>Instalacja Android Studio, konfiguracja emulatora (AVD), struktura projektu. Pierwsze funkcje @Composable — deklaratywne opisywanie UI zamiast imperatywnego zarządzania widokami. Podstawy składni Kotlin: niemutowalność, lambdy, null safety. Budujesz pierwszą interaktywną listę zadań (TaskApp) z lokalnym stanem.</p>
           <div class="chips">
             <span class="chip">val / var</span>
             <span class="chip">fun / lambda</span>
@@ -554,6 +688,39 @@ footer p{font-size:12px;color:var(--t4)}
             <span class="chip">remember { }</span>
             <span class="chip">mutableStateOf</span>
             <span class="chip">Column / Row / Box</span>
+            <span class="chip">LazyColumn</span>
+            <span class="chip">Modifier</span>
+          </div>
+          <div class="rm-divider"></div>
+          <div class="rm-sections">
+            <div class="rm-section learns">
+              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
+              <ul>
+                <li>Jak działa deklaratywny model UI — opisujesz stan, nie kolejność operacji</li>
+                <li>Różnica <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">val</code> vs <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">var</code> i dlaczego niemutowalność jest domyślna</li>
+                <li>Jak <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">remember { mutableStateOf() }</code> przechowuje stan między rekomposycjami</li>
+                <li>Budowanie layoutów z <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Column</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Row</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Box</code> i <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">LazyColumn</code></li>
+                <li>Kotlin: funkcje wyższego rzędu, trailing lambdy, string templates, data classes</li>
+              </ul>
+            </div>
+            <div class="rm-section why">
+              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
+              <ul>
+                <li>Compose to <strong style="color:var(--t1)">przyszłość UI na Androidzie</strong> — Google zamroziło stary system View, nowe API powstają tylko dla Compose</li>
+                <li>Stary system XML wymaga ręcznego synchronizowania widoków ze stanem przez <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">setText()</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">setVisibility()</code> — źródło ogromnej klasy bugów</li>
+                <li>Kotlin zastąpił Javę jako oficjalny język Androida w 2019 r. — null safety eliminuje NPE z definicji</li>
+                <li>Bez Lab 1 nie zrozumiesz żadnego kolejnego ćwiczenia — to fundament całego kursu</li>
+              </ul>
+            </div>
+            <div class="rm-section when">
+              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
+              <ul>
+                <li><strong style="color:var(--t1)">Każda aplikacja Android</strong> — @Composable jest podstawowym budulcem każdego ekranu</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">remember</code> i <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">mutableStateOf</code> używasz w każdym interaktywnym komponencie (pola tekstowe, checkboxy, rozwijane listy)</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">LazyColumn</code> zastępuje RecyclerView — używasz za każdym razem gdy lista ma więcej niż kilka elementów</li>
+                <li>Kotlin: codziennie — każda linia kodu w tym kursie jest napisana w Kotlinie</li>
+              </ul>
+            </div>
           </div>
           <div class="why-box">
             <strong>Dlaczego Compose, nie XML?</strong> Stary system XML wymaga ręcznego synchronizowania widoków ze stanem (findViewById, setText…). Compose opisuje <em>jak ekran wygląda przy danym stanie</em> — gdy stan się zmieni, framework sam przerysowuje co trzeba. Mniej kodu, mniej błędów.
@@ -569,7 +736,7 @@ footer p{font-size:12px;color:var(--t4)}
             <h3>Ćwiczenie 2 — Nawigacja i architektura MVVM</h3>
             <span class="rm-dur">Lab 2</span>
           </div>
-          <p>Wieloekranowe aplikacje z Navigation Compose. Wzorzec MVVM jako oficjalna architektura rekomendowana przez Google — separuje logikę (ViewModel) od wyglądu (Compose). StateFlow reaktywnie propaguje stan do UI.</p>
+          <p>Rozbudowa TaskApp o wiele ekranów — lista zadań, szczegóły zadania, ekran dodawania. Navigation Compose zarządza stosem ekranów i przekazywaniem argumentów. Wzorzec MVVM jako oficjalna architektura rekomendowana przez Google — <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">ViewModel</code> trzyma stan i logikę, <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">StateFlow</code> reaktywnie propaguje go do UI.</p>
           <div class="chips">
             <span class="chip">ViewModel</span>
             <span class="chip">MutableStateFlow</span>
@@ -577,6 +744,39 @@ footer p{font-size:12px;color:var(--t4)}
             <span class="chip">NavController</span>
             <span class="chip">NavHost</span>
             <span class="chip">UiState data class</span>
+            <span class="chip">composable { }</span>
+            <span class="chip">sealed Routes</span>
+          </div>
+          <div class="rm-divider"></div>
+          <div class="rm-sections">
+            <div class="rm-section learns">
+              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
+              <ul>
+                <li>Jak działa wzorzec MVVM: View (Compose) ← obserwuje ← ViewModel ← pobiera ← Model</li>
+                <li>Jak tworzyć jedną klasę <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">UiState</code> jako Single Source of Truth dla całego ekranu</li>
+                <li>Nawigacja między ekranami — <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">navController.navigate()</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">popBackStack()</code>, przekazywanie argumentów</li>
+                <li>Dlaczego <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">collectAsStateWithLifecycle()</code> a nie <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">collectAsState()</code></li>
+                <li>Event hoisting — zdarzenia płyną w górę, stan spływa w dół</li>
+              </ul>
+            </div>
+            <div class="rm-section why">
+              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
+              <ul>
+                <li>Bez ViewModel stan resetuje się przy <strong style="color:var(--t1)">każdej rotacji ekranu</strong> — podstawowy problem bez MVVM</li>
+                <li>Bez separacji logika biznesowa miesza się z kodem UI — niemożliwe do przetestowania i utrudnione do zmiany</li>
+                <li>Każda aplikacja z więcej niż jednym ekranem potrzebuje navigation — bez Nav Compose trzeba by zarządzać stosem fragmentów ręcznie</li>
+                <li>StateFlow gwarantuje że UI zawsze widzi <strong style="color:var(--t1)">aktualny stan</strong> — zero widoków które "nie odświeżyły się"</li>
+              </ul>
+            </div>
+            <div class="rm-section when">
+              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
+              <ul>
+                <li><strong style="color:var(--t1)">Każda aplikacja wieloekranowa</strong> — Navigation Compose to standard od 2021 r.</li>
+                <li>ViewModel — w każdym ekranie który ma jakikolwiek stan (formularze, listy, dane z API)</li>
+                <li>MVVM — architektura domyślna w każdym projekcie Google, wymagana w rekrutacjach Android</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">StateFlow</code> — zawsze gdy ViewModel musi poinformować UI o zmianie stanu</li>
+              </ul>
+            </div>
           </div>
           <div class="why-box">
             <strong>Dlaczego ViewModel?</strong> ViewModel przeżywa rotację ekranu — stan aplikacji nie resetuje się gdy obrócisz telefon. Dzięki separacji możesz testować logikę bez uruchamiania emulatora.
@@ -592,7 +792,7 @@ footer p{font-size:12px;color:var(--t4)}
             <h3>Ćwiczenie 3 — Room Database i Coroutines</h3>
             <span class="rm-dur">Lab 3</span>
           </div>
-          <p>Dane muszą przeżyć zamknięcie aplikacji. Room to warstwa abstrakcji nad SQLite — definiujesz tabele przez @Entity, zapytania przez @Dao. Kotlin Coroutines (suspend fun) i Flow pozwalają pisać asynchroniczny kod bez blokowania UI.</p>
+          <p>Dane TaskApp muszą przeżyć zamknięcie aplikacji — wchodzi Room. Room to warstwa abstrakcji nad SQLite: definiujesz tabele przez <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Entity</code>, zapytania przez <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Dao</code>, a Room generuje SQL i całą implementację za Ciebie. Kotlin Coroutines (<code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">suspend fun</code>) i <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code> pozwalają pisać asynchroniczny kod bez callbacks i bez blokowania wątku UI. Poznasz też migracje schematu — jak bezpiecznie zmieniać strukturę bazy.</p>
           <div class="chips">
             <span class="chip">@Entity</span>
             <span class="chip">@Dao + @Query</span>
@@ -600,6 +800,39 @@ footer p{font-size:12px;color:var(--t4)}
             <span class="chip">Flow&lt;List&lt;T&gt;&gt;</span>
             <span class="chip">suspend fun</span>
             <span class="chip">Migracje schematu</span>
+            <span class="chip">Repository pattern</span>
+            <span class="chip">TypeConverter</span>
+          </div>
+          <div class="rm-divider"></div>
+          <div class="rm-sections">
+            <div class="rm-section learns">
+              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
+              <ul>
+                <li>Jak Room mapuje klasy Kotlin na tabele SQLite przez adnotacje — zero ręcznego SQL dla CRUD</li>
+                <li>Dlaczego <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow&lt;List&lt;T&gt;&gt;</code> z DAO jest "żywym zapytaniem" — Room sam emituje nowe dane przy każdej zmianie tabeli</li>
+                <li>Co to jest <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">suspend fun</code> i jak Coroutines pozwalają czekać na I/O bez blokowania wątku UI</li>
+                <li>Wzorzec Repository — ViewModel nie wie czy dane pochodzą z bazy, z sieci czy z cache'u</li>
+                <li>Migracje schematu: jak dodawać kolumny do istniejącej bazy bez utraty danych użytkowników</li>
+              </ul>
+            </div>
+            <div class="rm-section why">
+              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
+              <ul>
+                <li>Bez trwałego magazynu <strong style="color:var(--t1)">dane znikają po zamknięciu aplikacji</strong> — Room to rozwiązanie tego fundamentalnego problemu</li>
+                <li>Operacje I/O na wątku UI powodują <strong style="color:var(--t1)">ANR (Application Not Responding)</strong> — system Android ubija aplikację po 5 sekundach blokady</li>
+                <li>Bez Coroutines trzeba używać Callback-ów lub RxJava — o rząd wielkości bardziej skomplikowane i podatne na błędy</li>
+                <li>Repository izoluje źródło danych — możesz później dodać cache sieciowy lub sync bez zmiany ViewModel</li>
+              </ul>
+            </div>
+            <div class="rm-section when">
+              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
+              <ul>
+                <li><strong style="color:var(--t1)">Każda aplikacja wymagająca trwałości danych</strong> — listy, historia, ustawienia złożone, dane offline</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">suspend fun</code> — przy każdym wywołaniu Room, Retrofit, pliku, lub innego I/O</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code> — gdy UI ma się automatycznie odświeżać po zmianie danych w bazie</li>
+                <li>Migracje — przy każdej zmianie struktury <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Entity</code> w opublikowanej aplikacji</li>
+              </ul>
+            </div>
           </div>
           <div class="why-box">
             <strong>Dlaczego Flow, nie LiveData?</strong> Flow jest częścią Kotlin Coroutines — działa na dowolnej platformie (nie tylko Android), obsługuje backpressure i ma bogatszy zestaw operatorów. LiveData był Androidowym obejściem problemu, Flow jest właściwym rozwiązaniem.
@@ -615,14 +848,47 @@ footer p{font-size:12px;color:var(--t4)}
             <h3>Ćwiczenie 4 — REST API, Retrofit i Coil</h3>
             <span class="rm-dur">Lab 4</span>
           </div>
-          <p>Komunikacja z serwerem przez HTTP. Retrofit + OkHttp = kompletny stos sieciowy. Gson parsuje JSON na Kotlin data classes. Sealed class Result&lt;T&gt; obsługuje błędy sieciowe bezpiecznie. Coil ładuje i cachuje obrazy z URL.</p>
+          <p>Budujesz nową aplikację — <strong>PokeApp</strong> — opartą na publicznym PokeAPI. Retrofit + OkHttp tworzy kompletny stos HTTP: definiujesz interfejs z adnotacjami (<code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@GET</code>, <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Query</code>, <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Path</code>), Retrofit generuje implementację. Gson parsuje JSON automatycznie. <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">sealed class Result&lt;T&gt;</code> obsługuje stany Success/Error/Loading jako typy — kompilator wymusza obsługę każdego przypadku. Coil ładuje, cachuje i wyświetla obrazy z URL jedną linią kodu.</p>
           <div class="chips">
             <span class="chip">Retrofit @GET/@POST</span>
             <span class="chip">OkHttp Interceptor</span>
             <span class="chip">Gson @SerializedName</span>
             <span class="chip">sealed Result&lt;T&gt;</span>
-            <span class="chip">AsyncImage</span>
+            <span class="chip">AsyncImage (Coil)</span>
+            <span class="chip">DTO → Domain Model</span>
+            <span class="chip">safeApiCall { }</span>
             <span class="chip">Offline-First</span>
+          </div>
+          <div class="rm-divider"></div>
+          <div class="rm-sections">
+            <div class="rm-section learns">
+              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
+              <ul>
+                <li>Jak Retrofit mapuje interfejs Kotlin na rzeczywiste żądania HTTP — Dynamic Proxy w runtime</li>
+                <li>Różnica między DTO (Data Transfer Object) a Domain Model — po co dwie warstwy danych</li>
+                <li>Jak <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">sealed class Result</code> i <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">when</code> eliminują niezwrócone błędy na poziomie kompilatora</li>
+                <li>Jak obsługiwać błędy sieciowe kategorycznie: brak internetu, timeout, błąd serwera (5xx), brak zasobu (404)</li>
+                <li>Jak <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">OkHttp HttpLoggingInterceptor</code> umożliwia debugowanie ruchu HTTP w Logcat</li>
+              </ul>
+            </div>
+            <div class="rm-section why">
+              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
+              <ul>
+                <li><strong style="color:var(--t1)">Niemal każda komercyjna aplikacja</strong> komunikuje się z backendem przez REST API — to podstawowa umiejętność</li>
+                <li>Bez Retrofit obsługa HTTP wymaga ręcznego tworzenia połączeń, parsowania JSON, obsługi kodów błędów — setki linii boilerplate</li>
+                <li>Bez DTO zmiany API natychmiast psują cały kod aplikacji — separacja izoluje zmiany do jednej warstwy</li>
+                <li>Niezwrócony błąd sieciowy = <strong style="color:var(--t1)">crash u użytkownika</strong> — sealed Result wymusza obsługę błędów w czasie kompilacji</li>
+              </ul>
+            </div>
+            <div class="rm-section when">
+              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
+              <ul>
+                <li><strong style="color:var(--t1)">Każda aplikacja łącząca się z serwerem</strong> — logowanie, pobieranie danych, wysyłanie formularzy</li>
+                <li>Retrofit — standard w każdym projekcie Android korzystającym z REST API (alternatywa: Ktor Client)</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">sealed Result</code> — za każdym razem gdy operacja może zakończyć się błędem (API, baza, plik)</li>
+                <li>Coil / AsyncImage — wszędzie gdzie URL obrazka pochodzi z serwera (awatary, zdjęcia produktów, miniatury)</li>
+              </ul>
+            </div>
           </div>
           <div class="why-box">
             <strong>Dlaczego sealed class Result, nie try-catch?</strong> try-catch w Kotlinie jest opcjonalne — kompilator nie wymusi jego użycia. Sealed class Result&lt;T&gt; jest zwracany jako typ — when(result) musi obsłużyć Success, Error i Loading. Pominięcie = błąd kompilacji, nie crash w runtime.
@@ -638,14 +904,47 @@ footer p{font-size:12px;color:var(--t4)}
             <h3>Ćwiczenie 5 — Hilt (DI) i testy jednostkowe</h3>
             <span class="rm-dur">Lab 5</span>
           </div>
-          <p>Dependency Injection eliminuje ręczne tworzenie i przekazywanie zależności. @HiltViewModel zastępuje fabryki ViewModel. Testy jednostkowe (JUnit + MockK) weryfikują logikę ViewModel bez emulatora. Turbine testuje Flow deterministycznie.</p>
+          <p>Refaktoryzacja TaskApp + PokeApp pod Hilt — Dependency Injection eliminuje ręczne tworzenie i przekazywanie zależności przez konstruktory. Hilt generuje graf zależności w czasie kompilacji: <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@HiltViewModel</code> zastępuje fabryki ViewModel. Następnie — testy jednostkowe: JUnit 5 + MockK weryfikują logikę ViewModel bez uruchamiania emulatora. Turbine umożliwia deterministyczne testowanie Flow krok po kroku.</p>
           <div class="chips">
             <span class="chip">@HiltAndroidApp</span>
             <span class="chip">@HiltViewModel</span>
-            <span class="chip">@Inject</span>
-            <span class="chip">@Module @Binds</span>
-            <span class="chip">JUnit + MockK</span>
-            <span class="chip">Turbine</span>
+            <span class="chip">@Inject constructor</span>
+            <span class="chip">@Module @Provides</span>
+            <span class="chip">@Binds (interfejsy)</span>
+            <span class="chip">JUnit 5 + MockK</span>
+            <span class="chip">Turbine (Flow)</span>
+            <span class="chip">TestCoroutineDispatcher</span>
+          </div>
+          <div class="rm-divider"></div>
+          <div class="rm-sections">
+            <div class="rm-section learns">
+              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
+              <ul>
+                <li>Co to jest Dependency Injection i dlaczego jest alternatywą dla <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">object</code> i singleton-ów ręcznych</li>
+                <li>Jak Hilt buduje graf zależności: <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Module</code> dostarcza instancje, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@InstallIn</code> określa zakres życia</li>
+                <li>Różnica <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Singleton</code> vs <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@ViewModelScoped</code> — kiedy jedna instancja, kiedy nowa per ViewModel</li>
+                <li>Jak pisać testy jednostkowe dla ViewModel: mocki zależności (MockK), asercje stanu, testowanie coroutine</li>
+                <li>Turbine: <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">awaitItem()</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">awaitComplete()</code> — testowanie strumieni Flow bez TimeMachine</li>
+              </ul>
+            </div>
+            <div class="rm-section why">
+              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
+              <ul>
+                <li>Bez DI klasy tworzą swoje zależności wewnętrznie — <strong style="color:var(--t1)">niemożliwe do przetestowania</strong> i trudne do zmiany</li>
+                <li>Bez testów każda zmiana kodu wymaga ręcznego uruchomienia aplikacji i klikania przez ekrany — nieefektywne i podatne na błędy</li>
+                <li>Hilt eliminuje <strong style="color:var(--t1)">błędy runtime</strong> związane z niezainicjalizowanymi zależnościami — cały graf budowany w czasie kompilacji</li>
+                <li>MockK pozwala testować ViewModel w izolacji — w 0,01 sekundy, bez emulatora, bez sieci, bez bazy</li>
+              </ul>
+            </div>
+            <div class="rm-section when">
+              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
+              <ul>
+                <li><strong style="color:var(--t1)">Każdy projekt produkcyjny</strong> — Hilt to de facto standard DI na Android od 2021 r.</li>
+                <li>DI szczególnie ważne przy wielu ekranach i wielu zależnościach — bez niego konstruktory ViewModel mają 5–10 parametrów</li>
+                <li>Testy jednostkowe — przy każdej logice biznesowej w ViewModel: obliczenia, filtrowanie, mapowanie</li>
+                <li>Turbine — zawsze gdy testujesz funkcje emitujące <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">StateFlow</code> lub <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code></li>
+              </ul>
+            </div>
           </div>
           <div class="why-box">
             <strong>Dlaczego DI?</strong> Bez DI klasa A tworzy klasę B wewnętrznie — niemożliwe do podmienienia w testach. Z DI klasa A dostaje B z zewnątrz — w testach wstrzykujesz FakeB lub MockB. Kod jest testowalny i elastyczny.
@@ -661,14 +960,47 @@ footer p{font-size:12px;color:var(--t4)}
             <h3>Ćwiczenie 6 — WorkManager, DataStore i publikacja</h3>
             <span class="rm-dur">Lab 6</span>
           </div>
-          <p>WorkManager wykonuje zadania w tle gwarantując ich ukończenie nawet po restarcie telefonu. DataStore zastępuje SharedPreferences reaktywnym magazynem danych. Na końcu: podpisanie APK, konfiguracja ProGuard i Google Play Console.</p>
+          <p>Ostatnie ćwiczenie domyka cały cykl życia aplikacji — od działania w tle po wdrożenie. WorkManager wykonuje zadania (sync danych, eksport, powiadomienia) gwarantując ukończenie nawet po restarcie telefonu. DataStore Preferences zastępuje stary <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">SharedPreferences</code> reaktywnym i type-safe magazynem ustawień. Na końcu: konfiguracja ProGuard, podpisanie APK kluczem release i publikacja w Google Play Console.</p>
           <div class="chips">
             <span class="chip">WorkManager</span>
             <span class="chip">CoroutineWorker</span>
+            <span class="chip">Constraints (sieć, bateria)</span>
             <span class="chip">DataStore Preferences</span>
             <span class="chip">Proto DataStore</span>
-            <span class="chip">ProGuard</span>
+            <span class="chip">ProGuard / R8</span>
+            <span class="chip">Keystore + APK signing</span>
             <span class="chip">Play Console</span>
+          </div>
+          <div class="rm-divider"></div>
+          <div class="rm-sections">
+            <div class="rm-section learns">
+              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
+              <ul>
+                <li>Jak WorkManager planuje zadania z ograniczeniami (<code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">NetworkType.CONNECTED</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">CHARGING</code>) i jak obserwować status pracy</li>
+                <li>Jak DataStore Preferences przechowuje proste ustawienia (motyw, język, onboarding) jako reaktywny <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code></li>
+                <li>Różnica między Preferences DataStore (klucz-wartość) a Proto DataStore (typowane protobufery)</li>
+                <li>Jak ProGuard/R8 minimalizuje i zaciemnia kod — zmniejszenie APK, utrudnienie inżynierii wstecznej</li>
+                <li>Cały proces publikacji: keystore, podpisanie, tory (internal → closed → open testing → production)</li>
+              </ul>
+            </div>
+            <div class="rm-section why">
+              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
+              <ul>
+                <li>Coroutine w <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">viewModelScope</code> jest <strong style="color:var(--t1)">anulowana przy zamknięciu aplikacji</strong> — WorkManager gwarantuje ukończenie bez względu na to co robi użytkownik</li>
+                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">SharedPreferences</code> jest synchroniczny i nie thread-safe — DataStore jest asynchroniczny, bezpieczny i integruje się z Flow</li>
+                <li>Bez ProGuard APK release zawiera pełne nazwy klas — łatwa inżynieria wsteczna i większy rozmiar pliku</li>
+                <li>Bez znajomości procesu publikacji aplikacja <strong style="color:var(--t1)">nigdy nie trafi do użytkowników</strong> — Play Console, polityki prywatności, podpisanie to nieodzowna wiedza</li>
+              </ul>
+            </div>
+            <div class="rm-section when">
+              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
+              <ul>
+                <li>WorkManager — synchronizacja w tle, czyszczenie cache, upload zdjęć, wysyłanie raportów analitycznych</li>
+                <li>DataStore — <strong style="color:var(--t1)">zamiast SharedPreferences zawsze</strong> w nowych projektach: motyw, język, onboarding, tokeny</li>
+                <li>ProGuard/R8 — obligatoryjnie w każdym release build, wyłączone tylko w debug</li>
+                <li>Play Console — przy każdej nowej wersji aplikacji przeznaczonej do dystrybucji użytkownikom</li>
+              </ul>
+            </div>
           </div>
           <div class="why-box">
             <strong>Dlaczego WorkManager, nie coroutine w tle?</strong> Coroutine w viewModelScope jest anulowana gdy użytkownik zamknie aplikację. WorkManager gwarantuje uruchomienie zadania nawet po restarcie systemu, respektuje ograniczenia baterii i sieci.
@@ -696,6 +1028,7 @@ footer p{font-size:12px;color:var(--t4)}
       <button class="tab"     data-p="room">Room DAO</button>
       <button class="tab"     data-p="retrofit">Retrofit</button>
       <button class="tab"     data-p="result">Result&lt;T&gt;</button>
+      <button class="tab"     data-p="hilt">Hilt DI</button>
     </div>
 
     <div class="panels r0">
@@ -1330,6 +1663,123 @@ footer p{font-size:12px;color:var(--t4)}
         </div>
       </div>
 
+      <!-- HILT -->
+      <div class="panel" id="p-hilt">
+        <div class="cw">
+          <div class="cw-bar">
+            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
+            <span class="fn-label">AppModule.kt</span>
+          </div>
+          <div class="cw-code"><pre><code><span class="cm">// @Module: klasa dostarczająca zależności</span>
+<span class="cm">// @InstallIn(SingletonComponent) → żyje tyle co aplikacja</span>
+<span class="an">@Module</span>
+<span class="an">@InstallIn</span>(<span class="ty">SingletonComponent</span>::<span class="kw">class</span>)
+<span class="kw">object</span> <span class="ty">AppModule</span> {
+
+    <span class="cm">// @Provides: funkcja tworząca instancję</span>
+    <span class="cm">// @Singleton: jedna instancja na całą aplikację</span>
+    <span class="an">@Provides</span>
+    <span class="an">@Singleton</span>
+    <span class="kw">fun</span> <span class="fn">provideDatabase</span>(
+        <span class="an">@ApplicationContext</span> ctx: <span class="ty">Context</span>
+    ): <span class="ty">AppDatabase</span> =
+        <span class="ty">Room</span>.<span class="fn">databaseBuilder</span>(
+            ctx,
+            <span class="ty">AppDatabase</span>::<span class="kw">class</span>.java,
+            <span class="st">"tasks.db"</span>
+        ).<span class="fn">build</span>()
+
+    <span class="an">@Provides</span>
+    <span class="kw">fun</span> <span class="fn">provideTaskDao</span>(
+        db: <span class="ty">AppDatabase</span>
+    ): <span class="ty">TaskDao</span> = db.<span class="fn">taskDao</span>()
+
+    <span class="an">@Provides</span>
+    <span class="an">@Singleton</span>
+    <span class="kw">fun</span> <span class="fn">provideTaskRepository</span>(
+        dao: <span class="ty">TaskDao</span>
+    ): <span class="ty">TaskRepository</span> =
+        <span class="ty">TaskRepositoryImpl</span>(dao)
+}</code></pre></div>
+          <div class="ann-table">
+            <table>
+              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="code-col">@Module @InstallIn(SingletonComponent)</td>
+                  <td class="desc-col"><strong>Zakres modułu</strong> — SingletonComponent = zależności żyją tyle co cały proces aplikacji. ViewModelComponent = zależności tworzone/niszczone z ViewModel.</td>
+                </tr>
+                <tr>
+                  <td class="code-col">@Provides @Singleton</td>
+                  <td class="desc-col"><strong>Jeden egzemplarz</strong> — Hilt wywołuje provideDatabase() tylko raz i cachuje wynik. Każde żądanie AppDatabase dostaje tę samą instancję — kluczowe dla Room.</td>
+                </tr>
+                <tr>
+                  <td class="code-col">@ApplicationContext ctx: Context</td>
+                  <td class="desc-col"><strong>Wstrzyknięty kontekst</strong> — Hilt automatycznie dostarcza ApplicationContext. Nigdy nie przechowuj ActivityContext w singletonach — to memory leak!</td>
+                </tr>
+                <tr>
+                  <td class="code-col">provideTaskDao(db: AppDatabase)</td>
+                  <td class="desc-col"><strong>Graf zależności</strong> — Hilt widzi że TaskDao wymaga AppDatabase i automatycznie wywołuje provideDatabase() przed provideTaskDao(). Kolejność budowania jest automatyczna.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="cw">
+          <div class="cw-bar">
+            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
+            <span class="fn-label">TaskViewModel.kt — z @HiltViewModel</span>
+          </div>
+          <div class="cw-code"><pre><code><span class="cm">// @HiltViewModel: Hilt zarządza tworzeniem</span>
+<span class="cm">// @Inject constructor: deklarujesz czego potrzebujesz</span>
+<span class="an">@HiltViewModel</span>
+<span class="kw">class</span> <span class="ty">TaskViewModel</span> <span class="an">@Inject</span> <span class="kw">constructor</span>(
+    <span class="kw">private val</span> repo: <span class="ty">TaskRepository</span>
+) : <span class="ty">ViewModel</span>() {
+
+    <span class="kw">private val</span> _uiState =
+        <span class="ty">MutableStateFlow</span>(<span class="ty">TaskUiState</span>())
+    <span class="kw">val</span> uiState = _uiState.<span class="fn">asStateFlow</span>()
+
+    <span class="kw">init</span> {
+        viewModelScope.<span class="fn">launch</span> {
+            repo.<span class="fn">getAllTasks</span>().<span class="fn">collect</span> { tasks ->
+                _uiState.<span class="fn">update</span> {
+                    it.<span class="fn">copy</span>(tasks = tasks)
+                }
+            }
+        }
+    }
+}
+
+<span class="cm">// W Compose: hiltViewModel() zamiast viewModel()</span>
+<span class="an">@Composable</span>
+<span class="kw">fun</span> <span class="fn">TaskListScreen</span>(
+    viewModel: <span class="ty">TaskViewModel</span> = <span class="fn">hiltViewModel</span>()
+) { <span class="cm">/* ... */</span> }</code></pre></div>
+          <div class="ann-table">
+            <table>
+              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
+              <tbody>
+                <tr>
+                  <td class="code-col">@HiltViewModel</td>
+                  <td class="desc-col"><strong>Fabryka automatyczna</strong> — bez Hilt musiałbyś pisać ViewModelFactory dla każdego ViewModel który potrzebuje parametrów. @HiltViewModel generuje fabrykę za Ciebie.</td>
+                </tr>
+                <tr>
+                  <td class="code-col">@Inject constructor</td>
+                  <td class="desc-col"><strong>Deklaracja zależności</strong> — mówisz "potrzebuję TaskRepository". Hilt szuka @Provides lub @Binds który to dostarcza i wstrzykuje automatycznie.</td>
+                </tr>
+                <tr>
+                  <td class="code-col">hiltViewModel()</td>
+                  <td class="desc-col"><strong>Rozszerzona fabryka</strong> — odpowiednik viewModel() ale świadomy grafu Hilt. Wie jak zbudować ViewModel z zależnościami. Wymaga NavBackStackEntry jako scope.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
     </div><!-- /panels -->
   </div>
 </section>
@@ -1379,6 +1829,135 @@ footer p{font-size:12px;color:var(--t4)}
         <div class="cc-num">06 — DANE</div>
         <h3>Single Source of Truth</h3>
         <p>UI zawsze czyta z Room, nigdy bezpośrednio z API. Sieć aktualizuje Room → Room Flow emituje nowe dane → UI się odświeża. Jeden kierunek przepływu = brak niespójności, działanie offline.</p>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ── TOOLS ──────────────────────────────────────────────────────────── -->
+<section id="tools">
+  <div class="w">
+    <span class="eyebrow r0">Środowisko pracy</span>
+    <h2 class="sec-title r0">Narzędzia kursu PAM</h2>
+    <p class="sec-sub r0">
+      Zanim napiszesz pierwszą linię kodu — zainstaluj i skonfiguruj narzędzia.
+      Każde z nich ma konkretne zadanie w ekosystemie Android.
+    </p>
+    <div class="tools-grid">
+
+      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--jade),var(--cyan))">
+        <span class="tool-icon">🤖</span>
+        <h3>Android Studio</h3>
+        <p>Oficjalne IDE Google do tworzenia aplikacji Android. Zawiera edytor kodu z podpowiedziami, debugger, profiler wydajności, Layout Inspector i narzędzia do analizy APK. Wersja <strong>Ladybug</strong> lub nowsza.</p>
+        <span class="tool-badge">Bezpłatny</span>
+      </div>
+
+      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--blue),var(--purple))">
+        <span class="tool-icon">📱</span>
+        <h3>AVD Manager (emulator)</h3>
+        <p>Android Virtual Device — wirtualny telefon działający na komputerze. Twórz urządzenia z różnymi wersjami API (min. API 26 / Android 8.0). Włącz akcelerację sprzętową (Intel HAXM lub AMD-V) dla płynności.</p>
+        <span class="tool-badge blue">Wbudowany w AS</span>
+      </div>
+
+      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--amber),var(--rose))">
+        <span class="tool-icon">🐘</span>
+        <h3>Gradle</h3>
+        <p>System budowania projektu. Plik <code style="font-family:var(--mono);font-size:.8rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">build.gradle.kts</code> definiuje zależności (biblioteki), wersję SDK i konfigurację kompilacji. Każda biblioteka z kursu dodawana jest tutaj.</p>
+        <span class="tool-badge amber">Automatyczny</span>
+      </div>
+
+      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--purple),var(--blue))">
+        <span class="tool-icon">🔍</span>
+        <h3>Logcat</h3>
+        <p>Konsola logów Androida wbudowana w Android Studio. Wyświetla logi aplikacji (<code style="font-family:var(--mono);font-size:.8rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Log.d(TAG, "...")</code>), wyjątki, komunikaty systemowe. Pierwsza linia debugowania — zawsze otwarta podczas laboratorium.</p>
+        <span class="tool-badge purple">Wbudowany w AS</span>
+      </div>
+
+      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--cyan),var(--jade))">
+        <span class="tool-icon">🐱</span>
+        <h3>Git + GitHub</h3>
+        <p>Kontrola wersji — każde laboratorium warto prowadzić w osobnym branchu lub repozytorium. Android Studio ma wbudowany klient Git. Zalecany workflow: <code style="font-family:var(--mono);font-size:.8rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">commit</code> po każdym działającym etapie.</p>
+        <span class="tool-badge cyan">Bezpłatny</span>
+      </div>
+
+      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--rose),var(--amber))">
+        <span class="tool-icon">🌐</span>
+        <h3>Postman / cURL</h3>
+        <p>Testowanie REST API przed integracją z kodem. W Lab 4 (PokeAPI) sprawdź odpowiedzi endpointów zanim napiszesz DTO. Postman pozwala zapisać kolekcję zapytań i udostępnić ją całemu zespołowi.</p>
+        <span class="tool-badge rose">Opcjonalne</span>
+      </div>
+
+    </div>
+
+    <!-- Setup checklist -->
+    <div class="r0" style="margin-top:48px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:28px 30px;">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
+        <span style="font-size:20px">✅</span>
+        <h3 style="font-size:1rem;font-weight:800;color:var(--t1)">Checklista przed pierwszym laboratorium</h3>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 32px">
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Android Studio zainstalowane (≥ Ladybug)</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Emulator AVD skonfigurowany (API 29+)</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> SDK Manager: Android 9–14 zainstalowane</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Akceleracja sprzętowa (HAXM / AMD-V)</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Kotlin plugin aktualny</div>
+        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Pierwsze „Hello World" uruchomione na emulatorze</div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ── RESOURCES ──────────────────────────────────────────────────────── -->
+<section id="resources">
+  <div class="w">
+    <span class="eyebrow r0">Materiały dodatkowe</span>
+    <h2 class="sec-title r0">Zasoby i dokumentacja</h2>
+    <p class="sec-sub r0">
+      Sprawdzone źródła ułożone według tematyki kursu. Oficjalna dokumentacja Google
+      to najlepszy punkt odniesienia — jest aktualna i bezpłatna.
+    </p>
+    <div class="res-grid">
+
+      <div class="res-group r0">
+        <div class="res-group-head"><span>📘</span><h4>Kotlin i podstawy języka</h4></div>
+        <ul class="res-list">
+          <li><a href="https://kotlinlang.org/docs/home.html" target="_blank"><span>Kotlin — oficjalna dokumentacja</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://play.kotlinlang.org/" target="_blank"><span>Kotlin Playground (ćwicz w przeglądarce)</span><span class="res-tag free">Free</span></a></li>
+          <li><a href="https://developer.android.com/kotlin/learn" target="_blank"><span>Android Kotlin Bootcamp — Google Codelabs</span><span class="res-tag free">Free</span></a></li>
+          <li><a href="https://kotlinlang.org/docs/coroutines-guide.html" target="_blank"><span>Coroutines Guide — kotlinlang.org</span><span class="res-tag doc">Docs</span></a></li>
+        </ul>
+      </div>
+
+      <div class="res-group r0">
+        <div class="res-group-head"><span>🎨</span><h4>Jetpack Compose i UI</h4></div>
+        <ul class="res-list">
+          <li><a href="https://developer.android.com/jetpack/compose/documentation" target="_blank"><span>Compose — pełna dokumentacja Google</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://developer.android.com/jetpack/compose/tutorial" target="_blank"><span>Compose Tutorial (krok po kroku)</span><span class="res-tag free">Free</span></a></li>
+          <li><a href="https://developer.android.com/jetpack/compose/layouts/material" target="_blank"><span>Material 3 w Compose</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://developer.android.com/codelabs/jetpack-compose-basics" target="_blank"><span>Codelab: Compose Basics</span><span class="res-tag free">Free</span></a></li>
+        </ul>
+      </div>
+
+      <div class="res-group r0">
+        <div class="res-group-head"><span>🗄️</span><h4>Room, Retrofit i dane</h4></div>
+        <ul class="res-list">
+          <li><a href="https://developer.android.com/training/data-storage/room" target="_blank"><span>Room — przewodnik Google</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://square.github.io/retrofit/" target="_blank"><span>Retrofit 2 — dokumentacja Square</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://coil-kt.github.io/coil/" target="_blank"><span>Coil — ładowanie obrazów</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://pokeapi.co/docs/v2" target="_blank"><span>PokeAPI v2 — dokumentacja REST (Lab 4)</span><span class="res-tag api">API</span></a></li>
+        </ul>
+      </div>
+
+      <div class="res-group r0">
+        <div class="res-group-head"><span>🏛️</span><h4>Architektura i narzędzia</h4></div>
+        <ul class="res-list">
+          <li><a href="https://developer.android.com/topic/architecture" target="_blank"><span>Guide to App Architecture — Google</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://developer.android.com/training/dependency-injection/hilt-android" target="_blank"><span>Hilt — dependency injection</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://developer.android.com/guide/navigation/get-started" target="_blank"><span>Navigation Compose</span><span class="res-tag doc">Docs</span></a></li>
+          <li><a href="https://developer.android.com/studio" target="_blank"><span>Android Studio — pobierz najnowszą wersję</span><span class="res-tag tool">Tool</span></a></li>
+        </ul>
       </div>
 
     </div>
@@ -1448,11 +2027,13 @@ footer p{font-size:12px;color:var(--t4)}
 <!-- ── FOOTER ────────────────────────────────────────────────────────── -->
 <footer>
   <div class="foot-wrap">
-    <p>© 2025 — Programowanie Aplikacji Mobilnych · Katedra Informatyki</p>
+    <p>© v.2026.03.07 · Programowanie Aplikacji Mobilnych · Katedra Informatyki</p>
     <div class="foot-links">
       <a href="#roadmap">Roadmap</a>
       <a href="#code">Kod</a>
       <a href="#concepts">Pojęcia</a>
+      <a href="#tools">Narzędzia</a>
+      <a href="#resources">Zasoby</a>
       <a href="#faq">FAQ</a>
     </div>
   </div>
