@@ -1,2100 +1,768 @@
 <!DOCTYPE html>
-<html lang="pl">
+<html lang="pl" data-theme="light">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PAM — Programowanie Aplikacji Mobilnych</title>
-<style>
-/* ─── TOKENS ────────────────────────────────────────────────────── */
-:root {
-  --bg0: #07090F;
-  --bg1: #0C1018;
-  --bg2: #111520;
-  --bg3: #171C2C;
-  --bg4: #1E2436;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programowanie Aplikacji Mobilnych - WIKI</title>
+    <meta name="description" content="Baza wiedzy z Programowania Aplikacji Mobilnych. Android, iOS, Flutter, XR, IoT, Informatyka Afektywna, Gry Mobilne.">
 
-  --jade:   #00D47E;
-  --jade-d: #009F5E;
-  --jade-g: rgba(0,212,126,.12);
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css" rel="stylesheet">
 
-  --border:   rgba(255,255,255,.07);
-  --border-m: rgba(255,255,255,.13);
+    <style>
+        /* ===== CSS VARIABLES ===== */
+        :root {
+            --bg: #f4f6fb;
+            --surface: #ffffff;
+            --surface2: #f0f2f8;
+            --border: #e2e6f0;
+            --text: #1a1d2e;
+            --text-muted: #6b7280;
+            --accent: #5b4fcf;
+            --accent2: #7c3aed;
+            --accent-light: #ede9fe;
+            --accent-glow: rgba(91,79,207,0.15);
+            --code-bg: #1e1e2e;
+            --nav-bg: #1a1d2e;
+            --nav-text: #e2e8f0;
+            --header-bg: #12142a;
+            --green: #10b981;
+            --amber: #f59e0b;
+            --red: #ef4444;
+            --sidebar-w: 300px;
+            --radius: 12px;
+            --shadow: 0 4px 24px rgba(0,0,0,0.08);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.12);
+            --transition: 0.2s ease;
+            --font: 'Outfit', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
+        }
 
-  --t1: #FFFFFF;
-  --t2: rgba(255,255,255,.65);
-  --t3: rgba(255,255,255,.38);
-  --t4: rgba(255,255,255,.20);
+        [data-theme="dark"] {
+            --bg: #0d0f1a;
+            --surface: #151827;
+            --surface2: #1c1f33;
+            --border: #2a2d42;
+            --text: #e8eaf6;
+            --text-muted: #8b93b0;
+            --accent: #7c6df0;
+            --accent2: #a78bfa;
+            --accent-light: #1e1a3a;
+            --accent-glow: rgba(124,109,240,0.2);
+            --shadow: 0 4px 24px rgba(0,0,0,0.3);
+            --shadow-lg: 0 8px 40px rgba(0,0,0,0.4);
+        }
 
-  --blue:   #4F9DFF;
-  --purple: #A07CFC;
-  --amber:  #FFBA44;
-  --rose:   #FF5470;
-  --cyan:   #33CFDA;
+        /* ===== RESET & BASE ===== */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        html { scroll-behavior: smooth; }
 
-  --mono: 'JetBrains Mono','Fira Code',Consolas,monospace;
-  --sans: 'Inter',system-ui,-apple-system,sans-serif;
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background var(--transition), color var(--transition);
+        }
 
-  --r:  10px;
-  --rl: 16px;
-  --rx: 22px;
-  --sh: 0 12px 48px rgba(0,0,0,.6);
-}
+        a { color: var(--accent); text-decoration: none; transition: color var(--transition); }
+        a:hover { color: var(--accent2); }
 
-/* ─── RESET ─────────────────────────────────────────────────────── */
-*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
-body{font-family:var(--sans);background:var(--bg0);color:var(--t1);line-height:1.7;overflow-x:hidden}
-a{text-decoration:none;color:inherit}
-p{color:var(--t2)}
-::-webkit-scrollbar{width:5px}
-::-webkit-scrollbar-track{background:var(--bg0)}
-::-webkit-scrollbar-thumb{background:var(--jade-d);border-radius:3px}
+        /* ===== SCROLL PROGRESS ===== */
+        .scroll-progress {
+            position: fixed; top: 0; left: 0; height: 3px;
+            background: linear-gradient(90deg, var(--accent), var(--accent2), #06b6d4);
+            z-index: 9999; width: 0; transition: width 0.1s linear;
+        }
 
-/* ─── LAYOUT ────────────────────────────────────────────────────── */
-.w{max-width:1100px;margin:0 auto;padding:0 28px}
-section{padding:108px 0}
+        /* ===== HEADER ===== */
+        header {
+            background: var(--header-bg);
+            border-bottom: 1px solid rgba(255,255,255,0.06);
+            padding: 14px 0;
+            position: sticky; top: 0; z-index: 100;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.4);
+        }
 
-/* ─── NAV ───────────────────────────────────────────────────────── */
-nav{
-  position:fixed;top:0;left:0;right:0;z-index:200;
-  height:62px;
-  background:rgba(7,9,15,.88);
-  backdrop-filter:blur(20px);
-  border-bottom:1px solid var(--border);
-}
-.nav-wrap{
-  max-width:1100px;margin:0 auto;padding:0 28px;
-  height:100%;display:flex;align-items:center;justify-content:space-between;
-}
-.logo{display:flex;align-items:center;gap:10px;font-weight:800;font-size:16px;letter-spacing:-.02em}
-.logo-box{
-  width:30px;height:30px;border-radius:8px;
-  background:linear-gradient(135deg,var(--jade),var(--jade-d));
-  display:flex;align-items:center;justify-content:center;font-size:15px;
-}
-.nav-links{display:flex;gap:2px}
-.nav-links a{
-  font-size:13px;font-weight:500;color:var(--t3);
-  padding:6px 13px;border-radius:8px;transition:all .2s;
-}
-.nav-links a:hover{color:var(--jade);background:var(--jade-g)}
-.nav-badge{
-  font-size:12px;font-weight:700;
-  background:var(--jade-g);color:var(--jade);
-  border:1px solid rgba(0,212,126,.25);
-  padding:5px 14px;border-radius:7px;
-}
-@media(max-width:700px){.nav-links,.nav-badge{display:none}}
+        .header-inner {
+            max-width: 1400px; margin: 0 auto; padding: 0 24px;
+            display: flex; align-items: center; gap: 16px;
+            justify-content: space-between;
+        }
 
-/* ─── HERO ──────────────────────────────────────────────────────── */
-#hero{
-  min-height:100vh;
-  display:grid;place-items:center;
-  padding:100px 28px 80px;
-  text-align:center;
-  position:relative;overflow:hidden;
-}
-/* Animated orbs */
-.orb{position:absolute;border-radius:50%;filter:blur(90px);pointer-events:none;will-change:transform}
-.o1{width:550px;height:550px;top:-100px;left:-80px;
-    background:radial-gradient(circle,rgba(0,212,126,.14) 0%,transparent 65%);
-    animation:float 16s ease-in-out infinite}
-.o2{width:480px;height:480px;bottom:-60px;right:-60px;
-    background:radial-gradient(circle,rgba(79,157,255,.10) 0%,transparent 65%);
-    animation:float 20s ease-in-out infinite reverse}
-.o3{width:260px;height:260px;top:40%;left:58%;
-    background:radial-gradient(circle,rgba(160,124,252,.10) 0%,transparent 65%);
-    animation:float 12s ease-in-out infinite 3s}
-@keyframes float{0%,100%{transform:translate(0,0)}33%{transform:translate(28px,-26px)}66%{transform:translate(-18px,18px)}}
-/* dot grid */
-#hero::before{
-  content:'';position:absolute;inset:0;
-  background-image:radial-gradient(rgba(255,255,255,.045) 1px,transparent 1px);
-  background-size:30px 30px;pointer-events:none;
-}
-.hero-inner{position:relative;z-index:1;max-width:780px}
+        .header-brand {
+            display: flex; align-items: center; gap: 14px;
+        }
 
-.badge{
-  display:inline-flex;align-items:center;gap:7px;
-  border:1px solid rgba(0,212,126,.28);
-  background:rgba(0,212,126,.07);
-  color:var(--jade);font-size:12px;font-weight:700;letter-spacing:.04em;
-  padding:5px 15px;border-radius:50px;margin-bottom:30px;
-}
-.dot-pulse{
-  width:6px;height:6px;border-radius:50%;
-  background:var(--jade);animation:pulse 2.2s infinite;
-}
-@keyframes pulse{0%,100%{opacity:1;transform:scale(1)}50%{opacity:.35;transform:scale(1.7)}}
+        .header-logo {
+            width: 38px; height: 38px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 18px; color: #fff;
+            flex-shrink: 0;
+        }
 
-.hero-h1{
-  font-size:clamp(2.8rem,6.5vw,5rem);
-  font-weight:900;letter-spacing:-.05em;
-  line-height:1.05;margin-bottom:26px;color:var(--t1);
-}
-.hero-h1 em{
-  font-style:normal;
-  background:linear-gradient(100deg,var(--jade) 0%,var(--cyan) 100%);
-  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
-}
-.hero-sub{
-  font-size:1.08rem;color:var(--t2);max-width:520px;
-  margin:0 auto 42px;line-height:1.9;
-}
+        .header-title {
+            color: #fff;
+        }
+        .header-title strong {
+            display: block; font-size: 17px; font-weight: 700;
+            letter-spacing: 0.3px;
+        }
+        .header-title span {
+            font-size: 11px; color: rgba(255,255,255,0.5);
+            letter-spacing: 1.5px; text-transform: uppercase;
+        }
 
-.hero-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-bottom:68px}
-.btn{
-  display:inline-flex;align-items:center;gap:7px;
-  font-family:var(--sans);font-size:14.5px;font-weight:700;
-  padding:13px 26px;border-radius:11px;
-  cursor:pointer;border:none;transition:all .25s;
-}
-.btn-main{
-  background:var(--jade);color:var(--bg0);
-  box-shadow:0 0 0 0 rgba(0,212,126,0);
-}
-.btn-main:hover{background:#00FF9A;transform:translateY(-2px);box-shadow:0 8px 28px rgba(0,212,126,.35)}
-.btn-ghost{
-  background:transparent;color:var(--t2);
-  border:1.5px solid var(--border-m);
-}
-.btn-ghost:hover{border-color:var(--jade);color:var(--jade);transform:translateY(-2px)}
+        .header-actions {
+            display: flex; align-items: center; gap: 10px;
+        }
 
-/* Hero stats row */
-.hero-stats{
-  display:inline-flex;
-  border:1px solid var(--border);
-  border-radius:14px;
-  background:rgba(255,255,255,.03);
-  overflow:hidden;
-}
-.hs{padding:18px 28px;text-align:center;border-right:1px solid var(--border)}
-.hs:last-child{border-right:none}
-.hs-n{font-size:1.55rem;font-weight:800;color:var(--jade);line-height:1}
-.hs-l{font-size:11px;color:var(--t3);margin-top:5px}
-@media(max-width:560px){.hs{padding:14px 18px}.hs-n{font-size:1.25rem}}
-@media(max-width:900px){.hero-stats .hs:nth-child(n+5){border-top:1px solid var(--border)}}
+        .btn-icon {
+            width: 38px; height: 38px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 8px;
+            color: rgba(255,255,255,0.8);
+            cursor: pointer;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 15px;
+            transition: all var(--transition);
+        }
+        .btn-icon:hover {
+            background: rgba(255,255,255,0.15);
+            color: #fff;
+        }
 
-/* ─── SECTION LABELS ────────────────────────────────────────────── */
-.eyebrow{
-  display:inline-flex;align-items:center;gap:8px;
-  font-size:11px;font-weight:700;letter-spacing:.12em;
-  text-transform:uppercase;color:var(--jade);
-  margin-bottom:14px;
-}
-.eyebrow::before{content:'';width:20px;height:2px;background:var(--jade);border-radius:2px;display:block}
-.sec-title{
-  font-size:clamp(1.9rem,3.6vw,2.9rem);
-  font-weight:800;color:var(--t1);
-  letter-spacing:-.04em;margin-bottom:16px;
-}
-.sec-sub{
-  font-size:1.02rem;color:var(--t2);
-  max-width:500px;line-height:1.85;margin-bottom:56px;
-}
+        .header-badge {
+            background: linear-gradient(135deg, var(--accent), #06b6d4);
+            color: #fff;
+            font-size: 11px; font-weight: 700;
+            padding: 4px 10px; border-radius: 20px;
+            letter-spacing: 0.5px;
+        }
 
-/* ─── REVEAL ────────────────────────────────────────────────────── */
-.r0{opacity:0;transform:translateY(26px);transition:opacity .6s ease,transform .6s ease}
-.r0.vis{opacity:1;transform:translateY(0)}
+        /* ===== HERO ===== */
+        .hero {
+            background: linear-gradient(135deg, #0d0f1a 0%, #1a1040 50%, #0d1a2e 100%);
+            padding: 60px 24px;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
 
-/* ─── ROADMAP ───────────────────────────────────────────────────── */
-#roadmap{background:var(--bg1)}
-.roadmap{display:flex;flex-direction:column;position:relative}
-/* vertical line */
-.roadmap::before{
-  content:'';
-  position:absolute;left:31px;top:32px;bottom:32px;
-  width:2px;
-  background:linear-gradient(to bottom,var(--jade),rgba(79,157,255,.5),rgba(160,124,252,.3));
-  border-radius:2px;
-}
+        .hero::before {
+            content: '';
+            position: absolute; inset: 0;
+            background: radial-gradient(ellipse at 30% 50%, rgba(91,79,207,0.25) 0%, transparent 60%),
+                        radial-gradient(ellipse at 70% 50%, rgba(6,182,212,0.15) 0%, transparent 60%);
+        }
 
-.rm{
-  display:grid;grid-template-columns:64px 1fr;
-  gap:22px;padding-bottom:28px;
-  opacity:0;transform:translateX(-22px);
-  transition:opacity .5s ease,transform .5s ease;
-}
-.rm.vis{opacity:1;transform:translateX(0)}
+        .hero-content { position: relative; max-width: 700px; margin: 0 auto; }
 
-.rm-icon{
-  width:64px;height:64px;border-radius:18px;
-  display:flex;align-items:center;justify-content:center;
-  font-size:22px;flex-shrink:0;position:relative;z-index:1;
-  box-shadow:0 4px 20px rgba(0,0,0,.5);
-}
-.ic1{background:linear-gradient(135deg,#00D47E,#00875B)}
-.ic2{background:linear-gradient(135deg,#4F9DFF,#1668C2)}
-.ic3{background:linear-gradient(135deg,#A07CFC,#6D35E0)}
-.ic4{background:linear-gradient(135deg,#FFBA44,#C27A00)}
-.ic5{background:linear-gradient(135deg,#FF5470,#B80030)}
-.ic6{background:linear-gradient(135deg,#33CFDA,#0A8C96)}
+        .hero-badge {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: rgba(91,79,207,0.2); border: 1px solid rgba(91,79,207,0.4);
+            color: #a78bfa; padding: 6px 16px; border-radius: 20px;
+            font-size: 12px; font-weight: 600; letter-spacing: 1px;
+            text-transform: uppercase; margin-bottom: 20px;
+        }
 
-.rm-card{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:var(--rl);
-  padding:26px 28px 28px;
-  transition:border-color .2s,box-shadow .2s;
-}
-.rm-card:hover{border-color:var(--border-m);box-shadow:0 6px 32px rgba(0,0,0,.45)}
+        .hero h1 {
+            font-size: clamp(28px, 5vw, 52px);
+            font-weight: 800;
+            color: #fff;
+            line-height: 1.1;
+            margin-bottom: 16px;
+        }
+        .hero h1 span {
+            background: linear-gradient(90deg, #7c6df0, #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
 
-.rm-top{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
-.rm-card h3{font-size:1.08rem;font-weight:800;color:var(--t1)}
-.rm-dur{
-  font-size:11.5px;font-weight:700;
-  background:rgba(0,212,126,.1);color:var(--jade);
-  border:1px solid rgba(0,212,126,.2);
-  padding:3px 11px;border-radius:50px;
-}
-.rm-card>p{font-size:.91rem;color:var(--t2);line-height:1.8;margin-bottom:18px}
+        .hero-sub {
+            font-size: 16px; color: rgba(255,255,255,0.6);
+            max-width: 500px; margin: 0 auto 32px;
+        }
 
-/* Concept chips */
-.chips{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:18px}
-.chip{
-  font-family:var(--mono);font-size:11.5px;
-  background:rgba(255,255,255,.05);
-  border:1px solid var(--border);
-  color:var(--t3);padding:3px 10px;border-radius:6px;
-}
+        .hero-stats {
+            display: flex; gap: 32px; justify-content: center; flex-wrap: wrap;
+        }
+        .hero-stat {
+            text-align: center;
+        }
+        .hero-stat strong {
+            display: block; font-size: 28px; font-weight: 800;
+            background: linear-gradient(90deg, var(--accent), #06b6d4);
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent;
+        }
+        .hero-stat span { font-size: 12px; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; }
 
-/* Why box inside roadmap step */
-.why-box{
-  background:rgba(255,186,68,.06);
-  border:1px solid rgba(255,186,68,.18);
-  border-left:3px solid var(--amber);
-  border-radius:9px;
-  padding:12px 16px;
-  font-size:.85rem;color:rgba(255,255,255,.55);
-  line-height:1.7;
-}
-.why-box strong{color:var(--amber);font-weight:700}
+        /* ===== LAYOUT ===== */
+        .wiki-layout {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: var(--sidebar-w) 1fr;
+            gap: 0;
+            min-height: calc(100vh - 200px);
+        }
 
-/* ─── CODE SHOWCASE ─────────────────────────────────────────────── */
-#code{background:var(--bg0)}
+        /* ===== SIDEBAR ===== */
+        .wiki-sidebar {
+            border-right: 1px solid var(--border);
+            background: var(--surface);
+            position: sticky; top: 64px;
+            height: calc(100vh - 64px);
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
 
-.tabs{
-  display:flex;gap:3px;flex-wrap:wrap;
-  background:var(--bg3);border:1px solid var(--border);
-  border-radius:13px;padding:5px;width:fit-content;
-  margin-bottom:24px;
-}
-.tab{
-  font-size:13px;font-weight:600;color:var(--t3);
-  padding:8px 18px;border-radius:9px;
-  cursor:pointer;border:none;background:transparent;
-  transition:all .2s;
-}
-.tab.on{background:var(--jade);color:var(--bg0);box-shadow:0 2px 14px rgba(0,212,126,.3)}
-.tab:not(.on):hover{color:var(--t1);background:rgba(255,255,255,.06)}
+        .sidebar-inner { padding: 20px 16px; }
 
-.panels{}
-.panel{display:none}
-.panel.on{display:grid;grid-template-columns:1fr 1fr;gap:20px}
-@media(max-width:820px){.panel.on{grid-template-columns:1fr}}
+        .wiki-search {
+            position: relative; margin-bottom: 20px;
+        }
+        .wiki-search input {
+            width: 100%; padding: 10px 14px 10px 38px;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            background: var(--surface2);
+            color: var(--text);
+            font-family: var(--font); font-size: 13px;
+            transition: all var(--transition);
+            outline: none;
+        }
+        .wiki-search input:focus {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+        .wiki-search i {
+            position: absolute; left: 12px; top: 50%; transform: translateY(-50%);
+            color: var(--text-muted); font-size: 13px;
+        }
 
-/* Code window */
-.cw{
-  background:var(--bg2);
-  border:1px solid var(--border);
-  border-radius:var(--rl);
-  overflow:hidden;
-  display:flex;flex-direction:column;
-}
-.cw-bar{
-  background:rgba(255,255,255,.04);
-  padding:12px 18px;
-  border-bottom:1px solid var(--border);
-  display:flex;align-items:center;gap:8px;flex-shrink:0;
-}
-.tls{display:flex;gap:6px}
-.tl{width:11px;height:11px;border-radius:50%}
-.tl.r{background:#FF5F57}.tl.y{background:#FEBC2E}.tl.g{background:#28C840}
-.fn-label{font-family:var(--mono);font-size:11.5px;color:var(--t4);margin-left:6px}
-.cw-code{padding:20px 22px;overflow-x:auto;flex:1}
-.cw-code pre{font-family:var(--mono);font-size:12.5px;line-height:1.85;margin:0;white-space:pre}
+        .sidebar-section-title {
+            font-size: 10px; font-weight: 700; text-transform: uppercase;
+            letter-spacing: 1.5px; color: var(--text-muted);
+            padding: 0 6px; margin-bottom: 10px;
+        }
 
-/* Syntax tokens */
-.kw {color:#7DD3FC;font-weight:600}
-.fn {color:#86EFAC}
-.st {color:#FCA5A5}
-.cm {color:#3F4A5C;font-style:italic}
-.an {color:#FCD34D}
-.ty {color:#C4B5FD}
-.nu {color:#FB923C}
-.op {color:#475569}
+        .wiki-category { margin-bottom: 4px; }
 
-/* Annotation table */
-.ann-table{
-  margin:0 16px 16px;
-  border:1px solid var(--border);
-  border-radius:10px;
-  overflow:hidden;
-  font-size:.82rem;
-}
-.ann-table table{width:100%;border-collapse:collapse}
-.ann-table thead th{
-  background:rgba(255,255,255,.05);
-  padding:10px 14px;text-align:left;
-  font-size:11px;font-weight:700;letter-spacing:.06em;
-  text-transform:uppercase;color:var(--t3);
-  border-bottom:1px solid var(--border);
-}
-.ann-table tbody tr{border-bottom:1px solid var(--border)}
-.ann-table tbody tr:last-child{border-bottom:none}
-.ann-table tbody tr:hover{background:rgba(255,255,255,.02)}
-.ann-table tbody td{padding:9px 14px;vertical-align:top;line-height:1.6}
-.ann-table .code-col{
-  font-family:var(--mono);font-size:11.5px;color:#86EFAC;
-  white-space:nowrap;width:46%;
-}
-.ann-table .desc-col{color:var(--t2);font-size:.8rem}
-.ann-table .desc-col strong{color:var(--jade);font-weight:700}
+        .cat-header {
+            display: flex; align-items: center; gap: 8px;
+            padding: 8px 10px; border-radius: 8px;
+            cursor: pointer; user-select: none;
+            font-size: 12px; font-weight: 700;
+            color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.5px;
+            transition: all var(--transition);
+        }
+        .cat-header:hover { background: var(--surface2); color: var(--text); }
+        .cat-header i:first-child { color: var(--accent); font-size: 11px; }
+        .cat-header .toggle-icon { margin-left: auto; font-size: 10px; transition: transform 0.2s; }
 
-/* ─── CONCEPTS ──────────────────────────────────────────────────── */
-#concepts{background:var(--bg1)}
-.c-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
-}
-@media(max-width:900px){.c-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.c-grid{grid-template-columns:1fr}}
+        .cat-list { list-style: none; padding: 0 0 4px 16px; }
+        .cat-list.collapsed { display: none; }
+        .cat-list li a {
+            display: flex; align-items: center; gap: 8px;
+            padding: 7px 10px; border-radius: 6px;
+            font-size: 13px; color: var(--text-muted);
+            transition: all var(--transition);
+        }
+        .cat-list li a:hover {
+            background: var(--accent-light);
+            color: var(--accent);
+        }
+        .cat-list li a.active {
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 600;
+        }
+        .article-icon { font-size: 11px; flex-shrink: 0; opacity: 0.7; }
 
-.cc{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:var(--rl);
-  padding:26px 22px;
-  position:relative;overflow:hidden;
-  transition:transform .2s,box-shadow .2s;
-}
-.cc:hover{transform:translateY(-4px);box-shadow:var(--sh)}
-.cc::before{
-  content:'';position:absolute;
-  top:0;left:0;right:0;height:3px;
-  background:var(--cc-g,linear-gradient(90deg,var(--jade),var(--cyan)));
-  opacity:0;transition:opacity .25s;
-}
-.cc:hover::before{opacity:1}
-.cc-num{
-  font-size:11px;font-weight:800;letter-spacing:.08em;
-  text-transform:uppercase;color:var(--cc-c,var(--jade));
-  margin-bottom:10px;
-}
-.cc h3{font-size:.97rem;font-weight:800;color:var(--t1);margin-bottom:9px}
-.cc p{font-size:.86rem;line-height:1.75}
-.cc code{
-  font-family:var(--mono);font-size:.78rem;
-  background:rgba(255,255,255,.07);
-  border:1px solid var(--border);
-  padding:1px 6px;border-radius:4px;color:#86EFAC;
-}
+        /* ===== MAIN CONTENT ===== */
+        .wiki-main {
+            padding: 32px 40px;
+            max-width: 900px;
+        }
 
-/* ─── FAQ ───────────────────────────────────────────────────────── */
-#faq{background:var(--bg0)}
-.faq{display:flex;flex-direction:column;gap:10px;max-width:820px}
-.faq-item{
-  border:1px solid var(--border);
-  border-radius:var(--rl);overflow:hidden;
-  transition:border-color .2s;
-}
-.faq-item.open{border-color:rgba(0,212,126,.28)}
-.fq{
-  display:flex;justify-content:space-between;align-items:center;
-  gap:14px;padding:20px 24px;cursor:pointer;
-  font-weight:700;color:var(--t1);font-size:.95rem;
-  transition:background .15s;
-}
-.fq:hover{background:rgba(255,255,255,.03)}
-.faq-item.open .fq{background:rgba(0,212,126,.04)}
-.fq-icon{
-  width:28px;height:28px;border-radius:8px;
-  background:var(--bg3);display:flex;align-items:center;
-  justify-content:center;font-size:16px;color:var(--t3);
-  flex-shrink:0;transition:all .3s;
-}
-.faq-item.open .fq-icon{background:var(--jade);color:var(--bg0);transform:rotate(45deg)}
-.fa{
-  max-height:0;overflow:hidden;
-  transition:max-height .35s ease,padding .3s;
-  font-size:.9rem;padding:0 24px;line-height:1.85;
-}
-.faq-item.open .fa{max-height:400px;padding:0 24px 22px}
-.fa code{
-  font-family:var(--mono);font-size:.82rem;
-  background:rgba(255,255,255,.07);border:1px solid var(--border);
-  padding:1px 6px;border-radius:4px;color:#86EFAC;
-}
+        /* Breadcrumbs */
+        #breadcrumbs {
+            display: none; align-items: center; gap: 8px;
+            font-size: 12px; color: var(--text-muted);
+            margin-bottom: 24px;
+            flex-wrap: wrap;
+        }
+        #breadcrumbs i { color: var(--accent); }
+        #breadcrumbs .sep { opacity: 0.4; }
+        #currentArticle { color: var(--text); font-weight: 600; }
 
-/* ─── CTA ───────────────────────────────────────────────────────── */
-#cta{
-  background:var(--bg1);
-  padding:110px 28px;text-align:center;
-  position:relative;overflow:hidden;
-}
-.cta-orb{
-  position:absolute;width:600px;height:600px;border-radius:50%;
-  background:radial-gradient(circle,rgba(0,212,126,.09) 0%,transparent 65%);
-  top:50%;left:50%;transform:translate(-50%,-50%);
-  pointer-events:none;
-}
-.cta-inner{position:relative;z-index:1}
-.cta-inner h2{font-size:clamp(1.9rem,4vw,3.2rem);font-weight:900;color:var(--t1);letter-spacing:-.04em;margin-bottom:16px}
-.cta-inner h2 span{color:var(--jade)}
-.cta-inner p{color:var(--t2);font-size:1.02rem;max-width:460px;margin:0 auto 40px;line-height:1.9}
-.cta-row{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+        /* ===== ARTICLE STYLES ===== */
+        #wikiArticle h1 {
+            font-size: clamp(22px, 3.5vw, 34px);
+            font-weight: 800; line-height: 1.2;
+            margin-bottom: 16px; color: var(--text);
+            border-bottom: 2px solid var(--accent);
+            padding-bottom: 16px;
+        }
+        #wikiArticle h2 {
+            font-size: 20px; font-weight: 700;
+            margin: 36px 0 14px;
+            color: var(--text);
+            display: flex; align-items: center; gap: 10px;
+        }
+        #wikiArticle h2::before {
+            content: '';
+            display: inline-block; width: 4px; height: 20px;
+            background: linear-gradient(180deg, var(--accent), var(--accent2));
+            border-radius: 2px; flex-shrink: 0;
+        }
+        #wikiArticle h3 {
+            font-size: 16px; font-weight: 700;
+            margin: 24px 0 10px; color: var(--text);
+        }
+        #wikiArticle p { margin-bottom: 14px; color: var(--text); line-height: 1.75; }
+        #wikiArticle ul, #wikiArticle ol {
+            margin: 10px 0 14px 20px;
+        }
+        #wikiArticle li { margin-bottom: 6px; }
+        #wikiArticle strong { font-weight: 700; color: var(--text); }
+        #wikiArticle em { font-style: italic; }
 
-/* ─── FOOTER ────────────────────────────────────────────────────── */
-footer{
-  background:var(--bg1);
-  border-top:1px solid var(--border);
-  padding:26px 28px;
-}
-.foot-wrap{
-  max-width:1100px;margin:0 auto;
-  display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;
-}
-footer p{font-size:12px;color:var(--t4)}
-.foot-links{display:flex;gap:18px}
-.foot-links a{font-size:12px;color:var(--t4);transition:color .2s}
-.foot-links a:hover{color:var(--jade)}
+        /* Blockquote */
+        #wikiArticle blockquote {
+            border-left: 4px solid var(--accent);
+            background: var(--accent-light);
+            padding: 14px 18px;
+            border-radius: 0 8px 8px 0;
+            margin: 16px 0;
+            font-size: 14px;
+        }
+        #wikiArticle blockquote strong { color: var(--accent); }
 
-/* ─── TOOLS ─────────────────────────────────────────────────────── */
-#tools{background:var(--bg0)}
-.tools-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:18px;
-}
-@media(max-width:900px){.tools-grid{grid-template-columns:repeat(2,1fr)}}
-@media(max-width:560px){.tools-grid{grid-template-columns:1fr}}
+        /* Tables */
+        #wikiArticle table {
+            width: 100%; border-collapse: collapse;
+            margin: 16px 0; font-size: 14px;
+            border-radius: var(--radius); overflow: hidden;
+            box-shadow: var(--shadow);
+        }
+        #wikiArticle th {
+            background: var(--accent);
+            color: #fff; padding: 10px 14px;
+            text-align: left; font-weight: 700; font-size: 13px;
+        }
+        #wikiArticle td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            background: var(--surface);
+        }
+        #wikiArticle tr:last-child td { border-bottom: none; }
+        #wikiArticle tr:hover td { background: var(--surface2); }
 
-.tool-card{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:var(--rl);
-  padding:26px 22px;
-  position:relative;overflow:hidden;
-  transition:transform .2s,box-shadow .2s,border-color .2s;
-}
-.tool-card:hover{transform:translateY(-4px);box-shadow:var(--sh);border-color:var(--border-m)}
-.tool-card::after{
-  content:'';position:absolute;bottom:0;left:0;right:0;height:2px;
-  background:var(--tc-g,linear-gradient(90deg,var(--jade),var(--cyan)));
-  opacity:0;transition:opacity .25s;
-}
-.tool-card:hover::after{opacity:1}
-.tool-icon{
-  font-size:32px;margin-bottom:14px;display:block;
-  filter:drop-shadow(0 2px 8px rgba(0,0,0,.4));
-}
-.tool-card h3{font-size:.97rem;font-weight:800;color:var(--t1);margin-bottom:8px}
-.tool-card p{font-size:.86rem;line-height:1.75;margin-bottom:14px}
-.tool-badge{
-  display:inline-flex;align-items:center;gap:5px;
-  font-size:11px;font-weight:700;
-  background:rgba(0,212,126,.08);color:var(--jade);
-  border:1px solid rgba(0,212,126,.2);
-  padding:3px 10px;border-radius:5px;
-}
-.tool-badge.blue{background:rgba(79,157,255,.08);color:var(--blue);border-color:rgba(79,157,255,.2)}
-.tool-badge.purple{background:rgba(160,124,252,.08);color:var(--purple);border-color:rgba(160,124,252,.2)}
-.tool-badge.amber{background:rgba(255,186,68,.08);color:var(--amber);border-color:rgba(255,186,68,.2)}
-.tool-badge.cyan{background:rgba(51,207,218,.08);color:var(--cyan);border-color:rgba(51,207,218,.2)}
-.tool-badge.rose{background:rgba(255,84,112,.08);color:var(--rose);border-color:rgba(255,84,112,.2)}
+        /* Inline code */
+        #wikiArticle code:not(pre code) {
+            font-family: var(--mono);
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 2px 6px; border-radius: 4px;
+            font-size: 13px; color: var(--accent2);
+        }
 
-/* ─── RESOURCES ─────────────────────────────────────────────────── */
-#resources{background:var(--bg1)}
-.res-grid{
-  display:grid;grid-template-columns:repeat(2,1fr);gap:16px;
-}
-@media(max-width:700px){.res-grid{grid-template-columns:1fr}}
+        /* Code blocks */
+        .code-block-wrapper { position: relative; margin: 16px 0; }
+        .code-block-wrapper pre {
+            background: var(--code-bg) !important;
+            border-radius: var(--radius);
+            padding: 20px;
+            overflow-x: auto;
+            font-family: var(--mono);
+            font-size: 13px;
+            line-height: 1.6;
+            box-shadow: var(--shadow-lg);
+        }
 
-.res-group{
-  background:var(--bg3);
-  border:1px solid var(--border);
-  border-radius:var(--rl);
-  overflow:hidden;
-}
-.res-group-head{
-  display:flex;align-items:center;gap:10px;
-  padding:16px 20px;
-  border-bottom:1px solid var(--border);
-  background:rgba(255,255,255,.025);
-}
-.res-group-head span{font-size:18px}
-.res-group-head h4{font-size:.9rem;font-weight:800;color:var(--t1)}
-.res-list{list-style:none;padding:8px 0}
-.res-list li a{
-  display:flex;align-items:center;justify-content:space-between;
-  padding:10px 20px;font-size:.88rem;color:var(--t2);
-  transition:background .15s,color .15s;
-  gap:8px;
-}
-.res-list li a:hover{background:rgba(255,255,255,.03);color:var(--jade)}
-.res-list li a::after{
-  content:'↗';font-size:11px;color:var(--t4);flex-shrink:0;transition:color .15s;
-}
-.res-list li a:hover::after{color:var(--jade)}
-.res-tag{
-  font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;
-  padding:2px 7px;border-radius:4px;flex-shrink:0;
-}
-.res-tag.free{background:rgba(0,212,126,.1);color:var(--jade);border:1px solid rgba(0,212,126,.2)}
-.res-tag.doc{background:rgba(79,157,255,.1);color:var(--blue);border:1px solid rgba(79,157,255,.2)}
-.res-tag.tool{background:rgba(160,124,252,.1);color:var(--purple);border:1px solid rgba(160,124,252,.2)}
-.res-tag.api{background:rgba(255,186,68,.1);color:var(--amber);border:1px solid rgba(255,186,68,.2)}
+        .copy-code-btn {
+            position: absolute; top: 10px; right: 10px;
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.15);
+            color: rgba(255,255,255,0.7);
+            padding: 4px 10px; border-radius: 6px;
+            font-size: 11px; cursor: pointer;
+            font-family: var(--font);
+            transition: all var(--transition);
+            display: flex; align-items: center; gap: 5px;
+        }
+        .copy-code-btn:hover { background: rgba(255,255,255,0.15); color: #fff; }
+        .copy-code-btn.copied { background: rgba(16,185,129,0.2); color: #10b981; border-color: #10b981; }
 
-/* ─── ROADMAP EXPANDED ──────────────────────────────────────────── */
-.rm-sections{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:10px;
-  margin-top:18px;margin-bottom:18px;
-}
-@media(max-width:720px){.rm-sections{grid-template-columns:1fr}}
+        /* Reading time */
+        .reading-time {
+            display: inline-flex; align-items: center; gap: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            padding: 6px 14px; border-radius: 20px;
+            font-size: 12px; color: var(--text-muted);
+            margin-bottom: 20px;
+        }
+        .reading-time i { color: var(--accent); }
 
-.rm-section{
-  background:rgba(255,255,255,.025);
-  border:1px solid var(--border);
-  border-radius:10px;
-  padding:14px 16px;
-}
-.rm-section-label{
-  display:flex;align-items:center;gap:6px;
-  font-size:10px;font-weight:800;letter-spacing:.10em;
-  text-transform:uppercase;margin-bottom:8px;
-}
-.rm-section-label .dot{
-  width:6px;height:6px;border-radius:50%;flex-shrink:0;
-}
-.rm-section.learns .rm-section-label{color:#86EFAC}
-.rm-section.learns .dot{background:#86EFAC}
-.rm-section.why   .rm-section-label{color:var(--amber)}
-.rm-section.why   .dot{background:var(--amber)}
-.rm-section.when  .rm-section-label{color:var(--blue)}
-.rm-section.when  .dot{background:var(--blue)}
+        /* Table of contents */
+        .article-toc {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-left: 4px solid var(--accent);
+            border-radius: 0 var(--radius) var(--radius) 0;
+            padding: 18px 20px;
+            margin: 20px 0 28px;
+        }
+        .article-toc h3 {
+            font-size: 13px; font-weight: 700;
+            text-transform: uppercase; letter-spacing: 1px;
+            color: var(--accent); margin-bottom: 12px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .article-toc ul { list-style: none; padding: 0; }
+        .article-toc li { margin: 5px 0; }
+        .article-toc a {
+            font-size: 13px; color: var(--text-muted);
+            transition: color var(--transition);
+        }
+        .article-toc a:hover { color: var(--accent); }
 
-.rm-section p{font-size:.83rem;color:var(--t2);line-height:1.75;margin:0}
-.rm-section ul{
-  list-style:none;padding:0;margin:0;
-  display:flex;flex-direction:column;gap:4px;
-}
-.rm-section ul li{
-  font-size:.82rem;color:var(--t2);line-height:1.6;
-  padding-left:14px;position:relative;
-}
-.rm-section ul li::before{
-  content:'›';position:absolute;left:0;
-  color:var(--t4);font-weight:700;
-}
-.rm-divider{
-  width:100%;height:1px;background:var(--border);margin:16px 0;
-}
+        /* Welcome screen */
+        .wiki-welcome { padding: 8px 0; }
+        .wiki-welcome h2 {
+            font-size: 24px; font-weight: 800;
+            margin-bottom: 12px;
+            display: flex; align-items: center; gap: 10px;
+        }
+        .wiki-welcome h2 i { color: var(--accent); }
+        .welcome-text { color: var(--text-muted); font-size: 15px; margin-bottom: 32px; }
 
-/* ─── BACK TOP ──────────────────────────────────────────────────── */
-#btt{
-  position:fixed;bottom:26px;right:26px;z-index:100;
-  width:42px;height:42px;border-radius:12px;
-  background:var(--jade);color:var(--bg0);
-  display:flex;align-items:center;justify-content:center;
-  font-size:17px;cursor:pointer;border:none;
-  box-shadow:0 4px 20px rgba(0,212,126,.35);
-  opacity:0;transform:translateY(10px);transition:all .3s;
-}
-#btt.show{opacity:1;transform:translateY(0)}
-#btt:hover{background:#00FF9A;transform:translateY(-3px)!important}
-</style>
+        .quick-start h3 {
+            font-size: 15px; font-weight: 700;
+            margin-bottom: 8px; color: var(--text-muted);
+            text-transform: uppercase; letter-spacing: 0.5px;
+        }
+        .quick-links-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 12px; margin-top: 16px;
+        }
+        .quick-link-card {
+            display: flex; align-items: center; gap: 14px;
+            background: var(--surface);
+            border: 1px solid var(--border);
+            padding: 14px 16px; border-radius: var(--radius);
+            transition: all var(--transition);
+        }
+        .quick-link-card:hover {
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+            transform: translateY(-2px);
+        }
+        .quick-link-icon {
+            width: 40px; height: 40px;
+            background: var(--accent-light);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--accent); font-size: 16px; flex-shrink: 0;
+        }
+        .quick-link-content strong { display: block; font-size: 14px; font-weight: 700; }
+        .quick-link-content span { font-size: 12px; color: var(--text-muted); }
+
+        .info-box {
+            margin-top: 32px;
+            background: var(--accent-light);
+            border: 1px solid rgba(91,79,207,0.3);
+            border-radius: var(--radius);
+            padding: 16px 20px;
+            display: flex; gap: 14px; align-items: flex-start;
+            font-size: 14px;
+        }
+        .info-box i { color: var(--accent); font-size: 16px; margin-top: 2px; flex-shrink: 0; }
+        .info-box strong { display: block; margin-bottom: 4px; }
+
+        /* Loading */
+        .wiki-loading {
+            display: flex; flex-direction: column; align-items: center;
+            justify-content: center; padding: 80px 20px;
+            color: var(--text-muted);
+        }
+        .loading-spinner {
+            width: 40px; height: 40px;
+            border: 3px solid var(--border);
+            border-top-color: var(--accent);
+            border-radius: 50%;
+            animation: spin 0.7s linear infinite;
+            margin-bottom: 16px;
+        }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* Error */
+        .wiki-error {
+            text-align: center; padding: 80px 20px;
+            color: var(--text-muted);
+        }
+        .wiki-error i { font-size: 40px; color: var(--amber); margin-bottom: 16px; display: block; }
+        .wiki-error h3 { font-size: 18px; color: var(--text); margin-bottom: 8px; }
+
+        /* ===== FOOTER ===== */
+        footer {
+            background: var(--header-bg);
+            color: rgba(255,255,255,0.5);
+            text-align: center; padding: 28px 24px;
+            font-size: 13px; border-top: 1px solid rgba(255,255,255,0.06);
+        }
+        footer strong { color: rgba(255,255,255,0.8); }
+
+        /* ===== MOBILE SIDEBAR TOGGLE ===== */
+        .sidebar-toggle {
+            display: none;
+            position: fixed; bottom: 24px; right: 24px;
+            width: 52px; height: 52px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none; border-radius: 50%;
+            color: #fff; font-size: 18px; cursor: pointer;
+            box-shadow: 0 4px 20px rgba(91,79,207,0.4);
+            z-index: 50;
+            transition: transform var(--transition);
+        }
+        .sidebar-toggle:hover { transform: scale(1.1); }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 900px) {
+            .wiki-layout { grid-template-columns: 1fr; }
+
+            .wiki-sidebar {
+                position: fixed; left: -320px; top: 64px;
+                width: 300px; height: calc(100vh - 64px);
+                z-index: 40; transition: left 0.3s ease;
+                box-shadow: var(--shadow-lg);
+            }
+            .wiki-sidebar.open { left: 0; }
+
+            .wiki-main { padding: 20px 20px 60px; max-width: 100%; }
+            .sidebar-toggle { display: flex; align-items: center; justify-content: center; }
+        }
+
+        @media (max-width: 480px) {
+            .hero { padding: 40px 16px; }
+            .hero-stats { gap: 20px; }
+            .quick-links-grid { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
 
-<!-- ── NAV ──────────────────────────────────────────────────────────── -->
-<nav>
-  <div class="nav-wrap">
-    <a href="#" class="logo">
-      <div class="logo-box">📱</div>
-      PAM
-    </a>
-    <div class="nav-links">
-      <a href="#roadmap">Roadmap</a>
-      <a href="#code">Kod</a>
-      <a href="#concepts">Pojęcia</a>
-      <a href="#tools">Narzędzia</a>
-      <a href="#resources">Zasoby</a>
-      <a href="#faq">FAQ</a>
-    </div>
-    <span class="nav-badge">Kotlin + Jetpack Compose</span>
-  </div>
-</nav>
+    <!-- Scroll progress -->
+    <div class="scroll-progress" id="scrollProgress"></div>
 
-<!-- ── HERO ─────────────────────────────────────────────────────────── -->
-<section id="hero">
-  <div class="o1 orb"></div><div class="o2 orb"></div><div class="o3 orb"></div>
-  <div class="hero-inner">
-
-    <div class="badge">
-      <span class="dot-pulse"></span>
-      Programowanie Aplikacji Mobilnych · Android Studio
-    </div>
-
-    <h1 class="hero-h1">
-      Od zera do<br>
-      <em>działającej aplikacji</em>
-    </h1>
-
-    <p class="hero-sub">
-      Kompletny przewodnik po kursie PAM — roadmapa, wyjaśnione fragmenty
-      kodu i odpowiedzi na najczęstsze pytania. Kotlin, Jetpack Compose,
-      Room, Retrofit. Krok po kroku.
-    </p>
-
-    <div class="hero-btns">
-      <a href="#roadmap" class="btn btn-main">Przejdź do roadmapy →</a>
-      <a href="#code" class="btn btn-ghost">Pokaż kod</a>
-    </div>
-
-    <div class="hero-stats">
-      <div class="hs"><div class="hs-n">6</div><div class="hs-l">laboratoriów</div></div>
-      <div class="hs"><div class="hs-n">Kotlin</div><div class="hs-l">oficjalny język</div></div>
-      <div class="hs"><div class="hs-n">MVVM</div><div class="hs-l">architektura</div></div>
-      <div class="hs"><div class="hs-n">Compose</div><div class="hs-l">deklaratywny UI</div></div>
-      <div class="hs"><div class="hs-n">Room</div><div class="hs-l">lokalna baza danych</div></div>
-      <div class="hs"><div class="hs-n">Retrofit</div><div class="hs-l">sieć / REST API</div></div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ── ROADMAP ───────────────────────────────────────────────────────── -->
-<section id="roadmap">
-  <div class="w">
-    <span class="eyebrow r0">Plan kursu</span>
-    <h2 class="sec-title r0">Roadmapa — 6 etapów</h2>
-    <p class="sec-sub r0">
-      Każde ćwiczenie buduje na poprzednim. Nie pomijaj etapów — każda koncepcja
-      pojawia się ponownie w kolejnym ćwiczeniu.
-    </p>
-
-    <div class="roadmap">
-
-      <!-- STEP 1 -->
-      <div class="rm">
-        <div class="rm-icon ic1">🔤</div>
-        <div class="rm-card">
-          <div class="rm-top">
-            <h3>Ćwiczenie 1 — Podstawy Kotlina i pierwsze @Composable</h3>
-            <span class="rm-dur">Lab 1</span>
-          </div>
-          <p>Instalacja Android Studio, konfiguracja emulatora (AVD), struktura projektu. Pierwsze funkcje @Composable — deklaratywne opisywanie UI zamiast imperatywnego zarządzania widokami. Podstawy składni Kotlin: niemutowalność, lambdy, null safety. Budujesz pierwszą interaktywną listę zadań (TaskApp) z lokalnym stanem.</p>
-          <div class="chips">
-            <span class="chip">val / var</span>
-            <span class="chip">fun / lambda</span>
-            <span class="chip">@Composable</span>
-            <span class="chip">remember { }</span>
-            <span class="chip">mutableStateOf</span>
-            <span class="chip">Column / Row / Box</span>
-            <span class="chip">LazyColumn</span>
-            <span class="chip">Modifier</span>
-          </div>
-          <div class="rm-divider"></div>
-          <div class="rm-sections">
-            <div class="rm-section learns">
-              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
-              <ul>
-                <li>Jak działa deklaratywny model UI — opisujesz stan, nie kolejność operacji</li>
-                <li>Różnica <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">val</code> vs <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">var</code> i dlaczego niemutowalność jest domyślna</li>
-                <li>Jak <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">remember { mutableStateOf() }</code> przechowuje stan między rekomposycjami</li>
-                <li>Budowanie layoutów z <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Column</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Row</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Box</code> i <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">LazyColumn</code></li>
-                <li>Kotlin: funkcje wyższego rzędu, trailing lambdy, string templates, data classes</li>
-              </ul>
+    <!-- HEADER -->
+    <header>
+        <div class="header-inner">
+            <div class="header-brand">
+                <div class="header-logo">
+                    <i class="fa-solid fa-mobile-screen-button"></i>
+                </div>
+                <div class="header-title">
+                    <strong>WIKI</strong>
+                    <span>Programowanie Aplikacji Mobilnych</span>
+                </div>
             </div>
-            <div class="rm-section why">
-              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
-              <ul>
-                <li>Compose to <strong style="color:var(--t1)">przyszłość UI na Androidzie</strong> — Google zamroziło stary system View, nowe API powstają tylko dla Compose</li>
-                <li>Stary system XML wymaga ręcznego synchronizowania widoków ze stanem przez <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">setText()</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">setVisibility()</code> — źródło ogromnej klasy bugów</li>
-                <li>Kotlin zastąpił Javę jako oficjalny język Androida w 2019 r. — null safety eliminuje NPE z definicji</li>
-                <li>Bez Lab 1 nie zrozumiesz żadnego kolejnego ćwiczenia — to fundament całego kursu</li>
-              </ul>
+            <div class="header-actions">
+                <span class="header-badge">KIA · PRz</span>
+                <button class="btn-icon" id="darkModeToggle" title="Zmień motyw" aria-label="Toggle dark mode">
+                    <i class="fa-solid fa-moon"></i>
+                </button>
             </div>
-            <div class="rm-section when">
-              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
-              <ul>
-                <li><strong style="color:var(--t1)">Każda aplikacja Android</strong> — @Composable jest podstawowym budulcem każdego ekranu</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">remember</code> i <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">mutableStateOf</code> używasz w każdym interaktywnym komponencie (pola tekstowe, checkboxy, rozwijane listy)</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">LazyColumn</code> zastępuje RecyclerView — używasz za każdym razem gdy lista ma więcej niż kilka elementów</li>
-                <li>Kotlin: codziennie — każda linia kodu w tym kursie jest napisana w Kotlinie</li>
-              </ul>
-            </div>
-          </div>
-          <div class="why-box">
-            <strong>Dlaczego Compose, nie XML?</strong> Stary system XML wymaga ręcznego synchronizowania widoków ze stanem (findViewById, setText…). Compose opisuje <em>jak ekran wygląda przy danym stanie</em> — gdy stan się zmieni, framework sam przerysowuje co trzeba. Mniej kodu, mniej błędów.
-          </div>
         </div>
-      </div>
+    </header>
 
-      <!-- STEP 2 -->
-      <div class="rm">
-        <div class="rm-icon ic2">🗺️</div>
-        <div class="rm-card">
-          <div class="rm-top">
-            <h3>Ćwiczenie 2 — Nawigacja i architektura MVVM</h3>
-            <span class="rm-dur">Lab 2</span>
-          </div>
-          <p>Rozbudowa TaskApp o wiele ekranów — lista zadań, szczegóły zadania, ekran dodawania. Navigation Compose zarządza stosem ekranów i przekazywaniem argumentów. Wzorzec MVVM jako oficjalna architektura rekomendowana przez Google — <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">ViewModel</code> trzyma stan i logikę, <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">StateFlow</code> reaktywnie propaguje go do UI.</p>
-          <div class="chips">
-            <span class="chip">ViewModel</span>
-            <span class="chip">MutableStateFlow</span>
-            <span class="chip">collectAsStateWithLifecycle</span>
-            <span class="chip">NavController</span>
-            <span class="chip">NavHost</span>
-            <span class="chip">UiState data class</span>
-            <span class="chip">composable { }</span>
-            <span class="chip">sealed Routes</span>
-          </div>
-          <div class="rm-divider"></div>
-          <div class="rm-sections">
-            <div class="rm-section learns">
-              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
-              <ul>
-                <li>Jak działa wzorzec MVVM: View (Compose) ← obserwuje ← ViewModel ← pobiera ← Model</li>
-                <li>Jak tworzyć jedną klasę <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">UiState</code> jako Single Source of Truth dla całego ekranu</li>
-                <li>Nawigacja między ekranami — <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">navController.navigate()</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">popBackStack()</code>, przekazywanie argumentów</li>
-                <li>Dlaczego <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">collectAsStateWithLifecycle()</code> a nie <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">collectAsState()</code></li>
-                <li>Event hoisting — zdarzenia płyną w górę, stan spływa w dół</li>
-              </ul>
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <div class="hero-badge">
+                <i class="fa-solid fa-book-open"></i>
+                Baza Wiedzy
             </div>
-            <div class="rm-section why">
-              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
-              <ul>
-                <li>Bez ViewModel stan resetuje się przy <strong style="color:var(--t1)">każdej rotacji ekranu</strong> — podstawowy problem bez MVVM</li>
-                <li>Bez separacji logika biznesowa miesza się z kodem UI — niemożliwe do przetestowania i utrudnione do zmiany</li>
-                <li>Każda aplikacja z więcej niż jednym ekranem potrzebuje navigation — bez Nav Compose trzeba by zarządzać stosem fragmentów ręcznie</li>
-                <li>StateFlow gwarantuje że UI zawsze widzi <strong style="color:var(--t1)">aktualny stan</strong> — zero widoków które "nie odświeżyły się"</li>
-              </ul>
+            <h1>Programowanie<br><span>Aplikacji Mobilnych</span></h1>
+            <p class="hero-sub">
+                Kompendium wiedzy z 11 obszarów tematycznych — od natywnego Android/iOS
+                po XR, IoT, Informatykę Afektywną i Robotykę.
+            </p>
+            <div class="hero-stats">
+                <div class="hero-stat">
+                    <strong>13</strong>
+                    <span>Artykułów</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>11</strong>
+                    <span>Kategorii</span>
+                </div>
+                <div class="hero-stat">
+                    <strong>100+</strong>
+                    <span>Przykładów kodu</span>
+                </div>
             </div>
-            <div class="rm-section when">
-              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
-              <ul>
-                <li><strong style="color:var(--t1)">Każda aplikacja wieloekranowa</strong> — Navigation Compose to standard od 2021 r.</li>
-                <li>ViewModel — w każdym ekranie który ma jakikolwiek stan (formularze, listy, dane z API)</li>
-                <li>MVVM — architektura domyślna w każdym projekcie Google, wymagana w rekrutacjach Android</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">StateFlow</code> — zawsze gdy ViewModel musi poinformować UI o zmianie stanu</li>
-              </ul>
-            </div>
-          </div>
-          <div class="why-box">
-            <strong>Dlaczego ViewModel?</strong> ViewModel przeżywa rotację ekranu — stan aplikacji nie resetuje się gdy obrócisz telefon. Dzięki separacji możesz testować logikę bez uruchamiania emulatora.
-          </div>
         </div>
-      </div>
+    </section>
 
-      <!-- STEP 3 -->
-      <div class="rm">
-        <div class="rm-icon ic3">🗄️</div>
-        <div class="rm-card">
-          <div class="rm-top">
-            <h3>Ćwiczenie 3 — Room Database i Coroutines</h3>
-            <span class="rm-dur">Lab 3</span>
-          </div>
-          <p>Dane TaskApp muszą przeżyć zamknięcie aplikacji — wchodzi Room. Room to warstwa abstrakcji nad SQLite: definiujesz tabele przez <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Entity</code>, zapytania przez <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Dao</code>, a Room generuje SQL i całą implementację za Ciebie. Kotlin Coroutines (<code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">suspend fun</code>) i <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code> pozwalają pisać asynchroniczny kod bez callbacks i bez blokowania wątku UI. Poznasz też migracje schematu — jak bezpiecznie zmieniać strukturę bazy.</p>
-          <div class="chips">
-            <span class="chip">@Entity</span>
-            <span class="chip">@Dao + @Query</span>
-            <span class="chip">@Database</span>
-            <span class="chip">Flow&lt;List&lt;T&gt;&gt;</span>
-            <span class="chip">suspend fun</span>
-            <span class="chip">Migracje schematu</span>
-            <span class="chip">Repository pattern</span>
-            <span class="chip">TypeConverter</span>
-          </div>
-          <div class="rm-divider"></div>
-          <div class="rm-sections">
-            <div class="rm-section learns">
-              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
-              <ul>
-                <li>Jak Room mapuje klasy Kotlin na tabele SQLite przez adnotacje — zero ręcznego SQL dla CRUD</li>
-                <li>Dlaczego <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow&lt;List&lt;T&gt;&gt;</code> z DAO jest "żywym zapytaniem" — Room sam emituje nowe dane przy każdej zmianie tabeli</li>
-                <li>Co to jest <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">suspend fun</code> i jak Coroutines pozwalają czekać na I/O bez blokowania wątku UI</li>
-                <li>Wzorzec Repository — ViewModel nie wie czy dane pochodzą z bazy, z sieci czy z cache'u</li>
-                <li>Migracje schematu: jak dodawać kolumny do istniejącej bazy bez utraty danych użytkowników</li>
-              </ul>
-            </div>
-            <div class="rm-section why">
-              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
-              <ul>
-                <li>Bez trwałego magazynu <strong style="color:var(--t1)">dane znikają po zamknięciu aplikacji</strong> — Room to rozwiązanie tego fundamentalnego problemu</li>
-                <li>Operacje I/O na wątku UI powodują <strong style="color:var(--t1)">ANR (Application Not Responding)</strong> — system Android ubija aplikację po 5 sekundach blokady</li>
-                <li>Bez Coroutines trzeba używać Callback-ów lub RxJava — o rząd wielkości bardziej skomplikowane i podatne na błędy</li>
-                <li>Repository izoluje źródło danych — możesz później dodać cache sieciowy lub sync bez zmiany ViewModel</li>
-              </ul>
-            </div>
-            <div class="rm-section when">
-              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
-              <ul>
-                <li><strong style="color:var(--t1)">Każda aplikacja wymagająca trwałości danych</strong> — listy, historia, ustawienia złożone, dane offline</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">suspend fun</code> — przy każdym wywołaniu Room, Retrofit, pliku, lub innego I/O</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code> — gdy UI ma się automatycznie odświeżać po zmianie danych w bazie</li>
-                <li>Migracje — przy każdej zmianie struktury <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Entity</code> w opublikowanej aplikacji</li>
-              </ul>
-            </div>
-          </div>
-          <div class="why-box">
-            <strong>Dlaczego Flow, nie LiveData?</strong> Flow jest częścią Kotlin Coroutines — działa na dowolnej platformie (nie tylko Android), obsługuje backpressure i ma bogatszy zestaw operatorów. LiveData był Androidowym obejściem problemu, Flow jest właściwym rozwiązaniem.
-          </div>
-        </div>
-      </div>
+    <!-- MAIN WIKI LAYOUT -->
+    <div class="wiki-layout">
 
-      <!-- STEP 4 -->
-      <div class="rm">
-        <div class="rm-icon ic4">🌐</div>
-        <div class="rm-card">
-          <div class="rm-top">
-            <h3>Ćwiczenie 4 — REST API, Retrofit i Coil</h3>
-            <span class="rm-dur">Lab 4</span>
-          </div>
-          <p>Budujesz nową aplikację — <strong>PokeApp</strong> — opartą na publicznym PokeAPI. Retrofit + OkHttp tworzy kompletny stos HTTP: definiujesz interfejs z adnotacjami (<code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@GET</code>, <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Query</code>, <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Path</code>), Retrofit generuje implementację. Gson parsuje JSON automatycznie. <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">sealed class Result&lt;T&gt;</code> obsługuje stany Success/Error/Loading jako typy — kompilator wymusza obsługę każdego przypadku. Coil ładuje, cachuje i wyświetla obrazy z URL jedną linią kodu.</p>
-          <div class="chips">
-            <span class="chip">Retrofit @GET/@POST</span>
-            <span class="chip">OkHttp Interceptor</span>
-            <span class="chip">Gson @SerializedName</span>
-            <span class="chip">sealed Result&lt;T&gt;</span>
-            <span class="chip">AsyncImage (Coil)</span>
-            <span class="chip">DTO → Domain Model</span>
-            <span class="chip">safeApiCall { }</span>
-            <span class="chip">Offline-First</span>
-          </div>
-          <div class="rm-divider"></div>
-          <div class="rm-sections">
-            <div class="rm-section learns">
-              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
-              <ul>
-                <li>Jak Retrofit mapuje interfejs Kotlin na rzeczywiste żądania HTTP — Dynamic Proxy w runtime</li>
-                <li>Różnica między DTO (Data Transfer Object) a Domain Model — po co dwie warstwy danych</li>
-                <li>Jak <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">sealed class Result</code> i <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">when</code> eliminują niezwrócone błędy na poziomie kompilatora</li>
-                <li>Jak obsługiwać błędy sieciowe kategorycznie: brak internetu, timeout, błąd serwera (5xx), brak zasobu (404)</li>
-                <li>Jak <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">OkHttp HttpLoggingInterceptor</code> umożliwia debugowanie ruchu HTTP w Logcat</li>
-              </ul>
-            </div>
-            <div class="rm-section why">
-              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
-              <ul>
-                <li><strong style="color:var(--t1)">Niemal każda komercyjna aplikacja</strong> komunikuje się z backendem przez REST API — to podstawowa umiejętność</li>
-                <li>Bez Retrofit obsługa HTTP wymaga ręcznego tworzenia połączeń, parsowania JSON, obsługi kodów błędów — setki linii boilerplate</li>
-                <li>Bez DTO zmiany API natychmiast psują cały kod aplikacji — separacja izoluje zmiany do jednej warstwy</li>
-                <li>Niezwrócony błąd sieciowy = <strong style="color:var(--t1)">crash u użytkownika</strong> — sealed Result wymusza obsługę błędów w czasie kompilacji</li>
-              </ul>
-            </div>
-            <div class="rm-section when">
-              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
-              <ul>
-                <li><strong style="color:var(--t1)">Każda aplikacja łącząca się z serwerem</strong> — logowanie, pobieranie danych, wysyłanie formularzy</li>
-                <li>Retrofit — standard w każdym projekcie Android korzystającym z REST API (alternatywa: Ktor Client)</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">sealed Result</code> — za każdym razem gdy operacja może zakończyć się błędem (API, baza, plik)</li>
-                <li>Coil / AsyncImage — wszędzie gdzie URL obrazka pochodzi z serwera (awatary, zdjęcia produktów, miniatury)</li>
-              </ul>
-            </div>
-          </div>
-          <div class="why-box">
-            <strong>Dlaczego sealed class Result, nie try-catch?</strong> try-catch w Kotlinie jest opcjonalne — kompilator nie wymusi jego użycia. Sealed class Result&lt;T&gt; jest zwracany jako typ — when(result) musi obsłużyć Success, Error i Loading. Pominięcie = błąd kompilacji, nie crash w runtime.
-          </div>
-        </div>
-      </div>
+        <!-- SIDEBAR -->
+        <aside class="wiki-sidebar" id="wikiSidebar">
+            <div class="sidebar-inner">
+                <!-- Search -->
+                <div class="wiki-search">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                    <input type="text" id="wikiSearch" placeholder="Szukaj artykułów..." autocomplete="off">
+                </div>
 
-      <!-- STEP 5 -->
-      <div class="rm">
-        <div class="rm-icon ic5">💉</div>
-        <div class="rm-card">
-          <div class="rm-top">
-            <h3>Ćwiczenie 5 — Hilt (DI) i testy jednostkowe</h3>
-            <span class="rm-dur">Lab 5</span>
-          </div>
-          <p>Refaktoryzacja TaskApp + PokeApp pod Hilt — Dependency Injection eliminuje ręczne tworzenie i przekazywanie zależności przez konstruktory. Hilt generuje graf zależności w czasie kompilacji: <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@HiltViewModel</code> zastępuje fabryki ViewModel. Następnie — testy jednostkowe: JUnit 5 + MockK weryfikują logikę ViewModel bez uruchamiania emulatora. Turbine umożliwia deterministyczne testowanie Flow krok po kroku.</p>
-          <div class="chips">
-            <span class="chip">@HiltAndroidApp</span>
-            <span class="chip">@HiltViewModel</span>
-            <span class="chip">@Inject constructor</span>
-            <span class="chip">@Module @Provides</span>
-            <span class="chip">@Binds (interfejsy)</span>
-            <span class="chip">JUnit 5 + MockK</span>
-            <span class="chip">Turbine (Flow)</span>
-            <span class="chip">TestCoroutineDispatcher</span>
-          </div>
-          <div class="rm-divider"></div>
-          <div class="rm-sections">
-            <div class="rm-section learns">
-              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
-              <ul>
-                <li>Co to jest Dependency Injection i dlaczego jest alternatywą dla <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">object</code> i singleton-ów ręcznych</li>
-                <li>Jak Hilt buduje graf zależności: <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Module</code> dostarcza instancje, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@InstallIn</code> określa zakres życia</li>
-                <li>Różnica <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@Singleton</code> vs <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">@ViewModelScoped</code> — kiedy jedna instancja, kiedy nowa per ViewModel</li>
-                <li>Jak pisać testy jednostkowe dla ViewModel: mocki zależności (MockK), asercje stanu, testowanie coroutine</li>
-                <li>Turbine: <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">awaitItem()</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">awaitComplete()</code> — testowanie strumieni Flow bez TimeMachine</li>
-              </ul>
-            </div>
-            <div class="rm-section why">
-              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
-              <ul>
-                <li>Bez DI klasy tworzą swoje zależności wewnętrznie — <strong style="color:var(--t1)">niemożliwe do przetestowania</strong> i trudne do zmiany</li>
-                <li>Bez testów każda zmiana kodu wymaga ręcznego uruchomienia aplikacji i klikania przez ekrany — nieefektywne i podatne na błędy</li>
-                <li>Hilt eliminuje <strong style="color:var(--t1)">błędy runtime</strong> związane z niezainicjalizowanymi zależnościami — cały graf budowany w czasie kompilacji</li>
-                <li>MockK pozwala testować ViewModel w izolacji — w 0,01 sekundy, bez emulatora, bez sieci, bez bazy</li>
-              </ul>
-            </div>
-            <div class="rm-section when">
-              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
-              <ul>
-                <li><strong style="color:var(--t1)">Każdy projekt produkcyjny</strong> — Hilt to de facto standard DI na Android od 2021 r.</li>
-                <li>DI szczególnie ważne przy wielu ekranach i wielu zależnościach — bez niego konstruktory ViewModel mają 5–10 parametrów</li>
-                <li>Testy jednostkowe — przy każdej logice biznesowej w ViewModel: obliczenia, filtrowanie, mapowanie</li>
-                <li>Turbine — zawsze gdy testujesz funkcje emitujące <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">StateFlow</code> lub <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code></li>
-              </ul>
-            </div>
-          </div>
-          <div class="why-box">
-            <strong>Dlaczego DI?</strong> Bez DI klasa A tworzy klasę B wewnętrznie — niemożliwe do podmienienia w testach. Z DI klasa A dostaje B z zewnątrz — w testach wstrzykujesz FakeB lub MockB. Kod jest testowalny i elastyczny.
-          </div>
-        </div>
-      </div>
+                <p class="sidebar-section-title">Tematy</p>
 
-      <!-- STEP 6 -->
-      <div class="rm">
-        <div class="rm-icon ic6">🚀</div>
-        <div class="rm-card">
-          <div class="rm-top">
-            <h3>Ćwiczenie 6 — WorkManager, DataStore i publikacja</h3>
-            <span class="rm-dur">Lab 6</span>
-          </div>
-          <p>Ostatnie ćwiczenie domyka cały cykl życia aplikacji — od działania w tle po wdrożenie. WorkManager wykonuje zadania (sync danych, eksport, powiadomienia) gwarantując ukończenie nawet po restarcie telefonu. DataStore Preferences zastępuje stary <code style="font-family:var(--mono);font-size:.82rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">SharedPreferences</code> reaktywnym i type-safe magazynem ustawień. Na końcu: konfiguracja ProGuard, podpisanie APK kluczem release i publikacja w Google Play Console.</p>
-          <div class="chips">
-            <span class="chip">WorkManager</span>
-            <span class="chip">CoroutineWorker</span>
-            <span class="chip">Constraints (sieć, bateria)</span>
-            <span class="chip">DataStore Preferences</span>
-            <span class="chip">Proto DataStore</span>
-            <span class="chip">ProGuard / R8</span>
-            <span class="chip">Keystore + APK signing</span>
-            <span class="chip">Play Console</span>
-          </div>
-          <div class="rm-divider"></div>
-          <div class="rm-sections">
-            <div class="rm-section learns">
-              <div class="rm-section-label"><span class="dot"></span>Czego uczy</div>
-              <ul>
-                <li>Jak WorkManager planuje zadania z ograniczeniami (<code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">NetworkType.CONNECTED</code>, <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">CHARGING</code>) i jak obserwować status pracy</li>
-                <li>Jak DataStore Preferences przechowuje proste ustawienia (motyw, język, onboarding) jako reaktywny <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Flow</code></li>
-                <li>Różnica między Preferences DataStore (klucz-wartość) a Proto DataStore (typowane protobufery)</li>
-                <li>Jak ProGuard/R8 minimalizuje i zaciemnia kod — zmniejszenie APK, utrudnienie inżynierii wstecznej</li>
-                <li>Cały proces publikacji: keystore, podpisanie, tory (internal → closed → open testing → production)</li>
-              </ul>
+                <!-- Categories built by JS -->
+                <nav class="wiki-nav-categories" aria-label="Kategorie WIKI"></nav>
             </div>
-            <div class="rm-section why">
-              <div class="rm-section-label"><span class="dot"></span>Dlaczego to potrzebne</div>
-              <ul>
-                <li>Coroutine w <code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">viewModelScope</code> jest <strong style="color:var(--t1)">anulowana przy zamknięciu aplikacji</strong> — WorkManager gwarantuje ukończenie bez względu na to co robi użytkownik</li>
-                <li><code style="font-family:var(--mono);font-size:.78rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">SharedPreferences</code> jest synchroniczny i nie thread-safe — DataStore jest asynchroniczny, bezpieczny i integruje się z Flow</li>
-                <li>Bez ProGuard APK release zawiera pełne nazwy klas — łatwa inżynieria wsteczna i większy rozmiar pliku</li>
-                <li>Bez znajomości procesu publikacji aplikacja <strong style="color:var(--t1)">nigdy nie trafi do użytkowników</strong> — Play Console, polityki prywatności, podpisanie to nieodzowna wiedza</li>
-              </ul>
-            </div>
-            <div class="rm-section when">
-              <div class="rm-section-label"><span class="dot"></span>Kiedy się tego używa</div>
-              <ul>
-                <li>WorkManager — synchronizacja w tle, czyszczenie cache, upload zdjęć, wysyłanie raportów analitycznych</li>
-                <li>DataStore — <strong style="color:var(--t1)">zamiast SharedPreferences zawsze</strong> w nowych projektach: motyw, język, onboarding, tokeny</li>
-                <li>ProGuard/R8 — obligatoryjnie w każdym release build, wyłączone tylko w debug</li>
-                <li>Play Console — przy każdej nowej wersji aplikacji przeznaczonej do dystrybucji użytkownikom</li>
-              </ul>
-            </div>
-          </div>
-          <div class="why-box">
-            <strong>Dlaczego WorkManager, nie coroutine w tle?</strong> Coroutine w viewModelScope jest anulowana gdy użytkownik zamknie aplikację. WorkManager gwarantuje uruchomienie zadania nawet po restarcie systemu, respektuje ograniczenia baterii i sieci.
-          </div>
-        </div>
-      </div>
+        </aside>
 
-    </div>
-  </div>
-</section>
+        <!-- CONTENT -->
+        <main class="wiki-main">
+            <!-- Breadcrumbs -->
+            <nav id="breadcrumbs" aria-label="Ścieżka">
+                <i class="fa-solid fa-house"></i>
+                <span class="sep">›</span>
+                <span id="currentCategory">—</span>
+                <span class="sep">›</span>
+                <span id="currentArticle">—</span>
+            </nav>
 
-<!-- ── CODE SHOWCASE ─────────────────────────────────────────────────── -->
-<section id="code">
-  <div class="w">
-    <span class="eyebrow r0">Przykłady kodu</span>
-    <h2 class="sec-title r0">Każda linijka wyjaśniona</h2>
-    <p class="sec-sub r0">
-      Wybierz temat — zobaczysz kod i tabelę adnotacji wyjaśniającą każdą linię.
-      Taki sam format jak w instrukcjach laboratoryjnych.
-    </p>
+            <!-- Article Container -->
+            <article id="wikiArticle">
+                <!-- Welcome screen -->
+                <div class="wiki-welcome">
+                    <h2><i class="fa-solid fa-hand-sparkles"></i> Witamy w PAM Wiki</h2>
+                    <p class="welcome-text">
+                        To kompendium wiedzy z przedmiotu <strong>Programowania Aplikacji Mobilnych</strong>
+                        (PAM) na Katedrze Informatyki i Automatyki Politechniki Rzeszowskiej.
+                        Wybierz artykuł z menu po lewej stronie lub kliknij skrót poniżej.
+                    </p>
 
-    <div class="tabs r0" id="tabs">
-      <button class="tab on"  data-p="compose">Compose UI</button>
-      <button class="tab"     data-p="viewmodel">ViewModel</button>
-      <button class="tab"     data-p="room">Room DAO</button>
-      <button class="tab"     data-p="retrofit">Retrofit</button>
-      <button class="tab"     data-p="result">Result&lt;T&gt;</button>
-      <button class="tab"     data-p="hilt">Hilt DI</button>
+                    <div class="quick-start">
+                        <h3><i class="fa-solid fa-rocket"></i>&nbsp; Szybki start</h3>
+                        <div class="quick-links-grid">
+                            <a href="#android-studio" data-article="android-studio" class="quick-link-card">
+                                <div class="quick-link-icon"><i class="fa-brands fa-android"></i></div>
+                                <div class="quick-link-content">
+                                    <strong>Android Studio</strong>
+                                    <span>Kotlin & Jetpack Compose</span>
+                                </div>
+                            </a>
+                            <a href="#xcode-ios" data-article="xcode-ios" class="quick-link-card">
+                                <div class="quick-link-icon"><i class="fa-brands fa-apple"></i></div>
+                                <div class="quick-link-content">
+                                    <strong>Xcode & iOS</strong>
+                                    <span>Swift & SwiftUI</span>
+                                </div>
+                            </a>
+                            <a href="#mobile-os" data-article="mobile-os" class="quick-link-card">
+                                <div class="quick-link-icon"><i class="fa-solid fa-mobile-screen-button"></i></div>
+                                <div class="quick-link-content">
+                                    <strong>Systemy OS</strong>
+                                    <span>Android, iOS i inne</span>
+                                </div>
+                            </a>
+                            <a href="#cross-platform" data-article="cross-platform" class="quick-link-card">
+                                <div class="quick-link-icon"><i class="fa-solid fa-layer-group"></i></div>
+                                <div class="quick-link-content">
+                                    <strong>Flutter & React Native</strong>
+                                    <span>Cross-platform i PWA</span>
+                                </div>
+                            </a>
+                            <a href="#xr-mobile" data-article="xr-mobile" class="quick-link-card">
+                                <div class="quick-link-icon"><i class="fa-solid fa-vr-cardboard"></i></div>
+                                <div class="quick-link-content">
+                                    <strong>XR Mobile</strong>
+                                    <span>ARCore, ARKit, WebXR</span>
+                                </div>
+                            </a>
+                            <a href="#affective-computing" data-article="affective-computing" class="quick-link-card">
+                                <div class="quick-link-icon"><i class="fa-solid fa-face-smile"></i></div>
+                                <div class="quick-link-content">
+                                    <strong>Inf. Afektywna</strong>
+                                    <span>Emocje w aplikacjach</span>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+
+                    <div class="info-box">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <div>
+                            <strong>Jak korzystać z WIKI?</strong>
+                            Wybierz temat z menu po lewej lub użyj wyszukiwarki. Artykuły zawierają
+                            przykłady kodu z podświetlaniem składni, tabele porównawcze i linki do
+                            oficjalnej dokumentacji.
+                        </div>
+                    </div>
+                </div>
+            </article>
+        </main>
     </div>
 
-    <div class="panels r0">
+    <!-- Mobile sidebar toggle -->
+    <button class="sidebar-toggle" id="sidebarToggle" aria-label="Otwórz menu">
+        <i class="fa-solid fa-bars"></i>
+    </button>
 
-      <!-- COMPOSE -->
-      <div class="panel on" id="p-compose">
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskListScreen.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="an">@Composable</span>
-<span class="kw">fun</span> <span class="fn">TaskListScreen</span>(
-    viewModel: <span class="ty">TaskViewModel</span> = <span class="fn">viewModel</span>()
-) {
-    <span class="kw">val</span> uiState <span class="kw">by</span> viewModel.uiState
-        .<span class="fn">collectAsStateWithLifecycle</span>()
+    <!-- FOOTER -->
+    <footer>
+        <p>
+            <strong>mobile Wiki</strong> — Programowanie Aplikacji Mobilnych ·
+            Katedra Informatyki i Automatyki · Politechnika Rzeszowska
+        </p>
+        <p style="margin-top: 6px; font-size: 11px;">
+            dr inż. Mateusz Pomianek · <span style="opacity:0.4">v1.0</span>
+        </p>
+    </footer>
 
-    <span class="ty">Scaffold</span>(
-        topBar = {
-            <span class="ty">TopAppBar</span>(
-                title = { <span class="ty">Text</span>(<span class="st">"Zadania"</span>) }
-            )
-        }
-    ) { padding ->
-        <span class="kw">when</span> {
-            uiState.isLoading ->
-                <span class="ty">CircularProgressIndicator</span>()
-            uiState.error != <span class="kw">null</span> ->
-                <span class="fn">ErrorScreen</span>(uiState.error!!)
-            <span class="kw">else</span> ->
-                <span class="ty">LazyColumn</span>(
-                    contentPadding = padding
-                ) {
-                    <span class="fn">items</span>(
-                        uiState.tasks,
-                        key = { it.id }
-                    ) { task ->
-                        <span class="fn">TaskItem</span>(task = task)
-                    }
-                }
-        }
-    }
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">@Composable</td>
-                  <td class="desc-col"><strong>Deklaratywny UI</strong> — ta funkcja opisuje jak ekran wygląda przy danym stanie. Compose wywołuje ją ponownie gdy stan się zmieni.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">viewModel()</td>
-                  <td class="desc-col"><strong>Automatyczne tworzenie</strong> — Compose tworzy lub pobiera istniejący ViewModel z zakresu (reuse przy rotacji ekranu).</td>
-                </tr>
-                <tr>
-                  <td class="code-col">collectAsStateWithLifecycle()</td>
-                  <td class="desc-col"><strong>Lifecycle-aware</strong> — subskrybuje StateFlow tylko gdy aktywność jest na pierwszym planie. Oszczędza baterię.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">when { isLoading / error / else }</td>
-                  <td class="desc-col"><strong>Trzy stany UI</strong> — Loading (spinner), Error (komunikat), Success (lista). Wzorzec pokrywa wszystkie przypadki bez else-if spaghetti.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">key = { it.id }</td>
-                  <td class="desc-col"><strong>Stabilna tożsamość</strong> — LazyColumn wie który element się zmienił i animuje tylko jego wiersz, nie całą listę.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/marked/11.1.1/marked.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/kotlin.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/swift.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/dart.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/javascript.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="wiki.js"></script>
 
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskItem.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="an">@Composable</span>
-<span class="kw">fun</span> <span class="fn">TaskItem</span>(
-    task: <span class="ty">Task</span>,
-    onToggle: () -> <span class="ty">Unit</span>,
-    onDelete: () -> <span class="ty">Unit</span>,
-) {
-    <span class="ty">Card</span>(
-        modifier = <span class="ty">Modifier</span>
-            .<span class="fn">fillMaxWidth</span>()
-            .<span class="fn">padding</span>(<span class="nu">8</span>.dp)
-            .<span class="fn">animateContentSize</span>()
-    ) {
-        <span class="ty">Row</span>(
-            verticalAlignment =
-                <span class="ty">Alignment</span>.CenterVertically,
-            modifier = <span class="ty">Modifier</span>.<span class="fn">padding</span>(<span class="nu">16</span>.dp)
-        ) {
-            <span class="ty">Checkbox</span>(
-                checked = task.isDone,
-                onCheckedChange = { onToggle() }
-            )
-            <span class="ty">Text</span>(
-                text = task.title,
-                modifier = <span class="ty">Modifier</span>.<span class="fn">weight</span>(<span class="nu">1</span>f),
-                textDecoration = <span class="kw">if</span> (task.isDone)
-                    <span class="ty">TextDecoration</span>.LineThrough
-                <span class="kw">else</span> <span class="ty">TextDecoration</span>.None
-            )
-        }
-    }
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">onToggle: () -> Unit</td>
-                  <td class="desc-col"><strong>Event hoisting</strong> — TaskItem nie zmienia stanu sam. Zdarzenia "wyciągamy" do rodzica/ViewModel. Item jest stateless i łatwiejszy do testowania.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">.animateContentSize()</td>
-                  <td class="desc-col"><strong>Automatyczna animacja</strong> — gdy Card zmienia rozmiar (np. po rozwinięciu), Compose interpoluje zmianę. Zero dodatkowego kodu.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">.weight(1f)</td>
-                  <td class="desc-col"><strong>Flex w Row</strong> — Text zajmuje całe pozostałe miejsce po Checkbox. Responsywne na każdym rozmiarze ekranu.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">if (task.isDone) ... else ...</td>
-                  <td class="desc-col"><strong>if jako wyrażenie</strong> — w Kotlin if zwraca wartość. Nie ma ternary operatora — if/else jest zwięźlejsze i czytelniejsze.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
+    <script>
+        // Mobile sidebar toggle
+        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
+            const sidebar = document.getElementById('wikiSidebar');
+            sidebar.classList.toggle('open');
+        });
 
-      <!-- VIEWMODEL -->
-      <div class="panel" id="p-viewmodel">
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskViewModel.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="kw">class</span> <span class="ty">TaskViewModel</span>(
-    <span class="kw">private val</span> repo: <span class="ty">TaskRepository</span>
-) : <span class="ty">ViewModel</span>() {
-
-    <span class="kw">private val</span> _uiState =
-        <span class="ty">MutableStateFlow</span>(<span class="ty">TaskUiState</span>())
-
-    <span class="kw">val</span> uiState =
-        _uiState.<span class="fn">asStateFlow</span>()
-
-    <span class="kw">init</span> {
-        viewModelScope.<span class="fn">launch</span> {
-            repo.<span class="fn">getAllTasks</span>()
-                .<span class="fn">collect</span> { tasks ->
-                    _uiState.<span class="fn">update</span> {
-                        it.<span class="fn">copy</span>(tasks = tasks)
-                    }
-                }
-        }
-    }
-
-    <span class="kw">fun</span> <span class="fn">addTask</span>(text: <span class="ty">String</span>) {
-        <span class="kw">if</span> (text.<span class="fn">isBlank</span>()) <span class="kw">return</span>
-        viewModelScope.<span class="fn">launch</span> {
-            repo.<span class="fn">save</span>(<span class="ty">Task</span>(title = text))
-        }
-    }
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">: ViewModel()</td>
-                  <td class="desc-col"><strong>Przeżywa rotację</strong> — Android tworzy nową Activity/Fragment, ale ten sam ViewModel. Stan aplikacji nie ginie po obróceniu telefonu.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">MutableStateFlow vs asStateFlow()</td>
-                  <td class="desc-col"><strong>Enkapsulacja</strong> — prywatne MutableStateFlow pisze ViewModel. UI dostaje read-only StateFlow. Modyfikacja tylko przez publiczne metody.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">viewModelScope.launch { }</td>
-                  <td class="desc-col"><strong>Auto-cancel</strong> — coroutine anulowana automatycznie gdy ViewModel jest niszczony. Zero memory leaks, zero ręcznego zarządzania cyklem życia.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">repo.getAllTasks().collect { }</td>
-                  <td class="desc-col"><strong>Reaktywność</strong> — Room Flow emituje nową listę przy każdej zmianie w bazie. ViewModel aktualizuje uiState → Compose przerysowuje ekran automatycznie.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">it.copy(tasks = tasks)</td>
-                  <td class="desc-col"><strong>Niezmienialny stan</strong> — data class copy() tworzy nowy obiekt z jednym zmienionym polem. Pozostałe pola (isLoading, error) są niezmienione.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskUiState.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// Jeden obiekt = pełny opis stanu ekranu</span>
-<span class="kw">data class</span> <span class="ty">TaskUiState</span>(
-    <span class="kw">val</span> tasks:     <span class="ty">List</span>&lt;<span class="ty">Task</span>&gt;  = <span class="fn">emptyList</span>(),
-    <span class="kw">val</span> isLoading: <span class="ty">Boolean</span>       = <span class="kw">false</span>,
-    <span class="kw">val</span> error:     <span class="ty">String</span>?       = <span class="kw">null</span>,
-)
-
-<span class="cm">// sealed class: kompilator zna WSZYSTKIE podklasy</span>
-<span class="cm">// → when musi je wszystkie obsłużyć</span>
-<span class="kw">sealed class</span> <span class="ty">Filter</span> {
-    <span class="kw">data object</span> <span class="ty">All</span>    : <span class="ty">Filter</span>()
-    <span class="kw">data object</span> <span class="ty">Active</span> : <span class="ty">Filter</span>()
-    <span class="kw">data object</span> <span class="ty">Done</span>   : <span class="ty">Filter</span>()
-}
-
-<span class="cm">// when jest wyczerpujące — pominięcie = błąd</span>
-<span class="kw">fun</span> <span class="fn">filtered</span>(tasks: <span class="ty">List</span>&lt;<span class="ty">Task</span>&gt;, f: <span class="ty">Filter</span>) =
-    <span class="kw">when</span> (f) {
-        <span class="ty">Filter</span>.All    -> tasks
-        <span class="ty">Filter</span>.Active -> tasks.<span class="fn">filter</span> { !it.isDone }
-        <span class="ty">Filter</span>.Done   -> tasks.<span class="fn">filter</span> { it.isDone }
-    }</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">data class TaskUiState</td>
-                  <td class="desc-col"><strong>Jeden source of truth</strong> — cały stan ekranu w jednym obiekcie. Compose subskrybuje go raz. Łatwiejsze debugowanie — logujesz jeden obiekt.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">error: String? = null</td>
-                  <td class="desc-col"><strong>Nullable = opcjonalne</strong> — null oznacza "brak błędu". Nie trzeba oddzielnego boolean hasError. Kompilator wymaga sprawdzenia null przed użyciem.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">sealed class Filter</td>
-                  <td class="desc-col"><strong>Zamknięta hierarchia</strong> — tylko 3 możliwe filtry zdefiniowane w tym pliku. Kompilator może sprawdzić czy when obsługuje każdy z nich.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">data object All</td>
-                  <td class="desc-col"><strong>Kotlin 1.9+</strong> — data object ma poprawną equals/hashCode/toString. Lepsze niż zwykłe object dla wartości w sealed class.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- ROOM -->
-      <div class="panel" id="p-room">
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskEntity.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// @Entity → Room tworzy tabelę w SQLite</span>
-<span class="an">@Entity</span>(tableName = <span class="st">"tasks"</span>)
-<span class="kw">data class</span> <span class="ty">TaskEntity</span>(
-
-    <span class="an">@PrimaryKey</span>
-    <span class="kw">val</span> id: <span class="ty">String</span> = <span class="ty">UUID</span>.<span class="fn">randomUUID</span>()
-                        .<span class="fn">toString</span>(),
-
-    <span class="an">@ColumnInfo</span>(name = <span class="st">"task_title"</span>)
-    <span class="kw">val</span> title: <span class="ty">String</span>,
-
-    <span class="an">@ColumnInfo</span>(
-        name = <span class="st">"is_done"</span>,
-        defaultValue = <span class="st">"0"</span>
-    )
-    <span class="kw">val</span> isDone: <span class="ty">Boolean</span> = <span class="kw">false</span>,
-
-    <span class="kw">val</span> createdAt: <span class="ty">Long</span> =
-        <span class="ty">System</span>.<span class="fn">currentTimeMillis</span>(),
-)</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">@Entity(tableName = "tasks")</td>
-                  <td class="desc-col"><strong>Definicja tabeli</strong> — Room generuje CREATE TABLE tasks(...) automatycznie. Zmiana klasy bez migracji = crash przy uruchomieniu.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@PrimaryKey</td>
-                  <td class="desc-col"><strong>Unikalny klucz</strong> — każdy rekord musi mieć unikalny id. UUID jako String = bezpieczne przy synchronizacji z serwerem (nie kolizje z auto-increment).</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@ColumnInfo(name = "task_title")</td>
-                  <td class="desc-col"><strong>Nazwa kolumny</strong> — kolumna w SQLite nazywa się "task_title", pole Kotlin "title". Jak @SerializedName dla JSON. Ważne przy migracji.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">defaultValue = "0"</td>
-                  <td class="desc-col"><strong>Migracja bezpieczna</strong> — gdy dodajesz nową kolumnę do istniejącej tabeli, stare rekordy dostają tę wartość. Bez defaultValue migracja failuje.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskDao.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// @Dao: interfejs zapytań SQL</span>
-<span class="cm">// Room generuje IMPLEMENTACJĘ za nas!</span>
-<span class="an">@Dao</span>
-<span class="kw">interface</span> <span class="ty">TaskDao</span> {
-
-    <span class="cm">// Flow = "żywe zapytanie"</span>
-    <span class="cm">// Emituje nową listę przy każdej zmianie tabeli</span>
-    <span class="an">@Query</span>(<span class="st">"SELECT * FROM tasks</span>
-           <span class="st"> ORDER BY created_at DESC"</span>)
-    <span class="kw">fun</span> <span class="fn">getAllTasks</span>():
-        <span class="ty">Flow</span>&lt;<span class="ty">List</span>&lt;<span class="ty">TaskEntity</span>&gt;&gt;
-
-    <span class="cm">// suspend: operacja IO</span>
-    <span class="cm">// Nie wolno wywołać na wątku UI!</span>
-    <span class="an">@Insert</span>(onConflict =
-        <span class="ty">OnConflictStrategy</span>.REPLACE)
-    <span class="kw">suspend fun</span> <span class="fn">upsert</span>(task: <span class="ty">TaskEntity</span>)
-
-    <span class="an">@Query</span>(<span class="st">"UPDATE tasks</span>
-           <span class="st"> SET is_done = :done</span>
-           <span class="st"> WHERE id = :id"</span>)
-    <span class="kw">suspend fun</span> <span class="fn">setDone</span>(
-        id: <span class="ty">String</span>, done: <span class="ty">Boolean</span>
-    )
-
-    <span class="an">@Query</span>(<span class="st">"DELETE FROM tasks WHERE id = :id"</span>)
-    <span class="kw">suspend fun</span> <span class="fn">delete</span>(id: <span class="ty">String</span>)
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">interface TaskDao</td>
-                  <td class="desc-col"><strong>Room generuje impl</strong> — piszesz tylko interfejs z adnotacjami. Room (przez KSP) generuje klasę TaskDao_Impl w czasie kompilacji. Analogia: jak Retrofit dla HTTP.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">Flow&lt;List&lt;TaskEntity&gt;&gt;</td>
-                  <td class="desc-col"><strong>Reaktywne zapytanie</strong> — po insert/update/delete Room automatycznie ponownie wykonuje zapytanie i emituje nową listę. Brak ręcznego odświeżania.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">OnConflictStrategy.REPLACE</td>
-                  <td class="desc-col"><strong>Upsert</strong> — jeśli rekord z tym id istnieje → zastąp. Nowy → wstaw. Jedna operacja zamiast insert+update. Niezbędne przy Offline-First.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">suspend fun delete</td>
-                  <td class="desc-col"><strong>Zawsze suspend</strong> — operacje bazodanowe są I/O. Muszą być w coroutine. Room sprawdza to w czasie kompilacji — błąd jeśli wywołasz na Main wątku.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- RETROFIT -->
-      <div class="panel" id="p-retrofit">
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">PokemonApiService.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// interface: Retrofit generuje implementację</span>
-<span class="cm">// przez Dynamic Proxy w runtime</span>
-<span class="kw">interface</span> <span class="ty">PokemonApiService</span> {
-
-    <span class="cm">// GET https://pokeapi.co/api/v2/pokemon</span>
-    <span class="cm">//        ?limit=20&offset=0</span>
-    <span class="an">@GET</span>(<span class="st">"pokemon"</span>)
-    <span class="kw">suspend fun</span> <span class="fn">getPokemonList</span>(
-        <span class="an">@Query</span>(<span class="st">"limit"</span>)  limit:  <span class="ty">Int</span> = <span class="nu">20</span>,
-        <span class="an">@Query</span>(<span class="st">"offset"</span>) offset: <span class="ty">Int</span> = <span class="nu">0</span>,
-    ): <span class="ty">PokemonListDto</span>
-
-    <span class="cm">// GET https://pokeapi.co/api/v2/pokemon/pikachu</span>
-    <span class="an">@GET</span>(<span class="st">"pokemon/{name}"</span>)
-    <span class="kw">suspend fun</span> <span class="fn">getPokemonDetail</span>(
-        <span class="an">@Path</span>(<span class="st">"name"</span>) name: <span class="ty">String</span>
-    ): <span class="ty">PokemonDetailDto</span>
-}
-
-<span class="cm">// DTO — odzwierciedla JSON 1:1</span>
-<span class="kw">data class</span> <span class="ty">PokemonDetailDto</span>(
-    <span class="kw">val</span> id:   <span class="ty">Int</span>,
-    <span class="kw">val</span> name: <span class="ty">String</span>,
-
-    <span class="cm">// podkreślnik w JSON → @SerializedName!</span>
-    <span class="an">@SerializedName</span>(<span class="st">"base_experience"</span>)
-    <span class="kw">val</span> baseExperience: <span class="ty">Int</span>?,
-
-    <span class="kw">val</span> height:  <span class="ty">Int</span>,   <span class="cm">// decymetry</span>
-    <span class="kw">val</span> weight:  <span class="ty">Int</span>,   <span class="cm">// hektogramy</span>
-)</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">@GET("pokemon")</td>
-                  <td class="desc-col"><strong>Metoda + ścieżka</strong> — Retrofit łączy z baseUrl: "https://.../api/v2/" + "pokemon" = kompletny URL. Uwaga: baseUrl MUSI kończyć się "/"!</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@Query("limit")</td>
-                  <td class="desc-col"><strong>Query string</strong> — dołącza parametr do URL: ?limit=20. Wartość null → parametr jest pomijany. Domyślna wartość = parametr opcjonalny.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@Path("name")</td>
-                  <td class="desc-col"><strong>Path parameter</strong> — wstawia wartość do {name} w URL. "pokemon/{name}" + "pikachu" → "pokemon/pikachu". Automatyczny URL-encoding.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@SerializedName("base_experience")</td>
-                  <td class="desc-col"><strong>Mapowanie nazw</strong> — JSON ma "base_experience" (snake_case), Kotlin ma baseExperience (camelCase). Bez tej adnotacji Gson nie znajdzie pola → null!</td>
-                </tr>
-                <tr>
-                  <td class="code-col">val baseExperience: Int?</td>
-                  <td class="desc-col"><strong>Nullable = może być null w JSON</strong> — niektóre Pokémony nie mają base_experience. Brak "?" → JsonSyntaxException przy parsowaniu null.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">RetrofitClient.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// object = singleton w Kotlinie</span>
-<span class="cm">// Tworzenie OkHttp/Retrofit jest kosztowne</span>
-<span class="cm">// → inicjalizuj raz, reużywaj wszędzie</span>
-<span class="kw">object</span> <span class="ty">RetrofitClient</span> {
-
-    <span class="kw">private const val</span> BASE_URL =
-        <span class="st">"https://pokeapi.co/api/v2/"</span>
-
-    <span class="kw">private val</span> logging =
-        <span class="ty">HttpLoggingInterceptor</span>().<span class="fn">apply</span> {
-            <span class="cm">// debugImpl only — nie loguj w release!</span>
-            level = <span class="ty">Level</span>.BODY
-        }
-
-    <span class="kw">private val</span> okHttp =
-        <span class="ty">OkHttpClient</span>.<span class="fn">Builder</span>()
-            .<span class="fn">addInterceptor</span>(logging)
-            .<span class="fn">connectTimeout</span>(<span class="nu">30</span>, <span class="ty">SECONDS</span>)
-            .<span class="fn">readTimeout</span>(<span class="nu">30</span>, <span class="ty">SECONDS</span>)
-            .<span class="fn">build</span>()
-
-    <span class="kw">val</span> api: <span class="ty">PokemonApiService</span> <span class="kw">by</span> <span class="fn">lazy</span> {
-        <span class="ty">Retrofit</span>.<span class="fn">Builder</span>()
-            .<span class="fn">baseUrl</span>(BASE_URL)
-            .<span class="fn">client</span>(okHttp)
-            .<span class="fn">addConverterFactory</span>(
-                <span class="ty">GsonConverterFactory</span>.<span class="fn">create</span>()
-            )
-            .<span class="fn">build</span>()
-            .<span class="fn">create</span>(<span class="ty">PokemonApiService</span>::<span class="kw">class</span>.java)
-    }
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">object RetrofitClient</td>
-                  <td class="desc-col"><strong>Singleton</strong> — jedna instancja na całą aplikację. OkHttp utrzymuje pulę połączeń TCP — wiele instancji = wiele pul = marnowanie zasobów.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">BASE_URL kończy się "/"</td>
-                  <td class="desc-col"><strong>Wymagane!</strong> — bez końcowego "/" Retrofit rzuca IllegalArgumentException. baseUrl + ścieżka @GET muszą się prawidłowo złożyć.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">Level.BODY</td>
-                  <td class="desc-col"><strong>Pełny log HTTP</strong> — loguje nagłówki + ciało żądania i odpowiedzi do Logcat. Tylko debugImplementation — ciało może zawierać dane użytkownika!</td>
-                </tr>
-                <tr>
-                  <td class="code-col">by lazy { }</td>
-                  <td class="desc-col"><strong>Leniwa inicjalizacja</strong> — api tworzone przy pierwszym użyciu, nie przy imporcie. .create() generuje implementację interfejsu przez Dynamic Proxy.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- RESULT -->
-      <div class="panel" id="p-result">
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">Result.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// sealed class: kompilator zna WSZYSTKIE podklasy</span>
-<span class="cm">// when(result) MUSI obsłużyć każdą → bezpieczne</span>
-<span class="kw">sealed class</span> <span class="ty">Result</span>&lt;<span class="kw">out</span> T&gt; {
-
-    <span class="kw">data class</span> <span class="ty">Success</span>&lt;T&gt;(
-        <span class="kw">val</span> data: T
-    ) : <span class="ty">Result</span>&lt;T&gt;()
-
-    <span class="kw">data class</span> <span class="ty">Error</span>(
-        <span class="kw">val</span> message: <span class="ty">String</span>,
-        <span class="kw">val</span> cause: <span class="ty">Throwable</span>? = <span class="kw">null</span>,
-        <span class="kw">val</span> code: <span class="ty">Int</span>? = <span class="kw">null</span>,
-    ) : <span class="ty">Result</span>&lt;<span class="ty">Nothing</span>&gt;()
-
-    <span class="kw">data object</span> <span class="ty">Loading</span> : <span class="ty">Result</span>&lt;<span class="ty">Nothing</span>&gt;()
-}
-
-<span class="cm">// safeApiCall: każde wywołanie API opakowuje w try-catch</span>
-<span class="cm">// Wynik: zawsze Result&lt;T&gt;, nigdy rzucony wyjątek</span>
-<span class="kw">suspend fun</span> &lt;T&gt; <span class="fn">safeApiCall</span>(
-    call: <span class="kw">suspend</span> () -> T
-): <span class="ty">Result</span>&lt;T&gt; = <span class="kw">try</span> {
-    <span class="ty">Result</span>.<span class="fn">Success</span>(<span class="fn">call</span>())
-} <span class="kw">catch</span> (e: <span class="ty">HttpException</span>) {
-    <span class="kw">val</span> msg = <span class="kw">when</span> (e.<span class="fn">code</span>()) {
-        <span class="nu">404</span> -> <span class="st">"Nie znaleziono zasobu"</span>
-        <span class="nu">401</span> -> <span class="st">"Wymagane logowanie"</span>
-        <span class="nu">429</span> -> <span class="st">"Zbyt wiele żądań"</span>
-        <span class="kw">in</span> <span class="nu">500</span>..<span class="nu">599</span> -> <span class="st">"Błąd serwera"</span>
-        <span class="kw">else</span> -> <span class="st">"Błąd HTTP ${e.code()}"</span>
-    }
-    <span class="ty">Result</span>.<span class="fn">Error</span>(msg, e, e.<span class="fn">code</span>())
-} <span class="kw">catch</span> (e: <span class="ty">UnknownHostException</span>) {
-    <span class="ty">Result</span>.<span class="fn">Error</span>(<span class="st">"Brak połączenia z internetem"</span>, e)
-} <span class="kw">catch</span> (e: <span class="ty">SocketTimeoutException</span>) {
-    <span class="ty">Result</span>.<span class="fn">Error</span>(<span class="st">"Przekroczono czas połączenia"</span>, e)
-} <span class="kw">catch</span> (e: <span class="ty">IOException</span>) {
-    <span class="ty">Result</span>.<span class="fn">Error</span>(<span class="st">"Błąd sieci"</span>, e)
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">sealed class Result&lt;out T&gt;</td>
-                  <td class="desc-col"><strong>out T = kowariantność</strong> — Result&lt;Dog&gt; może być użyty jako Result&lt;Animal&gt;. Dzięki temu Error i Loading mogą mieć typ Result&lt;Nothing&gt; i pasować do Result&lt;T&gt;.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">Result&lt;Nothing&gt;</td>
-                  <td class="desc-col"><strong>Nothing = podtyp wszystkiego</strong> — Result.Error(…) pasuje zarówno do Result&lt;List&lt;Pokemon&gt;&gt; jak i Result&lt;Pokemon&gt;. Jeden Error dla wszystkich typów.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">suspend () -> T</td>
-                  <td class="desc-col"><strong>Lambda suspendująca</strong> — safeApiCall przyjmuje dowolne wywołanie API jako lambdę. Generyczne &lt;T&gt; = działa dla List&lt;Pokemon&gt;, Pokemon, Unit…</td>
-                </tr>
-                <tr>
-                  <td class="code-col">HttpException vs UnknownHostException</td>
-                  <td class="desc-col"><strong>Różne błędy, różne komunikaty</strong> — HTTP 404 to "nie ma takiego zasobu", UnknownHostException to "brak internetu". Użytkownik widzi odpowiedni komunikat.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">in 500..599</td>
-                  <td class="desc-col"><strong>Range w when</strong> — Kotlin pozwala użyć zakresu jako warunku. Wszystkie kody 5xx (błąd serwera) obsługiwane jedną linią.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">PokemonViewModel.kt — obsługa Result</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="kw">fun</span> <span class="fn">loadPokemons</span>() {
-    viewModelScope.<span class="fn">launch</span> {
-        <span class="cm">// 1. Natychmiast pokaż spinner</span>
-        _uiState.<span class="fn">update</span> { it.<span class="fn">copy</span>(isLoading = <span class="kw">true</span>) }
-
-        <span class="cm">// 2. Wywołaj API przez safeApiCall</span>
-        <span class="kw">val</span> result = <span class="fn">safeApiCall</span> {
-            api.<span class="fn">getPokemonList</span>()
-        }
-
-        <span class="cm">// 3. when() musi obsłużyć KAŻDY stan</span>
-        <span class="cm">// Pominięcie → błąd kompilacji, nie crash!</span>
-        _uiState.<span class="fn">update</span> { state ->
-            <span class="kw">when</span> (result) {
-                <span class="kw">is</span> <span class="ty">Result</span>.Success ->
-                    state.<span class="fn">copy</span>(
-                        isLoading = <span class="kw">false</span>,
-                        pokemons  = result.data
-                            .<span class="fn">results</span>
-                            .<span class="fn">map</span> { it.<span class="fn">toDomainModel</span>() },
-                        error     = <span class="kw">null</span>
-                    )
-                <span class="kw">is</span> <span class="ty">Result</span>.Error ->
-                    state.<span class="fn">copy</span>(
-                        isLoading = <span class="kw">false</span>,
-                        error     = result.message
-                    )
-                <span class="ty">Result</span>.Loading ->
-                    state.<span class="fn">copy</span>(isLoading = <span class="kw">true</span>)
+        // Close sidebar when clicking outside
+        document.addEventListener('click', e => {
+            const sidebar = document.getElementById('wikiSidebar');
+            const toggle = document.getElementById('sidebarToggle');
+            if (sidebar?.classList.contains('open') &&
+                !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                sidebar.classList.remove('open');
             }
-        }
-    }
-}
-
-<span class="kw">fun</span> <span class="fn">retry</span>() { <span class="fn">loadPokemons</span>() }</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">_uiState.update { it.copy(...) }</td>
-                  <td class="desc-col"><strong>Atomowa aktualizacja</strong> — update() gwarantuje że nie zgubisz zmian przy równoległym dostępie. copy() zostawia niezmienione pola niezmienione.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">is Result.Success</td>
-                  <td class="desc-col"><strong>Smart cast</strong> — po sprawdzeniu "is Result.Success" kompilator wie że result to Success i pozwala użyć result.data bez castowania.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">result.data.results.map { ... }</td>
-                  <td class="desc-col"><strong>DTO → Domain Model</strong> — API zwraca DTO (Data Transfer Object). toDomainModel() konwertuje na Domain Model. ViewModel i UI nigdy nie widzą DTO.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">fun retry() { loadPokemons() }</td>
-                  <td class="desc-col"><strong>Przycisk Retry</strong> — UI woła onRetry, ViewModel woła loadPokemons(). Logika powtórzenia w jednym miejscu — UI nie musi o niej wiedzieć.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-      <!-- HILT -->
-      <div class="panel" id="p-hilt">
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">AppModule.kt</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// @Module: klasa dostarczająca zależności</span>
-<span class="cm">// @InstallIn(SingletonComponent) → żyje tyle co aplikacja</span>
-<span class="an">@Module</span>
-<span class="an">@InstallIn</span>(<span class="ty">SingletonComponent</span>::<span class="kw">class</span>)
-<span class="kw">object</span> <span class="ty">AppModule</span> {
-
-    <span class="cm">// @Provides: funkcja tworząca instancję</span>
-    <span class="cm">// @Singleton: jedna instancja na całą aplikację</span>
-    <span class="an">@Provides</span>
-    <span class="an">@Singleton</span>
-    <span class="kw">fun</span> <span class="fn">provideDatabase</span>(
-        <span class="an">@ApplicationContext</span> ctx: <span class="ty">Context</span>
-    ): <span class="ty">AppDatabase</span> =
-        <span class="ty">Room</span>.<span class="fn">databaseBuilder</span>(
-            ctx,
-            <span class="ty">AppDatabase</span>::<span class="kw">class</span>.java,
-            <span class="st">"tasks.db"</span>
-        ).<span class="fn">build</span>()
-
-    <span class="an">@Provides</span>
-    <span class="kw">fun</span> <span class="fn">provideTaskDao</span>(
-        db: <span class="ty">AppDatabase</span>
-    ): <span class="ty">TaskDao</span> = db.<span class="fn">taskDao</span>()
-
-    <span class="an">@Provides</span>
-    <span class="an">@Singleton</span>
-    <span class="kw">fun</span> <span class="fn">provideTaskRepository</span>(
-        dao: <span class="ty">TaskDao</span>
-    ): <span class="ty">TaskRepository</span> =
-        <span class="ty">TaskRepositoryImpl</span>(dao)
-}</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">@Module @InstallIn(SingletonComponent)</td>
-                  <td class="desc-col"><strong>Zakres modułu</strong> — SingletonComponent = zależności żyją tyle co cały proces aplikacji. ViewModelComponent = zależności tworzone/niszczone z ViewModel.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@Provides @Singleton</td>
-                  <td class="desc-col"><strong>Jeden egzemplarz</strong> — Hilt wywołuje provideDatabase() tylko raz i cachuje wynik. Każde żądanie AppDatabase dostaje tę samą instancję — kluczowe dla Room.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@ApplicationContext ctx: Context</td>
-                  <td class="desc-col"><strong>Wstrzyknięty kontekst</strong> — Hilt automatycznie dostarcza ApplicationContext. Nigdy nie przechowuj ActivityContext w singletonach — to memory leak!</td>
-                </tr>
-                <tr>
-                  <td class="code-col">provideTaskDao(db: AppDatabase)</td>
-                  <td class="desc-col"><strong>Graf zależności</strong> — Hilt widzi że TaskDao wymaga AppDatabase i automatycznie wywołuje provideDatabase() przed provideTaskDao(). Kolejność budowania jest automatyczna.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="cw">
-          <div class="cw-bar">
-            <div class="tls"><span class="tl r"></span><span class="tl y"></span><span class="tl g"></span></div>
-            <span class="fn-label">TaskViewModel.kt — z @HiltViewModel</span>
-          </div>
-          <div class="cw-code"><pre><code><span class="cm">// @HiltViewModel: Hilt zarządza tworzeniem</span>
-<span class="cm">// @Inject constructor: deklarujesz czego potrzebujesz</span>
-<span class="an">@HiltViewModel</span>
-<span class="kw">class</span> <span class="ty">TaskViewModel</span> <span class="an">@Inject</span> <span class="kw">constructor</span>(
-    <span class="kw">private val</span> repo: <span class="ty">TaskRepository</span>
-) : <span class="ty">ViewModel</span>() {
-
-    <span class="kw">private val</span> _uiState =
-        <span class="ty">MutableStateFlow</span>(<span class="ty">TaskUiState</span>())
-    <span class="kw">val</span> uiState = _uiState.<span class="fn">asStateFlow</span>()
-
-    <span class="kw">init</span> {
-        viewModelScope.<span class="fn">launch</span> {
-            repo.<span class="fn">getAllTasks</span>().<span class="fn">collect</span> { tasks ->
-                _uiState.<span class="fn">update</span> {
-                    it.<span class="fn">copy</span>(tasks = tasks)
-                }
-            }
-        }
-    }
-}
-
-<span class="cm">// W Compose: hiltViewModel() zamiast viewModel()</span>
-<span class="an">@Composable</span>
-<span class="kw">fun</span> <span class="fn">TaskListScreen</span>(
-    viewModel: <span class="ty">TaskViewModel</span> = <span class="fn">hiltViewModel</span>()
-) { <span class="cm">/* ... */</span> }</code></pre></div>
-          <div class="ann-table">
-            <table>
-              <thead><tr><th>Linia kodu</th><th>Co oznacza i dlaczego</th></tr></thead>
-              <tbody>
-                <tr>
-                  <td class="code-col">@HiltViewModel</td>
-                  <td class="desc-col"><strong>Fabryka automatyczna</strong> — bez Hilt musiałbyś pisać ViewModelFactory dla każdego ViewModel który potrzebuje parametrów. @HiltViewModel generuje fabrykę za Ciebie.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">@Inject constructor</td>
-                  <td class="desc-col"><strong>Deklaracja zależności</strong> — mówisz "potrzebuję TaskRepository". Hilt szuka @Provides lub @Binds który to dostarcza i wstrzykuje automatycznie.</td>
-                </tr>
-                <tr>
-                  <td class="code-col">hiltViewModel()</td>
-                  <td class="desc-col"><strong>Rozszerzona fabryka</strong> — odpowiednik viewModel() ale świadomy grafu Hilt. Wie jak zbudować ViewModel z zależnościami. Wymaga NavBackStackEntry jako scope.</td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </div>
-
-    </div><!-- /panels -->
-  </div>
-</section>
-
-<!-- ── CONCEPTS ──────────────────────────────────────────────────────── -->
-<section id="concepts">
-  <div class="w">
-    <span class="eyebrow r0">Słownik pojęć</span>
-    <h2 class="sec-title r0">Kluczowe koncepty kursu</h2>
-    <p class="sec-sub r0">
-      Sześć pojęć które pojawiają się w każdym ćwiczeniu. Jeśli rozumiesz każde
-      z nich — rozumiesz fundamenty profesjonalnego kodu Android.
-    </p>
-    <div class="c-grid">
-
-      <div class="cc r0" style="--cc-c:var(--jade);--cc-g:linear-gradient(90deg,var(--jade),var(--cyan))">
-        <div class="cc-num">01 — ARCHITEKTURA</div>
-        <h3>MVVM — podział odpowiedzialności</h3>
-        <p>View (Compose) → tylko wyświetla stan.<br>ViewModel → logika, stan, akcje.<br>Model (Room/API) → dostarcza dane.<br><br>Separacja sprawia że możesz testować ViewModel bez emulatora i zmieniać UI bez ruszania logiki.</p>
-      </div>
-
-      <div class="cc r0" style="--cc-c:var(--blue);--cc-g:linear-gradient(90deg,var(--blue),var(--cyan))">
-        <div class="cc-num">02 — REAKTYWNOŚĆ</div>
-        <h3>StateFlow i rekomposycja</h3>
-        <p>StateFlow emituje nowy obiekt UiState przy każdej zmianie. Compose wywołuje ponownie tylko te <code>@Composable</code> które odczytują zmienione pole. Zero ręcznego odświeżania UI.</p>
-      </div>
-
-      <div class="cc r0" style="--cc-c:var(--amber);--cc-g:linear-gradient(90deg,var(--amber),var(--rose))">
-        <div class="cc-num">03 — ASYNCHRONICZNOŚĆ</div>
-        <h3>Coroutines i suspend fun</h3>
-        <p><code>suspend fun</code> zawiesza się czekając na I/O bez blokowania wątku UI. <code>viewModelScope.launch</code> tworzy coroutine auto-anulowaną przy zniszczeniu ViewModel. Brak ANR, brak memory leaks.</p>
-      </div>
-
-      <div class="cc r0" style="--cc-c:var(--rose);--cc-g:linear-gradient(90deg,var(--rose),var(--amber))">
-        <div class="cc-num">04 — BEZPIECZEŃSTWO</div>
-        <h3>Null Safety Kotlina</h3>
-        <p><code>String</code> ≠ <code>String?</code>. Kompilator wymusza sprawdzenie null zanim użyjesz wartości nullable. NullPointerException w Kotlin jest trudne do napisania przez przypadek — to eliminuje całą klasę bugów.</p>
-      </div>
-
-      <div class="cc r0" style="--cc-c:var(--purple);--cc-g:linear-gradient(90deg,var(--purple),var(--blue))">
-        <div class="cc-num">05 — BEZPIECZEŃSTWO TYPÓW</div>
-        <h3>Sealed class i when</h3>
-        <p>Sealed class definiuje zamkniętą hierarchię stanów — tylko te podklasy które zadeklarujesz. <code>when(result)</code> musi obsłużyć <em>każdą</em> z nich. Pominięcie → błąd kompilacji, nie crash.</p>
-      </div>
-
-      <div class="cc r0" style="--cc-c:var(--cyan);--cc-g:linear-gradient(90deg,var(--cyan),var(--jade))">
-        <div class="cc-num">06 — DANE</div>
-        <h3>Single Source of Truth</h3>
-        <p>UI zawsze czyta z Room, nigdy bezpośrednio z API. Sieć aktualizuje Room → Room Flow emituje nowe dane → UI się odświeża. Jeden kierunek przepływu = brak niespójności, działanie offline.</p>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── TOOLS ──────────────────────────────────────────────────────────── -->
-<section id="tools">
-  <div class="w">
-    <span class="eyebrow r0">Środowisko pracy</span>
-    <h2 class="sec-title r0">Narzędzia kursu PAM</h2>
-    <p class="sec-sub r0">
-      Zanim napiszesz pierwszą linię kodu — zainstaluj i skonfiguruj narzędzia.
-      Każde z nich ma konkretne zadanie w ekosystemie Android.
-    </p>
-    <div class="tools-grid">
-
-      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--jade),var(--cyan))">
-        <span class="tool-icon">🤖</span>
-        <h3>Android Studio</h3>
-        <p>Oficjalne IDE Google do tworzenia aplikacji Android. Zawiera edytor kodu z podpowiedziami, debugger, profiler wydajności, Layout Inspector i narzędzia do analizy APK. Wersja <strong>Ladybug</strong> lub nowsza.</p>
-        <span class="tool-badge">Bezpłatny</span>
-      </div>
-
-      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--blue),var(--purple))">
-        <span class="tool-icon">📱</span>
-        <h3>AVD Manager (emulator)</h3>
-        <p>Android Virtual Device — wirtualny telefon działający na komputerze. Twórz urządzenia z różnymi wersjami API (min. API 26 / Android 8.0). Włącz akcelerację sprzętową (Intel HAXM lub AMD-V) dla płynności.</p>
-        <span class="tool-badge blue">Wbudowany w AS</span>
-      </div>
-
-      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--amber),var(--rose))">
-        <span class="tool-icon">🐘</span>
-        <h3>Gradle</h3>
-        <p>System budowania projektu. Plik <code style="font-family:var(--mono);font-size:.8rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">build.gradle.kts</code> definiuje zależności (biblioteki), wersję SDK i konfigurację kompilacji. Każda biblioteka z kursu dodawana jest tutaj.</p>
-        <span class="tool-badge amber">Automatyczny</span>
-      </div>
-
-      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--purple),var(--blue))">
-        <span class="tool-icon">🔍</span>
-        <h3>Logcat</h3>
-        <p>Konsola logów Androida wbudowana w Android Studio. Wyświetla logi aplikacji (<code style="font-family:var(--mono);font-size:.8rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">Log.d(TAG, "...")</code>), wyjątki, komunikaty systemowe. Pierwsza linia debugowania — zawsze otwarta podczas laboratorium.</p>
-        <span class="tool-badge purple">Wbudowany w AS</span>
-      </div>
-
-      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--cyan),var(--jade))">
-        <span class="tool-icon">🐱</span>
-        <h3>Git + GitHub</h3>
-        <p>Kontrola wersji — każde laboratorium warto prowadzić w osobnym branchu lub repozytorium. Android Studio ma wbudowany klient Git. Zalecany workflow: <code style="font-family:var(--mono);font-size:.8rem;background:rgba(255,255,255,.07);padding:1px 5px;border-radius:3px;color:#86EFAC">commit</code> po każdym działającym etapie.</p>
-        <span class="tool-badge cyan">Bezpłatny</span>
-      </div>
-
-      <div class="tool-card r0" style="--tc-g:linear-gradient(90deg,var(--rose),var(--amber))">
-        <span class="tool-icon">🌐</span>
-        <h3>Postman / cURL</h3>
-        <p>Testowanie REST API przed integracją z kodem. W Lab 4 (PokeAPI) sprawdź odpowiedzi endpointów zanim napiszesz DTO. Postman pozwala zapisać kolekcję zapytań i udostępnić ją całemu zespołowi.</p>
-        <span class="tool-badge rose">Opcjonalne</span>
-      </div>
-
-    </div>
-
-    <!-- Setup checklist -->
-    <div class="r0" style="margin-top:48px;background:var(--bg3);border:1px solid var(--border);border-radius:var(--rl);padding:28px 30px;">
-      <div style="display:flex;align-items:center;gap:10px;margin-bottom:20px">
-        <span style="font-size:20px">✅</span>
-        <h3 style="font-size:1rem;font-weight:800;color:var(--t1)">Checklista przed pierwszym laboratorium</h3>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px 32px">
-        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Android Studio zainstalowane (≥ Ladybug)</div>
-        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Emulator AVD skonfigurowany (API 29+)</div>
-        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> SDK Manager: Android 9–14 zainstalowane</div>
-        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Akceleracja sprzętowa (HAXM / AMD-V)</div>
-        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Kotlin plugin aktualny</div>
-        <div style="display:flex;gap:10px;align-items:flex-start;font-size:.875rem;color:var(--t2)"><span style="color:var(--jade);font-weight:800;flex-shrink:0">✓</span> Pierwsze „Hello World" uruchomione na emulatorze</div>
-      </div>
-    </div>
-
-  </div>
-</section>
-
-<!-- ── RESOURCES ──────────────────────────────────────────────────────── -->
-<section id="resources">
-  <div class="w">
-    <span class="eyebrow r0">Materiały dodatkowe</span>
-    <h2 class="sec-title r0">Zasoby i dokumentacja</h2>
-    <p class="sec-sub r0">
-      Sprawdzone źródła ułożone według tematyki kursu. Oficjalna dokumentacja Google
-      to najlepszy punkt odniesienia — jest aktualna i bezpłatna.
-    </p>
-    <div class="res-grid">
-
-      <div class="res-group r0">
-        <div class="res-group-head"><span>📘</span><h4>Kotlin i podstawy języka</h4></div>
-        <ul class="res-list">
-          <li><a href="https://kotlinlang.org/docs/home.html" target="_blank"><span>Kotlin — oficjalna dokumentacja</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://play.kotlinlang.org/" target="_blank"><span>Kotlin Playground (ćwicz w przeglądarce)</span><span class="res-tag free">Free</span></a></li>
-          <li><a href="https://developer.android.com/kotlin/learn" target="_blank"><span>Android Kotlin Bootcamp — Google Codelabs</span><span class="res-tag free">Free</span></a></li>
-          <li><a href="https://kotlinlang.org/docs/coroutines-guide.html" target="_blank"><span>Coroutines Guide — kotlinlang.org</span><span class="res-tag doc">Docs</span></a></li>
-        </ul>
-      </div>
-
-      <div class="res-group r0">
-        <div class="res-group-head"><span>🎨</span><h4>Jetpack Compose i UI</h4></div>
-        <ul class="res-list">
-          <li><a href="https://developer.android.com/jetpack/compose/documentation" target="_blank"><span>Compose — pełna dokumentacja Google</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://developer.android.com/jetpack/compose/tutorial" target="_blank"><span>Compose Tutorial (krok po kroku)</span><span class="res-tag free">Free</span></a></li>
-          <li><a href="https://developer.android.com/jetpack/compose/layouts/material" target="_blank"><span>Material 3 w Compose</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://developer.android.com/codelabs/jetpack-compose-basics" target="_blank"><span>Codelab: Compose Basics</span><span class="res-tag free">Free</span></a></li>
-        </ul>
-      </div>
-
-      <div class="res-group r0">
-        <div class="res-group-head"><span>🗄️</span><h4>Room, Retrofit i dane</h4></div>
-        <ul class="res-list">
-          <li><a href="https://developer.android.com/training/data-storage/room" target="_blank"><span>Room — przewodnik Google</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://square.github.io/retrofit/" target="_blank"><span>Retrofit 2 — dokumentacja Square</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://coil-kt.github.io/coil/" target="_blank"><span>Coil — ładowanie obrazów</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://pokeapi.co/docs/v2" target="_blank"><span>PokeAPI v2 — dokumentacja REST (Lab 4)</span><span class="res-tag api">API</span></a></li>
-        </ul>
-      </div>
-
-      <div class="res-group r0">
-        <div class="res-group-head"><span>🏛️</span><h4>Architektura i narzędzia</h4></div>
-        <ul class="res-list">
-          <li><a href="https://developer.android.com/topic/architecture" target="_blank"><span>Guide to App Architecture — Google</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://developer.android.com/training/dependency-injection/hilt-android" target="_blank"><span>Hilt — dependency injection</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://developer.android.com/guide/navigation/get-started" target="_blank"><span>Navigation Compose</span><span class="res-tag doc">Docs</span></a></li>
-          <li><a href="https://developer.android.com/studio" target="_blank"><span>Android Studio — pobierz najnowszą wersję</span><span class="res-tag tool">Tool</span></a></li>
-        </ul>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── FAQ ───────────────────────────────────────────────────────────── -->
-<section id="faq">
-  <div class="w">
-    <span class="eyebrow r0">FAQ</span>
-    <h2 class="sec-title r0">Najczęstsze pytania studentów</h2>
-    <p class="sec-sub r0">Pytania które pojawiają się podczas każdej edycji kursu PAM.</p>
-    <div class="faq r0">
-
-      <div class="faq-item">
-        <div class="fq">Muszę znać Javę żeby przystąpić do kursu?<span class="fq-icon">+</span></div>
-        <div class="fa">Nie. Kotlin to oficjalny język Androida i możesz zacząć bezpośrednio od niego. Jest nowocześniejszy i bezpieczniejszy niż Java. Wystarczy podstawowa znajomość programowania obiektowego w dowolnym języku (C++, Python, Java, C#). Jeśli znasz Javę — przyspieszy to naukę Kotlina, ale nie jest wymagane.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="fq">Czym Jetpack Compose różni się od starego systemu XML?<span class="fq-icon">+</span></div>
-        <div class="fa">Stary system: opisujesz UI w XML, potem ręcznie aktualizujesz widoki w Kotlin przez <code>findViewById()</code> i settery. Łatwo o niespójność — widok i stan mogą się rozjechać. Compose: opisujesz UI jako funkcje Kotlin i podajesz stan. Gdy stan się zmieni, Compose sam decyduje co przerysować — optymalnie i bez błędów. Stary system View jest de facto zamrożony przez Google, Compose to przyszłość Androida.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="fq">Dlaczego operacje bazodanowe i sieciowe muszą być suspend?<span class="fq-icon">+</span></div>
-        <div class="fa">Aplikacja Android ma jeden wątek UI — odpowiada za rysowanie ekranu (60 fps) i obsługę dotyku. Jeśli wywołasz operację sieciową bezpośrednio na tym wątku, ekran zamrozi się na czas oczekiwania — system może ubić aplikację (ANR). <code>suspend fun</code> zawiesza się czekając na wynik bez blokowania wątku — kod wygląda jak synchroniczny, ale działa asynchronicznie. Wywołanie na Main wątku bez <code>suspend</code> → <code>NetworkOnMainThreadException</code>.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="fq">Co to jest DTO i po co oddzielać od Domain Model?<span class="fq-icon">+</span></div>
-        <div class="fa">DTO (Data Transfer Object) odzwierciedla strukturę JSON 1:1 — ma <code>@SerializedName</code>, dokładnie te same pola co JSON. Domain Model to czyste dane które widzi ViewModel i UI — przeliczone jednostki, sformatowane teksty, bez szczegółów API. Gdy API zmieni nazwę pola "base_experience" na "base_exp" — zmienisz <code>@SerializedName</code> tylko w DTO. ViewModel, UI, testy — zero zmian. Separacja = odporność na zmiany API.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="fq">Dlaczego baseUrl w RetrofitClient MUSI kończyć się "/"?<span class="fq-icon">+</span></div>
-        <div class="fa">Retrofit łączy baseUrl z ścieżką @GET przez konkatenację. Bez końcowego ukośnika: <code>"https://api.example.com/v2"</code> + <code>"pokemon"</code> → <code>"https://api.example.com/v2pokemon"</code> (błędny URL). Z ukośnikiem: <code>"https://api.example.com/v2/"</code> + <code>"pokemon"</code> → <code>"https://api.example.com/v2/pokemon"</code> (poprawny). Brak "/" → <code>IllegalArgumentException</code> przy budowaniu Retrofit.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="fq">Czym różni się Flow.collect() od LiveData.observe()?<span class="fq-icon">+</span></div>
-        <div class="fa">LiveData był Androidowym rozwiązaniem problemu reaktywności. Flow to część Kotlin Coroutines — działa na każdej platformie, nie tylko Android. Flow ma bogatszy zestaw operatorów (<code>map</code>, <code>filter</code>, <code>combine</code>, <code>flatMapLatest</code>…), obsługuje backpressure i cold/hot streams. Różnica w użyciu: LiveData automatycznie uwzględnia lifecycle. Flow wymaga <code>collectAsStateWithLifecycle()</code> lub <code>viewModelScope.launch</code> — ale daje więcej kontroli. Google rekomenduje Flow dla nowych projektów.</div>
-      </div>
-
-      <div class="faq-item">
-        <div class="fq">Jak działają @Entity migracje — co się stanie jak zmienię klasę bez migracji?<span class="fq-icon">+</span></div>
-        <div class="fa">Room oblicza hash schematu bazy danych z adnotacji @Entity. Przy uruchomieniu porównuje hash zapisany w bazie z hashem skompilowanym. Jeśli się różnią i nie ma migracji → crash z <code>IllegalStateException: Room cannot verify the data integrity</code>. Dlatego każda zmiana @Entity (nowe pole, zmiana nazwy, usunięcie) wymaga: (1) inkrementacji <code>version</code> w @Database, (2) dostarczenia obiektu Migration z SQL ALTER TABLE. Alternatywa w developmencie: <code>fallbackToDestructiveMigration()</code> kasuje bazę — nigdy w produkcji!</div>
-      </div>
-
-    </div>
-  </div>
-</section>
-
-<!-- ── CTA ───────────────────────────────────────────────────────────── -->
-<section id="cta">
-  <div class="cta-orb"></div>
-  <div class="cta-inner">
-    <h2>Gotowy żeby pisać<br><span>swój pierwszy kod?</span></h2>
-    <p>Zainstaluj Android Studio, stwórz projekt Empty Activity i napisz pierwszy @Composable. "Hello World" w Compose zajmie Ci 5 minut.</p>
-    <div class="cta-row">
-      <a href="https://developer.android.com/studio" target="_blank" class="btn btn-main">Pobierz Android Studio →</a>
-      <a href="#roadmap" class="btn btn-ghost">Wróć do roadmapy</a>
-    </div>
-  </div>
-</section>
-
-<!-- ── FOOTER ────────────────────────────────────────────────────────── -->
-<footer>
-  <div class="foot-wrap">
-    <p>© v.2026.03.07 · Programowanie Aplikacji Mobilnych · Katedra Informatyki</p>
-    <div class="foot-links">
-      <a href="#roadmap">Roadmap</a>
-      <a href="#code">Kod</a>
-      <a href="#concepts">Pojęcia</a>
-      <a href="#tools">Narzędzia</a>
-      <a href="#resources">Zasoby</a>
-      <a href="#faq">FAQ</a>
-    </div>
-  </div>
-</footer>
-
-<button id="btt" onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>
-
-<script>
-// ── Reveal on scroll ──────────────────────────────────────────────
-const obs = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (!e.isIntersecting) return;
-    if (e.target.classList.contains('roadmap')) {
-      e.target.querySelectorAll('.rm').forEach((s,i) =>
-        setTimeout(() => s.classList.add('vis'), i * 110));
-    } else {
-      e.target.classList.add('vis');
-    }
-  });
-}, { threshold: 0.10 });
-
-document.querySelectorAll('.r0, .roadmap').forEach(el => obs.observe(el));
-
-// ── Tab switcher ──────────────────────────────────────────────────
-document.querySelectorAll('.tab').forEach(t => {
-  t.addEventListener('click', () => {
-    const p = t.dataset.p;
-    document.querySelectorAll('.tab').forEach(x => x.classList.remove('on'));
-    document.querySelectorAll('.panel').forEach(x => x.classList.remove('on'));
-    t.classList.add('on');
-    document.getElementById('p-' + p).classList.add('on');
-  });
-});
-
-// ── FAQ accordion ─────────────────────────────────────────────────
-document.querySelectorAll('.fq').forEach(q => {
-  q.addEventListener('click', () => {
-    const item = q.parentElement;
-    const was = item.classList.contains('open');
-    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-    if (!was) item.classList.add('open');
-  });
-});
-
-// ── Back to top ───────────────────────────────────────────────────
-const btt = document.getElementById('btt');
-window.addEventListener('scroll', () =>
-  btt.classList.toggle('show', window.scrollY > 420));
-
-// ── Nav link highlight ────────────────────────────────────────────
-const secs = document.querySelectorAll('section[id]');
-const links = document.querySelectorAll('.nav-links a');
-window.addEventListener('scroll', () => {
-  let cur = '';
-  secs.forEach(s => { if (window.scrollY >= s.offsetTop - 90) cur = s.id; });
-  links.forEach(a => {
-    const active = a.getAttribute('href') === '#' + cur;
-    a.style.color = active ? 'var(--jade)' : '';
-    a.style.background = active ? 'var(--jade-g)' : '';
-  });
-}, { passive: true });
-</script>
+        });
+    </script>
 </body>
 </html>
