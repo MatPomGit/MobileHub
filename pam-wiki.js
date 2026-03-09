@@ -1,7 +1,7 @@
 /**
  * WIKI System - Programowanie Aplikacji Mobilnych (PAM)
  * Katedra Informatyki - Politechnika Rzeszowska
- * Version: 2.1 — fix: poprawione klasy ikon Font Awesome (fa-brands vs fa-solid)
+ * Version: 2.2 — fix: poprawione klasy ikon FA (fa-brands vs fa-solid), zastąpione ikony Pro-only
  */
 
 'use strict';
@@ -89,7 +89,7 @@ const METADATA = {
     'android-network':      { category: 'Programowanie Natywne Android',  title: 'Sieć i REST API — Retrofit',               icon: 'fa-solid fa-network-wired' },
     'android-testing':      { category: 'Programowanie Natywne Android',  title: 'Testowanie Aplikacji Android',             icon: 'fa-solid fa-flask' },
     'xcode-ios':            { category: 'Programowanie Natywne iOS',      title: 'Xcode — Swift & SwiftUI',                  icon: 'fa-brands fa-apple' },
-    'swift-basics':         { category: 'Programowanie Natywne iOS',      title: 'Swift — Podstawy Języka',                  icon: 'fa-solid fa-swift' },
+    'swift-basics':         { category: 'Programowanie Natywne iOS',      title: 'Swift — Podstawy Języka',                  icon: 'fa-solid fa-terminal' },
     'swiftui-advanced':     { category: 'Programowanie Natywne iOS',      title: 'SwiftUI — Zaawansowane Techniki',          icon: 'fa-solid fa-wand-magic-sparkles' },
     'ios-networking':       { category: 'Programowanie Natywne iOS',      title: 'Sieć i API w iOS',                         icon: 'fa-solid fa-network-wired' },
     'ios-data':             { category: 'Programowanie Natywne iOS',      title: 'Przechowywanie Danych w iOS',              icon: 'fa-solid fa-database' },
@@ -110,7 +110,7 @@ const METADATA = {
     'mqtt-protocol':        { category: 'IoT Mobile',                     title: 'MQTT — Protokół dla IoT',                  icon: 'fa-solid fa-tower-broadcast' },
     'affective-computing':  { category: 'Informatyka Afektywna',          title: 'Informatyka Afektywna w Mobile',           icon: 'fa-solid fa-face-smile' },
     'emotion-recognition':  { category: 'Informatyka Afektywna',          title: 'Rozpoznawanie Emocji z Kamery',            icon: 'fa-solid fa-eye' },
-    'voice-analysis':       { category: 'Informatyka Afektywna',          title: 'Analiza Głosu i Mowy',                     icon: 'fa-solid fa-waveform-lines' },
+    'voice-analysis':       { category: 'Informatyka Afektywna',          title: 'Analiza Głosu i Mowy',                     icon: 'fa-solid fa-wave-square' },
     'mental-health-apps':   { category: 'Informatyka Afektywna',          title: 'Aplikacje Zdrowia Psychicznego',           icon: 'fa-solid fa-heart-pulse' },
     'xr-mobile':            { category: 'XR i Rozszerzona Rzeczywistość', title: 'Wprowadzenie do XR Mobile',                icon: 'fa-solid fa-vr-cardboard' },
     'arcore-advanced':      { category: 'XR i Rozszerzona Rzeczywistość', title: 'ARCore — Zaawansowane Techniki',           icon: 'fa-solid fa-cube' },
