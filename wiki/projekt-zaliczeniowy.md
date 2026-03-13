@@ -1,4 +1,4 @@
-# Projekt Zaliczeniowy — Własna Aplikacja Mobilna
+# Projekt zaliczeniowy — własna aplikacja mobilna
 
 Projekt zaliczeniowy to samodzielnie zaprojektowana i zaimplementowana aplikacja mobilna. Stanowi praktyczne potwierdzenie opanowania umiejętności programistycznych zdobytych w ramach przedmiotu **Programowanie Aplikacji Mobilnych (PAM)**.
 
@@ -79,18 +79,10 @@ Projekt polega na zaprojektowaniu i wdrożeniu aplikacji mobilnej, która **real
 | Cross-platform    | Flutter                  | Dart             |
 | Cross-platform    | React Native             | JavaScript/TS    |
 | Cross-platform    | Kotlin Multiplatform     | Kotlin           |
+| Unity             | Unity3D                  | C#           |
 
 > **Uwaga:** Wybór platformy jest dowolny, jednak platforma musi być uzgodniona z prowadzącym na początku semestru.
 
-## Harmonogram realizacji
-
-| Termin            | Kamień milowy                                              |
-|-------------------|------------------------------------------------------------|
-| Tydzień 3         | Zgłoszenie tematu i platformy — akceptacja przez prowadzącego |
-| Tydzień 6         | Wireframy i projekt UI (Figma lub szkice)                   |
-| Tydzień 9         | Demo MVP — działające podstawowe funkcje                    |
-| Tydzień 12        | Wersja beta — pełna funkcjonalność, testy                   |
-| Sesja egzaminacyjna | Prezentacja finalna + oddanie kodu źródłowego             |
 
 ## Kryteria oceniania
 
@@ -108,12 +100,12 @@ Projekt polega na zaprojektowaniu i wdrożeniu aplikacji mobilnej, która **real
 ### Progi ocen
 
 ```
-91–100 pkt → 5.0 (celujący)
-81–90  pkt → 4.5 (bardzo dobry+)
-71–80  pkt → 4.0 (bardzo dobry)
-61–70  pkt → 3.5 (dobry+)
+91–100 pkt → 5.0 (bardzo dobry)
+81–90  pkt → 4.5 (dobry+)
+71–80  pkt → 4.0 (dobry)
+61–70  pkt → 3.5 (dostateczny+)
 51–60  pkt → 3.0 (dostateczny)
-< 51   pkt → 2.0 (niedostateczny)
+< 50   pkt → 2.0 (niedostateczny)
 ```
 
 ## Dokumentacja projektu
@@ -128,7 +120,7 @@ Do oddawanego projektu należy dołączyć:
 
 ## Prezentacja projektu
 
-Każdy student prezentuje projekt indywidualnie (lub w parach — po uzgodnieniu):
+Każdy zespół prezentuje projekt:
 
 - Czas prezentacji: **8–12 minut**,
 - Demonstracja działania na urządzeniu fizycznym lub emulatorze,

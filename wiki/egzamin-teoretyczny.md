@@ -1,15 +1,15 @@
-# Egzamin Teoretyczny — Programowanie Aplikacji Mobilnych
+# Zaliczenie wykładów — Programowanie Aplikacji Mobilnych
 
-Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** sprawdza znajomość zagadnień omawianych na wykładach i laboratoriach. Egzamin odbywa się w sesji egzaminacyjnej i ma formę pisemną lub elektroniczną.
+Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** sprawdza znajomość zagadnień omawianych na wykładach i laboratoriach. 
+
 
 ## Format egzaminu
 
 | Element           | Szczegóły                                          |
 |-------------------|----------------------------------------------------|
 | Czas trwania      | 60 minut                                           |
-| Forma             | Test jednokrotnego i wielokrotnego wyboru + pytania otwarte |
-| Liczba pytań      | 40 pytań testowych + 3 pytania opisowe             |
-| Materiały         | Egzamin zamknięty — bez notatek                    |
+| Forma             | Test wielokrotnego wyboru                          |
+| Liczba pytań      | 50 pytań testowych                                 |
 | Próg zaliczenia   | 51% punktów (26/50)                                |
 
 ### Struktura punktowa
@@ -23,7 +23,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 
 ## Tematy egzaminacyjne
 
-### 1. Systemy Operacyjne i Ekosystemy Mobilne
+### 1. Systemy operacyjne i ekosystemy mobilne
 
 - Architektura systemu Android (Linux kernel, HAL, ART, warstwy aplikacji),
 - Architektura iOS (XNU kernel, Core OS, Core Services, Media, Cocoa Touch),
@@ -39,7 +39,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - Dostępność (Accessibility) — WCAG, TalkBack, VoiceOver, contrast ratio,
 - Responsive design i adaptacja do różnych rozmiarów ekranów.
 
-### 3. Architektura Aplikacji Mobilnych
+### 3. Architektura aplikacji mobilnych
 
 - Wzorzec MVC, MVP, MVVM — porównanie, zalety i wady,
 - Clean Architecture — warstwy Presentation / Domain / Data,
@@ -75,7 +75,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - PWA — Service Worker, Cache API, Web App Manifest, offline-first,
 - Porównanie: wydajność, dostęp do natywnych API, community.
 
-### 7. Obsługa Sensorów i Sprzętu
+### 7. Hardware i obsługa sensorów
 
 - Camera2 API / AVFoundation — preview, capture, analiza obrazu,
 - GPS i geolokalizacja — uprawnienia, foreground vs background,
@@ -83,7 +83,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - Biometria — BiometricPrompt (Android), LocalAuthentication (iOS),
 - Bluetooth LE — GATT, charakterystyki, skanowanie, parowanie.
 
-### 8. Sieć i Komunikacja
+### 8. Sieć i komunikacja
 
 - REST API — metody HTTP, kody statusu, nagłówki, autentykacja JWT,
 - WebSocket — połączenie full-duplex, zastosowania w real-time,
@@ -91,7 +91,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - Firebase — Firestore, Realtime DB, FCM (push notifications),
 - SSL Pinning i bezpieczeństwo komunikacji sieciowej.
 
-### 9. Bezpieczeństwo Aplikacji Mobilnych
+### 9. Bezpieczeństwo aplikacji mobilnych
 
 - OWASP Mobile Top 10 — najczęstsze zagrożenia,
 - Bezpieczne przechowywanie danych — Keychain (iOS), Keystore (Android),
@@ -99,7 +99,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - Certificate Pinning — zapobieganie MITM,
 - Uprawnienia — runtime permissions, principle of least privilege.
 
-### 10. Testowanie Aplikacji Mobilnych
+### 10. Testowanie aplikacji mobilnych
 
 - Piramida testów — unit testy, integracyjne, UI (end-to-end),
 - JUnit 4/5, MockK, Turbine — Android unit testing,
@@ -107,7 +107,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - XCTest, XCUITest — testy iOS,
 - Firebase Test Lab, BrowserStack — chmurowe farmy urządzeń.
 
-### 11. Wydajność i Optymalizacja
+### 11. Wydajność i optymalizacja
 
 - Profilowanie — Android Profiler, Xcode Instruments,
 - Zarządzanie pamięcią — garbage collection (ART), ARC (iOS),
