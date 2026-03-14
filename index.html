@@ -535,7 +535,7 @@
             display: flex;
             align-items: center;
             gap: 8px;
-            padding: 7px 10px;
+            padding: 4px 10px;
             border-radius: 6px;
             font-size: 13px;
             color: var(--text-muted);
@@ -2350,103 +2350,7 @@
                 </div>
             </div>
 
-            <div class="files-section">
-                <h3 class="files-section-title">
-                    <i class="fa-solid fa-chalkboard-teacher"></i>
-                    Wykłady
-                </h3>
-                <div class="file-list">
-                    <a class="file-item" href="wyklady/w1_pam_init.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>W1 – Wprowadzenie do PAM</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="wyklady/w2_hardware.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>W2 – Architektura Sprzętu</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="wyklady/w8_affective.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>W8 – Informatyka Afektywna</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="wyklady/w8_affective_1_4.pptx" download>
-                        <div class="file-icon pptx"><i class="fa-solid fa-file-powerpoint"></i></div>
-                        <div class="file-meta">
-                            <strong>W8 – Informatyka Afektywna (slajdy)</strong>
-                            <span>PPTX</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                </div>
-            </div>
-
-            <div class="files-section">
-                <h3 class="files-section-title">
-                    <i class="fa-solid fa-flask"></i>
-                    Laboratoria
-                </h3>
-                <div class="file-list">
-                    <a class="file-item" href="laby/tematyprojektow.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>Tematy projektów</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="laby/kotlin_4.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>Lab Kotlin 4</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="laby/kotlin_5.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>Lab Kotlin 5</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="laby/flutter_1.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>Lab Flutter 1</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="laby/flutter_2.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>Lab Flutter 2</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                    <a class="file-item" href="laby/unity_1.pdf" download>
-                        <div class="file-icon pdf"><i class="fa-solid fa-file-pdf"></i></div>
-                        <div class="file-meta">
-                            <strong>Lab Unity 1</strong>
-                            <span>PDF</span>
-                        </div>
-                        <i class="fa-solid fa-download file-download-icon"></i>
-                    </a>
-                </div>
-            </div>
+            <div id="materials-content"></div>
         </div>
     </div><!-- /panel-materialy -->
 
@@ -2475,6 +2379,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/python.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/xml.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/languages/csharp.min.js"></script>
+    <script src="pam-files.js"></script>
     <script src="pam-wiki.js"></script>
 
     <script>
