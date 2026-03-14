@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PAM Wiki — Programowanie Aplikacji Mobilnych</title>
+    <title>PAM WIKI — Programowanie Aplikacji Mobilnych</title>
     <meta name="description"
         content="Baza wiedzy z Programowania Aplikacji Mobilnych. Android, iOS, Flutter, XR, IoT, Informatyka Afektywna, Gry Mobilne.">
 
@@ -16,7 +16,11 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css"
         rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 
+
+    </header>
+    
     <style>
         /* ===== CSS VARIABLES ===== */
         :root {
@@ -380,12 +384,12 @@
         .hero-badge {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
+            gap: 6px;
             background: rgba(91, 79, 207, 0.2);
             border: 1px solid rgba(91, 79, 207, 0.4);
             color: #a78bfa;
-            padding: 4px 12px;
-            border-radius: 20px;
+            padding: 4px 10px;
+            border-radius: 16px;
             font-size: 10px;
             font-weight: 600;
             letter-spacing: 1px;
@@ -394,7 +398,7 @@
         }
 
         .hero h1 {
-            font-size: clamp(16px, 2.5vw, 24px);
+            font-size: clamp(12px, 2.5vw, 18px);
             font-weight: 800;
             color: #fff;
             line-height: 1.2;
@@ -408,7 +412,7 @@
         }
 
         .hero-sub {
-            font-size: 13px;
+            font-size: 11px;
             color: rgba(255, 255, 255, 0.45);
             max-width: 480px;
             margin: 0 auto;
@@ -587,7 +591,7 @@
 
         /* ===== ARTICLE STYLES ===== */
         #wikiArticle h1 {
-            font-size: clamp(22px, 3.5vw, 34px);
+            font-size: clamp(20px, 3.5vw, 34px);
             font-weight: 800;
             line-height: 1.1;
             margin-bottom: 16px;
@@ -597,7 +601,7 @@
         }
 
         #wikiArticle h2 {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             margin: 36px 0 14px;
             color: var(--text);
@@ -617,16 +621,16 @@
         }
 
         #wikiArticle h3 {
-            font-size: 16px;
+            font-size: 14px;
             font-weight: 700;
             margin: 24px 0 10px;
             color: var(--text);
         }
 
         #wikiArticle p {
-            margin-bottom: 14px;
+            margin-bottom: 12px;
             color: var(--text);
-            line-height: 1.75;
+            line-height: 1.5;
         }
 
         #wikiArticle ul,
@@ -666,7 +670,7 @@
             width: 100%;
             border-collapse: collapse;
             margin: 16px 0;
-            font-size: 14px;
+            font-size: 12px;
             border-radius: var(--radius);
             overflow: hidden;
             box-shadow: var(--shadow);
@@ -702,7 +706,7 @@
             border: 1px solid var(--border);
             padding: 2px 6px;
             border-radius: 4px;
-            font-size: 12px;
+            font-size: 10px;
             color: var(--accent2);
         }
 
@@ -719,7 +723,7 @@
             overflow-x: auto;
             font-family: var(--mono);
             font-size: 13px;
-            line-height: 1.6;
+            line-height: 1.5;
             box-shadow: var(--shadow-lg);
         }
 
@@ -813,7 +817,7 @@
 
         /* Welcome screen */
         .wiki-welcome {
-            padding: 8px 0;
+            padding: 6px 0;
         }
 
         .wiki-welcome h2 {
@@ -836,7 +840,7 @@
         }
 
         .quick-start h3 {
-            font-size: 15px;
+            font-size: 13px;
             font-weight: 700;
             margin-bottom: 8px;
             color: var(--text-muted);
@@ -847,8 +851,8 @@
         .quick-links-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-            gap: 12px;
-            margin-top: 16px;
+            gap: 10px;
+            margin-top: 14px;
         }
 
         .quick-link-card {
@@ -883,12 +887,12 @@
 
         .quick-link-content strong {
             display: block;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 700;
         }
 
         .quick-link-content span {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
@@ -901,12 +905,12 @@
             display: flex;
             gap: 14px;
             align-items: flex-start;
-            font-size: 14px;
+            font-size: 12px;
         }
 
         .info-box i {
             color: var(--accent);
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 2px;
             flex-shrink: 0;
         }
@@ -995,7 +999,7 @@
             background: none;
             cursor: pointer;
             font-family: var(--font);
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             color: var(--text-muted);
             border-bottom: 3px solid transparent;
@@ -1005,7 +1009,7 @@
         }
 
         .tab-btn i {
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .tab-btn:hover {
@@ -1059,7 +1063,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 22px;
+            font-size: 20px;
             color: #fff;
         }
 
@@ -1072,13 +1076,13 @@
         }
 
         .info-panel-header h2 {
-            font-size: 28px;
+            font-size: 24px;
             font-weight: 800;
         }
 
         .info-panel-header p {
             color: var(--text-muted);
-            font-size: 14px;
+            font-size: 12px;
             margin-top: 4px;
         }
 
@@ -1116,7 +1120,7 @@
             border-radius: 10px;
             background: var(--accent-light);
             color: var(--accent);
-            font-size: 15px;
+            font-size: 14px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -1124,12 +1128,12 @@
         }
 
         .info-card-header strong {
-            font-size: 15px;
+            font-size: 14px;
             font-weight: 700;
         }
 
         .info-card p {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
             line-height: 1.7;
             margin-bottom: 0;
@@ -1173,13 +1177,13 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 700;
         }
 
         .milestone-info strong {
             display: block;
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 700;
             margin-bottom: 2px;
         }
@@ -1203,14 +1207,14 @@
             color: #fff;
             padding: 10px 16px;
             text-align: left;
-            font-size: 13px;
+            font-size: 12px;
         }
 
         .score-table td {
             padding: 10px 16px;
             border-bottom: 1px solid var(--border);
             background: var(--surface);
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .score-table tr:last-child td {
@@ -1225,7 +1229,7 @@
             display: inline-block;
             padding: 3px 10px;
             border-radius: 12px;
-            font-size: 12px;
+            font-size: 13px;
             font-weight: 700;
         }
 
@@ -1245,7 +1249,7 @@
         }
 
         .section-title {
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             margin: 32px 0 16px;
             display: flex;
@@ -1295,7 +1299,7 @@
         }
 
         .topic-header span {
-            font-size: 14px;
+            font-size: 13px;
             font-weight: 600;
             flex: 1;
         }
@@ -1325,7 +1329,7 @@
         }
 
         .topic-body li {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 5px;
             line-height: 1.6;
@@ -1348,20 +1352,20 @@
 
         .exam-stat i {
             color: var(--accent);
-            font-size: 22px;
+            font-size: 20px;
             margin-bottom: 8px;
             display: block;
         }
 
         .exam-stat strong {
             display: block;
-            font-size: 22px;
+            font-size: 20px;
             font-weight: 800;
             margin-bottom: 4px;
         }
 
         .exam-stat span {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
         }
 
@@ -1373,14 +1377,14 @@
             padding: 16px 20px;
             margin-bottom: 24px;
             display: flex;
-            gap: 14px;
+            gap: 12px;
             align-items: flex-start;
-            font-size: 14px;
+            font-size: 13px;
         }
 
         .hint-box i {
             color: #10b981;
-            font-size: 16px;
+            font-size: 14px;
             margin-top: 2px;
             flex-shrink: 0;
         }
@@ -1396,7 +1400,7 @@
             color: rgba(255, 255, 255, 0.5);
             text-align: center;
             padding: 28px 24px;
-            font-size: 13px;
+            font-size: 11px;
             border-top: 1px solid rgba(255, 255, 255, 0.06);
         }
 
@@ -1416,7 +1420,7 @@
             border: none;
             border-radius: 50%;
             color: #fff;
-            font-size: 18px;
+            font-size: 16px;
             cursor: pointer;
             box-shadow: 0 4px 20px rgba(91, 79, 207, 0.4);
             z-index: 50;
@@ -1483,7 +1487,7 @@
             }
 
             .hero-stats {
-                gap: 20px;
+                gap: 16px;
             }
 
             .quick-links-grid {
@@ -1496,7 +1500,7 @@
 
             .tab-btn {
                 padding: 10px 12px;
-                font-size: 12px;
+                font-size: 11px;
             }
 
             .header-title span {
@@ -1522,7 +1526,7 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            font-size: 18px;
+            font-size: 16px;
             font-weight: 700;
             margin-bottom: 16px;
             padding-bottom: 10px;
@@ -1566,7 +1570,7 @@
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 18px;
+            font-size: 16px;
             flex-shrink: 0;
             color: #fff;
         }
@@ -1586,7 +1590,7 @@
 
         .file-meta strong {
             display: block;
-            font-size: 14px;
+            font-size: 12px;
             font-weight: 600;
             white-space: nowrap;
             overflow: hidden;
@@ -1594,7 +1598,7 @@
         }
 
         .file-meta span {
-            font-size: 12px;
+            font-size: 11px;
             color: var(--text-muted);
             text-transform: uppercase;
             letter-spacing: 0.5px;
@@ -1632,7 +1636,7 @@
                     <i class="fa-solid fa-mobile-screen-button"></i>
                 </div>
                 <div class="header-title">
-                    <strong>PAM Wiki</strong>
+                    <strong>PAM WIKI</strong>
                     <span>Programowanie Aplikacji Mobilnych</span>
                 </div>
             </div>
@@ -1673,12 +1677,11 @@
         <div class="hero-content">
             <div class="hero-badge">
                 <i class="fa-solid fa-book-open"></i>
-                Baza Wiedzy
+                Baza wiedzy
             </div>
             <h1>Programowanie<br><span>Aplikacji Mobilnych</span></h1>
             <p class="hero-sub">
-                Kompendium wiedzy z 11 obszarów tematycznych — od natywnego Android/iOS
-                po XR, IoT, Informatykę Afektywną i Robotykę.
+                Od natywnego Android/iOS po XR, IoT, informatykę afektywną i robotykę
             </p>
 
         </div>
@@ -1689,7 +1692,7 @@
         <div class="tab-bar-inner">
             <button class="tab-btn active" data-tab="wiki" id="tab-wiki">
                 <i class="fa-solid fa-book-open"></i>
-                Baza Wiedzy
+                Baza wiedzy
             </button>
             <button class="tab-btn" data-tab="projekt" id="tab-projekt">
                 <i class="fa-solid fa-laptop-code"></i>
@@ -2458,8 +2461,8 @@
             <strong>PAM Wiki</strong> · Programowanie Aplikacji Mobilnych ·
             Katedra Informatyki i Automatyki · Politechnika Rzeszowska
         </p>
-        <p style="margin-top: 6px; font-size: 11px;">
-            dr inż. Mateusz Pomianek · <span style="opacity:0.4">v1.6 "KNEDEL"</span>
+        <p style="margin-top: 4px; font-size: 10px;">
+            dr inż. Mateusz Pomianek · <span style="opacity:0.4">v1.62 "KOTLET"</span>
         </p>
     </footer>
 
