@@ -68,6 +68,7 @@ const ARTICLES = {
     'computer-vision-mobile':'wiki/computer-vision-mobile.md',
     'projekt-zaliczeniowy':  'wiki/projekt-zaliczeniowy.md',
     'egzamin-teoretyczny':   'wiki/egzamin-teoretyczny.md',
+    'app-publishing':        'wiki/app-publishing.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -134,6 +135,7 @@ const METADATA = {
     'computer-vision-mobile':{ category: 'Robotyka Autonomiczna',         title: 'Computer Vision w Robotyce Mobilnej',      icon: 'fa-solid fa-eye' },
     'projekt-zaliczeniowy':  { category: 'Zaliczenie',                    title: 'Projekt Zaliczeniowy — Własna Aplikacja',  icon: 'fa-solid fa-laptop-code' },
     'egzamin-teoretyczny':   { category: 'Zaliczenie',                    title: 'Egzamin Teoretyczny — Przygotowanie',      icon: 'fa-solid fa-graduation-cap' },
+    'app-publishing':        { category: 'Zaliczenie',                    title: 'Publikacja i Promocja Własnej Aplikacji',  icon: 'fa-solid fa-rocket' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
@@ -150,7 +152,7 @@ const CATEGORIES = [
     { id: 'cat-xr',       name: 'XR i Rozszerzona Rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
     { id: 'cat-games',    name: 'Gry Mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','unity-advanced','game-physics','game-monetization'] },
     { id: 'cat-robots',   name: 'Robotyka Autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui'] },
-    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
+    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny','app-publishing'] },
 ];
 
 // ---- INIT ----
