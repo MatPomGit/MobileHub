@@ -10,10 +10,24 @@ const FILES_DATA = [
         section: 'Wykłady',
         icon: 'fa-solid fa-chalkboard-teacher',
         files: [
-            { href: 'wyklady/w1_pam_init.pdf',       type: 'pdf',  label: 'W1 – Wprowadzenie do PAM' },
-            { href: 'wyklady/w2_hardware.pdf',        type: 'pdf',  label: 'W2 – Architektura Sprzętu' },
-            { href: 'wyklady/w8_affective.pdf',       type: 'pdf',  label: 'W8 – Informatyka Afektywna' },
-            { href: 'wyklady/w8_affective_1_4.pptx',  type: 'pptx', label: 'W8 – Informatyka Afektywna (slajdy)' },
+            { href: 'wyklady/w1_pam_init.pdf',        type: 'pdf',  label: 'W1 – Wprowadzenie do PAM' },
+            { href: 'wyklady/w2_hardware.pdf',        type: 'pdf',  label: 'W2 – Architektura sprzętu' },
+            { href: 'wyklady/w3_ui.pdf',              type: 'pdf',  label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
+            { href: 'wyklady/w6_sensors.pdf',         type: 'pdf',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
+            { href: 'wyklady/w7_iot.pdf',             type: 'pdf',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
+            { href: 'wyklady/w8_affective.pdf',       type: 'pdf',  label: 'W8 – Informatyka afektywna' },
+            { href: 'wyklady/w9_xr.pdf',              type: 'pdf',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
+            { href: 'wyklady/w10_xr.pdf',             type: 'pdf',  label: 'W10 – Programowanie Gier Mobilnych' },
+            { href: 'wyklady/w11_robots.pdf',         type: 'pdf',  label: 'W11 – Programowanie autonomicznych robotów' },
+            
+            { href: 'wyklady/w3_ui.pptx',             type: 'pptx', label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
+            { href: 'wyklady/w6_sensors.pptx',        type: 'pptx',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
+            { href: 'wyklady/w7_iot.pptx',            type: 'pptx',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
+            { href: 'wyklady/w8_affective_1_4.pptx.pptx',      type: 'pptx',  label: 'W8 – Informatyka afektywna' },
+            { href: 'wyklady/w9_xr.pptx',             type: 'pptx',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
+            { href: 'wyklady/w10_xr.pptx',            type: 'pptx',  label: 'W10 – Programowanie Gier Mobilnych' },
+            { href: 'wyklady/w11_robots.pptx',        type: 'pptx',  label: 'W11 – Programowanie autonomicznych robotów' },
+
         ],
     },
     {
