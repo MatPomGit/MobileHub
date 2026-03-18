@@ -69,6 +69,7 @@ const ARTICLES = {
     'projekt-zaliczeniowy':  'wiki/projekt-zaliczeniowy.md',
     'egzamin-teoretyczny':   'wiki/egzamin-teoretyczny.md',
     'app-publishing':        'wiki/app-publishing.md',
+    'app-design-process':    'wiki/app-design-process.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -135,12 +136,13 @@ const METADATA = {
     'computer-vision-mobile':{ category: 'Robotyka Autonomiczna',         title: 'Computer Vision w Robotyce Mobilnej',      icon: 'fa-solid fa-eye' },
     'projekt-zaliczeniowy':  { category: 'Zaliczenie',                    title: 'Projekt Zaliczeniowy — Własna Aplikacja',  icon: 'fa-solid fa-laptop-code' },
     'egzamin-teoretyczny':   { category: 'Zaliczenie',                    title: 'Egzamin Teoretyczny — Przygotowanie',      icon: 'fa-solid fa-graduation-cap' },
-    'app-publishing':        { category: 'Zaliczenie',                    title: 'Publikacja i Promocja Własnej Aplikacji',  icon: 'fa-solid fa-rocket' },
+    'app-publishing':        { category: 'Projektowanie i OS',            title: 'Publikacja i Promocja Własnej Aplikacji',  icon: 'fa-solid fa-rocket' },
+    'app-design-process':    { category: 'Projektowanie i OS',            title: 'Proces Projektowania — Brief, BRD, FRD, TRD', icon: 'fa-solid fa-file-lines' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
 const CATEGORIES = [
-    { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance'] },
+    { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing'] },
     { id: 'cat-hw',       name: 'Architektura Sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody Interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','navigation-patterns','gestures-interactions'] },
     { id: 'cat-android',  name: 'Programowanie Natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing'] },
@@ -152,7 +154,7 @@ const CATEGORIES = [
     { id: 'cat-xr',       name: 'XR i Rozszerzona Rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
     { id: 'cat-games',    name: 'Gry Mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','unity-advanced','game-physics','game-monetization'] },
     { id: 'cat-robots',   name: 'Robotyka Autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui'] },
-    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny','app-publishing'] },
+    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
 ];
 
 // ---- INIT ----
