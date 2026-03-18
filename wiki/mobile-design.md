@@ -99,6 +99,8 @@ Skala typograficzna Material Design 3 — 15 stylów:
 | Label Large | 14sp | Przyciski |
 | Label Small | 11sp | Captions, tagi |
 
+Poniższy kod tworzy własną, spójną skalę typograficzną dla aplikacji Compose. Klasa `Typography` przyjmuje nazwane parametry odpowiadające rolom tekstowym z Material Design 3 — dzięki temu zamiast definiować styl dla każdego `Text()` z osobna, definiujemy go raz i odwołujemy się przez `MaterialTheme.typography.headlineLarge`. Jednostka `sp` (scale-independent pixels) — w przeciwieństwie do `dp` — uwzględnia preferencje dostępności użytkownika dotyczące rozmiaru tekstu, co jest wymogiem dla aplikacji dostępnych. Właściwości `lineHeight` i `letterSpacing` są jawnie podane, a nie pozostawione domyślne, ponieważ ich precyzyjne ustawienie decyduje o czytelności na małych ekranach — zbyt mała wysokość linii utrudnia czytanie dłuższych akapitów. Użycie `FontFamily` z zasobem czcionki (`R.font.*`) zamiast systemowej czcionki zapewnia spójny wygląd na wszystkich urządzeniach, niezależnie od ich producenta.
+
 ```kotlin
 // Własna skala typografii w Compose
 val AppTypography = Typography(
@@ -124,6 +126,8 @@ val AppTypography = Typography(
 ```
 
 ## Kolor — system tokenów
+
+Material Theme Builder generuje na podstawie jednego koloru „seed" kompletną paletę kolorów zgodną z Material You. Poniższy kod definiuje dwa schematy — jasny i ciemny — które aplikacja przełącza automatycznie lub na życzenie użytkownika. Każdy kolor ma swój **token roli** (np. `primary`, `onPrimary`, `primaryContainer`): prefiks `on` oznacza kolor tekstu/ikony wyświetlanej na tle danego koloru, a `Container` — jaśniejszy, subtelny wariant przeznaczony na tła kart lub chipów. Dzięki temu programista nie używa `Color(0xFF5B4FCF)` bezpośrednio w komponencie, lecz `MaterialTheme.colorScheme.primary` — a zmiana motywu przelewa się automatycznie na cały UI. Ciemny schemat definiuje się jako osobną paletę (a nie przez proste odwrócenie jasnej), ponieważ kolory w ciemnym motywie muszą spełniać inne wymagania kontrastu — jasny `primary` na jasnym tle daje kontrast 4.5:1, ale ten sam kolor na ciemnym tle byłby nieczytelny.
 
 ```kotlin
 // Material Theme Builder → generuje pełną paletę z jednego koloru seedu
@@ -163,6 +167,8 @@ Dobre praktyki:
 ✓ Umożliw korzystanie bez konta ("Continue as guest")
 ✓ 3 ekrany max — lub jeszcze lepiej: guided first use
 ```
+
+Poniższy composable implementuje wzorzec **Progressive Disclosure** — wyjaśnianie funkcji aplikacji dopiero przy ich pierwszym użyciu, zamiast na osobnych ekranach powitalnych. `AnimatedVisibility` stosuje się tu zamiast prostego `if (visible)`, ponieważ animuje pojawienie się i znikanie tooltipa (`fadeIn() + slideInVertically()`), co jest percepcyjnie łagodniejsze i mniej zaskakujące dla użytkownika. `Box` jako kontener umożliwia pozycjonowanie tooltipa względem docelowego elementu (`targetContent`) za pomocą `Alignment.BottomStart` — tooltip jest dosłownie nakładany na zawartość. Kolor `inverseSurface` i `inverseOnSurface` zapewniają, że tooltip zawsze będzie czytelny zarówno w jasnym, jak i ciemnym motywie, bo jest kolorem odwrotnym do bieżącej powierzchni. Gdybyśmy użyli sztywnego koloru, tooltip mógłby zlać się z tłem w jednym z motywów.
 
 ```kotlin
 // Progressive Onboarding — tooltip przy pierwszym użyciu

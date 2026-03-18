@@ -15,6 +15,8 @@ Google Play Services to warstwa pośrednia między systemem Android a aplikacjam
 | **ML Kit** | AI on-device bez internetu | OCR, detekcja twarzy, tłumaczenie |
 | **SafetyNet / Play Integrity** | Weryfikacja autentyczności urządzenia | Ochrona przed rootowaniem |
 
+Poniższy fragment kodu sprawdza, czy na urządzeniu są zainstalowane i aktualne Google Play Services — jest to konieczne przed wywołaniem jakiegokolwiek API z ekosystemu Google. `GoogleApiAvailability.getInstance()` zwraca singleton zarządzający dostępnością serwisów. Metoda `isGooglePlayServicesAvailable()` zwraca kod statusu — wartość `ConnectionResult.SUCCESS` oznacza gotowość do pracy, inne kody sygnalizują problem (np. nieaktualna wersja, brak instalacji). Sprawdzenie `isUserResolvableError()` odróżnia błędy, które użytkownik może samodzielnie naprawić (np. aktualizacja Play Services przez sklep), od błędów niemożliwych do naprawienia (np. urządzenie Huawei bez licencji Google). W przypadku błędów naprawialnych wyświetlamy gotowy dialog systemowy — nie piszemy własnego UI, bo Google regularnie aktualizuje komunikaty w lokalnych językach.
+
 ```kotlin
 // Sprawdzenie dostępności Google Play Services
 val availability = GoogleApiAvailability.getInstance()
@@ -56,6 +58,8 @@ Dzięki AAB urządzenie pobiera tylko zasoby pasujące do jego gęstości ekranu
 
 ## Keystore — podpisywanie aplikacji
 
+Każda aplikacja Android musi być cyfrowo podpisana, zanim trafi do sklepu lub na urządzenie. Keystore to zaszyfrowany plik przechowujący klucz prywatny RSA, którym Google Play weryfikuje, że kolejne aktualizacje aplikacji pochodzą od tego samego wydawcy. Poniższe polecenie generuje nowy keystore jednorazowo — parametr `-validity 10000` oznacza ważność przez ok. 27 lat, co jest standardem, bo certyfikat musi być ważny podczas całego życia aplikacji. Algorytm RSA z kluczem 2048 bitów jest wymagany przez Google Play — SHA-256 używany do podpisywania wymaga odpowiednio długiego klucza asymetrycznego. Dane organizacji (pytane interaktywnie) nie wpływają na bezpieczeństwo, ale są widoczne w certyfikacie i pomagają zidentyfikować właściciela aplikacji.
+
 ```bash
 # Generowanie keystore — ZRÓB TO RAZ, PRZECHOWUJ NA ZAWSZE
 keytool -genkey -v -keystore release.jks \
@@ -63,6 +67,8 @@ keytool -genkey -v -keystore release.jks \
   -alias my-key-alias
 # Zostaniesz zapytany o hasło i dane organizacji
 ```
+
+Poniższa konfiguracja Gradle definiuje, jak budować wersję produkcyjną (release) aplikacji z automatycznym podpisywaniem. Hasła do keystore pobierane są ze zmiennych środowiskowych (`System.getenv()`), a nie wpisane na stałe w kodzie — gdyby znalazły się w pliku `build.gradle.kts` zcommitowanym do repozytorium, każdy z dostępem do repo mógłby podpisać fałszywą aktualizację. Flagi `isMinifyEnabled = true` i `isShrinkResources = true` włączają narzędzie R8, które usuwa nieużywany kod i zasoby oraz obfuskuje nazwy klas i metod — zmniejsza to rozmiar APK o 20–40% i utrudnia reverse engineering. Plik `proguard-rules.pro` pozwala wykluczyć z obfuskacji klasy, które muszą zachować oryginalne nazwy (np. modele danych serializowane przez Gson).
 
 ```kotlin
 // build.gradle.kts — konfiguracja podpisywania
@@ -133,6 +139,8 @@ Przekroczenie progów = ostrzeżenie lub obniżona widoczność w sklepie.
 
 ## CI/CD z Fastlane
 
+Poniższe konfiguracje automatyzują publikację aplikacji — zamiast ręcznych kilkunastu kroków w Play Console, jedno polecenie lub zdarzenie Git uruchamia cały pipeline. Plik `Fastfile` definiuje „lane" (ścieżkę) o nazwie `deploy_production`: najpierw `gradle()` buduje podpisany AAB (Android App Bundle), a następnie `upload_to_play_store()` wysyła go do Google Play z parametrem `rollout: "0.1"`, czyli staged rollout do 10% użytkowników. Parametr `skip_upload_screenshots: true` przyspiesza publikację, gdy zrzuty ekranu nie uległy zmianie. Na końcu wysyłane jest powiadomienie do Slacka — co jest dobrą praktyką w zespołach, bo każdy wie, że wersja produkcyjna jest już dostępna.
+
 ```ruby
 # Fastfile — automatyczna publikacja
 lane :deploy_production do
@@ -147,6 +155,8 @@ lane :deploy_production do
   slack(message: "Nowa wersja opublikowana w Google Play!")
 end
 ```
+
+Plik YAML definiuje workflow GitHub Actions wyzwalany automatycznie przez zdarzenie `push` na tagach pasujących do wzorca `v*` (np. `v1.2.3`). Taki wyzwalacz jest preferowany nad automatycznym buildowaniem każdego commita, bo w Google Play można przesyłać tylko wersje z rosnącym `versionCode` — tag Git naturalnie oznacza świadomą decyzję o wydaniu nowej wersji. Krok `setup-java` zapewnia powtarzalne środowisko budowania (zawsze Java 17 z dystrybucją Temurin), bo różne wersje JDK mogą generować różne wyniki kompilacji. Sekrety (`${{ secrets.* }}`) są wstrzykiwane jako zmienne środowiskowe — GitHub szyfruje je po stronie platformy i maskuje w logach, więc nie ma ryzyka ich wycieku nawet przy publicznym repozytorium.
 
 ```yaml
 # GitHub Actions — wyzwalanie przy tagu git
@@ -205,6 +215,8 @@ Limity rozmiaru APK/AAB:
 ```
 
 ## Play Integrity API
+
+Play Integrity API pozwala aplikacji serwer-side zweryfikować, że odpytujące urządzenie jest prawdziwym, niezmodyfikowanym urządzeniem z zainstalowaną oryginalną aplikacją z Google Play. Poniższy kod pokazuje kompletny przepływ: generowanie nonce (jednorazowego tokenu) po stronie klienta lub serwera, wysyłanie zapytania do Google o token integralności, a następnie odesłanie go do własnego backendu w celu weryfikacji przez Google API. Nonce jest kluczowy — bez niego atakujący mógłby przechwycić stary token i wielokrotnie go użyć (atak replay). Funkcja `suspend` i `await()` oznaczają, że cała operacja jest asynchroniczna i nie blokuje głównego wątku UI — to obowiązkowe podejście w Kotlinie dla operacji sieciowych. Wynik zawiera trzy wyroki: rozpoznanie aplikacji (`PLAY_RECOGNIZED`), integralność urządzenia i spełnienie wymogów bezpieczeństwa — każdy z nich można sprawdzać niezależnie, dopasowując poziom ochrony do wrażliwości wykonywanej operacji.
 
 ```kotlin
 // Sprawdź integralność urządzenia i aplikacji

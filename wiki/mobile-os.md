@@ -13,6 +13,8 @@ Android to system operacyjny oparty na jądrze Linux, rozwijany przez Google. AO
 - Języki: **Kotlin** (oficjalny od 2017), Java (legacy)
 - UI toolkit: **Jetpack Compose** (deklaratywny) lub XML Views
 
+Poniższy fragment pokazuje minimalną strukturę aplikacji napisanej w nowoczesnym podejściu deklaratywnym — Jetpack Compose. Klasa `MainActivity` dziedziczy po `ComponentActivity`, co jest podstawową klasą aktywności w architekturze Compose. Metoda `onCreate()` wywoływana jest przez system Android w momencie tworzenia aktywności i to w niej inicjalizujemy interfejs użytkownika. Wywołanie `setContent {}` zastępuje tradycyjne `setContentView(R.layout.main)` — zamiast inflacji pliku XML, deklaratywnie opisujemy, jak UI ma wyglądać. `MaterialTheme` zapewnia spójny system projektowania (kolory, typografia, kształty) zgodny z Material Design 3, a `Surface` stanowi „płótno" dla zawartości z odpowiednim kolorem tła. Takie podejście jest preferowane nad XML, ponieważ eliminuje synchronizację stanu między layoutem a kodem i umożliwia podgląd UI bezpośrednio w Android Studio.
+
 ```kotlin
 // Minimalna aplikacja Compose
 class MainActivity : ComponentActivity() {
@@ -69,6 +71,8 @@ iOS to zamknięty, sprzętowo-programowy ekosystem Apple. Działa wyłącznie na
 - UI toolkit: **SwiftUI** (deklaratywny, od 2019) lub UIKit
 - Bardzo szybka adopcja aktualizacji: >90% urządzeń na najnowszej wersji w 3 miesiące
 
+Poniższy przykład prezentuje minimalną strukturę aplikacji SwiftUI. Atrybut `@main` informuje kompilator, który `struct` jest punktem wejścia całej aplikacji — zastępuje on tradycyjny plik `main.swift`. Protokół `App` wymaga zdefiniowania właściwości `body`, zwracającej co najmniej jedną `Scene`. `WindowGroup` to najczęściej używana scena — automatycznie zarządza oknami (na iOS wyświetla jedno okno, na macOS umożliwia otwieranie wielu). `ContentView` jest osobnym widokiem, co obrazuje jeden z fundamentów SwiftUI: **dekompozycję UI na małe, wielokrotnie używane widoki**. Właściwość `body` w `ContentView` zwraca widok dekorowany modyfikatorami (`.font()`, `.padding()`) — taki styl zapewnia czytelność i możliwość podglądu w Xcode Canvas bez uruchamiania aplikacji.
+
 ```swift
 // Minimalna aplikacja SwiftUI
 @main
@@ -117,6 +121,8 @@ Fragmentacja to jeden z największych wyzwań deweloperów Android. Ta sama apli
 - Android 8.0 (2017) aż do Android 15 (2024)
 - Powłokach: One UI, MIUI, ColorOS, FunTouch, OxygenOS...
 - Ekranach od 4" do 7.9", różnych proporcjach i gęstościach
+
+Poniższy kod demonstruje strategię radzenia sobie z fragmentacją wersji Androida. Zamiast sprawdzać numer wersji za pomocą „magicznych liczb" (np. `>= 31`), używamy stałych z klasy `Build.VERSION_CODES` (jak `S` czy `TIRAMISU`) — nazwy kodowe odpowiadają konkretnym API Level i są czytelniejsze w kodzie. Instrukcja `when` z kontrolą wersji SDK jest preferowana nad zagnieżdżonymi `if-else`, ponieważ pozwala na przejrzyste obsłużenie wielu progów wersji w jednym bloku. Każda gałąź dostarcza API odpowiednie dla danej wersji systemu: na Androidzie 13+ aplikacja prosi tylko o dostęp do obrazów (`READ_MEDIA_IMAGES`), zamiast szerokiego uprawnienia do całego zewnętrznego magazynu danych (`READ_EXTERNAL_STORAGE`) — to przykład zasady minimalnych uprawnień, wymaganej przez polityki Google Play.
 
 ```kotlin
 // Strategia obsługi fragmentacji — sprawdzanie wersji przed użyciem API
@@ -192,6 +198,8 @@ Android 15  (2024)   — V, edge-to-edge wymuszone
 ```
 
 ## System uprawnień Android
+
+Poniższy kod pokazuje kompletny, produkcyjny wzorzec obsługi uprawnień w trybie runtime, obowiązkowy od Androida 6.0 (API 23). `registerForActivityResult()` z kontraktem `RequestPermission` jest nowoczesnym zamiennikiem przestarzałego `onRequestPermissionsResult()` — rejestruje callback jeszcze przed wywołaniem prośby, dzięki czemu nie musimy pisać kodu rozdzielającego logikę na różne metody cyklu życia. Wzorzec `when` sprawdza trzy możliwe stany przed wysłaniem prośby: uprawnienie już przyznane (otwieramy od razu), konieczność wyjaśnienia użytkownikowi dlaczego uprawnienie jest potrzebne (np. po wcześniejszej odmowie), lub pierwsze pytanie. Metoda `shouldShowRequestPermissionRationale()` zwraca `false` w dwóch przypadkach: gdy uprawnienie nie było jeszcze pytane (normalne pierwsze żądanie) LUB gdy użytkownik wybrał „Nie pytaj ponownie" — dlatego sprawdzenie jej wartości po odmowie (`!shouldShow... && !granted`) pozwala wykryć ten drugi przypadek i przekierować do ustawień systemowych.
 
 ```kotlin
 // Uprawnienia dzielą się na:

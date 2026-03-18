@@ -23,6 +23,8 @@ OWASP (Open Web Application Security Project) publikuje listę 10 najważniejszy
 
 ### Android Keystore + EncryptedSharedPreferences
 
+Poniższy kod demonstruje dwa sposoby bezpiecznego przechowywania wrażliwych danych na Androidzie. **Opcja 1** korzysta z `EncryptedSharedPreferences` — nakładki na standardowe SharedPreferences, która transparentnie szyfruje klucze i wartości. `MasterKey` oparty na schemacie `AES256_GCM` jest generowany i przechowywany w Android Keystore — sprzętowym magazynie kluczy, który na nowoczesnych urządzeniach korzysta z izolowanego środowiska bezpieczeństwa (Trusted Execution Environment lub Secure Enclave). Klucz nigdy nie opuszcza Keystore w postaci jawnej — operacje szyfrowania odbywają się „wewnątrz" bezpiecznego komponentu. Schemat `AES256_SIV` dla kluczy zapewnia, że dwie takie same nazwy kluczy mają identyczny szyfrogram (konieczne dla możliwości wyszukiwania), podczas gdy `AES256_GCM` dla wartości używa losowego IV przy każdym szyfrowaniu, gwarantując, że te same dane mają różny szyfrogram za każdym razem.
+
 ```kotlin
 // NIGDY nie przechowuj tokenów i haseł w zwykłych SharedPreferences!
 // Użyj EncryptedSharedPreferences lub własnego szyfrowania kluczem z Keystore
@@ -45,6 +47,8 @@ val securePrefs = EncryptedSharedPreferences.create(
 securePrefs.edit { putString("auth_token", token) }
 val savedToken = securePrefs.getString("auth_token", null)
 ```
+
+**Opcja 2** pokazuje własną implementację szyfrowania z bezpośrednim użyciem Android Keystore API. Algorytm `AES/GCM/NoPadding` jest preferowany nad starszym `AES/CBC/PKCS7Padding`, ponieważ GCM (Galois/Counter Mode) zapewnia jednocześnie poufność i integralność danych (AEAD — Authenticated Encryption with Associated Data) — oznacza to, że przy odszyfrowaniu można wykryć, czy dane zostały zmodyfikowane. Flaga `setRandomizedEncryptionRequired(true)` wymusza użycie innego IV (wektora inicjalizacji) przy każdym szyfrowaniu, co eliminuje możliwość przeprowadzenia ataków słownikowych opartych na analizie szyfrogramów. IV jest zapisywany obok szyfrogramu w strukturze `EncryptedData` — bez IV odszyfrowanie jest niemożliwe, ale IV nie jest tajny, bo sam w sobie nie ujawnia klucza ani treści.
 
 ```kotlin
 // Opcja 2 — własne szyfrowanie z Android Keystore (AES-256-GCM)
@@ -96,6 +100,8 @@ data class EncryptedData(
 
 Certificate Pinning chroni przed atakami Man-in-the-Middle, gdzie atakujący podstawia własny certyfikat TLS:
 
+Poniższy kod implementuje Certificate Pinning z użyciem biblioteki OkHttp. `CertificatePinner` porównuje odcisk palca SHA-256 klucza publicznego serwera z zakodowaną wartością w aplikacji — nawet jeśli atakujący posiada ważny certyfikat TLS wydany przez zaufane CA, jego odcisk palca nie będzie pasował i połączenie zostanie odrzucone. Piny definiuje się jako `sha256/BASE64` zamiast bezpośrednio jako bajty, bo Base64 jest zwięzły i bezpieczny do wbudowania w kod. Obecność **dwóch pinów** (głównego i zapasowego) jest kluczowa: gdyby certyfikat serwera wygasł i nie było backupowego pinu, aplikacja przestałaby działać dla wszystkich użytkowników do czasu wydania aktualizacji. Zapasowy pin to zwykle certyfikat pośredniego CA lub już wygenerowany następny certyfikat serwera. OkHttp stosuje interceptor do logowania nieudanych odpowiedzi — dobra praktyka w środowisku deweloperskim, bo certificate pinning może być trudny do debugowania.
+
 ```kotlin
 // OkHttp Certificate Pinning
 val certificatePinner = CertificatePinner.Builder()
@@ -119,6 +125,8 @@ val httpClient = OkHttpClient.Builder()
 > **Uwaga:** Zawsze dodaj backup pin (certyfikat CA lub następny certyfikat serwera). Bez backupu ryzykujesz zablokowanie aplikacji gdy certyfikat wygaśnie.
 
 ## Bezpieczeństwo AndroidManifest.xml
+
+Plik `AndroidManifest.xml` jest pierwszą linią obrony aplikacji. Poniższy przykład zestawia typowe błędy bezpieczeństwa z ich poprawnymi odpowiednikami. Atrybut `android:debuggable="true"` w buildzie release umożliwia podłączenie debuggera do działającej aplikacji nawet na urządzeniu nieposiadającym odpowiednich uprawnień deweloperskich — napastnik może w ten sposób analizować pamięć, modyfikować dane i omijać zabezpieczenia. Aktywności eksportowane bez atrybutu `android:permission` są dostępne dla każdej aplikacji na urządzeniu — wrażliwe ekrany (np. panel admina) powinny być chronione własnym uprawnieniem z `android:protectionLevel="signature"`, co ogranicza dostęp tylko do aplikacji podpisanych tym samym kluczem. Atrybut `android:allowBackup="false"` zapobiega kopiowaniu danych aplikacji przez `adb backup`, co byłoby możliwe na rootowanych urządzeniach lub w środowiskach testowych. Dwa bloki XML na końcu — jeden dla pliku `network_security_config.xml`, drugi dla providera danych — pokazują odpowiednio centralne zarządzanie polityką sieciową i ukrycie wewnętrznego dostawcy danych przed innymi aplikacjami.
 
 ```xml
 <!-- AndroidManifest.xml — typowe błędy bezpieczeństwa -->
@@ -154,6 +162,8 @@ val httpClient = OkHttpClient.Builder()
 <application android:networkSecurityConfig="@xml/network_security_config">
 ```
 
+Plik `network_security_config.xml` zapewnia deklaratywną i granularną kontrolę nad polityką bezpieczeństwa połączeń sieciowych bez konieczności pisania kodu. Konfiguracja `base-config` z `cleartextTrafficPermitted="false"` blokuje globalnie ruch HTTP — wszystkie niezaszyfrowane połączenia są odrzucane. Sekcja `domain-config` pozwala na precyzyjne wyjątki: urządzenia IoT w sieci lokalnej często nie obsługują HTTPS, więc adres `192.168.1.0` ma wyjątek dla HTTP. Wpis `pin-set` z datą `expiration` wbudowuje certificate pinning bezpośrednio w konfigurację XML, co jest alternatywą dla pinowania w OkHttp — ta metoda działa dla wszystkich połączeń sieciowych, nie tylko tych przez OkHttp.
+
 ```xml
 <!-- res/xml/network_security_config.xml -->
 <network-security-config>
@@ -178,6 +188,8 @@ val httpClient = OkHttpClient.Builder()
 ```
 
 ## Root i Tamper Detection
+
+Wykrywanie rootowania i modyfikacji aplikacji jest pierwszą linią obrony przed zaawansowanymi atakami. Poniższy kod `SecurityChecker` implementuje trzy podstawowe metody heurystycznego wykrywania rootowania. Sprawdzanie obecności pliku `su` w znanych lokalizacjach systemu (`/system/xbin/su`, `/sbin/su` itd.) jest najbardziej prymitywną metodą — rootujące narzędzia takie jak Magisk ukrywają te pliki. Sprawdzanie `Build.TAGS` pod kątem `test-keys` wykrywa urządzenia zbudowane z kluczami deweloperskimi zamiast kluczami OEM — oficjalne buildy Androida są zawsze podpisane kluczami producenta. Próba wykonania polecenia `su` sprawdza, czy interpreter jest dostępny i odpowiada. Wszystkie trzy metody są zawodne osobno, ale wykrycie choć jednej zwiększa prawdopodobieństwo rootowania. Dlatego na końcu pokazane jest podejście produkcyjne: **Play Integrity API**, które przenosi weryfikację na serwer Google — jest znacznie trudniejsze do obejścia. Metoda `generateSecureNonce()` używa `SecureRandom` zamiast `Random` — ta pierwsza jest kryptograficznie bezpieczna i zapewnia nieprzewidywalność nonce, co chroni przed atakami replay.
 
 ```kotlin
 class SecurityChecker {
@@ -230,6 +242,8 @@ class SecurityChecker {
 ```
 
 ## Bezpieczna komunikacja — SSL/TLS
+
+Poniższy kod konfiguruje klienta HTTP tak, aby akceptował tylko połączenia z nowoczesnymi, bezpiecznymi protokołami i szyframi. `ConnectionSpec.MODERN_TLS` to gotowy preset OkHttp definiujący listę bezpiecznych szyfrów. Jawne podanie `TlsVersion.TLS_1_3, TlsVersion.TLS_1_2` wyklucza przestarzałe TLS 1.0 i 1.1, które mają znane podatności (POODLE, BEAST). Wybrane szyfry `ECDHE_*_AES_256_GCM` łączą kilka właściwości bezpieczeństwa: `ECDHE` (Elliptic Curve Diffie-Hellman Ephemeral) zapewnia **Perfect Forward Secrecy** — nawet jeśli klucz prywatny serwera kiedyś zostanie ujawniony, wcześniejsze sesje pozostaną bezpieczne, bo każda sesja używała efemerycznego klucza wymiany. `AES_256_GCM` zapewnia 256-bitowe szyfrowanie symetryczne z uwierzytelnianiem wiadomości. SHA-384 to odcisk palca certyfikatu. Szyfry ECDSA i RSA obsługują oba rodzaje certyfikatów serwerowych — aplikacja będzie działać niezależnie od tego, czy serwer używa certyfikatu EC czy RSA.
 
 ```kotlin
 // Tylko TLS 1.2+ i bezpieczne szyfry
