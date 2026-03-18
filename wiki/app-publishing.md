@@ -66,6 +66,8 @@ URL: https://play.google.com/console
 
 ### Podpisanie i przesyłanie AAB
 
+Poniższe polecenia bashowe realizują trzyetapowy proces przygotowania wersji release do Google Play. Polecenie `keytool` z flagą `-genkey` generuje nowy keystore — plik przechowujący klucz prywatny RSA 2048-bitowy, którym podpisujemy każdą wersję aplikacji. Flaga `-validity 10000` ustawia ważność certyfikatu na ok. 27 lat: Google wymaga, by certyfikat był ważny do 2033 roku dla nowych aplikacji, a standardem jest generowanie z bardzo długim czasem ważności jednorazowo na początku projektu. Polecenie `./gradlew bundleRelease` uruchamia Gradle w trybie AAB (Android App Bundle) zamiast APK — AAB to format przeznaczony wyłącznie do przesłania do Google Play, gdzie Google dynamicznie generuje zoptymalizowane APK dla każdego urządzenia osobno, zmniejszając rozmiar pobieranego przez użytkownika pakietu o 15–40%.
+
 ```bash
 # 1. Generowanie keystore (zrób to raz — ZACHOWAJ NA ZAWSZE)
 keytool -genkey -v -keystore release.jks \
@@ -160,6 +162,8 @@ Xcode → Signing & Capabilities → Automatically manage signing
 <key>NSLocationWhenInUseUsageDescription</key>
 <string>Lokalizacja jest używana do wyświetlenia pobliskich punktów.</string>
 ```
+
+> **Wskazówka:** Brakujące klucze `NSUsageDescription` to jedna z najczęstszych przyczyn odrzucenia przez App Review. Opisy muszą być konkretne i pisane z perspektywy użytkownika — Apple odrzuca ogólnikowe komunikaty w stylu „Wymagany do działania aplikacji".
 
 ### TestFlight — testy beta
 
@@ -329,6 +333,8 @@ press-kit/
 
 ### Oceny i recenzje — jak je zdobywać
 
+Prośba o ocenę w odpowiednim momencie sesji może znacząco zwiększyć liczbę pozytywnych recenzji. Poniższy kod Kotlin implementuje Google Play In-App Review API, które wyświetla natywny dialog systemu z prośbą o ocenę **bez opuszczania aplikacji**. `ReviewManagerFactory.create(context)` zwraca instancję menadżera — w środowisku produkcyjnym korzysta z prawdziwego Play Store, a w środowisku testowym z trybu testowego (można go wymusić przez `FakeReviewManager`). Dwuetapowy proces (najpierw `requestReviewFlow()`, potem `launchReviewFlow()`) jest celowy: `requestReviewFlow()` odpytuje Google o dostępność promptu i przygotowuje `ReviewInfo` z informacjami o aplikacji, a `launchReviewFlow()` właściwie go wyświetla. Google **nie gwarantuje**, że prompt zostanie pokazany — system może go zablokować, jeśli użytkownik już ocenił aplikację lub prompt był wyświetlany zbyt niedawno. Dlatego callback `addOnCompleteListener` nie informuje, czy użytkownik faktycznie coś wybrał — aplikacja musi kontynuować działanie niezależnie od wyniku.
+
 ```kotlin
 // Android — In-App Review API (Google Play)
 // Prośba o ocenę pojawia się wewnątrz aplikacji, bez opuszczania jej
@@ -358,6 +364,8 @@ class ReviewManager(private val context: Context) {
 // ✗ Maksymalnie raz na 30 dni (Google ogranicza częstotliwość)
 ```
 
+Poniższy kod Swift realizuje prośbę o ocenę w aplikacji iOS za pomocą `SKStoreReviewController`. W SwiftUI preferowanym sposobem jest dekorator `@Environment(\.requestReview)` — jest on wstrzykiwany przez środowisko SwiftUI i wywołuje systemowy prompt niezależnie od kontekstu, bez konieczności importowania `StoreKit` w widoku. W UIKit konieczne jest uzyskanie `UIWindowScene`, ponieważ od iPadOS 13 aplikacje mogą mieć wiele okien, a prompt musi być powiązany z konkretnym oknem. Apple, podobnie jak Google, ogranicza wyświetlanie promptu — do 3 razy w ciągu 365 dni, niezależnie od tego, ile razy wywołamy tę metodę. Dzięki temu deweloper nie może nadużywać prośby o ocenę, co chroni użytkownika przed irytującymi powiadomieniami.
+
 ```swift
 // iOS — SKStoreReviewController
 import StoreKit
@@ -385,6 +393,8 @@ if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
 ## Analityka po Publikacji
 
 ### Firebase Analytics — kluczowe metryki
+
+Firebase Analytics pozwala śledzić zachowanie użytkowników w aplikacji i podejmować decyzje oparte na danych. Poniższy kod inicjalizuje Firebase przy użyciu Bill of Materials (BOM) — platforma `firebase-bom` zarządza spójnymi wersjami wszystkich bibliotek Firebase, dzięki czemu nie trzeba ręcznie synchronizować wersji `firebase-analytics` z `firebase-crashlytics`. Klasa `AnalyticsManager` enkapsuluje logowanie zdarzeń w trzech metodach: `logScreenView()` używa predefiniowanego zdarzenia `SCREEN_VIEW` z standardowymi parametrami `SCREEN_NAME` i `SCREEN_CLASS`, co pozwala Firebase na automatyczne budowanie raportów lejka nawigacyjnego. Używanie predefiniowanych stałych (`FirebaseAnalytics.Event.*`, `FirebaseAnalytics.Param.*`) zamiast „magicznych stringów" jest preferowane, bo Firebase Analytics obsługuje te zdarzenia specjalnie w dashboardzie. Metoda `logFeatureUsed()` loguje niestandardowe zdarzenia — nazwa `feature_used` i parametr `feature_name` pozwalają śledzić, które funkcje aplikacji są faktycznie używane, co jest podstawą do priorytetyzacji dalszego rozwoju. `logPurchase()` używa standardowego zdarzenia `PURCHASE`, które Firebase automatycznie przekazuje do Google Analytics for Firebase i umożliwia śledzenie przychodów bez dodatkowej konfiguracji.
 
 ```kotlin
 // Dodanie Firebase Analytics do projektu

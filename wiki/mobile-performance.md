@@ -18,6 +18,8 @@ Google Play Console zbiera dane z urządzeń i porównuje je z benchmarkami kate
 
 ## Optymalizacja startowania
 
+Poniższy kod zawiera dwie techniki optymalizacji czasu zimnego startu aplikacji. W klasie `MyApplication` metoda `onCreate()` mierzy czas inicjalizacji za pomocą `SystemClock.uptimeMillis()` zamiast `System.currentTimeMillis()` — `uptimeMillis()` mierzy czas od uruchomienia urządzenia i nie jest podatne na zmiany zegara systemowego (korekty NTP, zmiana strefy), co daje bardziej miarodajne pomiary. Operacje pomocnicze (`initAnalytics()`, `initCrashReporting()`) uruchamiane są na `Dispatchers.IO` przez coroutine — dzięki temu nie blokują głównego wątku UI, a użytkownik widzi pierwszy ekran szybciej. To kluczowa zasada: w `Application.onCreate()` należy inicjalizować **tylko to, co absolutnie potrzebne** do wyświetlenia pierwszego ekranu. `MacrobenchmarkRule` w teście startowym jest narzędziem do mierzenia wydajności na prawdziwym urządzeniu z uwzględnieniem stanu systemu (kompilacja AOT, cache) — `iterations = 10` uruchamia test wielokrotnie, by uśrednić wyniki i wyeliminować szum systemowy. `StartupMode.COLD` wymusza zatrzymanie procesu aplikacji przed każdą iteracją, symulując pierwsze uruchomienie.
+
 ```kotlin
 // Pomiar czasu startu
 class MyApplication : Application() {
@@ -62,6 +64,8 @@ Android Studio oferuje trzy główne profilery:
 
 ### CPU Profiler
 
+Poniższe fragmenty kodu pokazują, jak instrumentować własny kod do analizy w CPU Profilerze Android Studio. `Trace.beginSection("expensive_op")` i `Trace.endSection()` wstawiają markery widoczne w narzędziu Perfetto (wbudowanym w Android Studio) jako kolorowe bloki na osi czasu — pozwala to precyzyjnie zobaczyć, ile czasu zajmuje konkretna operacja i w którym wątku. Wywołanie `endSection()` w bloku `finally` jest obowiązkowe — gdyby operacja rzuciła wyjątek i `endSection()` nie zostałoby wywołane, profiler zatraciłby kontekst śledzenia. `CoroutineName("data_processing")` to dekorator dla coroutine, który sprawia, że w CPU Profilerze coroutine jest widoczna pod ludzką nazwą zamiast generowanego identyfikatora — bardzo ułatwia diagnozowanie, która z wielu coroutine jest wąskim gardłem.
+
 ```kotlin
 // Ręczne trace — widoczne w CPU Profiler
 fun performExpensiveOperation() {
@@ -81,6 +85,8 @@ withContext(Dispatchers.Default + CoroutineName("data_processing")) {
 
 ### Memory Profiler
 
+Poniższy kod umożliwia programistyczne wykonanie zrzutu sterty (heap dump) i odczyt bieżącego użycia pamięci. `Debug.dumpHprofData()` zapisuje plik HPROF — binarny format opisu całego wykresu obiektów w pamięci JVM. Plik ten można otworzyć w Android Studio Heap Dump Analyzer lub w narzędziach zewnętrznych (Eclipse MAT), żeby znaleźć obiekty, które nie zostały zwolnione przez garbage collector. `Debug.MemoryInfo` dostarcza szczegółowy podział zużycia pamięci: `dalvikPrivateDirty` to pamięć sterty Javy/Kotlina należąca wyłącznie do tej aplikacji, `nativePrivateDirty` to pamięć natywna (C/C++ kod bibliotek), a `totalPss` to Proportional Set Size — najbardziej miarodajna metryka całkowitego wkładu aplikacji w zużycie pamięci systemu, uwzględniająca dzieloną pamięć bibliotek w proporcji do liczby procesów, które z nich korzystają.
+
 ```kotlin
 // Triggering GC i heap dump z kodu
 Debug.dumpHprofData("/sdcard/heap.hprof")
@@ -96,6 +102,8 @@ Log.d("Memory", """
 ```
 
 ### Network Profiler
+
+Poniższy kod implementuje `EventListener` dla OkHttp, który rejestruje szczegółowe metryki czasowe każdego zapytania sieciowego. OkHttp udostępnia system wydarzeń (`EventListener`) zamiast prostego logowania, bo pozwala on na granularne mierzenie każdego etapu połączenia TCP/TLS. `callStart` i `responseBodyEnd` wyznaczają pełny czas trwania zapytania od inicjacji do odbioru ostatniego bajtu. `dnsStart` pomaga wykryć, czy DNS lookup jest wąskim gardłem — w aplikacjach korporacyjnych za VPN DNS może zajmować >100ms. Konwersja nanosekund na milisekundy przez dzielenie przez `1_000_000` (użycie `_` jako separatora to konwencja Kotlina zwiększająca czytelność liczb) zapewnia czytelny wynik. `EventListenerFactory` jest używany zamiast bezpośredniego podania instancji, bo fabryka tworzy nowy listener dla każdego zapytania — gdyby wszystkie zapytania dzieliły jeden obiekt, `callStart` mógłby nadpisać czas poprzedniego zapytania.
 
 ```kotlin
 // OkHttp EventListener — szczegółowe timings
@@ -120,6 +128,8 @@ val client = OkHttpClient.Builder()
 ## Compose — optymalizacja rekomposycji
 
 Rekomposycja jest kluczowym obszarem optymalizacji w Compose:
+
+Poniższe przykłady pokazują trzy wzorce unikania zbędnych rekomposycji w Jetpack Compose. Problem z `List<Product>` polega na tym, że standardowy `List<T>` Kotlina jest niestabilny z perspektywy Compose — kompilator Compose nie może gwarantować, że lista nie zmieni się między wywołaniami, więc przy każdej rekomposycji rodzica rekomponuje też `ProductList`. `ImmutableList` z biblioteki `kotlinx.collections.immutable` jest oznaczona jako niemutowalna, co Compose rozumie i pomija rekomposycję, jeśli referencja się nie zmieniła. Adnotacja `@Immutable` na klasie `Product` informuje kompilator Compose, że wszystkie pola są `val` i nie zmienią się po utworzeniu obiektu — analogiczny efekt, ale bez dodatkowej biblioteki. `derivedStateOf` jest stosowane dla wartości obliczanych na podstawie innych stanów — bez niego `total` przeliczałoby się przy każdej rekomposycji `CartSummary`, nawet gdy `items` się nie zmieniło. `remember(items)` powiązuje pamiętaną wartość z kluczem `items`, co powoduje przeliczenie `derivedStateOf` tylko przy zmianie listy. Zapamiętywanie lambd przez `remember(item.id)` eliminuje problem tworzenia nowego obiektu funkcji przy każdej rekomposycji — Compose traktuje nową lambdę jako zmianę parametru i niepotrzebnie rekomponuje `ItemRow`.
 
 ```kotlin
 // PROBLEM: niestabilny typ powoduje nadmiarową rekomposycję
@@ -166,6 +176,8 @@ fun ItemList(items: List<Item>, onItemClick: (Int) -> Unit) {
 
 ## LeakCanary — wykrywanie wycieków
 
+LeakCanary jest biblioteką do automatycznego wykrywania wycieków pamięci w aplikacjach Android. Poniższy kod pokazuje jej konfigurację. Zależność `debugImplementation` zamiast `implementation` oznacza, że biblioteka jest dołączona **tylko do buildu debug** — w release buildzie nie ma żadnego śladu LeakCanary, co eliminuje narzut wydajnościowy i zapobiega ekspozycji informacji diagnostycznych użytkownikom. LeakCanary nie wymaga żadnej inicjalizacji w kodzie aplikacji (działa automatycznie przez `ContentProvider` rejestrowany w AndroidManifest). Metoda `objectWatcher.expectWeaklyReachable()` pozwala ręcznie oznaczyć obiekty do śledzenia — po `onDestroyView()` fragmentu jego `binding` powinien zostać zwolniony przez GC. Jeśli po kilku sekundach obiekt nadal istnieje, LeakCanary wykonuje zrzut sterty i analizuje graf referencji, pokazując dokładną ścieżkę wyciek (np. `ActivityMainBinding` → `View` → `Context`). Takie podejście jest znacznie skuteczniejsze niż ręczna analiza zrzutów, bo LeakCanary automatycznie interpretuje graf obiektów.
+
 ```kotlin
 // build.gradle.kts
 debugImplementation("com.squareup.leakcanary:leakcanary-android:2.14")
@@ -184,6 +196,8 @@ class MyFragment : Fragment() {
 ```
 
 ## R8 i ProGuard — optymalizacja kodu
+
+Poniższe konfiguracje włączają i dostosowują narzędzie R8 (następca ProGuard) do minimalizacji i ochrony kodu produkcyjnego. Flaga `isMinifyEnabled = true` uruchamia R8, który wykonuje trzy operacje: **tree shaking** (usunięcie nieużywanego kodu), **obfuskację** (zastąpienie nazw klas i metod krótkimi identyfikatorami `a`, `b`, `c`) oraz **optymalizację bytecode** (inline'owanie małych metod, usunięcie zbędnych instrukcji). `isShrinkResources = true` usuwa nieużywane zasoby graficzne i układy — działa dopiero po R8, bo R8 może ujawnić zasoby, które wydawały się używane, ale były osiągalne tylko przez martwy kod. Plik `proguard-rules.pro` zawiera reguły wykluczające z obfuskacji klasy, które muszą zachować oryginalne nazwy: klasy modeli danych serializowanych przez Gson lub kotlinx.serialization muszą mieć dokładne nazwy pól, bo biblioteki te korzystają z refleksji. Reguła `-assumenosideeffects` instruuje R8, że może usunąć wszystkie wywołania `Log.d()` i `Log.v()` (debug i verbose), bo R8 zakłada, że te wywołania nie mają efektów ubocznych — dzięki temu logi developerskie nie trafiają do release APK, co uniemożliwia napastnikowi odczytanie wewnętrznej logiki przez `adb logcat`.
 
 ```kotlin
 // build.gradle.kts
@@ -223,6 +237,8 @@ android {
 ```
 
 ## StrictMode — wykrywanie naruszeń w dev
+
+StrictMode to narzędzie deweloperskie, które wykrywa operacje wykonywane w nieodpowiednich miejscach — najczęściej dostęp do dysku lub sieci na głównym wątku UI. Poniższy kod aktywuje StrictMode **tylko w buildzie debug** (`BuildConfig.DEBUG`) — jest to absolutnie konieczne, bo StrictMode spowalnia aplikację i jego naruszenia powinny być eliminowane w fazie developmentu, a nie widziane przez użytkowników. `ThreadPolicy` monitoruje operacje na głównym wątku: `detectDiskReads()` i `detectDiskWrites()` wychwytują synchroniczny dostęp do SharedPreferences, plików czy bazy SQLite bezpośrednio na wątku UI — taki dostęp może zablokować interfejs na 16ms+ i spowodować dropped frames. `detectNetwork()` wychwytuje synchroniczne połączenia sieciowe na UI thread — w nowych wersjach Androida kończy się to wyjątkiem `NetworkOnMainThreadException` i crashem. `VmPolicy` monitoruje cykl życia obiektów: `detectLeakedSqlLiteObjects()` wykrywa niezamknięte kursory bazodanowe, `detectActivityLeaks()` wychwytuje aktywności trzymane w pamięci po zniszczeniu. `penaltyLog()` zapisuje naruszenia do logcata, skąd można je odczytać w Android Studio — bardziej radykalna opcja `penaltyCrash()` może być używana w CI/CD do wymuszenia zera naruszeń przed mergem.
 
 ```kotlin
 // Application.onCreate() — tylko w debug
