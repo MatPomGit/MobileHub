@@ -3823,8 +3823,13 @@
                     if (!h.id) h.id = 'heading-' + i;
                     const li = document.createElement('li');
                     if (h.tagName === 'H3') li.classList.add('toc-h3');
-                    li.innerHTML = '<a href="#' + h.id + '"><span class="toc-dot"></span>' + h.textContent + '</a>';
-                    li.querySelector('a').addEventListener('click', (e) => {
+                    const a = document.createElement('a');
+                    a.href = '#' + h.id;
+                    const dot = document.createElement('span');
+                    dot.className = 'toc-dot';
+                    a.appendChild(dot);
+                    a.appendChild(document.createTextNode(h.textContent));
+                    a.addEventListener('click', (e) => {
                         e.preventDefault();
                         closeTocMenu();
                         hapticFeedback();
@@ -3832,6 +3837,7 @@
                             h.scrollIntoView({ behavior: 'smooth', block: 'start' });
                         }, 150);
                     });
+                    li.appendChild(a);
                     list.appendChild(li);
                 });
             }
@@ -3845,13 +3851,15 @@
                 headings.forEach(h => {
                     if (h.offsetTop <= scrollTop) activeId = h.id;
                 });
+                let activeLink = null;
                 list.querySelectorAll('a').forEach(a => {
                     const isActive = a.getAttribute('href') === '#' + activeId;
                     a.classList.toggle('active-heading', isActive);
-                    if (isActive) {
-                        a.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-                    }
+                    if (isActive) activeLink = a;
                 });
+                if (activeLink) {
+                    activeLink.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                }
             }
 
             fab.addEventListener('click', () => {
@@ -4004,13 +4012,17 @@
                         }
                         deferredPrompt = null;
                     } else {
-                        // Fallback: show instructions
+                        // Fallback: show inline instructions
                         const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                        if (isIOS) {
-                            alert('Aby dodać do ekranu głównego:\n1. Naciśnij ikonę "Udostępnij" (kwadrat ze strzałką)\n2. Wybierz "Dodaj do ekranu początkowego"');
-                        } else {
-                            alert('Aby dodać do ekranu głównego:\n1. Otwórz menu przeglądarki (⋮)\n2. Wybierz "Dodaj do ekranu głównego" lub "Zainstaluj aplikację"');
-                        }
+                        const msg = isIOS
+                            ? 'Naciśnij ikonę „Udostępnij" (⬆) → „Dodaj do ekranu początkowego"'
+                            : 'Otwórz menu przeglądarki (⋮) → „Dodaj do ekranu głównego"';
+                        installBtn.querySelector('span').textContent = msg;
+                        installBtn.disabled = true;
+                        setTimeout(() => {
+                            installBtn.querySelector('span').textContent = 'Dodaj do ekranu głównego';
+                            installBtn.disabled = false;
+                        }, 5000);
                     }
                 });
             }
@@ -4025,7 +4037,12 @@
                 const btn = document.createElement('button');
                 btn.className = 'pull-cat-btn';
                 btn.dataset.catId = cat.id;
-                btn.innerHTML = '<i class="' + cat.icon + '"></i><span>' + cat.name + '</span>';
+                const icon = document.createElement('i');
+                icon.className = cat.icon;
+                const span = document.createElement('span');
+                span.textContent = cat.name;
+                btn.appendChild(icon);
+                btn.appendChild(span);
                 btn.addEventListener('click', () => {
                     // Switch to wiki tab
                     if (typeof switchTab === 'function') switchTab('wiki');
