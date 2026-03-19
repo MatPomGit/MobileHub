@@ -2661,6 +2661,35 @@
                 color: var(--accent);
                 border-color: var(--accent);
             }
+
+            .pull-options-row {
+                margin-top: 12px;
+                border-top: 1px solid var(--border);
+                padding-top: 12px;
+            }
+
+            .pull-options-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
+                padding: 10px 14px;
+                background: var(--surface2);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                cursor: pointer;
+                font-family: var(--font);
+                color: var(--text-muted);
+                font-size: 13px;
+                font-weight: 600;
+                transition: background 0.15s ease, color 0.15s ease, transform 0.15s ease;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .pull-options-btn:active {
+                transform: scale(0.97);
+            }
         }
     </style>
 </head>
@@ -2706,6 +2735,12 @@
                     <i class="fa-solid fa-folder-open"></i> Kategorie artykułów
                 </div>
                 <div class="pull-cat-grid" id="pullCatGrid"></div>
+            </div>
+            <div class="pull-options-row">
+                <button class="pull-options-btn" id="pullOptionsBtn" aria-label="Ustawienia aplikacji">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Ustawienia</span>
+                </button>
             </div>
         </div>
         <div class="pull-handle" id="pullHandle" role="button" tabindex="0"
@@ -3924,12 +3959,23 @@
             overlay.addEventListener('click', closeSettings);
             closeBtn?.addEventListener('click', closeSettings);
 
-            // Show settings FAB only on mobile
-            function updateSettingsFabVisibility() {
-                fab.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-            }
-            window.addEventListener('resize', updateSettingsFabVisibility);
-            updateSettingsFabVisibility();
+            // Settings FAB hidden on mobile — accessed via pull panel instead
+            fab.style.display = 'none';
+
+            // Open settings from pull panel options button
+            const pullOptionsBtn = document.getElementById('pullOptionsBtn');
+            pullOptionsBtn?.addEventListener('click', () => {
+                const pullPanel = document.getElementById('pullPanel');
+                const pullOverlay = document.getElementById('pullOverlay');
+                if (pullPanel) {
+                    pullPanel.classList.remove('open');
+                    pullPanel.style.transform = '';
+                }
+                if (pullOverlay) {
+                    pullOverlay.classList.remove('open');
+                }
+                openSettings();
+            });
 
             // ===== Font size =====
             const FONT_SIZES = { small: '14px', medium: '16px', large: '18px' };
@@ -4046,6 +4092,16 @@
                 btn.addEventListener('click', () => {
                     // Switch to wiki tab
                     if (typeof switchTab === 'function') switchTab('wiki');
+
+                    // Load the first article in this category
+                    const firstId = cat.articles && cat.articles[0];
+                    if (firstId) {
+                        window.location.hash = firstId;
+                        if (typeof loadArticle === 'function') {
+                            loadArticle(firstId);
+                            if (typeof setActiveLink === 'function') setActiveLink(firstId);
+                        }
+                    }
 
                     // Find and expand the category in sidebar
                     const catList = document.getElementById(cat.id);
