@@ -416,7 +416,6 @@ function generateTableOfContents(container) {
     });
     container.querySelector('h1')?.insertAdjacentElement('afterend', toc);
 }
-
 // Mobile sidebar toggle
 document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.getElementById('sidebarToggle');
@@ -430,3 +429,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
+
