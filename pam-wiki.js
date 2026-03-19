@@ -161,6 +161,7 @@ const CATEGORIES = [
 document.addEventListener('DOMContentLoaded', () => {
     initThemePicker();
     initScrollProgress();
+    initBackToTop();
     waitForMarked();
 });
 
@@ -221,6 +222,17 @@ function initScrollProgress() {
     window.addEventListener('scroll', () => {
         const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
         bar.style.width = (window.scrollY / h * 100) + '%';
+    });
+}
+
+function initBackToTop() {
+    const btn = document.getElementById('backToTop');
+    if (!btn) return;
+    window.addEventListener('scroll', () => {
+        btn.classList.toggle('visible', window.scrollY > 300);
+    });
+    btn.addEventListener('click', () => {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
     });
 }
 
@@ -302,6 +314,7 @@ async function loadArticle(articleId) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         container.innerHTML = marked.parse(await res.text());
 
+        wrapTables(container);
         addReadingTime(container);
         generateTableOfContents(container);
         processInternalLinks(container);
@@ -315,6 +328,16 @@ async function loadArticle(articleId) {
     } catch (err) {
         showError(`Nie można załadować artykułu <strong>${articleId}</strong>. Upewnij się że uruchamiasz stronę przez serwer HTTP (np. <code>python -m http.server</code>).`);
     }
+}
+
+function wrapTables(container) {
+    container.querySelectorAll('table').forEach(table => {
+        if (table.closest('.table-wrapper')) return;
+        const wrapper = document.createElement('div');
+        wrapper.className = 'table-wrapper';
+        table.parentNode.insertBefore(wrapper, table);
+        wrapper.appendChild(table);
+    });
 }
 
 function showError(msg) {

@@ -560,6 +560,8 @@
         .wiki-main {
             padding: 32px 40px;
             max-width: 900px;
+            min-width: 0;
+            overflow-x: hidden;
         }
 
         /* Breadcrumbs */
@@ -587,6 +589,16 @@
         }
 
         /* ===== ARTICLE STYLES ===== */
+        #wikiArticle {
+            max-width: 100%;
+            overflow-x: hidden;
+        }
+
+        #wikiArticle img {
+            max-width: 100%;
+            height: auto;
+        }
+
         #wikiArticle h1 {
             font-size: clamp(20px, 3.5vw, 34px);
             font-weight: 800;
@@ -663,10 +675,16 @@
         }
 
         /* Tables */
+        #wikiArticle .table-wrapper {
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            margin: 16px 0;
+        }
+
         #wikiArticle table {
             width: 100%;
             border-collapse: collapse;
-            margin: 16px 0;
+            margin: 0;
             font-size: 12px;
             border-radius: var(--radius);
             overflow: hidden;
@@ -1428,6 +1446,41 @@
             transform: scale(1.1);
         }
 
+        /* ===== BACK TO TOP ===== */
+        .back-to-top {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: fixed;
+            bottom: 24px;
+            right: 24px;
+            width: 48px;
+            height: 48px;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            border: none;
+            border-radius: 50%;
+            color: #fff;
+            font-size: 16px;
+            cursor: pointer;
+            box-shadow: 0 4px 20px rgba(91, 79, 207, 0.4);
+            z-index: 49;
+            opacity: 0;
+            translate: 0 16px;
+            pointer-events: none;
+            transition: opacity var(--transition), translate var(--transition), scale var(--transition);
+        }
+
+        .back-to-top.visible {
+            opacity: 1;
+            translate: 0 0;
+            pointer-events: auto;
+        }
+
+        .back-to-top:hover {
+            translate: 0 -2px;
+            scale: 1.1;
+        }
+
         /* ===== RESPONSIVE ===== */
         @media (max-width: 900px) {
             .wiki-layout {
@@ -1450,14 +1503,20 @@
             }
 
             .wiki-main {
-                padding: 20px 20px 60px;
+                padding: 20px 16px 60px;
                 max-width: 100%;
+                width: 100%;
             }
 
             .sidebar-toggle {
                 display: flex;
                 align-items: center;
                 justify-content: center;
+            }
+
+            .back-to-top {
+                bottom: 84px;
+                right: 24px;
             }
 
             .info-panel {
@@ -2370,6 +2429,11 @@
     <!-- Mobile sidebar toggle -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Otwórz menu">
         <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <!-- Back to top button -->
+    <button class="back-to-top" id="backToTop" aria-label="Wróć na górę strony">
+        <i class="fa-solid fa-chevron-up"></i>
     </button>
 
     <!-- FOOTER -->
