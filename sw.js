@@ -36,7 +36,12 @@ self.addEventListener('fetch', event => {
                     caches.open(CACHE_NAME).then(cache => cache.put(event.request, clone));
                 }
                 return response;
-            }).catch(() => cached);
+            }).catch(err => {
+                if (!cached) {
+                    console.warn('[SW] Network request failed, no cache for:', event.request.url);
+                }
+                return cached;
+            });
             return cached || fetchPromise;
         })
     );
