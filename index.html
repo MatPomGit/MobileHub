@@ -1959,6 +1959,16 @@
             display: none;
         }
 
+        /* ===== TOC & SETTINGS FABs (hidden on desktop) ===== */
+        .toc-fab,
+        .toc-radial-overlay,
+        .toc-radial-menu,
+        .settings-fab,
+        .settings-panel-overlay,
+        .settings-panel {
+            display: none;
+        }
+
         @media (max-width: 768px) {
             .pull-panel-overlay {
                 display: block;
@@ -2146,6 +2156,511 @@
                 font-size: 11px;
                 margin-bottom: 8px;
             }
+
+            /* ===== RADIAL TOC MENU (mobile, wiki tab) ===== */
+            .toc-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: calc(72px + env(safe-area-inset-bottom));
+                left: 20px;
+                width: 52px;
+                height: 52px;
+                background: linear-gradient(135deg, var(--accent), var(--accent2));
+                border: none;
+                border-radius: 50%;
+                color: #fff;
+                font-size: 18px;
+                cursor: pointer;
+                box-shadow: 0 4px 20px rgba(91, 79, 207, 0.4);
+                z-index: 60;
+                transition: transform 0.25s ease, box-shadow 0.25s ease;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .toc-fab:active {
+                transform: scale(0.92);
+            }
+
+            .toc-fab.open {
+                transform: rotate(45deg);
+                box-shadow: 0 4px 28px rgba(91, 79, 207, 0.5);
+            }
+
+            .toc-radial-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.45);
+                z-index: 59;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+
+            .toc-radial-overlay.open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .toc-radial-menu {
+                display: none;
+                position: fixed;
+                bottom: calc(132px + env(safe-area-inset-bottom));
+                left: 20px;
+                width: calc(100vw - 40px);
+                max-width: 360px;
+                max-height: 50vh;
+                background: var(--surface);
+                border-radius: 20px;
+                border: 1px solid var(--border);
+                box-shadow: 0 12px 48px rgba(0, 0, 0, 0.25);
+                z-index: 61;
+                overflow: hidden;
+                transform: scale(0.85) translateY(20px);
+                opacity: 0;
+                transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1), opacity 0.25s ease;
+                transform-origin: bottom left;
+            }
+
+            .toc-radial-menu.open {
+                transform: scale(1) translateY(0);
+                opacity: 1;
+            }
+
+            .toc-radial-header {
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                padding: 14px 16px 10px;
+                border-bottom: 1px solid var(--border);
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+            }
+
+            .toc-radial-header i {
+                color: var(--accent);
+            }
+
+            .toc-radial-list {
+                list-style: none;
+                overflow-y: auto;
+                max-height: calc(50vh - 50px);
+                padding: 8px 0;
+                overscroll-behavior: contain;
+                -webkit-overflow-scrolling: touch;
+            }
+
+            .toc-radial-list li {
+                margin: 0;
+            }
+
+            .toc-radial-list li a {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                padding: 11px 16px;
+                font-size: 13px;
+                color: var(--text);
+                text-decoration: none;
+                transition: background 0.15s ease, color 0.15s ease;
+                border-left: 3px solid transparent;
+            }
+
+            .toc-radial-list li a:hover,
+            .toc-radial-list li a:active {
+                background: var(--accent-light);
+                color: var(--accent);
+            }
+
+            .toc-radial-list li a.active-heading {
+                border-left-color: var(--accent);
+                background: var(--accent-light);
+                color: var(--accent);
+                font-weight: 600;
+            }
+
+            .toc-radial-list li a .toc-dot {
+                width: 6px;
+                height: 6px;
+                border-radius: 50%;
+                background: var(--accent);
+                flex-shrink: 0;
+                opacity: 0.5;
+            }
+
+            .toc-radial-list li a.active-heading .toc-dot {
+                opacity: 1;
+                width: 8px;
+                height: 8px;
+            }
+
+            .toc-radial-list li.toc-h3 a {
+                padding-left: 32px;
+                font-size: 12px;
+                color: var(--text-muted);
+            }
+
+            .toc-radial-empty {
+                padding: 24px 16px;
+                text-align: center;
+                color: var(--text-muted);
+                font-size: 13px;
+            }
+
+            .toc-radial-empty i {
+                display: block;
+                font-size: 28px;
+                margin-bottom: 8px;
+                opacity: 0.4;
+            }
+
+            /* ===== SETTINGS FAB (mobile) ===== */
+            .settings-fab {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                position: fixed;
+                bottom: calc(132px + env(safe-area-inset-bottom));
+                right: 20px;
+                width: 44px;
+                height: 44px;
+                background: var(--surface);
+                border: 1px solid var(--border);
+                border-radius: 50%;
+                color: var(--text-muted);
+                font-size: 16px;
+                cursor: pointer;
+                box-shadow: 0 2px 12px rgba(0, 0, 0, 0.12);
+                z-index: 60;
+                transition: transform 0.25s ease, background 0.2s ease, color 0.2s ease;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .settings-fab:active {
+                transform: scale(0.92);
+            }
+
+            .settings-fab.open {
+                background: var(--accent);
+                color: #fff;
+                border-color: var(--accent);
+            }
+
+            /* ===== SETTINGS PANEL (mobile) ===== */
+            .settings-panel-overlay {
+                display: none;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.45);
+                z-index: 89;
+                opacity: 0;
+                transition: opacity 0.3s ease;
+                pointer-events: none;
+            }
+
+            .settings-panel-overlay.open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .settings-panel {
+                display: none;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                border-radius: 24px 24px 0 0;
+                box-shadow: 0 -8px 40px rgba(0, 0, 0, 0.2);
+                z-index: 91;
+                transform: translateY(100%);
+                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+                max-height: 80vh;
+                overflow: hidden;
+                padding-bottom: calc(16px + env(safe-area-inset-bottom));
+            }
+
+            .settings-panel.open {
+                transform: translateY(0);
+            }
+
+            .settings-panel-handle {
+                display: flex;
+                justify-content: center;
+                padding: 12px 0 4px;
+            }
+
+            .settings-panel-handle .pill {
+                width: 36px;
+                height: 4px;
+                border-radius: 2px;
+                background: var(--border);
+            }
+
+            .settings-panel-header {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 8px 20px 12px;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .settings-panel-header h3 {
+                font-size: 16px;
+                font-weight: 700;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+                color: var(--text);
+            }
+
+            .settings-panel-header h3 i {
+                color: var(--accent);
+            }
+
+            .settings-close {
+                width: 36px;
+                height: 36px;
+                border: none;
+                background: var(--surface2);
+                border-radius: 50%;
+                color: var(--text-muted);
+                font-size: 14px;
+                cursor: pointer;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                transition: background 0.2s ease;
+            }
+
+            .settings-close:active {
+                background: var(--border);
+            }
+
+            .settings-body {
+                padding: 16px 20px;
+                overflow-y: auto;
+                max-height: calc(80vh - 100px);
+            }
+
+            .settings-section {
+                margin-bottom: 20px;
+            }
+
+            .settings-section-title {
+                font-size: 10px;
+                font-weight: 700;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 10px;
+            }
+
+            .settings-row {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                padding: 12px 0;
+                border-bottom: 1px solid var(--border);
+            }
+
+            .settings-row:last-child {
+                border-bottom: none;
+            }
+
+            .settings-row-label {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+                font-size: 14px;
+                color: var(--text);
+            }
+
+            .settings-row-label i {
+                color: var(--accent);
+                font-size: 16px;
+                width: 20px;
+                text-align: center;
+            }
+
+            /* Toggle Switch */
+            .toggle-switch {
+                position: relative;
+                width: 48px;
+                height: 28px;
+                background: var(--border);
+                border-radius: 14px;
+                cursor: pointer;
+                transition: background 0.25s ease;
+                flex-shrink: 0;
+                border: none;
+                padding: 0;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .toggle-switch::after {
+                content: '';
+                position: absolute;
+                top: 3px;
+                left: 3px;
+                width: 22px;
+                height: 22px;
+                background: #fff;
+                border-radius: 50%;
+                transition: transform 0.25s ease;
+                box-shadow: 0 1px 4px rgba(0, 0, 0, 0.2);
+            }
+
+            .toggle-switch.active {
+                background: var(--accent);
+            }
+
+            .toggle-switch.active::after {
+                transform: translateX(20px);
+            }
+
+            /* Font Size Selector */
+            .font-size-btns {
+                display: flex;
+                gap: 6px;
+            }
+
+            .font-size-btn {
+                padding: 6px 14px;
+                border: 1px solid var(--border);
+                border-radius: 8px;
+                background: var(--surface2);
+                color: var(--text);
+                font-family: var(--font);
+                font-size: 12px;
+                cursor: pointer;
+                transition: background 0.2s ease, border-color 0.2s ease, color 0.2s ease;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .font-size-btn.active {
+                background: var(--accent-light);
+                border-color: var(--accent);
+                color: var(--accent);
+                font-weight: 600;
+            }
+
+            /* Install Button */
+            .install-btn {
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                gap: 8px;
+                width: 100%;
+                padding: 14px;
+                background: linear-gradient(135deg, var(--accent), var(--accent2));
+                border: none;
+                border-radius: 14px;
+                color: #fff;
+                font-family: var(--font);
+                font-size: 14px;
+                font-weight: 600;
+                cursor: pointer;
+                transition: transform 0.2s ease, box-shadow 0.2s ease;
+                box-shadow: 0 4px 16px rgba(91, 79, 207, 0.3);
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .install-btn:active {
+                transform: scale(0.97);
+            }
+
+            .install-btn:disabled {
+                opacity: 0.5;
+                cursor: default;
+            }
+
+            .install-btn .install-check {
+                display: none;
+            }
+
+            .install-btn.installed .install-check {
+                display: inline;
+            }
+
+            .install-btn.installed .install-icon {
+                display: none;
+            }
+
+            /* ===== PULL-DOWN PANEL: CATEGORIES ===== */
+            .pull-categories {
+                margin-top: 14px;
+                border-top: 1px solid var(--border);
+                padding-top: 12px;
+            }
+
+            .pull-categories-title {
+                font-size: 10px;
+                font-weight: 700;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 10px;
+                display: flex;
+                align-items: center;
+                gap: 6px;
+            }
+
+            .pull-categories-title i {
+                color: var(--accent);
+            }
+
+            .pull-cat-grid {
+                display: grid;
+                grid-template-columns: repeat(3, 1fr);
+                gap: 8px;
+            }
+
+            .pull-cat-btn {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                padding: 10px 4px;
+                background: var(--surface2);
+                border: 1px solid var(--border);
+                border-radius: 10px;
+                cursor: pointer;
+                font-family: var(--font);
+                color: var(--text-muted);
+                transition: background 0.15s ease, color 0.15s ease, border-color 0.15s ease, transform 0.15s ease;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .pull-cat-btn i {
+                font-size: 16px;
+            }
+
+            .pull-cat-btn span {
+                font-size: 8px;
+                font-weight: 600;
+                text-align: center;
+                line-height: 1.2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
+            }
+
+            .pull-cat-btn:active {
+                transform: scale(0.94);
+            }
+
+            .pull-cat-btn.active {
+                background: var(--accent-light);
+                color: var(--accent);
+                border-color: var(--accent);
+            }
         }
     </style>
 </head>
@@ -2185,6 +2700,12 @@
                     <i class="fa-solid fa-file-arrow-down"></i>
                     <span>Materiały</span>
                 </button>
+            </div>
+            <div class="pull-categories" id="pullCategories">
+                <div class="pull-categories-title">
+                    <i class="fa-solid fa-folder-open"></i> Kategorie artykułów
+                </div>
+                <div class="pull-cat-grid" id="pullCatGrid"></div>
             </div>
         </div>
         <div class="pull-handle" id="pullHandle" role="button" tabindex="0"
@@ -2928,6 +3449,69 @@
         <i class="fa-solid fa-bars"></i>
     </button>
 
+    <!-- TOC Radial Menu (mobile, wiki tab) -->
+    <div class="toc-radial-overlay" id="tocRadialOverlay"></div>
+    <button class="toc-fab" id="tocFab" aria-label="Spis treści artykułu">
+        <i class="fa-solid fa-list"></i>
+    </button>
+    <div class="toc-radial-menu" id="tocRadialMenu" role="dialog" aria-label="Spis treści">
+        <div class="toc-radial-header">
+            <i class="fa-solid fa-list"></i> Spis treści
+        </div>
+        <ul class="toc-radial-list" id="tocRadialList"></ul>
+    </div>
+
+    <!-- Settings FAB (mobile) -->
+    <button class="settings-fab" id="settingsFab" aria-label="Ustawienia aplikacji">
+        <i class="fa-solid fa-gear"></i>
+    </button>
+
+    <!-- Settings Panel (mobile) -->
+    <div class="settings-panel-overlay" id="settingsPanelOverlay"></div>
+    <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Ustawienia">
+        <div class="settings-panel-handle"><div class="pill"></div></div>
+        <div class="settings-panel-header">
+            <h3><i class="fa-solid fa-gear"></i> Ustawienia</h3>
+            <button class="settings-close" id="settingsClose" aria-label="Zamknij ustawienia">
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+        <div class="settings-body">
+            <div class="settings-section">
+                <div class="settings-section-title">Wyświetlanie</div>
+                <div class="settings-row">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-text-height"></i>
+                        <span>Rozmiar czcionki</span>
+                    </div>
+                    <div class="font-size-btns" id="fontSizeBtns">
+                        <button class="font-size-btn" data-size="small">A</button>
+                        <button class="font-size-btn active" data-size="medium">A</button>
+                        <button class="font-size-btn" data-size="large">A+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Interakcje</div>
+                <div class="settings-row">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-hand-pointer"></i>
+                        <span>Wibracje haptyczne</span>
+                    </div>
+                    <button class="toggle-switch active" id="hapticToggle" role="switch" aria-checked="true" aria-label="Wibracje haptyczne"></button>
+                </div>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Instalacja</div>
+                <button class="install-btn" id="installAppBtn">
+                    <i class="fa-solid fa-download install-icon"></i>
+                    <i class="fa-solid fa-check install-check"></i>
+                    <span>Dodaj do ekranu głównego</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
     <!-- Back to top button -->
     <button class="back-to-top" id="backToTop" aria-label="Wróć na górę strony">
         <i class="fa-solid fa-chevron-up"></i>
@@ -3045,6 +3629,12 @@
             const sidebarToggle = document.getElementById('sidebarToggle');
             if (sidebarToggle) {
                 sidebarToggle.style.display = tab === 'wiki' ? '' : 'none';
+            }
+
+            // Show/hide TOC FAB (only for wiki panel, mobile)
+            const tocFab = document.getElementById('tocFab');
+            if (tocFab && window.innerWidth <= 768) {
+                tocFab.style.display = tab === 'wiki' ? 'flex' : 'none';
             }
 
             // Scroll to top on tab switch
@@ -3175,6 +3765,304 @@
                         switchTab('wiki');
                     }
                 }
+            });
+        })();
+
+        // ===== TOC RADIAL MENU =====
+        (function () {
+            const fab = document.getElementById('tocFab');
+            const menu = document.getElementById('tocRadialMenu');
+            const list = document.getElementById('tocRadialList');
+            const overlay = document.getElementById('tocRadialOverlay');
+            if (!fab || !menu || !list || !overlay) return;
+
+            let isOpen = false;
+
+            function hapticFeedback() {
+                const hapticEnabled = localStorage.getItem('pam-haptic') !== 'false';
+                if (hapticEnabled && navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+            }
+
+            function openTocMenu() {
+                populateTocMenu();
+                isOpen = true;
+                menu.style.display = 'block';
+                overlay.style.display = 'block';
+                requestAnimationFrame(() => {
+                    menu.classList.add('open');
+                    overlay.classList.add('open');
+                    fab.classList.add('open');
+                });
+                hapticFeedback();
+                highlightActiveHeading();
+            }
+
+            function closeTocMenu() {
+                isOpen = false;
+                menu.classList.remove('open');
+                overlay.classList.remove('open');
+                fab.classList.remove('open');
+                setTimeout(() => {
+                    menu.style.display = '';
+                    overlay.style.display = '';
+                }, 300);
+            }
+
+            function populateTocMenu() {
+                const article = document.getElementById('wikiArticle');
+                if (!article) return;
+                const headings = article.querySelectorAll('h2, h3');
+                list.innerHTML = '';
+                if (headings.length === 0) {
+                    list.innerHTML = '<div class="toc-radial-empty"><i class="fa-solid fa-book-open"></i>Otwórz artykuł, aby zobaczyć spis treści</div>';
+                    return;
+                }
+                headings.forEach((h, i) => {
+                    if (!h.id) h.id = 'heading-' + i;
+                    const li = document.createElement('li');
+                    if (h.tagName === 'H3') li.classList.add('toc-h3');
+                    li.innerHTML = '<a href="#' + h.id + '"><span class="toc-dot"></span>' + h.textContent + '</a>';
+                    li.querySelector('a').addEventListener('click', (e) => {
+                        e.preventDefault();
+                        closeTocMenu();
+                        hapticFeedback();
+                        setTimeout(() => {
+                            h.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 150);
+                    });
+                    list.appendChild(li);
+                });
+            }
+
+            function highlightActiveHeading() {
+                const article = document.getElementById('wikiArticle');
+                if (!article) return;
+                const headings = article.querySelectorAll('h2, h3');
+                let activeId = null;
+                const scrollTop = window.scrollY + 120;
+                headings.forEach(h => {
+                    if (h.offsetTop <= scrollTop) activeId = h.id;
+                });
+                list.querySelectorAll('a').forEach(a => {
+                    const isActive = a.getAttribute('href') === '#' + activeId;
+                    a.classList.toggle('active-heading', isActive);
+                    if (isActive) {
+                        a.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                    }
+                });
+            }
+
+            fab.addEventListener('click', () => {
+                if (isOpen) closeTocMenu();
+                else openTocMenu();
+            });
+
+            overlay.addEventListener('click', closeTocMenu);
+
+            // Show/hide FAB based on active tab
+            function updateTocFabVisibility() {
+                const wikiActive = document.getElementById('panel-wiki')?.classList.contains('active');
+                const isMobile = window.innerWidth <= 768;
+                fab.style.display = (wikiActive && isMobile) ? 'flex' : 'none';
+            }
+
+            window.addEventListener('resize', updateTocFabVisibility);
+            updateTocFabVisibility();
+        })();
+
+        // ===== SETTINGS PANEL =====
+        (function () {
+            const fab = document.getElementById('settingsFab');
+            const panel = document.getElementById('settingsPanel');
+            const overlay = document.getElementById('settingsPanelOverlay');
+            const closeBtn = document.getElementById('settingsClose');
+            if (!fab || !panel || !overlay) return;
+
+            function hapticFeedback() {
+                const hapticEnabled = localStorage.getItem('pam-haptic') !== 'false';
+                if (hapticEnabled && navigator.vibrate) {
+                    navigator.vibrate(10);
+                }
+            }
+
+            function openSettings() {
+                panel.style.display = 'block';
+                overlay.style.display = 'block';
+                requestAnimationFrame(() => {
+                    panel.classList.add('open');
+                    overlay.classList.add('open');
+                    fab.classList.add('open');
+                });
+                hapticFeedback();
+            }
+
+            function closeSettings() {
+                panel.classList.remove('open');
+                overlay.classList.remove('open');
+                fab.classList.remove('open');
+                setTimeout(() => {
+                    panel.style.display = '';
+                    overlay.style.display = '';
+                }, 350);
+            }
+
+            fab.addEventListener('click', () => {
+                if (panel.classList.contains('open')) closeSettings();
+                else openSettings();
+            });
+
+            overlay.addEventListener('click', closeSettings);
+            closeBtn?.addEventListener('click', closeSettings);
+
+            // Show settings FAB only on mobile
+            function updateSettingsFabVisibility() {
+                fab.style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+            }
+            window.addEventListener('resize', updateSettingsFabVisibility);
+            updateSettingsFabVisibility();
+
+            // ===== Font size =====
+            const FONT_SIZES = { small: '14px', medium: '16px', large: '18px' };
+            const savedSize = localStorage.getItem('pam-font-size') || 'medium';
+            applyFontSize(savedSize);
+
+            document.querySelectorAll('.font-size-btn').forEach(btn => {
+                if (btn.dataset.size === savedSize) btn.classList.add('active');
+                else btn.classList.remove('active');
+
+                btn.addEventListener('click', () => {
+                    const size = btn.dataset.size;
+                    document.querySelectorAll('.font-size-btn').forEach(b => b.classList.remove('active'));
+                    btn.classList.add('active');
+                    applyFontSize(size);
+                    localStorage.setItem('pam-font-size', size);
+                    hapticFeedback();
+                });
+            });
+
+            function applyFontSize(size) {
+                document.documentElement.style.setProperty('--user-font-size', FONT_SIZES[size] || '16px');
+                const article = document.getElementById('wikiArticle');
+                if (article) article.style.fontSize = FONT_SIZES[size] || '16px';
+            }
+
+            // ===== Haptic toggle =====
+            const hapticToggle = document.getElementById('hapticToggle');
+            const hapticSaved = localStorage.getItem('pam-haptic') !== 'false';
+            if (hapticToggle) {
+                hapticToggle.classList.toggle('active', hapticSaved);
+                hapticToggle.setAttribute('aria-checked', String(hapticSaved));
+                hapticToggle.addEventListener('click', () => {
+                    const isActive = hapticToggle.classList.toggle('active');
+                    hapticToggle.setAttribute('aria-checked', String(isActive));
+                    localStorage.setItem('pam-haptic', String(isActive));
+                    if (isActive && navigator.vibrate) navigator.vibrate(15);
+                });
+            }
+
+            // ===== Install to Home Screen (PWA) =====
+            let deferredPrompt = null;
+            const installBtn = document.getElementById('installAppBtn');
+
+            window.addEventListener('beforeinstallprompt', (e) => {
+                e.preventDefault();
+                deferredPrompt = e;
+                if (installBtn) {
+                    installBtn.disabled = false;
+                    installBtn.classList.remove('installed');
+                }
+            });
+
+            window.addEventListener('appinstalled', () => {
+                deferredPrompt = null;
+                if (installBtn) {
+                    installBtn.classList.add('installed');
+                    installBtn.querySelector('span').textContent = 'Zainstalowano!';
+                    installBtn.disabled = true;
+                }
+            });
+
+            if (installBtn) {
+                // Check if already installed
+                if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
+                    installBtn.classList.add('installed');
+                    installBtn.querySelector('span').textContent = 'Już zainstalowano';
+                    installBtn.disabled = true;
+                }
+
+                installBtn.addEventListener('click', async () => {
+                    hapticFeedback();
+                    if (deferredPrompt) {
+                        deferredPrompt.prompt();
+                        const result = await deferredPrompt.userChoice;
+                        if (result.outcome === 'accepted') {
+                            installBtn.classList.add('installed');
+                            installBtn.querySelector('span').textContent = 'Zainstalowano!';
+                            installBtn.disabled = true;
+                        }
+                        deferredPrompt = null;
+                    } else {
+                        // Fallback: show instructions
+                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                        if (isIOS) {
+                            alert('Aby dodać do ekranu głównego:\n1. Naciśnij ikonę "Udostępnij" (kwadrat ze strzałką)\n2. Wybierz "Dodaj do ekranu początkowego"');
+                        } else {
+                            alert('Aby dodać do ekranu głównego:\n1. Otwórz menu przeglądarki (⋮)\n2. Wybierz "Dodaj do ekranu głównego" lub "Zainstaluj aplikację"');
+                        }
+                    }
+                });
+            }
+        })();
+
+        // ===== PULL PANEL: CATEGORIES =====
+        (function () {
+            const grid = document.getElementById('pullCatGrid');
+            if (!grid || typeof CATEGORIES === 'undefined') return;
+
+            CATEGORIES.forEach(cat => {
+                const btn = document.createElement('button');
+                btn.className = 'pull-cat-btn';
+                btn.dataset.catId = cat.id;
+                btn.innerHTML = '<i class="' + cat.icon + '"></i><span>' + cat.name + '</span>';
+                btn.addEventListener('click', () => {
+                    // Switch to wiki tab
+                    if (typeof switchTab === 'function') switchTab('wiki');
+
+                    // Find and expand the category in sidebar
+                    const catList = document.getElementById(cat.id);
+                    if (catList) {
+                        catList.classList.remove('collapsed');
+                        const header = document.querySelector('[data-cat="' + cat.id + '"]');
+                        const icon = header?.querySelector('.toggle-icon');
+                        if (icon) icon.style.transform = '';
+                        // Scroll sidebar to show category
+                        const sidebar = document.getElementById('wikiSidebar');
+                        if (sidebar && window.innerWidth < 900) {
+                            sidebar.classList.add('open');
+                        }
+                        setTimeout(() => {
+                            header?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }, 100);
+                    }
+
+                    // Close pull panel
+                    const pullPanel = document.getElementById('pullPanel');
+                    const pullOverlay = document.getElementById('pullOverlay');
+                    if (pullPanel) {
+                        pullPanel.classList.remove('open');
+                        pullPanel.style.transform = '';
+                    }
+                    if (pullOverlay) {
+                        pullOverlay.classList.remove('open');
+                    }
+
+                    // Haptic feedback
+                    const hapticEnabled = localStorage.getItem('pam-haptic') !== 'false';
+                    if (hapticEnabled && navigator.vibrate) navigator.vibrate(10);
+                });
+                grid.appendChild(btn);
             });
         })();
     </script>
