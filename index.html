@@ -3,10 +3,19 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>PAM WIKI — Programowanie Aplikacji Mobilnych</title>
     <meta name="description"
         content="Baza wiedzy z Programowania Aplikacji Mobilnych. Android, iOS, Flutter, XR, IoT, Informatyka Afektywna, Gry Mobilne.">
+
+    <!-- PWA -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#12142a">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="PAM WIKI">
+    <link rel="apple-touch-icon" href="assets/icon-192.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -1676,6 +1685,233 @@
                 grid-template-columns: 1fr;
             }
         }
+
+        /* ===== PWA STANDALONE & SAFE AREA ===== */
+        @media all and (display-mode: standalone) {
+            body {
+                padding-top: env(safe-area-inset-top);
+            }
+        }
+
+        /* ===== MOBILE BOTTOM NAV ===== */
+        .bottom-nav {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .bottom-nav {
+                display: flex;
+                position: fixed;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                background: var(--surface);
+                border-top: 1px solid var(--border);
+                z-index: 100;
+                padding: 4px 0 calc(4px + env(safe-area-inset-bottom));
+                box-shadow: 0 -2px 12px rgba(0,0,0,0.10);
+                justify-content: space-around;
+                align-items: stretch;
+            }
+
+            .bottom-nav-btn {
+                flex: 1;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                gap: 2px;
+                padding: 6px 2px 4px;
+                background: none;
+                border: none;
+                cursor: pointer;
+                font-family: var(--font);
+                color: var(--text-muted);
+                transition: color var(--transition);
+                min-height: 48px;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .bottom-nav-btn i {
+                font-size: 18px;
+                line-height: 1;
+            }
+
+            .bottom-nav-btn span {
+                font-size: 9px;
+                font-weight: 600;
+                line-height: 1.2;
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 64px;
+            }
+
+            .bottom-nav-btn.active {
+                color: var(--accent);
+            }
+
+            .bottom-nav-btn.active i {
+                transform: scale(1.1);
+            }
+
+            /* hide top tab bar on mobile, use bottom nav */
+            .page-tab-bar {
+                display: none;
+            }
+
+            /* adjust body for bottom nav */
+            body {
+                padding-bottom: calc(56px + env(safe-area-inset-bottom));
+            }
+
+            /* hero compact on mobile */
+            .hero {
+                padding: 8px 16px 6px;
+            }
+
+            .hero h1 {
+                font-size: clamp(11px, 2.2vw, 16px);
+            }
+
+            .hero-badge {
+                font-size: 9px;
+                padding: 3px 8px;
+                margin-bottom: 4px;
+            }
+
+            .hero-sub {
+                font-size: 10px;
+            }
+
+            /* header compact */
+            header {
+                padding: 6px 0;
+            }
+
+            .header-inner {
+                padding: 0 12px;
+            }
+
+            .header-logo {
+                width: 32px;
+                height: 32px;
+                font-size: 14px;
+            }
+
+            .header-title strong {
+                font-size: 15px;
+            }
+
+            /* improve touch targets */
+            .btn-icon {
+                width: 44px;
+                height: 44px;
+                font-size: 16px;
+            }
+
+            .cat-header {
+                padding: 12px 10px;
+                font-size: 12px;
+                min-height: 44px;
+            }
+
+            .cat-list li a {
+                padding: 8px 10px;
+                font-size: 14px;
+                min-height: 44px;
+            }
+
+            .quick-link-card {
+                padding: 16px;
+                min-height: 56px;
+            }
+
+            .topic-header {
+                padding: 16px 18px;
+                min-height: 48px;
+            }
+
+            .topic-header span {
+                font-size: 14px;
+            }
+
+            /* larger text on mobile for readability */
+            #wikiArticle p {
+                font-size: 15px;
+                line-height: 1.6;
+            }
+
+            #wikiArticle li {
+                font-size: 14px;
+                line-height: 1.5;
+            }
+
+            #wikiArticle h2 {
+                font-size: 18px;
+            }
+
+            #wikiArticle h3 {
+                font-size: 16px;
+            }
+
+            .info-card p,
+            .info-card ul {
+                font-size: 14px;
+            }
+
+            .info-card-header strong {
+                font-size: 15px;
+            }
+
+            /* back-to-top and sidebar toggle above bottom nav */
+            .back-to-top {
+                bottom: calc(72px + env(safe-area-inset-bottom));
+            }
+
+            .sidebar-toggle {
+                bottom: calc(72px + env(safe-area-inset-bottom));
+            }
+
+            /* wiki main with bottom padding for bottom nav */
+            .wiki-main {
+                padding-bottom: calc(60px + env(safe-area-inset-bottom));
+            }
+
+            /* info panel mobile */
+            .info-panel {
+                padding: 20px 16px 40px;
+            }
+
+            .info-panel-header h2 {
+                font-size: 20px;
+            }
+
+            /* wiki sidebar in mobile adjustments */
+            .wiki-sidebar {
+                top: var(--header-h);
+                height: calc(100vh - var(--header-h));
+            }
+
+            .wiki-search input {
+                padding: 12px 14px 12px 40px;
+                font-size: 16px;
+            }
+
+            /* tab panel transitions */
+            .tab-panel {
+                animation: none;
+            }
+
+            .tab-panel.active {
+                animation: fadeIn 0.2s ease;
+            }
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
     </style>
 </head>
 
@@ -2436,6 +2672,30 @@
         <i class="fa-solid fa-chevron-up"></i>
     </button>
 
+    <!-- MOBILE BOTTOM NAV -->
+    <nav class="bottom-nav" id="bottomNav" aria-label="Nawigacja mobilna">
+        <button class="bottom-nav-btn active" data-tab="wiki">
+            <i class="fa-solid fa-book-open"></i>
+            <span>Wiki</span>
+        </button>
+        <button class="bottom-nav-btn" data-tab="projekt">
+            <i class="fa-solid fa-laptop-code"></i>
+            <span>Projekt</span>
+        </button>
+        <button class="bottom-nav-btn" data-tab="egzamin">
+            <i class="fa-solid fa-graduation-cap"></i>
+            <span>Egzamin</span>
+        </button>
+        <button class="bottom-nav-btn" data-tab="pierwsza">
+            <i class="fa-solid fa-rocket"></i>
+            <span>1. Aplikacja</span>
+        </button>
+        <button class="bottom-nav-btn" data-tab="materialy">
+            <i class="fa-solid fa-file-arrow-down"></i>
+            <span>Materiały</span>
+        </button>
+    </nav>
+
     <!-- FOOTER -->
     <footer>
         <p>
@@ -2460,6 +2720,13 @@
     <script src="pam-wiki.js"></script>
 
     <script>
+        // Register Service Worker
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('sw.js').catch(err => {
+                console.warn('SW registration failed:', err);
+            });
+        }
+
         // Mobile sidebar toggle
         document.getElementById('sidebarToggle')?.addEventListener('click', () => {
             const sidebar = document.getElementById('wikiSidebar');
@@ -2476,43 +2743,63 @@
             }
         });
 
-        // ===== TAB SWITCHING =====
-        document.querySelectorAll('.tab-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const tab = btn.dataset.tab;
+        // ===== TAB SWITCHING (shared logic) =====
+        function switchTab(tab) {
+            // Update top tab bar
+            document.querySelectorAll('.page-tab-bar .tab-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
 
-                // Update active tab button
-                document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-                btn.classList.add('active');
+            // Update bottom nav
+            document.querySelectorAll('.bottom-nav-btn').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
 
-                // Show/hide panels
-                document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-                document.getElementById('panel-' + tab)?.classList.add('active');
+            // Show/hide panels
+            document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+            document.getElementById('panel-' + tab)?.classList.add('active');
 
-                // Resize "pierwsza" iframe once its panel is visible
-                if (tab === 'pierwsza') {
-                    const iframe = document.getElementById('iframe-pierwsza');
-                    if (iframe) {
-                        const resize = () => {
-                            const h = iframe.contentWindow?.document?.body?.scrollHeight;
-                            if (h && h > 100) { iframe.style.height = (h + 40) + 'px'; }
-                        };
-                        if (iframe.contentWindow?.document?.readyState === 'complete') {
-                            resize();
-                        } else {
-                            iframe.addEventListener('load', resize, { once: true });
-                        }
+            // Resize "pierwsza" iframe once its panel is visible
+            if (tab === 'pierwsza') {
+                const iframe = document.getElementById('iframe-pierwsza');
+                if (iframe) {
+                    const resize = () => {
+                        const h = iframe.contentWindow?.document?.body?.scrollHeight;
+                        if (h && h > 100) { iframe.style.height = (h + 40) + 'px'; }
+                    };
+                    if (iframe.contentWindow?.document?.readyState === 'complete') {
+                        resize();
+                    } else {
+                        iframe.addEventListener('load', resize, { once: true });
                     }
                 }
+            }
 
-                // Show/hide sidebar toggle (only for wiki panel)
-                const sidebarToggle = document.getElementById('sidebarToggle');
-                if (sidebarToggle) {
-                    sidebarToggle.style.display = tab === 'wiki' ? '' : 'none';
-                }
+            // Show/hide sidebar toggle (only for wiki panel)
+            const sidebarToggle = document.getElementById('sidebarToggle');
+            if (sidebarToggle) {
+                sidebarToggle.style.display = tab === 'wiki' ? '' : 'none';
+            }
 
-                // Remove badge "Nowe" after first click
+            // Scroll to top on tab switch
+            window.scrollTo({ top: 0 });
+        }
+
+        // Top tab bar clicks
+        document.querySelectorAll('.page-tab-bar .tab-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
                 btn.querySelector('.tab-badge')?.remove();
+            });
+        });
+
+        // Bottom nav clicks
+        document.querySelectorAll('.bottom-nav-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                switchTab(btn.dataset.tab);
+                // Remove badge from matching top tab btn
+                const topBtn = document.querySelector('.page-tab-bar .tab-btn[data-tab="' + btn.dataset.tab + '"]');
+                topBtn?.querySelector('.tab-badge')?.remove();
             });
         });
 
