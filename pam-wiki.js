@@ -417,16 +417,4 @@ function generateTableOfContents(container) {
     container.querySelector('h1')?.insertAdjacentElement('afterend', toc);
 }
 
-// Mobile sidebar toggle
-document.addEventListener('DOMContentLoaded', () => {
-    const toggle = document.getElementById('sidebarToggle');
-    const sidebar = document.getElementById('wikiSidebar');
-    toggle?.addEventListener('click', () => sidebar?.classList.toggle('open'));
-    document.addEventListener('click', e => {
-        if (sidebar?.classList.contains('open') &&
-            !sidebar.contains(e.target) &&
-            !toggle?.contains(e.target)) {
-            sidebar.classList.remove('open');
-        }
-    });
-});
+

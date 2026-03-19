@@ -1912,6 +1912,241 @@
             from { opacity: 0; transform: translateY(4px); }
             to { opacity: 1; transform: translateY(0); }
         }
+
+        /* ===== ENHANCED ANIMATIONS ===== */
+        @keyframes slideInUp {
+            from { opacity: 0; transform: translateY(16px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes scaleIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to   { opacity: 1; transform: scale(1); }
+        }
+
+        .wiki-welcome {
+            animation: slideInUp 0.3s ease;
+        }
+
+        .info-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .info-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .quick-link-card {
+            transition: transform 0.2s ease, box-shadow 0.2s ease, background var(--transition);
+        }
+
+        .quick-link-card:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .bottom-nav-btn:active {
+            transform: scale(0.90);
+        }
+
+        /* ===== PULL-DOWN PANEL (mobile) ===== */
+        .pull-panel-overlay {
+            display: none;
+        }
+
+        .pull-panel {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .pull-panel-overlay {
+                display: block;
+                position: fixed;
+                inset: 0;
+                background: rgba(0, 0, 0, 0.4);
+                z-index: 85;
+                opacity: 0;
+                pointer-events: none;
+                transition: opacity 0.3s ease;
+            }
+
+            .pull-panel-overlay.open {
+                opacity: 1;
+                pointer-events: auto;
+            }
+
+            .pull-panel {
+                display: block;
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                z-index: 90;
+                background: var(--surface);
+                border-radius: 0 0 24px 24px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
+                padding-top: var(--header-h);
+                transform: translateY(calc(-100% + var(--header-h) + 24px));
+                transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
+                            box-shadow 0.35s ease;
+                will-change: transform;
+                max-height: 80vh;
+            }
+
+            .pull-panel.open {
+                transform: translateY(0);
+                box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+            }
+
+            .pull-handle {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 10px 20px;
+                cursor: pointer;
+                touch-action: pan-y;
+                user-select: none;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .pull-pill {
+                width: 40px;
+                height: 4px;
+                border-radius: 2px;
+                background: var(--border);
+                transition: background 0.25s, width 0.25s;
+            }
+
+            .pull-panel.open .pull-pill {
+                background: var(--accent);
+                width: 32px;
+            }
+
+            .pull-panel-body {
+                padding: 4px 20px 24px;
+                overflow-y: auto;
+                max-height: calc(80vh - var(--header-h) - 44px);
+            }
+
+            .pull-panel-title {
+                font-size: 11px;
+                font-weight: 700;
+                color: var(--text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.8px;
+                margin-bottom: 14px;
+                display: flex;
+                align-items: center;
+                gap: 8px;
+            }
+
+            .pull-panel-title i {
+                color: var(--accent);
+            }
+
+            .pull-search-wrap {
+                position: relative;
+                margin-bottom: 16px;
+            }
+
+            .pull-search-wrap > i {
+                position: absolute;
+                left: 12px;
+                top: 50%;
+                transform: translateY(-50%);
+                color: var(--text-muted);
+                font-size: 13px;
+                pointer-events: none;
+            }
+
+            .pull-search-wrap input {
+                width: 100%;
+                padding: 10px 14px 10px 36px;
+                border: 1px solid var(--border);
+                border-radius: var(--radius);
+                background: var(--surface2);
+                color: var(--text);
+                font-family: var(--font);
+                font-size: 14px;
+                outline: none;
+                transition: border-color var(--transition);
+            }
+
+            .pull-search-wrap input:focus {
+                border-color: var(--accent);
+            }
+
+            .pull-shortcuts {
+                display: grid;
+                grid-template-columns: repeat(5, 1fr);
+                gap: 8px;
+            }
+
+            .pull-shortcut {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 5px;
+                padding: 12px 4px;
+                background: var(--surface2);
+                border: 1px solid var(--border);
+                border-radius: 12px;
+                cursor: pointer;
+                font-family: var(--font);
+                color: var(--text-muted);
+                transition: background var(--transition), color var(--transition),
+                            transform 0.15s ease, border-color var(--transition);
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .pull-shortcut i {
+                font-size: 18px;
+            }
+
+            .pull-shortcut span {
+                font-size: 9px;
+                font-weight: 600;
+                white-space: nowrap;
+            }
+
+            .pull-shortcut.active {
+                background: var(--accent-light);
+                color: var(--accent);
+                border-color: var(--accent);
+            }
+
+            .pull-shortcut:active {
+                transform: scale(0.93);
+            }
+
+            /* ===== CODE BLOCKS on mobile ===== */
+            .code-block-wrapper pre {
+                font-size: 10.5px;
+                padding: 14px 12px;
+                line-height: 1.45;
+            }
+
+            /* ===== ARTICLE TOC compact ===== */
+            .article-toc {
+                padding: 12px 14px;
+                margin: 12px 0 18px;
+            }
+
+            .article-toc li {
+                margin: 2px 0;
+            }
+
+            .article-toc a {
+                font-size: 12px;
+                line-height: 1.4;
+            }
+
+            .article-toc h3 {
+                font-size: 11px;
+                margin-bottom: 8px;
+            }
+        }
     </style>
 </head>
 
@@ -1919,6 +2154,44 @@
 
     <!-- Scroll progress -->
     <div class="scroll-progress" id="scrollProgress"></div>
+
+    <!-- PULL-DOWN PANEL (mobile only) -->
+    <div class="pull-panel-overlay" id="pullOverlay"></div>
+    <div class="pull-panel" id="pullPanel" role="dialog" aria-label="Szybka nawigacja">
+        <div class="pull-panel-body">
+            <p class="pull-panel-title"><i class="fa-solid fa-bolt"></i> Szybka nawigacja</p>
+            <div class="pull-search-wrap">
+                <i class="fa-solid fa-magnifying-glass"></i>
+                <input type="text" id="pullSearchInput" placeholder="Szukaj artykułów..." autocomplete="off">
+            </div>
+            <div class="pull-shortcuts">
+                <button class="pull-shortcut active" data-tab="wiki">
+                    <i class="fa-solid fa-book-open"></i>
+                    <span>Wiki</span>
+                </button>
+                <button class="pull-shortcut" data-tab="projekt">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>Projekt</span>
+                </button>
+                <button class="pull-shortcut" data-tab="egzamin">
+                    <i class="fa-solid fa-graduation-cap"></i>
+                    <span>Egzamin</span>
+                </button>
+                <button class="pull-shortcut" data-tab="pierwsza">
+                    <i class="fa-solid fa-rocket"></i>
+                    <span>Aplikacja</span>
+                </button>
+                <button class="pull-shortcut" data-tab="materialy">
+                    <i class="fa-solid fa-file-arrow-down"></i>
+                    <span>Materiały</span>
+                </button>
+            </div>
+        </div>
+        <div class="pull-handle" id="pullHandle" role="button" tabindex="0"
+             aria-expanded="false" aria-label="Panel szybkiej nawigacji — pociągnij w dół">
+            <div class="pull-pill"></div>
+        </div>
+    </div>
 
     <!-- HEADER -->
     <header>
@@ -2743,6 +3016,11 @@
                 b.classList.toggle('active', b.dataset.tab === tab);
             });
 
+            // Update pull panel shortcuts
+            document.querySelectorAll('.pull-shortcut').forEach(b => {
+                b.classList.toggle('active', b.dataset.tab === tab);
+            });
+
             // Show/hide panels
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('panel-' + tab)?.classList.add('active');
@@ -2801,6 +3079,104 @@
                 if (chev) chev.style.transform = isOpen ? '' : 'rotate(180deg)';
             });
         });
+
+        // ===== PULL-DOWN PANEL =====
+        (function () {
+            const panel = document.getElementById('pullPanel');
+            const handle = document.getElementById('pullHandle');
+            const overlay = document.getElementById('pullOverlay');
+            const pullSearchInput = document.getElementById('pullSearchInput');
+            if (!panel || !handle || !overlay) return;
+
+            let startY = 0, startTranslate = 0, isDragging = false;
+
+            function getClosedTranslate() {
+                return -(panel.offsetHeight - 54 - 24);
+            }
+
+            function openPanel() {
+                panel.classList.add('open');
+                overlay.classList.add('open');
+                handle.setAttribute('aria-expanded', 'true');
+                panel.style.transform = '';
+            }
+
+            function closePanel() {
+                panel.classList.remove('open');
+                overlay.classList.remove('open');
+                handle.setAttribute('aria-expanded', 'false');
+                panel.style.transform = '';
+            }
+
+            handle.addEventListener('click', () => {
+                if (isDragging) return;
+                if (panel.classList.contains('open')) closePanel();
+                else openPanel();
+            });
+
+            handle.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    if (panel.classList.contains('open')) closePanel();
+                    else openPanel();
+                }
+            });
+
+            overlay.addEventListener('click', closePanel);
+
+            // Touch/pointer drag support
+            handle.addEventListener('pointerdown', (e) => {
+                isDragging = false;
+                startY = e.clientY;
+                const matrix = new DOMMatrix(getComputedStyle(panel).transform);
+                startTranslate = matrix.m42;
+                panel.style.transition = 'none';
+                handle.setPointerCapture(e.pointerId);
+            });
+
+            handle.addEventListener('pointermove', (e) => {
+                const dy = e.clientY - startY;
+                if (Math.abs(dy) > 5) isDragging = true;
+                if (!isDragging) return;
+                const closed = getClosedTranslate();
+                const newY = Math.max(closed, Math.min(0, startTranslate + dy));
+                panel.style.transform = `translateY(${newY}px)`;
+                const progress = (newY - closed) / (-closed);
+                overlay.style.opacity = String(Math.max(0, Math.min(1, progress * 0.4)));
+                overlay.classList.toggle('open', progress > 0.05);
+            });
+
+            handle.addEventListener('pointerup', () => {
+                if (!isDragging) return;
+                isDragging = false;
+                panel.style.transition = '';
+                overlay.style.opacity = '';
+                const matrix = new DOMMatrix(getComputedStyle(panel).transform);
+                const currentY = matrix.m42;
+                if (currentY > getClosedTranslate() / 2) openPanel();
+                else closePanel();
+            });
+
+            // Pull shortcut buttons
+            document.querySelectorAll('.pull-shortcut').forEach(btn => {
+                btn.addEventListener('click', () => {
+                    switchTab(btn.dataset.tab);
+                    closePanel();
+                });
+            });
+
+            // Pull search → wiki search proxy
+            pullSearchInput?.addEventListener('input', () => {
+                const wikiSearch = document.getElementById('wikiSearch');
+                if (wikiSearch) {
+                    wikiSearch.value = pullSearchInput.value;
+                    wikiSearch.dispatchEvent(new Event('input'));
+                    if (!document.getElementById('panel-wiki')?.classList.contains('active')) {
+                        switchTab('wiki');
+                    }
+                }
+            });
+        })();
     </script>
 </body>
 
