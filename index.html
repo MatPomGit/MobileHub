@@ -1986,6 +1986,10 @@
                 pointer-events: auto;
             }
 
+            body.pull-panel-open .bottom-nav {
+                z-index: 84;
+            }
+
             .pull-panel {
                 display: block;
                 position: fixed;
@@ -3746,12 +3750,15 @@
             if (!panel || !handle || !overlay) return;
 
             let startY = 0, startTranslate = 0, isDragging = false;
+            let closeBodyClassTimeout = null;
 
             function getClosedTranslate() {
                 return -(panel.offsetHeight - 54 - 24);
             }
 
             function openPanel() {
+                clearTimeout(closeBodyClassTimeout);
+                document.body.classList.add('pull-panel-open');
                 panel.classList.add('open');
                 overlay.classList.add('open');
                 handle.setAttribute('aria-expanded', 'true');
@@ -3763,6 +3770,9 @@
                 overlay.classList.remove('open');
                 handle.setAttribute('aria-expanded', 'false');
                 panel.style.transform = '';
+                closeBodyClassTimeout = setTimeout(() => {
+                    document.body.classList.remove('pull-panel-open');
+                }, 300);
             }
 
             handle.addEventListener('click', () => {
@@ -3801,13 +3811,14 @@
                 const progress = (newY - closed) / (-closed);
                 overlay.style.opacity = String(Math.max(0, Math.min(1, progress * 0.4)));
                 overlay.classList.toggle('open', progress > 0.05);
+                document.body.classList.toggle('pull-panel-open', progress > 0.05);
             });
 
             handle.addEventListener('pointerup', () => {
+                overlay.style.opacity = '';
                 if (!isDragging) return;
                 isDragging = false;
                 panel.style.transition = '';
-                overlay.style.opacity = '';
                 const matrix = new DOMMatrix(getComputedStyle(panel).transform);
                 const currentY = matrix.m42;
                 if (currentY > getClosedTranslate() / 2) openPanel();
@@ -4006,6 +4017,7 @@
                 if (pullOverlay) {
                     pullOverlay.classList.remove('open');
                 }
+                document.body.classList.remove('pull-panel-open');
                 openSettings();
             });
 
@@ -4320,6 +4332,7 @@
                     if (pullOverlay) {
                         pullOverlay.classList.remove('open');
                     }
+                    document.body.classList.remove('pull-panel-open');
 
                     // Haptic feedback
                     const hapticEnabled = localStorage.getItem('pam-haptic') !== 'false';
