@@ -40,6 +40,12 @@
             --accent2: #7c3aed;
             --accent-light: #ede9fe;
             --accent-glow: rgba(91, 79, 207, 0.15);
+            --accent3: #06b6d4;
+            --accent4: #f472b6;
+            --hero-overlay: linear-gradient(135deg, rgba(13,15,26,0.84) 0%, rgba(26,16,64,0.78) 45%, rgba(13,26,46,0.84) 100%);
+            --hero-orb-1: rgba(91, 79, 207, 0.28);
+            --hero-orb-2: rgba(6, 182, 212, 0.22);
+            --hero-orb-3: rgba(244, 114, 182, 0.18);
             --code-bg: #1e1e2e;
             --nav-bg: #1a1d2e;
             --nav-text: #e2e8f0;
@@ -147,6 +153,31 @@
             --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
         }
 
+
+        /* Aurora — neon gradient theme */
+        [data-theme="aurora"] {
+            --bg: #090b1f;
+            --surface: #11152d;
+            --surface2: #171c3b;
+            --border: #243062;
+            --text: #eff6ff;
+            --text-muted: #a0b4d4;
+            --accent: #8b5cf6;
+            --accent2: #22d3ee;
+            --accent3: #a3e635;
+            --accent4: #f472b6;
+            --accent-light: #1a1f47;
+            --accent-glow: rgba(139, 92, 246, 0.2);
+            --hero-overlay: linear-gradient(135deg, rgba(9,11,31,0.88) 0%, rgba(54,30,98,0.7) 45%, rgba(6,78,118,0.84) 100%);
+            --hero-orb-1: rgba(139, 92, 246, 0.35);
+            --hero-orb-2: rgba(34, 211, 238, 0.25);
+            --hero-orb-3: rgba(163, 230, 53, 0.18);
+            --code-bg: #0c1022;
+            --header-bg: #080b18;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+        }
+
         /* ===== RESET & BASE ===== */
         *,
         *::before,
@@ -167,6 +198,10 @@
             line-height: 1.5;
             min-height: 100vh;
             transition: background var(--transition), color var(--transition);
+        }
+
+        body.startup-open {
+            overflow: hidden;
         }
 
         a {
@@ -362,23 +397,41 @@
         .theme-swatch.forest  { background: linear-gradient(135deg, #f0fdf4, #059669); }
         .theme-swatch.sunset  { background: linear-gradient(135deg, #1a0e08, #f97316); }
         .theme-swatch.rose    { background: linear-gradient(135deg, #fff0f6, #db2777); }
+        .theme-swatch.aurora  { background: linear-gradient(135deg, #090b1f, #8b5cf6, #22d3ee); }
 
         /* ===== HERO ===== */
         .hero {
-            background: linear-gradient(135deg, rgba(13,15,26,0.80) 0%, rgba(26,16,64,0.80) 50%, rgba(13,26,46,0.80) 100%),
-                url('assets/background_4.jpg') center/cover no-repeat;
-            padding: 14px 24px 12px;
+            background: var(--hero-overlay), url('assets/background_4.jpg') center/cover no-repeat;
+            padding: 18px 24px 18px;
             text-align: center;
             position: relative;
             overflow: hidden;
+            isolation: isolate;
         }
 
         .hero::before {
             content: '';
             position: absolute;
             inset: 0;
-            background: radial-gradient(ellipse at 30% 50%, rgba(91, 79, 207, 0.25) 0%, transparent 60%),
-                radial-gradient(ellipse at 70% 50%, rgba(6, 182, 212, 0.15) 0%, transparent 60%);
+            background:
+                radial-gradient(ellipse at 18% 25%, var(--hero-orb-1) 0%, transparent 55%),
+                radial-gradient(ellipse at 80% 30%, var(--hero-orb-2) 0%, transparent 60%),
+                radial-gradient(circle at 50% 85%, var(--hero-orb-3) 0%, transparent 45%);
+            animation: heroFloat 18s ease-in-out infinite alternate;
+        }
+
+        .hero::after {
+            content: '';
+            position: absolute;
+            inset: auto -15% -40% auto;
+            width: 280px;
+            height: 280px;
+            background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
+            filter: blur(10px);
+            opacity: 0.35;
+            animation: heroPulse 8s ease-in-out infinite;
+            pointer-events: none;
+            z-index: -1;
         }
 
         .hero-content {
@@ -422,6 +475,235 @@
             color: rgba(255, 255, 255, 0.45);
             max-width: 480px;
             margin: 0 auto;
+        }
+
+
+        .hero-highlights {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 12px;
+            margin-top: 18px;
+        }
+
+        .hero-highlight {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            border-radius: 18px;
+            padding: 14px;
+            color: #fff;
+            text-align: left;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
+        }
+
+        .hero-highlight i {
+            color: #fff;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .hero-highlight strong {
+            display: block;
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        .hero-highlight span {
+            display: block;
+            font-size: 11px;
+            color: rgba(255,255,255,0.72);
+        }
+
+        .startup-overlay {
+            position: fixed;
+            inset: 0;
+            z-index: 400;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+            background: radial-gradient(circle at top, rgba(34,211,238,0.18), transparent 38%), rgba(5, 8, 21, 0.88);
+            backdrop-filter: blur(18px);
+            transition: opacity 0.45s ease, visibility 0.45s ease;
+        }
+
+        .startup-overlay.hidden {
+            opacity: 0;
+            visibility: hidden;
+            pointer-events: none;
+        }
+
+        .startup-card {
+            position: relative;
+            width: min(980px, 100%);
+            overflow: hidden;
+            border-radius: 28px;
+            padding: 38px;
+            background: linear-gradient(135deg, rgba(17,21,45,0.96), rgba(42,19,77,0.9), rgba(9,44,88,0.92));
+            border: 1px solid rgba(255,255,255,0.1);
+            box-shadow: 0 30px 100px rgba(0,0,0,0.4);
+            color: #fff;
+        }
+
+        .startup-card::before,
+        .startup-card::after {
+            content: '';
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(10px);
+            opacity: 0.8;
+            pointer-events: none;
+        }
+
+        .startup-card::before {
+            width: 260px;
+            height: 260px;
+            top: -90px;
+            right: -60px;
+            background: radial-gradient(circle, rgba(34,211,238,0.35), transparent 68%);
+        }
+
+        .startup-card::after {
+            width: 220px;
+            height: 220px;
+            bottom: -100px;
+            left: -70px;
+            background: radial-gradient(circle, rgba(244,114,182,0.28), transparent 68%);
+        }
+
+        .startup-grid {
+            position: relative;
+            display: grid;
+            grid-template-columns: 1.2fr 0.8fr;
+            gap: 26px;
+            align-items: center;
+        }
+
+        .startup-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 6px 12px;
+            border-radius: 999px;
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.12);
+            font-size: 11px;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+            margin-bottom: 18px;
+        }
+
+        .startup-title {
+            font-size: clamp(30px, 6vw, 56px);
+            line-height: 1;
+            margin-bottom: 16px;
+        }
+
+        .startup-title span {
+            background: linear-gradient(90deg, #22d3ee, #8b5cf6, #f472b6, #f59e0b);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-size: 220% 220%;
+            animation: hueShift 8s linear infinite;
+        }
+
+        .startup-copy {
+            max-width: 560px;
+            color: rgba(255,255,255,0.74);
+            font-size: 16px;
+            margin-bottom: 26px;
+        }
+
+        .startup-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .startup-btn {
+            border: none;
+            border-radius: 999px;
+            padding: 13px 18px;
+            font-family: var(--font);
+            font-weight: 700;
+            cursor: pointer;
+            transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+        }
+
+        .startup-btn.primary {
+            background: linear-gradient(90deg, #8b5cf6, #22d3ee, #f472b6);
+            color: #fff;
+            box-shadow: 0 12px 30px rgba(34, 211, 238, 0.25);
+            background-size: 200% 200%;
+            animation: hueShift 10s ease infinite;
+        }
+
+        .startup-btn.secondary {
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            border: 1px solid rgba(255,255,255,0.14);
+        }
+
+        .startup-btn:hover { transform: translateY(-2px) scale(1.01); }
+
+        .startup-stats, .startup-features {
+            display: grid;
+            gap: 12px;
+        }
+
+        .startup-stat, .startup-feature {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 18px;
+            padding: 16px;
+            backdrop-filter: blur(10px);
+        }
+
+        .startup-stat strong {
+            display: block;
+            font-size: 24px;
+        }
+
+        .startup-stat span, .startup-feature span {
+            color: rgba(255,255,255,0.7);
+            font-size: 13px;
+        }
+
+        .startup-feature strong {
+            display: block;
+            margin: 10px 0 4px;
+            font-size: 14px;
+        }
+
+        .startup-close {
+            position: absolute;
+            top: 16px;
+            right: 16px;
+            width: 40px;
+            height: 40px;
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 50%;
+            background: rgba(255,255,255,0.08);
+            color: #fff;
+            cursor: pointer;
+        }
+
+        @keyframes heroFloat {
+            0% { transform: translate3d(0, 0, 0) scale(1); }
+            50% { transform: translate3d(-2%, 3%, 0) scale(1.02); }
+            100% { transform: translate3d(2%, -2%, 0) scale(1.05); }
+        }
+
+        @keyframes heroPulse {
+            0%,100% { transform: scale(1); opacity: 0.25; }
+            50% { transform: scale(1.12); opacity: 0.4; }
+        }
+
+        @keyframes hueShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
         }
 
         /* ===== LAYOUT ===== */
@@ -1784,6 +2066,23 @@
                 font-size: 10px;
             }
 
+            .hero-highlights {
+                gap: 10px;
+                margin-top: 14px;
+            }
+
+            .startup-overlay {
+                padding: 14px;
+            }
+
+            .startup-title {
+                font-size: clamp(26px, 10vw, 40px);
+            }
+
+            .startup-copy {
+                font-size: 14px;
+            }
+
             /* header compact */
             header {
                 padding: 6px 0;
@@ -2714,6 +3013,32 @@
 
 <body>
 
+    <div class="startup-overlay" id="startupOverlay" aria-label="Ekran startowy PAM WIKI">
+        <div class="startup-card">
+            <button class="startup-close" id="startupClose" aria-label="Pomiń ekran startowy"><i class="fa-solid fa-xmark"></i></button>
+            <div class="startup-grid">
+                <div class="startup-copy-col">
+                    <div class="startup-badge"><i class="fa-solid fa-sparkles"></i> Nowy ekran startowy</div>
+                    <h1 class="startup-title">Wejdź do <span>PAM WIKI</span> szybciej i efektowniej.</h1>
+                    <p class="startup-copy">Interaktywny przewodnik po mobilkach z mocniejszym kolorem, płynniejszym ruchem i nową warstwą startową, która kieruje użytkownika prosto do najważniejszych sekcji.</p>
+                    <div class="startup-actions">
+                        <button class="startup-btn primary" data-start-target="wiki"><i class="fa-solid fa-book-open"></i> Otwórz bazę wiedzy</button>
+                        <button class="startup-btn secondary" data-start-target="pierwsza"><i class="fa-solid fa-rocket"></i> Zacznij od aplikacji</button>
+                    </div>
+                    <div class="startup-features">
+                        <div class="startup-feature"><i class="fa-solid fa-wand-magic-sparkles"></i><strong>Bogatsza oprawa wizualna</strong><span>Gradienty, kolorowe orbity i nowy motyw Aurora zwiększają atrakcyjność strony.</span></div>
+                        <div class="startup-feature"><i class="fa-solid fa-film"></i><strong>Lepsze animacje</strong><span>Ruch wejścia, płynne przejścia paneli oraz mikrointerakcje prowadzą wzrok użytkownika.</span></div>
+                    </div>
+                </div>
+                <div class="startup-stats">
+                    <div class="startup-stat"><strong>50+</strong><span>tematów z Android, iOS, IoT, XR i PWA</span></div>
+                    <div class="startup-stat"><strong>5</strong><span>sekcji szybkiego dostępu z dolnej i górnej nawigacji</span></div>
+                    <div class="startup-stat"><strong>1 klik</strong><span>do startu nauki, laboratorium lub pierwszej aplikacji</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!-- Scroll progress -->
     <div class="scroll-progress" id="scrollProgress"></div>
 
@@ -2805,6 +3130,9 @@
                         <button class="theme-option" data-theme="rose" role="menuitem">
                             <span class="theme-swatch rose"></span>Różany
                         </button>
+                        <button class="theme-option" data-theme="aurora" role="menuitem">
+                            <span class="theme-swatch aurora"></span>Aurora
+                        </button>
                     </div>
                 </div>
             </div>
@@ -2822,6 +3150,23 @@
             <p class="hero-sub">
                 Od natywnego Android/iOS po XR, IoT, informatykę afektywną i robotykę
             </p>
+            <div class="hero-highlights">
+                <div class="hero-highlight">
+                    <i class="fa-solid fa-bolt"></i>
+                    <strong>Szybki start</strong>
+                    <span>Wejdź od razu do wiki, materiałów lub pierwszej aplikacji.</span>
+                </div>
+                <div class="hero-highlight">
+                    <i class="fa-solid fa-swatchbook"></i>
+                    <strong>Więcej kolorów</strong>
+                    <span>Nowe gradienty i motyw Aurora nadają stronie nowoczesny charakter.</span>
+                </div>
+                <div class="hero-highlight">
+                    <i class="fa-solid fa-arrows-to-circle"></i>
+                    <strong>Płynne animacje</strong>
+                    <span>Subtelne wejścia sekcji i dynamiczne przejścia prowadzą uwagę użytkownika.</span>
+                </div>
+            </div>
 
         </div>
     </section>
@@ -4345,6 +4690,40 @@
         })();
     </script>
 
+
+    <script>
+        (function () {
+            const overlay = document.getElementById('startupOverlay');
+            const closeBtn = document.getElementById('startupClose');
+            const startButtons = document.querySelectorAll('[data-start-target]');
+            if (!overlay) return;
+
+            const alreadySeen = sessionStorage.getItem('pam-startup-seen') === 'true';
+            if (alreadySeen) overlay.classList.add('hidden');
+
+            function closeStartup(targetTab) {
+                overlay.classList.add('hidden');
+                sessionStorage.setItem('pam-startup-seen', 'true');
+                document.body.classList.remove('startup-open');
+                if (targetTab && typeof window.switchTab === 'function') {
+                    setTimeout(() => window.switchTab(targetTab), 120);
+                }
+            }
+
+            if (!alreadySeen) {
+                document.body.classList.add('startup-open');
+            }
+
+            closeBtn?.addEventListener('click', () => closeStartup());
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) closeStartup();
+            });
+            startButtons.forEach(btn => {
+                btn.addEventListener('click', () => closeStartup(btn.dataset.startTarget));
+            });
+        })();
+    </script>
+
     <!-- ===== GSAP ANIMATIONS ===== -->
     <script>
     (function () {
@@ -4360,13 +4739,45 @@
         const introTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
         introTl
-            .from('header', { y: -50, opacity: 0, duration: 0.5 })
+            .from('header', { y: -50, opacity: 0, duration: 0.55 })
             .from('.hero-badge',  { y: 20, opacity: 0, duration: 0.4 }, '-=0.2')
-            .from('.hero h1',     { y: 30, opacity: 0, duration: 0.5 }, '-=0.15')
-            .from('.hero-sub',    { y: 20, opacity: 0, duration: 0.4 }, '-=0.2')
+            .from('.hero h1',     { y: 34, opacity: 0, duration: 0.55 }, '-=0.15')
+            .from('.hero-sub',    { y: 20, opacity: 0, duration: 0.42 }, '-=0.2')
+            .from('.hero-highlight', { y: 26, opacity: 0, duration: 0.45, stagger: 0.08 }, '-=0.15')
             .from('.page-tab-bar',{ y: 20, opacity: 0, duration: 0.4 }, '-=0.2');
 
         // ===== SCROLL-TRIGGERED ANIMATIONS =====
+
+        // Startup screen entrance
+        const startupCard = document.querySelector('.startup-card');
+        if (startupCard && !document.getElementById('startupOverlay')?.classList.contains('hidden')) {
+            gsap.from('.startup-card', { scale: 0.96, y: 26, opacity: 0, duration: 0.65, ease: 'power3.out' });
+            gsap.from('.startup-badge, .startup-title, .startup-copy, .startup-actions .startup-btn, .startup-feature, .startup-stat', {
+                y: 20,
+                opacity: 0,
+                duration: 0.5,
+                stagger: 0.06,
+                delay: 0.15,
+                ease: 'power2.out'
+            });
+        }
+
+        // Hero parallax glow
+        const heroSection = document.querySelector('.hero');
+        const heroContent = document.querySelector('.hero-content');
+        if (heroSection && heroContent) {
+            gsap.to(heroContent, {
+                y: 28,
+                ease: 'none',
+                scrollTrigger: {
+                    trigger: heroSection,
+                    start: 'top top',
+                    end: 'bottom top',
+                    scrub: true
+                }
+            });
+        }
+
 
         // Section titles — slide in from left
         gsap.utils.toArray('.section-title').forEach(el => {
@@ -4541,9 +4952,12 @@
             });
         }
 
-        addLiftHover('.quick-link-card', 4, 1);
-        addLiftHover('.info-card',       4, 1.015);
+        addLiftHover('.quick-link-card', 4, 1.015);
+        addLiftHover('.info-card',       5, 1.018);
         addLiftHover('.exam-stat',       4, 1.04);
+        addLiftHover('.hero-highlight',  5, 1.02);
+        addLiftHover('.startup-feature', 5, 1.02);
+        addLiftHover('.startup-stat',    5, 1.02);
 
         // Topic accordion headers — icon nudge on hover
         document.querySelectorAll('.topic-header').forEach(header => {

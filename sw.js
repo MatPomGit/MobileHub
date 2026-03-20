@@ -1,4 +1,4 @@
-const CACHE_NAME = 'pam-wiki-v1';
+const CACHE_NAME = 'pam-wiki-v2';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
