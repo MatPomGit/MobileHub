@@ -2592,6 +2592,20 @@
                 display: none;
             }
 
+            /* Notification permission status */
+            .notif-perm-status {
+                font-size: 11px;
+                margin: 6px 0 0;
+                color: var(--text-muted);
+                min-height: 16px;
+                transition: color 0.2s;
+            }
+
+            .toggle-switch:disabled {
+                opacity: 0.4;
+                cursor: default;
+            }
+
             /* ===== PULL-DOWN PANEL: CATEGORIES ===== */
             .pull-categories {
                 margin-top: 14px;
@@ -3537,6 +3551,24 @@
                 </div>
             </div>
             <div class="settings-section">
+                <div class="settings-section-title">Powiadomienia</div>
+                <div class="settings-row">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-bell"></i>
+                        <span>Wykłady (śr. 8:45)</span>
+                    </div>
+                    <button class="toggle-switch" id="notifLectureToggle" role="switch" aria-checked="false" aria-label="Powiadomienia o wykładach"></button>
+                </div>
+                <div class="settings-row">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-rotate"></i>
+                        <span>Powtórki materiału</span>
+                    </div>
+                    <button class="toggle-switch" id="notifReviewToggle" role="switch" aria-checked="false" aria-label="Przypomnienia o powtórce materiału"></button>
+                </div>
+                <p id="notifPermStatus" class="notif-perm-status"></p>
+            </div>
+            <div class="settings-section">
                 <div class="settings-section-title">Instalacja</div>
                 <button class="install-btn" id="installAppBtn">
                     <i class="fa-solid fa-download install-icon"></i>
@@ -4070,6 +4102,164 @@
                             installBtn.disabled = false;
                         }, 5000);
                     }
+                });
+            }
+        })();
+
+        // ===== PUSH NOTIFICATIONS =====
+        (function () {
+            if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
+
+            const lectureToggle = document.getElementById('notifLectureToggle');
+            const reviewToggle  = document.getElementById('notifReviewToggle');
+            const statusEl      = document.getElementById('notifPermStatus');
+            if (!lectureToggle || !reviewToggle) return;
+
+            function setStatus(msg, ok) {
+                if (!statusEl) return;
+                statusEl.textContent = msg;
+                statusEl.style.color = ok ? '#4caf50' : '#f55';
+            }
+
+            function applyToggle(btn, active) {
+                btn.classList.toggle('active', active);
+                btn.setAttribute('aria-checked', String(active));
+            }
+
+            const lecturePref = localStorage.getItem('pam-notif-lecture') === 'true';
+            const reviewPref  = localStorage.getItem('pam-notif-review')  === 'true';
+            const permGranted = Notification.permission === 'granted';
+            const permDenied  = Notification.permission === 'denied';
+
+            if (permGranted) {
+                applyToggle(lectureToggle, lecturePref);
+                applyToggle(reviewToggle, reviewPref);
+            }
+            if (permDenied) {
+                lectureToggle.disabled = true;
+                reviewToggle.disabled = true;
+                setStatus('Powiadomienia zablokowane w ustawieniach przeglądarki.', false);
+            }
+
+            // Returns the next Date for a given weekday (0=Sun…6=Sat), hour and minute
+            function nextDateAt(targetDay, hour, minute) {
+                const now = new Date();
+                const d   = new Date(now);
+                let days  = (targetDay - now.getDay() + 7) % 7;
+                d.setDate(now.getDate() + days);
+                d.setHours(hour, minute, 0, 0);
+                if (d <= now) d.setDate(d.getDate() + 7);
+                return d;
+            }
+
+            async function scheduleOne(reg, tag, triggerDate, title, body) {
+                // Prefer the Notification Triggers API (Chrome on Android 80+)
+                if (typeof TimestampTrigger !== 'undefined') {
+                    try {
+                        const existing = await reg.getNotifications({ tag }).catch(err => {
+                            console.warn('[PAM] getNotifications failed:', err);
+                            return [];
+                        });
+                        existing.forEach(n => n.close());
+                        await reg.showNotification(title, {
+                            body,
+                            icon:        './assets/icon-192.png',
+                            badge:       './assets/icon-192.png',
+                            tag,
+                            renotify:    true,
+                            showTrigger: new TimestampTrigger(triggerDate.getTime())
+                        });
+                        return;
+                    } catch (e) {
+                        // fall through to setTimeout
+                    }
+                }
+                // Fallback: setTimeout (fires while the page is open; max ~24.8 days, safe for weekly intervals)
+                const delay = triggerDate.getTime() - Date.now();
+                if (delay > 0) {
+                    setTimeout(() => {
+                        reg.showNotification(title, {
+                            body,
+                            icon:  './assets/icon-192.png',
+                            badge: './assets/icon-192.png',
+                            tag
+                        });
+                    }, delay);
+                }
+            }
+
+            async function scheduleAll() {
+                if (Notification.permission !== 'granted') return;
+                const reg = await navigator.serviceWorker.ready;
+
+                if (localStorage.getItem('pam-notif-lecture') === 'true') {
+                    await scheduleOne(
+                        reg,
+                        'pam-lecture',
+                        nextDateAt(3, 8, 45),           // Wednesday 8:45
+                        '📚 Wykład PAM – za chwilę!',
+                        'Środa 8:45 – Programowanie Aplikacji Mobilnych zaczyna się lada moment!'
+                    );
+                }
+
+                if (localStorage.getItem('pam-notif-review') === 'true') {
+                    await scheduleOne(
+                        reg,
+                        'pam-review',
+                        nextDateAt(6, 10, 0),           // Saturday 10:00
+                        '📖 Czas na powtórkę!',
+                        'Przejrzyj materiał z ostatniego wykładu PAM. Kolejny wykład już w środę!'
+                    );
+                }
+            }
+
+            async function requestAndEnable(storageKey, toggle) {
+                if (Notification.permission === 'default') {
+                    const perm = await Notification.requestPermission();
+                    if (perm !== 'granted') {
+                        setStatus('Powiadomienia zostały odrzucone.', false);
+                        if (Notification.permission === 'denied') {
+                            lectureToggle.disabled = true;
+                            reviewToggle.disabled  = true;
+                        }
+                        return;
+                    }
+                }
+                if (Notification.permission !== 'granted') {
+                    setStatus('Brak uprawnień do powiadomień.', false);
+                    return;
+                }
+                localStorage.setItem(storageKey, 'true');
+                applyToggle(toggle, true);
+                await scheduleAll();
+                setStatus('Powiadomienia włączone ✓', true);
+            }
+
+            lectureToggle.addEventListener('click', async () => {
+                if (lectureToggle.classList.contains('active')) {
+                    localStorage.setItem('pam-notif-lecture', 'false');
+                    applyToggle(lectureToggle, false);
+                    setStatus('Powiadomienia o wykładach wyłączone.', true);
+                } else {
+                    await requestAndEnable('pam-notif-lecture', lectureToggle);
+                }
+            });
+
+            reviewToggle.addEventListener('click', async () => {
+                if (reviewToggle.classList.contains('active')) {
+                    localStorage.setItem('pam-notif-review', 'false');
+                    applyToggle(reviewToggle, false);
+                    setStatus('Przypomnienia o powtórce wyłączone.', true);
+                } else {
+                    await requestAndEnable('pam-notif-review', reviewToggle);
+                }
+            });
+
+            // Re-schedule on every page load when already granted
+            if (permGranted && (lecturePref || reviewPref)) {
+                scheduleAll().catch(err => {
+                    console.warn('[PAM] scheduleAll failed:', err);
+                    setStatus('Nie udało się zaplanować powiadomień.', false);
                 });
             }
         })();
