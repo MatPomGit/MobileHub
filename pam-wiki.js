@@ -337,6 +337,7 @@ async function loadArticle(articleId) {
         generateTableOfContents(container);
         processInternalLinks(container);
         addCopyButtons(container);
+        injectExamQuizCallout(container, articleId);
 
         if (typeof hljs !== 'undefined') {
             container.querySelectorAll('pre code').forEach(b => hljs.highlightElement(b));
@@ -346,6 +347,30 @@ async function loadArticle(articleId) {
     } catch (err) {
         showError(`Nie można załadować artykułu <strong>${articleId}</strong>. Upewnij się że uruchamiasz stronę przez serwer HTTP (np. <code>python -m http.server</code>).`);
     }
+}
+
+
+function injectExamQuizCallout(container, articleId) {
+    container.querySelector('.exam-quiz-cta')?.remove();
+    if (articleId !== 'egzamin-teoretyczny') return;
+
+    const target = container.querySelector('h1') || container.firstElementChild;
+    if (!target) return;
+
+    const box = document.createElement('section');
+    box.className = 'exam-quiz-cta';
+    box.innerHTML = `
+        <div class="exam-quiz-cta-content">
+            <span class="exam-quiz-badge"><i class="fa-solid fa-pen-to-square"></i> Test wiedzy</span>
+            <h2>Sprawdź się w quizie ABCD</h2>
+            <p>Przejdź do osobnej strony z pytaniami jednokrotnego wyboru i zobacz wynik po zakończeniu testu.</p>
+            <a class="exam-quiz-button" href="test.html" aria-label="Przejdź do strony testu ABCD">
+                <i class="fa-solid fa-circle-play"></i>
+                Rozpocznij test
+            </a>
+        </div>
+    `;
+    target.insertAdjacentElement('afterend', box);
 }
 
 function wrapTables(container) {
