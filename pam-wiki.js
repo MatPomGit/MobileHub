@@ -219,10 +219,16 @@ function initScrollProgress() {
     const bar = document.createElement('div');
     bar.className = 'scroll-progress';
     document.body.appendChild(bar);
-    window.addEventListener('scroll', () => {
+
+    const updateProgress = () => {
         const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-        bar.style.width = (window.scrollY / h * 100) + '%';
-    });
+        const progress = h > 0 ? (window.scrollY / h) * 100 : 0;
+        bar.style.width = `${Math.max(0, Math.min(progress, 100))}%`;
+    };
+
+    window.addEventListener('scroll', updateProgress);
+    window.addEventListener('resize', updateProgress);
+    updateProgress();
 }
 
 function initBackToTop() {
@@ -241,10 +247,10 @@ function initWiki() {
     buildSidebar();
     setupSearch();
     const hash = window.location.hash.substring(1);
-    if (hash && ARTICLES[hash]) loadArticle(hash);
+    if (hash && ARTICLES[hash]) navigateToArticle(hash, { updateHash: false });
     window.addEventListener('hashchange', () => {
         const id = window.location.hash.substring(1);
-        if (id && ARTICLES[id]) { loadArticle(id); setActiveLink(id); }
+        if (id && ARTICLES[id]) navigateToArticle(id, { updateHash: false });
     });
 }
 
@@ -286,9 +292,7 @@ function buildSidebar() {
         link.addEventListener('click', e => {
             e.preventDefault();
             const id = link.dataset.article;
-            window.location.hash = id;
-            loadArticle(id);
-            setActiveLink(id);
+            navigateToArticle(id);
             if (window.innerWidth < 900) document.querySelector('.wiki-sidebar')?.classList.remove('open');
         });
     });
@@ -297,6 +301,20 @@ function buildSidebar() {
 function setActiveLink(id) {
     document.querySelectorAll('[data-article]').forEach(l => l.classList.remove('active'));
     document.querySelectorAll(`[data-article="${id}"]`).forEach(l => l.classList.add('active'));
+}
+
+function navigateToArticle(id, options = {}) {
+    if (!id || !ARTICLES[id]) return;
+
+    const { updateHash = true } = options;
+
+    if (updateHash && window.location.hash.substring(1) !== id) {
+        window.location.hash = id;
+        return;
+    }
+
+    loadArticle(id);
+    setActiveLink(id);
 }
 
 // setupSearch() is defined in pam-files.js
@@ -359,8 +377,7 @@ function processInternalLinks(container) {
         link.addEventListener('click', e => {
             e.preventDefault();
             const id = link.getAttribute('href').replace('#wiki-', '');
-            window.location.hash = id;
-            loadArticle(id);
+            navigateToArticle(id);
         });
     });
 }
