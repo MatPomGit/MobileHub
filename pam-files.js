@@ -10,7 +10,7 @@ const FILES_DATA = [
         section: 'Wykłady',
         icon: 'fa-solid fa-chalkboard-teacher',
         files: [
-            { href: 'wyklady/w1_pam_init.pdf',        type: 'pdf',  label: 'W1 – Wprowadzenie do PAM' },
+            { href: 'wyklady/w1_intro.pdf',           type: 'pdf',  label: 'W1 – Wprowadzenie do PAM' },
             { href: 'wyklady/w2_hardware.pdf',        type: 'pdf',  label: 'W2 – Architektura sprzętu' },
             { href: 'wyklady/w3_ui.pdf',              type: 'pdf',  label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
             { href: 'wyklady/w6_sensors.pdf',         type: 'pdf',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
