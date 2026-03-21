@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pl" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>PAM WIKI — Test wiedzy ABCD</title>
+    <meta name="description" content="Test wiedzy ABCD z programowania aplikacji mobilnych.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --bg: #f4f6fb;
+            --surface: #ffffff;
+            --surface2: #f0f2f8;
+            --border: #e2e6f0;
+            --text: #1a1d2e;
+            --text-muted: #6b7280;
+            --accent: #5b4fcf;
+            --accent2: #7c3aed;
+            --accent-light: #ede9fe;
+            --green: #10b981;
+            --red: #ef4444;
+            --shadow: 0 12px 40px rgba(17, 24, 39, 0.12);
+            --radius: 22px;
+            --font: 'Outfit', sans-serif;
+        }
+        * { box-sizing: border-box; }
+        body {
+            margin: 0;
+            font-family: var(--font);
+            background: linear-gradient(180deg, #eef2ff 0%, var(--bg) 100%);
+            color: var(--text);
+        }
+        .page {
+            width: min(920px, calc(100% - 32px));
+            margin: 0 auto;
+            padding: 32px 0 48px;
+        }
+        .hero, .quiz-card, .result-card {
+            background: var(--surface);
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        .hero {
+            padding: 28px;
+            margin-bottom: 24px;
+        }
+        .hero-top {
+            display: flex;
+            justify-content: space-between;
+            gap: 16px;
+            align-items: flex-start;
+            flex-wrap: wrap;
+        }
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--accent);
+            font-weight: 700;
+            text-decoration: none;
+        }
+        .hero h1 { margin: 14px 0 10px; font-size: clamp(2rem, 4vw, 3rem); }
+        .hero p { margin: 0; color: var(--text-muted); font-size: 1.05rem; }
+        .stats {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+            margin-top: 20px;
+        }
+        .stat {
+            background: var(--surface2);
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-weight: 600;
+        }
+        .quiz-card {
+            padding: 28px;
+        }
+        .question-count {
+            color: var(--accent);
+            font-weight: 800;
+            margin-bottom: 10px;
+        }
+        .question-text {
+            font-size: 1.45rem;
+            line-height: 1.35;
+            margin-bottom: 20px;
+        }
+        .answers {
+            display: grid;
+            gap: 14px;
+        }
+        .answer {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px;
+            align-items: start;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+        .answer:hover { border-color: var(--accent); transform: translateY(-1px); }
+        .answer.selected {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            box-shadow: 0 0 0 3px rgba(91, 79, 207, 0.12);
+        }
+        .answer-letter {
+            width: 34px;
+            height: 34px;
+            border-radius: 50%;
+            display: inline-grid;
+            place-items: center;
+            background: var(--surface2);
+            font-weight: 800;
+        }
+        .actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-top: 24px;
+        }
+        button {
+            border: none;
+            border-radius: 14px;
+            padding: 13px 18px;
+            font: inherit;
+            font-weight: 700;
+            cursor: pointer;
+        }
+        .secondary-btn {
+            background: var(--surface2);
+            color: var(--text);
+        }
+        .primary-btn {
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            color: #fff;
+        }
+        .primary-btn:disabled {
+            opacity: 0.55;
+            cursor: not-allowed;
+        }
+        .result-card {
+            display: none;
+            padding: 28px;
+            margin-top: 24px;
+        }
+        .result-card.visible { display: block; }
+        .score {
+            font-size: clamp(2rem, 6vw, 3.4rem);
+            font-weight: 800;
+            margin: 8px 0 4px;
+        }
+        .score.good { color: var(--green); }
+        .score.bad { color: var(--red); }
+        .summary { color: var(--text-muted); margin-bottom: 20px; }
+        .review-list {
+            display: grid;
+            gap: 14px;
+        }
+        .review-item {
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            padding: 18px;
+            background: var(--surface2);
+        }
+        .review-item.correct { border-color: rgba(16, 185, 129, 0.45); }
+        .review-item.incorrect { border-color: rgba(239, 68, 68, 0.35); }
+        .review-item h3 { margin: 0 0 10px; font-size: 1rem; }
+        .review-item p { margin: 6px 0; }
+        .muted { color: var(--text-muted); }
+        @media (max-width: 640px) {
+            .page { width: min(100% - 20px, 920px); padding-top: 20px; }
+            .hero, .quiz-card, .result-card { padding: 20px; }
+            .question-text { font-size: 1.2rem; }
+            .actions { flex-direction: column; }
+            .actions button { width: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <main class="page">
+        <section class="hero">
+            <div class="hero-top">
+                <a class="back-link" href="index.html#egzamin-teoretyczny"><i class="fa-solid fa-arrow-left"></i> Wróć do zakładki egzamin</a>
+                <span class="stat"><i class="fa-solid fa-list-check"></i> Quiz jednokrotnego wyboru</span>
+            </div>
+            <h1>Test wiedzy ABCD</h1>
+            <p>Odpowiedz na pytania związane z programowaniem aplikacji mobilnych. Każde pytanie ma jedną poprawną odpowiedź.</p>
+            <div class="stats">
+                <div class="stat" id="questionTotal">10 pytań</div>
+                <div class="stat">4 odpowiedzi do wyboru</div>
+                <div class="stat">Wynik po zakończeniu testu</div>
+            </div>
+        </section>
+
+        <section class="quiz-card" id="quizCard">
+            <div class="question-count" id="questionCount"></div>
+            <div class="question-text" id="questionText"></div>
+            <div class="answers" id="answers"></div>
+            <div class="actions">
+                <button class="secondary-btn" id="restartBtn" type="button">Rozpocznij od nowa</button>
+                <button class="primary-btn" id="nextBtn" type="button" disabled>Dalej</button>
+            </div>
+        </section>
+
+        <section class="result-card" id="resultCard">
+            <p class="muted">Wynik testu</p>
+            <div class="score" id="score"></div>
+            <p class="summary" id="summary"></p>
+            <div class="review-list" id="reviewList"></div>
+        </section>
+    </main>
+
+    <script src="quiz-module.js"></script>
+</body>
+</html>
