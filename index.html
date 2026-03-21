@@ -4761,8 +4761,10 @@
                     // Load the first article in this category
                     const firstId = cat.articles && cat.articles[0];
                     if (firstId) {
-                        window.location.hash = firstId;
-                        if (typeof loadArticle === 'function') {
+                        if (typeof navigateToArticle === 'function') {
+                            navigateToArticle(firstId);
+                        } else if (typeof loadArticle === 'function') {
+                            window.location.hash = firstId;
                             loadArticle(firstId);
                             if (typeof setActiveLink === 'function') setActiveLink(firstId);
                         }
