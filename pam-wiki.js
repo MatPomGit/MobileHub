@@ -170,7 +170,7 @@ function waitForMarked(attempts = 0) {
     else if (attempts < 20) setTimeout(() => waitForMarked(attempts + 1), 200);
 }
 
-const VALID_THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose'];
+const VALID_THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose', 'aurora'];
 
 function initThemePicker() {
     const saved = localStorage.getItem('pam-theme') || 'light';
