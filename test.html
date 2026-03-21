@@ -80,10 +80,49 @@
         .quiz-card {
             padding: 28px;
         }
+        .quiz-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+            flex-wrap: wrap;
+            margin-bottom: 16px;
+        }
         .question-count {
             color: var(--accent);
             font-weight: 800;
-            margin-bottom: 10px;
+        }
+        .question-category {
+            background: var(--accent-light);
+            color: var(--accent);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-weight: 700;
+            font-size: 0.95rem;
+        }
+        .progress-wrap {
+            margin-bottom: 20px;
+        }
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            color: var(--text-muted);
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        .progress-track {
+            width: 100%;
+            height: 12px;
+            border-radius: 999px;
+            background: var(--surface2);
+            overflow: hidden;
+        }
+        .progress-bar {
+            width: 0;
+            height: 100%;
+            background: linear-gradient(135deg, var(--accent), var(--accent2));
+            transition: width 0.25s ease;
         }
         .question-text {
             font-size: 1.45rem;
@@ -105,6 +144,7 @@
             background: #fff;
             cursor: pointer;
             transition: 0.2s ease;
+            text-align: left;
         }
         .answer:hover { border-color: var(--accent); transform: translateY(-1px); }
         .answer.selected {
@@ -128,6 +168,11 @@
             flex-wrap: wrap;
             margin-top: 24px;
         }
+        .actions-group {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
         button {
             border: none;
             border-radius: 14px;
@@ -144,7 +189,7 @@
             background: linear-gradient(135deg, var(--accent), var(--accent2));
             color: #fff;
         }
-        .primary-btn:disabled {
+        button:disabled {
             opacity: 0.55;
             cursor: not-allowed;
         }
@@ -161,7 +206,14 @@
         }
         .score.good { color: var(--green); }
         .score.bad { color: var(--red); }
-        .summary { color: var(--text-muted); margin-bottom: 20px; }
+        .summary { color: var(--text-muted); margin-bottom: 12px; }
+        .weak-areas {
+            background: var(--surface2);
+            border-radius: 16px;
+            padding: 14px 16px;
+            margin-bottom: 20px;
+            font-weight: 600;
+        }
         .review-list {
             display: grid;
             gap: 14px;
@@ -181,8 +233,8 @@
             .page { width: min(100% - 20px, 920px); padding-top: 20px; }
             .hero, .quiz-card, .result-card { padding: 20px; }
             .question-text { font-size: 1.2rem; }
-            .actions { flex-direction: column; }
-            .actions button { width: 100%; }
+            .actions, .actions-group { flex-direction: column; }
+            .actions button, .actions-group button { width: 100%; }
         }
     </style>
 </head>
@@ -198,17 +250,32 @@
             <div class="stats">
                 <div class="stat" id="questionTotal">10 pytań</div>
                 <div class="stat">4 odpowiedzi do wyboru</div>
-                <div class="stat">Wynik po zakończeniu testu</div>
+                <div class="stat">Podsumowanie z kategoriami po zakończeniu</div>
             </div>
         </section>
 
         <section class="quiz-card" id="quizCard">
-            <div class="question-count" id="questionCount"></div>
+            <div class="quiz-meta">
+                <div class="question-count" id="questionCount"></div>
+                <div class="question-category" id="questionCategory"></div>
+            </div>
+            <div class="progress-wrap">
+                <div class="progress-label">
+                    <span id="progressLabel">Postęp: 0/10 odpowiedzi</span>
+                    <span>Możesz wracać do wcześniejszych pytań</span>
+                </div>
+                <div class="progress-track" role="progressbar" aria-label="Postęp testu" aria-valuemin="0" aria-valuemax="100">
+                    <div class="progress-bar" id="progressBar"></div>
+                </div>
+            </div>
             <div class="question-text" id="questionText"></div>
             <div class="answers" id="answers"></div>
             <div class="actions">
                 <button class="secondary-btn" id="restartBtn" type="button">Rozpocznij od nowa</button>
-                <button class="primary-btn" id="nextBtn" type="button" disabled>Dalej</button>
+                <div class="actions-group">
+                    <button class="secondary-btn" id="prevBtn" type="button">Wstecz</button>
+                    <button class="primary-btn" id="nextBtn" type="button" disabled>Dalej</button>
+                </div>
             </div>
         </section>
 
@@ -216,6 +283,7 @@
             <p class="muted">Wynik testu</p>
             <div class="score" id="score"></div>
             <p class="summary" id="summary"></p>
+            <div class="weak-areas" id="weakAreas"></div>
             <div class="review-list" id="reviewList"></div>
         </section>
     </main>
