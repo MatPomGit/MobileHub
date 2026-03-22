@@ -248,10 +248,34 @@ Najważniejszy scenariusz „odczytu z dysku” w nowoczesnym Androidzie to uży
 ```kotlin
 val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
     if (uri != null) {
-        contentResolver.openInputStream(uri)?.bufferedReader()?.use { reader ->
-            val text = reader.readText()
-            showImportedContent(text)
+        try {
+            val maxSizeBytes = 5 * 1024 * 1024 // np. 5 MB — dostosuj do potrzeb aplikacji
+
+            contentResolver.openInputStream(uri)?.use { inputStream ->
+                // Prosta walidacja rozmiaru przed wczytaniem całości do pamięci
+                val available = inputStream.available()
+                if (available > maxSizeBytes) {
+                    // TODO: pokaż komunikat użytkownikowi, że plik jest za duży
+                    showImportError("Wybrany plik jest zbyt duży do importu.")
+                    return@registerForActivityResult
+                }
+
+                val text = inputStream.bufferedReader().use { reader ->
+                    reader.readText()
+                }
+
+                showImportedContent(text)
+            } ?: run {
+                // Strumień nie został otwarty — zgłoś błąd zamiast cicho ignorować problem
+                showImportError("Nie udało się otworzyć wybranego pliku.")
+            }
+        } catch (e: IOException) {
+            // Obsługa nieudanej operacji I/O (np. problem z dostępem do pliku)
+            showImportError("Wystąpił błąd podczas odczytu pliku.")
         }
+    } else {
+        // Użytkownik anulował wybór pliku
+        showImportError("Nie wybrano żadnego pliku do importu.")
     }
 }
 
