@@ -143,7 +143,7 @@ const METADATA = {
     'app-publishing':        { category: 'Projektowanie i OS',            title: 'Publikacja i Promocja Własnej Aplikacji',  icon: 'fa-solid fa-rocket' },
     'app-design-process':    { category: 'Projektowanie i OS',            title: 'Proces Projektowania — Brief, BRD, FRD, TRD', icon: 'fa-solid fa-file-lines' },
     'app-metadata':          { category: 'Projektowanie i OS',            title: 'Zbieranie Metadanych przez Aplikację',      icon: 'fa-solid fa-tags' },
-    'file-storage-mobile':   { category: 'Programowanie Natywne Android',  title: 'Zapisywanie i Odczyt Plików na Urządzeniu Mobilnym',  icon: 'fa-solid fa-file-arrow-down' },
+    'file-storage-mobile':   { category: 'Programowanie Natywne Android', title: 'Zapisywanie i Odczyt Plików na Urządzeniu Mobilnym', icon: 'fa-solid fa-file-arrow-down' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
