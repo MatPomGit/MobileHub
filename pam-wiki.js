@@ -74,6 +74,7 @@ const ARTICLES = {
     'app-distribution':      'wiki/app-distribution.md',
     'app-design-process':    'wiki/app-design-process.md',
     'app-metadata':          'wiki/app-metadata.md',
+    'file-storage-mobile':   'wiki/file-storage-mobile.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -146,6 +147,7 @@ const METADATA = {
     'app-distribution':      { category: 'Projektowanie i OS',            title: 'Metody Dystrybucji — Google Play i F-Droid', icon: 'fa-solid fa-store' },
     'app-design-process':    { category: 'Projektowanie i OS',            title: 'Proces Projektowania — Brief, BRD, FRD, TRD', icon: 'fa-solid fa-file-lines' },
     'app-metadata':          { category: 'Projektowanie i OS',            title: 'Zbieranie Metadanych przez Aplikację',      icon: 'fa-solid fa-tags' },
+    'file-storage-mobile':   { category: 'Programowanie Natywne Android', title: 'Zapisywanie i Odczyt Plików na Urządzeniu Mobilnym', icon: 'fa-solid fa-file-arrow-down' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
