@@ -377,6 +377,11 @@ func documentPicker(_ controller: UIDocumentPickerViewController, didPickDocumen
         }
     }
 
+    guard canAccess else {
+        // Nie udało się uzyskać dostępu do pliku (security-scoped resource).
+        // Tutaj można pokazać komunikat błędu użytkownikowi.
+        return
+    }
     if let text = try? String(contentsOf: url, encoding: .utf8) {
         print(text)
     }
