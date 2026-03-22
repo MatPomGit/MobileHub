@@ -150,7 +150,21 @@ fun saveTextToDownloads(context: Context, fileName: String, content: String) {
     val uri = resolver.insert(MediaStore.Downloads.EXTERNAL_CONTENT_URI, values)
         ?: error("Nie udało się utworzyć wpisu MediaStore")
 
-    resolver.openOutputStream(uri)?.use { stream ->
+    val outputStream = try {
+        resolver.openOutputStream(uri)
+    } catch (e: Exception) {
+        // W przypadku błędu otwarcia strumienia usuń utworzony wpis
+        resolver.delete(uri, null, null)
+        error("Nie udało się otworzyć strumienia zapisu dla $uri: ${e.message}")
+    }
+
+    if (outputStream == null) {
+        // Gdy openOutputStream zwróci null, również usuń wpis i zgłoś błąd
+        resolver.delete(uri, null, null)
+        error("openOutputStream zwrócił null dla $uri")
+    }
+
+    outputStream.use { stream ->
         stream.write(content.toByteArray())
     }
 }
