@@ -72,6 +72,7 @@ const ARTICLES = {
     'app-publishing':        'wiki/app-publishing.md',
     'app-design-process':    'wiki/app-design-process.md',
     'app-metadata':          'wiki/app-metadata.md',
+    'file-storage-mobile':   'wiki/file-storage-mobile.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -142,6 +143,7 @@ const METADATA = {
     'app-publishing':        { category: 'Projektowanie i OS',            title: 'Publikacja i Promocja Własnej Aplikacji',  icon: 'fa-solid fa-rocket' },
     'app-design-process':    { category: 'Projektowanie i OS',            title: 'Proces Projektowania — Brief, BRD, FRD, TRD', icon: 'fa-solid fa-file-lines' },
     'app-metadata':          { category: 'Projektowanie i OS',            title: 'Zbieranie Metadanych przez Aplikację',      icon: 'fa-solid fa-tags' },
+    'file-storage-mobile':   { category: 'Programowanie Natywne Android',  title: 'Zapisywanie i Odczyt Plików na Urządzeniu Mobilnym',  icon: 'fa-solid fa-file-arrow-down' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
@@ -149,7 +151,7 @@ const CATEGORIES = [
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing'] },
     { id: 'cat-hw',       name: 'Architektura Sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody Interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','navigation-patterns','gestures-interactions'] },
-    { id: 'cat-android',  name: 'Programowanie Natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing'] },
+    { id: 'cat-android',  name: 'Programowanie Natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','kotlin-basics','jetpack-compose','android-architecture','android-data','file-storage-mobile','android-network','android-testing'] },
     { id: 'cat-ios',      name: 'Programowanie Natywne iOS',      icon: 'fa-brands fa-apple',               articles: ['xcode-ios','swift-basics','swiftui-advanced','ios-networking','ios-data','ios-notifications'] },
     { id: 'cat-cross',    name: 'Cross-Platform i PWA',           icon: 'fa-solid fa-layer-group',          articles: ['cross-platform','flutter-advanced','react-native','pwa-advanced','kmp-multiplatform'] },
     { id: 'cat-sensors',  name: 'Obsługa Sensorów',               icon: 'fa-solid fa-compass',              articles: ['sensors','camera-api','location-maps','audio-microphone','biometrics'] },
