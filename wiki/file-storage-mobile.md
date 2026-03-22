@@ -189,10 +189,23 @@ Przykładowy przepływ:
 
 ```kotlin
 val createDocument = registerForActivityResult(ActivityResultContracts.CreateDocument("text/csv")) { uri ->
-    if (uri != null) {
-        contentResolver.openOutputStream(uri)?.use { stream ->
+    if (uri == null) {
+        // użytkownik anulował wybór lokalizacji / nazwy pliku
+        return@registerForActivityResult
+    }
+
+    try {
+        val outputStream = contentResolver.openOutputStream(uri)
+            ?: run {
+                // Nie udało się otworzyć strumienia – poinformuj użytkownika o błędzie zapisu
+                return@registerForActivityResult
+            }
+
+        outputStream.use { stream ->
             stream.write("id,name\n1,Ala\n2,Jan".toByteArray())
         }
+    } catch (e: java.io.IOException) {
+        // Wystąpił błąd podczas zapisu – poinformuj użytkownika, że eksport się nie powiódł
     }
 }
 
