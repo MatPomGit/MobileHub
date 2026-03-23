@@ -3923,7 +3923,7 @@
             src="pierwsza-aplikacja.html"
             style="border:none; width:100%; display:block; min-height:600px;"
             title="Moja pierwsza aplikacja — przewodnik krok po kroku"
-            onload="(function(f){var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';})(this)">
+            onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
         </iframe>
     </div><!-- /panel-pierwsza -->
 
@@ -4094,7 +4094,7 @@
         // Mobile sidebar toggle
         document.getElementById('sidebarToggle')?.addEventListener('click', () => {
             const sidebar = document.getElementById('wikiSidebar');
-            sidebar.classList.toggle('open');
+            sidebar?.classList.toggle('open');
         });
 
         // Close sidebar when clicking outside
@@ -4102,7 +4102,7 @@
             const sidebar = document.getElementById('wikiSidebar');
             const toggle = document.getElementById('sidebarToggle');
             if (sidebar?.classList.contains('open') &&
-                !sidebar.contains(e.target) && !toggle.contains(e.target)) {
+                !sidebar.contains(e.target) && !toggle?.contains(e.target)) {
                 sidebar.classList.remove('open');
             }
         });
@@ -4200,6 +4200,7 @@
 
             let startY = 0, startTranslate = 0, isDragging = false;
             let closeBodyClassTimeout = null;
+            let activePointerId = null;
 
             function getClosedTranslate() {
                 return -(panel.offsetHeight - 54 - 24);
@@ -4247,6 +4248,7 @@
                 const matrix = new DOMMatrix(getComputedStyle(panel).transform);
                 startTranslate = matrix.m42;
                 panel.style.transition = 'none';
+                activePointerId = e.pointerId;
                 handle.setPointerCapture(e.pointerId);
             });
 
@@ -4264,6 +4266,10 @@
             });
 
             handle.addEventListener('pointerup', () => {
+                if (activePointerId !== null) {
+                    handle.releasePointerCapture(activePointerId);
+                    activePointerId = null;
+                }
                 overlay.style.opacity = '';
                 if (!isDragging) return;
                 isDragging = false;
@@ -4272,6 +4278,16 @@
                 const currentY = matrix.m42;
                 if (currentY > getClosedTranslate() / 2) openPanel();
                 else closePanel();
+            });
+
+            handle.addEventListener('pointercancel', () => {
+                if (activePointerId !== null) {
+                    handle.releasePointerCapture(activePointerId);
+                    activePointerId = null;
+                }
+                isDragging = false;
+                panel.style.transition = '';
+                overlay.style.opacity = '';
             });
 
             // Pull shortcut buttons
