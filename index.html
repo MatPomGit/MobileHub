@@ -60,7 +60,7 @@
             --transition: 0.2s ease;
             --font: 'Outfit', sans-serif;
             --mono: 'JetBrains Mono', monospace;
-            --header-h: 54px;
+            --header-h: 48px;
             --tabbar-h: 41px;
             --chrome-h: calc(var(--header-h) + var(--tabbar-h));
             --wiki-font-size: 17px;
@@ -359,12 +359,10 @@
             align-items: center;
             justify-content: center;
             font-size: 14px;
-            transition: all var(--transition);
-        }
-
-        .btn-icon:hover {
-            background: rgba(255, 255, 255, 0.15);
-            color: #fff;
+            transition: background var(--transition), color var(--transition),
+                        transform 0.18s ease, box-shadow 0.18s ease;
+            transform: translateZ(0);
+            will-change: transform;
         }
 
         .header-badge {
@@ -459,7 +457,7 @@
         /* ===== HERO ===== */
         .hero {
             background: var(--hero-overlay), url('assets/background_4.jpg') center/cover no-repeat;
-            padding: 18px 24px 18px;
+            padding: 14px 24px 12px;
             text-align: center;
             position: relative;
             overflow: hidden;
@@ -493,7 +491,7 @@
 
         .hero-content {
             position: relative;
-            max-width: 700px;
+            max-width: 620px;
             margin: 0 auto;
         }
 
@@ -528,47 +526,10 @@
         }
 
         .hero-sub {
-            font-size: 11px;
+            font-size: 10px;
             color: rgba(255, 255, 255, 0.45);
-            max-width: 480px;
+            max-width: 420px;
             margin: 0 auto;
-        }
-
-
-        .hero-highlights {
-            display: grid;
-            grid-template-columns: repeat(3, minmax(0, 1fr));
-            gap: 12px;
-            margin-top: 18px;
-        }
-
-        .hero-highlight {
-            background: rgba(255, 255, 255, 0.08);
-            border: 1px solid rgba(255, 255, 255, 0.12);
-            border-radius: 18px;
-            padding: 14px;
-            color: #fff;
-            text-align: left;
-            backdrop-filter: blur(10px);
-            box-shadow: 0 18px 45px rgba(0, 0, 0, 0.18);
-        }
-
-        .hero-highlight i {
-            color: #fff;
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
-
-        .hero-highlight strong {
-            display: block;
-            font-size: 13px;
-            margin-bottom: 4px;
-        }
-
-        .hero-highlight span {
-            display: block;
-            font-size: 11px;
-            color: rgba(255,255,255,0.72);
         }
 
         .startup-overlay {
@@ -686,6 +647,8 @@
             font-weight: 700;
             cursor: pointer;
             transition: transform .2s ease, box-shadow .2s ease, background .2s ease;
+            transform: translateZ(0);
+            will-change: transform;
         }
 
         .startup-btn.primary {
@@ -701,8 +664,6 @@
             color: #fff;
             border: 1px solid rgba(255,255,255,0.14);
         }
-
-        .startup-btn:hover { transform: translateY(-2px) scale(1.01); }
 
         .startup-stats, .startup-features {
             display: grid;
@@ -1374,17 +1335,16 @@
             color: var(--text-muted);
             border-bottom: 3px solid transparent;
             margin-bottom: -2px;
-            transition: all var(--transition);
+            transition: color var(--transition), background var(--transition),
+                        transform 0.18s ease, border-color var(--transition),
+                        box-shadow 0.18s ease;
             white-space: nowrap;
+            transform: translateZ(0);
+            will-change: transform;
         }
 
         .tab-btn i {
             font-size: 13px;
-        }
-
-        .tab-btn:hover {
-            color: var(--accent);
-            background: var(--accent-light);
         }
 
         .tab-btn.active {
@@ -2130,11 +2090,6 @@
                 font-size: 10px;
             }
 
-            .hero-highlights {
-                gap: 10px;
-                margin-top: 14px;
-            }
-
             .startup-overlay {
                 padding: 14px;
             }
@@ -2322,6 +2277,31 @@
             display: none;
         }
 
+        @media (hover: hover) and (pointer: fine) {
+            .btn-icon:hover {
+                background: rgba(255, 255, 255, 0.15);
+                color: #fff;
+                transform: translateY(-1px);
+                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+            }
+
+            .tab-btn:hover {
+                color: var(--accent);
+                background: var(--accent-light);
+                transform: translateY(-1px);
+            }
+
+            .startup-btn:hover {
+                transform: translateY(-2px) scale(1.01);
+            }
+
+            .pull-shortcut:hover {
+                color: var(--accent);
+                border-color: rgba(91, 79, 207, 0.28);
+                transform: translateY(-1px);
+            }
+        }
+
         /* ===== TOC & SETTINGS FABs (hidden on desktop) ===== */
         .toc-fab,
         .toc-radial-overlay,
@@ -2475,6 +2455,8 @@
                 transition: background var(--transition), color var(--transition),
                             transform 0.15s ease, border-color var(--transition);
                 -webkit-tap-highlight-color: transparent;
+                transform: translateZ(0);
+                will-change: transform;
             }
 
             .pull-shortcut i {
@@ -3285,24 +3267,6 @@
             <p class="hero-sub">
                 Od natywnego Android/iOS po XR, IoT, informatykę afektywną i robotykę
             </p>
-            <div class="hero-highlights">
-                <div class="hero-highlight">
-                    <i class="fa-solid fa-book-open-reader"></i>
-                    <strong>Materiały do kursu</strong>
-                    <span>Znajdziesz tu wiki, pliki i odnośniki potrzebne na laboratoriach oraz w pracy własnej.</span>
-                </div>
-                <div class="hero-highlight">
-                    <i class="fa-solid fa-list-check"></i>
-                    <strong>Przygotowanie do zaliczeń</strong>
-                    <span>Łatwo przejdziesz do treści o projekcie, wymaganiach i zagadnieniach na egzamin.</span>
-                </div>
-                <div class="hero-highlight">
-                    <i class="fa-solid fa-code"></i>
-                    <strong>Nauka przez praktykę</strong>
-                    <span>Pierwsza aplikacja i sekcje technologiczne pomagają od razu ćwiczyć materiał w kodzie.</span>
-                </div>
-            </div>
-
         </div>
     </section>
 
@@ -4985,7 +4949,6 @@
             .from('.hero-badge',  { y: 20, opacity: 0, duration: 0.4 }, '-=0.2')
             .from('.hero h1',     { y: 34, opacity: 0, duration: 0.55 }, '-=0.15')
             .from('.hero-sub',    { y: 20, opacity: 0, duration: 0.42 }, '-=0.2')
-            .from('.hero-highlight', { y: 26, opacity: 0, duration: 0.45, stagger: 0.08 }, '-=0.15')
             .from('.page-tab-bar',{ y: 20, opacity: 0, duration: 0.4 }, '-=0.2');
 
         // ===== SCROLL-TRIGGERED ANIMATIONS =====
@@ -5209,21 +5172,8 @@
         addLiftHover('.quick-link-card', 4, 1.015);
         addLiftHover('.info-card',       5, 1.018);
         addLiftHover('.exam-stat',       4, 1.04);
-        addLiftHover('.hero-highlight',  5, 1.02);
         addLiftHover('.startup-feature', 5, 1.02);
         addLiftHover('.startup-stat',    5, 1.02);
-
-        if (window.anime) {
-            anime({
-                targets: '.hero-highlight',
-                translateY: [0, -6],
-                duration: 2200,
-                delay: anime.stagger(180),
-                direction: 'alternate',
-                loop: true,
-                easing: 'easeInOutSine'
-            });
-        }
 
         // Topic accordion headers — icon nudge on hover
         document.querySelectorAll('.topic-header').forEach(header => {
