@@ -2069,6 +2069,7 @@
             /* adjust body for bottom nav */
             body {
                 padding-bottom: calc(56px + env(safe-area-inset-bottom));
+                overflow-x: hidden;
             }
 
             /* hero compact on mobile */
@@ -2154,23 +2155,23 @@
                 font-size: 14px;
             }
 
-            /* larger text on mobile for readability */
+            /* larger text on mobile for readability — use CSS variable so font-size setting works */
             #wikiArticle p {
-                font-size: 15px;
+                font-size: calc(15px * var(--wiki-font-scale));
                 line-height: 1.6;
             }
 
             #wikiArticle li {
-                font-size: 14px;
+                font-size: calc(14px * var(--wiki-font-scale));
                 line-height: 1.5;
             }
 
             #wikiArticle h2 {
-                font-size: 18px;
+                font-size: calc(18px * var(--wiki-font-scale));
             }
 
             #wikiArticle h3 {
-                font-size: 16px;
+                font-size: calc(16px * var(--wiki-font-scale));
             }
 
             .info-card p,
@@ -2227,8 +2228,8 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(4px); }
-            to { opacity: 1; transform: translateY(0); }
+            from { opacity: 0; }
+            to { opacity: 1; }
         }
 
         /* ===== ENHANCED ANIMATIONS ===== */
@@ -2481,7 +2482,7 @@
 
             /* ===== CODE BLOCKS on mobile ===== */
             .code-block-wrapper pre {
-                font-size: 10.5px;
+                font-size: calc(10.5px * var(--wiki-font-scale));
                 padding: 14px 12px;
                 line-height: 1.45;
             }
@@ -2497,12 +2498,12 @@
             }
 
             .article-toc a {
-                font-size: 12px;
+                font-size: calc(12px * var(--wiki-font-scale));
                 line-height: 1.7;
             }
 
             .article-toc h3 {
-                font-size: 11px;
+                font-size: calc(11px * var(--wiki-font-scale));
                 margin-bottom: 8px;
             }
 
