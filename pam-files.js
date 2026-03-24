@@ -12,7 +12,9 @@ const FILES_DATA = [
         files: [
             { href: 'wyklady/w1_intro.pdf',           type: 'pdf',  label: 'W1 – Wprowadzenie do PAM' },
             { href: 'wyklady/w2_hardware.pdf',        type: 'pdf',  label: 'W2 – Architektura sprzętu' },
-            { href: 'wyklady/w3_ui.pdf',              type: 'pdf',  label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
+            { href: 'wyklady/w3_ui.pdf',              type: 'pdf',  label: 'W3 – Projektowanie UI/UX' },
+            { href: 'wyklady/w4_native.pdf',          type: 'pdf',  label: 'W4 – Projektowanie natywne' },
+            { href: 'wyklady/w5_cross.pdf',          type: 'pdf',  label: 'W4 – Projektowanie cross-platformowe' },
             { href: 'wyklady/w6_sensors.pdf',         type: 'pdf',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
             { href: 'wyklady/w7_IoT.pdf',             type: 'pdf',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
             { href: 'wyklady/w8_affective.pdf',       type: 'pdf',  label: 'W8 – Informatyka afektywna' },
