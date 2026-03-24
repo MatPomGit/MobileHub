@@ -1,7 +1,7 @@
 {
-    "name": "PAM WIKI — Programowanie Aplikacji Mobilnych",
+    "name": "PAM WIKI — Programowanie aplikacji mobilnych",
     "short_name": "PAM WIKI",
-    "description": "Baza wiedzy z Programowania Aplikacji Mobilnych. Android, iOS, Flutter, XR, IoT.",
+    "description": "Baza wiedzy z programowania aplikacji mobilnych. Android, iOS, Flutter, XR, IoT.",
     "start_url": "./index.html",
     "scope": "./",
     "display": "standalone",
