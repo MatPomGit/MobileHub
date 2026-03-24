@@ -19,7 +19,8 @@ const FILES_DATA = [
             { href: 'wyklady/w9_xr.pdf',              type: 'pdf',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
             { href: 'wyklady/w10_games.pdf',          type: 'pdf',  label: 'W10 – Programowanie gier mobilnych' },
             { href: 'wyklady/w11_robots.pdf',         type: 'pdf',  label: 'W11 – Programowanie autonomicznych robotów' },
-            
+
+            /*
             { href: 'wyklady/w3_ui.pptx',             type: 'pptx', label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
             { href: 'wyklady/w6_sensors.pptx',        type: 'pptx',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
             { href: 'wyklady/w7_IoT.pptx',            type: 'pptx',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
@@ -27,19 +28,23 @@ const FILES_DATA = [
             { href: 'wyklady/w9_xr.pptx',             type: 'pptx',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
             { href: 'wyklady/w10_games.pptx',         type: 'pptx',  label: 'W10 – Programowanie gier mobilnych' },
             { href: 'wyklady/w11_robots.pptx',        type: 'pptx',  label: 'W11 – Programowanie autonomicznych robotów' },
-
+            */
         ],
     },
     {
         section: 'Laboratoria',
         icon: 'fa-solid fa-flask',
         files: [
-            { href: 'laby/tematyprojektow.pdf', type: 'pdf', label: 'Tematy projektów' },
+            { href: 'laby/kotlin_1.pdf',        type: 'pdf', label: 'Lab Kotlin 1' },
+            { href: 'laby/kotlin_2.pdf',        type: 'pdf', label: 'Lab Kotlin 2' },
+            { href: 'laby/kotlin_3.pdf',        type: 'pdf', label: 'Lab Kotlin 3' },
             { href: 'laby/kotlin_4.pdf',        type: 'pdf', label: 'Lab Kotlin 4' },
             { href: 'laby/kotlin_5.pdf',        type: 'pdf', label: 'Lab Kotlin 5' },
             { href: 'laby/flutter_1.pdf',       type: 'pdf', label: 'Lab Flutter 1' },
             { href: 'laby/flutter_2.pdf',       type: 'pdf', label: 'Lab Flutter 2' },
             { href: 'laby/unity_1.pdf',         type: 'pdf', label: 'Lab Unity 1' },
+            { href: 'laby/tematyprojektow.pdf', type: 'pdf', label: 'Tematy projektów' },
+
         ],
     },
 ];
