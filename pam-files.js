@@ -17,7 +17,7 @@ const FILES_DATA = [
             { href: 'wyklady/w7_IoT.pdf',             type: 'pdf',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
             { href: 'wyklady/w8_affective.pdf',       type: 'pdf',  label: 'W8 – Informatyka afektywna' },
             { href: 'wyklady/w9_xr.pdf',              type: 'pdf',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
-            { href: 'wyklady/w10_games.pdf',          type: 'pdf',  label: 'W10 – Programowanie Gier Mobilnych' },
+            { href: 'wyklady/w10_games.pdf',          type: 'pdf',  label: 'W10 – Programowanie gier mobilnych' },
             { href: 'wyklady/w11_robots.pdf',         type: 'pdf',  label: 'W11 – Programowanie autonomicznych robotów' },
             
             { href: 'wyklady/w3_ui.pptx',             type: 'pptx', label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
@@ -25,7 +25,7 @@ const FILES_DATA = [
             { href: 'wyklady/w7_IoT.pptx',            type: 'pptx',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
             { href: 'wyklady/w8_affective_1_4.pptx',      type: 'pptx',  label: 'W8 – Informatyka afektywna' },
             { href: 'wyklady/w9_xr.pptx',             type: 'pptx',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
-            { href: 'wyklady/w10_games.pptx',         type: 'pptx',  label: 'W10 – Programowanie Gier Mobilnych' },
+            { href: 'wyklady/w10_games.pptx',         type: 'pptx',  label: 'W10 – Programowanie gier mobilnych' },
             { href: 'wyklady/w11_robots.pptx',        type: 'pptx',  label: 'W11 – Programowanie autonomicznych robotów' },
 
         ],
