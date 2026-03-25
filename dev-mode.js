@@ -2,7 +2,7 @@
  * PAM WIKI — Tryb deweloperski
  * Katedra Informatyki · Politechnika Rzeszowska
  *
- * Aktywacja: kliknij 5-krotnie odznakę "KIA · PRz" w prawym górnym rogu.
+ * Aktywacja: kliknij odznakę "KIA · PRz" w prawym górnym rogu.
  * Stan przechowywany w localStorage pod kluczem "pam-dev-mode".
  */
 
@@ -10,11 +10,6 @@
 
 (function () {
     const LS_KEY = 'pam-dev-mode';
-    const CLICK_THRESHOLD = 5;
-    const CLICK_TIMEOUT_MS = 3000;
-
-    let clickCount = 0;
-    let clickTimer = null;
 
     /* ------------------------------------------------------------------ */
     /*  Sprawdź informacje o środowisku                                     */
@@ -176,12 +171,14 @@
     function activateDev() {
         localStorage.setItem(LS_KEY, '1');
         markBadge(true);
+        showStudenciTab();
         buildPanel();
     }
 
     function deactivateDev() {
         localStorage.removeItem(LS_KEY);
         markBadge(false);
+        hideStudenciTab();
         closePanel();
     }
 
@@ -190,40 +187,37 @@
         if (!badge) return;
         if (active) {
             badge.setAttribute('data-dev-active', 'true');
-            badge.title = 'Tryb deweloperski WŁĄCZONY – kliknij, aby otworzyć panel';
+            badge.title = 'Tryb deweloperski WŁĄCZONY – kliknij, aby wyłączyć';
         } else {
             badge.removeAttribute('data-dev-active');
-            badge.title = '';
+            badge.title = 'Kliknij, aby włączyć tryb deweloperski';
         }
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Obsługa wielokrotnego kliknięcia                                    */
+    /*  Zakładka Studenci                                                   */
+    /* ------------------------------------------------------------------ */
+    function showStudenciTab() {
+        document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
+            el.classList.remove('dev-only-tab');
+        });
+    }
+
+    function hideStudenciTab() {
+        document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
+            el.classList.add('dev-only-tab');
+        });
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Obsługa kliknięcia (przełącznik)                                    */
     /* ------------------------------------------------------------------ */
     function handleBadgeClick() {
-        clickCount++;
-
-        clearTimeout(clickTimer);
-
-        if (clickCount >= CLICK_THRESHOLD) {
-            clickCount = 0;
-            if (localStorage.getItem(LS_KEY)) {
-                /* Tryb już aktywny — otwórz panel ponownie */
-                const existing = document.getElementById('dev-overlay');
-                if (existing) {
-                    closePanel();
-                } else {
-                    buildPanel();
-                }
-            } else {
-                activateDev();
-            }
-            return;
+        if (localStorage.getItem(LS_KEY)) {
+            deactivateDev();
+        } else {
+            activateDev();
         }
-
-        clickTimer = setTimeout(function () {
-            clickCount = 0;
-        }, CLICK_TIMEOUT_MS);
     }
 
     /* ------------------------------------------------------------------ */
@@ -238,6 +232,7 @@
         /* Przywróć stan po odświeżeniu strony */
         if (localStorage.getItem(LS_KEY)) {
             markBadge(true);
+            showStudenciTab();
         }
     }
 
