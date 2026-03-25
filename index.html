@@ -309,6 +309,8 @@
             display: flex;
             align-items: center;
             gap: 14px;
+            text-decoration: none;
+            color: inherit;
         }
 
         .header-logo {
@@ -3311,31 +3313,6 @@
 
 <body>
 
-    <div class="startup-overlay" id="startupOverlay" aria-label="Ekran startowy PAM WIKI">
-        <div class="startup-card">
-            <button class="startup-close" id="startupClose" aria-label="Pomiń ekran startowy"><i class="fa-solid fa-xmark"></i></button>
-            <div class="startup-grid">
-                <div class="startup-copy-col">
-                    <div class="startup-badge"><i class="fa-solid fa-sparkles"></i> Nowy ekran startowy</div>
-                    <h1 class="startup-title">Wejdź do <span>PAM WIKI</span> i ucz się świadomie.</h1>
-                    <p class="startup-copy">To punkt startowy dla studentów PAM: prowadzi do materiałów, laboratoriów i pierwszej aplikacji, aby szybciej opanować wymagania kursu i przygotować się do zajęć.</p>
-                    <div class="startup-actions">
-                        <button class="startup-btn primary" data-start-target="wiki"><i class="fa-solid fa-book-open"></i> Otwórz bazę wiedzy</button>
-                        <button class="startup-btn secondary" data-start-target="pierwsza"><i class="fa-solid fa-rocket"></i> Zacznij od aplikacji</button>
-                    </div>
-                    <div class="startup-features">
-                        <div class="startup-feature"><i class="fa-solid fa-book-open-reader"></i><strong>Materiały dla studentów</strong><span>Przejdziesz bezpośrednio do wiki, laboratoriów i materiałów potrzebnych na kursie.</span></div>
-                        <div class="startup-feature"><i class="fa-solid fa-graduation-cap"></i><strong>Wsparcie w nauce</strong><span>Treści prowadzą od podstaw do projektu i egzaminu, pomagając uporządkować naukę.</span></div>
-                    </div>
-                </div>
-                <div class="startup-stats">
-                    <div class="startup-stat"><strong>50+</strong><span>tematów z Android, iOS, IoT, XR i PWA</span></div>
-                    <div class="startup-stat"><strong>5</strong><span>sekcji szybkiego dostępu z dolnej i górnej nawigacji</span></div>
-                    <div class="startup-stat"><strong>1 klik</strong><span>do startu nauki, laboratorium lub pierwszej aplikacji</span></div>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <!-- Scroll progress -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -3397,7 +3374,7 @@
     <!-- HEADER -->
     <header>
         <div class="header-inner">
-            <div class="header-brand">
+            <a class="header-brand" href="https://matpomgit.github.io/MobileHub/" aria-label="PAM WIKI – strona główna">
                 <div class="header-logo">
                     <i class="fa-solid fa-mobile-screen-button"></i>
                 </div>
@@ -3405,7 +3382,7 @@
                     <strong>PAM WIKI</strong>
                     <span>Programowanie aplikacji mobilnych</span>
                 </div>
-            </div>
+            </a>
             <div class="header-actions">
                 <button class="header-badge" id="dev-mode-trigger" aria-label="KIA · PRz">KIA · PRz</button>
                 <div class="theme-picker" id="themePicker">
@@ -5142,38 +5119,6 @@
     </script>
 
 
-    <script>
-        (function () {
-            const overlay = document.getElementById('startupOverlay');
-            const closeBtn = document.getElementById('startupClose');
-            const startButtons = document.querySelectorAll('[data-start-target]');
-            if (!overlay) return;
-
-            const alreadySeen = sessionStorage.getItem('pam-startup-seen') === 'true';
-            if (alreadySeen) overlay.classList.add('hidden');
-
-            function closeStartup(targetTab) {
-                overlay.classList.add('hidden');
-                sessionStorage.setItem('pam-startup-seen', 'true');
-                document.body.classList.remove('startup-open');
-                if (targetTab && typeof window.switchTab === 'function') {
-                    setTimeout(() => window.switchTab(targetTab), 120);
-                }
-            }
-
-            if (!alreadySeen) {
-                document.body.classList.add('startup-open');
-            }
-
-            closeBtn?.addEventListener('click', () => closeStartup());
-            overlay.addEventListener('click', (e) => {
-                if (e.target === overlay) closeStartup();
-            });
-            startButtons.forEach(btn => {
-                btn.addEventListener('click', () => closeStartup(btn.dataset.startTarget));
-            });
-        })();
-    </script>
 
     <!-- ===== GSAP ANIMATIONS ===== -->
     <script>
@@ -5197,20 +5142,6 @@
             .from('.page-tab-bar',{ y: 20, opacity: 0, duration: 0.4 }, '-=0.2');
 
         // ===== SCROLL-TRIGGERED ANIMATIONS =====
-
-        // Startup screen entrance
-        const startupCard = document.querySelector('.startup-card');
-        if (startupCard && !document.getElementById('startupOverlay')?.classList.contains('hidden')) {
-            gsap.from('.startup-card', { scale: 0.96, y: 26, opacity: 0, duration: 0.65, ease: 'power3.out' });
-            gsap.from('.startup-badge, .startup-title, .startup-copy, .startup-actions .startup-btn, .startup-feature, .startup-stat', {
-                y: 20,
-                opacity: 0,
-                duration: 0.5,
-                stagger: 0.06,
-                delay: 0.15,
-                ease: 'power2.out'
-            });
-        }
 
         // Hero parallax glow
         const heroSection = document.querySelector('.hero');
