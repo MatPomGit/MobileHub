@@ -377,7 +377,7 @@
             border-radius: 20px;
             letter-spacing: 0.5px;
             border: none;
-            cursor: pointer;
+            cursor: default;
             user-select: none;
             -webkit-user-select: none;
             transition: background 0.2s ease;
@@ -3209,6 +3209,50 @@
                 cursor: default;
             }
 
+            /* Dev mode trigger in settings panel */
+            .settings-row-version {
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                position: relative;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .settings-row-version:active {
+                background: var(--surface2);
+                border-radius: 8px;
+            }
+
+            .dev-version-badge {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-muted);
+                background: var(--surface2);
+                padding: 3px 10px;
+                border-radius: 12px;
+                transition: background 0.2s ease, color 0.2s ease;
+                white-space: nowrap;
+            }
+
+            .settings-row-version[data-dev-active] .dev-version-badge {
+                background: rgba(220, 38, 38, 0.15);
+                color: #ef4444;
+            }
+
+            .settings-row-version[data-dev-active] .settings-row-label i {
+                color: #ef4444;
+            }
+
+            .settings-row-version[data-taps-left] .dev-version-badge {
+                background: var(--accent-light);
+                color: var(--accent);
+            }
+
+            .settings-row-version[data-taps-left] {
+                background: var(--surface2);
+                border-radius: 8px;
+            }
+
             /* ===== PULL-DOWN PANEL: CATEGORIES ===== */
             .pull-categories {
                 margin-top: 14px;
@@ -3384,7 +3428,7 @@
                 </div>
             </a>
             <div class="header-actions">
-                <button class="header-badge" id="dev-mode-trigger" aria-label="KIA · PRz">KIA · PRz</button>
+                <button class="header-badge" id="header-badge-kia" aria-label="KIA · PRz">KIA · PRz</button>
                 <div class="theme-picker" id="themePicker">
                     <button class="btn-icon" id="themePickerBtn" title="Zmień motyw" aria-label="Wybierz motyw kolorystyczny" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-palette"></i>
@@ -4200,6 +4244,17 @@
                     <i class="fa-solid fa-check install-check"></i>
                     <span>Dodaj do ekranu głównego</span>
                 </button>
+            </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Informacje</div>
+                <div class="settings-row settings-row-version" id="dev-mode-trigger" role="button" tabindex="0"
+                     aria-label="Informacje o wersji aplikacji">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Wersja aplikacji</span>
+                    </div>
+                    <span class="dev-version-badge"></span>
+                </div>
             </div>
         </div>
     </div>
