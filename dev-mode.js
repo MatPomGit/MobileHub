@@ -172,7 +172,6 @@
         localStorage.setItem(LS_KEY, '1');
         markBadge(true);
         showStudenciTab();
-        buildPanel();
     }
 
     function deactivateDev() {

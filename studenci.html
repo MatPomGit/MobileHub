@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Studenci — PAM WIKI</title>
+    <meta name="description" content="Zgłoszenia studentów: tematy projektów aplikacji mobilnych.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;600&family=Outfit:wght@300;400;600;700;800&display=swap"
+        rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
+    <style>
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --bg:           #f4f6fb;
+            --surface:      #ffffff;
+            --surface2:     #f0f2f8;
+            --border:       #e2e6f0;
+            --text:         #1a1d2e;
+            --text-muted:   #6b7280;
+            --accent:       #ef4444;
+            --accent2:      #dc2626;
+            --accent-light: #fee2e2;
+            --radius:       12px;
+            --radius-sm:    8px;
+            --shadow:       0 4px 24px rgba(0,0,0,0.08);
+            --font:         'Outfit', sans-serif;
+            --mono:         'JetBrains Mono', monospace;
+        }
+
+        body {
+            font-family: var(--font);
+            background: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            font-size: 15px;
+        }
+
+        .page-wrapper {
+            max-width: 960px;
+            margin: 0 auto;
+            padding: 32px 20px 80px;
+        }
+
+        /* ===== HEADER ===== */
+        .page-hero {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: #fff;
+            border-radius: var(--radius);
+            padding: 36px 36px 32px;
+            margin-bottom: 32px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .page-hero::before {
+            content: '';
+            position: absolute;
+            top: -40px; right: -40px;
+            width: 200px; height: 200px;
+            background: rgba(255,255,255,0.08);
+            border-radius: 50%;
+        }
+
+        .page-hero-icon {
+            font-size: 2rem;
+            margin-bottom: 12px;
+            opacity: 0.9;
+        }
+
+        .page-hero h1 {
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin-bottom: 8px;
+        }
+
+        .page-hero p {
+            opacity: 0.85;
+            font-size: 0.95rem;
+        }
+
+        /* ===== SECTION CARD ===== */
+        .card {
+            background: var(--surface);
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border);
+            margin-bottom: 24px;
+            overflow: hidden;
+        }
+
+        .card-header {
+            padding: 20px 24px 16px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-header h2 {
+            font-size: 1rem;
+            font-weight: 700;
+        }
+
+        .card-header i {
+            color: var(--accent);
+            font-size: 1rem;
+        }
+
+        .card-body {
+            padding: 20px 24px;
+        }
+
+        /* ===== TABLE ===== */
+        .data-table-wrap {
+            overflow-x: auto;
+        }
+
+        .data-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.9rem;
+        }
+
+        .data-table th {
+            background: var(--surface2);
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 10px 14px;
+            text-align: left;
+            border-bottom: 1px solid var(--border);
+            white-space: nowrap;
+        }
+
+        .data-table td {
+            padding: 10px 14px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .data-table tr:last-child td {
+            border-bottom: none;
+        }
+
+        .data-table tr:hover td {
+            background: var(--surface2);
+        }
+
+        .role-badge {
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 20px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            white-space: nowrap;
+        }
+
+        .role-lider    { background: #fef3c7; color: #92400e; }
+        .role-developer { background: #dbeafe; color: #1e40af; }
+        .role-tester   { background: #d1fae5; color: #065f46; }
+
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--text-muted);
+        }
+
+        .empty-state i {
+            font-size: 2.5rem;
+            margin-bottom: 12px;
+            opacity: 0.4;
+        }
+
+        .empty-state p {
+            font-size: 0.9rem;
+        }
+
+        /* ===== FORM ===== */
+        .form-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 16px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text);
+        }
+
+        label .req {
+            color: var(--accent);
+            margin-left: 2px;
+        }
+
+        input[type="text"],
+        textarea,
+        select {
+            font-family: var(--font);
+            font-size: 0.9rem;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            color: var(--text);
+            width: 100%;
+            transition: border-color 0.2s, box-shadow 0.2s;
+        }
+
+        input[type="text"]:focus,
+        textarea:focus,
+        select:focus {
+            outline: none;
+            border-color: var(--accent);
+            box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 100px;
+        }
+
+        .btn-submit {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent);
+            color: #fff;
+            border: none;
+            border-radius: var(--radius-sm);
+            padding: 11px 24px;
+            font-family: var(--font);
+            font-size: 0.9rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, transform 0.1s;
+        }
+
+        .btn-submit:hover { background: var(--accent2); }
+        .btn-submit:active { transform: scale(0.98); }
+        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+
+        /* ===== ALERT ===== */
+        .alert {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 0.9rem;
+            margin-bottom: 16px;
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+        }
+
+        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
+        .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
+        .alert-info    { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; }
+        .alert.hidden  { display: none; }
+
+        /* ===== TOKEN SETUP ===== */
+        .token-section {
+            margin-bottom: 16px;
+        }
+
+        .token-row {
+            display: flex;
+            gap: 8px;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .token-row input {
+            flex: 1;
+            min-width: 0;
+            font-family: var(--mono);
+            font-size: 0.8rem;
+        }
+
+        .btn-sm {
+            padding: 8px 14px;
+            font-size: 0.82rem;
+            white-space: nowrap;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-family: var(--font);
+            font-weight: 600;
+            transition: background 0.2s;
+        }
+
+        .btn-sm:hover { background: var(--border); }
+        .btn-sm.danger { color: #dc2626; }
+
+        .token-status {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+        }
+
+        .token-status.ok { color: #059669; }
+
+        @media (max-width: 600px) {
+            .form-grid { grid-template-columns: 1fr; }
+            .form-group.full { grid-column: 1; }
+            .page-hero { padding: 28px 20px 24px; }
+            .page-hero h1 { font-size: 1.4rem; }
+            .card-body { padding: 16px; }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="page-wrapper">
+
+        <!-- HERO -->
+        <div class="page-hero">
+            <div class="page-hero-icon"><i class="fa-solid fa-users"></i></div>
+            <h1>Studenci – zgłoszenia projektów</h1>
+            <p>Lista zgłoszonych tematów projektów aplikacji mobilnych oraz formularz nowego zgłoszenia.</p>
+        </div>
+
+        <!-- ALERT BOX (shared) -->
+        <div id="main-alert" class="alert hidden" role="alert"></div>
+
+        <!-- TABLE CARD -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-table-list"></i>
+                <h2>Zgłoszone tematy</h2>
+            </div>
+            <div class="card-body">
+                <div id="table-state" class="alert alert-info hidden">
+                    <i class="fa-solid fa-spinner fa-spin"></i>
+                    <span>Ładowanie danych…</span>
+                </div>
+                <div class="data-table-wrap">
+                    <table class="data-table" id="students-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Imię i nazwisko</th>
+                                <th>Temat</th>
+                                <th>Opis</th>
+                                <th>Rola</th>
+                                <th>Data</th>
+                            </tr>
+                        </thead>
+                        <tbody id="students-tbody">
+                            <!-- filled by JS -->
+                        </tbody>
+                    </table>
+                </div>
+                <div id="empty-state" class="empty-state hidden">
+                    <i class="fa-solid fa-inbox"></i>
+                    <p>Brak zgłoszeń. Wypełnij formularz poniżej.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- SUBMISSION FORM CARD -->
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-paper-plane"></i>
+                <h2>Formularz zgłoszenia</h2>
+            </div>
+            <div class="card-body">
+
+                <!-- GitHub Token setup -->
+                <div class="token-section">
+                    <div class="alert alert-info" style="margin-bottom:12px;">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Aby wysłać zgłoszenie, wymagany jest <strong>GitHub Personal Access Token</strong>
+                            z uprawnieniami <code>repo</code> (Contents write). Token jest przechowywany
+                            lokalnie w przeglądarce i nigdy nie jest wysyłany nigdzie indziej poza GitHub API.</span>
+                    </div>
+                    <label for="gh-token-input">Token GitHub <span class="req">*</span></label>
+                    <div class="token-row" style="margin-top:6px;">
+                        <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off" spellcheck="false">
+                        <button class="btn-sm" id="btn-save-token" type="button">Zapisz token</button>
+                        <button class="btn-sm danger" id="btn-clear-token" type="button">Usuń</button>
+                    </div>
+                    <p class="token-status" id="token-status">Token nie jest zapisany.</p>
+                </div>
+
+                <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+
+                <form id="submission-form" novalidate>
+                    <div class="form-grid">
+
+                        <div class="form-group">
+                            <label for="field-imie">Imię <span class="req">*</span></label>
+                            <input type="text" id="field-imie" name="imie" placeholder="np. Jan" required>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="field-nazwisko">Nazwisko <span class="req">*</span></label>
+                            <input type="text" id="field-nazwisko" name="nazwisko" placeholder="np. Kowalski" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="field-temat">Temat projektu <span class="req">*</span></label>
+                            <input type="text" id="field-temat" name="temat" placeholder="np. Aplikacja do zarządzania zadaniami" required>
+                        </div>
+
+                        <div class="form-group full">
+                            <label for="field-opis">Opis tematu <span class="req">*</span></label>
+                            <textarea id="field-opis" name="opis" placeholder="Krótki opis funkcjonalności i celu aplikacji…" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="field-rola">Rola w projekcie <span class="req">*</span></label>
+                            <select id="field-rola" name="rola" required>
+                                <option value="">— wybierz rolę —</option>
+                                <option value="Lider">Lider projektu</option>
+                                <option value="Developer">Developer</option>
+                                <option value="Tester">Tester</option>
+                            </select>
+                        </div>
+
+                    </div>
+
+                    <div style="margin-top:20px;">
+                        <button type="submit" class="btn-submit" id="btn-submit">
+                            <i class="fa-solid fa-paper-plane"></i>
+                            Wyślij zgłoszenie
+                        </button>
+                    </div>
+                </form>
+
+            </div>
+        </div>
+
+    </div><!-- /page-wrapper -->
+
+    <script>
+    'use strict';
+
+    /* ------------------------------------------------------------------ */
+    /*  Config                                                              */
+    /* ------------------------------------------------------------------ */
+    const REPO_OWNER  = 'MatPomGit';
+    const REPO_NAME   = 'MobileHub';
+    const DATA_FILE   = 'students-data.json';
+    const GH_API_BASE = 'https://api.github.com';
+    const LS_TOKEN_KEY = 'pam-gh-token';
+
+    /* ------------------------------------------------------------------ */
+    /*  Helpers                                                             */
+    /* ------------------------------------------------------------------ */
+    function showAlert(msg, type) {
+        const el = document.getElementById('main-alert');
+        const iconClass = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
+        el.className = 'alert alert-' + type;
+        el.textContent = '';
+        const icon = document.createElement('i');
+        icon.className = 'fa-solid ' + iconClass;
+        icon.setAttribute('aria-hidden', 'true');
+        el.appendChild(icon);
+        el.appendChild(document.createTextNode(' ' + msg));
+        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+    }
+
+    function hideAlert() {
+        document.getElementById('main-alert').className = 'alert hidden';
+    }
+
+    function roleClass(role) {
+        if (role === 'Lider') return 'role-lider';
+        if (role === 'Developer') return 'role-developer';
+        if (role === 'Tester') return 'role-tester';
+        return '';
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  GitHub Token management                                             */
+    /* ------------------------------------------------------------------ */
+    function getToken() {
+        return localStorage.getItem(LS_TOKEN_KEY) || '';
+    }
+
+    function updateTokenStatus() {
+        const tok = getToken();
+        const status = document.getElementById('token-status');
+        const input  = document.getElementById('gh-token-input');
+        if (tok) {
+            status.textContent = 'Token zapisany (' + tok.slice(0, 8) + '…).';
+            status.className = 'token-status ok';
+            input.value = '';
+            input.placeholder = '(token jest zapisany)';
+        } else {
+            status.textContent = 'Token nie jest zapisany.';
+            status.className = 'token-status';
+            input.placeholder = 'ghp_…';
+        }
+    }
+
+    document.getElementById('btn-save-token').addEventListener('click', function () {
+        const val = document.getElementById('gh-token-input').value.trim();
+        if (!val) { showAlert('Wpisz token przed zapisaniem.', 'error'); return; }
+        localStorage.setItem(LS_TOKEN_KEY, val);
+        updateTokenStatus();
+        hideAlert();
+    });
+
+    document.getElementById('btn-clear-token').addEventListener('click', function () {
+        localStorage.removeItem(LS_TOKEN_KEY);
+        document.getElementById('gh-token-input').value = '';
+        updateTokenStatus();
+    });
+
+    /* ------------------------------------------------------------------ */
+    /*  Load data from repository                                           */
+    /* ------------------------------------------------------------------ */
+    async function loadData() {
+        const tbody  = document.getElementById('students-tbody');
+        const empty  = document.getElementById('empty-state');
+        const status = document.getElementById('table-state');
+
+        status.className = 'alert alert-info';
+        status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ładowanie danych…';
+        tbody.innerHTML  = '';
+        empty.className  = 'empty-state hidden';
+
+        try {
+            const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
+            const headers = { 'Accept': 'application/vnd.github.v3+json' };
+            const tok = getToken();
+            if (tok) headers['Authorization'] = 'Bearer ' + tok;
+
+            const resp = await fetch(url, { headers });
+            if (!resp.ok) {
+                throw new Error('HTTP ' + resp.status + ' – ' + resp.statusText);
+            }
+            const json = await resp.json();
+            const content = atob(json.content.replace(/\n/g, ''));
+            const students = JSON.parse(content);
+
+            status.className = 'alert alert-info hidden';
+
+            if (!Array.isArray(students) || students.length === 0) {
+                empty.className = 'empty-state';
+                return;
+            }
+
+            students.forEach(function (s, i) {
+                const tr = document.createElement('tr');
+                tr.innerHTML =
+                    '<td>' + (i + 1) + '</td>' +
+                    '<td><strong>' + escHtml(s.imie) + ' ' + escHtml(s.nazwisko) + '</strong></td>' +
+                    '<td>' + escHtml(s.temat) + '</td>' +
+                    '<td style="max-width:260px;white-space:pre-wrap;">' + escHtml(s.opis) + '</td>' +
+                    '<td><span class="role-badge ' + roleClass(s.rola) + '">' + escHtml(s.rola) + '</span></td>' +
+                    '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.82rem;">' + escHtml(s.data || '') + '</td>';
+                tbody.appendChild(tr);
+            });
+
+        } catch (err) {
+            status.className = 'alert alert-error';
+            status.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Błąd ładowania danych: ' + escHtml(err.message);
+        }
+    }
+
+    function escHtml(str) {
+        return String(str)
+            .replace(/&/g, '&amp;')
+            .replace(/</g, '&lt;')
+            .replace(/>/g, '&gt;')
+            .replace(/"/g, '&quot;')
+            .replace(/'/g, '&#39;');
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Save data to repository via GitHub API                             */
+    /* ------------------------------------------------------------------ */
+    async function saveData(newEntry) {
+        const tok = getToken();
+        if (!tok) {
+            showAlert('Brak tokenu GitHub. Wpisz i zapisz token przed wysłaniem zgłoszenia.', 'error');
+            document.getElementById('gh-token-input').focus();
+            return false;
+        }
+
+        const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
+        const headers = {
+            'Accept':        'application/vnd.github.v3+json',
+            'Authorization': 'Bearer ' + tok,
+            'Content-Type':  'application/json'
+        };
+
+        /* 1. Read current file (need SHA for update) */
+        let currentStudents = [];
+        let fileSha = null;
+        try {
+            const getResp = await fetch(url, { headers });
+            if (getResp.ok) {
+                const fileData = await getResp.json();
+                fileSha = fileData.sha;
+                const decoded = atob(fileData.content.replace(/\n/g, ''));
+                currentStudents = JSON.parse(decoded);
+                if (!Array.isArray(currentStudents)) currentStudents = [];
+            } else if (getResp.status !== 404) {
+                throw new Error('HTTP ' + getResp.status + ' przy odczycie pliku.');
+            }
+        } catch (err) {
+            showAlert('Błąd odczytu danych z repozytorium: ' + err.message, 'error');
+            return false;
+        }
+
+        /* 2. Append new entry */
+        currentStudents.push(newEntry);
+        const jsonStr = JSON.stringify(currentStudents, null, 2);
+        const bytes = new TextEncoder().encode(jsonStr);
+        let binary = '';
+        bytes.forEach(function (b) { binary += String.fromCharCode(b); });
+        const newContent = btoa(binary);
+
+        /* 3. Write file */
+        const body = {
+            message: 'Dodano zgłoszenie: ' + newEntry.imie + ' ' + newEntry.nazwisko,
+            content: newContent,
+        };
+        if (fileSha) body.sha = fileSha;
+
+        try {
+            const putResp = await fetch(url, {
+                method:  'PUT',
+                headers: headers,
+                body:    JSON.stringify(body)
+            });
+
+            if (!putResp.ok) {
+                const errBody = await putResp.json().catch(() => ({}));
+                throw new Error('HTTP ' + putResp.status + ': ' + (errBody.message || putResp.statusText));
+            }
+        } catch (err) {
+            showAlert('Błąd zapisu danych: ' + err.message, 'error');
+            return false;
+        }
+
+        return true;
+    }
+
+    /* ------------------------------------------------------------------ */
+    /*  Form submission                                                     */
+    /* ------------------------------------------------------------------ */
+    document.getElementById('submission-form').addEventListener('submit', async function (e) {
+        e.preventDefault();
+        hideAlert();
+
+        const imie     = document.getElementById('field-imie').value.trim();
+        const nazwisko = document.getElementById('field-nazwisko').value.trim();
+        const temat    = document.getElementById('field-temat').value.trim();
+        const opis     = document.getElementById('field-opis').value.trim();
+        const rola     = document.getElementById('field-rola').value;
+
+        if (!imie || !nazwisko || !temat || !opis || !rola) {
+            showAlert('Wypełnij wszystkie wymagane pola.', 'error');
+            return;
+        }
+
+        const now = new Date();
+        const data = now.toLocaleDateString('pl-PL') + ' ' + now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+
+        const entry = { imie, nazwisko, temat, opis, rola, data };
+
+        const btn = document.getElementById('btn-submit');
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wysyłanie…';
+
+        const ok = await saveData(entry);
+
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
+
+        if (ok) {
+            showAlert('Zgłoszenie zostało pomyślnie zapisane w repozytorium!', 'success');
+            document.getElementById('submission-form').reset();
+            /* Reload table to show updated data */
+            await loadData();
+        }
+    });
+
+    /* ------------------------------------------------------------------ */
+    /*  Init                                                                */
+    /* ------------------------------------------------------------------ */
+    updateTokenStatus();
+    loadData();
+    </script>
+</body>
+</html>
