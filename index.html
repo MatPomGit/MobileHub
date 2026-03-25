@@ -375,12 +375,14 @@
             border-radius: 20px;
             letter-spacing: 0.5px;
             border: none;
-            cursor: default;
+            cursor: pointer;
             user-select: none;
             -webkit-user-select: none;
+            transition: background 0.2s ease;
         }
 
         .header-badge[data-dev-active] {
+            background: linear-gradient(135deg, #dc2626, #ef4444);
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
         }
 
@@ -3364,6 +3366,10 @@
                     <i class="fa-solid fa-file-arrow-down"></i>
                     <span>Materiały</span>
                 </button>
+                <button class="pull-shortcut" data-tab="studenci" style="display:none">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Studenci</span>
+                </button>
             </div>
             <div class="pull-categories" id="pullCategories">
                 <div class="pull-categories-title">
@@ -3468,6 +3474,10 @@
             <button class="tab-btn" data-tab="materialy" id="tab-materialy">
                 <i class="fa-solid fa-file-arrow-down"></i>
                 Materiały
+            </button>
+            <button class="tab-btn" data-tab="studenci" id="tab-studenci" style="display:none">
+                <i class="fa-solid fa-users"></i>
+                Studenci
             </button>
         </div>
     </nav>
@@ -4116,6 +4126,96 @@
         </div>
     </div><!-- /panel-materialy -->
 
+    <!-- TAB PANEL: STUDENCI (dev mode only) -->
+    <div class="tab-panel" id="panel-studenci">
+        <div class="info-panel">
+            <div class="info-panel-header">
+                <div class="info-panel-icon" style="background:rgba(239,68,68,0.12);color:#ef4444;"><i class="fa-solid fa-users"></i></div>
+                <div>
+                    <h2>Studenci – zgłoszone tematy</h2>
+                    <p>Lista zgłoszonych tematów projektów aplikacji mobilnych.</p>
+                </div>
+            </div>
+
+            <h3 class="section-title">Tematy projektów</h3>
+            <div class="cards-grid">
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-map-location-dot"></i>
+                        <strong>Aplikacja turystyczna – lokalne atrakcje</strong>
+                    </div>
+                    <p>Aplikacja mobilna umożliwiająca odkrywanie lokalnych atrakcji turystycznych z mapą, filtrowaniem po kategorii i trybem offline.</p>
+                    <p style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;
+                        <strong>Indeksy:</strong> 123456 · 123457 · 123458
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-dumbbell"></i>
+                        <strong>Tracker aktywności fizycznej</strong>
+                    </div>
+                    <p>Aplikacja do śledzenia ćwiczeń, rejestrowania treningów, planowania diety i monitorowania postępów za pomocą wykresów.</p>
+                    <p style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;
+                        <strong>Indeksy:</strong> 234561 · 234562 · 234563
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-wallet"></i>
+                        <strong>Menedżer finansów osobistych</strong>
+                    </div>
+                    <p>Aplikacja do zarządzania budżetem domowym: kategoryzacja wydatków, powiadomienia o przekroczeniu limitu, raporty miesięczne.</p>
+                    <p style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;
+                        <strong>Indeksy:</strong> 345671 · 345672 · 345673
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-graduation-cap"></i>
+                        <strong>Platforma do nauki języków obcych</strong>
+                    </div>
+                    <p>Aplikacja oparta na fiszkatach i powtórkach interwałowych (SRS) do nauki słownictwa z grywalizacją i statystykami postępów.</p>
+                    <p style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;
+                        <strong>Indeksy:</strong> 456781 · 456782 · 456783
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-utensils"></i>
+                        <strong>Książka kucharska z planowaniem posiłków</strong>
+                    </div>
+                    <p>Aplikacja z bazą przepisów, generowaniem listy zakupów, filtrowaniem po diecie oraz integracją z aparatem do skanowania kodów kreskowych.</p>
+                    <p style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;
+                        <strong>Indeksy:</strong> 567891 · 567892 · 567893
+                    </p>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-bus"></i>
+                        <strong>Rozkład jazdy komunikacji miejskiej</strong>
+                    </div>
+                    <p>Aplikacja z rozkładami jazdy w czasie rzeczywistym, powiadomieniami o opóźnieniach, planowaniem trasy i trybem offline dla pobranych linii.</p>
+                    <p style="margin-top:10px;font-size:12px;color:var(--text-muted);">
+                        <i class="fa-solid fa-id-badge"></i>&nbsp;
+                        <strong>Indeksy:</strong> 678901 · 678902 · 678903
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div><!-- /panel-studenci -->
+
     <!-- Mobile sidebar toggle -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Otwórz menu">
         <i class="fa-solid fa-bars"></i>
@@ -4228,6 +4328,10 @@
         <button class="bottom-nav-btn" data-tab="materialy">
             <i class="fa-solid fa-file-arrow-down"></i>
             <span>Materiały</span>
+        </button>
+        <button class="bottom-nav-btn" data-tab="studenci" style="display:none">
+            <i class="fa-solid fa-users"></i>
+            <span>Studenci</span>
         </button>
     </nav>
 
