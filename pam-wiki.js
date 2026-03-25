@@ -405,6 +405,12 @@ function updateBreadcrumbs(id) {
     document.getElementById('currentCategory').textContent = meta.category;
     document.getElementById('currentArticle').textContent = meta.title;
     crumbs.style.display = 'flex';
+
+    const logoIcon = document.getElementById('headerLogoIcon');
+    if (logoIcon && meta.icon) {
+        logoIcon.classList.remove(...Array.from(logoIcon.classList).filter(c => c.startsWith('fa-')));
+        meta.icon.split(' ').forEach(cls => { if (cls) logoIcon.classList.add(cls); });
+    }
 }
 
 function processInternalLinks(container) {
