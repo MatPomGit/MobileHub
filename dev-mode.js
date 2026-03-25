@@ -199,13 +199,13 @@
     /* ------------------------------------------------------------------ */
     function showStudenciTab() {
         document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
-            el.style.display = '';
+            el.classList.remove('dev-only-tab');
         });
     }
 
     function hideStudenciTab() {
         document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
-            el.style.display = 'none';
+            el.classList.add('dev-only-tab');
         });
     }
 

@@ -386,6 +386,10 @@
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
         }
 
+        .dev-only-tab {
+            display: none !important;
+        }
+
         /* ===== DEV MODE PANEL ===== */
         #dev-overlay {
             position: fixed;
@@ -3366,7 +3370,7 @@
                     <i class="fa-solid fa-file-arrow-down"></i>
                     <span>Materiały</span>
                 </button>
-                <button class="pull-shortcut" data-tab="studenci" style="display:none">
+                <button class="pull-shortcut dev-only-tab" data-tab="studenci">
                     <i class="fa-solid fa-users"></i>
                     <span>Studenci</span>
                 </button>
@@ -3475,7 +3479,7 @@
                 <i class="fa-solid fa-file-arrow-down"></i>
                 Materiały
             </button>
-            <button class="tab-btn" data-tab="studenci" id="tab-studenci" style="display:none">
+            <button class="tab-btn dev-only-tab" data-tab="studenci" id="tab-studenci">
                 <i class="fa-solid fa-users"></i>
                 Studenci
             </button>
@@ -4329,7 +4333,7 @@
             <i class="fa-solid fa-file-arrow-down"></i>
             <span>Materiały</span>
         </button>
-        <button class="bottom-nav-btn" data-tab="studenci" style="display:none">
+        <button class="bottom-nav-btn dev-only-tab" data-tab="studenci">
             <i class="fa-solid fa-users"></i>
             <span>Studenci</span>
         </button>
