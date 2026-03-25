@@ -228,11 +228,10 @@
 
         badge.addEventListener('click', handleBadgeClick);
 
-        /* Przywróć stan po odświeżeniu strony */
-        if (localStorage.getItem(LS_KEY)) {
-            markBadge(true);
-            showStudenciTab();
-        }
+        /* Tryb dev domyślnie wyłączony – wyczyść ewentualny poprzedni stan */
+        localStorage.removeItem(LS_KEY);
+        markBadge(false);
+        hideStudenciTab();
     }
 
     if (document.readyState === 'loading') {
