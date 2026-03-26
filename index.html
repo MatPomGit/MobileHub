@@ -64,8 +64,8 @@
             --header-h: 48px;
             --tabbar-h: 41px;
             --chrome-h: calc(var(--header-h) + var(--tabbar-h));
-            --wiki-font-size: 17px;
-            --wiki-font-scale: 1;
+            --wiki-font-size: 15px;
+            --wiki-font-scale: 0.9;
         }
 
         [data-theme="dark"] {
@@ -192,13 +192,14 @@
 
         html {
             scroll-behavior: smooth;
+            font-size: 90%;
         }
 
         body {
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.5;
+            line-height: 1.4;
             min-height: 100vh;
             transition: background var(--transition), color var(--transition);
         }
@@ -1285,6 +1286,28 @@
 
         .reading-time i {
             color: var(--accent);
+        }
+
+        /* Topics collapse toggle */
+        .topics-collapse-toggle {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--accent-light);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            padding: 7px 16px;
+            border-radius: 20px;
+            font-size: calc(0.85em * var(--wiki-font-scale));
+            font-family: var(--font);
+            font-weight: 600;
+            cursor: pointer;
+            margin: 10px 0 16px;
+            transition: background 0.2s;
+        }
+        .topics-collapse-toggle:hover {
+            background: var(--accent);
+            color: #fff;
         }
 
         /* Table of contents */

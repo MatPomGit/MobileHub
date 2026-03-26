@@ -141,7 +141,7 @@ const METADATA = {
     'robotics-mobile':      { category: 'Robotyka autonomiczna',          title: 'Aplikacja jako kontroler robota',          icon: 'fa-solid fa-robot' },
     'ros2-mobile':          { category: 'Robotyka autonomiczna',          title: 'ROS2 i sterowanie robotem',                icon: 'fa-solid fa-diagram-project' },
     'computer-vision-mobile':{ category: 'Robotyka autonomiczna',         title: 'Computer Vision w robotyce mobilnej',      icon: 'fa-solid fa-eye' },
-    'projekt-zaliczeniowy':  { category: 'Zaliczenie',                    title: 'Projekt zaliczeniowy — własna aplikacja',  icon: 'fa-solid fa-laptop-code' },
+    'projekt-zaliczeniowy':  { category: 'Zaliczenie',                    title: 'Projekt aplikacji',                        icon: 'fa-solid fa-laptop-code' },
     'egzamin-teoretyczny':   { category: 'Zaliczenie',                    title: 'Egzamin teoretyczny — przygotowanie',      icon: 'fa-solid fa-graduation-cap' },
     'app-publishing':        { category: 'Projektowanie i OS',            title: 'Publikacja i promocja własnej aplikacji',  icon: 'fa-solid fa-rocket' },
     'app-distribution':      { category: 'Projektowanie i OS',            title: 'Metody dystrybucji — Google Play i F-Droid', icon: 'fa-solid fa-store' },
@@ -346,6 +346,7 @@ async function loadArticle(articleId) {
         addReadingTime(container);
         generateTableOfContents(container);
         processInternalLinks(container);
+        collapseTopicsList(container, articleId);
         addCopyButtons(container);
         injectExamQuizCallout(container, articleId);
 
@@ -357,6 +358,51 @@ async function loadArticle(articleId) {
     } catch (err) {
         showError(`Nie można załadować artykułu <strong>${articleId}</strong>. Upewnij się że uruchamiasz stronę przez serwer HTTP (np. <code>python -m http.server</code>).`);
     }
+}
+
+function collapseTopicsList(container, articleId) {
+    if (articleId !== 'projekt-zaliczeniowy') return;
+    const headings = container.querySelectorAll('h2');
+    let targetH2 = null;
+    headings.forEach(h => {
+        if (h.textContent.trim() === 'Lista przykładowych tematów projektu') {
+            targetH2 = h;
+        }
+    });
+    if (!targetH2) return;
+
+    const elementsToCollapse = [];
+    let el = targetH2.nextElementSibling;
+    while (el && el.tagName !== 'H2') {
+        elementsToCollapse.push(el);
+        el = el.nextElementSibling;
+    }
+    if (elementsToCollapse.length === 0) return;
+
+    const wrapperId = 'topics-list-body';
+    const wrapper = document.createElement('div');
+    wrapper.className = 'topics-collapse-body';
+    wrapper.id = wrapperId;
+    wrapper.style.display = 'none';
+    elementsToCollapse.forEach(elem => wrapper.appendChild(elem));
+
+    const toggle = document.createElement('button');
+    toggle.className = 'topics-collapse-toggle';
+    toggle.type = 'button';
+    toggle.setAttribute('aria-expanded', 'false');
+    toggle.setAttribute('aria-controls', wrapperId);
+    toggle.innerHTML = '<i class="fa-solid fa-chevron-down"></i> Pokaż listę tematów';
+    toggle.addEventListener('click', () => {
+        const hidden = wrapper.style.display === 'none';
+        wrapper.style.display = hidden ? '' : 'none';
+        toggle.setAttribute('aria-expanded', hidden ? 'true' : 'false');
+        toggle.innerHTML = hidden
+            ? '<i class="fa-solid fa-chevron-up"></i> Ukryj listę tematów'
+            : '<i class="fa-solid fa-chevron-down"></i> Pokaż listę tematów';
+    });
+
+    targetH2.insertAdjacentElement('afterend', wrapper);
+    targetH2.insertAdjacentElement('afterend', toggle);
 }
 
 
