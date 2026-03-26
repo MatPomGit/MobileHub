@@ -1,4 +1,4 @@
-# Projekt zaliczeniowy — własna aplikacja mobilna
+# Projekt aplikacji
 
 Projekt zaliczeniowy to samodzielnie zaprojektowana i zaimplementowana aplikacja mobilna. Stanowi praktyczne potwierdzenie opanowania umiejętności programistycznych zdobytych w ramach przedmiotu **Programowanie Aplikacji Mobilnych (PAM)**.
 
