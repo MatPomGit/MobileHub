@@ -416,6 +416,10 @@
             transition: background 0.2s ease;
         }
 
+        .pwa-standalone .header-badge {
+            cursor: default;
+        }
+
         .header-badge[data-dev-active] {
             background: linear-gradient(135deg, #dc2626, #ef4444);
             box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.4);
@@ -651,6 +655,12 @@
         .theme-option.active {
             background: var(--accent-light);
             color: var(--accent);
+        }
+
+        .theme-picker-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 6px 2px;
         }
 
         .theme-swatch {
@@ -3242,6 +3252,50 @@
                 cursor: default;
             }
 
+            /* Dev mode trigger in settings panel */
+            .settings-row-version {
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                position: relative;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .settings-row-version:active {
+                background: var(--surface2);
+                border-radius: 8px;
+            }
+
+            .dev-version-badge {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-muted);
+                background: var(--surface2);
+                padding: 3px 10px;
+                border-radius: 12px;
+                transition: background 0.2s ease, color 0.2s ease;
+                white-space: nowrap;
+            }
+
+            .settings-row-version[data-dev-active] .dev-version-badge {
+                background: rgba(220, 38, 38, 0.15);
+                color: #ef4444;
+            }
+
+            .settings-row-version[data-dev-active] .settings-row-label i {
+                color: #ef4444;
+            }
+
+            .settings-row-version[data-taps-left] .dev-version-badge {
+                background: var(--accent-light);
+                color: var(--accent);
+            }
+
+            .settings-row-version[data-taps-left] {
+                background: var(--surface2);
+                border-radius: 8px;
+            }
+
             /* ===== PULL-DOWN PANEL: CATEGORIES ===== */
             .pull-categories {
                 margin-top: 14px;
@@ -3417,7 +3471,7 @@
                 </div>
             </a>
             <div class="header-actions">
-                <button class="header-badge" id="dev-mode-trigger" aria-label="KIA · PRz">KIA · PRz</button>
+                <button class="header-badge" id="header-badge-kia" aria-label="KIA · PRz">KIA · PRz</button>
                 <div class="theme-picker" id="themePicker">
                     <button class="btn-icon" id="themePickerBtn" title="Zmień motyw" aria-label="Wybierz motyw kolorystyczny" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-palette"></i>
@@ -3444,6 +3498,12 @@
                         </button>
                         <button class="theme-option" data-theme="aurora" role="menuitem">
                             <span class="theme-swatch aurora"></span>Aurora
+                        </button>
+                        <div class="theme-picker-divider"></div>
+                        <div class="theme-picker-label">Widok</div>
+                        <button class="theme-option" id="displayModeToggle" role="menuitem">
+                            <i class="fa-solid fa-mobile-screen-button" id="displayModeIcon"></i>
+                            <span id="displayModeLabel">Uruchom jako PWA</span>
                         </button>
                     </div>
                 </div>
@@ -4234,6 +4294,17 @@
                     <span>Dodaj do ekranu głównego</span>
                 </button>
             </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Informacje</div>
+                <div class="settings-row settings-row-version" id="dev-mode-trigger" role="button" tabindex="0"
+                     aria-label="Informacje o wersji aplikacji">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Wersja aplikacji</span>
+                    </div>
+                    <span class="dev-version-badge"></span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -4868,11 +4939,13 @@
 
             // ===== Install to Home Screen (PWA) =====
             let deferredPrompt = null;
+            window.pamInstallPrompt = null;
             const installBtn = document.getElementById('installAppBtn');
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
+                window.pamInstallPrompt = e;
                 if (installBtn) {
                     installBtn.disabled = false;
                     installBtn.classList.remove('installed');
@@ -4881,6 +4954,7 @@
 
             window.addEventListener('appinstalled', () => {
                 deferredPrompt = null;
+                window.pamInstallPrompt = null;
                 if (installBtn) {
                     installBtn.classList.add('installed');
                     installBtn.querySelector('span').textContent = 'Zainstalowano!';
@@ -4922,6 +4996,55 @@
                     }
                 });
             }
+        })();
+
+        // ===== DISPLAY MODE TOGGLE (PWA ↔ WEB) =====
+        (function () {
+            const btn = document.getElementById('displayModeToggle');
+            const labelEl = document.getElementById('displayModeLabel');
+            const iconEl = document.getElementById('displayModeIcon');
+            if (!btn || !labelEl || !iconEl) return;
+
+            function isStandalone() {
+                return window.matchMedia('(display-mode: standalone)').matches || Boolean(window.navigator.standalone);
+            }
+
+            function update() {
+                if (isStandalone()) {
+                    iconEl.className = 'fa-solid fa-arrow-up-right-from-square';
+                    labelEl.textContent = 'Otwórz w przeglądarce';
+                } else {
+                    iconEl.className = 'fa-solid fa-mobile-screen-button';
+                    labelEl.textContent = 'Uruchom jako PWA';
+                }
+            }
+
+            update();
+            window.matchMedia('(display-mode: standalone)').addEventListener('change', update);
+
+            btn.addEventListener('click', function () {
+                if (isStandalone()) {
+                    window.open(window.location.href, '_blank', 'noreferrer');
+                } else {
+                    const prompt = window.pamInstallPrompt;
+                    if (prompt) {
+                        prompt.prompt();
+                        prompt.userChoice.then(function (result) {
+                            if (result.outcome === 'accepted') window.pamInstallPrompt = null;
+                            update();
+                        }).catch(function () {
+                            update();
+                        });
+                    } else {
+                        const orig = labelEl.textContent;
+                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                        labelEl.textContent = isIOS
+                            ? 'Użyj „Udostępnij" → „Dodaj…"'
+                            : 'Zainstaluj przez menu (⋮)';
+                        setTimeout(function () { labelEl.textContent = orig; }, 4000);
+                    }
+                }
+            });
         })();
 
         // ===== PUSH NOTIFICATIONS =====
