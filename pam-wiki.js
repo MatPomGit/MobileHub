@@ -278,13 +278,16 @@ function buildSidebar() {
                 <span>${cat.name}</span>
                 <i class="fa-solid fa-chevron-down toggle-icon"></i>
             </h4>
-            <ul class="cat-list" id="${cat.id}">
+            <ul class="cat-list collapsed" id="${cat.id}">
                 ${cat.articles.map(id => {
                     const m = METADATA[id] || {};
                     return `<li><a href="#${id}" data-article="${id}"><i class="${m.icon || 'fa-solid fa-file'} article-icon"></i>${m.title || id}</a></li>`;
                 }).join('')}
             </ul>`;
         nav.appendChild(sec);
+        // Start collapsed: rotate toggle icon
+        const icon = sec.querySelector('.toggle-icon');
+        if (icon) icon.style.transform = 'rotate(-90deg)';
     });
 
     document.querySelectorAll('.cat-header').forEach(h => {
@@ -311,6 +314,18 @@ function buildSidebar() {
 function setActiveLink(id) {
     document.querySelectorAll('[data-article]').forEach(l => l.classList.remove('active'));
     document.querySelectorAll(`[data-article="${id}"]`).forEach(l => l.classList.add('active'));
+
+    // Expand the category that contains this article
+    const activeLink = document.querySelector(`[data-article="${id}"]`);
+    if (activeLink) {
+        const catList = activeLink.closest('.cat-list');
+        if (catList) {
+            catList.classList.remove('collapsed');
+            const header = document.querySelector(`[data-cat="${catList.id}"]`);
+            const icon = header?.querySelector('.toggle-icon');
+            if (icon) icon.style.transform = '';
+        }
+    }
 }
 
 function navigateToArticle(id, options = {}) {
