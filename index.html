@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>PAM WIKI — Programowanie aplikacji mobilnych</title>
+    <title>PAM WIKI --- Programowanie aplikacji mobilnych</title>
     <meta name="description"
         content="Baza wiedzy z programowania aplikacji mobilnych. Android, iOS, Flutter, XR, IoT, informatyka afektywna, gry mobilne.">
 
@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PAM WIKI">
-    <meta name="app-version" content="2.2">
+    <meta name="app-version" content="2.3">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -122,20 +122,31 @@
 
         /* Sunset — warm orange/red dark theme */
         [data-theme="sunset"] {
+            /* 60% — tło (ciemne, stabilne) */
             --bg: #1a0e08;
-            --surface: #271409;
-            --surface2: #321a0b;
-            --border: #4a2510;
+            --header-bg: #140904;
+            --code-bg: #12080a;
+
+            /* 30% — powierzchnie (lekko jaśniejsze, ale nadal neutralne) */
+            --surface: #24130a;
+            --surface2: #2e180c;
+            --border: #3a1d0e;
+
+            /* tekst (neutralny, bez akcentu) */
             --text: #fde8d0;
-            --text-muted: #b88060;
+            --text-muted: #a87458;
+
+            /* 10% — akcent (tylko interakcje / highlight) */
             --accent: #f97316;
             --accent2: #fb923c;
-            --accent-light: #3a1800;
-            --accent-glow: rgba(249, 115, 22, 0.25);
-            --code-bg: #12080a;
-            --header-bg: #100804;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+            /* ograniczenie „rozlewania się” akcentu */
+            --accent-light: #2a1406;      /* mniej nasycony */
+            --accent-glow: rgba(249, 115, 22, 0.18);
+
+            /* cienie (neutralne, nie pomarańczowe) */
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
         }
 
         /* Rose — pink/magenta light theme */
@@ -159,26 +170,48 @@
 
         /* Aurora — neon gradient theme */
         [data-theme="aurora"] {
+            /* 60% — tło (ciemne, chłodne) */
             --bg: #090b1f;
-            --surface: #11152d;
-            --surface2: #171c3b;
-            --border: #243062;
-            --text: #eff6ff;
-            --text-muted: #a0b4d4;
-            --accent: #8b5cf6;
-            --accent2: #22d3ee;
-            --accent3: #a3e635;
-            --accent4: #f472b6;
-            --accent-light: #1a1f47;
-            --accent-glow: rgba(139, 92, 246, 0.2);
-            --hero-overlay: linear-gradient(135deg, rgba(9,11,31,0.88) 0%, rgba(54,30,98,0.7) 45%, rgba(6,78,118,0.84) 100%);
-            --hero-orb-1: rgba(139, 92, 246, 0.35);
-            --hero-orb-2: rgba(34, 211, 238, 0.25);
-            --hero-orb-3: rgba(163, 230, 53, 0.18);
+            --header-bg: #070a17;
             --code-bg: #0c1022;
-            --header-bg: #080b18;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+            /* 30% — powierzchnie (umiarkowany kontrast) */
+            --surface: #0f142b;
+            --surface2: #151a36;
+            --border: #1f2850;
+
+            /* tekst */
+            --text: #eff6ff;
+            --text-muted: #9fb0cc;
+
+            /* 10% — akcent główny (spójny) */
+            --accent: #8b5cf6;
+
+            /* akcenty wtórne — zdegradowane (rzadkie użycie) */
+            --accent2: #22d3ee;
+            --accent3: #84cc16;   /* mniej jaskrawy niż wcześniej */
+            --accent4: #e879f9;   /* ograniczyć użycie */
+
+            /* ograniczenie „rozlewania” akcentów */
+            --accent-light: #141938;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+
+            /* hero — mniej agresywny, bardziej tło niż akcent */
+            --hero-overlay: linear-gradient(
+                135deg,
+                rgba(9,11,31,0.92) 0%,
+                rgba(40,30,80,0.65) 50%,
+                rgba(10,40,70,0.75) 100%
+            );
+
+            /* orbsy — wyraźnie przygaszone (de facto dekoracja, nie akcent) */
+            --hero-orb-1: rgba(139, 92, 246, 0.22);
+            --hero-orb-2: rgba(34, 211, 238, 0.16);
+            --hero-orb-3: rgba(132, 204, 22, 0.12);
+
+            /* cienie neutralne */
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
         }
 
         /* ===== RESET & BASE ===== */
