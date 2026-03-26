@@ -384,15 +384,15 @@
             </div>
             <div class="card-body">
 
-                <!-- GitHub Token setup -->
-                <div class="token-section">
+                <!-- GitHub Token setup — visible only in dev mode -->
+                <div class="token-section hidden" id="token-config">
                     <div class="alert alert-info" style="margin-bottom:12px;">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>Aby wysłać zgłoszenie, wymagany jest <strong>GitHub Personal Access Token</strong>
-                            z uprawnieniami <code>repo</code> (Contents write). Token jest przechowywany
-                            lokalnie w przeglądarce i nigdy nie jest wysyłany nigdzie indziej poza GitHub API.</span>
+                        <span>GitHub Personal Access Token z uprawnieniami <code>repo</code> (Contents write).
+                            Token jest przechowywany lokalnie w przeglądarce i nigdy nie jest wysyłany nigdzie
+                            indziej poza GitHub API.</span>
                     </div>
-                    <label for="gh-token-input">Token GitHub <span class="req">*</span></label>
+                    <label for="gh-token-input">Token GitHub</label>
                     <div class="token-row" style="margin-top:6px;">
                         <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off" spellcheck="false">
                         <button class="btn-sm" id="btn-save-token" type="button">Zapisz token</button>
@@ -401,7 +401,7 @@
                     <p class="token-status" id="token-status">Token nie jest zapisany.</p>
                 </div>
 
-                <hr style="border:none;border-top:1px solid var(--border);margin:20px 0;">
+                <hr id="token-hr" style="display:none;border:none;border-top:1px solid var(--border);margin:20px 0;">
 
                 <form id="submission-form" novalidate>
                     <div class="form-grid">
@@ -491,6 +491,36 @@
     }
 
     /* ------------------------------------------------------------------ */
+    /*  Dev mode — token section is only for the professor                  */
+    /* ------------------------------------------------------------------ */
+    const LS_DEV_KEY   = 'pam-dev-mode';
+    const LS_LOCAL_KEY = 'pam-students-local';
+
+    function isDevMode() {
+        return !!localStorage.getItem(LS_DEV_KEY);
+    }
+
+    function updateTokenSectionVisibility() {
+        const section = document.getElementById('token-config');
+        const hr      = document.getElementById('token-hr');
+        const devMode = isDevMode();
+        if (devMode) {
+            section.classList.remove('hidden');
+            hr.style.display = '';
+        } else {
+            section.classList.add('hidden');
+            hr.style.display = 'none';
+        }
+    }
+
+    /* React to dev mode toggled in the parent frame */
+    window.addEventListener('storage', function (e) {
+        if (e.key === LS_DEV_KEY) {
+            updateTokenSectionVisibility();
+        }
+    });
+
+    /* ------------------------------------------------------------------ */
     /*  GitHub Token management                                             */
     /* ------------------------------------------------------------------ */
     function getToken() {
@@ -528,7 +558,7 @@
     });
 
     /* ------------------------------------------------------------------ */
-    /*  Load data from repository                                           */
+    /*  Load data from repository and/or localStorage                       */
     /* ------------------------------------------------------------------ */
     async function loadData() {
         const tbody  = document.getElementById('students-tbody');
@@ -540,6 +570,8 @@
         tbody.innerHTML  = '';
         empty.className  = 'empty-state hidden';
 
+        let ghStudents = [];
+
         try {
             const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
             const headers = { 'Accept': 'application/vnd.github.v3+json' };
@@ -547,36 +579,48 @@
             if (tok) headers['Authorization'] = 'Bearer ' + tok;
 
             const resp = await fetch(url, { headers });
-            if (!resp.ok) {
+            if (resp.ok) {
+                const json = await resp.json();
+                const content = atob(json.content.replace(/\n/g, ''));
+                const parsed = JSON.parse(content);
+                if (Array.isArray(parsed)) ghStudents = parsed;
+            } else if (resp.status !== 401 && resp.status !== 403) {
                 throw new Error('HTTP ' + resp.status + ' – ' + resp.statusText);
             }
-            const json = await resp.json();
-            const content = atob(json.content.replace(/\n/g, ''));
-            const students = JSON.parse(content);
-
-            status.className = 'alert alert-info hidden';
-
-            if (!Array.isArray(students) || students.length === 0) {
-                empty.className = 'empty-state';
-                return;
-            }
-
-            students.forEach(function (s, i) {
-                const tr = document.createElement('tr');
-                tr.innerHTML =
-                    '<td>' + (i + 1) + '</td>' +
-                    '<td><strong>' + escHtml(s.imie) + ' ' + escHtml(s.nazwisko) + '</strong></td>' +
-                    '<td>' + escHtml(s.temat) + '</td>' +
-                    '<td style="max-width:260px;white-space:pre-wrap;">' + escHtml(s.opis) + '</td>' +
-                    '<td><span class="role-badge ' + roleClass(s.rola) + '">' + escHtml(s.rola) + '</span></td>' +
-                    '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.82rem;">' + escHtml(s.data || '') + '</td>';
-                tbody.appendChild(tr);
-            });
-
         } catch (err) {
             status.className = 'alert alert-error';
             status.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Błąd ładowania danych: ' + escHtml(err.message);
+            return;
         }
+
+        /* Merge local (token-less) submissions with GitHub data */
+        let localStudents = [];
+        try {
+            localStudents = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
+            if (!Array.isArray(localStudents)) localStudents = [];
+        } catch (e) {
+            localStudents = [];
+        }
+        const allStudents = ghStudents.concat(localStudents);
+
+        status.className = 'alert alert-info hidden';
+
+        if (allStudents.length === 0) {
+            empty.className = 'empty-state';
+            return;
+        }
+
+        allStudents.forEach(function (s, i) {
+            const tr = document.createElement('tr');
+            tr.innerHTML =
+                '<td>' + (i + 1) + '</td>' +
+                '<td><strong>' + escHtml(s.imie) + ' ' + escHtml(s.nazwisko) + '</strong></td>' +
+                '<td>' + escHtml(s.temat) + '</td>' +
+                '<td style="max-width:260px;white-space:pre-wrap;">' + escHtml(s.opis) + '</td>' +
+                '<td><span class="role-badge ' + roleClass(s.rola) + '">' + escHtml(s.rola) + '</span></td>' +
+                '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.82rem;">' + escHtml(s.data || '') + '</td>';
+            tbody.appendChild(tr);
+        });
     }
 
     function escHtml(str) {
@@ -589,14 +633,24 @@
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Save data to repository via GitHub API                             */
+    /*  Save data — GitHub API when token is available, localStorage        */
+    /*  otherwise so students can submit without a token                    */
     /* ------------------------------------------------------------------ */
     async function saveData(newEntry) {
         const tok = getToken();
+
         if (!tok) {
-            showAlert('Brak tokenu GitHub. Wpisz i zapisz token przed wysłaniem zgłoszenia.', 'error');
-            document.getElementById('gh-token-input').focus();
-            return false;
+            /* No token — store locally so the form still works for students */
+            let existing = [];
+            try {
+                existing = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
+                if (!Array.isArray(existing)) existing = [];
+            } catch (e) {
+                existing = [];
+            }
+            existing.push(newEntry);
+            localStorage.setItem(LS_LOCAL_KEY, JSON.stringify(existing));
+            return true;
         }
 
         const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
@@ -692,7 +746,10 @@
         btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
 
         if (ok) {
-            showAlert('Zgłoszenie zostało pomyślnie zapisane w repozytorium!', 'success');
+            const msg = getToken()
+                ? 'Zgłoszenie zostało pomyślnie zapisane w repozytorium!'
+                : 'Zgłoszenie zostało zapisane.';
+            showAlert(msg, 'success');
             document.getElementById('submission-form').reset();
             /* Reload table to show updated data */
             await loadData();
@@ -702,6 +759,7 @@
     /* ------------------------------------------------------------------ */
     /*  Init                                                                */
     /* ------------------------------------------------------------------ */
+    updateTokenSectionVisibility();
     updateTokenStatus();
     loadData();
     </script>
