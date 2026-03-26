@@ -75,6 +75,7 @@ const ARTICLES = {
     'app-design-process':    'wiki/app-design-process.md',
     'app-metadata':          'wiki/app-metadata.md',
     'file-storage-mobile':   'wiki/file-storage-mobile.md',
+    'gamedev-market':        'wiki/gamedev-market.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -148,6 +149,7 @@ const METADATA = {
     'app-design-process':    { category: 'Projektowanie i OS',            title: 'Proces projektowania — Brief, BRD, FRD, TRD', icon: 'fa-solid fa-file-lines' },
     'app-metadata':          { category: 'Projektowanie i OS',            title: 'Zbieranie metadanych przez aplikację',      icon: 'fa-solid fa-tags' },
     'file-storage-mobile':   { category: 'Programowanie natywne Android', title: 'Zapisywanie i odczyt plików na urządzeniu mobilnym', icon: 'fa-solid fa-file-arrow-down' },
+    'gamedev-market':        { category: 'Gry mobilne',                    title: 'Rynek gamedev w Polsce i na świecie',               icon: 'fa-solid fa-earth-europe' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
@@ -162,7 +164,7 @@ const CATEGORIES = [
     { id: 'cat-iot',      name: 'IoT mobile',                     icon: 'fa-solid fa-wifi',                 articles: ['iot-mobile','wifi-networking','smart-home','mqtt-protocol'] },
     { id: 'cat-affective',name: 'Informatyka afektywna',          icon: 'fa-solid fa-face-smile',           articles: ['affective-computing','emotion-recognition','voice-analysis','mental-health-apps'] },
     { id: 'cat-xr',       name: 'XR i rozszerzona rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
-    { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','unity-advanced','game-physics','game-monetization'] },
+    { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','unity-advanced','game-physics','game-monetization','gamedev-market'] },
     { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui'] },
     { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
 ];
