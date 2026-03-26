@@ -2,7 +2,7 @@
  * PAM WIKI — Tryb deweloperski
  * Katedra Informatyki · Politechnika Rzeszowska
  *
- * Aktywacja: kliknij odznakę "KIA · PRz" w prawym górnym rogu.
+ * Aktywacja: kliknij 5 razy wiersz „Wersja aplikacji" w panelu ustawień.
  * Stan przechowywany w localStorage pod kluczem "pam-dev-mode".
  */
 
@@ -182,14 +182,24 @@
     }
 
     function markBadge(active) {
-        const badge = document.getElementById('dev-mode-trigger');
-        if (!badge) return;
-        if (active) {
-            badge.setAttribute('data-dev-active', 'true');
-            badge.title = 'Tryb deweloperski WŁĄCZONY – kliknij, aby wyłączyć';
-        } else {
-            badge.removeAttribute('data-dev-active');
-            badge.title = 'Kliknij, aby włączyć tryb deweloperski';
+        const trigger = document.getElementById('dev-mode-trigger');
+        if (trigger) {
+            if (active) {
+                trigger.setAttribute('data-dev-active', 'true');
+                trigger.title = 'Tryb deweloperski WŁĄCZONY – kliknij, aby wyłączyć';
+            } else {
+                trigger.removeAttribute('data-dev-active');
+                trigger.title = 'Kliknij 5 razy, aby włączyć tryb deweloperski';
+            }
+        }
+        /* Keep the header badge as a visual indicator */
+        const headerBadge = document.getElementById('header-badge-kia');
+        if (headerBadge) {
+            if (active) {
+                headerBadge.setAttribute('data-dev-active', 'true');
+            } else {
+                headerBadge.removeAttribute('data-dev-active');
+            }
         }
     }
 
@@ -209,26 +219,69 @@
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Obsługa kliknięcia (przełącznik)                                    */
-    /* ------------------------------------------------------------------ */
-    function handleBadgeClick() {
-        if (localStorage.getItem(LS_KEY)) {
-            deactivateDev();
-        } else {
-            activateDev();
-        }
-    }
-
-    /* ------------------------------------------------------------------ */
     /*  Inicjalizacja                                                       */
     /* ------------------------------------------------------------------ */
     function init() {
-        const badge = document.getElementById('dev-mode-trigger');
-        if (!badge) return;
+        const trigger = document.getElementById('dev-mode-trigger');
+        if (!trigger) return;
 
-        badge.addEventListener('click', handleBadgeClick);
+        /* Populate version text from meta tag */
+        const versionBadge = trigger.querySelector('.dev-version-badge');
+        const appVersion = (document.querySelector('meta[name="app-version"]') || {}).content || '?';
+        if (versionBadge) {
+            versionBadge.textContent = 'PAM WIKI ' + appVersion;
+        }
 
-        /* Tryb dev domyślnie wyłączony – wyczyść ewentualny poprzedni stan */
+        let tapCount = 0;
+        let tapTimer = null;
+        const TAPS_REQUIRED = 5;
+        const TAP_WINDOW_MS = 2000;
+
+        trigger.addEventListener('click', function () {
+            if (localStorage.getItem(LS_KEY)) {
+                /* Dev mode active: single click deactivates */
+                deactivateDev();
+                return;
+            }
+
+            /* Count taps towards activation */
+            tapCount++;
+            clearTimeout(tapTimer);
+
+            if (tapCount >= TAPS_REQUIRED) {
+                tapCount = 0;
+                trigger.removeAttribute('data-taps-left');
+                if (versionBadge) versionBadge.textContent = 'PAM WIKI ' + appVersion;
+                activateDev();
+            } else {
+                const remaining = TAPS_REQUIRED - tapCount;
+                trigger.setAttribute('data-taps-left', remaining);
+                const form = remaining === 1 ? 'kliknięcie' : 'kliknięcia';
+                if (versionBadge) versionBadge.textContent = 'Jeszcze\u00a0' + remaining + '\u00a0' + form;
+                tapTimer = setTimeout(function () {
+                    tapCount = 0;
+                    trigger.removeAttribute('data-taps-left');
+                    if (versionBadge) versionBadge.textContent = 'PAM WIKI ' + appVersion;
+                }, TAP_WINDOW_MS);
+            }
+        });
+
+        /* In web (non-PWA) mode, header badge acts as a single-click dev toggle */
+        const headerBadge = document.getElementById('header-badge-kia');
+        if (headerBadge) {
+            headerBadge.addEventListener('click', function () {
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || Boolean(window.navigator.standalone);
+                if (!isStandalone) {
+                    if (localStorage.getItem(LS_KEY)) {
+                        deactivateDev();
+                    } else {
+                        activateDev();
+                    }
+                }
+            });
+        }
+
+        /* Dev mode disabled by default – clear any lingering state */
         localStorage.removeItem(LS_KEY);
         markBadge(false);
         hideStudenciTab();

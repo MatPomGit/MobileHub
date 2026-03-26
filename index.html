@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>PAM WIKI — Programowanie aplikacji mobilnych</title>
+    <title>PAM WIKI --- Programowanie aplikacji mobilnych</title>
     <meta name="description"
         content="Baza wiedzy z programowania aplikacji mobilnych. Android, iOS, Flutter, XR, IoT, informatyka afektywna, gry mobilne.">
 
@@ -15,7 +15,7 @@
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="apple-mobile-web-app-title" content="PAM WIKI">
-    <meta name="app-version" content="2.2">
+    <meta name="app-version" content="2.3">
     <link rel="apple-touch-icon" href="assets/icon-192.png">
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -122,20 +122,31 @@
 
         /* Sunset — warm orange/red dark theme */
         [data-theme="sunset"] {
+            /* 60% — tło (ciemne, stabilne) */
             --bg: #1a0e08;
-            --surface: #271409;
-            --surface2: #321a0b;
-            --border: #4a2510;
+            --header-bg: #140904;
+            --code-bg: #12080a;
+
+            /* 30% — powierzchnie (lekko jaśniejsze, ale nadal neutralne) */
+            --surface: #24130a;
+            --surface2: #2e180c;
+            --border: #3a1d0e;
+
+            /* tekst (neutralny, bez akcentu) */
             --text: #fde8d0;
-            --text-muted: #b88060;
+            --text-muted: #a87458;
+
+            /* 10% — akcent (tylko interakcje / highlight) */
             --accent: #f97316;
             --accent2: #fb923c;
-            --accent-light: #3a1800;
-            --accent-glow: rgba(249, 115, 22, 0.25);
-            --code-bg: #12080a;
-            --header-bg: #100804;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+            /* ograniczenie „rozlewania się” akcentu */
+            --accent-light: #2a1406;      /* mniej nasycony */
+            --accent-glow: rgba(249, 115, 22, 0.18);
+
+            /* cienie (neutralne, nie pomarańczowe) */
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
         }
 
         /* Rose — pink/magenta light theme */
@@ -159,26 +170,48 @@
 
         /* Aurora — neon gradient theme */
         [data-theme="aurora"] {
+            /* 60% — tło (ciemne, chłodne) */
             --bg: #090b1f;
-            --surface: #11152d;
-            --surface2: #171c3b;
-            --border: #243062;
-            --text: #eff6ff;
-            --text-muted: #a0b4d4;
-            --accent: #8b5cf6;
-            --accent2: #22d3ee;
-            --accent3: #a3e635;
-            --accent4: #f472b6;
-            --accent-light: #1a1f47;
-            --accent-glow: rgba(139, 92, 246, 0.2);
-            --hero-overlay: linear-gradient(135deg, rgba(9,11,31,0.88) 0%, rgba(54,30,98,0.7) 45%, rgba(6,78,118,0.84) 100%);
-            --hero-orb-1: rgba(139, 92, 246, 0.35);
-            --hero-orb-2: rgba(34, 211, 238, 0.25);
-            --hero-orb-3: rgba(163, 230, 53, 0.18);
+            --header-bg: #070a17;
             --code-bg: #0c1022;
-            --header-bg: #080b18;
-            --shadow: 0 4px 24px rgba(0, 0, 0, 0.4);
-            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.5);
+
+            /* 30% — powierzchnie (umiarkowany kontrast) */
+            --surface: #0f142b;
+            --surface2: #151a36;
+            --border: #1f2850;
+
+            /* tekst */
+            --text: #eff6ff;
+            --text-muted: #9fb0cc;
+
+            /* 10% — akcent główny (spójny) */
+            --accent: #8b5cf6;
+
+            /* akcenty wtórne — zdegradowane (rzadkie użycie) */
+            --accent2: #22d3ee;
+            --accent3: #84cc16;   /* mniej jaskrawy niż wcześniej */
+            --accent4: #e879f9;   /* ograniczyć użycie */
+
+            /* ograniczenie „rozlewania” akcentów */
+            --accent-light: #141938;
+            --accent-glow: rgba(139, 92, 246, 0.15);
+
+            /* hero — mniej agresywny, bardziej tło niż akcent */
+            --hero-overlay: linear-gradient(
+                135deg,
+                rgba(9,11,31,0.92) 0%,
+                rgba(40,30,80,0.65) 50%,
+                rgba(10,40,70,0.75) 100%
+            );
+
+            /* orbsy — wyraźnie przygaszone (de facto dekoracja, nie akcent) */
+            --hero-orb-1: rgba(139, 92, 246, 0.22);
+            --hero-orb-2: rgba(34, 211, 238, 0.16);
+            --hero-orb-3: rgba(132, 204, 22, 0.12);
+
+            /* cienie neutralne */
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
         }
 
         /* ===== RESET & BASE ===== */
@@ -382,6 +415,10 @@
             user-select: none;
             -webkit-user-select: none;
             transition: background 0.2s ease;
+        }
+
+        .pwa-standalone .header-badge {
+            cursor: default;
         }
 
         .header-badge[data-dev-active] {
@@ -619,6 +656,12 @@
         .theme-option.active {
             background: var(--accent-light);
             color: var(--accent);
+        }
+
+        .theme-picker-divider {
+            height: 1px;
+            background: var(--border);
+            margin: 6px 2px;
         }
 
         .theme-swatch {
@@ -3232,6 +3275,50 @@
                 cursor: default;
             }
 
+            /* Dev mode trigger in settings panel */
+            .settings-row-version {
+                cursor: pointer;
+                user-select: none;
+                -webkit-user-select: none;
+                position: relative;
+                -webkit-tap-highlight-color: transparent;
+            }
+
+            .settings-row-version:active {
+                background: var(--surface2);
+                border-radius: 8px;
+            }
+
+            .dev-version-badge {
+                font-size: 12px;
+                font-weight: 600;
+                color: var(--text-muted);
+                background: var(--surface2);
+                padding: 3px 10px;
+                border-radius: 12px;
+                transition: background 0.2s ease, color 0.2s ease;
+                white-space: nowrap;
+            }
+
+            .settings-row-version[data-dev-active] .dev-version-badge {
+                background: rgba(220, 38, 38, 0.15);
+                color: #ef4444;
+            }
+
+            .settings-row-version[data-dev-active] .settings-row-label i {
+                color: #ef4444;
+            }
+
+            .settings-row-version[data-taps-left] .dev-version-badge {
+                background: var(--accent-light);
+                color: var(--accent);
+            }
+
+            .settings-row-version[data-taps-left] {
+                background: var(--surface2);
+                border-radius: 8px;
+            }
+
             /* ===== PULL-DOWN PANEL: CATEGORIES ===== */
             .pull-categories {
                 margin-top: 14px;
@@ -3407,7 +3494,7 @@
                 </div>
             </a>
             <div class="header-actions">
-                <button class="header-badge" id="dev-mode-trigger" aria-label="KIA · PRz">KIA · PRz</button>
+                <button class="header-badge" id="header-badge-kia" aria-label="KIA · PRz">KIA · PRz</button>
                 <div class="theme-picker" id="themePicker">
                     <button class="btn-icon" id="themePickerBtn" title="Zmień motyw" aria-label="Wybierz motyw kolorystyczny" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-palette"></i>
@@ -3434,6 +3521,12 @@
                         </button>
                         <button class="theme-option" data-theme="aurora" role="menuitem">
                             <span class="theme-swatch aurora"></span>Aurora
+                        </button>
+                        <div class="theme-picker-divider"></div>
+                        <div class="theme-picker-label">Widok</div>
+                        <button class="theme-option" id="displayModeToggle" role="menuitem">
+                            <i class="fa-solid fa-mobile-screen-button" id="displayModeIcon"></i>
+                            <span id="displayModeLabel">Uruchom jako PWA</span>
                         </button>
                     </div>
                 </div>
@@ -4224,6 +4317,17 @@
                     <span>Dodaj do ekranu głównego</span>
                 </button>
             </div>
+            <div class="settings-section">
+                <div class="settings-section-title">Informacje</div>
+                <div class="settings-row settings-row-version" id="dev-mode-trigger" role="button" tabindex="0"
+                     aria-label="Informacje o wersji aplikacji">
+                    <div class="settings-row-label">
+                        <i class="fa-solid fa-circle-info"></i>
+                        <span>Wersja aplikacji</span>
+                    </div>
+                    <span class="dev-version-badge"></span>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -4858,11 +4962,13 @@
 
             // ===== Install to Home Screen (PWA) =====
             let deferredPrompt = null;
+            window.pamInstallPrompt = null;
             const installBtn = document.getElementById('installAppBtn');
 
             window.addEventListener('beforeinstallprompt', (e) => {
                 e.preventDefault();
                 deferredPrompt = e;
+                window.pamInstallPrompt = e;
                 if (installBtn) {
                     installBtn.disabled = false;
                     installBtn.classList.remove('installed');
@@ -4871,6 +4977,7 @@
 
             window.addEventListener('appinstalled', () => {
                 deferredPrompt = null;
+                window.pamInstallPrompt = null;
                 if (installBtn) {
                     installBtn.classList.add('installed');
                     installBtn.querySelector('span').textContent = 'Zainstalowano!';
@@ -4912,6 +5019,55 @@
                     }
                 });
             }
+        })();
+
+        // ===== DISPLAY MODE TOGGLE (PWA ↔ WEB) =====
+        (function () {
+            const btn = document.getElementById('displayModeToggle');
+            const labelEl = document.getElementById('displayModeLabel');
+            const iconEl = document.getElementById('displayModeIcon');
+            if (!btn || !labelEl || !iconEl) return;
+
+            function isStandalone() {
+                return window.matchMedia('(display-mode: standalone)').matches || Boolean(window.navigator.standalone);
+            }
+
+            function update() {
+                if (isStandalone()) {
+                    iconEl.className = 'fa-solid fa-arrow-up-right-from-square';
+                    labelEl.textContent = 'Otwórz w przeglądarce';
+                } else {
+                    iconEl.className = 'fa-solid fa-mobile-screen-button';
+                    labelEl.textContent = 'Uruchom jako PWA';
+                }
+            }
+
+            update();
+            window.matchMedia('(display-mode: standalone)').addEventListener('change', update);
+
+            btn.addEventListener('click', function () {
+                if (isStandalone()) {
+                    window.open(window.location.href, '_blank', 'noreferrer');
+                } else {
+                    const prompt = window.pamInstallPrompt;
+                    if (prompt) {
+                        prompt.prompt();
+                        prompt.userChoice.then(function (result) {
+                            if (result.outcome === 'accepted') window.pamInstallPrompt = null;
+                            update();
+                        }).catch(function () {
+                            update();
+                        });
+                    } else {
+                        const orig = labelEl.textContent;
+                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+                        labelEl.textContent = isIOS
+                            ? 'Użyj „Udostępnij" → „Dodaj…"'
+                            : 'Zainstaluj przez menu (⋮)';
+                        setTimeout(function () { labelEl.textContent = orig; }, 4000);
+                    }
+                }
+            });
         })();
 
         // ===== PUSH NOTIFICATIONS =====
