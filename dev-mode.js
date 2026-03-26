@@ -266,6 +266,21 @@
             }
         });
 
+        /* In web (non-PWA) mode, header badge acts as a single-click dev toggle */
+        const headerBadge = document.getElementById('header-badge-kia');
+        if (headerBadge) {
+            headerBadge.addEventListener('click', function () {
+                const isStandalone = window.matchMedia('(display-mode: standalone)').matches || Boolean(window.navigator.standalone);
+                if (!isStandalone) {
+                    if (localStorage.getItem(LS_KEY)) {
+                        deactivateDev();
+                    } else {
+                        activateDev();
+                    }
+                }
+            });
+        }
+
         /* Dev mode disabled by default – clear any lingering state */
         localStorage.removeItem(LS_KEY);
         markBadge(false);
