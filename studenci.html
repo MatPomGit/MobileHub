@@ -338,6 +338,59 @@
             margin-bottom: 16px;
         }
 
+        .token-toggle {
+            width: 100%;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 14px;
+            cursor: pointer;
+            font-family: var(--font);
+            font-size: 0.9rem;
+            font-weight: 600;
+            color: var(--text);
+            text-align: left;
+            transition: background 0.2s;
+        }
+
+        .token-toggle:hover { background: var(--border); }
+
+        .token-toggle-label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .token-toggle-status {
+            flex: 1;
+            font-size: 0.8rem;
+            font-weight: 400;
+            color: var(--text-muted);
+        }
+
+        .token-toggle-status.ok { color: #059669; }
+
+        .token-toggle-chevron {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            transition: transform 0.2s;
+        }
+
+        .token-toggle[aria-expanded="true"] .token-toggle-chevron {
+            transform: rotate(180deg);
+        }
+
+        .token-body {
+            margin-top: 10px;
+            padding: 14px;
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+        }
+
         .token-row {
             display: flex;
             gap: 8px;
@@ -444,19 +497,30 @@
 
                 <!-- GitHub Token setup — visible only in dev mode -->
                 <div class="token-section hidden" id="token-config">
-                    <div class="alert alert-info" style="margin-bottom:12px;">
-                        <i class="fa-solid fa-circle-info"></i>
-                        <span>GitHub Personal Access Token z uprawnieniami <code>repo</code> (Contents write).
-                            Token jest przechowywany lokalnie w przeglądarce i nigdy nie jest wysyłany nigdzie
-                            indziej poza GitHub API.</span>
+                    <button class="token-toggle" id="token-toggle" type="button"
+                            aria-expanded="false" aria-controls="token-body">
+                        <span class="token-toggle-label">
+                            <i class="fa-solid fa-key" aria-hidden="true"></i>
+                            Token GitHub
+                        </span>
+                        <span class="token-toggle-status" id="token-toggle-status"></span>
+                        <i class="fa-solid fa-chevron-down token-toggle-chevron" aria-hidden="true"></i>
+                    </button>
+                    <div class="token-body hidden" id="token-body">
+                        <div class="alert alert-info" style="margin-bottom:12px;">
+                            <i class="fa-solid fa-circle-info"></i>
+                            <span>GitHub Personal Access Token z uprawnieniami <code>repo</code> (Contents write).
+                                Token jest przechowywany lokalnie w przeglądarce i nigdy nie jest wysyłany nigdzie
+                                indziej poza GitHub API.</span>
+                        </div>
+                        <label for="gh-token-input">Wartość tokena</label>
+                        <div class="token-row" style="margin-top:6px;">
+                            <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off" spellcheck="false">
+                            <button class="btn-sm" id="btn-save-token" type="button">Zapisz token</button>
+                            <button class="btn-sm danger" id="btn-clear-token" type="button">Usuń</button>
+                        </div>
+                        <p class="token-status" id="token-status">Token nie jest zapisany.</p>
                     </div>
-                    <label for="gh-token-input">Token GitHub</label>
-                    <div class="token-row" style="margin-top:6px;">
-                        <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off" spellcheck="false">
-                        <button class="btn-sm" id="btn-save-token" type="button">Zapisz token</button>
-                        <button class="btn-sm danger" id="btn-clear-token" type="button">Usuń</button>
-                    </div>
-                    <p class="token-status" id="token-status">Token nie jest zapisany.</p>
                 </div>
 
                 <hr id="token-hr" style="display:none;border:none;border-top:1px solid var(--border);margin:20px 0;">
@@ -607,19 +671,31 @@
 
     function updateTokenStatus() {
         const tok = getToken();
-        const status = document.getElementById('token-status');
-        const input  = document.getElementById('gh-token-input');
+        const status       = document.getElementById('token-status');
+        const toggleStatus = document.getElementById('token-toggle-status');
+        const input        = document.getElementById('gh-token-input');
         if (tok) {
             status.textContent = 'Token zapisany (' + tok.slice(0, 8) + '…).';
             status.className = 'token-status ok';
+            toggleStatus.textContent = '✓ skonfigurowany';
+            toggleStatus.className = 'token-toggle-status ok';
             input.value = '';
             input.placeholder = '(token jest zapisany)';
         } else {
             status.textContent = 'Token nie jest zapisany.';
             status.className = 'token-status';
+            toggleStatus.textContent = 'nie skonfigurowany';
+            toggleStatus.className = 'token-toggle-status';
             input.placeholder = 'ghp_…';
         }
     }
+
+    document.getElementById('token-toggle').addEventListener('click', function () {
+        const body     = document.getElementById('token-body');
+        const expanded = this.getAttribute('aria-expanded') === 'true';
+        this.setAttribute('aria-expanded', String(!expanded));
+        body.classList.toggle('hidden', expanded);
+    });
 
     document.getElementById('btn-save-token').addEventListener('click', function () {
         const val = document.getElementById('gh-token-input').value.trim();
