@@ -3529,12 +3529,7 @@
                         <button class="theme-option" data-theme="aurora" role="menuitem">
                             <span class="theme-swatch aurora"></span>Aurora
                         </button>
-                        <div class="theme-picker-divider"></div>
-                        <div class="theme-picker-label">Widok</div>
-                        <button class="theme-option" id="displayModeToggle" role="menuitem">
-                            <i class="fa-solid fa-mobile-screen-button" id="displayModeIcon"></i>
-                            <span id="displayModeLabel">Uruchom jako PWA</span>
-                        </button>
+
                     </div>
                 </div>
             </div>
@@ -5028,54 +5023,6 @@
             }
         })();
 
-        // ===== DISPLAY MODE TOGGLE (PWA ↔ WEB) =====
-        (function () {
-            const btn = document.getElementById('displayModeToggle');
-            const labelEl = document.getElementById('displayModeLabel');
-            const iconEl = document.getElementById('displayModeIcon');
-            if (!btn || !labelEl || !iconEl) return;
-
-            function isStandalone() {
-                return window.matchMedia('(display-mode: standalone)').matches || Boolean(window.navigator.standalone);
-            }
-
-            function update() {
-                if (isStandalone()) {
-                    iconEl.className = 'fa-solid fa-arrow-up-right-from-square';
-                    labelEl.textContent = 'Otwórz w przeglądarce';
-                } else {
-                    iconEl.className = 'fa-solid fa-mobile-screen-button';
-                    labelEl.textContent = 'Uruchom jako PWA';
-                }
-            }
-
-            update();
-            window.matchMedia('(display-mode: standalone)').addEventListener('change', update);
-
-            btn.addEventListener('click', function () {
-                if (isStandalone()) {
-                    window.open(window.location.href, '_blank', 'noreferrer');
-                } else {
-                    const prompt = window.pamInstallPrompt;
-                    if (prompt) {
-                        prompt.prompt();
-                        prompt.userChoice.then(function (result) {
-                            if (result.outcome === 'accepted') window.pamInstallPrompt = null;
-                            update();
-                        }).catch(function () {
-                            update();
-                        });
-                    } else {
-                        const orig = labelEl.textContent;
-                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                        labelEl.textContent = isIOS
-                            ? 'Użyj „Udostępnij" → „Dodaj…"'
-                            : 'Zainstaluj przez menu (⋮)';
-                        setTimeout(function () { labelEl.textContent = orig; }, 4000);
-                    }
-                }
-            });
-        })();
 
         // ===== PUSH NOTIFICATIONS =====
         (function () {
