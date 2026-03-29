@@ -4,6 +4,8 @@ Biometria mobilna (odcisk palca, rozpoznawanie twarzy) zastępuje tradycyjne has
 
 ## BiometricPrompt — Android
 
+`BiometricPrompt` to rekomendowane przez Google API do obsługi uwierzytelniania biometrycznego na Androidzie, zapewniające spójny interfejs niezależnie od typu sensora (odcisk palca, twarz, tęczówka). Poniższy przykład implementuje klasę menedżera, która sprawdza dostępność biometrii i wyświetla systemowy dialog uwierzytelniania z obsługą sukcesu, błędu i nieudanej próby. Wyliczenie `BiometricStatus` pozwala czytelnie komunikować różne stany dostępności biometrii w logice aplikacji.
+
 ```kotlin
 class BiometricAuthManager(private val activity: FragmentActivity) {
 
@@ -153,6 +155,8 @@ class CryptoAuthManager(private val activity: FragmentActivity) {
 ```
 
 ## Face ID / Touch ID — iOS (LocalAuthentication)
+
+Na platformie iOS uwierzytelnianie biometryczne jest dostępne poprzez framework `LocalAuthentication`, obsługujący zarówno Face ID, jak i Touch ID. Poniższy przykład w Swift implementuje klasę `BiometricAuth` z metodami sprawdzającymi dostępność sensora, przeprowadzającymi prostą autentykację oraz autentykację z fallbackiem do hasła urządzenia. Integracja z SwiftUI jest zaprezentowana jako kompletny widok, który automatycznie inicjuje uwierzytelnianie po wyświetleniu i obsługuje różne scenariusze błędów.
 
 ```swift
 import LocalAuthentication

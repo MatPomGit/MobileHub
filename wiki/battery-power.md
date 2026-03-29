@@ -71,6 +71,8 @@ Takie podejście jest poprawne, ponieważ:
 * pozwala narzucić ograniczenia, np. dostępność sieci,
 * zapobiega uruchamianiu kosztownej pracy w złym momencie.
 
+Kluczowym elementem planowania zadań w tle jest zdefiniowanie warunków, które muszą być spełnione przed uruchomieniem pracy. Poniższy kod przedstawia tworzenie zestawu ograniczeń dla `WorkManager`, takich jak wymaganie połączenia sieciowego i minimalnego poziomu baterii. Dzięki tym ograniczeniom system może odłożyć wykonanie zadania na odpowiedniejszy moment.
+
 ```kotlin
 val constraints = Constraints.Builder()
     .setRequiredNetworkType(NetworkType.CONNECTED)
@@ -158,6 +160,8 @@ Typowe reakcje aplikacji na aktywny Battery Saver:
 * zmniejszenie precyzji lokalizacji,
 * rezygnacja z prefetchingu danych i obrazów.
 
+Aby aplikacja mogła dynamicznie reagować na włączenie lub wyłączenie trybu oszczędzania energii, należy nasłuchiwać na odpowiednie zdarzenie systemowe. Poniższy przykład rejestruje odbiornik rozgłoszeniowy, który monitoruje zmiany stanu Battery Saver. Takie podejście pozwala natychmiast dostosować zachowanie aplikacji do aktualnego stanu urządzenia.
+
 ```kotlin
 registerReceiver(object : BroadcastReceiver() {
     override fun onReceive(ctx: Context, intent: Intent) {
@@ -209,6 +213,8 @@ Foreground Service to specjalny typ usługi, która pozostaje widoczna dla użyt
 * rejestrowanie trasy,
 * nagrywanie audio lub wideo,
 * aktywne połączenie telefoniczne lub VoIP.
+
+Poniższy przykład ilustruje implementację usługi pierwszoplanowej przeznaczonej do ciągłego śledzenia trasy użytkownika. Serwis uruchamia stałą notyfikację informującą użytkownika o działaniu usługi, co jest wymagane przez system Android dla wszystkich usług pierwszoplanowych. Ważne jest, aby trwała notyfikacja zawierała opcję zatrzymania nagrywania, zapewniając użytkownikowi pełną kontrolę.
 
 ```kotlin
 class LocationTrackingService : Service() {

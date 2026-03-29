@@ -165,6 +165,8 @@ Wiele komponentów Compose ma sensowną semantykę wbudowaną domyślnie. Nie na
 
 ### Rola elementu
 
+Każdy interaktywny element interfejsu powinien posiadać odpowiednie oznaczenie roli semantycznej, aby czytniki ekranu mogły go poprawnie zinterpretować. Poniższy przykład pokazuje, jak przypisać rolę `Button` do zwykłego kontenera `Box` przy użyciu modyfikatora semantyki. Dzięki temu użytkownicy TalkBack usłyszą prawidłową informację o tym, że dany element jest przyciskiem.
+
 ```kotlin
 Box(
     modifier = Modifier
@@ -184,6 +186,8 @@ Button(onClick = { submit() }) {
 ```
 
 ### Opis stanu
+
+Elementy przełączające — takie jak `Switch` — powinny komunikować swój aktualny stan w sposób zrozumiały dla technologii asystujących. Właściwość `stateDescription` pozwala określić, co zostanie odczytane użytkownikowi, gdy fokus dotknie tego elementu. Poniższy przykład ilustruje, jak dostosować opis stanu przełącznika do kontekstu aplikacji.
 
 ```kotlin
 Switch(
@@ -491,6 +495,8 @@ Minimalny zestaw:
 
 ### 2. Testy automatyczne Compose
 
+Testy automatyczne pozwalają weryfikować poprawność implementacji dostępności bez potrzeby każdorazowego ręcznego sprawdzania z TalkBack. Poniższy przykład pokazuje, jak w Jetpack Compose przetestować, czy karta zadania posiada znaczący opis dostępności. Asercja sprawdza, czy element o konkretnym opisie istnieje w drzewie semantycznym.
+
 ```kotlin
 @Test
 fun taskCard_hasMeaningfulAccessibilityDescription() {
@@ -507,6 +513,8 @@ fun taskCard_hasMeaningfulAccessibilityDescription() {
 ```
 
 ### 3. Kontrola celów dotykowych
+
+Weryfikacja minimalnego rozmiaru celów dotykowych może być częścią automatycznych testów UI. Poniższy test sprawdza, czy przycisk usuwania spełnia wymagane minimum 48dp × 48dp. Takie testy zabezpieczają przed regresją, gdy layout jest modyfikowany przez innych członków zespołu.
 
 ```kotlin
 @Test

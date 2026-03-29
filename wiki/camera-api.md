@@ -107,6 +107,8 @@ Dokumentacja CameraX opisuje model oparty na abstrakcji `use case`. Dostępne s�
 
 ### 4.2 Schemat logiczny
 
+Zrozumienie architektury CameraX jest kluczowe dla prawidłowego projektowania aplikacji kamerowych. Poniższy diagram pokazuje hierarchię zależności między głównym dostawcą kamery a poszczególnymi przypadkami użycia: podglądem, fotografowaniem i analizą. Każdy use case działa niezależnie, lecz wszystkie są koordynowane przez `ProcessCameraProvider` i wiązane z cyklem życia komponentu.
+
 ```text
                      +-------------------------+
                      |   ProcessCameraProvider |
@@ -192,6 +194,8 @@ Z punktu widzenia UX i bezpieczeństwa użytkownik powinien znać powód żądan
 
 ### Przykład – bramka uprawnień w Compose
 
+Przed uruchomieniem kamery aplikacja musi sprawdzić i ewentualnie poprosić o odpowiednie uprawnienie systemowe. Poniższy przykład pokazuje implementację composable pełniącego rolę „bramki uprawnień" — wyświetla treść kamery po udzieleniu zgody, a komunikat z prośbą o uprawnienie, jeśli zgoda nie została jeszcze nadana. Takie podejście pozwala elegancko obsłużyć oba stany bez rozpraszania logiki w głównym ekranie.
+
 ```kotlin
 @Composable
 fun CameraPermissionGate(content: @Composable () -> Unit) {
@@ -256,6 +260,8 @@ Dokumentacja wskazuje, że domyślny tryb to `PERFORMANCE`, natomiast `COMPATIBL
 Bo `TextureView` jest wygodny przy eksperymentach z animacjami, efektami i nietypowym skalowaniem. W systemach produkcyjnych nie należy jednak wybierać go bez powodu. Jeśli nie ma konkretnego problemu kompatybilności, warto zacząć od `PERFORMANCE`.
 
 ### Praktyczny przykład – podgląd i fotografowanie
+
+Poniższy przykład demonstruje pełny ekran podglądu kamery połączony z możliwością wykonania zdjęcia w Jetpack Compose. Kamera jest powiązana z cyklem życia composable za pomocą `DisposableEffect`, co zapewnia jej automatyczne zwolnienie po opuszczeniu ekranu. Przycisk wyzwalacza zapisuje zdjęcie do pamięci podręcznej i zwraca identyfikator URI do pliku.
 
 ```kotlin
 @Composable
@@ -419,6 +425,8 @@ To absolutnie krytyczne. Jeśli nie wywołasz `imageProxy.close()`, bufor nie wr
 
 ### Praktyczny przykład – analizator kodów kreskowych
 
+Poniższy przykład prezentuje implementację analizatora kodów kreskowych i QR korzystającego z ML Kit w ramach pipeline'u `ImageAnalysis`. Analizator odbiera klatki w formacie YUV, przetwarza je przez skaner kodów i zwraca wynik przez callback — krytyczne jest przy tym zawsze zamknięcie `ImageProxy` po zakończeniu analizy. Budowanie `ImageAnalysis` ze strategią `KEEP_ONLY_LATEST` zapobiega narastaniu kolejki nieprzetworzonych klatek.
+
 ```kotlin
 class BarcodeAnalyzer(
     private val onBarcodeDetected: (String) -> Unit
@@ -527,6 +535,8 @@ To klasyczny kompromis „rozmiar aplikacji kontra gotowość funkcji przy pierw
 
 ### Praktyczny przykład – OCR na bitmapie
 
+Optyczne rozpoznawanie znaków (OCR) umożliwia ekstrakcję tekstu bezpośrednio z obrazu na urządzeniu, bez konieczności wysyłania danych na serwer. Poniższy przykład pokazuje, jak skonfigurować i uruchomić silnik Text Recognition z ML Kit na dostarczonym obiekcie `Bitmap`. Wyniki są agregowane z bloków i linii tekstu do postaci jednolitego ciągu znaków.
+
 ```kotlin
 val textRecognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
@@ -570,6 +580,8 @@ Bo w dyskusjach dydaktycznych często miesza się dwa różne zadania:
 To inny problem techniczny, inna warstwa ryzyka prywatności i zwykle inny reżim prawny.
 
 ### Praktyczny przykład – detekcja twarzy
+
+Detekcja twarzy w czasie rzeczywistym jest jednym z kluczowych zastosowań biblioteki ML Kit, umożliwiając m.in. filtry AR czy automatyczne kadrowanie. Poniższy przykład konfiguruje detektor twarzy w trybie szybkiego działania z klasyfikacją wyrazu, a następnie przetwarza kolejne klatki z kamery. Ważne jest wywołanie `imageProxy.close()` po zakończeniu przetwarzania, aby nie zablokować pipeline'u.
 
 ```kotlin
 val faceDetector = FaceDetection.getClient(
@@ -634,6 +646,8 @@ Bo jest procesem ciągłym. Trzeba jednocześnie:
 - utrzymać sensowny pobór energii.
 
 ### Praktyczny przykład – nagrywanie wideo
+
+Nagrywanie wideo wymaga jednoczesnej obsługi obrazu, dźwięku, enkodowania i zapisu do pliku, co czyni je bardziej złożonym niż jednorazowe fotografowanie. Poniższy przykład przedstawia kontroler nagrywania oparty na `VideoCapture<Recorder>` z CameraX, obsługujący start i stop nagrywania oraz reagujący na zdarzenie zakończenia. Obiekt `QualitySelector` pozwala zadeklarować preferowaną jakość wyjściową z możliwością automatycznego obniżenia jej, gdy urządzenie nie spełnia wymagań.
 
 ```kotlin
 class VideoRecorderController(
@@ -766,6 +780,8 @@ Apple zaleca grupowanie zmian pomiędzy `beginConfiguration()` i `commitConfigur
 
 ### Praktyczny przykład – sesja zdjęciowa w Swift
 
+Konfiguracja sesji przechwytywania w AVFoundation wymaga atomowego grupowania zmian za pomocą metod `beginConfiguration()` i `commitConfiguration()`. Poniższy przykład w Swift pokazuje, jak zbudować `CameraManager` zarządzający sesją na osobnej kolejce, aby nie blokować wątku UI. Po skonfigurowaniu wejścia i wyjścia sesja jest uruchamiana i gotowa do wykonywania zdjęć.
+
 ```swift
 import AVFoundation
 import UIKit
@@ -828,6 +844,8 @@ Bo problem jest ten sam: framework deklaratywnego UI nie jest naturalnym miejsce
 
 ### Praktyczny przykład – widok podglądu w UIKit/SwiftUI
 
+W UIKit warstwa podglądu kamery jest implementowana jako `AVCaptureVideoPreviewLayer` przypisana do niestandardowego `UIView`. Poniższy przykład pokazuje, jak przesłonić `layerClass`, aby widok automatycznie używał warstwy podglądu AVFoundation. Metoda `attach(session:)` przypisuje sesję do warstwy i ustawia tryb dopasowania obrazu do rozmiarów widoku.
+
 ```swift
 import AVFoundation
 import UIKit
@@ -859,6 +877,8 @@ Do analizy czasu rzeczywistego iOS udostępnia `AVCaptureVideoDataOutput`, któr
 Dokładnie z tego samego powodu co na Androidzie: analiza obrazu jest ciężka obliczeniowo i powinna być izolowana od wątku interfejsu.
 
 ### Praktyczny przykład – odbieranie klatek
+
+Analiza klatek wideo na iOS odbywa się poprzez implementację delegata `AVCaptureVideoDataOutputSampleBufferDelegate`, który odbiera kolejne `CMSampleBuffer`. Poniższy przykład konfiguruje wyjście wideo z włączonym odrzucaniem spóźnionych klatek i deleguje przetwarzanie na dedykowaną kolejkę. Wywołanie analizy na osobnym wątku zapobiega blokowaniu interfejsu użytkownika przez intensywne obliczenia.
 
 ```swift
 import AVFoundation
