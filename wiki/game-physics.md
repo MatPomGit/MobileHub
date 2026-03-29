@@ -4,6 +4,8 @@ Silniki fizyczne w grach mobilnych muszą balansować realizm z wydajnością. Z
 
 ## Podstawowe koncepty fizyki
 
+Zanim przejdziemy do kodu, warto poznać kluczowe pojęcia silników fizycznych stosowane zarówno w Unity, jak i w Godot. Zrozumienie różnicy między koliderem a triggerem, a także roli warstw kolizji, pozwala projektować interakcje w grze efektywnie i bez niepotrzebnych błędów.
+
 ```
 Rigidbody — bryła sztywna z masą, prędkością i siłą grawitacji
 Collider   — kształt detekcji kolizji (nie musi = kształt wizualny)
@@ -15,6 +17,8 @@ Layer      — maska kolizji — kontroluje które obiekty ze sobą kolidują
 ## Unity — PhysX 2D
 
 ### Rigidbody2D i siły
+
+Klasa `Rigidbody2D` to serce silnika fizycznego w Unity — to ona przechowuje masę, prędkość i odpowiada za reakcję na siły grawitacji oraz impulsy. Poniższy przykład to kompletny kontroler gracza platformówki 2D, który używa `FixedUpdate` do sterowania ruchem, sprawdza, czy gracz stoi na ziemi, i obsługuje skok przez jednorazowy impuls pionowy.
 
 ```csharp
 // Komponent gracza
@@ -72,6 +76,8 @@ public class PlayerController : MonoBehaviour
 
 ### Kolizje i triggery
 
+Metody `OnCollisionEnter2D` i `OnTriggerEnter2D` to główne punkty wejścia dla logiki reagującej na kontakt fizyczny obiektów. Kolizja blokuje ruch i przekazuje dane o punkcie kontaktu (normalna, siła), natomiast trigger jedynie informuje o wejściu/wyjściu — idealne dla collectibles, stref efektów czy checkpointów.
+
 ```csharp
 // Detekcja kolizji fizycznych
 void OnCollisionEnter2D(Collision2D collision)
@@ -126,6 +132,8 @@ public class Collectible : MonoBehaviour
 
 ### Raycast — strzelanie, AI, LOS
 
+Raycast to „rzut promieniem" — zapytanie do silnika fizycznego, który obiekt (jeśli jakikolwiek) przecina dany odcinek. Jest to podstawa systemów broni hitscan, wykrywania linii wzroku (LOS) wrogów i sprawdzania terenu pod postacią. Poniższy przykład pokazuje, jak zoptymalizować wykrywanie gracza przez AI (najpierw tanie sprawdzenie zasięgu kołem, potem kosztowny raycast) oraz jak zrealizować broń bez fizycznego pocisku.
+
 ```csharp
 // Raycast 2D — wykryj co jest naprzód
 public class EnemyAI : MonoBehaviour
@@ -171,6 +179,8 @@ public class EnemyAI : MonoBehaviour
 ```
 
 ## Efekty fizyczne specjalne
+
+Poza podstawowym ruchem silnik fizyczny umożliwia tworzenie ciekawych mechanik gameplayowych, takich jak sprężynujące podesty czy łańcuchy zbudowane z połączonych brył. Poniższe przykłady pokazują sprężynowy podest z animacją odkształcenia (squash & stretch) oraz proceduralne generowanie łańcucha złożonego z wielu ogniw połączonych `HingeJoint2D`.
 
 ```csharp
 // Sprężynowy podest
@@ -223,6 +233,8 @@ public class ChainSpawner : MonoBehaviour
 
 ## Godot 4 — Jolt Physics
 
+Godot 4 wprowadza silnik Jolt Physics i dedykowaną klasę `CharacterBody2D`, zoptymalizowaną do sterowania postacią gracza z obsługą kolizji i ślizgania się po pochyłościach. Poniższy skrypt GDScript implementuje kompletny kontroler platformówki: grawitację, skok i płynne zwalnianie ruchu poziomego za pomocą `move_toward`.
+
 ```gdscript
 # CharacterBody2D — specjalna klasa dla gracza
 extends CharacterBody2D
@@ -255,6 +267,8 @@ func _on_area_entered(area: Area2D) -> void:
 ```
 
 ## Optymalizacja fizyki mobilnej
+
+Fizyka jest jednym z droższych obliczeniowo systemów w grach, dlatego na urządzeniach mobilnych warto stosować techniki redukujące liczbę aktywnych symulacji. Poniższy przykład demonstruje trzy kluczowe strategie: dostosowanie kroku czasowego fizyki, wyłączanie symulacji dla obiektów poza ekranem oraz object pooling eliminujący kosztowne tworzenie i niszczenie obiektów w trakcie rozgrywki.
 
 ```csharp
 // Zmniejsz fixed timestep dla wyższej wydajności (kosztem dokładności)

@@ -64,6 +64,8 @@ List<Task> filteredTasks(FilteredTasksRef ref) {
 }
 ```
 
+W widgecie korzystającym z Riverpoda dane asynchroniczne odczytuje się przez `ref.watch`, a obsługę stanów ładowania, błędu i sukcesu zapewnia metoda `when`. Poniższy przykład pokazuje kompletny widżet listy zadań reagujący na wszystkie możliwe stany providera.
+
 ```dart
 // Użycie w widgecie
 class TaskListScreen extends ConsumerWidget {
@@ -95,6 +97,8 @@ class TaskListScreen extends ConsumerWidget {
 ```
 
 ## Go Router — nawigacja
+
+Go Router to rekomendowana przez zespół Flutter biblioteka do nawigacji opartej na URL-ach, obsługująca zagnieżdżone trasy, parametry ścieżki i globalne przekierowania (np. do ekranu logowania). Poniższy przykład demonstruje konfigurację routera z ochroną tras oraz typowe wywołania nawigacyjne — `go`, `push` i `pop`.
 
 ```dart
 // pubspec.yaml: go_router: ^14.0.0
@@ -145,6 +149,8 @@ context.goNamed('task_detail', pathParameters: {'id': taskId});
 ```
 
 ## Animacje zaawansowane
+
+Flutter oferuje trzy poziomy animacji: deklaratywne przełączanie widoków (`AnimatedSwitcher`), animacje implicit z automatyczną interpolacją (`AnimatedContainer`) oraz animacje explicit z pełną kontrolą przez `AnimationController`. Poniższy przykład pokazuje wszystkie trzy podejścia, dzięki czemu można wybrać właściwe narzędzie do konkretnego efektu wizualnego.
 
 ```dart
 // AnimatedSwitcher — przełączanie widoków z animacją
@@ -205,6 +211,8 @@ class _PulseWidgetState extends State<PulseWidget> with SingleTickerProviderStat
 
 ## Platform Channels — natywny kod
 
+Platform Channels umożliwiają wywołanie kodu natywnego platformy (Android/iOS) bezpośrednio z Dart, co jest niezbędne przy dostępie do funkcji systemowych niedostępnych w samym Flutter. Poniższy przykład po stronie Dart definiuje kanał komunikacji i metodę pobierania poziomu baterii; niezależna sekcja pokazuje, jak ten sam kanał obsłużyć po stronie Androida.
+
 ```dart
 // Komunikacja z natywnym kodem platformy
 class BatteryService {
@@ -228,6 +236,8 @@ class BatteryService {
 }
 ```
 
+Poniższy fragment to odpowiednik po stronie Androida — implementacja `MethodChannel` w `MainActivity`, która odbiera wywołanie z Dart i zwraca aktualny poziom naładowania baterii za pomocą `BatteryManager`.
+
 ```kotlin
 // Strona Android — MainActivity.kt
 class MainActivity : FlutterActivity() {
@@ -250,6 +260,8 @@ class MainActivity : FlutterActivity() {
 ```
 
 ## Testy w Flutter
+
+Testy widżetów (widget tests) w Flutter pozwalają weryfikować interfejs użytkownika bez potrzeby uruchamiania fizycznego urządzenia lub emulatora, co znacząco przyspiesza pętlę TDD. Poniższe przykłady pokazują zarówno prosty test wyświetlania komponentu, jak i test integracyjny z Riverpod wykorzystujący mocki repozytorium.
 
 ```dart
 // Widget test

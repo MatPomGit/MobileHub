@@ -15,6 +15,8 @@ Gry mobilne generują większość przychodów z App Store i Google Play. Wybór
 
 ## In-App Purchases (IAP) — Google Play Billing
 
+Zakupy w aplikacji (IAP) to jeden z najważniejszych źródeł przychodów gier mobilnych — od jednorazowych pakietów monet po odblokowanie pełnej wersji. Poniższy przykład demonstruje kompletną konfigurację `BillingClient`, w tym nawiązanie połączenia, odpytanie o dostępne produkty, uruchomienie ekranu zakupu oraz obsługę i weryfikację zrealizowanej transakcji.
+
 ```kotlin
 class BillingManager(private val context: Context) {
     private val billingClient = BillingClient.newBuilder(context)
@@ -83,6 +85,8 @@ class BillingManager(private val context: Context) {
 
 ## Reklamy — Unity Ads + AdMob
 
+Reklamy pełnoekranowe (interstitial) są naturalnym miejscem przerwy między poziomami gry, dzięki czemu zaburzają rozgrywkę w minimalnym stopniu przy jednoczesnym generowaniu przychodu. Poniższy przykład pokazuje, jak załadować i wyświetlić interstitial za pomocą Google AdMob oraz automatycznie wczytać kolejną reklamę po jej zamknięciu.
+
 ```kotlin
 // Google AdMob — Interstitial (pełnoekranowa)
 class AdManager(private val activity: Activity) {
@@ -142,6 +146,8 @@ Branża gier mobilnych zmaga się z problemem nieetycznych mechanik:
 
 ## Subskrypcje — Google Play Billing
 
+Subskrypcje różnią się od jednorazowych zakupów tym, że produkt musi być zdefiniowany jako `BillingClient.ProductType.SUBS` i wymaga wyboru konkretnej oferty (np. planu miesięcznego lub rocznego) za pomocą `offerToken`. Poniższy przykład pokazuje, jak odpytać Google Play o dostępne plany subskrypcyjne i uruchomić ekran zakupu z właściwym tokenem oferty.
+
 ```kotlin
 // Subskrypcje mają inną strukturę niż jednorazowe zakupy
 suspend fun querySubscriptions(): List<ProductDetails> {
@@ -180,6 +186,8 @@ fun launchSubscriptionPurchase(activity: Activity, product: ProductDetails) {
 ```
 
 ## Analytics — mierzenie KPI monetyzacji
+
+Śledzenie zdarzeń analitycznych pozwala zrozumieć, gdzie gracze rezygnują z zakupu, które punkty w rozgrywce generują największe przychody i jak reklamy wpływają na retencję. Poniższa klasa demonstruje logowanie kluczowych eventów Firebase Analytics dla gry mobilnej: zakupu, otwarcia sklepu, nieudanego poziomu i obejrzanej reklamy.
 
 ```kotlin
 // Firebase Analytics — kluczowe eventy dla gier
@@ -220,6 +228,8 @@ class GameAnalytics(private val firebaseAnalytics: FirebaseAnalytics) {
 ```
 
 ## A/B Testing cen — Remote Config
+
+Firebase Remote Config umożliwia dynamiczną zmianę parametrów aplikacji (np. cen, wariantów interfejsu) bez konieczności aktualizacji w sklepie, co jest podstawą testów A/B. Poniższy przykład pokazuje, jak pobrać aktualną cenę paczki startowej z Remote Config, co pozwala w Firebase Console przypisać różne wartości różnym grupom użytkowników i zmierzyć, która cena przynosi wyższy wskaźnik konwersji.
 
 ```kotlin
 // Firebase Remote Config — testuj różne strategie cen
