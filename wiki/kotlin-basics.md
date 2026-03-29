@@ -4,6 +4,8 @@ Kotlin to statycznie typowany, wieloparadygmatyczny język programowania tworzon
 
 ## Typy, zmienne i system typów
 
+Poniższy przykład pokazuje podstawowe typy zmiennych w Kotlinie i sposoby ich deklarowania. System typów zapewnia wbudowane null-safety, które eliminuje częste błędy NullPointerException już na etapie kompilacji — każdy typ musi być jawnie oznaczony jako nullable za pomocą operatora `?`. Kompilator Kotlin potrafi automatycznie wywnioskować typ zmiennej na podstawie przypisanej wartości, a mechanizm smart cast umożliwia bezpieczne rzutowanie wewnątrz bloku `when`.
+
 ```kotlin
 // Wnioskowanie typów — kompilator sam określa typ
 val name = "Marek"                // String (stała — val = value, immutable)
@@ -28,6 +30,8 @@ fun describe(obj: Any) {
 ```
 
 ## Data classes — klasy danych
+
+Data class to specjalny rodzaj klasy w Kotlinie, przeznaczony wyłącznie do przechowywania danych. Kompilator automatycznie generuje metody `equals()`, `hashCode()`, `toString()` oraz `copy()`, co znacząco redukuje ilość powtarzalnego kodu szablonowego (boilerplate). Metoda `copy()` pozwala tworzyć zmodyfikowane kopie obiektu bez mutowania oryginału, co jest szczególnie przydatne w architekturach reaktywnych opartych na niezmiennych stanach (immutable state).
 
 ```kotlin
 data class User(
@@ -55,6 +59,8 @@ println("$id: $name ($email)")
 ```
 
 ## Funkcje i wyrażenia lambda
+
+Kotlin oferuje rozbudowany system funkcji z wartościami domyślnymi i nazwanymi argumentami, który upraszcza wywoływanie metod i eliminuje potrzebę tworzenia wielu przeciążonych wersji tej samej funkcji. Funkcje wyższego rzędu przyjmują inne funkcje jako parametry lub zwracają je jako wyniki, co jest fundamentem programowania funkcyjnego. Poniższy przykład demonstruje zarówno zwięzłe funkcje jednowyrażeniowe, jak i potężne operacje na kolekcjach realizowane za pomocą łańcuchów `filter`, `map` i `take`.
 
 ```kotlin
 // Funkcje z wartościami domyślnymi
@@ -88,6 +94,8 @@ val names = transform(listOf(1, 2, 3)) { "item_$it" }  // ["item_1", "item_2", "
 
 ## Sealed classes — modelowanie stanów
 
+Sealed class definiuje zamkniętą hierarchię typów, której wszystkie podklasy muszą być zadeklarowane w tym samym pliku lub module. To idealne narzędzie do modelowania wyników operacji i stanów ekranu (np. Loading, Success, Error), ponieważ kompilator wymusza obsłużenie każdego przypadku w wyrażeniu `when` — brak gałęzi spowoduje błąd kompilacji. Taka konstrukcja eliminuje możliwość pominięcia jednego ze stanów i jest jednym z kluczowych wzorców w nowoczesnym Androidzie.
+
 ```kotlin
 // Sealed class = ograniczona hierarchia typów
 // Idealny do modelowania wyników operacji i stanów UI
@@ -117,6 +125,8 @@ fun <T> render(state: UiState<T>) = when (state) {
 ```
 
 ## Coroutines — asynchroniczność
+
+Coroutines to wbudowany w Kotlin mechanizm asynchroniczności, który zastępuje tradycyjne callbacki i zarządzanie wątkami lżejszymi i bardziej czytelnymi konstrukcjami. Dzięki słowu kluczowemu `suspend` funkcja może zostać zawieszona w dowolnym momencie bez blokowania wątku, co pozwala uruchamiać setki tysięcy coroutines jednocześnie przy minimalnym narzucie na pamięć. Poniższy przykład ilustruje trzy kluczowe wzorce: sekwencyjne wywołania z `withContext`, równoległe wykonanie za pomocą `async/await` oraz reaktywny strumień danych z `Flow`.
 
 ```kotlin
 // Coroutines = "lekkie wątki" — setki tysięcy coroutines bez problemów z pamięcią
@@ -173,6 +183,8 @@ class WeatherViewModel : ViewModel() {
 
 ## Extension functions — rozszerzanie klas
 
+Funkcje rozszerzające pozwalają dodawać nowe metody do istniejących klas bez potrzeby ich dziedziczenia ani modyfikowania kodu źródłowego. Jest to wyjątkowo przydatna cecha w ekosystemie Android, gdzie często zachodzi potrzeba rozszerzenia klas systemowych takich jak `View`, `String` czy `Int`. Poniższy przykład pokazuje praktyczne zastosowania: konwersję tekstu do formatu slug URL, przeliczanie dp na piksele ekranu oraz uproszczenie zarządzania widocznością widoków.
+
 ```kotlin
 // Dodawanie metod do istniejących klas bez dziedziczenia
 fun String.toSlug(): String =
@@ -196,6 +208,8 @@ fun View.invisible() { visibility = View.INVISIBLE }
 ```
 
 ## Scope functions — let, run, with, apply, also
+
+Scope functions to zestaw funkcji standardowej biblioteki Kotlina (`let`, `run`, `with`, `apply`, `also`), które pozwalają wykonywać operacje na obiekcie wewnątrz zwartego bloku kodu, eliminując potrzebę powtarzania nazwy zmiennej. Różnią się między sobą sposobem odwoływania się do obiektu (`this` lub `it`) oraz wartością zwracaną (sam obiekt lub wynik bloku), co decyduje o tym, kiedy każda z nich jest najwłaściwsza. Poniższy przykład ilustruje typowe przypadki użycia w projekcie Android: konfigurację dialogu (`apply`), warunkowe przetwarzanie wartości nullable (`let`) oraz rejestrowanie efektów ubocznych bez ingerencji w łańcuch wywołań (`also`).
 
 ```kotlin
 // let — transformacja obiektu, null-safety

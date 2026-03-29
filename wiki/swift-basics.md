@@ -4,6 +4,8 @@ Swift to szybki, bezpieczny i wyrazisty język programowania stworzony przez App
 
 ## Typy i opcjonale
 
+Podstawą bezpieczeństwa w Swift jest system opcjonali, który wymusza jawną obsługę braku wartości już na etapie kompilacji. W odróżnieniu od `null` w języku Java, opcjonale w Swift muszą być świadomie rozpakowane — pominięcie tej operacji jest błędem kompilacji, a nie dopiero wyjątkiem w czasie wykonania. Poniższy przykład pokazuje deklarację stałych i zmiennych oraz trzy różne sposoby bezpiecznego rozpakowywania opcjonali: operator `??`, blok `if let` i konstrukcję `guard let` do wczesnego powrotu z funkcji.
+
 ```swift
 // Stałe i zmienne
 let name = "Anna"           // stała — immutable
@@ -29,6 +31,8 @@ func processEmail(_ email: String?) {
 ```
 
 ## Struktury i klasy
+
+Swift rozróżnia dwa fundamentalnie różne modele przechowywania danych: struktury (value type) i klasy (reference type). Struktury są kopiowane przy każdym przypisaniu, co zapobiega niezamierzonym modyfikacjom współdzielonych danych — dlatego w SwiftUI większość modeli danych to właśnie struktury. Klasy natomiast są przekazywane przez referencję i obsługują dziedziczenie, a ich cykl życia zarządzany jest automatycznie przez ARC (Automatic Reference Counting).
 
 ```swift
 // Struct — value type (kopia przy przypisaniu)
@@ -62,6 +66,8 @@ enum NetworkError: Error {
 
 ## Protokoły i generyki
 
+Protokoły w Swift pełnią rolę zbliżoną do interfejsów znanych z innych języków, ale są znacznie potężniejsze — mogą zawierać domyślne implementacje metod i definiować typy stowarzyszone (`associatedtype`). Generyki z ograniczeniami protokołowymi (np. `T: Identifiable`) umożliwiają pisanie elastycznego, wielokrotnie używanego kodu bez utraty bezpieczeństwa typów w czasie kompilacji. Ten wzorzec jest powszechny w architekturze iOS — repozytoria i serwisy sieciowe definiuje się jako generyczne protokoły, co ułatwia podmianę implementacji i pisanie testów.
+
 ```swift
 protocol Identifiable {
     var id: UUID { get }
@@ -80,6 +86,8 @@ func findById<T: Identifiable>(_ id: UUID, in items: [T]) -> T? {
 ```
 
 ## Async/Await
+
+Async/await to nowoczesna składnia asynchroniczności wprowadzona w Swift 5.5, która zastępuje złożone łańcuchy completion handlerów czystym, sekwencyjnym kodem. Słowo kluczowe `try await` pozwala elegancko propagować błędy przez cały łańcuch wywołań asynchronicznych bez zagnieżdżonych bloków. Poniższy przykład demonstruje pobieranie danych z API z obsługą błędów HTTP oraz aktualizację interfejsu na głównym wątku za pomocą `MainActor.run`.
 
 ```swift
 // async/await — czytelna asynchroniczność
@@ -105,6 +113,8 @@ Task {
 ```
 
 ## Closures i functional programming
+
+Zamknięcia (closures) to samodzielne bloki kodu, które można przekazywać jako argumenty funkcji i przechowywać w zmiennych, co jest fundamentem programowania funkcyjnego w Swift. Zwięzła składnia z `$0`, `$1` jako nazwami kolejnych parametrów skraca zapis do minimum, a operacje `filter`, `map` i `reduce` pozwalają przetwarzać kolekcje w sposób deklaratywny. Typ `Result<Success, Failure>` zapewnia bezpieczną obsługę błędów bez wyjątków — jest preferowanym wzorcem w ekosystemie Swift przy operacjach, które mogą zakończyć się niepowodzeniem.
 
 ```swift
 let numbers = [1, 2, 3, 4, 5, 6]
@@ -174,6 +184,8 @@ class ViewModel {
 
 ## Concurrency — Actors i Swift Concurrency
 
+Aktor (`actor`) to typ referencyjny w Swift, który automatycznie serializuje dostęp do swojego wewnętrznego stanu, eliminując wyścigi danych (data races) bez konieczności ręcznego zarządzania blokadami. Każde wywołanie metody aktora wymaga `await`, co sygnalizuje programiście potencjalny punkt przełączenia kontekstu i uniemożliwia niezabezpieczony dostęp współbieżny. Poniższy przykład ilustruje aktora modelującego konto bankowe, atrybut `@MainActor` gwarantujący wykonanie kodu na wątku UI oraz `TaskGroup` do równoległego pobierania wielu profili jednocześnie.
+
 ```swift
 // Actor — bezpieczny dostęp współbieżny do stanu
 actor BankAccount {
@@ -231,6 +243,8 @@ func fetchAllProfiles(ids: [String]) async throws -> [UserProfile] {
 
 ## Property Wrappers
 
+Property wrappers to mechanizm Swift pozwalający enkapsulować powtarzalną logikę związaną z właściwościami w wielokrotnie używalny dekorator, redukując duplikację kodu. Wbudowany wrapper `@Published` z frameworku Combine automatycznie powiadamia obserwatorów o każdej zmianie wartości, co jest podstawą reaktywności w architekturze MVVM z SwiftUI. Poniższy przykład pokazuje `@Published` w praktyce oraz implementację własnego wrappera `@Clamped`, który automatycznie ogranicza wartość do podanego zakresu niezależnie od tego, co zostanie przypisane.
+
 ```swift
 // @Published — powiadamia o zmianach (Combine)
 class CounterViewModel: ObservableObject {
@@ -268,6 +282,8 @@ print(slider.volume) // 100
 
 ## Makra Swift (Swift 5.9+)
 
+Makra wprowadzone w Swift 5.9 pozwalają generować kod w czasie kompilacji, znacząco redukując ilość powtarzalnego kodu szablonowego. Makro `@Observable` zastępuje dotychczasowy wzorzec `ObservableObject` + `@Published` pojedynczą adnotacją, automatycznie śledząc zmiany wszystkich właściwości klasy bez konieczności ich ręcznego oznaczania. Poniższy przykład demonstruje makro `#Preview` do podglądu w Xcode oraz model z `@Observable`, który w porównaniu z klasycznym podejściem Combine jest znacznie prostszy i bardziej zwięzły.
+
 ```swift
 // #Preview — podgląd w Xcode
 #Preview {
@@ -298,6 +314,8 @@ struct CounterView: View {
 ```
 
 ## Wzorzec Result Builder
+
+Result builder to mechanizm Swift umożliwiający definiowanie własnych DSL (Domain Specific Languages) o czytelnej, deklaratywnej składni podobnej do kodu HTML lub XML. To właśnie na result builderach opiera się cały system budowania interfejsów w SwiftUI — każdy blok `body: some View` korzysta z wbudowanego `@ViewBuilder`, który działa dokładnie na tej samej zasadzie. Poniższy przykład pokazuje, jak stworzyć własny `HTMLBuilder` generujący strukturę HTML, co pomaga zrozumieć mechanizm leżący u podstaw SwiftUI.
 
 ```swift
 // Result builder — podstawa DSL w SwiftUI
