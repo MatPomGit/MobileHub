@@ -82,6 +82,8 @@ W materiałach dydaktycznych lepiej unikać twardego wpisywania wielu numerów w
 
 ### Przykład modułu `app/build.gradle.kts`
 
+Plik `build.gradle.kts` konfiguruje moduł aplikacji: docelowe wersje API, funkcje kompilacji, zależności i ustawienia podpisywania. Użycie BOM (Bill of Materials) dla Compose pozwala zarządzać wersjami wielu powiązanych bibliotek w jednym miejscu, eliminując konflikty między zależnościami.
+
 ```kotlin
 plugins {
     id("com.android.application")
@@ -192,7 +194,7 @@ Compose opiera się na trzech filarach:
 
 ### Composable functions
 
-Funkcja oznaczona adnotacją `@Composable` opisuje fragment interfejsu użytkownika.
+Funkcja oznaczona adnotacją `@Composable` opisuje fragment interfejsu użytkownika. Poniższy przykład demonstruje tworzenie karty użytkownika z avatarem i danymi kontaktowymi, ilustrując kluczowe wzorce Compose: układy wierszowe i kolumnowe, modyfikatory, stylowanie typografią Material 3 oraz ładowanie obrazów z sieci przez bibliotekę Coil.
 
 ```kotlin
 @Composable
@@ -244,7 +246,7 @@ W Compose interfejs nie powinien „sam siebie pamiętać” w przypadkowych mie
 
 ### Stan lokalny
 
-Stan lokalny jest dobry wtedy, gdy dotyczy wyłącznie pojedynczego elementu UI.
+Stan lokalny jest dobry wtedy, gdy dotyczy wyłącznie pojedynczego elementu UI. Prosty licznik ilustruje użycie `rememberSaveable`, które przechowuje stan zarówno między rekombinacjami composable, jak i po zmianie konfiguracji urządzenia, np. obrocie ekranu. To podstawowy wzorzec zarządzania stanem dla elementów UI niezależnych od reszty aplikacji.
 
 ```kotlin
 @Composable
@@ -307,7 +309,7 @@ ViewModel:
 
 ## ViewModel + StateFlow
 
-ViewModel powinien udostępniać stan ekranu jako niezmienny strumień oraz przyjmować zdarzenia od UI.
+ViewModel powinien udostępniać stan ekranu jako niezmienny strumień oraz przyjmować zdarzenia od UI. Poniższy przykład pokazuje wzorcową implementację z `StateFlow`: definicję klasy stanu, reaktywne zbieranie danych z repozytorium, obsługę błędów i mutowalne metody akcji. Taki układ zapewnia odporność na zmiany konfiguracji i czytelny jednokierunkowy przepływ danych.
 
 ```kotlin
 data class TaskUiState(
@@ -352,6 +354,8 @@ class TaskViewModel(
 ```
 
 Composable obserwujący stan:
+
+Poniższy ekran demonstruje, jak obserwować `StateFlow` z ViewModelu i reagować na różne stany: ładowanie, błąd i poprawnie załadowane dane. Metoda `collectAsStateWithLifecycle()` jest preferowanym sposobem zbierania strumieni w Compose, ponieważ automatycznie wstrzymuje kolekcję, gdy ekran nie jest widoczny.
 
 ```kotlin
 @Composable
@@ -433,6 +437,8 @@ Room upraszcza pracę z SQLite, zapewnia sprawdzanie zapytań SQL podczas kompil
 
 ### Encja
 
+Encja Room reprezentuje pojedynczy wiersz tabeli w bazie danych SQLite. Adnotacja `@Entity` definiuje nazwę tabeli, a `@PrimaryKey(autoGenerate = true)` zleca bazie automatyczne przypisywanie unikalnych identyfikatorów nowym rekordom.
+
 ```kotlin
 @Entity(tableName = "tasks")
 data class TaskEntity(
@@ -444,6 +450,8 @@ data class TaskEntity(
 ```
 
 ### DAO
+
+DAO (Data Access Object) opisuje operacje na tabeli za pomocą adnotacji Room. Metoda zwracająca `Flow<List<TaskEntity>>` umożliwia reaktywne obserwowanie zmian w bazie — każda modyfikacja tabeli automatycznie emituje zaktualizowaną listę do wszystkich obserwatorów.
 
 ```kotlin
 @Dao
@@ -463,6 +471,8 @@ interface TaskDao {
 ```
 
 ### Baza danych
+
+Klasa `AppDatabase` jest głównym punktem wejścia do bazy danych Room. Adnotacja `@Database` określa listę encji i numer wersji schematu, który jest niezbędny do prawidłowego zarządzania migracjami przy przyszłych zmianach struktury danych.
 
 ```kotlin
 @Database(entities = [TaskEntity::class], version = 1, exportSchema = true)
@@ -493,6 +503,8 @@ object DatabaseProvider {
 ```
 
 ### Repozytorium
+
+Repozytorium stanowi warstwę pośrednią między DAO a resztą aplikacji, wykonując mapowanie encji na modele domenowe. Taka separacja sprawia, że ViewModel i UI nie muszą wiedzieć nic o szczegółach implementacji bazy danych ani o strukturze tabel SQLite.
 
 ```kotlin
 class TaskRepository(
@@ -530,6 +542,8 @@ Retrofit jest popularną biblioteką do komunikacji HTTP. Na Androidzie zwykle u
 
 ### Definicja API
 
+Interfejs API Retrofit opisuje endpointy serwera jako metody Kotlin z adnotacjami HTTP. Dzięki słowu kluczowemu `suspend` metody te można wywoływać bezpośrednio w korutynach, a biblioteka automatycznie obsługuje serializację parametrów i deserializację odpowiedzi JSON.
+
 ```kotlin
 interface PokemonApi {
     @GET("pokemon/{name}")
@@ -546,6 +560,8 @@ interface PokemonApi {
 ```
 
 ### Inicjalizacja klienta HTTP
+
+Konfiguracja klienta HTTP obejmuje ustawienie bazowego URL, konwertera JSON oraz interceptorów. `HttpLoggingInterceptor` jest szczególnie przydatny podczas developmentu, ponieważ wypisuje pełną treść żądań i odpowiedzi HTTP w oknie Logcat.
 
 ```kotlin
 val loggingInterceptor = HttpLoggingInterceptor().apply {
@@ -567,6 +583,8 @@ val api = retrofit.create(PokemonApi::class.java)
 
 ### Repozytorium dla sieci
 
+Repozytorium sieciowe opakowuje wywołanie API w `runCatching`, zamieniając potencjalne wyjątki na typ `Result`. Taka warstwa abstrakcji sprawia, że ViewModel nigdy nie musi bezpośrednio obsługiwać wyjątków sieciowych ani znać szczegółów implementacji Retrofit.
+
 ```kotlin
 class PokemonRepository(
     private val api: PokemonApi
@@ -586,6 +604,8 @@ class PokemonRepository(
 - Produkcyjna aplikacja powinna uwzględniać cache, retry, politykę odświeżania oraz bezpieczeństwo transmisji.
 
 ### Przykład bezpieczniejszego wywołania w ViewModel
+
+Poniższy ViewModel demonstruje pełny cykl obsługi żądania sieciowego: ustawienie stanu ładowania, wywołanie repozytorium i aktualizację stanu w zależności od wyniku operacji. Użycie `StateFlow` z metodą `update` zapewnia atomowe i bezpieczne wątkowo modyfikacje stanu ekranu.
 
 ```kotlin
 class PokemonViewModel(
@@ -621,6 +641,8 @@ Manifest opisuje podstawowe cechy aplikacji: komponenty, uprawnienia, ikonę, te
 
 ### Przykład
 
+Plik `AndroidManifest.xml` jest centralnym dokumentem konfiguracyjnym każdej aplikacji Android. Deklaruje on komponenty aplikacji (aktywności, usługi), uprawnienia systemowe oraz atrybut `android:exported`, który określa, czy dany komponent jest dostępny dla innych aplikacji zainstalowanych na urządzeniu.
+
 ```xml
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
 
@@ -652,6 +674,8 @@ Manifest opisuje podstawowe cechy aplikacji: komponenty, uprawnienia, ikonę, te
 Samo zadeklarowanie niektórych uprawnień w manifeście **nie wystarcza**. Uprawnienia takie jak lokalizacja czy aparat należą do grupy uprawnień niebezpiecznych i muszą być dodatkowo proszone w czasie działania aplikacji.
 
 ### Przykład żądania uprawnienia w Compose
+
+Dynamiczne żądanie uprawnienia za pomocą `rememberLauncherForActivityResult` jest zalecanym podejściem w Compose. Launcher obsługuje cały cykl: wyświetlenie systemowego okna dialogowego i powrót z wynikiem, który informuje aplikację, czy użytkownik udzielił zgody.
 
 ```kotlin
 @Composable
@@ -758,6 +782,8 @@ Android Studio udostępnia zestaw narzędzi, które studenci powinni umieć stos
 
 ### Przykład Compose Preview
 
+Adnotacja `@Preview` pozwala podglądać composable bezpośrednio w Android Studio bez uruchamiania aplikacji. Opakowując komponent w `MaterialTheme` i przekazując przykładowe dane, można szybko weryfikować wygląd i zachowanie UI w różnych konfiguracjach bez konieczności wdrażania na emulator.
+
 ```kotlin
 @Preview(showBackground = true)
 @Composable
@@ -783,6 +809,8 @@ W nowoczesnej aplikacji Android testujemy co najmniej trzy poziomy:
 - interfejs użytkownika.
 
 ### Przykład testu jednostkowego logiki
+
+Testy jednostkowe repozytorium pozwalają weryfikować logikę biznesową bez emulatorów i urządzeń fizycznych. Dzięki `FakeTaskDao` (implementacji DAO przechowywacej dane w pamięci) test jest szybki, deterministyczny i nie wymaga prawdziwej bazy danych SQLite.
 
 ```kotlin
 class TaskRepositoryTest {

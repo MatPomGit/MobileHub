@@ -48,6 +48,8 @@ Retrofit upraszcza definiowanie endpointów HTTP. Zamiast ręcznie budować żą
 
 ### Przykład modeli odpowiedzi
 
+Modele DTO (Data Transfer Object) odwzorowują strukturę odpowiedzi JSON z serwera. Użycie adnotacji `@SerializedName` pozwala mapować pola o nazwach niezgodnych z konwencją Kotlin na właściwe nazwy właściwości, zachowując czytelność kodu niezależnie od formatu backendu.
+
 ```kotlin
 data class PokemonDto(
     val id: Int,
@@ -79,6 +81,8 @@ Warto zwrócić uwagę na sufiks `Dto` (`Data Transfer Object`). To dobra prakty
 
 ### Definicja interfejsu API
 
+Interfejs API w Retrofit definiuje dostępne endpointy za pomocą adnotacji HTTP i parametrów. Użycie `suspend fun` umożliwia wywoływanie żądań bezpośrednio z korutyn, co eliminuje konieczność ręcznego zarządzania callbackami i sprawia, że kod jest czytelniejszy oraz łatwiejszy do testowania.
+
 ```kotlin
 interface PokemonApi {
     @GET("pokemon/{name}")
@@ -95,6 +99,8 @@ interface PokemonApi {
 ```
 
 ### Konfiguracja klienta
+
+Konfiguracja klienta HTTP łączy OkHttp z Retrofit, definiując timeouty, interceptory i konwerter JSON. Interceptor logowania ułatwia debugowanie w trakcie developmentu, a jego wyłączenie w buildzie release chroni przed przypadkowym ujawnieniem danych wrażliwych w logach produkcyjnych.
 
 ```kotlin
 object NetworkModule {
@@ -185,6 +191,8 @@ Typowe kategorie błędów:
 
 ### Przykład typu wyniku
 
+Zamiast rzucać wyjątkami, warto modelować wszystkie możliwe wyniki żądania HTTP jako zapieczętowaną hierarchię typów. Poniższa implementacja `NetworkResult` i funkcja `safeApiCall` umożliwiają obsługę każdego przypadku — sukcesu, błędu HTTP, błędu sieci i nieoczekiwanego wyjątku — w sposób bezpieczny i czytelny dla kompilatora.
+
 ```kotlin
 sealed interface NetworkResult<out T> {
     data class Success<T>(val data: T) : NetworkResult<T>
@@ -214,6 +222,8 @@ suspend fun <T> safeApiCall(block: suspend () -> T): NetworkResult<T> {
 Korutyny używają anulowania do zatrzymywania pracy, np. gdy ekran znika. Przechwycenie anulowania jako zwykłego błędu prowadzi do niepoprawnego zachowania i wycieków logiki. To częsty błąd początkujących.
 
 ## Praca ze stanem w ViewModel
+
+ViewModel przechowuje stan ekranu i reaguje na żądania z warstwy UI. Poniższy przykład pokazuje kompletny przepływ: od wywołania żądania HTTP, przez aktualizację stanu ładowania, aż po obsługę różnych kategorii błędów sieciowych w jednolitej strukturze `PokemonUiState`.
 
 ```kotlin
 data class PokemonUiState(
@@ -264,6 +274,8 @@ OkHttp pozwala modyfikować i obserwować żądania oraz odpowiedzi.
 
 ### Interceptor autoryzacji
 
+Interceptor autoryzacji automatycznie dołącza nagłówek `Authorization` do każdego wychodzącego żądania HTTP. Dzięki temu logika uwierzytelniania jest scentralizowana w jednym miejscu i nie musi być powtarzana przy każdym wywołaniu API.
+
 ```kotlin
 class AuthInterceptor(
     private val tokenProvider: TokenProvider
@@ -285,6 +297,8 @@ class AuthInterceptor(
 ```
 
 ### Authenticator do odświeżania tokenu po 401
+
+Klasa `Authenticator` w OkHttp jest wywoływana automatycznie, gdy serwer zwróci kod 401 (Unauthorized). Poniższa implementacja odświeża token dostępu i ponawia oryginalne żądanie z nowym tokenem, umożliwiając transparentne odnawianie sesji użytkownika bez jego wiedzy.
 
 ```kotlin
 class TokenAuthenticator(
@@ -347,6 +361,8 @@ Podstawowe zasady:
 
 ### Przykład `network_security_config.xml`
 
+Plik `network_security_config.xml` definiuje reguły bezpieczeństwa połączeń sieciowych dla aplikacji. Ustawienie `cleartextTrafficPermitted="false"` wymusza korzystanie wyłącznie z połączeń HTTPS, co jest zalecaną praktyką zabezpieczającą dane użytkownika przed podsłuchem w sieciach publicznych.
+
 ```xml
 <?xml version="1.0" encoding="utf-8"?>
 <network-security-config>
@@ -356,7 +372,7 @@ Podstawowe zasady:
 
 ## Upload plików
 
-Aplikacje mobilne często wysyłają zdjęcia, dokumenty lub logi diagnostyczne.
+Aplikacje mobilne często wysyłają zdjęcia, dokumenty lub logi diagnostyczne. Wysyłanie pliku multipart wymaga skonstruowania obiektu `MultipartBody.Part`, który opakowuje binarną zawartość pliku razem z metadanymi. Poniższy przykład pokazuje definicję endpointu Retrofit oraz funkcję pomocniczą tworzącą odpowiednią część żądania dla pliku graficznego.
 
 ```kotlin
 interface FileApi {
@@ -389,6 +405,8 @@ Dobre praktyki:
 Paging 3 jest oficjalnym rozwiązaniem Jetpack do stopniowego ładowania dużych zbiorów danych. Dokumentacja Android Developers rekomenduje je do scenariuszy, w których pełna lista jest zbyt duża dla pojedynczego pobrania, a także opisuje `RemoteMediator` jako rozwiązanie dla połączenia sieci i bazy lokalnej. citeturn1search1turn1search17
 
 ### Przykład `PagingSource`
+
+`PagingSource` jest kluczowym elementem biblioteki Paging 3 — odpowiada za pobieranie jednej strony danych i informowanie systemu o kluczach poprzedniej oraz następnej strony. Poprawna implementacja metody `getRefreshKey()` zapewnia, że po odświeżeniu lub zmianie konfiguracji lista zostaje wznowiona od właściwej pozycji.
 
 ```kotlin
 class PokemonPagingSource(
@@ -426,6 +444,8 @@ class PokemonPagingSource(
 ```
 
 ### Konfiguracja pagera
+
+Obiekt `Pager` łączy `PagingSource` z konfiguracją stronicowania i udostępnia strumień `Flow<PagingData>`. Parametry `pageSize` i `prefetchDistance` wpływają na płynność przewijania listy — zbyt mała wartość powoduje opóźnienia widoczne dla użytkownika, a zbyt duża niepotrzebnie obciąża sieć i pamięć.
 
 ```kotlin
 class PokemonRepository(
@@ -471,6 +491,8 @@ Wady:
 - dodatkowa konfiguracja schematu i generowania kodu.
 
 ### Przykład użycia
+
+Poniższy przykład pokazuje konfigurację klienta Apollo i wywołanie zapytania GraphQL z nagłówkiem autoryzacyjnym. Wygenerowane przez plugin klasy zapytań (np. `GetUserQuery`) gwarantują typowe bezpieczeństwo i eliminują konieczność ręcznego parsowania JSON.
 
 ```kotlin
 val apolloClient = ApolloClient.Builder()
@@ -518,6 +540,8 @@ Kod sieciowy należy testować na kilku poziomach:
 
 ### 1. Test mapowania DTO → domena
 
+Testy mapowania weryfikują, czy dane z API są poprawnie przekształcane na obiekty domenowe. Są to szybkie testy jednostkowe działające na JVM, które nie wymagają emulatora ani połączenia sieciowego.
+
 ```kotlin
 @Test
 fun `toDomain maps dto correctly`() {
@@ -538,6 +562,8 @@ fun `toDomain maps dto correctly`() {
 ```
 
 ### 2. Test repozytorium z fałszywym API
+
+Test repozytorium z fałszywą (stub) implementacją API pozwala weryfikować logikę repozytorium bez rzeczywistych wywołań sieciowych. Podmieniając prawdziwy klient Retrofit na klasę testową, możemy symulować zarówno sukces, jak i różne scenariusze błędów.
 
 ```kotlin
 class FakePokemonApi : PokemonApi {
