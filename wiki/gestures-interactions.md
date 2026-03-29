@@ -16,6 +16,8 @@ Ekran dotykowy to główny interfejs urządzenia mobilnego. Dobrze zaprojektowan
 
 ## Compose — Gesty
 
+Jetpack Compose dostarcza gotowych detektorów gestów, które można łatwo podłączyć do dowolnego komponentu za pomocą modyfikatora `pointerInput`. Dzięki nim obsługa tapnięć, długiego przytrzymania czy przeciągania sprowadza się do kilku linii kodu. Poniższy przykład pokazuje, jak wykrywać różne typy gestów oraz zaimplementować mechanizm „swipe to dismiss" na karcie zadania.
+
 ```kotlin
 // Detectory gestów
 Box(
@@ -70,6 +72,8 @@ SwipeToDismissBox(
 
 ## Transformacje — pinch to zoom
 
+Obsługa gestów wielodotykowych, takich jak powiększanie (pinch-to-zoom) czy obracanie, wymaga śledzenia wielu punktów dotykowych jednocześnie. Compose upraszcza ten proces dzięki funkcji `detectTransformGestures`, która zwraca zagregowane wartości zoomu, przesunięcia i obrotu. Poniższy przykład pokazuje komponent obrazu reagującego na wszystkie trzy rodzaje transformacji.
+
 ```kotlin
 @Composable
 fun ZoomableImage(painter: Painter) {
@@ -101,6 +105,8 @@ fun ZoomableImage(painter: Painter) {
 ```
 
 ## Haptic Feedback — sprzężenie dotykowe
+
+Wibracyjne sprzężenie zwrotne (haptic feedback) poprawia odczucie interakcji, dając użytkownikowi potwierdzenie dotykowe po wykonaniu akcji. Odpowiednio dobrana haptyka sprawia, że aplikacja czuje się bardziej responsywna i dopracowana. Poniżej przykład przycisku z feedbackiem haptycznym oraz omówienie dostępnych typów wibracji.
 
 ```kotlin
 @Composable
@@ -155,6 +161,8 @@ IconButton(
 
 ## Nestedscroll — koordynacja przewijania
 
+W złożonych layoutach z wieloma przewijalnymi sekcjami konieczna jest koordynacja przewijania między komponentami rodzica i potomka. Mechanizm `NestedScroll` w Compose pozwala przekazywać zdarzenia scroll do właściwego komponentu zgodnie z zdefiniowaną logiką. Poniższy przykład demonstruje zwijający się pasek aplikacji (collapsing toolbar) oraz implementację własnego `NestedScrollConnection`.
+
 ```kotlin
 // Skoordynowane przewijanie: rozwijanie/zwijanie paska przy scrollu
 @Composable
@@ -194,6 +202,8 @@ val nestedScrollConnection = object : NestedScrollConnection {
 
 ## Pull-to-Refresh
 
+Gest „przeciągnij, aby odświeżyć" (pull-to-refresh) to powszechnie stosowany wzorzec UX umożliwiający użytkownikowi ręczne odświeżenie zawartości listy. Material 3 dostarcza gotowy komponent `PullToRefreshContainer`, który integruje się bezpośrednio z `NestedScroll`. Poniższy przykład pokazuje kompletną implementację z ViewModelem sterującym stanem ładowania.
+
 ```kotlin
 @Composable
 fun RefreshableContent(
@@ -230,6 +240,8 @@ fun RefreshableContent(
 ```
 
 ## Drag and Drop — reorder listy
+
+Możliwość ręcznego sortowania elementów listy metodą „przeciągnij i upuść" znacząco poprawia użyteczność aplikacji do zarządzania zadaniami czy playlistami. Biblioteka `ComposeReorderable` dostarcza gotową integrację z `LazyColumn`, obsługując animacje i zmianę indeksów. Poniższy przykład implementuje przewijalną listę zadań z ikoną uchwytu do przeciągania.
 
 ```kotlin
 @Composable

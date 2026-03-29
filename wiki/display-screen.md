@@ -13,6 +13,8 @@ Ekran to interfejs między aplikacją a użytkownikiem. Zrozumienie technologii 
 
 ## Gęstość pikseli (DPI)
 
+Gęstość pikseli (PPI — pixels per inch) określa, ile pikseli mieści się na jednym calu ekranu. Im wyższa wartość, tym ostrzejszy obraz i mniejsze widoczne „piksele". Poniższy wzór pozwala wyliczyć gęstość dla dowolnego ekranu na podstawie jego rozdzielczości i rozmiaru.
+
 ```
 Gęstość = √(px_w² + px_h²) / diagonal_inches
 
@@ -22,6 +24,8 @@ Gęstość = √(2400² + 1080²) / 6.4 = 411 PPI
 
 ### Android — Density Buckets
 
+Android grupuje urządzenia w tzw. „density buckets", dzięki czemu aplikacja może dostarczać różne zasoby graficzne dla różnych rozdzielczości bez ręcznego sprawdzania DPI. Jednostka `dp` (density-independent pixel) automatycznie skaluje interfejs do odpowiedniej gęstości ekranu.
+
 ```
 mdpi    = 160 dpi  (1dp = 1px)  — podstawowy
 hdpi    = 240 dpi  (1dp = 1.5px)
@@ -29,6 +33,8 @@ xhdpi   = 320 dpi  (1dp = 2px)  — większość urządzeń ~2018
 xxhdpi  = 480 dpi  (1dp = 3px)  — obecne flagowce
 xxxhdpi = 640 dpi  (1dp = 4px)  — ultra-premium
 ```
+
+Poniższy przykład pokazuje, jak samodzielnie przeliczyć `dp` na piksele oraz jak poprawnie używać jednostek niezależnych od gęstości w Jetpack Compose, aby interfejs wyglądał identycznie na każdym urządzeniu.
 
 ```kotlin
 // Konwersja dp → px
@@ -45,6 +51,8 @@ Box(modifier = Modifier
 ```
 
 ## Częstotliwość odświeżania
+
+Częstotliwość odświeżania (Hz) definiuje, ile razy na sekundę ekran jest aktualizowany. Nowoczesne flagowce obsługują zmienną częstotliwość (LTPO), którą system dostosowuje dynamicznie do treści. Poniższy kod pokazuje, jak odczytać aktualną częstotliwość oraz wymusić konkretną wartość, np. przy nagrywaniu wideo.
 
 ```kotlin
 // Sprawdzenie aktualnej częstotliwości
@@ -65,6 +73,8 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
 ```
 
 ## Notch, punch-hole i Dynamic Island
+
+Wcięcia ekranu (notch, punch-hole) zajmują fizyczny obszar wyświetlacza, przez co aplikacja musi uwzględniać „bezpieczne strefy", aby treść nie chowała się za kamerą lub czujnikami. Poniższy przykład demonstruje włączenie trybu edge-to-edge oraz obsługę `WindowInsets`, dzięki którym UI automatycznie adaptuje się do kształtu ekranu.
 
 ```kotlin
 // Obsługa wcięcia (notch) — rysuj za systemowym UI
@@ -88,6 +98,8 @@ val bottomInset = insets.getInsets(WindowInsetsCompat.Type.navigationBars()).bot
 ```
 
 ## HDR i szeroka gama barw
+
+Ekrany HDR oferują znacznie szerszy zakres jasności i kolorów niż standardowe SDR, co szczególnie poprawia jakość odtwarzanych filmów. Przed włączeniem trybu HDR należy sprawdzić, czy urządzenie faktycznie go obsługuje — poniższy fragment pokazuje, jak to zrobić i jak aktywować odpowiedni tryb okna.
 
 ```kotlin
 // Sprawdź czy urządzenie obsługuje HDR
@@ -127,6 +139,8 @@ ViewCompat.setOnApplyWindowInsetsListener(binding.root) { view, insets ->
 
 ## Tryby kolorów i Dark Mode
 
+Tryb ciemny (Dark Mode) redukuje zmęczenie oczu i oszczędza energię na ekranach OLED. Android udostępnia flagę konfiguracyjną `UI_MODE_NIGHT_YES`, która pozwala wykryć bieżący motyw i odpowiednio dostosować wygląd aplikacji — zarówno w klasycznym View system, jak i w Compose.
+
 ```kotlin
 // Sprawdzenie aktualnego trybu (jasny/ciemny)
 val isDarkMode = when (resources.configuration.uiMode and Configuration.UI_MODE_NIGHT_MASK) {
@@ -143,6 +157,8 @@ override fun onConfigurationChanged(newConfig: Configuration) {
     }
 }
 ```
+
+W Jetpack Compose zarządzanie motywem jest jeszcze prostsze — `MaterialTheme` automatycznie stosuje właściwe kolory na podstawie stanu systemowego. Poniższy przykład pokazuje kompletną implementację jasnej i ciemnej palety barw zgodnej z Material Design 3.
 
 ```kotlin
 // Compose — automatyczny dark mode przez MaterialTheme
@@ -205,6 +221,8 @@ fun DynamicTheme(
 
 ## Adaptacyjne układy — telefon vs tablet vs foldable
 
+Wraz z rosnącą popularnością tabletów i składanych smartfonów aplikacja powinna dostosowywać swój układ do dostępnej przestrzeni ekranu. `WindowSizeClass` z Jetpack Compose pozwala w czytelny sposób klasyfikować rozmiar okna i wyświetlać odpowiedni interfejs — od pojedynczego panelu na telefonie po układ listy ze szczegółami na dużym ekranie.
+
 ```kotlin
 // WindowSizeClass — klasyfikacja rozmiaru okna
 @Composable
@@ -247,6 +265,8 @@ fun TwoPaneLayout() {
 ```
 
 ## Animowane ikony i lottie
+
+Biblioteka Lottie umożliwia odtwarzanie wektorowych animacji eksportowanych z Adobe After Effects jako pliki JSON, co daje znacznie wyższą jakość niż klasyczne GIF-y przy minimalnym rozmiarze pliku. Poniższy przykład pokazuje, jak zintegrować Lottie z Compose i użyć animacji na ekranie powitalnym, automatycznie wywołując callback po jej zakończeniu.
 
 ```kotlin
 dependencies {

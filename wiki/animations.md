@@ -90,6 +90,8 @@ Dostępne warianty `animate*AsState`:
 
 ### Animowana widoczność — `AnimatedVisibility`
 
+`AnimatedVisibility` to gotowy komponent Compose umożliwiający płynne pojawianie i znikanie elementów interfejsu. Parametry `enter` i `exit` przyjmują złożenia efektów przejścia, które można łączyć operatorem `+`, tworząc kombinacje ruchu i przeźroczystości. To najwygodniejsze narzędzie do animowania widoczności banerów, list i sekcji warunkowych.
+
 ```kotlin
 @Composable
 fun NotificationBanner(visible: Boolean, message: String) {
@@ -204,6 +206,8 @@ fun PulsingButton(onClick: () -> Unit) {
 | `snap()` | Natychmiastowa zmiana bez animacji | Reset stanu, tryb dostępności |
 | `infiniteRepeatable(...)` | Powtarzanie w pętli | Shimmer, spinnery, pulsy |
 
+Poniższy przykład demonstruje użycie `infiniteRepeatable` do stworzenia efektu shimmer — nieskończonej animacji połysku stosowanej podczas ładowania treści. `rememberInfiniteTransition` zarządza animacją niepowiązaną z konkretnym stanem, a wartość `shimmerOffset` jest następnie przekazywana do `LinearGradient`, który tworzy efekt przesuwanego blasku.
+
 ```kotlin
 // Shimmer loader — nieskończona pętla
 val infiniteTransition = rememberInfiniteTransition(label = "shimmer")
@@ -224,6 +228,8 @@ SwiftUI udostępnia animacje jako modyfikatory widoku. Zmiana stanu powiązana z
 
 ### Podstawowe animacje
 
+W SwiftUI wystarczy dołączyć modyfikator `.animation(_:value:)` do widoku — każda zmiana wskazanej wartości automatycznie uruchamia płynną animację. Poniższy przykład pokazuje rozwijającą się kartę, której wysokość animuje się za pomocą sprężyny (`spring`) reagującej na dotknięcie. Podejście to jest deklaratywne i eliminuje potrzebę ręcznego zarządzania timerami czy stanami animacji.
+
 ```swift
 struct ExpandableCard: View {
     @State private var expanded = false
@@ -241,6 +247,8 @@ struct ExpandableCard: View {
 ```
 
 ### Widoczność i przejścia — `.transition`
+
+Modyfikator `.transition` w SwiftUI definiuje sposób wchodzenia i wychodzenia widoku z hierarchii, gdy jest wyświetlany lub ukrywany warunkowo przez `if`. Metoda `.asymmetric` pozwala zastosować inny efekt przy pojawieniu się elementu i inny przy jego znikaniu. Animację uruchamia się przez dołączenie `.animation(_:value:)` do kontenera rodzica, co synchronizuje wszystkie zmiany stanu wewnątrz niego.
 
 ```swift
 struct BannerView: View {
@@ -268,6 +276,8 @@ struct BannerView: View {
 
 ### Animacja fazowa — `PhaseAnimator` (iOS 17+)
 
+`PhaseAnimator` dostępny od iOS 17 pozwala sekwencyjnie przechodzić przez listę faz animacji, co upraszcza tworzenie wieloetapowych efektów. W poniższym przykładzie serce pulsuje przez trzy fazy skalowania, a każda z nich używa animacji sprężyny. Wyzwalacz `trigger` decyduje, kiedy sekwencja się uruchamia — wystarczy zmienić jego wartość po zdarzeniu, np. dotknięciu.
+
 ```swift
 struct PulsingHeart: View {
     @State private var trigger = false
@@ -287,6 +297,8 @@ struct PulsingHeart: View {
 ```
 
 ### Keyframe animations (iOS 17+)
+
+Animacje klatkowe (keyframe) dostępne od iOS 17 umożliwiają precyzyjne definiowanie wartości właściwości w konkretnych momentach czasu. `KeyframeTrack` grupuje klatki dla jednej właściwości, a różne typy klatek (`LinearKeyframe`, `SpringKeyframe`) określają interpolację między nimi. Dzięki temu można tworzyć złożone, wieloetapowe efekty — jak realistyczne odbicie przycisku — bez zagnieżdżania wielu animacji.
 
 ```swift
 struct BounceButton: View {
@@ -496,6 +508,8 @@ Płynna animacja to **stałe 60 klatek na sekundę** (16,6 ms/klatka). Na ekrana
 
 ### Dobre praktyki wydajnościowe
 
+Kluczowa zasada wydajnych animacji to animowanie wyłącznie właściwości renderowanych przez GPU — takich jak `alpha`, `scale` czy `offset` — które nie wywołują ponownego układu elementów (relayout). Poniższy przykład zestawia dobre i złe podejście: animowanie szerokości widgetu przez `animateDpAsState` powoduje pełny relayout każdej klatki, co jest droższe obliczeniowo i łatwo prowadzi do janku. Jeśli zmiana rozmiaru jest niezbędna, warto rozważyć użycie `AnimatedContent` lub `animateContentSize`.
+
 ```kotlin
 // ✅ Dobrze — animuj tylko `alpha` i `translationY` (GPU)
 AnimatedVisibility(visible = show) {
@@ -517,6 +531,8 @@ Właściwości animowane przez GPU (bez relayoutu):
 | Translacja | `offset` | `.offset` | `Transform.translate` |
 
 ### Profiling animacji
+
+Każda z trzech platform udostępnia dedykowane narzędzia do profilowania płynności animacji — warto z nich korzystać przed opublikowaniem aplikacji. Android Studio Profiler pokazuje tzw. „janky frames" (klatki przekraczające 16 ms), Instruments na iOS umożliwia śledzenie commit timeline renderera Core Animation, a Flutter DevTools wyświetla nakładkę GPU/UI thread bezpośrednio na urządzeniu.
 
 ```
 Android: Android Studio → Profiler → Rendering → Janky frames
@@ -560,6 +576,8 @@ fun AccessibleCard(isExpanded: Boolean) {
 }
 ```
 
+Odpowiednik w SwiftUI jest jeszcze bardziej zwięzły — środowisko dostarcza gotową wartość logiczną `accessibilityReduceMotion`, dzięki której można warunkowo zastosować `.none` zamiast normalnej animacji. Warto wyciągnąć tę logikę do osobnej właściwości obliczeniowej, aby unikać duplikowania warunku w każdym modyfikatorze `.animation`.
+
 ```swift
 // SwiftUI
 @Environment(\.accessibilityReduceMotion) var reduceMotion
@@ -568,6 +586,8 @@ var animation: Animation {
     reduceMotion ? .none : .spring(response: 0.4)
 }
 ```
+
+We Flutterze informacja o wyłączonych animacjach pochodzi z `MediaQuery` — wartość `disableAnimations` zwraca `true`, gdy użytkownik włączył opcję ograniczenia ruchu w systemie. Wystarczy wtedy ustawić `duration` na `Duration.zero`, aby wszelkie animacje były natychmiastowe i nie powodowały dyskomfortu.
 
 ```dart
 // Flutter
@@ -595,6 +615,8 @@ final duration = reduceMotion
 - **Android Motion Editor** — wizualny edytor ConstraintLayout transitions
 
 ### Lottie w Compose
+
+Lottie pozwala odtwarzać animacje stworzone w Adobe After Effects lub edytorach kompatybilnych, eksportowane do lekkiego formatu JSON. Poniższy przykład pokazuje kompletną integrację: `rememberLottieComposition` asynchronicznie ładuje plik z zasobów, `animateLottieCompositionAsState` kontroluje postęp odtwarzania, a `LaunchedEffect` uruchamia callback po zakończeniu animacji. Takie podejście sprawdza się świetnie przy animacjach sukcesu, błędu lub ekranach powitalnych.
 
 ```kotlin
 // build.gradle (app)
@@ -625,6 +647,8 @@ fun SuccessAnimation(onComplete: () -> Unit) {
 ```
 
 ### Lottie w Flutter
+
+We Flutterze integracja z Lottie jest równie prosta — widget `Lottie.asset` ładuje animację z katalogu `assets` i wyświetla ją bez konieczności tworzenia kontrolera. Parametr `repeat: false` powoduje jednorazowe odtworzenie animacji, co jest typowe dla ekranów potwierdzenia akcji. Callback `onLoaded` informuje o zakończeniu ładowania kompozycji, co pozwala synchronizować animację z logiką aplikacji.
 
 ```dart
 // pubspec.yaml: lottie: ^3.1.0

@@ -30,6 +30,8 @@ if (result != ConnectionResult.SUCCESS) {
 
 ## Publikacja w Google Play — APK vs AAB
 
+Proces wydania aplikacji w Google Play składa się z kilku następujących po sobie kroków. Poniższy schemat ilustruje kolejność od skompilowania kodu źródłowego aż po dystrybucję gotowej aplikacji do użytkowników.
+
 ```
 Kod źródłowy
     │
@@ -102,6 +104,8 @@ android {
 
 ### Kanały dystrybucji
 
+Google Play Console oferuje cztery kanały dystrybucji różniące się dostępnością i czasem weryfikacji. Pozwala to stopniowo wprowadzać aplikację do szerszego grona użytkowników i wykrywać problemy, zanim dotrą do wszystkich.
+
 ```
 Internal Testing   →  Closed Testing   →  Open Testing   →  Production
 (max 100 osób)        (lista e-mail)       (publiczne %)     (wszyscy)
@@ -109,6 +113,9 @@ Internal Testing   →  Closed Testing   →  Open Testing   →  Production
 ```
 
 **Staged rollout** — stopniowe wdrażanie:
+
+Staged rollout to technika stopniowego wdrażania nowej wersji — zamiast wysyłać aktualizację do wszystkich użytkowników naraz, zwiększamy procent odbiorców po obserwacji kluczowych metryk. Poniższy diagram pokazuje typowy schemat rozszerzania zasięgu wdrożenia.
+
 ```
 1% → 5% → 10% → 20% → 50% → 100%
    ↑ obserwuj crash rate i oceny przed każdym krokiem
@@ -117,6 +124,8 @@ Internal Testing   →  Closed Testing   →  Open Testing   →  Production
 ### Android Vitals — automatyczne alerty
 
 Play Console mierzy jakość aplikacji i porównuje z innymi w kategorii:
+
+Systematyczne monitorowanie wskaźników jakości pozwala szybko reagować na problemy wpływające na oceny i widoczność w sklepie. Przekroczenie poniższych progów skutkuje automatycznym ostrzeżeniem w konsoli lub obniżeniem widoczności aplikacji w wynikach wyszukiwania sklepu.
 
 ```
 Crash Rate              < 1.09%  (bad core vitals threshold)
@@ -198,6 +207,8 @@ jobs:
 
 ## Google Play — polityki i wymagania
 
+Sekcja ta podsumowuje aktualne wymagania techniczne i prawne Google Play dotyczące poziomu docelowego API, rozmiaru paczek oraz bezpieczeństwa. Znajomość tych limitów jest niezbędna przy planowaniu wdrożenia produkcyjnego i pozwala uniknąć odrzucenia aplikacji podczas weryfikacji.
+
 ```
 Targetowane API Level:
 - Od 2024: nowe aplikacje muszą targetować API 34+
@@ -248,6 +259,8 @@ class IntegrityChecker(private val context: Context) {
 ```
 
 ## Android App Bundle (AAB) vs APK
+
+Poniższy schemat porównuje format APK z nowym formatem AAB (Android App Bundle) i mechanizmem Dynamic Delivery. Zrozumienie różnic między tymi formatami jest istotne przy planowaniu procesu wydania aplikacji i optymalizacji jej rozmiaru dla różnych konfiguracji urządzeń.
 
 ```
 APK (Android Package):

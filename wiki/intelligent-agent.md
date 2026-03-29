@@ -18,6 +18,8 @@ gdzie `P*` to ciąg historii percepcji, a `A` to zbiór dostępnych akcji. Agent
 
 ## Struktura agenta
 
+Poniższy diagram przedstawia wewnętrzną architekturę inteligentnego agenta, ukazując przepływ informacji między sensorami, bazą wiedzy, programem decyzyjnym i efektorami. Zrozumienie tej struktury jest kluczowe, ponieważ stanowi ona szablon dla wszystkich bardziej zaawansowanych typów agentów opisanych w kolejnych sekcjach.
+
 ```
 ┌──────────────────────────────────────────┐
 │              AGENT                        │
@@ -196,6 +198,8 @@ Najogólniejsza forma — poprawia swoją funkcję decyzyjną na podstawie dośw
     Nagroda / kara ze środowiska
 ```
 
+Poniższa implementacja Q-Learning demonstruje, jak agent uczy się optymalnej polityki działania metodą prób i błędów, aktualizując tabelę wartości Q zgodnie z równaniem Bellmana. Strategia epsilon-greedy balansuje eksplorację nowych akcji z eksploatacją już poznanych, stopniowo prowadząc do coraz lepszych decyzji.
+
 ```python
 import numpy as np
 
@@ -261,6 +265,8 @@ Wejście (mowa) → ASR → NLU → Dialog Manager → NLG → TTS → Wyjście 
 ```
 
 ### Agenty personalizacji
+
+Agent personalizacji obserwuje wzorce zachowań użytkownika i buduje jego model, który następnie służy do dopasowywania interfejsu i rekomendacji. Poniższy przykład śledzi, które aplikacje użytkownik uruchamia o różnych porach dnia, i na tej podstawie proponuje najbardziej prawdopodobne następne akcje. Tego rodzaju mechanizmy są powszechnie stosowane w launcherach, systemach powiadomień oraz asystentach AI na urządzeniach mobilnych.
 
 ```python
 class MobilePersonalizationAgent:

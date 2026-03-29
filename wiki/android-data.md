@@ -6,6 +6,8 @@ Dokumentacja Android Developers rozróżnia przechowywanie preferencji, danych w
 
 ## Dobór mechanizmu do rodzaju danych
 
+Wybór właściwego mechanizmu przechowywania danych jest kluczową decyzją architektoniczną. Poniższa tabela zestawia typowe rodzaje danych z zalecanymi mechanizmami i scenariuszami użycia. Pozwala to szybko ocenić, które narzędzie najlepiej odpowiada potrzebom konkretnego projektu.
+
 ```text
 Rodzaj danych                  → Mechanizm                         → Typowy scenariusz
 -------------------------------------------------------------------------------------
@@ -38,6 +40,8 @@ Używaj DataStore, gdy chcesz przechować:
 Nie używaj DataStore jako zamiennika pełnej bazy relacyjnej.
 
 ### Preferences DataStore — przykład
+
+Poniższy przykład pokazuje kompletne wdrożenie Preferences DataStore: definicję kluczy, model danych ustawień oraz klasę repozytorium. Repozytorium korzysta z reaktywnego `Flow` do udostępniania aktualnych ustawień i operacji `edit` do bezpiecznego, transakcyjnego ich modyfikowania.
 
 ```kotlin
 val Context.settingsDataStore by preferencesDataStore(name = "app_settings")
@@ -147,6 +151,8 @@ Room wybieramy, gdy:
 
 ### Encja
 
+Encja Room definiuje strukturę pojedynczej tabeli w bazie danych. Adnotacje `@Entity`, `@PrimaryKey` i `@ColumnInfo` opisują mapowanie między klasą Kotlin a tabelą SQLite, a `@Index` przyspiesza zapytania na często filtrowanych kolumnach.
+
 ```kotlin
 @Entity(
     tableName = "tasks",
@@ -169,6 +175,8 @@ data class TaskEntity(
 ```
 
 ### DAO
+
+DAO (Data Access Object) to interfejs definiujący wszystkie operacje na encji. Room generuje implementację na podstawie adnotacji i sprawdza poprawność zapytań SQL w czasie kompilacji, co eliminuje wiele błędów wykrywanych dotąd dopiero w czasie działania aplikacji.
 
 ```kotlin
 @Dao
@@ -208,6 +216,8 @@ interface TaskDao {
 ```
 
 ### Klasa bazy
+
+Klasa bazy danych deklaruje, jakie encje i jaką wersję schematu zawiera baza. Wzorzec singleton gwarantuje, że przez cały czas życia aplikacji istnieje tylko jedna instancja bazy, co zapobiega problemom ze współbieżnością i niepotrzebnemu tworzeniu kosztownych połączeń.
 
 ```kotlin
 @Database(
@@ -366,6 +376,8 @@ Android Developers rozróżnia kilka scenariuszy zapisu plików. Najważniejsze 
 
 ### Internal storage — przykład
 
+Poniższy przykład ilustruje zapis i odczyt pliku tekstowego w pamięci prywatnej aplikacji. Użycie `openFileOutput` z trybem `MODE_PRIVATE` zapewnia, że plik jest widoczny wyłącznie dla tej aplikacji i nie wymaga dodatkowych uprawnień systemowych.
+
 ```kotlin
 fun saveTextFile(context: Context, filename: String, content: String) {
     context.openFileOutput(filename, Context.MODE_PRIVATE).use { stream ->
@@ -435,6 +447,8 @@ To dobry przykład, że jedna aplikacja zwykle korzysta z kilku metod przechowyw
 - reakcję DataStore na zmianę preferencji.
 
 ### Przykład testu mapowania
+
+Test mapowania weryfikuje poprawność konwersji encji bazy danych na obiekt domenowy. Takie testy są szybkie, nie wymagają środowiska emulacyjnego i powinny być pierwszą linią obrony przed błędami w logice transformacji danych.
 
 ```kotlin
 @Test

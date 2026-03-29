@@ -4,6 +4,8 @@ ARCore (Android) umożliwia tworzenie rozbudowanych aplikacji AR: rozpoznawanie 
 
 ## Kluczowe koncepcje ARCore
 
+ARCore opiera się na kilku wzajemnie powiązanych modułach, które razem tworzą kompletny system rozszerzonej rzeczywistości. Poniższy diagram przedstawia główne składniki sesji ARCore i ich rolę: śledzenie ruchu urządzenia w 6 stopniach swobody, rozumienie otoczenia (wykrywanie płaszczyzn, głębia) oraz rozpoznawanie obrazów-markerów. Zrozumienie tej architektury jest kluczowe przed przystąpieniem do implementacji jakiejkolwiek funkcji AR.
+
 ```
 ┌─────────────────────────────────────────────────────────┐
 │                   ARCore Session                         │
@@ -24,6 +26,8 @@ ARCore (Android) umożliwia tworzenie rozbudowanych aplikacji AR: rozpoznawanie 
 ```
 
 ## SceneView + Compose — ARScene
+
+Biblioteka SceneView integruje ARCore bezpośrednio z Jetpack Compose, eliminując potrzebę ręcznego zarządzania sesją ARCore i cyklem życia widoku. Poniższy przykład pokazuje kompletny ekran AR z obsługą gestów dotykowych, umieszczaniem modeli 3D na wykrytych płaszczyznach oraz wyświetlaniem komunikatów o problemach z śledzeniem. Jest to punkt wyjścia dla większości aplikacji AR opartych na Compose.
 
 ```kotlin
 dependencies {
@@ -111,6 +115,8 @@ fun reasonToMessage(reason: TrackingFailureReason) = when (reason) {
 
 ## Augmented Images — śledzenie obrazów-markerów
 
+Augmented Images pozwala aplikacji rozpoznawać wcześniej zdefiniowane obrazy (plakaty, okładki, etykiety) w widoku kamery i nakładać na nie treści AR. Każdy obraz należy zarejestrować w bazie danych razem z jego rzeczywistą szerokością, co umożliwia precyzyjne określenie skali i pozycji. Poniższy kod pokazuje konfigurację bazy obrazów oraz obsługę różnych stanów śledzenia podczas działania aplikacji.
+
 ```kotlin
 // Konfiguracja bazy obrazów (wykonaj raz)
 fun setupAugmentedImageDatabase(session: Session, context: Context): Boolean {
@@ -162,6 +168,8 @@ fun onSessionUpdated(session: Session, frame: Frame) {
 
 ## Depth API — głębia sceny
 
+Depth API dostarcza informacje o odległości obiektów od kamery jako obraz 16-bitowy (wartości w milimetrach), co umożliwia realistyczne zasłanianie obiektów wirtualnych przez rzeczywiste przeszkody. Nie wszystkie urządzenia obsługują dedykowany czujnik głębi, dlatego przed użyciem należy sprawdzić dostępność tej funkcji. Poniższy kod prezentuje weryfikację wsparcia oraz odczyt głębokości z centrum kadru.
+
 ```kotlin
 // Sprawdź wsparcie dla Depth API
 fun isDepthSupported(session: Session): Boolean {
@@ -191,6 +199,8 @@ fun processDepthFrame(frame: Frame) {
 
 ## Light Estimation — realistyczne oświetlenie
 
+Jednym z największych wyzwań w AR jest naturalne wkomponowanie obiektów wirtualnych w oświetlenie rzeczywistego środowiska. ARCore szacuje warunki oświetleniowe na podstawie obrazu z kamery i dostarcza dane HDR (główny kierunek światła, sferyczne harmoniki otoczenia oraz mapę środowiska), które można zastosować do modeli 3D. Dzięki temu wirtualne obiekty rzucają cienie i reagują na światło identycznie jak prawdziwe przedmioty.
+
 ```kotlin
 // Pobierz informacje o oświetleniu otoczenia
 fun applyLightEstimation(frame: Frame, modelNode: ModelNode) {
@@ -211,6 +221,8 @@ fun applyLightEstimation(frame: Frame, modelNode: ModelNode) {
 ```
 
 ## Cloud Anchors — wspólne AR między urządzeniami
+
+Cloud Anchors umożliwiają współdzielenie punktów zakotwiczenia AR między wieloma urządzeniami — jeden użytkownik hostuje kotwicę w chmurze Google, a inni mogą ją odtworzyć za pomocą unikalnego identyfikatora (np. przekazanego przez QR kod). Jest to podstawa wieloosobowych doświadczeń AR, takich jak wspólne gry czy współpraca w wizualizacjach przestrzennych. Poniższy kod pokazuje zarówno hosting nowej kotwicy, jak i jej odtworzenie na innym urządzeniu.
 
 ```kotlin
 // Resolve istniejącego Cloud Anchor (np. z QR kodu)

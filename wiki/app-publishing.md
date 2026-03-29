@@ -6,6 +6,8 @@ Opublikowanie aplikacji w sklepie to dopiero połowa sukcesu — równie ważna 
 
 ### Checklista przed wysłaniem do sklepu
 
+Przed przesłaniem aplikacji do sklepu warto przejrzeć trzy obszary: wymagania techniczne, materiały marketingowe i zgodność prawną. Poniższa checklista obejmuje najważniejsze punkty kontrolne, które często są pomijane przez niedoświadczonych deweloperów i skutkują odrzuceniem przez review lub negatywnymi opiniami użytkowników. Przejście przez nią krok po kroku pozwala uniknąć kosztownych poprawek po premierze.
+
 ```
 Wymagania techniczne:
   ☑ Aplikacja działa na fizycznym urządzeniu (nie tylko emulatorze)
@@ -40,6 +42,8 @@ Prawne i RODO:
 | **Feature Graphic** | 1024×500 px | — |
 | **Promo Video** | YouTube URL (opcjonalnie) | MP4, max 30s (opcjonalnie) |
 
+Poniższe wskazówki dotyczą tworzenia screenhotów do sklepu — to jeden z najważniejszych czynników wpływających na konwersję z wyświetlenia na instalację. Dobrze zaprojektowane screenshoty z podpisami i mockupami urządzeń mogą zwiększyć współczynnik instalacji nawet o 30%, dlatego warto poświęcić im czas.
+
 ```
 Wskazówki dot. screenhotów:
  • Pokaż kluczowe funkcje w pierwszych 2-3 slajdach
@@ -54,6 +58,8 @@ Wskazówki dot. screenhotów:
 ## Publikacja w Google Play
 
 ### Konto deweloperskie i opłaty
+
+Przed pierwszą publikacją w Google Play konieczne jest założenie konta deweloperskiego w Google Play Console. Poniższe zestawienie zawiera kluczowe informacje finansowe i operacyjne: jednorazową opłatę rejestracyjną, model prowizji od zakupów i orientacyjny czas procesu review. Znajomość tych danych jest niezbędna do planowania budżetu i harmonogramu premiery.
 
 ```
 Google Play Console:
@@ -88,6 +94,8 @@ keytool -genkey -v -keystore release.jks \
 
 ### Kanały dystrybucji (Tracks)
 
+Google Play oferuje cztery kanały dystrybucji pozwalające stopniowo udostępniać aplikację coraz szerszemu gronu odbiorców. Każdy kolejny kanał wymaga przejścia przez review, a czas jego trwania rośnie — dzięki temu można znaleźć i naprawić błędy, zanim trafią do wszystkich użytkowników produkcyjnych. Poniższy schemat ilustruje typowy przepływ wdrożenia od testów wewnętrznych do pełnej produkcji.
+
 ```
 Internal Testing  →  Closed Testing  →  Open Testing  →  Production
  do 100 kont          lista e-mail       publiczne %      wszyscy
@@ -107,6 +115,8 @@ Wstrzymaj rollout jeśli:
 - Ocena spadnie gwałtownie (więcej niż 0,3 gwiazdki)
 
 ### Opis aplikacji — SEO w sklepie
+
+Opis aplikacji w Google Play to jeden z głównych czynników wpływających na pozycję w wynikach wyszukiwania — algorytm indeksuje tytuł, krótki opis i pełny opis pod kątem słów kluczowych. Poniższe wskazówki pokazują, jak formułować poszczególne sekcje, by były zarówno czytelne dla użytkownika, jak i zoptymalizowane pod kątem wyszukiwania. Szczególnie ważny jest tytuł (max. 30 znaków) i krótki opis — to one wyświetlają się w wynikach wyszukiwania i bezpośrednio wpływają na CTR.
 
 ```
 Tytuł (max. 30 znaków):
@@ -131,6 +141,8 @@ Pełny opis (max. 4000 znaków):
 
 ### Konto Apple Developer
 
+Publikacja w App Store wymaga aktywnego członkostwa w Apple Developer Program, które odnawia się co roku. Poniższe zestawienie zawiera kluczowe informacje o kosztach i czasie review dla standardowego programu Individual/Organization oraz programu Enterprise przeznaczonego do dystrybucji wewnętrznej. Warto pamiętać, że bez aktywnego konta certyfikaty i provisioning profiles wygasają, co uniemożliwia instalację aplikacji na urządzeniach.
+
 ```
 Apple Developer Program:
   Roczna opłata: $99 USD (Individual lub Organization)
@@ -143,6 +155,8 @@ URL: https://appstoreconnect.apple.com
 
 ### Certyfikaty i provisioning profiles
 
+Podpisywanie aplikacji iOS opiera się na systemie certyfikatów i provisioning profiles — każdy build musi być podpisany odpowiednim certyfikatem powiązanym z App ID. Poniższy schemat pokazuje, jak Xcode automatycznie zarządza tym procesem przy włączonej opcji „Automatically manage signing". Każde uprawnienie (permission) używane w aplikacji musi być zadeklarowane w pliku `Info.plist` z opisem dla użytkownika — brak tego opisu to jedna z najczęstszych przyczyn odrzucenia przez App Review.
+
 ```
 Xcode → Signing & Capabilities → Automatically manage signing
   ↓
@@ -152,6 +166,8 @@ Xcode → Signing & Capabilities → Automatically manage signing
   - App ID (Bundle Identifier: com.firma.aplikacja)
   - Provisioning Profile (łączy certyfikat + App ID + urządzenia)
 ```
+
+Wymagania dotyczące uprawnień są weryfikowane ręcznie przez App Review — każde uprawnienie zadeklarowane w `Info.plist` musi mieć klucz `NSUsageDescription` z konkretnym opisem po polsku lub angielsku, zrozumiałym dla użytkownika. Poniższy przykład pokazuje dwa najczęściej używane klucze: dostęp do aparatu i lokalizacji.
 
 ```swift
 // Info.plist — opis uprawnień (wymagane przez App Review)
@@ -166,6 +182,8 @@ Xcode → Signing & Capabilities → Automatically manage signing
 > **Wskazówka:** Brakujące klucze `NSUsageDescription` to jedna z najczęstszych przyczyn odrzucenia przez App Review. Opisy muszą być konkretne i pisane z perspektywy użytkownika — Apple odrzuca ogólnikowe komunikaty w stylu „Wymagany do działania aplikacji".
 
 ### TestFlight — testy beta
+
+TestFlight to oficjalny system dystrybucji beta Apple, który pozwala przetestować aplikację z prawdziwymi użytkownikami przed publiczną premierą. Poniższe zestawienie porównuje dwa typy testerów: wewnętrznych (do 100 osób z zespołu, bez review) i zewnętrznych (do 10 000 osób, z krótkim przeglądem Apple). Korzystanie z TestFlight przed premierą znacznie zmniejsza ryzyko negatywnych recenzji spowodowanych błędami, które można wykryć w kontrolowanym środowisku.
 
 ```
 TestFlight pozwala na dystrybucję do testerów przed publikacją:
@@ -202,6 +220,8 @@ ASO to SEO dla sklepów z aplikacjami — optymalizacja widoczności w wynikach 
 
 ### Czynniki wpływające na ranking
 
+Ranking aplikacji w sklepie zależy od dwóch grup czynników: bezpośrednich (możliwych do optymalizacji przez dewelopera) i pośrednich (będących wynikiem działań użytkowników). Poniższe zestawienie pozwala zrozumieć, na co masz realny wpływ przed premierą — głównie na tytuł, opis i materiały graficzne — oraz co rośnie organicznie wraz z bazą użytkowników. Znajomość tych czynników jest punktem wyjścia do skutecznej strategii ASO.
+
 ```
 Czynniki bezpośrednie (możliwe do optymalizacji):
   • Tytuł aplikacji — najważniejsze słowa kluczowe
@@ -220,6 +240,8 @@ Czynniki pośrednie (wynik działań):
 ```
 
 ### Badanie słów kluczowych
+
+Badanie słów kluczowych to fundament skutecznej strategii ASO — pozwala odkryć frazy, których użytkownicy faktycznie szukają, zamiast opierać się na intuicji. Poniższy schemat przedstawia dostępne narzędzia oraz czteroetapowy proces: od zebrania propozycji, przez analizę konkurencji, po wybór optymalnego miksu słów z wysokim wolumenem i niską konkurencją. Iteracyjne testowanie co 4–6 tygodni jest kluczowe, bo trendy wyszukiwania zmieniają się wraz z porami roku i aktualnymi wydarzeniami.
 
 ```
 Narzędzia bezpłatne:
@@ -259,6 +281,8 @@ App Store Connect → Features → Product Page Optimization
 
 ### Marketing przed premierą (pre-launch)
 
+Działania marketingowe warto rozpocząć 6–8 tygodni przed planowaną premierą, żeby zbudować bazę zainteresowanych użytkowników i zapewnić pierwszą falę instalacji w dniu publikacji. Wczesne pobrania i oceny mają szczególne znaczenie — algorytmy sklepów nagradzają aplikacje z szybkim wzrostem zaraz po premierze, co zwiększa ich organiczną widoczność. Poniższa checklista obejmuje kluczowe działania pre-launchowe z podziałem na priorytety.
+
 ```
 6–8 tygodni przed publikacją:
   ☑ Strona landing page (np. na GitHub Pages, Netlify, Carrd)
@@ -270,6 +294,8 @@ App Store Connect → Features → Product Page Optimization
 ```
 
 ### Strona landing page — minimum viable
+
+Landing page aplikacji mobilnej to pierwsza interakcja potencjalnego użytkownika z Twoim produktem, zanim jeszcze trafi do sklepu. Poniższy szablon HTML definiuje sześć kluczowych sekcji skutecznej strony: nagłówek z przyciskami pobierania, hero section z mockupem, listę funkcji, galerię screenhotów, opinie i formularz CTA. Minimum viable landing page można przygotować w ciągu jednego dnia korzystając z szablonów Carrd lub Netlify.
 
 ```html
 <!-- Elementy skutecznej strony landing page dla aplikacji mobilnej -->
@@ -300,6 +326,8 @@ Szablony: Carrd.co, Readymag, Webflow
 
 ### Dystrybucja treści — pierwsze 30 dni po premierze
 
+Pierwsze cztery tygodnie po premierze to kluczowy okres, który determinuje przyszłą widoczność organiczną aplikacji — algorytmy sklepów oceniają prędkość wzrostu instalacji i ocen w tym czasie. Poniższy plan działania porządkuje aktywności promocyjne na każdy tydzień: premiera na ProductHunt, posty w mediach społecznościowych, artykuły techniczne i outreach do twórców branżowych. Systematyczne wykonanie każdego kroku buduje wielokanałową obecność, która generuje instalacje długo po premierze.
+
 ```
 Tydzień 1 — Premiera:
   → ProductHunt (wtorek–czwartek — najlepsze dni)
@@ -315,6 +343,8 @@ Tydzień 2–4 — Budowanie zasięgu:
 ```
 
 ### Press Kit — zawartość
+
+Press kit to zestaw materiałów przygotowanych dla dziennikarzy i blogerów piszących o aplikacji — im łatwiej им pracować, tym większa szansa na wzmiankę w prasie technicznej. Poniższa struktura katalogów pokazuje minimalne wymagane elementy: logo w różnych wariantach, screenshoty, ikonę, opisy aplikacji i dane kontaktowe. Gotowy press kit skraca czas dziennikarza z godzin do minut, co bezpośrednio przekłada się na prawdopodobieństwo pojawienia się w artykule.
 
 ```
 press-kit/
@@ -448,6 +478,8 @@ class AnalyticsManager(private val analytics: FirebaseAnalytics) {
 
 ### Google Play Console — Android Vitals
 
+Android Vitals to dashboard w Google Play Console monitorujący kluczowe wskaźniki stabilności i wydajności aplikacji. Przekroczenie progów granicznych (tzw. „bad core vitals") ma bezpośrednie konsekwencje biznesowe: obniżoną widoczność w wynikach wyszukiwania, a nawet możliwą blokadę aktualizacji. Poniższe wartości progowe wskazują, kiedy Google uznaje aplikację za problematyczną — warto monitorować je przy każdym staged rollout.
+
 ```
 Play Console → Android Vitals → monitoruj:
 
@@ -463,6 +495,8 @@ Przekroczenie progów:
 ```
 
 ### Odpowiadanie na recenzje
+
+Aktywne odpowiadanie na recenzje, szczególnie te negatywne, ma udowodniony wpływ na poprawę średniej oceny aplikacji — użytkownicy często aktualizują ocenę po otrzymaniu pomocnej odpowiedzi. Poniższe zasady i przykład odpowiedzi pokazują, jak prowadzić dialog z recenzentami w sposób profesjonalny i skuteczny. Szczególnie ważne jest przestrzeganie zakazów: nigdy nie kłócić się publicznie i nie oferować nagród za zmianę oceny — to naruszenie polityk obu sklepów.
 
 ```
 Zasady odpowiadania na recenzje:
@@ -486,6 +520,8 @@ Przykład odpowiedzi na negatywną recenzję:
 
 ### Semantic Versioning dla aplikacji mobilnych
 
+Semantic Versioning (SemVer) w aplikacjach mobilnych ma swoje specyfiki — obok numeru wersji widocznego dla użytkownika (`versionName` / `CFBundleShortVersionString`) sklepy wymagają też monotonicznie rosnącego numeru wewnętrznego (`versionCode` / `CFBundleVersion`). Poniższy schemat pokazuje, jak oba numery współdziałają na przykładach: hotfix zwiększa PATCH i inkrementuje versionCode, nowa funkcja — MINOR, a przepisanie UI — MAJOR. Przestrzeganie tych konwencji ułatwia zarządzanie historią wersji i automatyzację CI/CD.
+
 ```
 MAJOR.MINOR.PATCH (+ version code/build number)
 
@@ -505,6 +541,8 @@ iOS — Xcode / Info.plist:
 ```
 
 ### Changelog dla użytkowników
+
+Changelog w sklepie to bezpośrednia komunikacja z użytkownikami przy każdej aktualizacji — dobrze napisany może zwiększyć liczbę pobrań aktualizacji i poprawić odbiór aplikacji. Poniższe zasady i przykład pokazują, jak pisać changelog językiem korzyści dla użytkownika, a nie technicznym żargonem deweloperskim. Najczęstszy błąd to ogólnikowe „Poprawki błędów i ulepszenia wydajności" — takie wpisy są bezużyteczne i obniżają zaufanie użytkowników.
 
 ```
 Zasady dobrego changelogu w sklepie:
@@ -527,6 +565,8 @@ Czego unikać:
 ```
 
 ### Harmonogram wydań
+
+Regularny i przewidywalny harmonogram wydań buduje zaufanie użytkowników i pozwala sprawnie planować zasoby deweloperskie. Poniższe zalecenia określają odpowiedni cykl dla czterech typów wydań — od krytycznych hotfixów (24–48h) po duże zmiany kwartalne. Przyspieszenie hotfixów wymaga zazwyczaj automatyzacji CI/CD, która pozwala wydać poprawkę w ciągu godzin, a nie dni.
 
 ```
 Zalecany cykl:

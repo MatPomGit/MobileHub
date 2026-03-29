@@ -4,6 +4,8 @@ Aplikacje mobilne coraz częściej korzystają z mikrofonu — do rozpoznawania 
 
 ## Nagrywanie audio — AudioRecord (Android)
 
+Niskopoziomowe nagrywanie audio przez `AudioRecord` daje pełną kontrolę nad strumieniem PCM, co jest niezbędne w aplikacjach wymagających analizy lub przetwarzania dźwięku w czasie rzeczywistym. Poniższy przykład implementuje klasę nagrywającą, która dostarcza kolejne fragmenty bufora dźwiękowego przez callback, z wbudowaną prostą detekcją aktywności głosowej (VAD). Nagrywanie odbywa się na osobnym wątku (Dispatchers.IO), aby nie blokować interfejsu użytkownika.
+
 ```kotlin
 class AudioRecorder(
     private val sampleRate: Int = 16000,
@@ -54,6 +56,8 @@ class AudioRecorder(
 
 ## Zapis do pliku WAV
 
+Surowe dane PCM muszą zostać opakowane odpowiednim nagłówkiem, aby tworzyły standardowy plik WAV możliwy do odtworzenia w dowolnym odtwarzaczu. Poniższy przykład pokazuje, jak ręcznie skonstruować nagłówek RIFF/WAVE i zapisać dane PCM do pliku wyjściowego. Zrozumienie struktury nagłówka WAV jest przydatne przy diagnozowaniu problemów z formatem audio i integrowaniu się z zewnętrznymi bibliotekami.
+
 ```kotlin
 object WavWriter {
     fun writeWavFile(
@@ -95,6 +99,8 @@ object WavWriter {
 
 ## MediaRecorder — prostsze nagrywanie
 
+Dla prostszych scenariuszy nagrywania — gdzie nie jest wymagany dostęp do surowych danych PCM — klasa `MediaRecorder` oferuje wygodny interfejs wysokiego poziomu. Poniższy przykład implementuje klasę nagrywającą, która zapisuje audio do pliku M4A w formacie AAC z próbkowaniem 44 100 Hz. Metoda `amplitude` umożliwia odczyt aktualnej amplitudy dźwięku, co można wykorzystać do wizualizacji waveformy w interfejsie.
+
 ```kotlin
 class SimpleRecorder(private val context: Context) {
     private var mediaRecorder: MediaRecorder? = null
@@ -131,6 +137,8 @@ class SimpleRecorder(private val context: Context) {
 ```
 
 ## Speech Recognition — rozpoznawanie mowy
+
+Rozpoznawanie mowy na Androidzie jest realizowane przez `SpeechRecognizer`, który może dostarczać zarówno wyniki końcowe, jak i częściowe w trakcie słuchania. Poniższy przykład opakowuje `SpeechRecognizer` w klasę menedżera, obsługując wyniki, błędy i zdarzenia cyklu życia sesji rozpoznawania. Właściwa obsługa kodów błędów pozwala wyświetlić użytkownikowi zrozumiały komunikat zamiast technicznego numeru błędu.
 
 ```kotlin
 class SpeechRecognitionManager(
@@ -201,6 +209,8 @@ class SpeechRecognitionManager(
 
 ## Wizualizacja fali dźwiękowej w Compose
 
+Wizualna reprezentacja fali dźwiękowej znacząco poprawia UX aplikacji nagrywającej, dając użytkownikowi informację zwrotną o poziomie dźwięku. Poniższy przykład implementuje composable rysujący waveform jako słupki na `Canvas`, z animowanym pulsowaniem w trybie nagrywania. Wartości amplitudy przekazywane do komponentu powinny być znormalizowane do zakresu 0.0–1.0.
+
 ```kotlin
 @Composable
 fun AudioWaveform(
@@ -242,6 +252,8 @@ fun AudioWaveform(
 ```
 
 ## Text-to-Speech (TTS)
+
+Text-to-Speech pozwala aplikacji odczytywać treści na głos, co jest szczególnie przydatne w aplikacjach dostępnościowych, nawigacyjnych i edukacyjnych. Poniższy przykład pokazuje implementację menedżera TTS dla języka polskiego, z konfiguracją tempa i wysokości mowy. System TTS jest inicjalizowany asynchronicznie, dlatego flaga `isReady` chroni przed próbą odtworzenia tekstu przed gotowością silnika.
 
 ```kotlin
 class TtsManager(context: Context) {

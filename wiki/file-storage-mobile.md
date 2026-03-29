@@ -347,6 +347,8 @@ Na iOS aplikacja działa w modelu sandbox, czyli ma własny, odizolowany obszar 
 
 ### Przykład zapisu do katalogu Documents w Swift
 
+Na iOS każda aplikacja posiada własny, izolowany sandbox, w którym katalog `Documents` jest przeznaczony na pliki trwałe należące do użytkownika. Poniższy kod pokazuje, jak zapisać i odczytać plik tekstowy przy użyciu `FileManager` i standardowego API klasy `String`, zachowując kodowanie UTF-8.
+
 ```swift
 func saveTextFile(fileName: String, content: String) throws {
     let directory = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!

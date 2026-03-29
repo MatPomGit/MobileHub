@@ -106,6 +106,8 @@ Kluczowe dane (2023):
 
 ### Activision Blizzard (Microsoft) — Call of Duty, World of Warcraft
 
+Activision Blizzard to jeden z największych wydawców gier na świecie, znany z kultowych serii takich jak Call of Duty i World of Warcraft. Przejęcie przez Microsoft w 2023 roku za rekordową kwotę 69 miliardów dolarów zmieniło układ sił w całej branży. Poniższe dane ilustrują skalę operacji i zasięg tej korporacji.
+
 ```
 - Przejęcie przez Microsoft za 69 mld USD (2023) — największa transakcja w historii gier
 - Call of Duty: Warzone — 125 mln zarejestrowanych graczy
@@ -114,6 +116,8 @@ Kluczowe dane (2023):
 
 ### Nintendo — model platformowy i IP
 
+Nintendo wyróżnia się unikatową strategią biznesową: sprzedaje własny sprzęt (konsole) i zarabia na ekskluzywnych markach (IP) niedostępnych na innych platformach. Dzięki temu może utrzymywać wysokie marże zysku i kontrolować całe doświadczenie gracza. Poniższe liczby pokazują siłę tego modelu w praktyce.
+
 ```
 - Switch: 140 mln sprzedanych egzemplarzy
 - The Legend of Zelda: Tears of the Kingdom — 20 mln egzemplarzy w 6 tygodni
@@ -121,6 +125,8 @@ Kluczowe dane (2023):
 ```
 
 ### Valve — Steam i model dystrybutora
+
+Valve zbudowało dominującą pozycję na rynku dystrybucji gier PC dzięki platformie Steam, która obsługuje ponad 50 000 tytułów i dziesiątki milionów aktywnych graczy. Model biznesowy oparty na prowizji od sprzedaży (30%) generuje ogromne przychody przy stosunkowo niewielkim zespole. Poniżej kluczowe dane finansowe i zasięg platformy.
 
 ```
 - Steam: 130+ mln aktywnych użytkowników miesięcznie
@@ -144,6 +150,8 @@ Fiński twórca **Clash of Clans** i **Brawl Stars** zatrudnia zaledwie ~300 os�
 ## Segmenty rynku mobilnego — głębsze spojrzenie
 
 ### Kategorie gier mobilnych według przychodów
+
+Rynek gier mobilnych jest silnie podzielony na segmenty, z których każdy kieruje się odmienną logiką monetyzacji i przyciąga różne grupy graczy. Znajomość tych proporcji jest kluczowa przy projektowaniu modelu biznesowego nowej gry. Poniższe dane pokazują, które gatunki generują największe przychody.
 
 ```
 1. Casino/Gambling-style   ~25% przychodów mobilnych
@@ -182,6 +190,8 @@ Kluczowe czynniki sukcesu:
 ## Ścieżki kariery w gamedev
 
 ### Role w zespole produkcyjnym
+
+Produkcja gry to złożony projekt wymagający specjalistów z wielu dziedzin: programowania, grafiki, designu i zarządzania. Zrozumienie struktury zespołu pomaga studentom wybrać ścieżkę kariery i zaplanować odpowiednie umiejętności. Poniżej przedstawiono hierarchię stanowisk typową dla średniego i dużego studia gamedev.
 
 ```
 Programiści:
@@ -228,6 +238,8 @@ Produkcja:
 
 ### Najpopularniejsze silniki gier
 
+Wybór silnika gry to jedna z najważniejszych decyzji technologicznych w projekcie — wpływa na narzędzia, język programowania i koszty licencyjne. Trzy dominujące platformy (Unreal Engine, Unity i Godot) mają różne profile zastosowań i warunki licencjonowania. Poniżej zestawienie ich kluczowych cech.
+
 ```
 Unreal Engine 5 (Epic Games)
 ├── Język: C++ + Blueprints (wizualny)
@@ -263,6 +275,8 @@ Godot 4
 ---
 
 ## Proces produkcji gry — od konceptu do premiery
+
+Produkcja gry przebiega przez kolejne etapy — od wstępnego konceptu, przez intensywną fazę tworzenia, aż po launch i wsparcie po premierze. Każda faza ma swoje kamienie milowe i kryteria jakościowe, których niespełnienie może opóźnić projekt lub pochłonąć dodatkowy budżet. Poniżej przedstawiono standardowy cykl życia projektu gamedev.
 
 ```
 Pre-production (3–12 mies.)
@@ -304,6 +318,8 @@ Post-launch (Live Service lub DLC)
 ## Polska scena indie — ekosystem wsparcia
 
 ### Finansowanie i granty
+
+Polscy indie deweloperzy mogą korzystać z różnych źródeł finansowania — od dotacji publicznych, przez inkubatory, po game jamy dające szansę na zaistnienie w społeczności. Wiedza o dostępnych programach wsparcia może być kluczowa dla niezależnych twórców szukających budżetu na swój pierwszy projekt. Poniżej zestawienie najważniejszych możliwości dla polskiej sceny indie.
 
 ```
 Polskie Centrum Audiowizualne (PISF)
@@ -350,6 +366,8 @@ Przykład: Cyberpunk 2077 (2020)
 
 ### Layoffs — fala zwolnień (2023–2024)
 
+Po pandemicznym boomie na gry branża weszła w fazę restrukturyzacji, czego efektem była bezprecedensowa fala zwolnień w największych korporacjach gamedev. Był to efekt przeinwestowania w latach 2020–2022, gdy studia gwałtownie zwiększały zatrudnienie w odpowiedzi na rosnące zapotrzebowanie. Poniżej najważniejsze przypadki redukcji zatrudnienia.
+
 ```
 Globalna fala restrukturyzacji po pandemicznym boomie:
 - Microsoft Gaming:  10 000 zwolnień (styczeń 2024)
@@ -377,6 +395,8 @@ Skutki:
 
 ### Generatywna AI w gamedev
 
+Generatywna sztuczna inteligencja coraz mocniej wkracza w pipeline produkcji gier, skracając czas tworzenia assetów, kodu i dialogów. Narzędzia AI mogą znacząco obniżyć próg wejścia dla małych studiów, umożliwiając im tworzenie treści o jakości zbliżonej do AAA. Poniżej przegląd zastosowań i prognoz dla tej technologii w branży gamedev.
+
 ```
 Zastosowania (już używane):
 ├── Generowanie assetów 2D/3D — Midjourney, Stable Diffusion
@@ -392,6 +412,8 @@ Prognoza:
 ```
 
 ### Polska jako hub gamedev
+
+Polska stała się jednym z najważniejszych centrów gamedev w Europie Środkowo-Wschodniej, korzystając z połączenia wykwalifikowanych kadr i relatywnie niższych kosztów produkcji. Jednocześnie branża stoi przed wyzwaniami, które mogą osłabić tę pozycję w najbliższych latach. Poniższe zestawienie pokazuje zarówno mocne strony, jak i ryzyka polskiego ekosystemu gamedev.
 
 ```
 Czynniki wzrostu:

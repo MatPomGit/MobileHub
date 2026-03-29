@@ -57,7 +57,7 @@ To właśnie dlatego architektura nie jest dodatkiem estetycznym, lecz mechanizm
 
 ## 2. Architektura warstwowa w Androidzie
 
-Najczęściej stosowany podział wygląda następująco:
+Najczęściej stosowany podział wygląda następująco. Poniższy diagram wizualizuje trzy główne warstwy aplikacji Android i ich zawartość. Zrozumienie granic między warstwami jest kluczowe — każda warstwa powinna komunikować się wyłącznie z warstwą bezpośrednio pod nią, co ogranicza sprzężenie i ułatwia testowanie poszczególnych części systemu w izolacji.
 
 ```text
 ┌─────────────────────────────────────────────┐
@@ -177,6 +177,8 @@ Ponieważ część zachowań jest ściśle zależna od konkretnego sposobu rende
 
 ### Przykład `ViewModel`
 
+Poniższy przykład przedstawia kompletny `ViewModel` wstrzyknięty przez Hilt, który zarządza stanem ekranu listy zadań. Klasa wystawia stan ekranu jako `StateFlow` — publiczny, ale niemutowalny strumień — i reaguje na akcje użytkownika przez dedykowane metody. Taki wzorzec umożliwia warstwie UI odczytywanie stanu bez możliwości jego bezpośredniej modyfikacji, co jest kluczową zasadą jednokierunkowego przepływu danych.
+
 ```kotlin
 @HiltViewModel
 class TaskViewModel @Inject constructor(
@@ -250,7 +252,7 @@ Ponieważ pokazuje kilka ważnych zasad jednocześnie:
 
 ## 6. UDF — Unidirectional Data Flow
 
-UDF, czyli **Unidirectional Data Flow**, oznacza jednokierunkowy przepływ danych:
+UDF, czyli **Unidirectional Data Flow**, oznacza jednokierunkowy przepływ danych. Poniższy diagram ilustruje cykl: akcja użytkownika trafia do `ViewModel`, który aktualizuje stan, a zmodyfikowany stan jest renderowany przez UI. Dzięki temu przepływ zawsze przebiega w jednym kierunku, co eliminuje trudne do wykrycia błędy wynikające z rozproszonych, nieskoordynowanych zmian stanu.
 
 ```text
 akcja użytkownika -> ViewModel -> aktualizacja stanu -> render UI
@@ -268,6 +270,8 @@ UDF daje następujące korzyści:
 - łatwiej zachować spójność między logiką a widokiem.
 
 ### Minimalistyczny ekran zgodny z UDF
+
+Poniższy Composable demonstruje wzorcowy punkt wejścia warstwy UI w architekturze opartej na UDF. Funkcja przyjmuje gotowy stan ekranu i zestaw callbacków reprezentujących akcje użytkownika — nie zawiera żadnej logiki biznesowej ani bezpośrednich odwołań do danych. Taki podział sprawia, że Composable jest łatwy do testowania i podglądu w narzędziu Preview bez konieczności uruchamiania całej aplikacji.
 
 ```kotlin
 @Composable
@@ -311,6 +315,8 @@ interface TaskRepository {
 ```
 
 ### Implementacja repozytorium
+
+Poniższy przykład pokazuje konkretną implementację interfejsu `TaskRepository`, która łączy lokalne i zdalne źródło danych. Kluczową zasadą jest rozdzielenie obserwacji danych (strumień z bazy lokalnej) od wymuszania odświeżenia (wywołanie `refresh()`), co zapobiega wielokrotnym niepotrzebnym żądaniom sieciowym przy każdej nowej subskrypcji. Wstrzykiwany `CoroutineDispatcher` pozwala podmienić go w testach na `UnconfinedTestDispatcher`, co czyni testy kodu asynchronicznego deterministycznymi.
 
 ```kotlin
 class TaskRepositoryImpl @Inject constructor(
@@ -386,6 +392,8 @@ Warstwa domenowa bywa źle rozumiana. Jedni studenci próbują dodawać ją do k
 
 ### Przykład sensownego use case
 
+Poniższy use case nie jest tylko pustym opakowaniem repozytorium — dodaje realną regułę biznesową: filtruje zarchiwizowane zadania i ustala porządek sortowania. Dzięki umieszczeniu tej logiki w osobnej klasie można ją przetestować niezależnie od `ViewModel` i warstwy danych. Operator `invoke` z modyfikatorem `operator` pozwala wywoływać use case jak zwykłą funkcję, co poprawia czytelność kodu w miejscu wywołania.
+
 ```kotlin
 class GetActiveTasksUseCase @Inject constructor(
     private val repository: TaskRepository
@@ -400,6 +408,8 @@ class GetActiveTasksUseCase @Inject constructor(
 Ten use case nie jest pustym wrapperem. Dodaje realną regułę: odfiltrowuje zadania zarchiwizowane i ustala sposób sortowania.
 
 ### Przykład use case z regułą biznesową
+
+Poniższy use case zawiera nietrywialną regułę biznesową: sprawdza limit aktywnych zadań dla kont darmowych przed dodaniem nowego. Takie zasady powinny znaleźć się w warstwie domenowej właśnie dlatego, że są niezależne od sposobu wyświetlania danych i mogą być współdzielone przez wiele ekranów. Gdyby ta reguła trafiła do `ViewModel`, stałaby się trudna do przetestowania i podatna na duplikację przy kolejnych ekranach korzystających z tej samej operacji.
 
 ```kotlin
 class AddTaskUseCase @Inject constructor(
@@ -449,6 +459,8 @@ Jeśli użyjesz jednego modelu wszędzie, granice warstw zaczną się zacierać.
 
 ### Przykład modeli
 
+Poniższy przykład ilustruje cztery odrębne modele danych, z których każdy służy innej warstwie aplikacji. `TaskDto` odzwierciedla strukturę odpowiedzi z API (daty jako String), `TaskEntity` odpowiada schematowi tabeli w bazie Room, `Task` to model domenowy z właściwymi typami semantycznymi (`LocalDate`, `Instant`), a `TaskUiModel` zawiera dane już przetworzone na potrzeby renderowania. Utrzymywanie tych modeli jako osobnych klas zapobiega „przeciekaniu" szczegółów jednej warstwy do pozostałych.
+
 ```kotlin
 data class TaskDto(
     val id: Int,
@@ -487,6 +499,8 @@ data class TaskUiModel(
 ```
 
 ### Przykład mapowania modelu domenowego do UI
+
+Poniższa funkcja rozszerzająca pokazuje, jak przetransformować model domenowy `Task` na model UI `TaskUiModel` gotowy do wyświetlenia. Mapowanie generuje czytelny dla użytkownika opis daty (np. „Dziś", „Jutro") i oblicza flagę `isOverdue` — logika typowo prezentacyjna, która nie powinna znajdować się ani w modelu domenowym, ani w Composable. Umieszczenie mapowania poza warstwą UI jako osobna funkcja ułatwia testowanie jednostkowe bez uruchamiania frameworka Android.
 
 ```kotlin
 fun Task.toUiModel(now: LocalDate = LocalDate.now()): TaskUiModel {
@@ -547,6 +561,8 @@ Wielu początkujących programistów próbuje modelować każdy komunikat UI jak
 Jeżeli błąd ma być widoczny na ekranie aż do momentu poprawy danych, jest to **stan**, a nie jednorazowe zdarzenie.
 
 ### Przykład wyszukiwarki
+
+Poniższy `SearchViewModel` demonstruje reaktywne wyszukiwanie z użyciem `StateFlow` i operatorów `debounce` oraz `flatMapLatest`. Operator `debounce(300)` opóźnia wyszukiwanie o 300 ms po ostatnim znaku, co eliminuje zbędne zapytania sieciowe przy każdym naciśnięciu klawisza. Całe przekształcenie zapytania na stan UI opisane jest deklaratywnie jako ciąg operatorów — taki kod jest łatwy do czytania i testowania.
 
 ```kotlin
 @HiltViewModel
@@ -616,6 +632,8 @@ Dlaczego? Ponieważ mechanizm ten opiera się na `Bundle`, a więc nie został z
 
 ### Przykład
 
+Poniższy `ViewModel` korzysta z `SavedStateHandle` do zachowania lekkiego stanu formularza po śmierci procesu. Właściwości `title` i `description` używają delegata `saveable`, dzięki czemu ich wartość jest automatycznie serializowana do `Bundle` i przywracana po ponownym uruchomieniu aplikacji przez system. Jest to właściwy wzorzec dla pól tekstowych formularzy i aktywnych zakładek, ale nie nadaje się do przechowywania dużych struktur danych.
+
 ```kotlin
 @HiltViewModel
 class FormViewModel @Inject constructor(
@@ -664,6 +682,8 @@ Dependency Injection nie jest celem samym w sobie. To technika, która pomaga ko
 
 ### Przykład modułu Hilt
 
+Poniższy moduł Hilt pokazuje, jak konfigurować zależności na poziomie całej aplikacji (zakres `SingletonComponent`). Adnotacja `@Provides` wskazuje, że Hilt ma wywołać tę metodę fabryczną zamiast próbować automatycznie tworzyć obiekty, co jest konieczne dla zewnętrznych bibliotek takich jak Room czy Retrofit. Wstrzykiwanie dispatchera jako `@IoDispatcher` zamiast bezpośredniego użycia `Dispatchers.IO` umożliwia podmianę go na `TestCoroutineDispatcher` w testach automatycznych.
+
 ```kotlin
 @Module
 @InstallIn(SingletonComponent::class)
@@ -711,6 +731,8 @@ To zagadnienie ma duże znaczenie praktyczne, bo wpływa na codzienną pracę z 
 
 ### Podejście 1: package by layer
 
+Poniższy diagram przedstawia organizację pakietów według warstw aplikacji — najprostszy sposób podziału kodu. Struktura ta dobrze sprawdza się w małych projektach edukacyjnych, ponieważ jest intuicyjna i odzwierciedla trzy warstwy omówione w tym materiale. Wadą jest to, że wraz z rozrostem aplikacji klasy powiązane z jedną funkcją biznesową są rozsiane między kilkoma katalogami.
+
 ```text
 ui/
 data/
@@ -730,6 +752,8 @@ Wady:
 - trudniej zrozumieć modułowość funkcjonalną systemu.
 
 ### Podejście 2: package by feature
+
+Poniższy diagram przedstawia organizację pakietów według funkcji aplikacji, gdzie każda funkcja (tasks, search, settings) zawiera wewnętrznie własne podkatalogi warstw. Takie podejście sprawia, że kod dotyczący jednej funkcji jest skupiony w jednym miejscu, co ułatwia rozwijanie i usuwanie funkcji jako całości. W dużych projektach często łączy się oba podejścia: główny podział według funkcji, a wewnątrz każdej funkcji — podział według warstw.
 
 ```text
 tasks/
@@ -875,6 +899,8 @@ Masz ekran listy zadań z funkcjami:
 
 ### Kod
 
+Poniższy fragment kodu zawiera celowo zaprojektowane naruszenia zasad architektury — jest materiałem do analizy, a nie wzorcem do naśladowania. `ViewModel` bezpośrednio wstrzykuje `NavController`, `Context` oraz obiekt API, co oznacza, że łączy odpowiedzialności warstwy UI, nawigacji i danych w jednej klasie. Zadaniem studenta jest zidentyfikowanie tych naruszeń i zaproponowanie prawidłowego podziału odpowiedzialności.
+
 ```kotlin
 class ProfileViewModel(
     private val api: ProfileApi,
@@ -923,6 +949,8 @@ Zaprojektuj `UiState` dla ekranu logowania. Ekran ma zawierać:
 - informację o sukcesie.
 
 ### Przykładowe rozwiązanie
+
+Poniższa klasa `LoginUiState` demonstruje wzorcowe podejście do modelowania stanu ekranu logowania jako jednego spójnego obiektu. Wszystkie pola tworzą kompletny opis tego, co powinno zostać wyrenderowane — flagi błędów pól, stan ładowania i komunikat ogólny. Dzięki modelowaniu stanu jako immutable data class każda zmiana prowadzi do nowego obiektu stanu, co jest zgodne z zasadami UDF i ułatwia debugowanie przez porównywanie kolejnych stanów.
 
 ```kotlin
 data class LoginUiState(
