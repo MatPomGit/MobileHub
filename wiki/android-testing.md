@@ -4,6 +4,8 @@ Testowanie to integralna część profesjonalnego rozwoju aplikacji. Android ofe
 
 ## Piramida testów
 
+Piramida testów ilustruje zalecaną strategię pokrycia testowego w aplikacjach mobilnych. Testy jednostkowe stanowią podstawę — jest ich najwięcej, działają najszybciej i są najtańsze w utrzymaniu. Im wyżej w piramidzie, tym testy są wolniejsze i kosztowniejsze, dlatego powinno ich być mniej.
+
 ```
         /\
        /UI\          ← Testy UI (Espresso, Compose Test) — wolne
@@ -15,6 +17,8 @@ Testowanie to integralna część profesjonalnego rozwoju aplikacji. Android ofe
 ```
 
 ## Testy jednostkowe — JUnit 5 + MockK
+
+JUnit 5 to standardowy framework testowy dla JVM, a MockK — biblioteka dedykowana do mockowania obiektów w Kotlinie. Poniższy przykład pokazuje test ViewModel z użyciem fałszywych implementacji use case'ów, co pozwala testować logikę prezentacji w izolacji od warstwy danych. Wzorzec Given-When-Then czytelnie oddziela konfigurację testu, wykonanie akcji i weryfikację wyniku.
 
 ```kotlin
 @ExtendWith(MockKExtension::class)
@@ -49,6 +53,8 @@ class TaskViewModelTest {
 ```
 
 ## Testy Compose UI
+
+Testy Compose UI pozwalają weryfikować zachowanie interfejsu użytkownika bez uruchamiania całej aplikacji na emulatorze lub urządzeniu. `createComposeRule()` udostępnia środowisko testowe, w którym można renderować komponenty i sprawdzać ich zawartość lub interaktywność. To podejście jest szybsze od pełnych testów instrumentalnych i umożliwia testowanie pojedynczych komponentów w izolacji.
 
 ```kotlin
 class TaskScreenTest {
@@ -85,6 +91,8 @@ class TaskScreenTest {
 
 ## Testy Room
 
+Testy Room weryfikują operacje na lokalnej bazie danych bez potrzeby uruchamiania fizycznego urządzenia. Baza danych `inMemoryDatabaseBuilder()` istnieje tylko na czas trwania testu — nie zapisuje danych na dysk, co przyspiesza wykonanie i gwarantuje izolację każdego testu. To niezbędne narzędzie do sprawdzenia poprawności zapytań SQL, migracji schematu i logiki DAO.
+
 ```kotlin
 @RunWith(AndroidJUnit4::class)
 class TaskDaoTest {
@@ -118,6 +126,8 @@ class TaskDaoTest {
 
 ## Code Coverage
 
+Pokrycie kodu (code coverage) to metryka informująca, jaki procent kodu produkcyjnego jest wykonywany podczas testów. Włączenie raportowania pokrycia wymaga konfiguracji w pliku `build.gradle.kts` — poniższy fragment włącza śledzenie zarówno dla testów jednostkowych (`enableUnitTestCoverage`), jak i instrumentalnych (`enableAndroidTestCoverage`). Wygenerowany raport HTML pozwala zidentyfikować niepokryte ścieżki kodu i zaplanować dalsze testy.
+
 ```kotlin
 // build.gradle.kts
 android {
@@ -129,6 +139,8 @@ android {
     }
 }
 ```
+
+Po skonfigurowaniu ustawień pokrycia należy uruchomić dedykowane polecenie Gradle, które generuje raport HTML. Raport ten wizualnie zaznacza linie pokryte (zielone) i niepokryte (czerwone) testami, ułatwiając identyfikację luk w pokryciu.
 
 ```bash
 # Generowanie raportu
@@ -143,6 +155,8 @@ android {
 - [MockK](https://mockk.io/)
 
 ## Compose Testing — UI testy
+
+Do uruchomienia testów UI Compose wymagane są dwie zależności: `ui-test-junit4` dla środowiska testowego oraz `ui-test-manifest` (dostępna tylko w buildzie debug) zapewniająca poprawną konfigurację manifestu. Poniższy przykład pokazuje pełny zestaw testów ekranu TaskScreen obejmujący weryfikację listy zadań, interakcję z formularzem dodawania i obsługę wskaźnika ładowania — trzy najczęstsze scenariusze testowe w aplikacjach MVVM.
 
 ```kotlin
 dependencies {
@@ -220,6 +234,8 @@ class TaskScreenTest {
 
 ## Turbine — testowanie Flow
 
+Turbine to biblioteka Cash App upraszczająca testowanie Kotlin Flow — pozwala „zbierać" emisje w kontrolowany sposób zamiast korzystać z trudniejszego w obsłudze `collect`. Metoda `test {}` blokuje wykonanie coroutine i umożliwia sekwencyjne pobieranie kolejnych emisji przez `awaitItem()`. Dzięki temu można precyzyjnie zweryfikować kolejność stanów: stan początkowy → ładowanie → dane załadowane.
+
 ```kotlin
 dependencies {
     testImplementation("app.cash.turbine:turbine:1.1.0")
@@ -254,6 +270,8 @@ fun viewModel_emitsLoadingThenData() = runTest {
 ```
 
 ## MockK — mockowanie w testach
+
+MockK to natywna biblioteka mockowania dla Kotlina, która — w odróżnieniu od Mockito — w pełni obsługuje `suspend fun` i coroutines. `coEvery` oraz `coVerify` to odpowiedniki `every`/`verify` przeznaczone dla funkcji zawieszalnych. Poniższy przykład sprawdza zarówno poprawność przekazywanych argumentów do repozytorium, jak i logikę filtrowania wyników przez use case.
 
 ```kotlin
 dependencies {

@@ -4,6 +4,8 @@ Każda profesjonalna aplikacja mobilna zaczyna się nie od kodu, lecz od dokumen
 
 ## Dlaczego dokumentacja jest kluczowa
 
+Poniższe zestawienie pokazuje, jak brak dokumentacji przekłada się na konkretne problemy w projekcie, a każdy z czterech dokumentów eliminuje jeden rodzaj nieporozumień. Diagram ilustruje wyraźny kontrast między niezorganizowanym podejściem a profesjonalnym procesem dokumentowania — od wizji w głowie menedżera do precyzyjnej architektury technicznej.
+
 ```
 Brak dokumentacji          Z dokumentacją
 ─────────────────          ───────────────────
@@ -28,6 +30,8 @@ Brief to **pierwszy, syntetyczny dokument**, który definiuje ideę aplikacji w 
 Dlaczego brief, a nie od razu specyfikacja? Bo zanim zaczniemy precyzować szczegóły, musimy upewnić się, że wszyscy rozumieją **ten sam problem** i **ten sam cel**. Brief zmusza autora do klarownego myślenia i eliminuje założenia ukryte.
 
 ### Struktura dobrego briefu
+
+Dobry brief powinien zawierać dokładnie tyle informacji, ile potrzeba, żeby każdy członek zespołu mógł odpowiedzieć na pytanie: „co i po co budujemy?". Poniższy szablon dziewięciu sekcji to sprawdzony format stosowany w agencjach mobilnych — każda sekcja odpowiada na jedno kluczowe pytanie projektowe. Wypełnienie go przed rozpoczęciem prac pozwala uniknąć kosztownych nieporozumień na późniejszych etapach.
 
 ```
 BRIEF APLIKACJI MOBILNEJ
@@ -77,6 +81,8 @@ Każda sekcja briefu odpowiada na pytanie, które **i tak pojawi się** w trakci
 
 ### Przykład briefu
 
+Aby utrwalić omawiany format, poniżej znajdziesz wypełniony brief dla fikcyjnej aplikacji FitTrack. To realistyczny przykład pokazujący, jak wygląda gotowy dokument — zwróć uwagę na konkretność danych (liczby, priorytety MoSCoW, mierzalne kryteria sukcesu) zamiast ogólnikowych deklaracji.
+
 ```
 BRIEF: FitTrack — Aplikacja do Śledzenia Aktywności Fizycznej
 ═══════════════════════════════════════════════════════════════
@@ -125,6 +131,8 @@ BRD to dokument, który **tłumaczy wizję z briefu na język biznesu**. Odpowia
 Dlaczego osobny dokument, a nie rozszerzony brief? Bo brief jest skierowany do **wszystkich**, a BRD do **decydentów biznesowych** (stakeholders, zarząd, inwestorzy). BRD musi uzasadnić inwestycję liczbami, analizami i mierzalnymi KPI.
 
 ### Struktura BRD
+
+BRD ma sformalizowaną strukturę, bo musi przekonać decydentów biznesowych — musi więc zawierać zarówno kontekst rynkowy, jak i mierzalne cele oraz analizę ryzyk. Poniższy szablon dziewięciu sekcji to standard stosowany w dużych organizacjach: każda sekcja pełni określoną rolę komunikacyjną i razem tworzą kompletny argument biznesowy uzasadniający inwestycję.
 
 ```
 BUSINESS REQUIREMENTS DOCUMENT
@@ -177,6 +185,8 @@ BUSINESS REQUIREMENTS DOCUMENT
 
 ### Przykładowe wymaganie biznesowe w BRD
 
+Każde wymaganie biznesowe w BRD powinno być atomowe, identyfikowalne i powiązane z konkretnym KPI — inaczej trudno ocenić, czy zostało zrealizowane. Poniższy przykład ilustruje wzorcowy format: wymaganie BR-004 ma identyfikator, priorytet MoSCoW, opis w języku biznesowym oraz uzasadnienie oparte na danych. Taki format ułatwia późniejszą traceability — powiązanie wymagania biznesowego z wymaganiem funkcjonalnym i technicznym.
+
 ```
 ┌──────────────────────────────────────────────────────────┐
 │  ID:        BR-004                                       │
@@ -193,6 +203,8 @@ BUSINESS REQUIREMENTS DOCUMENT
 ```
 
 ### Analiza rynku w BRD — przykład
+
+Analiza TAM/SAM/SOM to standardowa metoda szacowania potencjału rynkowego, którą inwestorzy i zarządy oczekują w dokumentach biznesowych. TAM to cały adresowalny rynek, SAM to jego dostępna dla nas część, a SOM to realistyczny udział, jaki możemy zdobyć. Poniższy przykład pokazuje, jak te liczby wyglądają w kontekście aplikacji fitness dla rynku polskiego i CEE.
 
 ```
 Analiza rynku fitness apps (2024):
@@ -223,6 +235,8 @@ FRD to dokument, który **przekłada wymagania biznesowe na konkretne zachowania
 Dlaczego nie wystarczy BRD? Bo BRD mówi *„potrzebujemy systemu powiadomień"*, a FRD precyzuje *„po 48h braku aktywności system wysyła push z tekstem X, użytkownik może kliknąć Y, co przenosi go do ekranu Z"*. FRD jest pomostem między biznesem a technologią.
 
 ### Struktura FRD
+
+FRD jest najbardziej rozbudowanym z czterech dokumentów, ponieważ musi precyzyjnie opisać każde zachowanie systemu z perspektywy użytkownika. Ośmiosekcyjna struktura poniżej zapewnia kompletność: od definicji aktorów przez przypadki użycia, kryteria akceptacji, wymagania dotyczące danych, aż po wymagania niefunkcjonalne. Taki podział gwarantuje, że nic nie zostanie pominięte — ani happy path, ani obsługa błędów.
 
 ```
 FUNCTIONAL REQUIREMENTS DOCUMENT
@@ -280,6 +294,8 @@ FUNCTIONAL REQUIREMENTS DOCUMENT
 
 ### Przykładowy Use Case
 
+Use Case to opis interakcji użytkownika z systemem w konkretnym scenariuszu — powinien uwzględniać nie tylko ścieżkę sukcesu (happy path), ale też wszystkie istotne scenariusze alternatywne i wyjątkowe. Poniższy przykład UC-003 opisuje proces rozpoczęcia treningu biegowego: zawiera warunki wstępne, kolejne kroki użytkownika i systemu, a także trzy sytuacje awaryjne (wyłączony GPS, utrata sygnału, przejście w tło). Takie podejście ujawnia 80% rzeczywistej pracy programistycznej.
+
 ```
 UC-003: Rozpoczęcie treningu biegowego
 ══════════════════════════════════════
@@ -326,6 +342,8 @@ WARUNEK KOŃCOWY:
 
 ### Przykładowe wymaganie funkcjonalne
 
+Każde wymaganie funkcjonalne powinno być jednoznaczne, testowalane i powiązane z wymaganiem biznesowym — inaczej tester nie wie, kiedy feature jest „gotowy". Poniższy szablon FR-012 ilustruje format z kluczowymi polami: opis zachowania, reguły biznesowe z konkretnymi ograniczeniami (min/max, format) i mierzalne kryteria akceptacji. Kryteria w stylu „✓ Błędne pole podświetlone na czerwono" są jedyną obiektywną miarą ukończenia funkcji.
+
 ```
 ┌──────────────────────────────────────────────────────────┐
 │  ID:        FR-012                                       │
@@ -363,6 +381,8 @@ TRD to dokument **dla zespołu technicznego**, który określa *jak* system zost
 Dlaczego TRD jest osobnym dokumentem? Bo **decyzje techniczne wymagają innego kontekstu niż biznesowe i funkcjonalne**. Product Owner nie musi wiedzieć, czy używamy REST czy GraphQL, ale CTO — tak. TRD izoluje decyzje techniczne od wymagań biznesowych, co ułatwia ich niezależną ewolucję.
 
 ### Struktura TRD
+
+TRD to jedyny z czterech dokumentów skierowany wyłącznie do zespołu technicznego — jego zadaniem jest opisanie „jak" zbudować system, a nie „co" ani „po co". Poniższy dziesięciosekcyjny szablon pokrywa wszystkie kluczowe obszary decyzji technicznych: architekturę, stack, dane, API, bezpieczeństwo, wydajność, CI/CD, monitoring i środowiska. Każda sekcja powinna zawierać uzasadnienie wyborów, nie tylko listę technologii.
 
 ```
 TECHNICAL REQUIREMENTS DOCUMENT
@@ -437,6 +457,8 @@ TECHNICAL REQUIREMENTS DOCUMENT
 
 ### Przykład decyzji architektonicznej w TRD
 
+Decyzje architektoniczne w TRD powinny dokumentować nie tylko wybrany wzorzec, ale też wszystkie rozważane alternatywy z ich wadami i zaletami. Poniższy przykład TD-002 pokazuje uzasadnienie wyboru Clean Architecture + MVVM: zestawia cztery alternatywy (MVC, MVP, MVVM, MVI) z oceną każdej z nich, a następnie precyzuje konsekwencje decyzji — włącznie z krzywą uczenia się dla juniorów. Taka transparentność ułatwia przegląd decyzji w przyszłości i chroni przed ponownym otwieraniem tych samych dyskusji.
+
 ```
 DECYZJA: TD-002 — Wzorzec architektoniczny
 ══════════════════════════════════════════
@@ -464,6 +486,8 @@ Konsekwencje:
 ```
 
 ### Przykład stosu technologicznego w TRD
+
+Dokumentowanie stosu technologicznego w TRD powinno obejmować konkretne wersje bibliotek oraz podział na warstwy: mobile, backend, CI/CD i monitoring. Poniższy przykład dla projektu FitTrack pokazuje kompletny, spójny zestaw technologii dla aplikacji Flutter z backendem Firebase — widać wyraźne uzasadnienie każdego wyboru przez jego rolę w projekcie. Taka dokumentacja pozwala nowym członkom zespołu szybko zrozumieć cały ekosystem projektu.
 
 ```
 STACK TECHNOLOGICZNY — FitTrack
@@ -502,6 +526,8 @@ Monitoring:
 ---
 
 ## Przepływ dokumentów — od briefu do kodu
+
+Poniższy diagram ASCII ilustruje kaskadowy przepływ informacji między czterema dokumentami projektowymi i wskazuje, do której grupy odbiorców jest adresowany każdy z nich. Brief trafia do klienta i inwestora, BRD do decydentów biznesowych, FRD do projektantów i testerów, a TRD wyłącznie do zespołu technicznego. Zrozumienie tej hierarchii jest kluczem do efektywnej komunikacji w wielodyscyplinarnych zespołach.
 
 ```
 ┌─────────┐     ┌─────────┐     ┌─────────┐     ┌─────────┐
@@ -542,6 +568,8 @@ Odwrócenie kolejności (np. zaczynanie od TRD) prowadzi do **over-engineeringu*
 
 ## Najczęstsze błędy w dokumentacji projektowej
 
+Znajomość typowych błędów jest równie ważna, co znajomość poprawnych praktyk — pozwala uniknąć pułapek, w które wpadają nawet doświadczone zespoły. Poniższe zestawienie prezentuje osiem najczęstszych błędów w parach przyczyna–rozwiązanie, tworząc gotową listę kontrolną do weryfikacji własnych dokumentów. Szczególną uwagę warto zwrócić na brak traceability i brak aktualizacji dokumentów — te dwie kwestie najczęściej powodują rozbieżność między dokumentacją a rzeczywistym stanem projektu.
+
 ```
 BŁĄD                                    ROZWIĄZANIE
 ────────────────────────────────────    ─────────────────────────────────
@@ -558,6 +586,8 @@ Dokumenty w Wordzie na dysku            Używaj Markdown + Git lub Confluence
 ---
 
 ## Narzędzia do tworzenia dokumentacji
+
+Wybór narzędzia do dokumentacji powinien być dostosowany do rodzaju dokumentu i zespołu — inne narzędzie sprawdzi się dla briefu pisanego na początku projektu, inne dla TRD wymagającego diagramów i wersjonowania. Poniższe zestawienie to praktyczna lista rekomendacji uwzględniająca też narzędzia do diagramów (Mermaid, PlantUML), prototypów UI (Figma) i zarządzania wymaganiami (Jira, Linear). Utrzymywanie dokumentów w systemie kontroli wersji (Git + Markdown) jest szczególnie zalecane dla TRD.
 
 ```
 Typ dokumentu          Rekomendowane narzędzia
