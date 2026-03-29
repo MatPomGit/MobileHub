@@ -4,6 +4,8 @@ Wizja komputerowa na urządzeniach mobilnych umożliwia detekcję obiektów, seg
 
 ## Ekosystem narzędzi
 
+Środowisko wizji komputerowej na urządzeniach mobilnych dzieli się na dwie warstwy: biblioteki wysokopoziomowe z gotowymi modelami (ML Kit, Apple Vision) oraz niskopoziomowe środowiska uruchomieniowe umożliwiające wdrożenie własnych modeli (TFLite, ONNX, PyTorch Mobile). Wybór odpowiedniego narzędzia zależy od tego, czy standardowe modele spełniają wymagania projektu, czy konieczne jest trenowanie własnego modelu na dedykowanych danych. Poniższy diagram przedstawia dostępne opcje z podziałem na te dwie kategorie.
+
 ```
 ┌──────────────────────────────────────────────────────────────┐
 │                    Computer Vision na Mobile                  │
@@ -18,6 +20,8 @@ Wizja komputerowa na urządzeniach mobilnych umożliwia detekcję obiektów, seg
 ```
 
 ## ML Kit — gotowe modele bez trenowania
+
+ML Kit od Google oferuje gotowe do użycia modele detekcji, rozpoznawania tekstu, twarzy i wiele innych — bez konieczności trenowania ani wiedzy o sieciach neuronowych. Poniższy przykład pokazuje integrację detekcji obiektów w trybie strumieniowym z `CameraX ImageAnalysis`, gdzie każda klatka z kamery jest automatycznie analizowana. Wynik zawiera prostokąt otaczający wykryty obiekt (`boundingBox`), jego stały identyfikator między klatkami (`trackingId`) oraz etykietę kategorii z poziomem pewności.
 
 ```kotlin
 // Detekcja obiektów (Object Detection and Tracking)
@@ -50,6 +54,8 @@ override fun analyze(imageProxy: ImageProxy) {
 ```
 
 ## TFLite — własny model
+
+TensorFlow Lite pozwala uruchomić na urządzeniu mobilnym dowolny model wytrenowany w TensorFlow lub PyTorch (po konwersji), w tym popularne architektury jak YOLOv8 czy EfficientDet. Kluczową optymalizacją jest delegacja obliczeń do GPU, która może przyspieszyć inferencję 3–10-krotnie w porównaniu z CPU. Poniższy kod pokazuje oba podejścia: wygodne API wysokopoziomowe `ObjectDetector` oraz niskopoziomowy `Interpreter` z `GpuDelegate`.
 
 ```kotlin
 dependencies {
@@ -94,6 +100,8 @@ class GpuDetector(context: Context) {
 ```
 
 ## Rysowanie bounding boxes w Compose
+
+Wizualizacja wyników detekcji wymaga narysowania prostokątów i etykiet na warstwie nałożonej na podgląd kamery. W Jetpack Compose robi się to przez composable `Canvas`, który skaluje współrzędne z przestrzeni obrazu do przestrzeni ekranu. Poniższy komponent rysuje kolorowe ramki z półprzezroczystymi tłami etykiet, prawidłowo obsługując różnicę rozdzielczości między strumieniem kamery a widokiem na ekranie.
 
 ```kotlin
 @Composable
@@ -154,6 +162,8 @@ data class DetectionResult(
 
 ## MediaPipe — pipeline wizji
 
+MediaPipe Tasks to zestaw gotowych, zoptymalizowanych pipeline'ów do analizy obrazu: detekcja ciała (pose), dłoni, twarzy i połączona (holistic). Działają w trybie strumieniowym z kamery z bardzo niskim opóźnieniem dzięki akceleracji GPU. Poniższy przykład implementuje detektor pozy, który w czasie rzeczywistym wyznacza 33 punkty charakterystyczne sylwetki i oblicza kąt między stawami.
+
 ```kotlin
 // MediaPipe Tasks — gotowe pipeline'y: pose, hands, face, holistic
 dependencies {
@@ -212,6 +222,8 @@ class PoseDetector(context: Context) {
 ```
 
 ## Optymalizacja modeli — quantization
+
+Kwantyzacja to technika zmniejszania rozmiaru modelu i przyspieszania inferencji przez reprezentację wag z mniejszą precyzją (np. INT8 zamiast Float32). Wymaga kalibracji na reprezentatywnych danych wejściowych, aby skompensować utratę precyzji, ale często skutkuje 4-krotnym zmniejszeniem rozmiaru modelu przy minimalnym spadku dokładności. Poniższy skrypt Pythonowy konwertuje model TensorFlow do formatu TFLite z pełną kwantyzacją INT8 gotową do wdrożenia na urządzeniu mobilnym.
 
 ```python
 # Python — konwersja i optymalizacja modelu do TFLite

@@ -19,6 +19,8 @@ Flutter to framework od Google, który renderuje UI samodzielnie przez własny s
 
 ### Podstawy Dart i Flutter
 
+Dart to silnie typowany język kompilowany AOT, którego składnia jest bliska Javie i Kotlinowi, co ułatwia naukę programistom mobilnym. W Flutterze każdy element interfejsu to widget — niezmienne drzewa opisu UI, które Flutter renderuje samodzielnie na canvasie. Poniższy przykład pokazuje dwa fundamentalne typy widgetów: `StatelessWidget` (bez wewnętrznego stanu) oraz `StatefulWidget` (ze stanem zarządzanym przez `setState`).
+
 ```dart
 // Widget statyczny
 class MyWidget extends StatelessWidget {
@@ -73,6 +75,8 @@ class _CounterState extends State<Counter> {
 ```
 
 ### State management w Flutter — Riverpod
+
+Riverpod to nowoczesne podejście do zarządzania stanem w Flutterze, które rozwiązuje ograniczenia oryginalnego Provider'a poprzez pełne oddzielenie stanu od drzewa widgetów. Providerzy są globalne, type-safe i testowalne bez kontekstu Buildera. Poniższy przykład demonstruje definicję `StateNotifierProvider` z prostym licznikiem oraz jego obserwację w widgecie `ConsumerWidget`.
 
 ```dart
 // Provider
@@ -167,6 +171,8 @@ PWA to aplikacja webowa z możliwościami podobnymi do natywnych: instalacja na 
 
 ### Service Worker
 
+Service Worker to skrypt działający w tle przeglądarki, niezależnie od strony, który przechwytuje żądania sieciowe i zarządza lokalnym cache. Rejestrowanie zasobów podczas instalacji (`install` event) umożliwia aplikacji działanie całkowicie offline po pierwszym odwiedzeniu. Poniższy przykład implementuje strategię „cache-first": odpowiedź pobierana jest najpierw z cache, a sieć jest odwiedzana tylko gdy zasobu nie ma lokalnie.
+
 ```javascript
 // sw.js — Service Worker
 const CACHE_NAME = 'app-v1';
@@ -189,6 +195,8 @@ self.addEventListener('fetch', event => {
 
 ### Web App Manifest
 
+Plik `manifest.json` informuje przeglądarkę, jak wyświetlać aplikację po zainstalowaniu na ekranie głównym — nadaje jej nazwę, ikony, kolor paska systemowego i tryb wyświetlania `standalone` (bez paska przeglądarki). Jest to kluczowy plik każdej PWA, bez którego przeglądarka nie zaproponuje użytkownikowi instalacji aplikacji. Poniższy przykład przedstawia kompletną konfigurację manifestu z dwoma rozmiarami ikon wymaganymi przez standard PWA.
+
 ```json
 {
   "name": "Moja Aplikacja",
@@ -205,6 +213,8 @@ self.addEventListener('fetch', event => {
 ```
 
 ### Rejestracja SW w HTML
+
+Service Worker musi zostać zarejestrowany przez główny skrypt aplikacji — przeglądarka pobiera plik SW i instaluje go, jeśli jeszcze nie jest aktywny lub zmieniła się jego treść. Rejestracja jest asynchroniczna, a wynik informuje o zasięgu (`scope`) kontrolowanym przez Service Workera. Poniższy fragment to minimalna, poprawna rejestracja, którą należy umieścić w głównym pliku HTML lub skrypcie inicjalizującym aplikację.
 
 ```javascript
 if ('serviceWorker' in navigator) {

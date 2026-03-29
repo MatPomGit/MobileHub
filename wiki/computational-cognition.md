@@ -286,6 +286,8 @@ Szum: ───┼────────────────────�
          ↓ -a (granica NIE)
 ```
 
+Symulacja DDM pozwala generować syntetyczne dane czasu reakcji i dokładności decyzji, które można porównywać z wynikami eksperymentalnymi. Parametr `drift_rate` odpowiada jakości dowodu sensorycznego, `boundary` — ostrożności decydenta, a szum modeluje wewnętrzną zmienność układu nerwowego. Model ten jest szeroko stosowany do dopasowywania danych psychologicznych z zadań binarnych (np. rozpoznawanie słów, detekcja sygnałów).
+
 ```python
 def simulate_ddm(drift_rate=0.5, boundary=1.0, noise=1.0, dt=0.001):
     """
@@ -323,6 +325,8 @@ Modele jak GPT-4 wykazują zaskakujące podobieństwo do ludzkich wzorców pozna
 - Błędy morfologiczne: podobne do błędów ludzkich
 - Reprezentacje semantyczne: zbliżone do ludzkich norm skojarzeń
 - Nieracjonalne wnioskowanie: podobne błędy jak ludzie (złudzenia kognitywne)
+
+Poniższy przykład ilustruje metodologię pomiaru „czasu reakcji" modelu językowego analogiczną do paradygmatów stosowanych w psychologii eksperymentalnej. Mierząc czas generowania odpowiedzi oraz wpływ poprzedzającego kontekstu (priming), można badać, czy LLM-y replikują efekty poznawcze znane z badań na ludziach. Taka analiza dostarcza danych do oceny przydatności modeli językowych jako narzędzi kognitywistycznych.
 
 ```python
 # Przykład: pomiar "czasu reakcji" LLM jako modelu kognitywnego
