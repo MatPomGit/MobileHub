@@ -88,6 +88,18 @@ const ARTICLES = {
     'app-metadata':          'wiki/app-metadata.md',
     'file-storage-mobile':   'wiki/file-storage-mobile.md',
     'gamedev-market':        'wiki/gamedev-market.md',
+    'local-ai-intro':        'wiki/local-ai-intro.md',
+    'mobile-ml-frameworks':  'wiki/mobile-ml-frameworks.md',
+    'neural-networks-mobile': 'wiki/neural-networks-mobile.md',
+    'llm-on-device':         'wiki/llm-on-device.md',
+    'model-quantization':    'wiki/model-quantization.md',
+    'on-device-inference':   'wiki/on-device-inference.md',
+    'ai-image-processing':   'wiki/ai-image-processing.md',
+    'ai-speech-nlp':         'wiki/ai-speech-nlp.md',
+    'ai-privacy-security':   'wiki/ai-privacy-security.md',
+    'mediapipe-mobile':      'wiki/mediapipe-mobile.md',
+    'ai-mobile-ux':          'wiki/ai-mobile-ux.md',
+    'edge-ai-future':        'wiki/edge-ai-future.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -174,6 +186,18 @@ const METADATA = {
     'app-metadata':          { category: 'Projektowanie i OS',            title: 'Zbieranie metadanych przez aplikację',      icon: 'fa-solid fa-tags' },
     'file-storage-mobile':   { category: 'Programowanie natywne Android', title: 'Zapisywanie i odczyt plików na urządzeniu mobilnym', icon: 'fa-solid fa-file-arrow-down' },
     'gamedev-market':        { category: 'Gry mobilne',                    title: 'Rynek gamedev w Polsce i na świecie',               icon: 'fa-solid fa-earth-europe' },
+    'local-ai-intro':        { category: 'Lokalna AI na urządzeniu',       title: 'Wprowadzenie do lokalnej AI na urządzeniu mobilnym', icon: 'fa-solid fa-microchip' },
+    'mobile-ml-frameworks':  { category: 'Lokalna AI na urządzeniu',       title: 'Frameworki ML na urządzeniu: TFLite, Core ML, ONNX', icon: 'fa-solid fa-layer-group' },
+    'neural-networks-mobile': { category: 'Lokalna AI na urządzeniu',       title: 'Sieci neuronowe na urządzeniu mobilnym',             icon: 'fa-solid fa-diagram-project' },
+    'llm-on-device':         { category: 'Lokalna AI na urządzeniu',       title: 'Modele językowe LLM na urządzeniu',                  icon: 'fa-solid fa-comment-dots' },
+    'model-quantization':    { category: 'Lokalna AI na urządzeniu',       title: 'Kwantyzacja i optymalizacja modeli AI',              icon: 'fa-solid fa-compress' },
+    'on-device-inference':   { category: 'Lokalna AI na urządzeniu',       title: 'Wnioskowanie lokalne — architektura i wydajność',    icon: 'fa-solid fa-bolt' },
+    'ai-image-processing':   { category: 'Lokalna AI na urządzeniu',       title: 'AI w przetwarzaniu obrazu na urządzeniu',            icon: 'fa-solid fa-image' },
+    'ai-speech-nlp':         { category: 'Lokalna AI na urządzeniu',       title: 'Przetwarzanie mowy i NLP na urządzeniu',             icon: 'fa-solid fa-microphone-lines' },
+    'ai-privacy-security':   { category: 'Lokalna AI na urządzeniu',       title: 'Prywatność i bezpieczeństwo w lokalnej AI',          icon: 'fa-solid fa-shield-halved' },
+    'mediapipe-mobile':      { category: 'Lokalna AI na urządzeniu',       title: 'MediaPipe — kompleksowe rozwiązania AI',             icon: 'fa-solid fa-wand-magic-sparkles' },
+    'ai-mobile-ux':          { category: 'Lokalna AI na urządzeniu',       title: 'Projektowanie UX aplikacji z lokalną AI',            icon: 'fa-solid fa-hand-pointer' },
+    'edge-ai-future':        { category: 'Lokalna AI na urządzeniu',       title: 'Przyszłość Edge AI — trendy i kierunki rozwoju',     icon: 'fa-solid fa-rocket' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
@@ -190,6 +214,7 @@ const CATEGORIES = [
     { id: 'cat-xr',       name: 'XR i rozszerzona rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
     { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','unity-advanced','game-physics','game-monetization','gamedev-market'] },
     { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui'] },
+    { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','mediapipe-mobile','ai-mobile-ux','edge-ai-future'] },
     { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
 ];
 
