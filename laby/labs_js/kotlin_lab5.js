@@ -354,6 +354,40 @@ function annotatedCode(title, lines) {
   });
 }
 
+function dayBanner(dayNum, title, description) {
+  return [
+    sp(200),
+    new Table({
+      width: { size: PW, type: WidthType.DXA },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: PW, type: WidthType.DXA },
+              shading: { type: ShadingType.CLEAR, fill: "003366" },
+              borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.SINGLE, size: 6, color: COL.h1Bg }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+              margins: { top: 140, bottom: 140, left: 240, right: 240 },
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `DZIEŃ ${dayNum}  ·  `, font: F, size: 26, bold: true, color: COL.h1Bg }),
+                    new TextRun({ text: title, font: F, size: 26, bold: true, color: "FFFFFF" }),
+                  ],
+                }),
+                new Paragraph({
+                  spacing: { before: 60, after: 0 },
+                  children: [new TextRun({ text: description, font: F, size: 19, color: "A0B8D0", italics: true })],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+    sp(160),
+  ];
+}
+
 // ─── HEADER / FOOTER ─────────────────────────────────────────────────────────
 
 function makeHeader() {
@@ -500,6 +534,7 @@ var content = [].concat(
   // SEKCJA 1 — CZYM JEST DEPENDENCY INJECTION?
   // ═══════════════════════════════════════════════════════════════
   [
+    ...dayBanner(1, "Dependency Injection i Hilt", "Sekcje 1–4 · ~90 minut · Zrozumienie DI, konfiguracja Hilt, moduły i zakresy cyklu życia"),
     h1("1. Czym jest Dependency Injection?"),
     para("Zanim poznamy Hilt, musimy dok\u0142adnie zrozumie\u0107 problem, kt\u00f3ry rozwi\u0105zuje. Dependency Injection (DI) to jeden z tych wzorców projektowych, kt\u00f3ry \u0142atwo zrozumie\u0107 po zobaczeiu kodu bez niego \u2014 jest po prostu nieczytelny i kruchy."),
     sp(),
@@ -794,6 +829,7 @@ var content = [].concat(
   // SEKCJA 5 — FILOZOFIA TESTOWANIA
   // ═══════════════════════════════════════════════════════════════
   [
+    ...dayBanner(2, "Testowanie — filozofia, JUnit i MockK", "Sekcje 5–8 · ~90 minut · Piramida testów, testy jednostkowe z MockK, testy integracyjne Room i testy Compose UI"),
     h1("5. Filozofia testowania \u2014 piramida test\u00f3w"),
     para("Testy to nie opcja \u2014 to gwarancja, \u017ce refaktoryzacja nie psuje istniej\u0105cych funkcjonalno\u015bci, a nowy kod robi to co powinien. Dobry projekt testowy opiera si\u0119 na 'piramidzie test\u00f3w'."),
     sp(),
@@ -1141,6 +1177,7 @@ var content = [].concat(
   // SEKCJA 9 — HILT W TESTACH
   // ═══════════════════════════════════════════════════════════════
   [
+    ...dayBanner(3, "Hilt w testach, Coroutines i strategia testowania", "Sekcje 9–14 · ~90 minut · Podmienianie zależności w testach, testy koroutyn, strategia projektu i przegląd typowych błędów"),
     h1("9. Hilt w testach \u2014 podmienianie zale\u017cno\u015bci"),
     para("Kluczow\u0105 zalet\u0105 Hilt jest mo\u017cliwo\u015b\u0107 podmieniania prawdziwych implementacji na testowe (fake/stub) bez zmiany kodu produkcyjnego. Hilt oferuje dwa mechanizmy: @TestInstallIn i @UninstallModules."),
     sp(),

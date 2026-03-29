@@ -297,6 +297,40 @@ function annotatedCode(title, lines) {
   });
 }
 
+function dayBanner(dayNum, title, description) {
+  return [
+    sp(200),
+    new Table({
+      width: { size: PW, type: WidthType.DXA },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: PW, type: WidthType.DXA },
+              shading: { type: ShadingType.CLEAR, fill: "003366" },
+              borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.SINGLE, size: 6, color: COL.h1Bg }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+              margins: { top: 140, bottom: 140, left: 240, right: 240 },
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `DZIEŃ ${dayNum}  ·  `, font: F, size: 26, bold: true, color: COL.h1Bg }),
+                    new TextRun({ text: title, font: F, size: 26, bold: true, color: "FFFFFF" }),
+                  ],
+                }),
+                new Paragraph({
+                  spacing: { before: 60, after: 0 },
+                  children: [new TextRun({ text: description, font: F, size: 19, color: "A0B8D0", italics: true })],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+    sp(160),
+  ];
+}
+
 // ─── HEADER / FOOTER ────────────────────────────────────────────────────────
 
 function makeHeader() {
@@ -445,6 +479,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 1 — HTTP i REST API
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(1, "Teoria sieci i konfiguracja projektu", "Sekcje 1–4 · ~90 minut · Rozumienie HTTP/REST, formatu JSON, architektury warstwowej i pierwszej konfiguracji projektu PokeApp"),
   h1("1. Jak działa komunikacja przez internet?"),
   para("Zanim napiszemy pierwszą linię kodu sieciowego, musimy zrozumieć, co tak naprawdę dzieje się pod maską, gdy aplikacja mobilna prosi o dane z internetu. Ten rozdział wyjaśnia mechanizm krok po kroku — od wpisania adresu URL aż do wyświetlenia listy Pokémonów na ekranie."),
   sp(),
@@ -692,6 +727,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 5 — DTO i DOMAIN MODEL
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(2, "Modele danych, Retrofit i obsługa błędów", "Sekcje 5–9 · ~90 minut · Implementacja DTO, Retrofit, warstwy repozytorium, Coil i wzorca Offline-First"),
   h1("5. Modele danych — DTO i Domain Model"),
   para("Jednym z ważniejszych wzorców architektonicznych, który zastosujemy w PokeApp, jest rozdział między modelem sieciowym (DTO) a modelem domenowym. Zrozumienie tego rozdziału chroni aplikację przed kruchością na zmiany w API."),
   sp(),
@@ -1153,6 +1189,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 10 — DIAGNOSTYKA
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(3, "Diagnostyka, zadania i podsumowanie", "Sekcje 10–13 · ~90 minut · Debugowanie sieci, praktyczne zadania do wykonania, kryteria oceny i przegląd najczęstszych błędów"),
   h1("10. Diagnostyka i debugowanie sieci"),
   para("Zanim napiszesz pierwszą linię kodu integrującego API, sprawdź API ręcznie za pomocą narzędzi zewnętrznych. Oszczędzi Ci to wielu godzin debugowania błędów, które tkwią w DTO a nie w kodzie."),
   sp(),

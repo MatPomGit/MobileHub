@@ -314,8 +314,29 @@
             color: #7c8ca0;
             text-transform: uppercase;
             letter-spacing: 0.5px;
-            margin-bottom: 10px;
+            margin-bottom: 6px;
             font-family: var(--mono);
+        }
+
+        .code-block .code-day-desc {
+            font-size: 12px;
+            color: #8fa3b8;
+            font-family: var(--font);
+            font-style: italic;
+            margin-bottom: 10px;
+            padding: 5px 0 8px;
+            border-bottom: 1px solid rgba(255,255,255,0.07);
+            display: flex;
+            align-items: flex-start;
+            gap: 6px;
+            line-height: 1.5;
+        }
+
+        .code-block .code-day-desc i {
+            color: var(--accent);
+            font-size: 11px;
+            margin-top: 2px;
+            flex-shrink: 0;
         }
 
         /* ===== HINT / WARNING ===== */
@@ -678,6 +699,7 @@
 
             <div class="code-block">
                 <div class="code-label">Przykład User Story z kryteriami akceptacji</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 0–3 projektu — User Stories piszesz przed Lab&nbsp;4 i rozwijasz je przez pierwsze dni pracy, gdy zespół wspólnie analizuje wymagania i ustala zakres MVP.</div>
                 <pre>US-07: Jako zalogowany użytkownik chcę dodać nowe zadanie do listy,
         aby móc śledzić swoje obowiązki.
 
@@ -777,6 +799,7 @@ Kryteria akceptacji:
 
             <div class="code-block">
                 <div class="code-label">Zalecana struktura branchy (Git Flow)</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 1 projektu — tę strukturę gałęzi tworzysz raz na początku i stosujesz przez cały czas trwania projektu (3–4 tygodnie). Każda nowa funkcja = nowa gałąź <code style="font-size:11px;color:#a9b7c6;">feature/</code>.</div>
                 <pre>main          ← tylko stabilny, przetestowany kod
 develop       ← integracja zmian od wszystkich developerów
 feature/xxx   ← nowa funkcja (np. feature/login-screen)
@@ -1000,6 +1023,7 @@ release/x.y   ← przygotowanie wydania</pre>
 
             <div class="code-block">
                 <div class="code-label">Zalecana struktura pakietów</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 1–2 projektu — hierarchię pakietów tworzysz przy zakładaniu projektu w Dniu 1, a rozbudowujesz w Dniu 2, gdy dodajesz kolejne warstwy MVVM. Dobrze zaplanowana struktura oszczędza godzin refaktoryzacji w późniejszych dniach.</div>
                 <pre>com.example.app/
 ├── data/
 │   ├── local/          ← Room DAO, Database, entities
@@ -1033,6 +1057,7 @@ release/x.y   ← przygotowanie wydania</pre>
 
             <div class="code-block">
                 <div class="code-label">Przykładowy ViewModel (Kotlin + Compose)</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 2–5 projektu — pierwszy ViewModel piszesz w Dniu 2–3 dla ekranu głównego. Ten wzorzec (StateFlow + viewModelScope) powtarzasz dla każdego ekranu przez kolejne 3–5 dni, aż wszystkie funkcje MVP będą miały swój ViewModel.</div>
                 <pre>@HiltViewModel
 class TaskViewModel @Inject constructor(
     private val taskRepository: TaskRepository
@@ -1116,6 +1141,7 @@ class TaskViewModel @Inject constructor(
 
             <div class="code-block">
                 <div class="code-label">Szkielet NavGraph (Jetpack Compose)</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 3–7 projektu — NavGraph konfigurujesz raz w Dniu 3, a następnie rozbudowujesz przez Dzień 4–7, dodając kolejne ekrany i trasy wraz z implementacją nowych funkcji MVP.</div>
                 <pre>@Composable
 fun AppNavGraph(navController: NavHostController) {
     NavHost(navController, startDestination = Screen.Home.route) {
@@ -1192,6 +1218,7 @@ fun AppNavGraph(navController: NavHostController) {
 
             <div class="code-block">
                 <div class="code-label">Przykładowa encja i DAO</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 4–6 projektu — pierwszą encję Room implementujesz w Dniu 4–5 dla głównego modelu danych. Wzorzec encja + DAO powtarzasz przez Dzień 5–6 dla każdej tabeli bazy danych wymaganej przez MVP.</div>
                 <pre>@Entity(tableName = "tasks")
 data class TaskEntity(
     @PrimaryKey(autoGenerate = true) val id: Long = 0,
@@ -1482,6 +1509,7 @@ interface TaskDao {
 
             <div class="code-block">
                 <div class="code-label">Przykładowy test jednostkowy ViewModelu (Kotlin)</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 5–12 projektu (równolegle z implementacją) — testy jednostkowe piszesz od Dnia 5, równolegle z każdą zaimplementowaną funkcją. Każdy nowy ViewModel lub UseCase powinien mieć test napisany tego samego lub następnego dnia roboczego.</div>
                 <pre>@ExperimentalCoroutinesApi
 class TaskViewModelTest {
     @get:Rule val mainCoroutineRule = MainCoroutineRule()
@@ -1554,6 +1582,7 @@ class TaskViewModelTest {
             
             <div class="code-block">
                 <div class="code-label">.github/workflows/android-ci.yml</div>
+                <div class="code-day-desc"><i class="fa-solid fa-calendar-days"></i> Dzień 1–3 projektu (konfiguruj jak najwcześniej) — pipeline CI/CD najlepiej skonfigurować w Dniu 1–3, aby każdy commit od Dnia 2 był automatycznie budowany i testowany. Im później go dodasz, tym więcej błędów może umknąć wcześniej.</div>
                 <pre>name: Android CI
 
 on:

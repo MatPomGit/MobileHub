@@ -162,6 +162,40 @@ function annotatedCode(title, lines) {
   });
 }
 
+function dayBanner(dayNum, title, description) {
+  return [
+    sp(200),
+    new Table({
+      width: { size: PW, type: WidthType.DXA },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: PW, type: WidthType.DXA },
+              shading: { type: ShadingType.CLEAR, fill: "001D3D" },
+              borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.SINGLE, size: 6, color: COL.h1Accent }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+              margins: { top: 140, bottom: 140, left: 240, right: 240 },
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `DZIEŃ ${dayNum}  ·  `, font: F, size: 26, bold: true, color: COL.h1Accent }),
+                    new TextRun({ text: title, font: F, size: 26, bold: true, color: "FFFFFF" }),
+                  ],
+                }),
+                new Paragraph({
+                  spacing: { before: 60, after: 0 },
+                  children: [new TextRun({ text: description, font: F, size: 19, color: "A0C4E8", italics: true })],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+    sp(160),
+  ];
+}
+
 // ─── HEADER / FOOTER ─────────────────────────────────────────────────────────
 const makeHeader = () => new Header({children:[new Paragraph({
   border:{bottom:{style:BorderStyle.SINGLE,size:6,color:COL.h1Accent,space:1}},
@@ -249,6 +283,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 1 — OD PROVIDER DO RIVERPOD
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(1, "Riverpod i lokalna baza danych Hive", "Sekcje 1–3 · ~90 minut · Migracja z Provider do Riverpod, typy providerów, persystencja danych offline z Hive"),
   h1("1. Od Provider do Riverpod — dlaczego warto przejść?"),
   para("W Flutter Lab 1 zarządzaliśmy stanem przy pomocy Provider i ChangeNotifier. Provider jest świetny na start, ale w miarę rozrostu aplikacji ujawnia ograniczenia: trudność z zależnościami między providerami, brak wsparcia dla asynchroniczności, konieczność ręcznego dispose(). Riverpod rozwiązuje te problemy i jest oficjalnie rekomendowanym następcą Providera przez tego samego autora — Rémi Rousselet."),
   sp(),
@@ -576,6 +611,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 4 — ANIMACJE NIEJAWNE
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(2, "Animacje i testowanie widgetów", "Sekcje 4–7 · ~90 minut · Animacje niejawne i jawne (AnimationController), testy widgetów z flutter_test i mockowanie z Mocktail"),
   h1("4. Animacje niejawne — Animated* widgety"),
   para("Flutter dzieli animacje na dwie kategorie. Animacje niejawne (implicit) obsługują proste przejścia automatycznie — wystarczy zmienić wartość a Flutter sam animuje przejście. Animacje jawne (explicit) dają pełną kontrolę nad czasem, przebiegiem i sekwencją. Zacznijmy od prostszych — niejawnych."),
   sp(),
@@ -936,6 +972,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 8 — ARCHITEKTURA CLEAN / FEATURE-FIRST
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(3, "Architektura, dostępność, DevTools i zadania", "Sekcje 8–13 · ~90 minut · Clean Architecture Feature-First, internacjonalizacja, Flutter DevTools, zadania projektowe i kryteria oceny"),
   h1("8. Architektura projektu — Feature-First i Clean Architecture"),
   para("W Flutter Lab 1 stosowaliśmy prostą strukturę lib/ z katalogami data/, providers/, ui/. To podejście działa dla małych projektów. Przy rozroście aplikacji lepsza jest architektura Feature-First — każda funkcjonalność ma swój własny, samodzielny moduł."),
   sp(),

@@ -178,6 +178,40 @@ function annotatedCode(title, lines) {
   });
 }
 
+function dayBanner(dayNum, title, description) {
+  return [
+    sp(200),
+    new Table({
+      width: { size: PW, type: WidthType.DXA },
+      rows: [
+        new TableRow({
+          children: [
+            new TableCell({
+              width: { size: PW, type: WidthType.DXA },
+              shading: { type: ShadingType.CLEAR, fill: "001D3D" },
+              borders: { top: { style: BorderStyle.NONE }, bottom: { style: BorderStyle.SINGLE, size: 6, color: COL.h1Accent }, left: { style: BorderStyle.NONE }, right: { style: BorderStyle.NONE } },
+              margins: { top: 140, bottom: 140, left: 240, right: 240 },
+              children: [
+                new Paragraph({
+                  children: [
+                    new TextRun({ text: `DZIEŃ ${dayNum}  ·  `, font: F, size: 26, bold: true, color: COL.h1Accent }),
+                    new TextRun({ text: title, font: F, size: 26, bold: true, color: "FFFFFF" }),
+                  ],
+                }),
+                new Paragraph({
+                  spacing: { before: 60, after: 0 },
+                  children: [new TextRun({ text: description, font: F, size: 19, color: "A0C4E8", italics: true })],
+                }),
+              ],
+            }),
+          ],
+        }),
+      ],
+    }),
+    sp(160),
+  ];
+}
+
 // ─── HEADER / FOOTER ─────────────────────────────────────────────────────────
 function makeHeader() {
   return new Header({ children: [new Paragraph({
@@ -277,6 +311,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 1 — CO TO JEST FLUTTER?
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(1, "Podstawy Flutter, Dart i pierwsza aplikacja", "Sekcje 1–5 · ~90 minut · Czym jest Flutter, instalacja środowiska, struktura projektu, podstawy Dart i widgety"),
   h1("1. Czym jest Flutter i dlaczego warto go poznać?"),
   para("Flutter to otwartoźródłowy framework firmy Google do tworzenia aplikacji na wiele platform jednocześnie z jednej bazy kodu. Jedna aplikacja napisana we Flutterze działa natywnie na Androidzie, iOS, Windows, macOS, Linuksie i w przeglądarce — bez konieczności przepisywania. W tym ćwiczeniu skupimy się na Androidzie, ale cała wiedza przenosi się na pozostałe platformy."),
   sp(),
@@ -717,6 +752,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 6 — ZARZĄDZANIE STANEM
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(2, "Stan, nawigacja, REST API i Material Design 3", "Sekcje 6–10 · ~90 minut · Provider, nawigacja między ekranami, pobieranie danych HTTP i stylowanie aplikacji WeatherApp"),
   h1("6. Zarządzanie stanem — od setState do Provider"),
   para("setState() działa świetnie dla lokalnego stanu jednego widgetu. Ale gdy wiele widgetów potrzebuje tych samych danych (np. lista ulubionych miast wyświetlana na kilku ekranach), potrzebujemy globalnego zarządzania stanem. W tym ćwiczeniu użyjemy Provider — najprostszego i oficjalnie zalecanego rozwiązania dla początkujących."),
   sp(),
@@ -1198,6 +1234,7 @@ const content = [
   // ═══════════════════════════════════════════════════════════════
   // SEKCJA 11 — ZADANIA
   // ═══════════════════════════════════════════════════════════════
+  ...dayBanner(3, "Zadania, kryteria i materiały dodatkowe", "Sekcje 11–14 · ~90 minut · Praktyczne zadania WeatherApp, kryteria oceniania, ściągawka Dart vs Kotlin i najczęstsze błędy"),
   h1("11. Zadania do wykonania"),
   para("Zadania prowadzą przez budowę WeatherApp krok po kroku. Każde kolejne buduje na poprzednim — nie pomijaj kolejności. Każde zadanie zakończ weryfikacją zanim przejdziesz do następnego."),
   sp(),
