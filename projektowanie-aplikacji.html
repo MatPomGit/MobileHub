@@ -738,7 +738,7 @@
             </div>
 
             <!-- RESET -->
-            <button class="reset-btn" id="resetBtn" style="display:none;" onclick="resetAll()">
+            <button class="reset-btn" id="resetBtn" style="display:none;">
                 <i class="fa-solid fa-rotate-left"></i> Zacznij od nowa
             </button>
         </div>
@@ -917,6 +917,7 @@
     function init() {
         renderQuestions();
         renderExtraFeatures();
+        document.getElementById('resetBtn').addEventListener('click', resetAll);
     }
 
     function renderQuestions() {
@@ -928,17 +929,36 @@
             card.className = 'question-card';
             card.id = 'qcard-' + q.id;
 
-            const optionsHtml = q.options.map(opt => {
-                const selected = state[q.id] === opt.val ? ' selected' : '';
-                const descSpan = opt.desc ? `<span class="opt-desc">${opt.desc}</span>` : '';
-                return `<button class="opt-btn${selected}" data-q="${q.id}" data-val="${opt.val}" onclick="selectOption('${q.id}','${opt.val}',this)">${opt.label}${descSpan}</button>`;
-            }).join('');
+            const numEl = document.createElement('div');
+            numEl.className = 'question-number';
+            numEl.textContent = `Pytanie ${idx + 1} z ${QUESTIONS.length}`;
 
-            card.innerHTML = `
-                <div class="question-number">Pytanie ${idx + 1} z ${QUESTIONS.length}</div>
-                <div class="question-text">${q.text}</div>
-                <div class="options-grid">${optionsHtml}</div>
-            `;
+            const textEl = document.createElement('div');
+            textEl.className = 'question-text';
+            textEl.textContent = q.text;
+
+            const grid = document.createElement('div');
+            grid.className = 'options-grid';
+
+            q.options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.className = 'opt-btn' + (state[q.id] === opt.val ? ' selected' : '');
+                btn.dataset.q   = q.id;
+                btn.dataset.val = opt.val;
+                btn.textContent = opt.label;
+                if (opt.desc) {
+                    const descSpan = document.createElement('span');
+                    descSpan.className = 'opt-desc';
+                    descSpan.textContent = opt.desc;
+                    btn.appendChild(descSpan);
+                }
+                btn.addEventListener('click', () => selectOption(q.id, opt.val, btn));
+                grid.appendChild(btn);
+            });
+
+            card.appendChild(numEl);
+            card.appendChild(textEl);
+            card.appendChild(grid);
             list.appendChild(card);
         });
     }
@@ -947,14 +967,23 @@
         const grid = document.getElementById('extraFeaturesGrid');
         grid.innerHTML = '';
         EXTRA_FEATURES.forEach(f => {
-            const active = activeExtras[f.id] ? ' active' : '';
             const btn = document.createElement('button');
-            btn.className = 'feature-toggle' + active;
+            btn.className = 'feature-toggle' + (activeExtras[f.id] ? ' active' : '');
             btn.id = 'feat-' + f.id;
-            btn.innerHTML = `
-                <span><i class="fa-solid fa-check feat-check" style="margin-right:4px;font-size:0.7rem"></i>${f.label}</span>
-                <span class="feat-hours">~${f.hours} godz. · Czł. ${f.member}</span>
-            `;
+
+            const labelSpan = document.createElement('span');
+            const checkIcon = document.createElement('i');
+            checkIcon.className = 'fa-solid fa-check feat-check';
+            checkIcon.style.cssText = 'margin-right:4px;font-size:0.7rem';
+            labelSpan.appendChild(checkIcon);
+            labelSpan.appendChild(document.createTextNode(f.label));
+
+            const hoursSpan = document.createElement('span');
+            hoursSpan.className = 'feat-hours';
+            hoursSpan.textContent = `~${f.hours} godz. · Czł. ${f.member}`;
+
+            btn.appendChild(labelSpan);
+            btn.appendChild(hoursSpan);
             btn.addEventListener('click', () => toggleExtra(f.id, btn));
             grid.appendChild(btn);
         });
@@ -964,8 +993,7 @@
     //  EVENT HANDLERS
     // ============================================================
 
-    function selectOption(qId, val, btnEl) {
-        const changed = state[qId] !== val;
+    function selectOption(qId, val) {
         state[qId] = val;
 
         // Update button styles for this question
@@ -1104,13 +1132,19 @@
         EXTRA_FEATURES.forEach(f => {
             if (!activeExtras[f.id]) return;
             const target = [m1, m2, m3][f.member - 1];
-            target.push({ task: f.label.replace(/^[^\s]+\s/, '') + ' (' + f.desc + ')', h: f.hours });
+            target.push({ task: stripEmojiPrefix(f.label) + ' (' + f.desc + ')', h: f.hours });
         });
 
         return { m1, m2, m3 };
     }
 
     function sum(arr) { return arr.reduce((s, t) => s + t.h, 0); }
+
+    // Removes the leading emoji character(s) and following space from a label string,
+    // returning only the textual description (e.g. "📷 Aparat" → "Aparat").
+    function stripEmojiPrefix(label) {
+        return label.replace(/^[^\s]+\s/, '');
+    }
 
     // ============================================================
     //  DESCRIPTION GENERATION
