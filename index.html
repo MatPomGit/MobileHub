@@ -3226,47 +3226,6 @@
                 font-weight: 600;
             }
 
-            /* Install Button */
-            .install-btn {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                gap: 8px;
-                width: 100%;
-                padding: 14px;
-                background: linear-gradient(135deg, var(--accent), var(--accent2));
-                border: none;
-                border-radius: 14px;
-                color: #fff;
-                font-family: var(--font);
-                font-size: 14px;
-                font-weight: 600;
-                cursor: pointer;
-                transition: transform 0.2s ease, box-shadow 0.2s ease;
-                box-shadow: 0 4px 16px rgba(91, 79, 207, 0.3);
-                -webkit-tap-highlight-color: transparent;
-            }
-
-            .install-btn:active {
-                transform: scale(0.97);
-            }
-
-            .install-btn:disabled {
-                opacity: 0.5;
-                cursor: default;
-            }
-
-            .install-btn .install-check {
-                display: none;
-            }
-
-            .install-btn.installed .install-check {
-                display: inline;
-            }
-
-            .install-btn.installed .install-icon {
-                display: none;
-            }
 
             /* Notification permission status */
             .notif-perm-status {
@@ -4331,14 +4290,6 @@
                 <p id="notifPermStatus" class="notif-perm-status"></p>
             </div>
             <div class="settings-section">
-                <div class="settings-section-title">Instalacja</div>
-                <button class="install-btn" id="installAppBtn">
-                    <i class="fa-solid fa-download install-icon"></i>
-                    <i class="fa-solid fa-check install-check"></i>
-                    <span>Dodaj do ekranu głównego</span>
-                </button>
-            </div>
-            <div class="settings-section">
                 <div class="settings-section-title">Informacje</div>
                 <div class="settings-row settings-row-version" id="dev-mode-trigger" role="button" tabindex="0"
                      aria-label="Informacje o wersji aplikacji">
@@ -5009,65 +4960,6 @@
                 });
             }
 
-            // ===== Install to Home Screen (PWA) =====
-            let deferredPrompt = null;
-            window.pamInstallPrompt = null;
-            const installBtn = document.getElementById('installAppBtn');
-
-            window.addEventListener('beforeinstallprompt', (e) => {
-                e.preventDefault();
-                deferredPrompt = e;
-                window.pamInstallPrompt = e;
-                if (installBtn) {
-                    installBtn.disabled = false;
-                    installBtn.classList.remove('installed');
-                }
-            });
-
-            window.addEventListener('appinstalled', () => {
-                deferredPrompt = null;
-                window.pamInstallPrompt = null;
-                if (installBtn) {
-                    installBtn.classList.add('installed');
-                    installBtn.querySelector('span').textContent = 'Zainstalowano!';
-                    installBtn.disabled = true;
-                }
-            });
-
-            if (installBtn) {
-                // Check if already installed
-                if (window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone) {
-                    installBtn.classList.add('installed');
-                    installBtn.querySelector('span').textContent = 'Już zainstalowano';
-                    installBtn.disabled = true;
-                }
-
-                installBtn.addEventListener('click', async () => {
-                    hapticFeedback();
-                    if (deferredPrompt) {
-                        deferredPrompt.prompt();
-                        const result = await deferredPrompt.userChoice;
-                        if (result.outcome === 'accepted') {
-                            installBtn.classList.add('installed');
-                            installBtn.querySelector('span').textContent = 'Zainstalowano!';
-                            installBtn.disabled = true;
-                        }
-                        deferredPrompt = null;
-                    } else {
-                        // Fallback: show inline instructions
-                        const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
-                        const msg = isIOS
-                            ? 'Naciśnij ikonę „Udostępnij" (⬆) → „Dodaj do ekranu początkowego"'
-                            : 'Otwórz menu przeglądarki (⋮) → „Dodaj do ekranu głównego"';
-                        installBtn.querySelector('span').textContent = msg;
-                        installBtn.disabled = true;
-                        setTimeout(() => {
-                            installBtn.querySelector('span').textContent = 'Dodaj do ekranu głównego';
-                            installBtn.disabled = false;
-                        }, 5000);
-                    }
-                });
-            }
         })();
 
 

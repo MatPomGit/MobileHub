@@ -63,7 +63,7 @@
         .page-hero {
             background: linear-gradient(135deg, #5b4fcf 0%, #7c3aed 60%, #06b6d4 100%);
             color: #fff;
-            padding: 36px 32px 32px;
+            padding: 20px 24px 16px;
             position: relative;
             overflow: hidden;
         }
@@ -84,14 +84,14 @@
             border-radius: 50%;
         }
         .page-hero h1 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 800;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
             position: relative;
             z-index: 1;
         }
         .page-hero p {
-            font-size: 0.95rem;
+            font-size: 0.88rem;
             opacity: 0.88;
             max-width: 580px;
             position: relative;
@@ -100,8 +100,8 @@
         .hero-badges {
             display: flex;
             flex-wrap: wrap;
-            gap: 8px;
-            margin-top: 16px;
+            gap: 6px;
+            margin-top: 8px;
             position: relative;
             z-index: 1;
         }
@@ -124,7 +124,7 @@
 
         /* ===== LEFT COLUMN ===== */
         .designer-left {
-            padding: 24px 20px 48px 24px;
+            padding: 16px 16px 32px 16px;
             border-right: 1px solid var(--border);
             min-height: 100%;
         }
@@ -135,7 +135,7 @@
             letter-spacing: 0.8px;
             text-transform: uppercase;
             color: var(--text-muted);
-            margin-bottom: 16px;
+            margin-bottom: 8px;
         }
 
         /* ===== QUESTION CARD ===== */
@@ -143,8 +143,8 @@
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
-            padding: 18px 18px 14px;
-            margin-bottom: 12px;
+            padding: 10px 14px 8px;
+            margin-bottom: 6px;
             box-shadow: var(--shadow);
             animation: fadeSlideIn 0.25s ease;
         }
@@ -160,26 +160,26 @@
             letter-spacing: 0.6px;
             text-transform: uppercase;
             color: var(--accent);
-            margin-bottom: 4px;
+            margin-bottom: 2px;
         }
 
         .question-text {
             font-size: 0.97rem;
             font-weight: 700;
             color: var(--text);
-            margin-bottom: 12px;
+            margin-bottom: 6px;
         }
 
         .options-grid {
             display: flex;
             flex-wrap: wrap;
-            gap: 7px;
+            gap: 4px;
         }
 
         .opt-btn {
             flex: 1 1 auto;
             min-width: 120px;
-            padding: 9px 13px;
+            padding: 6px 10px;
             background: var(--surface2);
             border: 1.5px solid var(--border);
             border-radius: 9px;
@@ -218,31 +218,31 @@
 
         /* ===== EXTRA FEATURES SECTION ===== */
         .extra-section {
-            margin-top: 8px;
+            margin-top: 6px;
         }
 
         .extra-section-header {
             display: flex;
             align-items: center;
-            gap: 10px;
-            margin-bottom: 12px;
+            gap: 8px;
+            margin-bottom: 8px;
         }
 
         .extra-section-header h2 {
-            font-size: 0.97rem;
+            font-size: 0.92rem;
             font-weight: 700;
         }
 
         .extra-features-grid {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 7px;
+            gap: 4px;
         }
 
         .feature-toggle {
             display: flex;
             flex-direction: column;
-            padding: 10px 12px;
+            padding: 7px 10px;
             background: var(--surface);
             border: 1.5px solid var(--border);
             border-radius: 9px;
@@ -309,7 +309,7 @@
 
         /* ===== RIGHT COLUMN ===== */
         .designer-right {
-            padding: 24px 24px 48px 20px;
+            padding: 16px 16px 32px 16px;
             position: sticky;
             top: 0;
             max-height: 100vh;
@@ -611,16 +611,16 @@
 
         /* ===== PROGRESS BAR ===== */
         .progress-container {
-            padding: 0 24px 0 24px;
-            margin-bottom: 4px;
+            padding: 0 16px 0 16px;
+            margin-bottom: 2px;
         }
 
         .progress-bar-wrap {
-            height: 4px;
+            height: 3px;
             background: var(--border);
             border-radius: 2px;
             overflow: hidden;
-            margin-bottom: 8px;
+            margin-bottom: 4px;
         }
 
         .progress-bar-fill {
@@ -643,13 +643,13 @@
             }
 
             .designer-left {
-                padding: 16px 16px 24px;
+                padding: 10px 12px 16px;
                 border-right: none;
                 border-bottom: 1px solid var(--border);
             }
 
             .designer-right {
-                padding: 16px 16px 40px;
+                padding: 10px 12px 24px;
                 position: static;
                 max-height: none;
             }
@@ -663,11 +663,11 @@
             }
 
             .page-hero {
-                padding: 24px 20px 20px;
+                padding: 14px 16px 12px;
             }
 
             .page-hero h1 {
-                font-size: 1.4rem;
+                font-size: 1.2rem;
             }
         }
 
@@ -705,7 +705,7 @@
     </div>
 
     <!-- PROGRESS -->
-    <div class="progress-container" style="padding-top:14px;">
+    <div class="progress-container" style="padding-top:8px;">
         <div class="progress-bar-wrap">
             <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
         </div>
@@ -878,6 +878,7 @@
         {
             id: 'hardware',
             text: 'Jakie funkcje sprzętowe są potrzebne?',
+            multi: true,
             options: [
                 { val: 'none',      label: '🚫 Tylko ekran dotykowy',      desc: '' },
                 { val: 'camera',    label: '📷 Aparat / skaner QR',        desc: 'Zdjęcia, wideo, kody kreskowe' },
@@ -942,7 +943,10 @@
 
             q.options.forEach(opt => {
                 const btn = document.createElement('button');
-                btn.className = 'opt-btn' + (state[q.id] === opt.val ? ' selected' : '');
+                const isSelected = q.multi
+                    ? (Array.isArray(state[q.id]) && state[q.id].includes(opt.val))
+                    : state[q.id] === opt.val;
+                btn.className = 'opt-btn' + (isSelected ? ' selected' : '');
                 btn.dataset.q   = q.id;
                 btn.dataset.val = opt.val;
                 btn.textContent = opt.label;
@@ -994,16 +998,40 @@
     // ============================================================
 
     function selectOption(qId, val) {
-        state[qId] = val;
+        const q = QUESTIONS.find(q => q.id === qId);
 
-        // Update button styles for this question
-        const card = document.getElementById('qcard-' + qId);
-        card.querySelectorAll('.opt-btn').forEach(b => {
-            b.classList.toggle('selected', b.dataset.val === val);
-        });
+        if (q && q.multi) {
+            if (!Array.isArray(state[qId])) state[qId] = [];
+            if (val === 'none') {
+                state[qId] = ['none'];
+            } else {
+                state[qId] = state[qId].filter(v => v !== 'none');
+                const idx = state[qId].indexOf(val);
+                if (idx >= 0) {
+                    state[qId].splice(idx, 1);
+                } else {
+                    state[qId].push(val);
+                }
+            }
+            const card = document.getElementById('qcard-' + qId);
+            card.querySelectorAll('.opt-btn').forEach(b => {
+                b.classList.toggle('selected', Array.isArray(state[qId]) && state[qId].includes(b.dataset.val));
+            });
+        } else {
+            state[qId] = val;
+            const card = document.getElementById('qcard-' + qId);
+            card.querySelectorAll('.opt-btn').forEach(b => {
+                b.classList.toggle('selected', b.dataset.val === val);
+            });
+        }
 
         // Count answered questions
-        answeredCount = Object.keys(state).filter(k => QUESTIONS.find(q => q.id === k)).length;
+        answeredCount = Object.keys(state).filter(k => {
+            const q = QUESTIONS.find(q => q.id === k);
+            if (!q) return false;
+            if (q.multi) return Array.isArray(state[k]) && state[k].length > 0;
+            return true;
+        }).length;
         updateProgress();
 
         // Show extra features section once all 8 questions answered
@@ -1048,6 +1076,11 @@
     // ============================================================
     //  HOURS CALCULATION
     // ============================================================
+
+    // Returns selected hardware values (excludes the 'none' sentinel).
+    function selectedHardware() {
+        return Array.isArray(state.hardware) ? state.hardware.filter(h => h !== 'none') : [];
+    }
 
     function calcHours() {
         const m1 = []; // UI/UX Lead
@@ -1119,13 +1152,16 @@
         }
 
         // --- Hardware ---
-        if (state.hardware && state.hardware !== 'none') {
-            const ht = {
-                camera:    { task: 'CameraX / Camera2 API — zdjęcia, wideo, skanowanie QR', h: 10 },
-                sensors:   { task: 'SensorManager — akcelerometr, żyroskop, orientacja urządzenia', h: 8 },
-                bluetooth: { task: 'BLE GATT — skanowanie, parowanie, odczyt/zapis charakterystyk', h: 18 },
-            }[state.hardware];
-            if (ht) m3.push(ht);
+        const hw = selectedHardware();
+        if (hw.length) {
+            hw.forEach(h => {
+                const ht = {
+                    camera:    { task: 'CameraX / Camera2 API — zdjęcia, wideo, skanowanie QR', h: 10 },
+                    sensors:   { task: 'SensorManager — akcelerometr, żyroskop, orientacja urządzenia', h: 8 },
+                    bluetooth: { task: 'BLE GATT — skanowanie, parowanie, odczyt/zapis charakterystyk', h: 18 },
+                }[h];
+                if (ht) m3.push(ht);
+            });
         }
 
         // --- Extra features ---
@@ -1161,7 +1197,7 @@
         if (state.dataStorage && state.dataStorage !== 'none' && state.dataStorage !== 'prefs') features.push(storageLabel(state.dataStorage));
         if (state.notifications && state.notifications !== 'none') features.push(notifLabel(state.notifications));
         if (state.location && state.location !== 'none')   features.push(locLabel(state.location));
-        if (state.hardware && state.hardware !== 'none')   features.push(hwLabel(state.hardware));
+        selectedHardware().forEach(hw => { const l = hwLabel(hw); if (l) features.push(l); });
 
         EXTRA_FEATURES.filter(f => activeExtras[f.id]).forEach(f => {
             features.push(f.desc);
