@@ -99,6 +99,7 @@ const ARTICLES = {
     'ai-image-processing':   'wiki/ai-image-processing.md',
     'ai-speech-nlp':         'wiki/ai-speech-nlp.md',
     'ai-privacy-security':   'wiki/ai-privacy-security.md',
+    'ai-legal-aspects':      'wiki/ai-legal-aspects.md',
     'mediapipe-mobile':      'wiki/mediapipe-mobile.md',
     'ai-mobile-ux':          'wiki/ai-mobile-ux.md',
     'edge-ai-future':        'wiki/edge-ai-future.md',
@@ -199,6 +200,7 @@ const METADATA = {
     'ai-image-processing':   { category: 'Lokalna AI na urządzeniu',       title: 'AI w przetwarzaniu obrazu na urządzeniu',            icon: 'fa-solid fa-image' },
     'ai-speech-nlp':         { category: 'Lokalna AI na urządzeniu',       title: 'Przetwarzanie mowy i NLP na urządzeniu',             icon: 'fa-solid fa-microphone-lines' },
     'ai-privacy-security':   { category: 'Lokalna AI na urządzeniu',       title: 'Prywatność i bezpieczeństwo w lokalnej AI',          icon: 'fa-solid fa-shield-halved' },
+    'ai-legal-aspects':      { category: 'Lokalna AI na urządzeniu',       title: 'Prawne aspekty AI na urządzeniach mobilnych',        icon: 'fa-solid fa-scale-balanced' },
     'mediapipe-mobile':      { category: 'Lokalna AI na urządzeniu',       title: 'MediaPipe — kompleksowe rozwiązania AI',             icon: 'fa-solid fa-wand-magic-sparkles' },
     'ai-mobile-ux':          { category: 'Lokalna AI na urządzeniu',       title: 'Projektowanie UX aplikacji z lokalną AI',            icon: 'fa-solid fa-hand-pointer' },
     'edge-ai-future':        { category: 'Lokalna AI na urządzeniu',       title: 'Przyszłość Edge AI — trendy i kierunki rozwoju',     icon: 'fa-solid fa-rocket' },
@@ -218,7 +220,7 @@ const CATEGORIES = [
     { id: 'cat-xr',       name: 'XR i rozszerzona rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
     { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','unity-advanced','game-physics','game-monetization','gamedev-market'] },
     { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui'] },
-    { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','mediapipe-mobile','ai-mobile-ux','edge-ai-future'] },
+    { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','ai-legal-aspects','mediapipe-mobile','ai-mobile-ux','edge-ai-future'] },
     { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
 ];
 
