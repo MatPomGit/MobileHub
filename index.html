@@ -43,7 +43,7 @@
             --accent-glow: rgba(91, 79, 207, 0.15);
             --accent3: #06b6d4;
             --accent4: #f472b6;
-            --hero-overlay: linear-gradient(135deg, rgba(13,15,26,0.84) 0%, rgba(26,16,64,0.78) 45%, rgba(13,26,46,0.84) 100%);
+            --hero-overlay: linear-gradient(135deg, rgba(13, 15, 26, 0.84) 0%, rgba(26, 16, 64, 0.78) 45%, rgba(13, 26, 46, 0.84) 100%);
             --hero-orb-1: rgba(91, 79, 207, 0.28);
             --hero-orb-2: rgba(6, 182, 212, 0.22);
             --hero-orb-3: rgba(244, 114, 182, 0.18);
@@ -141,7 +141,8 @@
             --accent2: #fb923c;
 
             /* ograniczenie „rozlewania się” akcentu */
-            --accent-light: #2a1406;      /* mniej nasycony */
+            --accent-light: #2a1406;
+            /* mniej nasycony */
             --accent-glow: rgba(249, 115, 22, 0.18);
 
             /* cienie (neutralne, nie pomarańczowe) */
@@ -189,20 +190,20 @@
 
             /* akcenty wtórne — zdegradowane (rzadkie użycie) */
             --accent2: #22d3ee;
-            --accent3: #84cc16;   /* mniej jaskrawy niż wcześniej */
-            --accent4: #e879f9;   /* ograniczyć użycie */
+            --accent3: #84cc16;
+            /* mniej jaskrawy niż wcześniej */
+            --accent4: #e879f9;
+            /* ograniczyć użycie */
 
             /* ograniczenie „rozlewania” akcentów */
             --accent-light: #141938;
             --accent-glow: rgba(139, 92, 246, 0.15);
 
             /* hero — mniej agresywny, bardziej tło niż akcent */
-            --hero-overlay: linear-gradient(
-                135deg,
-                rgba(9,11,31,0.92) 0%,
-                rgba(40,30,80,0.65) 50%,
-                rgba(10,40,70,0.75) 100%
-            );
+            --hero-overlay: linear-gradient(135deg,
+                    rgba(9, 11, 31, 0.92) 0%,
+                    rgba(40, 30, 80, 0.65) 50%,
+                    rgba(10, 40, 70, 0.75) 100%);
 
             /* orbsy — wyraźnie przygaszone (de facto dekoracja, nie akcent) */
             --hero-orb-1: rgba(139, 92, 246, 0.22);
@@ -232,8 +233,8 @@
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.4;
-            min-height: 100vh;
+            line-height: 1.2;
+            min-height: 80vh;
             transition: background var(--transition), color var(--transition);
         }
 
@@ -349,7 +350,7 @@
 
         .header-logo {
             width: 38px;
-            height: 38px;
+            height: 36px;
             background: linear-gradient(135deg, var(--accent), var(--accent2));
             border-radius: 10px;
             display: flex;
@@ -385,7 +386,7 @@
         }
 
         .btn-icon {
-            width: 38px;
+            width: 36px;
             height: 38px;
             background: rgba(255, 255, 255, 0.08);
             border: 1px solid rgba(255, 255, 255, 0.1);
@@ -397,7 +398,7 @@
             justify-content: center;
             font-size: 14px;
             transition: background var(--transition), color var(--transition),
-                        transform 0.18s ease, box-shadow 0.18s ease;
+                transform 0.18s ease, box-shadow 0.18s ease;
             transform: translateZ(0);
             will-change: transform;
         }
@@ -451,10 +452,10 @@
 
         #dev-panel {
             background: var(--nav-bg, #1e2535);
-            border: 1px solid var(--border, rgba(255,255,255,0.1));
+            border: 1px solid var(--border, rgba(255, 255, 255, 0.1));
             border-radius: 16px;
             width: min(640px, 94vw);
-            max-height: 85vh;
+            max-height: 75vh;
             display: flex;
             flex-direction: column;
             overflow: hidden;
@@ -472,7 +473,7 @@
             align-items: center;
             justify-content: space-between;
             padding: 16px 20px;
-            border-bottom: 1px solid var(--border, rgba(255,255,255,0.1));
+            border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.1));
             flex-shrink: 0;
         }
 
@@ -488,7 +489,7 @@
         #dev-panel-close {
             background: none;
             border: none;
-            color: var(--text-muted, rgba(255,255,255,0.5));
+            color: var(--text-muted, rgba(255, 255, 255, 0.5));
             font-size: 18px;
             cursor: pointer;
             padding: 4px 8px;
@@ -498,7 +499,7 @@
         }
 
         #dev-panel-close:hover {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             color: var(--text, #fff);
         }
 
@@ -522,14 +523,14 @@
             flex: 1;
         }
 
-        #dev-panel > #dev-info-table {
+        #dev-panel>#dev-info-table {
             display: block;
             overflow-y: auto;
             padding: 14px 20px;
         }
 
         #dev-info-table tr {
-            border-bottom: 1px solid var(--border, rgba(255,255,255,0.07));
+            border-bottom: 1px solid var(--border, rgba(255, 255, 255, 0.07));
         }
 
         #dev-info-table tr:last-child {
@@ -538,7 +539,7 @@
 
         #dev-info-table th {
             text-align: left;
-            color: var(--text-muted, rgba(255,255,255,0.5));
+            color: var(--text-muted, rgba(255, 255, 255, 0.5));
             font-weight: 600;
             padding: 7px 12px 7px 0;
             white-space: nowrap;
@@ -557,7 +558,7 @@
             display: flex;
             gap: 10px;
             padding: 14px 20px;
-            border-top: 1px solid var(--border, rgba(255,255,255,0.1));
+            border-top: 1px solid var(--border, rgba(255, 255, 255, 0.1));
             flex-shrink: 0;
         }
 
@@ -578,12 +579,12 @@
         }
 
         #dev-panel-refresh {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             color: var(--text, #e2e8f0);
         }
 
         #dev-panel-refresh:hover {
-            background: rgba(255,255,255,0.14);
+            background: rgba(255, 255, 255, 0.14);
         }
 
         #dev-panel-deactivate {
@@ -665,20 +666,40 @@
         }
 
         .theme-swatch {
-            width: 14px;
-            height: 14px;
+            width: 12px;
+            height: 12px;
             border-radius: 50%;
             flex-shrink: 0;
             border: 2px solid rgba(255, 255, 255, 0.2);
         }
 
-        .theme-swatch.light   { background: linear-gradient(135deg, #f4f6fb, #5b4fcf); }
-        .theme-swatch.dark    { background: linear-gradient(135deg, #0d0f1a, #7c6df0); }
-        .theme-swatch.ocean   { background: linear-gradient(135deg, #071726, #0ea5e9); }
-        .theme-swatch.forest  { background: linear-gradient(135deg, #f0fdf4, #059669); }
-        .theme-swatch.sunset  { background: linear-gradient(135deg, #1a0e08, #f97316); }
-        .theme-swatch.rose    { background: linear-gradient(135deg, #fff0f6, #db2777); }
-        .theme-swatch.aurora  { background: linear-gradient(135deg, #090b1f, #8b5cf6, #22d3ee); }
+        .theme-swatch.light {
+            background: linear-gradient(135deg, #f4f6fb, #5b4fcf);
+        }
+
+        .theme-swatch.dark {
+            background: linear-gradient(135deg, #0d0f1a, #7c6df0);
+        }
+
+        .theme-swatch.ocean {
+            background: linear-gradient(135deg, #071726, #0ea5e9);
+        }
+
+        .theme-swatch.forest {
+            background: linear-gradient(135deg, #f0fdf4, #059669);
+        }
+
+        .theme-swatch.sunset {
+            background: linear-gradient(135deg, #1a0e08, #f97316);
+        }
+
+        .theme-swatch.rose {
+            background: linear-gradient(135deg, #fff0f6, #db2777);
+        }
+
+        .theme-swatch.aurora {
+            background: linear-gradient(135deg, #090b1f, #8b5cf6, #22d3ee);
+        }
 
         /* ===== HERO ===== */
         .hero {
@@ -705,9 +726,9 @@
             content: '';
             position: absolute;
             inset: auto -15% -40% auto;
-            width: 280px;
-            height: 280px;
-            background: radial-gradient(circle, rgba(255,255,255,0.2), transparent 60%);
+            width: 240px;
+            height: 240px;
+            background: radial-gradient(circle, rgba(255, 255, 255, 0.2), transparent 60%);
             filter: blur(10px);
             opacity: 0.35;
             animation: heroPulse 8s ease-in-out infinite;
@@ -766,7 +787,7 @@
             align-items: center;
             justify-content: center;
             padding: 24px;
-            background: radial-gradient(circle at top, rgba(34,211,238,0.18), transparent 38%), rgba(5, 8, 21, 0.88);
+            background: radial-gradient(circle at top, rgba(34, 211, 238, 0.18), transparent 38%), rgba(5, 8, 21, 0.88);
             backdrop-filter: blur(18px);
             transition: opacity 0.45s ease, visibility 0.45s ease;
         }
@@ -783,9 +804,9 @@
             overflow: hidden;
             border-radius: 28px;
             padding: 38px;
-            background: linear-gradient(135deg, rgba(17,21,45,0.96), rgba(42,19,77,0.9), rgba(9,44,88,0.92));
-            border: 1px solid rgba(255,255,255,0.1);
-            box-shadow: 0 30px 100px rgba(0,0,0,0.4);
+            background: linear-gradient(135deg, rgba(17, 21, 45, 0.96), rgba(42, 19, 77, 0.9), rgba(9, 44, 88, 0.92));
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 30px 100px rgba(0, 0, 0, 0.4);
             color: #fff;
         }
 
@@ -800,11 +821,11 @@
         }
 
         .startup-card::before {
-            width: 260px;
-            height: 260px;
+            width: 240px;
+            height: 240px;
             top: -90px;
             right: -60px;
-            background: radial-gradient(circle, rgba(34,211,238,0.35), transparent 68%);
+            background: radial-gradient(circle, rgba(34, 211, 238, 0.35), transparent 68%);
         }
 
         .startup-card::after {
@@ -812,7 +833,7 @@
             height: 220px;
             bottom: -100px;
             left: -70px;
-            background: radial-gradient(circle, rgba(244,114,182,0.28), transparent 68%);
+            background: radial-gradient(circle, rgba(244, 114, 182, 0.28), transparent 68%);
         }
 
         .startup-grid {
@@ -829,8 +850,8 @@
             gap: 8px;
             padding: 6px 12px;
             border-radius: 999px;
-            background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.12);
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             font-size: 11px;
             letter-spacing: 1px;
             text-transform: uppercase;
@@ -853,7 +874,7 @@
 
         .startup-copy {
             max-width: 560px;
-            color: rgba(255,255,255,0.74);
+            color: rgba(255, 255, 255, 0.74);
             font-size: 16px;
             margin-bottom: 26px;
         }
@@ -886,19 +907,21 @@
         }
 
         .startup-btn.secondary {
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             color: #fff;
-            border: 1px solid rgba(255,255,255,0.14);
+            border: 1px solid rgba(255, 255, 255, 0.14);
         }
 
-        .startup-stats, .startup-features {
+        .startup-stats,
+        .startup-features {
             display: grid;
             gap: 12px;
         }
 
-        .startup-stat, .startup-feature {
-            background: rgba(255,255,255,0.08);
-            border: 1px solid rgba(255,255,255,0.12);
+        .startup-stat,
+        .startup-feature {
+            background: rgba(255, 255, 255, 0.08);
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 18px;
             padding: 16px;
             backdrop-filter: blur(10px);
@@ -909,8 +932,9 @@
             font-size: 24px;
         }
 
-        .startup-stat span, .startup-feature span {
-            color: rgba(255,255,255,0.7);
+        .startup-stat span,
+        .startup-feature span {
+            color: rgba(255, 255, 255, 0.7);
             font-size: 13px;
         }
 
@@ -924,30 +948,55 @@
             position: absolute;
             top: 16px;
             right: 16px;
-            width: 40px;
-            height: 40px;
-            border: 1px solid rgba(255,255,255,0.12);
+            width: 36px;
+            height: 36px;
+            border: 1px solid rgba(255, 255, 255, 0.12);
             border-radius: 50%;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
             color: #fff;
             cursor: pointer;
         }
 
         @keyframes heroFloat {
-            0% { transform: translate3d(0, 0, 0) scale(1); }
-            50% { transform: translate3d(-2%, 3%, 0) scale(1.02); }
-            100% { transform: translate3d(2%, -2%, 0) scale(1.05); }
+            0% {
+                transform: translate3d(0, 0, 0) scale(1);
+            }
+
+            50% {
+                transform: translate3d(-2%, 3%, 0) scale(1.02);
+            }
+
+            100% {
+                transform: translate3d(2%, -2%, 0) scale(1.05);
+            }
         }
 
         @keyframes heroPulse {
-            0%,100% { transform: scale(1); opacity: 0.25; }
-            50% { transform: scale(1.12); opacity: 0.4; }
+
+            0%,
+            100% {
+                transform: scale(1);
+                opacity: 0.25;
+            }
+
+            50% {
+                transform: scale(1.12);
+                opacity: 0.4;
+            }
         }
 
         @keyframes hueShift {
-            0% { background-position: 0% 50%; }
-            50% { background-position: 100% 50%; }
-            100% { background-position: 0% 50%; }
+            0% {
+                background-position: 0% 50%;
+            }
+
+            50% {
+                background-position: 100% 50%;
+            }
+
+            100% {
+                background-position: 0% 50%;
+            }
         }
 
         /* ===== LAYOUT ===== */
@@ -957,7 +1006,7 @@
             display: grid;
             grid-template-columns: var(--sidebar-w) 1fr;
             gap: 0;
-            min-height: calc(100vh - 200px);
+            min-height: calc(80vh - 200px);
         }
 
         /* ===== SIDEBAR ===== */
@@ -1009,10 +1058,10 @@
         }
 
         .sidebar-section-title {
-            font-size: 10px;
-            font-weight: 700;
+            font-size: 8px;
+            font-weight: 600;
             text-transform: uppercase;
-            letter-spacing: 1.4px;
+            letter-spacing: 1.0px;
             color: var(--text-muted);
             padding: 0 6px;
             margin-bottom: 10px;
@@ -1130,7 +1179,7 @@
             font-size: var(--wiki-font-size);
         }
 
-        #wikiArticle > * {
+        #wikiArticle>* {
             font-size: inherit;
         }
 
@@ -1142,7 +1191,7 @@
         #wikiArticle h1 {
             font-size: clamp(calc(2.05em * var(--wiki-font-scale)), 3.8vw, calc(2.55em * var(--wiki-font-scale)));
             font-weight: 800;
-            line-height: 1.1;
+            line-height: 1.0;
             margin-bottom: 16px;
             color: var(--text);
             border-bottom: 2px solid var(--accent);
@@ -1163,7 +1212,7 @@
             content: '';
             display: inline-block;
             width: 4px;
-            height: 20px;
+            height: 16px;
             background: linear-gradient(180deg, var(--accent), var(--accent2));
             border-radius: 2px;
             flex-shrink: 0;
@@ -1180,7 +1229,7 @@
             font-size: 1em;
             margin-bottom: 0.7em;
             color: var(--text);
-            line-height: 1.7;
+            line-height: 1.4;
         }
 
         #wikiArticle ul,
@@ -1209,7 +1258,7 @@
             border-radius: 0 8px 8px 0;
             margin: 16px 0;
             font-size: calc(0.98em * var(--wiki-font-scale));
-            line-height: 1.65;
+            line-height: 1.35;
         }
 
         #wikiArticle blockquote strong {
@@ -1279,7 +1328,7 @@
             overflow-x: auto;
             font-family: var(--mono);
             font-size: calc(0.9em * var(--wiki-font-scale));
-            line-height: 1.55;
+            line-height: 1.35;
             box-shadow: var(--shadow-lg);
         }
 
@@ -1347,6 +1396,7 @@
             margin: 10px 0 16px;
             transition: background 0.2s;
         }
+
         .topics-collapse-toggle:hover {
             background: var(--accent);
             color: #fff;
@@ -1451,8 +1501,8 @@
         }
 
         .quick-link-icon {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             background: var(--accent-light);
             border-radius: 10px;
             display: flex;
@@ -1509,8 +1559,8 @@
         }
 
         .loading-spinner {
-            width: 40px;
-            height: 40px;
+            width: 36px;
+            height: 36px;
             border: 3px solid var(--border);
             border-top-color: var(--accent);
             border-radius: 50%;
@@ -1583,8 +1633,8 @@
             border-bottom: 3px solid transparent;
             margin-bottom: -2px;
             transition: color var(--transition), background var(--transition),
-                        transform 0.18s ease, border-color var(--transition),
-                        box-shadow 0.18s ease;
+                transform 0.18s ease, border-color var(--transition),
+                box-shadow 0.18s ease;
             white-space: nowrap;
             transform: translateZ(0);
             will-change: transform;
@@ -1606,7 +1656,7 @@
             font-weight: 700;
             padding: 2px 7px;
             border-radius: 10px;
-            line-height: 1.4;
+            line-height: 1.2;
         }
 
         /* ===== TAB PANELS ===== */
@@ -1634,13 +1684,13 @@
 
         .info-panel-icon {
             width: 56px;
-            height: 56px;
+            height: 52px;
             border-radius: 16px;
             flex-shrink: 0;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 20px;
+            font-size: 18px;
             color: #fff;
         }
 
@@ -1712,12 +1762,12 @@
         .info-card p {
             font-size: 12px;
             color: var(--text-muted);
-            line-height: 1.7;
+            line-height: 1.4;
             margin-bottom: 0;
         }
 
         .info-card ul {
-            font-size: 13px;
+            font-size: 12px;
             color: var(--text-muted);
             margin: 6px 0 0 16px;
         }
@@ -1838,7 +1888,7 @@
             content: '';
             display: inline-block;
             width: 4px;
-            height: 20px;
+            height: 18px;
             background: linear-gradient(180deg, var(--accent), var(--accent2));
             border-radius: 2px;
         }
@@ -1909,7 +1959,7 @@
             font-size: 12px;
             color: var(--text-muted);
             margin-bottom: 5px;
-            line-height: 1.6;
+            line-height: 1.2;
         }
 
         .exam-info-grid {
@@ -1992,14 +2042,14 @@
             bottom: 24px;
             right: 24px;
             width: 52px;
-            height: 52px;
+            height: 48px;
             background: linear-gradient(135deg, var(--accent), var(--accent2));
             border: none;
             border-radius: 50%;
             color: #fff;
             font-size: 16px;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(91, 79, 207, 0.4);
+            box-shadow: 0 4px 24px rgba(91, 79, 207, 0.4);
             z-index: 50;
             transition: transform var(--transition);
         }
@@ -2022,9 +2072,9 @@
             border: none;
             border-radius: 50%;
             color: #fff;
-            font-size: 16px;
+            font-size: 14px;
             cursor: pointer;
-            box-shadow: 0 4px 20px rgba(91, 79, 207, 0.4);
+            box-shadow: 0 4px 24px rgba(91, 79, 207, 0.4);
             z-index: 49;
             opacity: 0;
             translate: 0 16px;
@@ -2054,7 +2104,7 @@
                 left: -320px;
                 top: var(--chrome-h);
                 width: 300px;
-                height: calc(100vh - var(--chrome-h));
+                height: calc(80vh - var(--chrome-h));
                 z-index: 40;
                 transition: left 0.3s ease;
                 box-shadow: var(--shadow-lg);
@@ -2082,7 +2132,7 @@
             }
 
             .info-panel {
-                padding: 24px 20px 40px;
+                padding: 24px 18px 40px;
             }
 
             .info-panel-header {
@@ -2262,7 +2312,7 @@
                 border-top: 1px solid var(--border);
                 z-index: 100;
                 padding: 4px 0 calc(4px + env(safe-area-inset-bottom));
-                box-shadow: 0 -2px 12px rgba(0,0,0,0.10);
+                box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.10);
                 justify-content: space-around;
                 align-items: stretch;
             }
@@ -2281,7 +2331,7 @@
                 font-family: var(--font);
                 color: var(--text-muted);
                 transition: color var(--transition);
-                min-height: 48px;
+                min-height: 42px;
                 -webkit-tap-highlight-color: transparent;
             }
 
@@ -2371,26 +2421,26 @@
 
             /* improve touch targets */
             .btn-icon {
-                width: 44px;
-                height: 44px;
+                width: 40px;
+                height: 40px;
                 font-size: 16px;
             }
 
             .cat-header {
                 padding: 12px 10px;
                 font-size: 12px;
-                min-height: 44px;
+                min-height: 40px;
             }
 
             .cat-list li a {
                 padding: 8px 10px;
-                font-size: 14px;
+                font-size: 12px;
                 min-height: 44px;
             }
 
             .quick-link-card {
                 padding: 16px;
-                min-height: 56px;
+                min-height: 52px;
             }
 
             .topic-header {
@@ -2399,43 +2449,43 @@
             }
 
             .topic-header span {
-                font-size: 14px;
+                font-size: 12px;
             }
 
             /* larger text on mobile for readability — use CSS variable so font-size setting works */
             #wikiArticle p {
-                font-size: calc(15px * var(--wiki-font-scale));
-                line-height: 1.6;
+                font-size: calc(14px * var(--wiki-font-scale));
+                line-height: 1.4;
             }
 
             #wikiArticle li {
-                font-size: calc(14px * var(--wiki-font-scale));
-                line-height: 1.5;
+                font-size: calc(13px * var(--wiki-font-scale));
+                line-height: 1.3;
             }
 
             #wikiArticle h2 {
-                font-size: calc(18px * var(--wiki-font-scale));
+                font-size: calc(17px * var(--wiki-font-scale));
             }
 
             #wikiArticle h3 {
-                font-size: calc(16px * var(--wiki-font-scale));
+                font-size: calc(15px * var(--wiki-font-scale));
             }
 
             #wikiArticle table {
-                font-size: calc(13px * var(--wiki-font-scale));
+                font-size: calc(12px * var(--wiki-font-scale));
             }
 
             #wikiArticle th {
-                font-size: calc(13px * var(--wiki-font-scale));
+                font-size: calc(12px * var(--wiki-font-scale));
             }
 
             .info-card p,
             .info-card ul {
-                font-size: 14px;
+                font-size: 12px;
             }
 
             .info-card-header strong {
-                font-size: 15px;
+                font-size: 13px;
             }
 
             /* back-to-top and sidebar toggle above bottom nav */
@@ -2458,13 +2508,13 @@
             }
 
             .info-panel-header h2 {
-                font-size: 20px;
+                font-size: 18px;
             }
 
             /* wiki sidebar in mobile adjustments */
             .wiki-sidebar {
                 top: var(--header-h);
-                height: calc(100vh - var(--header-h));
+                height: calc(80vh - var(--header-h));
             }
 
             .wiki-search input {
@@ -2483,19 +2533,38 @@
         }
 
         @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
+            from {
+                opacity: 0;
+            }
+
+            to {
+                opacity: 1;
+            }
         }
 
         /* ===== ENHANCED ANIMATIONS ===== */
         @keyframes slideInUp {
-            from { opacity: 0; transform: translateY(16px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(16px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         @keyframes scaleIn {
-            from { opacity: 0; transform: scale(0.96); }
-            to   { opacity: 1; transform: scale(1); }
+            from {
+                opacity: 0;
+                transform: scale(0.96);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
         }
 
         .wiki-welcome {
@@ -2538,7 +2607,7 @@
                 background: rgba(255, 255, 255, 0.15);
                 color: #fff;
                 transform: translateY(-1px);
-                box-shadow: 0 8px 18px rgba(0, 0, 0, 0.18);
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.18);
             }
 
             .tab-btn:hover {
@@ -2602,7 +2671,7 @@
                 padding-top: var(--header-h);
                 transform: translateY(calc(-100% + var(--header-h) + 24px));
                 transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                            box-shadow 0.35s ease;
+                    box-shadow 0.35s ease;
                 will-change: transform;
                 max-height: 80vh;
             }
@@ -2663,7 +2732,7 @@
                 margin-bottom: 16px;
             }
 
-            .pull-search-wrap > i {
+            .pull-search-wrap>i {
                 position: absolute;
                 left: 12px;
                 top: 50%;
@@ -2709,7 +2778,7 @@
                 font-family: var(--font);
                 color: var(--text-muted);
                 transition: background var(--transition), color var(--transition),
-                            transform 0.15s ease, border-color var(--transition);
+                    transform 0.15s ease, border-color var(--transition);
                 -webkit-tap-highlight-color: transparent;
                 transform: translateZ(0);
                 will-change: transform;
@@ -2739,7 +2808,7 @@
             .code-block-wrapper pre {
                 font-size: calc(10.5px * var(--wiki-font-scale));
                 padding: 14px 12px;
-                line-height: 1.45;
+                line-height: 1.4;
             }
 
             /* ===== ARTICLE TOC compact ===== */
@@ -2754,7 +2823,7 @@
 
             .article-toc a {
                 font-size: calc(12px * var(--wiki-font-scale));
-                line-height: 1.7;
+                line-height: 1.6;
             }
 
             .article-toc h3 {
@@ -2797,7 +2866,7 @@
             }
 
             .toc-fab::before {
-                background: radial-gradient(circle, rgba(255,255,255,0.35) 0%, rgba(255,255,255,0) 70%);
+                background: radial-gradient(circle, rgba(255, 255, 255, 0.35) 0%, rgba(255, 255, 255, 0) 70%);
                 animation: tocFabPulse 2.8s ease-out infinite;
             }
 
@@ -2852,16 +2921,38 @@
             }
 
             @keyframes tocFabPulse {
-                0% { opacity: 0; transform: scale(0.88); }
-                18% { opacity: 0.45; }
-                55% { opacity: 0; transform: scale(1.22); }
-                100% { opacity: 0; transform: scale(1.22); }
+                0% {
+                    opacity: 0;
+                    transform: scale(0.88);
+                }
+
+                18% {
+                    opacity: 0.45;
+                }
+
+                55% {
+                    opacity: 0;
+                    transform: scale(1.22);
+                }
+
+                100% {
+                    opacity: 0;
+                    transform: scale(1.22);
+                }
             }
 
             @keyframes tocFabBump {
-                0% { transform: scale(1); }
-                30% { transform: scale(1.14); }
-                100% { transform: scale(1); }
+                0% {
+                    transform: scale(1);
+                }
+
+                30% {
+                    transform: scale(1.14);
+                }
+
+                100% {
+                    transform: scale(1);
+                }
             }
 
             .toc-radial-overlay {
@@ -3407,13 +3498,13 @@
                     <i class="fa-solid fa-book-open"></i>
                     <span>Wiki</span>
                 </button>
-                <button class="pull-shortcut" data-tab="projekt">
-                    <i class="fa-solid fa-laptop-code"></i>
-                    <span>Projekt</span>
-                </button>
                 <button class="pull-shortcut" data-tab="egzamin">
                     <i class="fa-solid fa-graduation-cap"></i>
                     <span>Egzamin</span>
+                </button>
+                <button class="pull-shortcut" data-tab="projekt">
+                    <i class="fa-solid fa-laptop-code"></i>
+                    <span>Projekt</span>
                 </button>
                 <button class="pull-shortcut" data-tab="pierwsza">
                     <i class="fa-solid fa-rocket"></i>
@@ -3445,8 +3536,8 @@
                 </button>
             </div>
         </div>
-        <div class="pull-handle" id="pullHandle" role="button" tabindex="0"
-             aria-expanded="false" aria-label="Panel szybkiej nawigacji — pociągnij w dół">
+        <div class="pull-handle" id="pullHandle" role="button" tabindex="0" aria-expanded="false"
+            aria-label="Panel szybkiej nawigacji — pociągnij w dół">
             <div class="pull-pill"></div>
         </div>
     </div>
@@ -3466,7 +3557,8 @@
             <div class="header-actions">
                 <button class="header-badge" id="header-badge-kia" aria-label="KIA · PRz">KIA · PRz</button>
                 <div class="theme-picker" id="themePicker">
-                    <button class="btn-icon" id="themePickerBtn" title="Zmień motyw" aria-label="Wybierz motyw kolorystyczny" aria-haspopup="true" aria-expanded="false">
+                    <button class="btn-icon" id="themePickerBtn" title="Zmień motyw"
+                        aria-label="Wybierz motyw kolorystyczny" aria-haspopup="true" aria-expanded="false">
                         <i class="fa-solid fa-palette"></i>
                     </button>
                     <div class="theme-picker-dropdown" id="themeDropdown" role="menu">
@@ -3721,7 +3813,7 @@
                     </ul>
                 </div>
             </div>
-            
+
             <h3 class="section-title">Harmonogram realizacji</h3>
             <ul class="milestone-list">
                 <li class="milestone-item">
@@ -3733,13 +3825,15 @@
                     <div class="milestone-dot">2</div>
                     <div class="milestone-info">
                         <strong>Laboratoria nr 4/5 - repozytorium i projekt aplikacji</strong>
-                        <span>Wrzucenie linku do repozytorium na e-learningu w moodle. Opisanie swojego projektu w README. Dodanie innych studentów jako testerów.</span>
+                        <span>Wrzucenie linku do repozytorium na e-learningu w moodle. Opisanie swojego projektu w
+                            README. Dodanie innych studentów jako testerów.</span>
                     </div>
                 <li class="milestone-item">
                     <div class="milestone-dot">3</div>
                     <div class="milestone-info">
                         <strong>Laboratoria nr 6 - wersja beta</strong>
-                        <span>Pełna funkcjonalność (wszystkie zaplanowane funkcje działają), wstępne testy, refaktoryzacja kodu.</span>
+                        <span>Pełna funkcjonalność (wszystkie zaplanowane funkcje działają), wstępne testy,
+                            refaktoryzacja kodu.</span>
                     </div>
                 </li>
                 <li class="milestone-item">
@@ -4168,9 +4262,7 @@
 
     <!-- TAB PANEL: MOJA PIERWSZA APLIKACJA -->
     <div class="tab-panel" id="panel-pierwsza">
-        <iframe
-            id="iframe-pierwsza"
-            src="pierwsza-aplikacja.html"
+        <iframe id="iframe-pierwsza" src="pierwsza-aplikacja.html"
             style="border:none; width:100%; display:block; min-height:600px;"
             title="Moja pierwsza aplikacja — przewodnik krok po kroku"
             onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
@@ -4179,9 +4271,7 @@
 
     <!-- TAB PANEL: PROJEKTOWANIE APLIKACJI -->
     <div class="tab-panel" id="panel-projektowanie">
-        <iframe
-            id="iframe-projektowanie"
-            src="projektowanie-aplikacji.html"
+        <iframe id="iframe-projektowanie" src="projektowanie-aplikacji.html"
             style="border:none; width:100%; display:block; min-height:600px;"
             title="Projektowanie aplikacji — interaktywny kreator projektu"
             onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
@@ -4205,11 +4295,8 @@
 
     <!-- TAB PANEL: STUDENCI (dev mode only) -->
     <div class="tab-panel" id="panel-studenci">
-        <iframe
-            id="iframe-studenci"
-            src="studenci.html"
-            style="border:none; width:100%; display:block; min-height:600px;"
-            title="Studenci — zgłoszenia projektów"
+        <iframe id="iframe-studenci" src="studenci.html"
+            style="border:none; width:100%; display:block; min-height:600px;" title="Studenci — zgłoszenia projektów"
             onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
         </iframe>
     </div><!-- /panel-studenci -->
@@ -4239,7 +4326,9 @@
     <!-- Settings Panel (mobile) -->
     <div class="settings-panel-overlay" id="settingsPanelOverlay"></div>
     <div class="settings-panel" id="settingsPanel" role="dialog" aria-label="Ustawienia">
-        <div class="settings-panel-handle"><div class="pill"></div></div>
+        <div class="settings-panel-handle">
+            <div class="pill"></div>
+        </div>
         <div class="settings-panel-header">
             <h3><i class="fa-solid fa-gear"></i> Ustawienia</h3>
             <button class="settings-close" id="settingsClose" aria-label="Zamknij ustawienia">
@@ -4268,7 +4357,8 @@
                         <i class="fa-solid fa-hand-pointer"></i>
                         <span>Wibracje haptyczne</span>
                     </div>
-                    <button class="toggle-switch active" id="hapticToggle" role="switch" aria-checked="true" aria-label="Wibracje haptyczne"></button>
+                    <button class="toggle-switch active" id="hapticToggle" role="switch" aria-checked="true"
+                        aria-label="Wibracje haptyczne"></button>
                 </div>
             </div>
             <div class="settings-section">
@@ -4278,21 +4368,23 @@
                         <i class="fa-solid fa-bell"></i>
                         <span>Wykłady (śr. 8:45)</span>
                     </div>
-                    <button class="toggle-switch" id="notifLectureToggle" role="switch" aria-checked="false" aria-label="Powiadomienia o wykładach"></button>
+                    <button class="toggle-switch" id="notifLectureToggle" role="switch" aria-checked="false"
+                        aria-label="Powiadomienia o wykładach"></button>
                 </div>
                 <div class="settings-row">
                     <div class="settings-row-label">
                         <i class="fa-solid fa-rotate"></i>
                         <span>Powtórki materiału</span>
                     </div>
-                    <button class="toggle-switch" id="notifReviewToggle" role="switch" aria-checked="false" aria-label="Przypomnienia o powtórce materiału"></button>
+                    <button class="toggle-switch" id="notifReviewToggle" role="switch" aria-checked="false"
+                        aria-label="Przypomnienia o powtórce materiału"></button>
                 </div>
                 <p id="notifPermStatus" class="notif-perm-status"></p>
             </div>
             <div class="settings-section">
                 <div class="settings-section-title">Informacje</div>
                 <div class="settings-row settings-row-version" id="dev-mode-trigger" role="button" tabindex="0"
-                     aria-label="Informacje o wersji aplikacji">
+                    aria-label="Informacje o wersji aplikacji">
                     <div class="settings-row-label">
                         <i class="fa-solid fa-circle-info"></i>
                         <span>Wersja aplikacji</span>
@@ -4968,8 +5060,8 @@
             if (!('Notification' in window) || !('serviceWorker' in navigator)) return;
 
             const lectureToggle = document.getElementById('notifLectureToggle');
-            const reviewToggle  = document.getElementById('notifReviewToggle');
-            const statusEl      = document.getElementById('notifPermStatus');
+            const reviewToggle = document.getElementById('notifReviewToggle');
+            const statusEl = document.getElementById('notifPermStatus');
             if (!lectureToggle || !reviewToggle) return;
 
             function setStatus(msg, ok) {
@@ -4984,9 +5076,9 @@
             }
 
             const lecturePref = localStorage.getItem('pam-notif-lecture') === 'true';
-            const reviewPref  = localStorage.getItem('pam-notif-review')  === 'true';
+            const reviewPref = localStorage.getItem('pam-notif-review') === 'true';
             const permGranted = Notification.permission === 'granted';
-            const permDenied  = Notification.permission === 'denied';
+            const permDenied = Notification.permission === 'denied';
 
             if (permGranted) {
                 applyToggle(lectureToggle, lecturePref);
@@ -5001,8 +5093,8 @@
             // Returns the next Date for a given weekday (0=Sun…6=Sat), hour and minute
             function nextDateAt(targetDay, hour, minute) {
                 const now = new Date();
-                const d   = new Date(now);
-                let days  = (targetDay - now.getDay() + 7) % 7;
+                const d = new Date(now);
+                let days = (targetDay - now.getDay() + 7) % 7;
                 d.setDate(now.getDate() + days);
                 d.setHours(hour, minute, 0, 0);
                 if (d <= now) d.setDate(d.getDate() + 7);
@@ -5020,10 +5112,10 @@
                         existing.forEach(n => n.close());
                         await reg.showNotification(title, {
                             body,
-                            icon:        './assets/icon-192.png',
-                            badge:       './assets/icon-192.png',
+                            icon: './assets/icon-192.png',
+                            badge: './assets/icon-192.png',
                             tag,
-                            renotify:    true,
+                            renotify: true,
                             showTrigger: new TimestampTrigger(triggerDate.getTime())
                         });
                         return;
@@ -5037,7 +5129,7 @@
                     setTimeout(() => {
                         reg.showNotification(title, {
                             body,
-                            icon:  './assets/icon-192.png',
+                            icon: './assets/icon-192.png',
                             badge: './assets/icon-192.png',
                             tag
                         });
@@ -5077,7 +5169,7 @@
                         setStatus('Powiadomienia zostały odrzucone.', false);
                         if (Notification.permission === 'denied') {
                             lectureToggle.disabled = true;
-                            reviewToggle.disabled  = true;
+                            reviewToggle.disabled = true;
                         }
                         return;
                     }
@@ -5183,7 +5275,7 @@
 
                     // Haptic feedback
                     const hapticEnabled = localStorage.getItem('pam-haptic') !== 'false';
-                    if (hapticEnabled && navigator.vibrate) navigator.vibrate(10);
+                    if (hapticEnabled && navigator.vibrate) navigator.vibrate(20);
                 });
                 grid.appendChild(btn);
             });
@@ -5194,252 +5286,252 @@
 
     <!-- ===== GSAP ANIMATIONS ===== -->
     <script>
-    (function () {
-        'use strict';
+        (function () {
+            'use strict';
 
-        // Respect prefers-reduced-motion accessibility setting
-        if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
-        if (typeof gsap === 'undefined') return;
+            // Respect prefers-reduced-motion accessibility setting
+            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            if (typeof gsap === 'undefined') return;
 
-        gsap.registerPlugin(ScrollTrigger);
+            gsap.registerPlugin(ScrollTrigger);
 
-        // ===== PAGE LOAD SEQUENCE =====
-        const introTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
+            // ===== PAGE LOAD SEQUENCE =====
+            const introTl = gsap.timeline({ defaults: { ease: 'power2.out' } });
 
-        introTl
-            .from('header', { y: -50, opacity: 0, duration: 0.55 })
-            .from('.hero-badge',  { y: 20, opacity: 0, duration: 0.4 }, '-=0.2')
-            .from('.hero h1',     { y: 34, opacity: 0, duration: 0.55 }, '-=0.15')
-            .from('.hero-sub',    { y: 20, opacity: 0, duration: 0.42 }, '-=0.2')
-            .from('.page-tab-bar',{ y: 20, opacity: 0, duration: 0.4 }, '-=0.2');
+            introTl
+                .from('header', { y: -50, opacity: 0, duration: 0.55 })
+                .from('.hero-badge', { y: 20, opacity: 0, duration: 0.4 }, '-=0.2')
+                .from('.hero h1', { y: 34, opacity: 0, duration: 0.55 }, '-=0.15')
+                .from('.hero-sub', { y: 20, opacity: 0, duration: 0.42 }, '-=0.2')
+                .from('.page-tab-bar', { y: 20, opacity: 0, duration: 0.4 }, '-=0.2');
 
-        // ===== SCROLL-TRIGGERED ANIMATIONS =====
+            // ===== SCROLL-TRIGGERED ANIMATIONS =====
 
-        // Hero parallax glow
-        const heroSection = document.querySelector('.hero');
-        const heroContent = document.querySelector('.hero-content');
-        if (heroSection && heroContent) {
-            gsap.to(heroContent, {
-                y: 28,
-                ease: 'none',
-                scrollTrigger: {
-                    trigger: heroSection,
-                    start: 'top top',
-                    end: 'bottom top',
-                    scrub: true
-                }
-            });
-        }
-
-
-        // Section titles — slide in from left
-        gsap.utils.toArray('.section-title').forEach(el => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
-                x: -30, opacity: 0, duration: 0.5, ease: 'power2.out'
-            });
-        });
-
-        // Info panel headers
-        gsap.utils.toArray('.info-panel-header').forEach(el => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
-                y: 30, opacity: 0, duration: 0.6, ease: 'power2.out'
-            });
-        });
-
-        // Cards grids — staggered fade-in from below
-        gsap.utils.toArray('.cards-grid').forEach(grid => {
-            gsap.from(grid.querySelectorAll('.info-card'), {
-                scrollTrigger: { trigger: grid, start: 'top 82%', toggleActions: 'play none none none' },
-                y: 40, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out'
-            });
-        });
-
-        // Exam stats — scale + fade, staggered
-        const examInfoGrid = document.querySelector('.exam-info-grid');
-        if (examInfoGrid) {
-            gsap.from(examInfoGrid.querySelectorAll('.exam-stat'), {
-                scrollTrigger: { trigger: examInfoGrid, start: 'top 82%', toggleActions: 'play none none none' },
-                y: 25, opacity: 0, scale: 0.88, duration: 0.45, stagger: 0.08, ease: 'back.out(1.5)'
-            });
-        }
-
-        // Milestone items — slide in from left
-        gsap.utils.toArray('.milestone-item').forEach((item, i) => {
-            gsap.from(item, {
-                scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' },
-                x: -40, opacity: 0, duration: 0.5, delay: i * 0.04, ease: 'power2.out'
-            });
-        });
-
-        // Topic accordion items — fade + slight rise
-        gsap.utils.toArray('.topic-item').forEach((item, i) => {
-            gsap.from(item, {
-                scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none none' },
-                y: 20, opacity: 0, duration: 0.4, delay: i * 0.03, ease: 'power2.out'
-            });
-        });
-
-        // Score table rows — slide in from left
-        gsap.utils.toArray('.score-table tbody tr').forEach((row, i) => {
-            gsap.from(row, {
-                scrollTrigger: { trigger: row, start: 'top 92%', toggleActions: 'play none none none' },
-                x: -20, opacity: 0, duration: 0.3, delay: i * 0.04, ease: 'power2.out'
-            });
-        });
-
-        // Quick-start link cards — staggered
-        const quickLinksGrid = document.querySelector('.quick-links-grid');
-        if (quickLinksGrid) {
-            gsap.from(quickLinksGrid.querySelectorAll('.quick-link-card'), {
-                scrollTrigger: { trigger: quickLinksGrid, start: 'top 85%', toggleActions: 'play none none none' },
-                y: 30, opacity: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out'
-            });
-        }
-
-        // Info/hint boxes
-        gsap.utils.toArray('.hint-box, .info-box').forEach(el => {
-            gsap.from(el, {
-                scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
-                y: 20, opacity: 0, duration: 0.5, ease: 'power2.out'
-            });
-        });
-
-        // ===== ARTICLE CONTENT ANIMATIONS =====
-
-        // Track ScrollTriggers created for article content so they can be
-        // cleaned up efficiently when a new article is loaded.
-        let articleTriggers = [];
-
-        function animateArticleContent(container) {
-            if (!container) return;
-
-            if (window.anime) {
-                anime.remove(container.querySelectorAll('h1, h2, p, li, .reading-time, .article-toc, .table-wrapper, .code-block-wrapper, blockquote, img'));
-                anime({
-                    targets: container.querySelectorAll('h1, h2, p, li, .reading-time, .article-toc, .table-wrapper, .code-block-wrapper, blockquote, img'),
-                    translateY: [22, 0],
-                    opacity: [0, 1],
-                    delay: anime.stagger(22, { start: 40 }),
-                    duration: 460,
-                    easing: 'easeOutQuad'
+            // Hero parallax glow
+            const heroSection = document.querySelector('.hero');
+            const heroContent = document.querySelector('.hero-content');
+            if (heroSection && heroContent) {
+                gsap.to(heroContent, {
+                    y: 28,
+                    ease: 'none',
+                    scrollTrigger: {
+                        trigger: heroSection,
+                        start: 'top top',
+                        end: 'bottom top',
+                        scrub: true
+                    }
                 });
             }
 
-            // Kill triggers from the previous article
-            articleTriggers.forEach(st => st.kill());
-            articleTriggers = [];
 
-            const h1Els  = container.querySelectorAll('h1');
-            const h2Els  = container.querySelectorAll('h2');
-            const imgEls = container.querySelectorAll('img');
-            const tableEls = container.querySelectorAll('.table-wrapper');
-            const codeEls  = container.querySelectorAll('.code-block-wrapper');
+            // Section titles — slide in from left
+            gsap.utils.toArray('.section-title').forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+                    x: -30, opacity: 0, duration: 0.5, ease: 'power2.out'
+                });
+            });
 
-            if (h1Els.length) {
-                gsap.from(h1Els, { y: -20, opacity: 0, duration: 0.5, ease: 'power2.out' });
+            // Info panel headers
+            gsap.utils.toArray('.info-panel-header').forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+                    y: 30, opacity: 0, duration: 0.6, ease: 'power2.out'
+                });
+            });
+
+            // Cards grids — staggered fade-in from below
+            gsap.utils.toArray('.cards-grid').forEach(grid => {
+                gsap.from(grid.querySelectorAll('.info-card'), {
+                    scrollTrigger: { trigger: grid, start: 'top 82%', toggleActions: 'play none none none' },
+                    y: 40, opacity: 0, duration: 0.5, stagger: 0.1, ease: 'power2.out'
+                });
+            });
+
+            // Exam stats — scale + fade, staggered
+            const examInfoGrid = document.querySelector('.exam-info-grid');
+            if (examInfoGrid) {
+                gsap.from(examInfoGrid.querySelectorAll('.exam-stat'), {
+                    scrollTrigger: { trigger: examInfoGrid, start: 'top 82%', toggleActions: 'play none none none' },
+                    y: 25, opacity: 0, scale: 0.88, duration: 0.45, stagger: 0.08, ease: 'back.out(1.5)'
+                });
             }
 
-            h2Els.forEach(h2 => {
-                const st = ScrollTrigger.create({
-                    trigger: h2, start: 'top 88%', toggleActions: 'play none none none',
-                    onEnter: () => gsap.from(h2, { x: -20, opacity: 0, duration: 0.4, ease: 'power2.out' })
+            // Milestone items — slide in from left
+            gsap.utils.toArray('.milestone-item').forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: 'top 88%', toggleActions: 'play none none none' },
+                    x: -40, opacity: 0, duration: 0.5, delay: i * 0.04, ease: 'power2.out'
                 });
-                articleTriggers.push(st);
             });
 
-            imgEls.forEach(img => {
-                const st = ScrollTrigger.create({
-                    trigger: img, start: 'top 88%', toggleActions: 'play none none none',
-                    onEnter: () => gsap.from(img, { scale: 0.94, opacity: 0, duration: 0.5, ease: 'power2.out' })
+            // Topic accordion items — fade + slight rise
+            gsap.utils.toArray('.topic-item').forEach((item, i) => {
+                gsap.from(item, {
+                    scrollTrigger: { trigger: item, start: 'top 90%', toggleActions: 'play none none none' },
+                    y: 20, opacity: 0, duration: 0.4, delay: i * 0.03, ease: 'power2.out'
                 });
-                articleTriggers.push(st);
             });
 
-            tableEls.forEach(table => {
-                const st = ScrollTrigger.create({
-                    trigger: table, start: 'top 88%', toggleActions: 'play none none none',
-                    onEnter: () => gsap.from(table, { y: 20, opacity: 0, duration: 0.4, ease: 'power2.out' })
+            // Score table rows — slide in from left
+            gsap.utils.toArray('.score-table tbody tr').forEach((row, i) => {
+                gsap.from(row, {
+                    scrollTrigger: { trigger: row, start: 'top 92%', toggleActions: 'play none none none' },
+                    x: -20, opacity: 0, duration: 0.3, delay: i * 0.04, ease: 'power2.out'
                 });
-                articleTriggers.push(st);
             });
 
-            codeEls.forEach(block => {
-                const st = ScrollTrigger.create({
-                    trigger: block, start: 'top 88%', toggleActions: 'play none none none',
-                    onEnter: () => gsap.from(block, { y: 20, opacity: 0, duration: 0.4, ease: 'power2.out' })
+            // Quick-start link cards — staggered
+            const quickLinksGrid = document.querySelector('.quick-links-grid');
+            if (quickLinksGrid) {
+                gsap.from(quickLinksGrid.querySelectorAll('.quick-link-card'), {
+                    scrollTrigger: { trigger: quickLinksGrid, start: 'top 85%', toggleActions: 'play none none none' },
+                    y: 30, opacity: 0, duration: 0.5, stagger: 0.08, ease: 'power2.out'
                 });
-                articleTriggers.push(st);
+            }
+
+            // Info/hint boxes
+            gsap.utils.toArray('.hint-box, .info-box').forEach(el => {
+                gsap.from(el, {
+                    scrollTrigger: { trigger: el, start: 'top 88%', toggleActions: 'play none none none' },
+                    y: 20, opacity: 0, duration: 0.5, ease: 'power2.out'
+                });
             });
 
-            ScrollTrigger.refresh();
-        }
+            // ===== ARTICLE CONTENT ANIMATIONS =====
 
-        // Watch #wikiArticle for content replacement (article loads)
-        const articleEl = document.getElementById('wikiArticle');
-        if (articleEl) {
-            const articleObserver = new MutationObserver(mutations => {
-                const replaced = mutations.some(m => m.type === 'childList' && m.addedNodes.length > 0);
-                if (replaced) {
-                    // Delay accounts for hljs highlight + TOC/copy-button post-processing
-                    // that runs synchronously after innerHTML assignment in loadArticle().
-                    setTimeout(() => animateArticleContent(articleEl), 80);
+            // Track ScrollTriggers created for article content so they can be
+            // cleaned up efficiently when a new article is loaded.
+            let articleTriggers = [];
+
+            function animateArticleContent(container) {
+                if (!container) return;
+
+                if (window.anime) {
+                    anime.remove(container.querySelectorAll('h1, h2, p, li, .reading-time, .article-toc, .table-wrapper, .code-block-wrapper, blockquote, img'));
+                    anime({
+                        targets: container.querySelectorAll('h1, h2, p, li, .reading-time, .article-toc, .table-wrapper, .code-block-wrapper, blockquote, img'),
+                        translateY: [22, 0],
+                        opacity: [0, 1],
+                        delay: anime.stagger(22, { start: 40 }),
+                        duration: 460,
+                        easing: 'easeOutQuad'
+                    });
                 }
-            });
-            articleObserver.observe(articleEl, { childList: true });
-        }
 
-        // ===== TAB PANEL TRANSITION =====
-        const origSwitchTab = window.switchTab;
-        if (typeof origSwitchTab === 'function') {
-            window.switchTab = function (tab) {
-                origSwitchTab.call(this, tab);
-                const panel = document.getElementById('panel-' + tab);
-                if (panel) {
-                    gsap.fromTo(panel,
-                        { opacity: 0, y: 14 },
-                        { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
-                    );
+                // Kill triggers from the previous article
+                articleTriggers.forEach(st => st.kill());
+                articleTriggers = [];
+
+                const h1Els = container.querySelectorAll('h1');
+                const h2Els = container.querySelectorAll('h2');
+                const imgEls = container.querySelectorAll('img');
+                const tableEls = container.querySelectorAll('.table-wrapper');
+                const codeEls = container.querySelectorAll('.code-block-wrapper');
+
+                if (h1Els.length) {
+                    gsap.from(h1Els, { y: -20, opacity: 0, duration: 0.5, ease: 'power2.out' });
                 }
-            };
-        }
 
-        // ===== INTERACTIVE HOVER MICRO-ANIMATIONS =====
+                h2Els.forEach(h2 => {
+                    const st = ScrollTrigger.create({
+                        trigger: h2, start: 'top 88%', toggleActions: 'play none none none',
+                        onEnter: () => gsap.from(h2, { x: -20, opacity: 0, duration: 0.4, ease: 'power2.out' })
+                    });
+                    articleTriggers.push(st);
+                });
 
-        // Helper: add lift-on-hover to a set of elements
-        function addLiftHover(selector, yAmt, scaleAmt) {
-            document.querySelectorAll(selector).forEach(el => {
-                el.addEventListener('mouseenter', () =>
-                    gsap.to(el, { y: -yAmt, scale: scaleAmt, duration: 0.2, ease: 'power2.out' }));
-                el.addEventListener('mouseleave', () =>
-                    gsap.to(el, { y: 0, scale: 1, duration: 0.2, ease: 'power2.out' }));
+                imgEls.forEach(img => {
+                    const st = ScrollTrigger.create({
+                        trigger: img, start: 'top 88%', toggleActions: 'play none none none',
+                        onEnter: () => gsap.from(img, { scale: 0.94, opacity: 0, duration: 0.5, ease: 'power2.out' })
+                    });
+                    articleTriggers.push(st);
+                });
+
+                tableEls.forEach(table => {
+                    const st = ScrollTrigger.create({
+                        trigger: table, start: 'top 88%', toggleActions: 'play none none none',
+                        onEnter: () => gsap.from(table, { y: 20, opacity: 0, duration: 0.4, ease: 'power2.out' })
+                    });
+                    articleTriggers.push(st);
+                });
+
+                codeEls.forEach(block => {
+                    const st = ScrollTrigger.create({
+                        trigger: block, start: 'top 88%', toggleActions: 'play none none none',
+                        onEnter: () => gsap.from(block, { y: 20, opacity: 0, duration: 0.4, ease: 'power2.out' })
+                    });
+                    articleTriggers.push(st);
+                });
+
+                ScrollTrigger.refresh();
+            }
+
+            // Watch #wikiArticle for content replacement (article loads)
+            const articleEl = document.getElementById('wikiArticle');
+            if (articleEl) {
+                const articleObserver = new MutationObserver(mutations => {
+                    const replaced = mutations.some(m => m.type === 'childList' && m.addedNodes.length > 0);
+                    if (replaced) {
+                        // Delay accounts for hljs highlight + TOC/copy-button post-processing
+                        // that runs synchronously after innerHTML assignment in loadArticle().
+                        setTimeout(() => animateArticleContent(articleEl), 80);
+                    }
+                });
+                articleObserver.observe(articleEl, { childList: true });
+            }
+
+            // ===== TAB PANEL TRANSITION =====
+            const origSwitchTab = window.switchTab;
+            if (typeof origSwitchTab === 'function') {
+                window.switchTab = function (tab) {
+                    origSwitchTab.call(this, tab);
+                    const panel = document.getElementById('panel-' + tab);
+                    if (panel) {
+                        gsap.fromTo(panel,
+                            { opacity: 0, y: 14 },
+                            { opacity: 1, y: 0, duration: 0.35, ease: 'power2.out' }
+                        );
+                    }
+                };
+            }
+
+            // ===== INTERACTIVE HOVER MICRO-ANIMATIONS =====
+
+            // Helper: add lift-on-hover to a set of elements
+            function addLiftHover(selector, yAmt, scaleAmt) {
+                document.querySelectorAll(selector).forEach(el => {
+                    el.addEventListener('mouseenter', () =>
+                        gsap.to(el, { y: -yAmt, scale: scaleAmt, duration: 0.2, ease: 'power2.out' }));
+                    el.addEventListener('mouseleave', () =>
+                        gsap.to(el, { y: 0, scale: 1, duration: 0.2, ease: 'power2.out' }));
+                });
+            }
+
+            addLiftHover('.quick-link-card', 4, 1.015);
+            addLiftHover('.info-card', 5, 1.018);
+            addLiftHover('.exam-stat', 4, 1.04);
+            addLiftHover('.startup-feature', 5, 1.02);
+            addLiftHover('.startup-stat', 5, 1.02);
+
+            // Topic accordion headers — icon nudge on hover
+            document.querySelectorAll('.topic-header').forEach(header => {
+                const icon = header.querySelector('.cat-icon');
+                if (!icon) return;
+                header.addEventListener('mouseenter', () => gsap.to(icon, { x: 4, duration: 0.18, ease: 'power2.out' }));
+                header.addEventListener('mouseleave', () => gsap.to(icon, { x: 0, duration: 0.18, ease: 'power2.out' }));
             });
-        }
 
-        addLiftHover('.quick-link-card', 4, 1.015);
-        addLiftHover('.info-card',       5, 1.018);
-        addLiftHover('.exam-stat',       4, 1.04);
-        addLiftHover('.startup-feature', 5, 1.02);
-        addLiftHover('.startup-stat',    5, 1.02);
+            // Back-to-top button — bounce on click
+            const backToTopBtn = document.getElementById('backToTop');
+            if (backToTopBtn) {
+                backToTopBtn.addEventListener('click', () => {
+                    gsap.from(backToTopBtn, { scale: 0.75, duration: 0.3, ease: 'back.out(3)' });
+                });
+            }
 
-        // Topic accordion headers — icon nudge on hover
-        document.querySelectorAll('.topic-header').forEach(header => {
-            const icon = header.querySelector('.cat-icon');
-            if (!icon) return;
-            header.addEventListener('mouseenter', () => gsap.to(icon, { x: 4, duration: 0.18, ease: 'power2.out' }));
-            header.addEventListener('mouseleave', () => gsap.to(icon, { x: 0, duration: 0.18, ease: 'power2.out' }));
-        });
-
-        // Back-to-top button — bounce on click
-        const backToTopBtn = document.getElementById('backToTop');
-        if (backToTopBtn) {
-            backToTopBtn.addEventListener('click', () => {
-                gsap.from(backToTopBtn, { scale: 0.75, duration: 0.3, ease: 'back.out(3)' });
-            });
-        }
-
-    }());
+        }());
     </script>
 </body>
 

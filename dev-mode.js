@@ -41,7 +41,7 @@
         return {
             'Wersja aplikacji': 'PAM WIKI ' + appVersion,
             'Data kompilacji': document.lastModified,
-            'Tryb PWA': isPWA ? 'tak (standalone)' : 'nie (przeglądarka)',
+            //'Tryb PWA': isPWA ? 'tak (standalone)' : 'nie (przeglądarka)',
             'Service Worker': swState,
             'Przeglądarka': nav.userAgent,
             'Platforma': nav.platform || 'nieznana',

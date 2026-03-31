@@ -15,37 +15,43 @@
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
     <style>
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
-            --bg:           #f4f6fb;
-            --surface:      #ffffff;
-            --surface2:     #f0f2f8;
-            --border:       #e2e6f0;
-            --text:         #1a1d2e;
-            --text-muted:   #6b7280;
-            --accent:       #ef4444;
-            --accent2:      #dc2626;
+            --bg: #f4f6fb;
+            --surface: #ffffff;
+            --surface2: #f0f2f8;
+            --border: #e2e6f0;
+            --text: #1a1d2e;
+            --text-muted: #6b7280;
+            --accent: #ef4444;
+            --accent2: #dc2626;
             --accent-light: #fee2e2;
-            --radius:       12px;
-            --radius-sm:    8px;
-            --shadow:       0 4px 24px rgba(0,0,0,0.08);
-            --font:         'Outfit', sans-serif;
-            --mono:         'JetBrains Mono', monospace;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --font: 'Outfit', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
         }
 
         body {
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.6;
+            line-height: 0.7;
             font-size: 15px;
         }
 
         .page-wrapper {
             max-width: 960px;
             margin: 0 auto;
-            padding: 32px 20px 80px;
+            padding: 32px 10px 80px;
         }
 
         /* ===== HEADER ===== */
@@ -54,7 +60,7 @@
             color: #fff;
             border-radius: var(--radius);
             padding: 18px 28px 16px;
-            margin-bottom: 24px;
+            margin-bottom: 12px;
             position: relative;
             overflow: hidden;
         }
@@ -62,14 +68,16 @@
         .page-hero::before {
             content: '';
             position: absolute;
-            top: -40px; right: -40px;
-            width: 200px; height: 200px;
-            background: rgba(255,255,255,0.08);
+            top: -20px;
+            right: -40px;
+            width: 200px;
+            height: 60px;
+            background: rgba(255, 255, 255, 0.08);
             border-radius: 50%;
         }
 
         .page-hero-icon {
-            font-size: 2rem;
+            font-size: 1rem;
             margin-bottom: 12px;
             opacity: 0.9;
         }
@@ -82,7 +90,7 @@
 
         .page-hero p {
             opacity: 0.85;
-            font-size: 0.95rem;
+            font-size: 0.75rem;
         }
 
         /* ===== SECTION CARD ===== */
@@ -114,7 +122,7 @@
         }
 
         .card-body {
-            padding: 20px 24px;
+            padding: 16px 24px;
         }
 
         /* ===== TABLE ===== */
@@ -125,13 +133,13 @@
         .data-table {
             width: 100%;
             border-collapse: collapse;
-            font-size: 0.9rem;
+            font-size: 0.8rem;
         }
 
         .data-table th {
             background: var(--surface2);
             color: var(--text-muted);
-            font-size: 0.78rem;
+            font-size: 0.72rem;
             font-weight: 600;
             text-transform: uppercase;
             letter-spacing: 0.05em;
@@ -164,12 +172,35 @@
             white-space: nowrap;
         }
 
-        .role-lider    { background: #fef3c7; color: #92400e; }
-        .role-developer { background: #dbeafe; color: #1e40af; }
-        .role-tester   { background: #d1fae5; color: #065f46; }
-        .role-product-lead { background: #fef3c7; color: #92400e; }
-        .role-frontend { background: #dbeafe; color: #1e40af; }
-        .role-backend  { background: #d1fae5; color: #065f46; }
+        .role-lider {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .role-developer {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-tester {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .role-product-lead {
+            background: #fef3c7;
+            color: #92400e;
+        }
+
+        .role-frontend {
+            background: #dbeafe;
+            color: #1e40af;
+        }
+
+        .role-backend {
+            background: #d1fae5;
+            color: #065f46;
+        }
 
         /* ===== ROLE PICKER ===== */
         .role-picker {
@@ -192,7 +223,8 @@
             user-select: none;
         }
 
-        .role-card:hover, .role-card.active {
+        .role-card:hover,
+        .role-card.active {
             border-color: var(--accent);
             background: var(--accent-light);
         }
@@ -205,9 +237,9 @@
         }
 
         .role-card strong {
-            font-size: 0.82rem;
+            font-size: 0.70em;
             display: block;
-            line-height: 1.3;
+            line-height: 0.8;
         }
 
         .role-card .role-desc {
@@ -288,12 +320,12 @@
         select:focus {
             outline: none;
             border-color: var(--accent);
-            box-shadow: 0 0 0 3px rgba(239,68,68,0.12);
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12);
         }
 
         textarea {
             resize: vertical;
-            min-height: 100px;
+            min-height: 70px;
         }
 
         .btn-submit {
@@ -312,9 +344,18 @@
             transition: background 0.2s, transform 0.1s;
         }
 
-        .btn-submit:hover { background: var(--accent2); }
-        .btn-submit:active { transform: scale(0.98); }
-        .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+        .btn-submit:hover {
+            background: var(--accent2);
+        }
+
+        .btn-submit:active {
+            transform: scale(0.98);
+        }
+
+        .btn-submit:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
 
         /* ===== ALERT ===== */
         .alert {
@@ -327,11 +368,31 @@
             gap: 10px;
         }
 
-        .alert-success { background: #d1fae5; color: #065f46; border: 1px solid #6ee7b7; }
-        .alert-error   { background: #fee2e2; color: #991b1b; border: 1px solid #fca5a5; }
-        .alert-info    { background: #dbeafe; color: #1e3a8a; border: 1px solid #93c5fd; }
-        .alert.hidden  { display: none; }
-        .hidden { display: none !important; }
+        .alert-success {
+            background: #d1fae5;
+            color: #065f46;
+            border: 1px solid #6ee7b7;
+        }
+
+        .alert-error {
+            background: #fee2e2;
+            color: #991b1b;
+            border: 1px solid #fca5a5;
+        }
+
+        .alert-info {
+            background: #dbeafe;
+            color: #1e3a8a;
+            border: 1px solid #93c5fd;
+        }
+
+        .alert.hidden {
+            display: none;
+        }
+
+        .hidden {
+            display: none !important;
+        }
 
         /* ===== TOKEN SETUP ===== */
         .token-section {
@@ -356,7 +417,9 @@
             transition: background 0.2s;
         }
 
-        .token-toggle:hover { background: var(--border); }
+        .token-toggle:hover {
+            background: var(--border);
+        }
 
         .token-toggle-label {
             display: flex;
@@ -371,7 +434,9 @@
             color: var(--text-muted);
         }
 
-        .token-toggle-status.ok { color: #059669; }
+        .token-toggle-status.ok {
+            color: #059669;
+        }
 
         .token-toggle-chevron {
             font-size: 0.75rem;
@@ -418,8 +483,13 @@
             transition: background 0.2s;
         }
 
-        .btn-sm:hover { background: var(--border); }
-        .btn-sm.danger { color: #dc2626; }
+        .btn-sm:hover {
+            background: var(--border);
+        }
+
+        .btn-sm.danger {
+            color: #dc2626;
+        }
 
         .token-status {
             font-size: 0.82rem;
@@ -427,14 +497,30 @@
             margin-top: 6px;
         }
 
-        .token-status.ok { color: #059669; }
+        .token-status.ok {
+            color: #059669;
+        }
 
         @media (max-width: 600px) {
-            .form-grid { grid-template-columns: 1fr; }
-            .form-group.full { grid-column: 1; }
-            .page-hero { padding: 14px 16px 12px; }
-            .page-hero h1 { font-size: 1.4rem; }
-            .card-body { padding: 16px; }
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: 1;
+            }
+
+            .page-hero {
+                padding: 14px 16px 12px;
+            }
+
+            .page-hero h1 {
+                font-size: 1.4rem;
+            }
+
+            .card-body {
+                padding: 16px;
+            }
         }
     </style>
 </head>
@@ -497,8 +583,8 @@
 
                 <!-- GitHub Token setup — visible only in dev mode -->
                 <div class="token-section hidden" id="token-config">
-                    <button class="token-toggle" id="token-toggle" type="button"
-                            aria-expanded="false" aria-controls="token-body">
+                    <button class="token-toggle" id="token-toggle" type="button" aria-expanded="false"
+                        aria-controls="token-body">
                         <span class="token-toggle-label">
                             <i class="fa-solid fa-key" aria-hidden="true"></i>
                             Token GitHub
@@ -515,7 +601,8 @@
                         </div>
                         <label for="gh-token-input">Wartość tokena</label>
                         <div class="token-row" style="margin-top:6px;">
-                            <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off" spellcheck="false">
+                            <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off"
+                                spellcheck="false">
                             <button class="btn-sm" id="btn-save-token" type="button">Zapisz token</button>
                             <button class="btn-sm danger" id="btn-clear-token" type="button">Usuń</button>
                         </div>
@@ -540,31 +627,40 @@
 
                         <div class="form-group full">
                             <label for="field-temat">Temat projektu <span class="req">*</span></label>
-                            <input type="text" id="field-temat" name="temat" placeholder="np. Aplikacja do zarządzania zadaniami" required>
+                            <input type="text" id="field-temat" name="temat"
+                                placeholder="np. Aplikacja do zarządzania zadaniami" required>
                         </div>
 
                         <div class="form-group full">
                             <label for="field-opis">Opis tematu <span class="req">*</span></label>
-                            <textarea id="field-opis" name="opis" placeholder="Krótki opis funkcjonalności i celu aplikacji…" required></textarea>
+                            <textarea id="field-opis" name="opis"
+                                placeholder="Krótki opis funkcjonalności i celu aplikacji…" required></textarea>
                         </div>
 
                         <div class="form-group full">
                             <label id="role-picker-label">Rola w projekcie <span class="req">*</span></label>
-                            <div class="role-picker" id="role-picker" role="radiogroup" aria-labelledby="role-picker-label">
-                                <div class="role-card" data-value="Product Lead &amp; UX" tabindex="0" role="radio" aria-checked="false">
+                            <div class="role-picker" id="role-picker" role="radiogroup"
+                                aria-labelledby="role-picker-label">
+                                <div class="role-card" data-value="Product Lead &amp; UX" tabindex="0" role="radio"
+                                    aria-checked="false">
                                     <i class="fa-solid fa-user-pen"></i>
                                     <strong>Product Lead &amp; UX</strong>
-                                    <span class="role-desc">User stories, prototyp, opis do Play Store, screeny, changelog, instrukcja użytkownika</span>
+                                    <span class="role-desc">User stories, prototyp, opis do Play Store, screeny,
+                                        changelog, instrukcja użytkownika</span>
                                 </div>
-                                <div class="role-card" data-value="Frontend Developer" tabindex="0" role="radio" aria-checked="false">
+                                <div class="role-card" data-value="Frontend Developer" tabindex="0" role="radio"
+                                    aria-checked="false">
                                     <i class="fa-solid fa-mobile-screen-button"></i>
                                     <strong>Frontend Developer</strong>
-                                    <span class="role-desc">Min. 5 ekranów, natywne funkcje urządzenia, testy jednostkowe, podpisany build APK/AAB</span>
+                                    <span class="role-desc">Min. 5 ekranów, natywne funkcje urządzenia, testy
+                                        jednostkowe, podpisany build APK/AAB</span>
                                 </div>
-                                <div class="role-card" data-value="Backend &amp; DevOps Engineer" tabindex="0" role="radio" aria-checked="false">
+                                <div class="role-card" data-value="Backend &amp; DevOps Engineer" tabindex="0"
+                                    role="radio" aria-checked="false">
                                     <i class="fa-solid fa-server"></i>
                                     <strong>Backend &amp; DevOps Engineer</strong>
-                                    <span class="role-desc">API REST, uwierzytelnianie (JWT), baza danych, CI/CD, deployment, polityka prywatności</span>
+                                    <span class="role-desc">API REST, uwierzytelnianie (JWT), baza danych, CI/CD,
+                                        deployment, polityka prywatności</span>
                                 </div>
                             </div>
                             <select id="field-rola" name="rola" style="display:none;" aria-hidden="true">
@@ -591,356 +687,357 @@
     </div><!-- /page-wrapper -->
 
     <script>
-    'use strict';
+        'use strict';
 
-    /* ------------------------------------------------------------------ */
-    /*  Config                                                              */
-    /* ------------------------------------------------------------------ */
-    const REPO_OWNER  = 'MatPomGit';
-    const REPO_NAME   = 'MobileHub';
-    const DATA_FILE   = 'students-data.json';
-    const GH_API_BASE = 'https://api.github.com';
-    const LS_TOKEN_KEY = 'pam-gh-token';
+        /* ------------------------------------------------------------------ */
+        /*  Config                                                              */
+        /* ------------------------------------------------------------------ */
+        const REPO_OWNER = 'MatPomGit';
+        const REPO_NAME = 'MobileHub';
+        const DATA_FILE = 'students-data.json';
+        const GH_API_BASE = 'https://api.github.com';
+        const LS_TOKEN_KEY = 'pam-gh-token';
 
-    /* ------------------------------------------------------------------ */
-    /*  Helpers                                                             */
-    /* ------------------------------------------------------------------ */
-    function showAlert(msg, type) {
-        const el = document.getElementById('main-alert');
-        const iconClass = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
-        el.className = 'alert alert-' + type;
-        el.textContent = '';
-        const icon = document.createElement('i');
-        icon.className = 'fa-solid ' + iconClass;
-        icon.setAttribute('aria-hidden', 'true');
-        el.appendChild(icon);
-        el.appendChild(document.createTextNode(' ' + msg));
-        el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-    }
-
-    function hideAlert() {
-        document.getElementById('main-alert').className = 'alert hidden';
-    }
-
-    function roleClass(role) {
-        if (role === 'Product Lead & UX') return 'role-product-lead';
-        if (role === 'Frontend Developer') return 'role-frontend';
-        if (role === 'Backend & DevOps Engineer') return 'role-backend';
-        if (role === 'Lider') return 'role-lider';
-        if (role === 'Developer') return 'role-developer';
-        if (role === 'Tester') return 'role-tester';
-        return '';
-    }
-
-    /* ------------------------------------------------------------------ */
-    /*  Dev mode — token section is only for the professor                  */
-    /* ------------------------------------------------------------------ */
-    const LS_DEV_KEY   = 'pam-dev-mode';
-    const LS_LOCAL_KEY = 'pam-students-local';
-
-    function isDevMode() {
-        return !!localStorage.getItem(LS_DEV_KEY);
-    }
-
-    function updateTokenSectionVisibility() {
-        const section = document.getElementById('token-config');
-        const hr      = document.getElementById('token-hr');
-        const devMode = isDevMode();
-        if (devMode) {
-            section.classList.remove('hidden');
-            hr.style.display = '';
-        } else {
-            section.classList.add('hidden');
-            hr.style.display = 'none';
+        /* ------------------------------------------------------------------ */
+        /*  Helpers                                                             */
+        /* ------------------------------------------------------------------ */
+        function showAlert(msg, type) {
+            const el = document.getElementById('main-alert');
+            const iconClass = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
+            el.className = 'alert alert-' + type;
+            el.textContent = '';
+            const icon = document.createElement('i');
+            icon.className = 'fa-solid ' + iconClass;
+            icon.setAttribute('aria-hidden', 'true');
+            el.appendChild(icon);
+            el.appendChild(document.createTextNode(' ' + msg));
+            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
-    }
 
-    /* React to dev mode toggled in the parent frame */
-    window.addEventListener('storage', function (e) {
-        if (e.key === LS_DEV_KEY) {
-            updateTokenSectionVisibility();
+        function hideAlert() {
+            document.getElementById('main-alert').className = 'alert hidden';
         }
-    });
 
-    /* ------------------------------------------------------------------ */
-    /*  GitHub Token management                                             */
-    /* ------------------------------------------------------------------ */
-    function getToken() {
-        return localStorage.getItem(LS_TOKEN_KEY) || '';
-    }
-
-    function updateTokenStatus() {
-        const tok = getToken();
-        const status       = document.getElementById('token-status');
-        const toggleStatus = document.getElementById('token-toggle-status');
-        const input        = document.getElementById('gh-token-input');
-        if (tok) {
-            status.textContent = 'Token zapisany (' + tok.slice(0, 8) + '…).';
-            status.className = 'token-status ok';
-            toggleStatus.textContent = '✓ skonfigurowany';
-            toggleStatus.className = 'token-toggle-status ok';
-            input.value = '';
-            input.placeholder = '(token jest zapisany)';
-        } else {
-            status.textContent = 'Token nie jest zapisany.';
-            status.className = 'token-status';
-            toggleStatus.textContent = 'nie skonfigurowany';
-            toggleStatus.className = 'token-toggle-status';
-            input.placeholder = 'ghp_…';
+        function roleClass(role) {
+            if (role === 'Product Lead & UX') return 'role-product-lead';
+            if (role === 'Frontend Developer') return 'role-frontend';
+            if (role === 'Backend & DevOps Engineer') return 'role-backend';
+            if (role === 'Lider') return 'role-lider';
+            if (role === 'Developer') return 'role-developer';
+            if (role === 'Tester') return 'role-tester';
+            return '';
         }
-    }
 
-    document.getElementById('token-toggle').addEventListener('click', function () {
-        const body     = document.getElementById('token-body');
-        const expanded = this.getAttribute('aria-expanded') === 'true';
-        this.setAttribute('aria-expanded', String(!expanded));
-        body.classList.toggle('hidden', expanded);
-    });
+        /* ------------------------------------------------------------------ */
+        /*  Dev mode — token section is only for the professor                  */
+        /* ------------------------------------------------------------------ */
+        const LS_DEV_KEY = 'pam-dev-mode';
+        const LS_LOCAL_KEY = 'pam-students-local';
 
-    document.getElementById('btn-save-token').addEventListener('click', function () {
-        const val = document.getElementById('gh-token-input').value.trim();
-        if (!val) { showAlert('Wpisz token przed zapisaniem.', 'error'); return; }
-        localStorage.setItem(LS_TOKEN_KEY, val);
-        updateTokenStatus();
-        hideAlert();
-    });
+        function isDevMode() {
+            return !!localStorage.getItem(LS_DEV_KEY);
+        }
 
-    document.getElementById('btn-clear-token').addEventListener('click', function () {
-        localStorage.removeItem(LS_TOKEN_KEY);
-        document.getElementById('gh-token-input').value = '';
-        updateTokenStatus();
-    });
-
-    /* ------------------------------------------------------------------ */
-    /*  Load data from repository and/or localStorage                       */
-    /* ------------------------------------------------------------------ */
-    async function loadData() {
-        const tbody  = document.getElementById('students-tbody');
-        const empty  = document.getElementById('empty-state');
-        const status = document.getElementById('table-state');
-
-        status.className = 'alert alert-info';
-        status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ładowanie danych…';
-        tbody.innerHTML  = '';
-        empty.className  = 'empty-state hidden';
-
-        let ghStudents = [];
-
-        try {
-            const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
-            const headers = { 'Accept': 'application/vnd.github.v3+json' };
-            const tok = getToken();
-            if (tok) headers['Authorization'] = 'Bearer ' + tok;
-
-            const resp = await fetch(url, { headers });
-            if (resp.ok) {
-                const json = await resp.json();
-                const content = atob(json.content.replace(/\n/g, ''));
-                const parsed = JSON.parse(content);
-                if (Array.isArray(parsed)) ghStudents = parsed;
-            } else if (resp.status !== 401 && resp.status !== 403) {
-                throw new Error('HTTP ' + resp.status + ' – ' + resp.statusText);
+        function updateTokenSectionVisibility() {
+            const section = document.getElementById('token-config');
+            const hr = document.getElementById('token-hr');
+            const devMode = isDevMode();
+            if (devMode) {
+                section.classList.remove('hidden');
+                hr.style.display = '';
+            } else {
+                section.classList.add('hidden');
+                hr.style.display = 'none';
             }
-        } catch (err) {
-            status.className = 'alert alert-error';
-            status.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Błąd ładowania danych: ' + escHtml(err.message);
-            return;
         }
 
-        /* Merge local (token-less) submissions with GitHub data */
-        let localStudents = [];
-        try {
-            localStudents = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
-            if (!Array.isArray(localStudents)) localStudents = [];
-        } catch (e) {
-            localStudents = [];
-        }
-        const allStudents = ghStudents.concat(localStudents);
-
-        status.className = 'alert alert-info hidden';
-
-        if (allStudents.length === 0) {
-            empty.className = 'empty-state';
-            return;
-        }
-
-        allStudents.forEach(function (s, i) {
-            const tr = document.createElement('tr');
-            tr.innerHTML =
-                '<td>' + (i + 1) + '</td>' +
-                '<td><strong>' + escHtml(s.imie) + ' ' + escHtml(s.nazwisko) + '</strong></td>' +
-                '<td>' + escHtml(s.temat) + '</td>' +
-                '<td style="max-width:260px;white-space:pre-wrap;">' + escHtml(s.opis) + '</td>' +
-                '<td><span class="role-badge ' + roleClass(s.rola) + '">' + escHtml(s.rola) + '</span></td>' +
-                '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.82rem;">' + escHtml(s.data || '') + '</td>';
-            tbody.appendChild(tr);
+        /* React to dev mode toggled in the parent frame */
+        window.addEventListener('storage', function (e) {
+            if (e.key === LS_DEV_KEY) {
+                updateTokenSectionVisibility();
+            }
         });
-    }
 
-    function escHtml(str) {
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;')
-            .replace(/'/g, '&#39;');
-    }
+        /* ------------------------------------------------------------------ */
+        /*  GitHub Token management                                             */
+        /* ------------------------------------------------------------------ */
+        function getToken() {
+            return localStorage.getItem(LS_TOKEN_KEY) || '';
+        }
 
-    /* ------------------------------------------------------------------ */
-    /*  Save data — GitHub API when token is available, localStorage        */
-    /*  otherwise so students can submit without a token                    */
-    /* ------------------------------------------------------------------ */
-    async function saveData(newEntry) {
-        const tok = getToken();
-
-        if (!tok) {
-            /* No token — store locally so the form still works for students */
-            let existing = [];
-            try {
-                existing = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
-                if (!Array.isArray(existing)) existing = [];
-            } catch (e) {
-                existing = [];
+        function updateTokenStatus() {
+            const tok = getToken();
+            const status = document.getElementById('token-status');
+            const toggleStatus = document.getElementById('token-toggle-status');
+            const input = document.getElementById('gh-token-input');
+            if (tok) {
+                status.textContent = 'Token zapisany (' + tok.slice(0, 8) + '…).';
+                status.className = 'token-status ok';
+                toggleStatus.textContent = '✓ skonfigurowany';
+                toggleStatus.className = 'token-toggle-status ok';
+                input.value = '';
+                input.placeholder = '(token jest zapisany)';
+            } else {
+                status.textContent = 'Token nie jest zapisany.';
+                status.className = 'token-status';
+                toggleStatus.textContent = 'nie skonfigurowany';
+                toggleStatus.className = 'token-toggle-status';
+                input.placeholder = 'ghp_…';
             }
-            existing.push(newEntry);
-            localStorage.setItem(LS_LOCAL_KEY, JSON.stringify(existing));
+        }
+
+        document.getElementById('token-toggle').addEventListener('click', function () {
+            const body = document.getElementById('token-body');
+            const expanded = this.getAttribute('aria-expanded') === 'true';
+            this.setAttribute('aria-expanded', String(!expanded));
+            body.classList.toggle('hidden', expanded);
+        });
+
+        document.getElementById('btn-save-token').addEventListener('click', function () {
+            const val = document.getElementById('gh-token-input').value.trim();
+            if (!val) { showAlert('Wpisz token przed zapisaniem.', 'error'); return; }
+            localStorage.setItem(LS_TOKEN_KEY, val);
+            updateTokenStatus();
+            hideAlert();
+        });
+
+        document.getElementById('btn-clear-token').addEventListener('click', function () {
+            localStorage.removeItem(LS_TOKEN_KEY);
+            document.getElementById('gh-token-input').value = '';
+            updateTokenStatus();
+        });
+
+        /* ------------------------------------------------------------------ */
+        /*  Load data from repository and/or localStorage                       */
+        /* ------------------------------------------------------------------ */
+        async function loadData() {
+            const tbody = document.getElementById('students-tbody');
+            const empty = document.getElementById('empty-state');
+            const status = document.getElementById('table-state');
+
+            status.className = 'alert alert-info';
+            status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ładowanie danych…';
+            tbody.innerHTML = '';
+            empty.className = 'empty-state hidden';
+
+            let ghStudents = [];
+
+            try {
+                const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
+                const headers = { 'Accept': 'application/vnd.github.v3+json' };
+                const tok = getToken();
+                if (tok) headers['Authorization'] = 'Bearer ' + tok;
+
+                const resp = await fetch(url, { headers });
+                if (resp.ok) {
+                    const json = await resp.json();
+                    const content = atob(json.content.replace(/\n/g, ''));
+                    const parsed = JSON.parse(content);
+                    if (Array.isArray(parsed)) ghStudents = parsed;
+                } else if (resp.status !== 401 && resp.status !== 403) {
+                    throw new Error('HTTP ' + resp.status + ' – ' + resp.statusText);
+                }
+            } catch (err) {
+                status.className = 'alert alert-error';
+                status.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Błąd ładowania danych: ' + escHtml(err.message);
+                return;
+            }
+
+            /* Merge local (token-less) submissions with GitHub data */
+            let localStudents = [];
+            try {
+                localStudents = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
+                if (!Array.isArray(localStudents)) localStudents = [];
+            } catch (e) {
+                localStudents = [];
+            }
+            const allStudents = ghStudents.concat(localStudents);
+
+            status.className = 'alert alert-info hidden';
+
+            if (allStudents.length === 0) {
+                empty.className = 'empty-state';
+                return;
+            }
+
+            allStudents.forEach(function (s, i) {
+                const tr = document.createElement('tr');
+                tr.innerHTML =
+                    '<td>' + (i + 1) + '</td>' +
+                    '<td><strong>' + escHtml(s.imie) + ' ' + escHtml(s.nazwisko) + '</strong></td>' +
+                    '<td>' + escHtml(s.temat) + '</td>' +
+                    '<td style="max-width:260px;white-space:pre-wrap;">' + escHtml(s.opis) + '</td>' +
+                    '<td><span class="role-badge ' + roleClass(s.rola) + '">' + escHtml(s.rola) + '</span></td>' +
+                    '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.82rem;">' + escHtml(s.data || '') + '</td>';
+                tbody.appendChild(tr);
+            });
+        }
+
+        function escHtml(str) {
+            return String(str)
+                .replace(/&/g, '&amp;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;')
+                .replace(/'/g, '&#39;');
+        }
+
+        /* ------------------------------------------------------------------ */
+        /*  Save data — GitHub API when token is available, localStorage        */
+        /*  otherwise so students can submit without a token                    */
+        /* ------------------------------------------------------------------ */
+        async function saveData(newEntry) {
+            const tok = getToken();
+
+            if (!tok) {
+                /* No token — store locally so the form still works for students */
+                let existing = [];
+                try {
+                    existing = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
+                    if (!Array.isArray(existing)) existing = [];
+                } catch (e) {
+                    existing = [];
+                }
+                existing.push(newEntry);
+                localStorage.setItem(LS_LOCAL_KEY, JSON.stringify(existing));
+                return true;
+            }
+
+            const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
+            const headers = {
+                'Accept': 'application/vnd.github.v3+json',
+                'Authorization': 'Bearer ' + tok,
+                'Content-Type': 'application/json'
+            };
+
+            /* 1. Read current file (need SHA for update) */
+            let currentStudents = [];
+            let fileSha = null;
+            try {
+                const getResp = await fetch(url, { headers });
+                if (getResp.ok) {
+                    const fileData = await getResp.json();
+                    fileSha = fileData.sha;
+                    const decoded = atob(fileData.content.replace(/\n/g, ''));
+                    currentStudents = JSON.parse(decoded);
+                    if (!Array.isArray(currentStudents)) currentStudents = [];
+                } else if (getResp.status !== 404) {
+                    throw new Error('HTTP ' + getResp.status + ' przy odczycie pliku.');
+                }
+            } catch (err) {
+                showAlert('Błąd odczytu danych z repozytorium: ' + err.message, 'error');
+                return false;
+            }
+
+            /* 2. Append new entry */
+            currentStudents.push(newEntry);
+            const jsonStr = JSON.stringify(currentStudents, null, 2);
+            const bytes = new TextEncoder().encode(jsonStr);
+            let binary = '';
+            bytes.forEach(function (b) { binary += String.fromCharCode(b); });
+            const newContent = btoa(binary);
+
+            /* 3. Write file */
+            const body = {
+                message: 'Dodano zgłoszenie: ' + newEntry.imie + ' ' + newEntry.nazwisko,
+                content: newContent,
+            };
+            if (fileSha) body.sha = fileSha;
+
+            try {
+                const putResp = await fetch(url, {
+                    method: 'PUT',
+                    headers: headers,
+                    body: JSON.stringify(body)
+                });
+
+                if (!putResp.ok) {
+                    const errBody = await putResp.json().catch(() => ({}));
+                    throw new Error('HTTP ' + putResp.status + ': ' + (errBody.message || putResp.statusText));
+                }
+            } catch (err) {
+                showAlert('Błąd zapisu danych: ' + err.message, 'error');
+                return false;
+            }
+
             return true;
         }
 
-        const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
-        const headers = {
-            'Accept':        'application/vnd.github.v3+json',
-            'Authorization': 'Bearer ' + tok,
-            'Content-Type':  'application/json'
-        };
+        /* ------------------------------------------------------------------ */
+        /*  Form submission                                                     */
+        /* ------------------------------------------------------------------ */
+        document.getElementById('submission-form').addEventListener('submit', async function (e) {
+            e.preventDefault();
+            hideAlert();
 
-        /* 1. Read current file (need SHA for update) */
-        let currentStudents = [];
-        let fileSha = null;
-        try {
-            const getResp = await fetch(url, { headers });
-            if (getResp.ok) {
-                const fileData = await getResp.json();
-                fileSha = fileData.sha;
-                const decoded = atob(fileData.content.replace(/\n/g, ''));
-                currentStudents = JSON.parse(decoded);
-                if (!Array.isArray(currentStudents)) currentStudents = [];
-            } else if (getResp.status !== 404) {
-                throw new Error('HTTP ' + getResp.status + ' przy odczycie pliku.');
+            const imie = document.getElementById('field-imie').value.trim();
+            const nazwisko = document.getElementById('field-nazwisko').value.trim();
+            const temat = document.getElementById('field-temat').value.trim();
+            const opis = document.getElementById('field-opis').value.trim();
+            const rola = document.getElementById('field-rola').value;
+
+            if (!imie || !nazwisko || !temat || !opis || !rola) {
+                showAlert('Wypełnij wszystkie wymagane pola.', 'error');
+                return;
             }
-        } catch (err) {
-            showAlert('Błąd odczytu danych z repozytorium: ' + err.message, 'error');
-            return false;
-        }
 
-        /* 2. Append new entry */
-        currentStudents.push(newEntry);
-        const jsonStr = JSON.stringify(currentStudents, null, 2);
-        const bytes = new TextEncoder().encode(jsonStr);
-        let binary = '';
-        bytes.forEach(function (b) { binary += String.fromCharCode(b); });
-        const newContent = btoa(binary);
+            const now = new Date();
+            const data = now.toLocaleDateString('pl-PL') + ' ' + now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
 
-        /* 3. Write file */
-        const body = {
-            message: 'Dodano zgłoszenie: ' + newEntry.imie + ' ' + newEntry.nazwisko,
-            content: newContent,
-        };
-        if (fileSha) body.sha = fileSha;
+            const entry = { imie, nazwisko, temat, opis, rola, data };
 
-        try {
-            const putResp = await fetch(url, {
-                method:  'PUT',
-                headers: headers,
-                body:    JSON.stringify(body)
-            });
+            const btn = document.getElementById('btn-submit');
+            btn.disabled = true;
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wysyłanie…';
 
-            if (!putResp.ok) {
-                const errBody = await putResp.json().catch(() => ({}));
-                throw new Error('HTTP ' + putResp.status + ': ' + (errBody.message || putResp.statusText));
-            }
-        } catch (err) {
-            showAlert('Błąd zapisu danych: ' + err.message, 'error');
-            return false;
-        }
+            const ok = await saveData(entry);
 
-        return true;
-    }
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
 
-    /* ------------------------------------------------------------------ */
-    /*  Form submission                                                     */
-    /* ------------------------------------------------------------------ */
-    document.getElementById('submission-form').addEventListener('submit', async function (e) {
-        e.preventDefault();
-        hideAlert();
-
-        const imie     = document.getElementById('field-imie').value.trim();
-        const nazwisko = document.getElementById('field-nazwisko').value.trim();
-        const temat    = document.getElementById('field-temat').value.trim();
-        const opis     = document.getElementById('field-opis').value.trim();
-        const rola     = document.getElementById('field-rola').value;
-
-        if (!imie || !nazwisko || !temat || !opis || !rola) {
-            showAlert('Wypełnij wszystkie wymagane pola.', 'error');
-            return;
-        }
-
-        const now = new Date();
-        const data = now.toLocaleDateString('pl-PL') + ' ' + now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
-
-        const entry = { imie, nazwisko, temat, opis, rola, data };
-
-        const btn = document.getElementById('btn-submit');
-        btn.disabled = true;
-        btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wysyłanie…';
-
-        const ok = await saveData(entry);
-
-        btn.disabled = false;
-        btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
-
-        if (ok) {
-            const msg = getToken()
-                ? 'Zgłoszenie zostało pomyślnie zapisane w repozytorium!'
-                : 'Zgłoszenie zostało zapisane.';
-            showAlert(msg, 'success');
-            document.getElementById('submission-form').reset();
-            document.querySelectorAll('#role-picker .role-card').forEach(function (c) {
-                c.classList.remove('active');
-                c.setAttribute('aria-checked', 'false');
-            });
-            /* Reload table to show updated data */
-            await loadData();
-        }
-    });
-
-    /* ------------------------------------------------------------------ */
-    /*  Role picker                                                        */
-    /* ------------------------------------------------------------------ */
-    document.querySelectorAll('#role-picker .role-card').forEach(function (card) {
-        card.addEventListener('click', function () {
-            document.querySelectorAll('#role-picker .role-card').forEach(function (c) {
-                c.classList.remove('active');
-                c.setAttribute('aria-checked', 'false');
-            });
-            card.classList.add('active');
-            card.setAttribute('aria-checked', 'true');
-            document.getElementById('field-rola').value = card.dataset.value;
-        });
-        card.addEventListener('keydown', function (e) {
-            if (e.key === 'Enter' || e.key === ' ') {
-                e.preventDefault();
-                card.click();
+            if (ok) {
+                const msg = getToken()
+                    ? 'Zgłoszenie zostało pomyślnie zapisane w repozytorium!'
+                    : 'Zgłoszenie zostało zapisane.';
+                showAlert(msg, 'success');
+                document.getElementById('submission-form').reset();
+                document.querySelectorAll('#role-picker .role-card').forEach(function (c) {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-checked', 'false');
+                });
+                /* Reload table to show updated data */
+                await loadData();
             }
         });
-    });
 
-    /* ------------------------------------------------------------------ */
-    /*  Init                                                                */
-    /* ------------------------------------------------------------------ */
-    updateTokenSectionVisibility();
-    updateTokenStatus();
-    loadData();
+        /* ------------------------------------------------------------------ */
+        /*  Role picker                                                        */
+        /* ------------------------------------------------------------------ */
+        document.querySelectorAll('#role-picker .role-card').forEach(function (card) {
+            card.addEventListener('click', function () {
+                document.querySelectorAll('#role-picker .role-card').forEach(function (c) {
+                    c.classList.remove('active');
+                    c.setAttribute('aria-checked', 'false');
+                });
+                card.classList.add('active');
+                card.setAttribute('aria-checked', 'true');
+                document.getElementById('field-rola').value = card.dataset.value;
+            });
+            card.addEventListener('keydown', function (e) {
+                if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    card.click();
+                }
+            });
+        });
+
+        /* ------------------------------------------------------------------ */
+        /*  Init                                                                */
+        /* ------------------------------------------------------------------ */
+        updateTokenSectionVisibility();
+        updateTokenStatus();
+        loadData();
     </script>
 </body>
+
 </html>

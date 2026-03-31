@@ -17,45 +17,51 @@
 
     <style>
         /* ===== RESET & BASE ===== */
-        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+        *,
+        *::before,
+        *::after {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
         :root {
-            --bg:           #f4f6fb;
-            --surface:      #ffffff;
-            --surface2:     #f0f2f8;
-            --border:       #e2e6f0;
-            --text:         #1a1d2e;
-            --text-muted:   #6b7280;
-            --accent:       #5b4fcf;
-            --accent2:      #7c3aed;
+            --bg: #f4f6fb;
+            --surface: #ffffff;
+            --surface2: #f0f2f8;
+            --border: #e2e6f0;
+            --text: #1a1d2e;
+            --text-muted: #6b7280;
+            --accent: #5b4fcf;
+            --accent2: #7c3aed;
             --accent-light: #ede9fe;
-            --accent-glow:  rgba(91, 79, 207, 0.15);
-            --green:        #10b981;
-            --green-light:  #d1fae5;
-            --amber:        #f59e0b;
-            --amber-light:  #fef3c7;
-            --red:          #ef4444;
-            --red-light:    #fee2e2;
-            --blue:         #3b82f6;
-            --blue-light:   #dbeafe;
-            --purple:       #8b5cf6;
+            --accent-glow: rgba(91, 79, 207, 0.15);
+            --green: #10b981;
+            --green-light: #d1fae5;
+            --amber: #f59e0b;
+            --amber-light: #fef3c7;
+            --red: #ef4444;
+            --red-light: #fee2e2;
+            --blue: #3b82f6;
+            --blue-light: #dbeafe;
+            --purple: #8b5cf6;
             --purple-light: #ede9fe;
-            --teal:         #06b6d4;
-            --teal-light:   #cffafe;
-            --code-bg:      #1e1e2e;
-            --radius:       12px;
-            --radius-sm:    8px;
-            --shadow:       0 4px 24px rgba(0,0,0,0.08);
-            --shadow-lg:    0 8px 40px rgba(0,0,0,0.12);
-            --font:         'Outfit', sans-serif;
-            --mono:         'JetBrains Mono', monospace;
+            --teal: #06b6d4;
+            --teal-light: #cffafe;
+            --code-bg: #1e1e2e;
+            --radius: 12px;
+            --radius-sm: 8px;
+            --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
+            --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
+            --font: 'Outfit', sans-serif;
+            --mono: 'JetBrains Mono', monospace;
         }
 
         body {
             font-family: var(--font);
             background: var(--bg);
             color: var(--text);
-            line-height: 1.65;
+            line-height: 1.2;
             font-size: 15px;
         }
 
@@ -67,22 +73,29 @@
             position: relative;
             overflow: hidden;
         }
+
         .page-hero::before {
             content: '';
             position: absolute;
-            top: -60px; right: -60px;
-            width: 240px; height: 240px;
-            background: rgba(255,255,255,0.07);
+            top: -60px;
+            right: -60px;
+            width: 240px;
+            height: 240px;
+            background: rgba(255, 255, 255, 0.07);
             border-radius: 50%;
         }
+
         .page-hero::after {
             content: '';
             position: absolute;
-            bottom: -40px; left: 30%;
-            width: 160px; height: 160px;
-            background: rgba(255,255,255,0.05);
+            bottom: -40px;
+            left: 30%;
+            width: 160px;
+            height: 120px;
+            background: rgba(255, 255, 255, 0.05);
             border-radius: 50%;
         }
+
         .page-hero h1 {
             font-size: 1.5rem;
             font-weight: 800;
@@ -90,6 +103,7 @@
             position: relative;
             z-index: 1;
         }
+
         .page-hero p {
             font-size: 0.88rem;
             opacity: 0.88;
@@ -97,6 +111,7 @@
             position: relative;
             z-index: 1;
         }
+
         .hero-badges {
             display: flex;
             flex-wrap: wrap;
@@ -105,9 +120,10 @@
             position: relative;
             z-index: 1;
         }
+
         .hero-badge {
-            background: rgba(255,255,255,0.18);
-            border: 1px solid rgba(255,255,255,0.28);
+            background: rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(255, 255, 255, 0.28);
             border-radius: 20px;
             padding: 4px 12px;
             font-size: 0.78rem;
@@ -150,8 +166,15 @@
         }
 
         @keyframes fadeSlideIn {
-            from { opacity: 0; transform: translateY(10px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         .question-number {
@@ -211,10 +234,13 @@
             font-weight: 400;
             color: var(--text-muted);
             margin-top: 2px;
-            line-height: 1.3;
+            line-height: 1.2;
         }
 
-        .opt-btn.selected .opt-desc { color: var(--accent); opacity: 0.75; }
+        .opt-btn.selected .opt-desc {
+            color: var(--accent);
+            opacity: 0.75;
+        }
 
         /* ===== EXTRA FEATURES SECTION ===== */
         .extra-section {
@@ -319,6 +345,7 @@
         .designer-right::-webkit-scrollbar {
             width: 4px;
         }
+
         .designer-right::-webkit-scrollbar-thumb {
             background: var(--border);
             border-radius: 2px;
@@ -374,12 +401,12 @@
         .summary-app-card p {
             font-size: 0.85rem;
             opacity: 0.88;
-            line-height: 1.55;
+            line-height: 1.4;
         }
 
         .app-type-badge {
             display: inline-block;
-            background: rgba(255,255,255,0.2);
+            background: rgba(255, 255, 255, 0.2);
             border-radius: 20px;
             padding: 3px 10px;
             font-size: 0.75rem;
@@ -407,26 +434,49 @@
         }
 
         .summary-section-icon {
-            width: 28px;
-            height: 28px;
+            width: 24px;
+            height: 24px;
             border-radius: 8px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 0.85rem;
+            font-size: 0.75rem;
             flex-shrink: 0;
         }
 
-        .icon-purple { background: var(--purple-light); color: var(--purple); }
-        .icon-green  { background: var(--green-light);  color: var(--green); }
-        .icon-amber  { background: var(--amber-light);  color: var(--amber); }
-        .icon-blue   { background: var(--blue-light);   color: var(--blue); }
-        .icon-teal   { background: var(--teal-light);   color: var(--teal); }
-        .icon-red    { background: var(--red-light);    color: var(--red); }
+        .icon-purple {
+            background: var(--purple-light);
+            color: var(--purple);
+        }
+
+        .icon-green {
+            background: var(--green-light);
+            color: var(--green);
+        }
+
+        .icon-amber {
+            background: var(--amber-light);
+            color: var(--amber);
+        }
+
+        .icon-blue {
+            background: var(--blue-light);
+            color: var(--blue);
+        }
+
+        .icon-teal {
+            background: var(--teal-light);
+            color: var(--teal);
+        }
+
+        .icon-red {
+            background: var(--red-light);
+            color: var(--red);
+        }
 
         .summary-section-header h3 {
-            font-size: 0.88rem;
-            font-weight: 700;
+            font-size: 0.78rem;
+            font-weight: 600;
         }
 
         .summary-section-body {
@@ -444,7 +494,9 @@
             font-size: 0.84rem;
         }
 
-        .feature-row:last-child { border-bottom: none; }
+        .feature-row:last-child {
+            border-bottom: none;
+        }
 
         .feature-row-left {
             display: flex;
@@ -465,7 +517,7 @@
         .feature-row-name {
             font-weight: 600;
             color: var(--text);
-            line-height: 1.4;
+            line-height: 1.2;
         }
 
         .feature-row-hours {
@@ -485,7 +537,9 @@
             border-bottom: 1px solid var(--border);
         }
 
-        .team-member:last-child { border-bottom: none; }
+        .team-member:last-child {
+            border-bottom: none;
+        }
 
         .team-member-header {
             display: flex;
@@ -495,8 +549,8 @@
         }
 
         .member-avatar {
-            width: 34px;
-            height: 34px;
+            width: 32px;
+            height: 32px;
             border-radius: 50%;
             display: flex;
             align-items: center;
@@ -506,9 +560,20 @@
             flex-shrink: 0;
         }
 
-        .avatar-1 { background: #ede9fe; color: #7c3aed; }
-        .avatar-2 { background: #d1fae5; color: #065f46; }
-        .avatar-3 { background: #cffafe; color: #155e75; }
+        .avatar-1 {
+            background: #ede9fe;
+            color: #7c3aed;
+        }
+
+        .avatar-2 {
+            background: #d1fae5;
+            color: #065f46;
+        }
+
+        .avatar-3 {
+            background: #cffafe;
+            color: #155e75;
+        }
 
         .member-info-name {
             font-size: 0.88rem;
@@ -579,14 +644,19 @@
             letter-spacing: 0.5px;
         }
 
-        .pricing-tier.highlight .pricing-tier-label { color: var(--accent); }
+        .pricing-tier.highlight .pricing-tier-label {
+            color: var(--accent);
+        }
 
         .pricing-tier-rate {
             font-size: 0.7rem;
             color: var(--text-muted);
         }
 
-        .pricing-tier.highlight .pricing-tier-rate { color: var(--accent); opacity: 0.75; }
+        .pricing-tier.highlight .pricing-tier-rate {
+            color: var(--accent);
+            opacity: 0.75;
+        }
 
         .pricing-tier-value {
             font-size: 1.1rem;
@@ -594,7 +664,9 @@
             color: var(--text);
         }
 
-        .pricing-tier.highlight .pricing-tier-value { color: var(--accent); }
+        .pricing-tier.highlight .pricing-tier-value {
+            color: var(--accent);
+        }
 
         .pricing-total-row {
             display: flex;
@@ -606,8 +678,16 @@
             font-size: 0.85rem;
         }
 
-        .pricing-total-row .total-label { color: var(--text-muted); font-weight: 600; }
-        .pricing-total-row .total-hours { font-weight: 800; color: var(--text); font-size: 1rem; }
+        .pricing-total-row .total-label {
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        .pricing-total-row .total-hours {
+            font-weight: 800;
+            color: var(--text);
+            font-size: 1rem;
+        }
 
         /* ===== PROGRESS BAR ===== */
         .progress-container {
@@ -616,7 +696,7 @@
         }
 
         .progress-bar-wrap {
-            height: 3px;
+            height: 4px;
             background: var(--border);
             border-radius: 2px;
             overflow: hidden;
@@ -667,7 +747,7 @@
             }
 
             .page-hero h1 {
-                font-size: 1.2rem;
+                font-size: 1.0rem;
             }
         }
 
@@ -675,6 +755,7 @@
             .extra-features-grid {
                 grid-template-columns: 1fr;
             }
+
             .pricing-grid {
                 grid-template-columns: 1fr;
             }
@@ -682,7 +763,7 @@
 
         /* ===== EMPTY STATE HELPERS ===== */
         .empty-hint {
-            font-size: 0.82rem;
+            font-size: 0.72rem;
             color: var(--text-muted);
             font-style: italic;
             padding: 8px 0;
@@ -694,11 +775,14 @@
 
     <!-- HERO -->
     <div class="page-hero">
-        <h1><i class="fa-solid fa-wand-magic-sparkles" style="margin-right:10px;opacity:0.85"></i>Projektowanie aplikacji</h1>
-        <p>Interaktywny kreator projektu — odpowiedz na pytania, aby zaplanować zakres, podział zadań i wycenę swojego projektu semestralnego.</p>
+        <h1><i class="fa-solid fa-wand-magic-sparkles" style="margin-right:10px;opacity:0.85"></i>Projektowanie
+            aplikacji</h1>
+        <p>Interaktywny kreator projektu — odpowiedz na pytania, aby zaplanować zakres, podział zadań i wycenę swojego
+            projektu semestralnego.</p>
         <div class="hero-badges">
             <span class="hero-badge"><i class="fa-solid fa-users" style="margin-right:5px"></i>Zespół 3 osób</span>
-            <span class="hero-badge"><i class="fa-solid fa-clock" style="margin-right:5px"></i>Szacunek czasu pracy</span>
+            <span class="hero-badge"><i class="fa-solid fa-clock" style="margin-right:5px"></i>Szacunek czasu
+                pracy</span>
             <span class="hero-badge"><i class="fa-solid fa-coins" style="margin-right:5px"></i>Wycena rynkowa</span>
             <span class="hero-badge"><i class="fa-solid fa-list-check" style="margin-right:5px"></i>Podział zadań</span>
         </div>
@@ -717,7 +801,8 @@
 
         <!-- LEFT: QUESTIONS -->
         <div class="designer-left">
-            <p class="questions-title"><i class="fa-solid fa-circle-question" style="margin-right:5px"></i>Pytania konfiguracyjne</p>
+            <p class="questions-title"><i class="fa-solid fa-circle-question" style="margin-right:5px"></i>Pytania
+                konfiguracyjne</p>
 
             <div id="questionList">
                 <!-- Injected by JS -->
@@ -730,7 +815,8 @@
                     <h2>Dodaj dodatkowe funkcje</h2>
                 </div>
                 <p style="font-size:0.83rem;color:var(--text-muted);margin-bottom:12px;">
-                    Kliknij, aby uwzględnić dodatkowe funkcjonalności w projekcie. Zostaną one wliczone w wycenę i podział zadań.
+                    Kliknij, aby uwzględnić dodatkowe funkcjonalności w projekcie. Zostaną one wliczone w wycenę i
+                    podział zadań.
                 </p>
                 <div class="extra-features-grid" id="extraFeaturesGrid">
                     <!-- Injected by JS -->
@@ -745,7 +831,8 @@
 
         <!-- RIGHT: SUMMARY -->
         <div class="designer-right" id="summaryPanel">
-            <p class="summary-title"><i class="fa-solid fa-file-lines" style="margin-right:5px"></i>Podsumowanie projektu</p>
+            <p class="summary-title"><i class="fa-solid fa-file-lines" style="margin-right:5px"></i>Podsumowanie
+                projektu</p>
 
             <!-- PLACEHOLDER -->
             <div class="summary-placeholder" id="summaryPlaceholder">
@@ -799,465 +886,465 @@
     </div>
 
     <script>
-    // ============================================================
-    //  DATA
-    // ============================================================
+        // ============================================================
+        //  DATA
+        // ============================================================
 
-    const QUESTIONS = [
-        {
-            id: 'appType',
-            text: 'Jaki typ aplikacji chcesz stworzyć?',
-            options: [
-                { val: 'game',      label: '🎮 Gra mobilna',            desc: 'Interaktywna gra z logiką rozgrywki' },
-                { val: 'shop',      label: '🛒 Sklep / e-commerce',     desc: 'Przeglądanie i zakup produktów lub usług' },
-                { val: 'iot',       label: '📡 Narzędzie IoT',          desc: 'Sterowanie i monitoring urządzeń IoT' },
-                { val: 'social',    label: '💬 Komunikacja / Social',   desc: 'Czat, forum, serwis społecznościowy' },
-                { val: 'utility',   label: '🛠️ Narzędzie / Utility',   desc: 'Kalkulator, organizer, notatnik, skaner' },
-                { val: 'health',    label: '🏥 Zdrowie / Fitness',      desc: 'Śledzenie aktywności i zdrowia' },
-                { val: 'education', label: '📚 Edukacja',               desc: 'Nauka, quizy, kursy, e-learning' },
-            ]
-        },
-        {
-            id: 'platform',
-            text: 'Jaka platforma docelowa?',
-            options: [
-                { val: 'android', label: '🤖 Android (Kotlin)',   desc: 'Natywna aplikacja na Android' },
-                { val: 'ios',     label: '🍎 iOS (Swift)',         desc: 'Natywna aplikacja na iPhone / iPad' },
-                { val: 'flutter', label: '🦋 Flutter (Dart)',      desc: 'Jedna baza kodu — Android i iOS' },
-                { val: 'rn',      label: '⚛️ React Native',       desc: 'JS/TS dla obu platform' },
-            ]
-        },
-        {
-            id: 'uiComplexity',
-            text: 'Jak rozbudowany jest interfejs użytkownika?',
-            options: [
-                { val: 'simple',  label: '📄 Prosty (1–3 ekrany)',       desc: 'Minimalna nawigacja, jedno zadanie' },
-                { val: 'medium',  label: '📋 Średni (4–8 ekranów)',       desc: 'Kilka sekcji, zakładki lub drawer' },
-                { val: 'complex', label: '📚 Rozbudowany (9+ ekranów)',   desc: 'Wiele widoków, role użytkownika' },
-            ]
-        },
-        {
-            id: 'auth',
-            text: 'Czy aplikacja wymaga uwierzytelniania?',
-            options: [
-                { val: 'none',      label: '🚫 Bez logowania',         desc: 'Aplikacja działa bez konta' },
-                { val: 'email',     label: '📧 Email + hasło',         desc: 'Klasyczna rejestracja i logowanie' },
-                { val: 'google',    label: '🔑 Google / Social login', desc: 'OAuth przez Google lub inne usługi' },
-                { val: 'biometric', label: '🪪 Biometryczne',          desc: 'Odcisk palca lub Face ID' },
-            ]
-        },
-        {
-            id: 'dataStorage',
-            text: 'Jak aplikacja przechowuje dane?',
-            options: [
-                { val: 'none',     label: '🚫 Tylko w pamięci',                desc: 'Dane znikają po zamknięciu' },
-                { val: 'prefs',    label: '⚙️ Shared Preferences',             desc: 'Proste ustawienia i flagi' },
-                { val: 'room',     label: '🗃️ Lokalna baza (Room / SQLite)',   desc: 'Pełna baza danych on-device' },
-                { val: 'firebase', label: '🔥 Firebase Firestore / RTDB',      desc: 'Baza NoSQL w chmurze Google' },
-                { val: 'api',      label: '🌐 Własne REST API',                desc: 'Serwer + HTTP/JSON lub GraphQL' },
-            ]
-        },
-        {
-            id: 'notifications',
-            text: 'Czy aplikacja wysyła powiadomienia?',
-            options: [
-                { val: 'none',  label: '🚫 Bez powiadomień',     desc: '' },
-                { val: 'local', label: '🔔 Lokalne',              desc: 'Zaplanowane przez AlarmManager / WorkManager' },
-                { val: 'push',  label: '📲 Push (Firebase FCM)',  desc: 'Powiadomienia zdalne z serwera' },
-            ]
-        },
-        {
-            id: 'location',
-            text: 'Czy aplikacja korzysta z lokalizacji lub map?',
-            options: [
-                { val: 'none',  label: '🚫 Bez lokalizacji',         desc: '' },
-                { val: 'gps',   label: '📍 Podstawowe GPS',           desc: 'Bieżąca lokalizacja użytkownika' },
-                { val: 'maps',  label: '🗺️ Mapy (Google Maps)',      desc: 'Wyświetlanie mapy, markery, trasy' },
-            ]
-        },
-        {
-            id: 'hardware',
-            text: 'Jakie funkcje sprzętowe są potrzebne?',
-            multi: true,
-            options: [
-                { val: 'none',      label: '🚫 Tylko ekran dotykowy',      desc: '' },
-                { val: 'camera',    label: '📷 Aparat / skaner QR',        desc: 'Zdjęcia, wideo, kody kreskowe' },
-                { val: 'sensors',   label: '📐 Czujniki ruchu',             desc: 'Akcelerometr, żyroskop, orientacja' },
-                { val: 'bluetooth', label: '📶 Bluetooth / BLE',            desc: 'Komunikacja z peryferiami' },
-            ]
-        },
-    ];
+        const QUESTIONS = [
+            {
+                id: 'appType',
+                text: 'Jaki typ aplikacji chcesz stworzyć?',
+                options: [
+                    { val: 'game', label: '🎮 Gra mobilna', desc: 'Interaktywna gra z logiką rozgrywki' },
+                    { val: 'shop', label: '🛒 Sklep / e-commerce', desc: 'Przeglądanie i zakup produktów lub usług' },
+                    { val: 'iot', label: '📡 Narzędzie IoT', desc: 'Sterowanie i monitoring urządzeń IoT' },
+                    { val: 'social', label: '💬 Komunikacja / Social', desc: 'Czat, forum, serwis społecznościowy' },
+                    { val: 'utility', label: '🛠️ Narzędzie / Utility', desc: 'Kalkulator, organizer, notatnik, skaner' },
+                    { val: 'health', label: '🏥 Zdrowie / Fitness', desc: 'Śledzenie aktywności i zdrowia' },
+                    { val: 'education', label: '📚 Edukacja', desc: 'Nauka, quizy, kursy, e-learning' },
+                ]
+            },
+            {
+                id: 'platform',
+                text: 'Jaka platforma docelowa?',
+                options: [
+                    { val: 'android', label: '🤖 Android (Kotlin)', desc: 'Natywna aplikacja na Android' },
+                    { val: 'ios', label: '🍎 iOS (Swift)', desc: 'Natywna aplikacja na iPhone / iPad' },
+                    { val: 'flutter', label: '🦋 Flutter (Dart)', desc: 'Jedna baza kodu — Android i iOS' },
+                    { val: 'rn', label: '⚛️ React Native', desc: 'JS/TS dla obu platform' },
+                ]
+            },
+            {
+                id: 'uiComplexity',
+                text: 'Jak rozbudowany jest interfejs użytkownika?',
+                options: [
+                    { val: 'simple', label: '📄 Prosty (1–3 ekrany)', desc: 'Minimalna nawigacja, jedno zadanie' },
+                    { val: 'medium', label: '📋 Średni (4–8 ekranów)', desc: 'Kilka sekcji, zakładki lub drawer' },
+                    { val: 'complex', label: '📚 Rozbudowany (9+ ekranów)', desc: 'Wiele widoków, role użytkownika' },
+                ]
+            },
+            {
+                id: 'auth',
+                text: 'Czy aplikacja wymaga uwierzytelniania?',
+                options: [
+                    { val: 'none', label: '🚫 Bez logowania', desc: 'Aplikacja działa bez konta' },
+                    { val: 'email', label: '📧 Email + hasło', desc: 'Klasyczna rejestracja i logowanie' },
+                    { val: 'google', label: '🔑 Google / Social login', desc: 'OAuth przez Google lub inne usługi' },
+                    { val: 'biometric', label: '🪪 Biometryczne', desc: 'Odcisk palca lub Face ID' },
+                ]
+            },
+            {
+                id: 'dataStorage',
+                text: 'Jak aplikacja przechowuje dane?',
+                options: [
+                    { val: 'none', label: '🚫 Tylko w pamięci', desc: 'Dane znikają po zamknięciu' },
+                    { val: 'prefs', label: '⚙️ Shared Preferences', desc: 'Proste ustawienia i flagi' },
+                    { val: 'room', label: '🗃️ Lokalna baza (Room / SQLite)', desc: 'Pełna baza danych on-device' },
+                    { val: 'firebase', label: '🔥 Firebase Firestore / RTDB', desc: 'Baza NoSQL w chmurze Google' },
+                    { val: 'api', label: '🌐 Własne REST API', desc: 'Serwer + HTTP/JSON lub GraphQL' },
+                ]
+            },
+            {
+                id: 'notifications',
+                text: 'Czy aplikacja wysyła powiadomienia?',
+                options: [
+                    { val: 'none', label: '🚫 Bez powiadomień', desc: '' },
+                    { val: 'local', label: '🔔 Lokalne', desc: 'Zaplanowane przez AlarmManager / WorkManager' },
+                    { val: 'push', label: '📲 Push (Firebase FCM)', desc: 'Powiadomienia zdalne z serwera' },
+                ]
+            },
+            {
+                id: 'location',
+                text: 'Czy aplikacja korzysta z lokalizacji lub map?',
+                options: [
+                    { val: 'none', label: '🚫 Bez lokalizacji', desc: '' },
+                    { val: 'gps', label: '📍 Podstawowe GPS', desc: 'Bieżąca lokalizacja użytkownika' },
+                    { val: 'maps', label: '🗺️ Mapy (Google Maps)', desc: 'Wyświetlanie mapy, markery, trasy' },
+                ]
+            },
+            {
+                id: 'hardware',
+                text: 'Jakie funkcje sprzętowe są potrzebne?',
+                multi: true,
+                options: [
+                    { val: 'none', label: '🚫 Tylko ekran dotykowy', desc: '' },
+                    { val: 'camera', label: '📷 Aparat / skaner QR', desc: 'Zdjęcia, wideo, kody kreskowe' },
+                    { val: 'sensors', label: '📐 Czujniki ruchu', desc: 'Akcelerometr, żyroskop, orientacja' },
+                    { val: 'bluetooth', label: '📶 Bluetooth / BLE', desc: 'Komunikacja z peryferiami' },
+                ]
+            },
+        ];
 
-    const EXTRA_FEATURES = [
-        { id: 'adv_camera',     label: '📷 Zaawansowany aparat',      hours: 14, member: 3, desc: 'ML Kit, filtry, nagrywanie wideo' },
-        { id: 'firebase_auth',  label: '🔐 Firebase Auth',             hours: 8,  member: 2, desc: 'Email, Google, anonymous, reguły' },
-        { id: 'firebase_db',    label: '🔥 Firebase Firestore',        hours: 14, member: 2, desc: 'NoSQL w chmurze, subskrypcje RT' },
-        { id: 'firebase_stor',  label: '☁️ Firebase Storage',         hours: 8,  member: 2, desc: 'Upload/download plików w chmurze' },
-        { id: 'ai_local',       label: '🤖 Lokalny AI (TF Lite)',      hours: 32, member: 3, desc: 'Klasyfikacja obrazów, NLP on-device' },
-        { id: 'ar',             label: '🥽 AR (ARCore / ARKit)',        hours: 40, member: 3, desc: 'Obiekty 3D nakładane na kamerę' },
-        { id: 'payment',        label: '💳 Płatności in-app',          hours: 18, member: 2, desc: 'Google Play Billing / Stripe / PayU' },
-        { id: 'ble_iot',        label: '📶 BLE / IoT GATT',            hours: 20, member: 3, desc: 'Skanowanie, parowanie, transmisja' },
-        { id: 'widget',         label: '📌 Widżety ekranu głównego',   hours: 12, member: 1, desc: 'AppWidget (Android) / WidgetKit (iOS)' },
-        { id: 'charts',         label: '📊 Wykresy i statystyki',      hours: 10, member: 1, desc: 'MPAndroidChart / Compose Charts' },
-        { id: 'dark_mode',      label: '🌙 Dynamic Theme',             hours: 6,  member: 1, desc: 'Material You, persystencja motywu' },
-        { id: 'accessibility',  label: '♿ Dostępność (a11y)',          hours: 10, member: 1, desc: 'TalkBack, napisy, kontrast, skalowanie' },
-    ];
+        const EXTRA_FEATURES = [
+            { id: 'adv_camera', label: '📷 Zaawansowany aparat', hours: 14, member: 3, desc: 'ML Kit, filtry, nagrywanie wideo' },
+            { id: 'firebase_auth', label: '🔐 Firebase Auth', hours: 8, member: 2, desc: 'Email, Google, anonymous, reguły' },
+            { id: 'firebase_db', label: '🔥 Firebase Firestore', hours: 14, member: 2, desc: 'NoSQL w chmurze, subskrypcje RT' },
+            { id: 'firebase_stor', label: '☁️ Firebase Storage', hours: 8, member: 2, desc: 'Upload/download plików w chmurze' },
+            { id: 'ai_local', label: '🤖 Lokalny AI (TF Lite)', hours: 32, member: 3, desc: 'Klasyfikacja obrazów, NLP on-device' },
+            { id: 'ar', label: '🥽 AR (ARCore / ARKit)', hours: 40, member: 3, desc: 'Obiekty 3D nakładane na kamerę' },
+            { id: 'payment', label: '💳 Płatności in-app', hours: 18, member: 2, desc: 'Google Play Billing / Stripe / PayU' },
+            { id: 'ble_iot', label: '📶 BLE / IoT GATT', hours: 20, member: 3, desc: 'Skanowanie, parowanie, transmisja' },
+            { id: 'widget', label: '📌 Widżety ekranu głównego', hours: 12, member: 1, desc: 'AppWidget (Android) / WidgetKit (iOS)' },
+            { id: 'charts', label: '📊 Wykresy i statystyki', hours: 10, member: 1, desc: 'MPAndroidChart / Compose Charts' },
+            { id: 'dark_mode', label: '🌙 Dynamic Theme', hours: 6, member: 1, desc: 'Material You, persystencja motywu' },
+            { id: 'accessibility', label: '♿ Dostępność (a11y)', hours: 10, member: 1, desc: 'TalkBack, napisy, kontrast, skalowanie' },
+        ];
 
-    // ============================================================
-    //  STATE
-    // ============================================================
+        // ============================================================
+        //  STATE
+        // ============================================================
 
-    let state = {};         // { appType: 'game', platform: 'android', ... }
-    let activeExtras = {};  // { adv_camera: true, ... }
-    let answeredCount = 0;
+        let state = {};         // { appType: 'game', platform: 'android', ... }
+        let activeExtras = {};  // { adv_camera: true, ... }
+        let answeredCount = 0;
 
-    // ============================================================
-    //  INIT
-    // ============================================================
+        // ============================================================
+        //  INIT
+        // ============================================================
 
-    function init() {
-        renderQuestions();
-        renderExtraFeatures();
-        document.getElementById('resetBtn').addEventListener('click', resetAll);
-    }
+        function init() {
+            renderQuestions();
+            renderExtraFeatures();
+            document.getElementById('resetBtn').addEventListener('click', resetAll);
+        }
 
-    function renderQuestions() {
-        const list = document.getElementById('questionList');
-        list.innerHTML = '';
+        function renderQuestions() {
+            const list = document.getElementById('questionList');
+            list.innerHTML = '';
 
-        QUESTIONS.forEach((q, idx) => {
-            const card = document.createElement('div');
-            card.className = 'question-card';
-            card.id = 'qcard-' + q.id;
+            QUESTIONS.forEach((q, idx) => {
+                const card = document.createElement('div');
+                card.className = 'question-card';
+                card.id = 'qcard-' + q.id;
 
-            const numEl = document.createElement('div');
-            numEl.className = 'question-number';
-            numEl.textContent = `Pytanie ${idx + 1} z ${QUESTIONS.length}`;
+                const numEl = document.createElement('div');
+                numEl.className = 'question-number';
+                numEl.textContent = `Pytanie ${idx + 1} z ${QUESTIONS.length}`;
 
-            const textEl = document.createElement('div');
-            textEl.className = 'question-text';
-            textEl.textContent = q.text;
+                const textEl = document.createElement('div');
+                textEl.className = 'question-text';
+                textEl.textContent = q.text;
 
-            const grid = document.createElement('div');
-            grid.className = 'options-grid';
+                const grid = document.createElement('div');
+                grid.className = 'options-grid';
 
-            q.options.forEach(opt => {
+                q.options.forEach(opt => {
+                    const btn = document.createElement('button');
+                    const isSelected = q.multi
+                        ? (Array.isArray(state[q.id]) && state[q.id].includes(opt.val))
+                        : state[q.id] === opt.val;
+                    btn.className = 'opt-btn' + (isSelected ? ' selected' : '');
+                    btn.dataset.q = q.id;
+                    btn.dataset.val = opt.val;
+                    btn.textContent = opt.label;
+                    if (opt.desc) {
+                        const descSpan = document.createElement('span');
+                        descSpan.className = 'opt-desc';
+                        descSpan.textContent = opt.desc;
+                        btn.appendChild(descSpan);
+                    }
+                    btn.addEventListener('click', () => selectOption(q.id, opt.val, btn));
+                    grid.appendChild(btn);
+                });
+
+                card.appendChild(numEl);
+                card.appendChild(textEl);
+                card.appendChild(grid);
+                list.appendChild(card);
+            });
+        }
+
+        function renderExtraFeatures() {
+            const grid = document.getElementById('extraFeaturesGrid');
+            grid.innerHTML = '';
+            EXTRA_FEATURES.forEach(f => {
                 const btn = document.createElement('button');
-                const isSelected = q.multi
-                    ? (Array.isArray(state[q.id]) && state[q.id].includes(opt.val))
-                    : state[q.id] === opt.val;
-                btn.className = 'opt-btn' + (isSelected ? ' selected' : '');
-                btn.dataset.q   = q.id;
-                btn.dataset.val = opt.val;
-                btn.textContent = opt.label;
-                if (opt.desc) {
-                    const descSpan = document.createElement('span');
-                    descSpan.className = 'opt-desc';
-                    descSpan.textContent = opt.desc;
-                    btn.appendChild(descSpan);
-                }
-                btn.addEventListener('click', () => selectOption(q.id, opt.val, btn));
+                btn.className = 'feature-toggle' + (activeExtras[f.id] ? ' active' : '');
+                btn.id = 'feat-' + f.id;
+
+                const labelSpan = document.createElement('span');
+                const checkIcon = document.createElement('i');
+                checkIcon.className = 'fa-solid fa-check feat-check';
+                checkIcon.style.cssText = 'margin-right:4px;font-size:0.7rem';
+                labelSpan.appendChild(checkIcon);
+                labelSpan.appendChild(document.createTextNode(f.label));
+
+                const hoursSpan = document.createElement('span');
+                hoursSpan.className = 'feat-hours';
+                hoursSpan.textContent = `~${f.hours} godz. · Czł. ${f.member}`;
+
+                btn.appendChild(labelSpan);
+                btn.appendChild(hoursSpan);
+                btn.addEventListener('click', () => toggleExtra(f.id, btn));
                 grid.appendChild(btn);
             });
+        }
 
-            card.appendChild(numEl);
-            card.appendChild(textEl);
-            card.appendChild(grid);
-            list.appendChild(card);
-        });
-    }
+        // ============================================================
+        //  EVENT HANDLERS
+        // ============================================================
 
-    function renderExtraFeatures() {
-        const grid = document.getElementById('extraFeaturesGrid');
-        grid.innerHTML = '';
-        EXTRA_FEATURES.forEach(f => {
-            const btn = document.createElement('button');
-            btn.className = 'feature-toggle' + (activeExtras[f.id] ? ' active' : '');
-            btn.id = 'feat-' + f.id;
+        function selectOption(qId, val) {
+            const q = QUESTIONS.find(q => q.id === qId);
 
-            const labelSpan = document.createElement('span');
-            const checkIcon = document.createElement('i');
-            checkIcon.className = 'fa-solid fa-check feat-check';
-            checkIcon.style.cssText = 'margin-right:4px;font-size:0.7rem';
-            labelSpan.appendChild(checkIcon);
-            labelSpan.appendChild(document.createTextNode(f.label));
-
-            const hoursSpan = document.createElement('span');
-            hoursSpan.className = 'feat-hours';
-            hoursSpan.textContent = `~${f.hours} godz. · Czł. ${f.member}`;
-
-            btn.appendChild(labelSpan);
-            btn.appendChild(hoursSpan);
-            btn.addEventListener('click', () => toggleExtra(f.id, btn));
-            grid.appendChild(btn);
-        });
-    }
-
-    // ============================================================
-    //  EVENT HANDLERS
-    // ============================================================
-
-    function selectOption(qId, val) {
-        const q = QUESTIONS.find(q => q.id === qId);
-
-        if (q && q.multi) {
-            if (!Array.isArray(state[qId])) state[qId] = [];
-            if (val === 'none') {
-                state[qId] = ['none'];
-            } else {
-                state[qId] = state[qId].filter(v => v !== 'none');
-                const idx = state[qId].indexOf(val);
-                if (idx >= 0) {
-                    state[qId].splice(idx, 1);
+            if (q && q.multi) {
+                if (!Array.isArray(state[qId])) state[qId] = [];
+                if (val === 'none') {
+                    state[qId] = ['none'];
                 } else {
-                    state[qId].push(val);
+                    state[qId] = state[qId].filter(v => v !== 'none');
+                    const idx = state[qId].indexOf(val);
+                    if (idx >= 0) {
+                        state[qId].splice(idx, 1);
+                    } else {
+                        state[qId].push(val);
+                    }
                 }
+                const card = document.getElementById('qcard-' + qId);
+                card.querySelectorAll('.opt-btn').forEach(b => {
+                    b.classList.toggle('selected', Array.isArray(state[qId]) && state[qId].includes(b.dataset.val));
+                });
+            } else {
+                state[qId] = val;
+                const card = document.getElementById('qcard-' + qId);
+                card.querySelectorAll('.opt-btn').forEach(b => {
+                    b.classList.toggle('selected', b.dataset.val === val);
+                });
             }
-            const card = document.getElementById('qcard-' + qId);
-            card.querySelectorAll('.opt-btn').forEach(b => {
-                b.classList.toggle('selected', Array.isArray(state[qId]) && state[qId].includes(b.dataset.val));
-            });
-        } else {
-            state[qId] = val;
-            const card = document.getElementById('qcard-' + qId);
-            card.querySelectorAll('.opt-btn').forEach(b => {
-                b.classList.toggle('selected', b.dataset.val === val);
-            });
+
+            // Count answered questions
+            answeredCount = Object.keys(state).filter(k => {
+                const q = QUESTIONS.find(q => q.id === k);
+                if (!q) return false;
+                if (q.multi) return Array.isArray(state[k]) && state[k].length > 0;
+                return true;
+            }).length;
+            updateProgress();
+
+            // Show extra features section once all 8 questions answered
+            if (answeredCount >= QUESTIONS.length) {
+                document.getElementById('extraSection').style.display = '';
+                document.getElementById('resetBtn').style.display = '';
+            }
+
+            updateSummary();
         }
 
-        // Count answered questions
-        answeredCount = Object.keys(state).filter(k => {
-            const q = QUESTIONS.find(q => q.id === k);
-            if (!q) return false;
-            if (q.multi) return Array.isArray(state[k]) && state[k].length > 0;
-            return true;
-        }).length;
-        updateProgress();
-
-        // Show extra features section once all 8 questions answered
-        if (answeredCount >= QUESTIONS.length) {
-            document.getElementById('extraSection').style.display = '';
-            document.getElementById('resetBtn').style.display = '';
+        function toggleExtra(fId, btnEl) {
+            activeExtras[fId] = !activeExtras[fId];
+            btnEl.classList.toggle('active', activeExtras[fId]);
+            updateSummary();
         }
 
-        updateSummary();
-    }
-
-    function toggleExtra(fId, btnEl) {
-        activeExtras[fId] = !activeExtras[fId];
-        btnEl.classList.toggle('active', activeExtras[fId]);
-        updateSummary();
-    }
-
-    function resetAll() {
-        state = {};
-        activeExtras = {};
-        answeredCount = 0;
-        renderQuestions();
-        renderExtraFeatures();
-        document.getElementById('extraSection').style.display = 'none';
-        document.getElementById('resetBtn').style.display = 'none';
-        document.getElementById('summaryPlaceholder').style.display = '';
-        document.getElementById('summaryContent').style.display = 'none';
-        updateProgress();
-    }
-
-    function updateProgress() {
-        const pct = Math.round((answeredCount / QUESTIONS.length) * 100);
-        document.getElementById('progressFill').style.width = pct + '%';
-        document.getElementById('progressLabel').textContent =
-            answeredCount === 0
-                ? 'Pytanie 1 z 8 — zacznij odpowiadać'
-                : answeredCount < QUESTIONS.length
-                    ? `Ukończono ${answeredCount} z ${QUESTIONS.length} pytań`
-                    : 'Wszystkie pytania wypełnione ✓';
-    }
-
-    // ============================================================
-    //  HOURS CALCULATION
-    // ============================================================
-
-    // Returns selected hardware values (excludes the 'none' sentinel).
-    function selectedHardware() {
-        return Array.isArray(state.hardware) ? state.hardware.filter(h => h !== 'none') : [];
-    }
-
-    function calcHours() {
-        const m1 = []; // UI/UX Lead
-        const m2 = []; // Data Engineer
-        const m3 = []; // Features Specialist
-
-        // --- Always present ---
-        m1.push({ task: 'Architektura projektu i konfiguracja środowiska', h: 8 });
-        m2.push({ task: 'Modele danych, ViewModel, repozytoria (MVVM)', h: 6 });
-        m3.push({ task: 'Konfiguracja uprawnień, testy manualne na urządzeniu', h: 4 });
-
-        // --- Platform ---
-        if (state.platform) {
-            const ph = { android: 6, ios: 10, flutter: 14, rn: 12 }[state.platform] || 0;
-            m1.push({ task: `Konfiguracja projektu ${platformName(state.platform)}`, h: ph });
-        }
-
-        // --- UI Complexity ---
-        if (state.uiComplexity) {
-            const uh = { simple: 8, medium: 22, complex: 44 }[state.uiComplexity] || 0;
-            m1.push({ task: `Ekrany i nawigacja (${uiComplexityName(state.uiComplexity)})`, h: uh });
-        }
-
-        // --- App type specific ---
-        if (state.appType) {
-            const at = appTypeContrib(state.appType);
-            if (at.m1) m1.push(at.m1);
-            if (at.m2) m2.push(at.m2);
-            if (at.m3) m3.push(at.m3);
-        }
-
-        // --- Auth ---
-        if (state.auth && state.auth !== 'none') {
-            const at = {
-                email:     { task: 'Rejestracja / logowanie email + hasło', h: 8 },
-                google:    { task: 'Logowanie przez Google OAuth 2.0', h: 12 },
-                biometric: { task: 'Uwierzytelnianie biometryczne (Fingerprint / Face ID)', h: 12 },
-            }[state.auth];
-            if (at) m2.push(at);
-        }
-
-        // --- Data storage ---
-        if (state.dataStorage && state.dataStorage !== 'none') {
-            const dt = {
-                prefs:    { task: 'SharedPreferences — ustawienia użytkownika', h: 4 },
-                room:     { task: 'Room ORM — baza SQLite, encje, DAO, migracje', h: 18 },
-                firebase: { task: 'Firebase Firestore — kolekcje, CRUD, reguły, real-time', h: 22 },
-                api:      { task: 'REST API klient — Retrofit / Ktor, endpointy, auth interceptor', h: 28 },
-            }[state.dataStorage];
-            if (dt) m2.push(dt);
-        }
-
-        // --- Notifications ---
-        if (state.notifications && state.notifications !== 'none') {
-            const nt = {
-                local: { task: 'Lokalne powiadomienia — AlarmManager / WorkManager', h: 6 },
-                push:  { task: 'Firebase FCM — token, handler, kanały powiadomień', h: 14 },
-            }[state.notifications];
-            if (nt) m3.push(nt);
-        }
-
-        // --- Location ---
-        if (state.location && state.location !== 'none') {
-            const lt = {
-                gps:  { task: 'Lokalizacja GPS — FusedLocationProvider, uprawnienia', h: 6 },
-                maps: { task: 'Google Maps SDK — mapa, markery, geofencing, routing', h: 16 },
-            }[state.location];
-            if (lt) m3.push(lt);
-        }
-
-        // --- Hardware ---
-        const hw = selectedHardware();
-        if (hw.length) {
-            hw.forEach(h => {
-                const ht = {
-                    camera:    { task: 'CameraX / Camera2 API — zdjęcia, wideo, skanowanie QR', h: 10 },
-                    sensors:   { task: 'SensorManager — akcelerometr, żyroskop, orientacja urządzenia', h: 8 },
-                    bluetooth: { task: 'BLE GATT — skanowanie, parowanie, odczyt/zapis charakterystyk', h: 18 },
-                }[h];
-                if (ht) m3.push(ht);
-            });
-        }
-
-        // --- Extra features ---
-        EXTRA_FEATURES.forEach(f => {
-            if (!activeExtras[f.id]) return;
-            const target = [m1, m2, m3][f.member - 1];
-            target.push({ task: stripEmojiPrefix(f.label) + ' (' + f.desc + ')', h: f.hours });
-        });
-
-        return { m1, m2, m3 };
-    }
-
-    function sum(arr) { return arr.reduce((s, t) => s + t.h, 0); }
-
-    // Removes the leading emoji character(s) and following space from a label string,
-    // returning only the textual description (e.g. "📷 Aparat" → "Aparat").
-    function stripEmojiPrefix(label) {
-        return label.replace(/^[^\s]+\s/, '');
-    }
-
-    // ============================================================
-    //  DESCRIPTION GENERATION
-    // ============================================================
-
-    function generateDescription() {
-        const parts = [];
-        const type   = appTypeLabel(state.appType);
-        const plat   = platformName(state.platform);
-        parts.push(`${type} na platformę ${plat}.`);
-
-        const features = [];
-        if (state.auth && state.auth !== 'none')           features.push(authLabel(state.auth));
-        if (state.dataStorage && state.dataStorage !== 'none' && state.dataStorage !== 'prefs') features.push(storageLabel(state.dataStorage));
-        if (state.notifications && state.notifications !== 'none') features.push(notifLabel(state.notifications));
-        if (state.location && state.location !== 'none')   features.push(locLabel(state.location));
-        selectedHardware().forEach(hw => { const l = hwLabel(hw); if (l) features.push(l); });
-
-        EXTRA_FEATURES.filter(f => activeExtras[f.id]).forEach(f => {
-            features.push(f.desc);
-        });
-
-        if (features.length) parts.push('Funkcje: ' + features.join(', ') + '.');
-        return parts.join(' ');
-    }
-
-    function generateTitle() {
-        const base = {
-            game:      'Gra mobilna',
-            shop:      'Aplikacja sklepu',
-            iot:       'Aplikacja IoT',
-            social:    'Aplikacja społecznościowa',
-            utility:   'Aplikacja narzędziowa',
-            health:    'Aplikacja fitness',
-            education: 'Aplikacja edukacyjna',
-        }[state.appType] || 'Aplikacja mobilna';
-        const plat = { android: 'Android', ios: 'iOS', flutter: 'Flutter', rn: 'React Native' }[state.platform] || '';
-        return plat ? `${base} (${plat})` : base;
-    }
-
-    // ============================================================
-    //  UPDATE SUMMARY
-    // ============================================================
-
-    function updateSummary() {
-        if (answeredCount === 0) {
+        function resetAll() {
+            state = {};
+            activeExtras = {};
+            answeredCount = 0;
+            renderQuestions();
+            renderExtraFeatures();
+            document.getElementById('extraSection').style.display = 'none';
+            document.getElementById('resetBtn').style.display = 'none';
             document.getElementById('summaryPlaceholder').style.display = '';
             document.getElementById('summaryContent').style.display = 'none';
-            return;
+            updateProgress();
         }
 
-        document.getElementById('summaryPlaceholder').style.display = 'none';
-        document.getElementById('summaryContent').style.display = '';
+        function updateProgress() {
+            const pct = Math.round((answeredCount / QUESTIONS.length) * 100);
+            document.getElementById('progressFill').style.width = pct + '%';
+            document.getElementById('progressLabel').textContent =
+                answeredCount === 0
+                    ? 'Pytanie 1 z 8 — zacznij odpowiadać'
+                    : answeredCount < QUESTIONS.length
+                        ? `Ukończono ${answeredCount} z ${QUESTIONS.length} pytań`
+                        : 'Wszystkie pytania wypełnione ✓';
+        }
 
-        // App card
-        document.getElementById('summaryAppBadge').textContent = appTypeBadge(state.appType);
-        document.getElementById('summaryAppTitle').textContent = generateTitle();
-        document.getElementById('summaryAppDesc').textContent  = generateDescription();
+        // ============================================================
+        //  HOURS CALCULATION
+        // ============================================================
 
-        // Features + hours
-        const hours = calcHours();
-        renderFeaturesSection(hours);
-        renderTeamSection(hours);
-        renderPricingSection(hours);
-    }
+        // Returns selected hardware values (excludes the 'none' sentinel).
+        function selectedHardware() {
+            return Array.isArray(state.hardware) ? state.hardware.filter(h => h !== 'none') : [];
+        }
 
-    function renderFeaturesSection(hours) {
-        const body = document.getElementById('featuresBody');
-        const allTasks = [
-            ...hours.m1.map(t => ({ ...t, member: 1 })),
-            ...hours.m2.map(t => ({ ...t, member: 2 })),
-            ...hours.m3.map(t => ({ ...t, member: 3 })),
-        ];
-        if (!allTasks.length) { body.innerHTML = '<p class="empty-hint">Brak zadań.</p>'; return; }
+        function calcHours() {
+            const m1 = []; // UI/UX Lead
+            const m2 = []; // Data Engineer
+            const m3 = []; // Features Specialist
 
-        const memberColors = { 1: 'var(--purple)', 2: 'var(--green)', 3: 'var(--teal)' };
-        body.innerHTML = allTasks.map(t => `
+            // --- Always present ---
+            m1.push({ task: 'Architektura projektu i konfiguracja środowiska', h: 8 });
+            m2.push({ task: 'Modele danych, ViewModel, repozytoria (MVVM)', h: 6 });
+            m3.push({ task: 'Konfiguracja uprawnień, testy manualne na urządzeniu', h: 4 });
+
+            // --- Platform ---
+            if (state.platform) {
+                const ph = { android: 6, ios: 10, flutter: 14, rn: 12 }[state.platform] || 0;
+                m1.push({ task: `Konfiguracja projektu ${platformName(state.platform)}`, h: ph });
+            }
+
+            // --- UI Complexity ---
+            if (state.uiComplexity) {
+                const uh = { simple: 8, medium: 22, complex: 44 }[state.uiComplexity] || 0;
+                m1.push({ task: `Ekrany i nawigacja (${uiComplexityName(state.uiComplexity)})`, h: uh });
+            }
+
+            // --- App type specific ---
+            if (state.appType) {
+                const at = appTypeContrib(state.appType);
+                if (at.m1) m1.push(at.m1);
+                if (at.m2) m2.push(at.m2);
+                if (at.m3) m3.push(at.m3);
+            }
+
+            // --- Auth ---
+            if (state.auth && state.auth !== 'none') {
+                const at = {
+                    email: { task: 'Rejestracja / logowanie email + hasło', h: 8 },
+                    google: { task: 'Logowanie przez Google OAuth 2.0', h: 12 },
+                    biometric: { task: 'Uwierzytelnianie biometryczne (Fingerprint / Face ID)', h: 12 },
+                }[state.auth];
+                if (at) m2.push(at);
+            }
+
+            // --- Data storage ---
+            if (state.dataStorage && state.dataStorage !== 'none') {
+                const dt = {
+                    prefs: { task: 'SharedPreferences — ustawienia użytkownika', h: 4 },
+                    room: { task: 'Room ORM — baza SQLite, encje, DAO, migracje', h: 18 },
+                    firebase: { task: 'Firebase Firestore — kolekcje, CRUD, reguły, real-time', h: 22 },
+                    api: { task: 'REST API klient — Retrofit / Ktor, endpointy, auth interceptor', h: 28 },
+                }[state.dataStorage];
+                if (dt) m2.push(dt);
+            }
+
+            // --- Notifications ---
+            if (state.notifications && state.notifications !== 'none') {
+                const nt = {
+                    local: { task: 'Lokalne powiadomienia — AlarmManager / WorkManager', h: 6 },
+                    push: { task: 'Firebase FCM — token, handler, kanały powiadomień', h: 14 },
+                }[state.notifications];
+                if (nt) m3.push(nt);
+            }
+
+            // --- Location ---
+            if (state.location && state.location !== 'none') {
+                const lt = {
+                    gps: { task: 'Lokalizacja GPS — FusedLocationProvider, uprawnienia', h: 6 },
+                    maps: { task: 'Google Maps SDK — mapa, markery, geofencing, routing', h: 16 },
+                }[state.location];
+                if (lt) m3.push(lt);
+            }
+
+            // --- Hardware ---
+            const hw = selectedHardware();
+            if (hw.length) {
+                hw.forEach(h => {
+                    const ht = {
+                        camera: { task: 'CameraX / Camera2 API — zdjęcia, wideo, skanowanie QR', h: 10 },
+                        sensors: { task: 'SensorManager — akcelerometr, żyroskop, orientacja urządzenia', h: 8 },
+                        bluetooth: { task: 'BLE GATT — skanowanie, parowanie, odczyt/zapis charakterystyk', h: 18 },
+                    }[h];
+                    if (ht) m3.push(ht);
+                });
+            }
+
+            // --- Extra features ---
+            EXTRA_FEATURES.forEach(f => {
+                if (!activeExtras[f.id]) return;
+                const target = [m1, m2, m3][f.member - 1];
+                target.push({ task: stripEmojiPrefix(f.label) + ' (' + f.desc + ')', h: f.hours });
+            });
+
+            return { m1, m2, m3 };
+        }
+
+        function sum(arr) { return arr.reduce((s, t) => s + t.h, 0); }
+
+        // Removes the leading emoji character(s) and following space from a label string,
+        // returning only the textual description (e.g. "📷 Aparat" → "Aparat").
+        function stripEmojiPrefix(label) {
+            return label.replace(/^[^\s]+\s/, '');
+        }
+
+        // ============================================================
+        //  DESCRIPTION GENERATION
+        // ============================================================
+
+        function generateDescription() {
+            const parts = [];
+            const type = appTypeLabel(state.appType);
+            const plat = platformName(state.platform);
+            parts.push(`${type} na platformę ${plat}.`);
+
+            const features = [];
+            if (state.auth && state.auth !== 'none') features.push(authLabel(state.auth));
+            if (state.dataStorage && state.dataStorage !== 'none' && state.dataStorage !== 'prefs') features.push(storageLabel(state.dataStorage));
+            if (state.notifications && state.notifications !== 'none') features.push(notifLabel(state.notifications));
+            if (state.location && state.location !== 'none') features.push(locLabel(state.location));
+            selectedHardware().forEach(hw => { const l = hwLabel(hw); if (l) features.push(l); });
+
+            EXTRA_FEATURES.filter(f => activeExtras[f.id]).forEach(f => {
+                features.push(f.desc);
+            });
+
+            if (features.length) parts.push('Funkcje: ' + features.join(', ') + '.');
+            return parts.join(' ');
+        }
+
+        function generateTitle() {
+            const base = {
+                game: 'Gra mobilna',
+                shop: 'Aplikacja sklepu',
+                iot: 'Aplikacja IoT',
+                social: 'Aplikacja społecznościowa',
+                utility: 'Aplikacja narzędziowa',
+                health: 'Aplikacja fitness',
+                education: 'Aplikacja edukacyjna',
+            }[state.appType] || 'Aplikacja mobilna';
+            const plat = { android: 'Android', ios: 'iOS', flutter: 'Flutter', rn: 'React Native' }[state.platform] || '';
+            return plat ? `${base} (${plat})` : base;
+        }
+
+        // ============================================================
+        //  UPDATE SUMMARY
+        // ============================================================
+
+        function updateSummary() {
+            if (answeredCount === 0) {
+                document.getElementById('summaryPlaceholder').style.display = '';
+                document.getElementById('summaryContent').style.display = 'none';
+                return;
+            }
+
+            document.getElementById('summaryPlaceholder').style.display = 'none';
+            document.getElementById('summaryContent').style.display = '';
+
+            // App card
+            document.getElementById('summaryAppBadge').textContent = appTypeBadge(state.appType);
+            document.getElementById('summaryAppTitle').textContent = generateTitle();
+            document.getElementById('summaryAppDesc').textContent = generateDescription();
+
+            // Features + hours
+            const hours = calcHours();
+            renderFeaturesSection(hours);
+            renderTeamSection(hours);
+            renderPricingSection(hours);
+        }
+
+        function renderFeaturesSection(hours) {
+            const body = document.getElementById('featuresBody');
+            const allTasks = [
+                ...hours.m1.map(t => ({ ...t, member: 1 })),
+                ...hours.m2.map(t => ({ ...t, member: 2 })),
+                ...hours.m3.map(t => ({ ...t, member: 3 })),
+            ];
+            if (!allTasks.length) { body.innerHTML = '<p class="empty-hint">Brak zadań.</p>'; return; }
+
+            const memberColors = { 1: 'var(--purple)', 2: 'var(--green)', 3: 'var(--teal)' };
+            body.innerHTML = allTasks.map(t => `
             <div class="feature-row">
                 <div class="feature-row-left">
                     <div class="feature-row-dot" style="background:${memberColors[t.member]}"></div>
@@ -1266,17 +1353,17 @@
                 <span class="feature-row-hours">${t.h} godz.</span>
             </div>
         `).join('');
-    }
+        }
 
-    function renderTeamSection(hours) {
-        const body = document.getElementById('teamBody');
-        const total1 = sum(hours.m1), total2 = sum(hours.m2), total3 = sum(hours.m3);
+        function renderTeamSection(hours) {
+            const body = document.getElementById('teamBody');
+            const total1 = sum(hours.m1), total2 = sum(hours.m2), total3 = sum(hours.m3);
 
-        function memberHtml(num, name, role, cls, taskArr, totalH) {
-            const tasksHtml = taskArr.length
-                ? taskArr.map(t => `<li><span>${t.task}</span><span class="task-h">${t.h}h</span></li>`).join('')
-                : '<li><span style="color:var(--text-muted);font-style:italic">Brak zadań</span></li>';
-            return `
+            function memberHtml(num, name, role, cls, taskArr, totalH) {
+                const tasksHtml = taskArr.length
+                    ? taskArr.map(t => `<li><span>${t.task}</span><span class="task-h">${t.h}h</span></li>`).join('')
+                    : '<li><span style="color:var(--text-muted);font-style:italic">Brak zadań</span></li>';
+                return `
                 <div class="team-member">
                     <div class="team-member-header">
                         <div class="member-avatar ${cls}">${num}</div>
@@ -1289,22 +1376,22 @@
                     <ul class="member-tasks">${tasksHtml}</ul>
                 </div>
             `;
+            }
+
+            body.innerHTML =
+                memberHtml(1, 'Architekt UI/UX', 'Interfejs, nawigacja, ekrany, motywy', 'avatar-1', hours.m1, total1) +
+                memberHtml(2, 'Inżynier danych', 'Baza danych, API, uwierzytelnianie, modele', 'avatar-2', hours.m2, total2) +
+                memberHtml(3, 'Specjalista funkcji', 'Sprzęt, czujniki, powiadomienia, lokalizacja', 'avatar-3', hours.m3, total3);
         }
 
-        body.innerHTML =
-            memberHtml(1, 'Architekt UI/UX',     'Interfejs, nawigacja, ekrany, motywy',             'avatar-1', hours.m1, total1) +
-            memberHtml(2, 'Inżynier danych',      'Baza danych, API, uwierzytelnianie, modele',        'avatar-2', hours.m2, total2) +
-            memberHtml(3, 'Specjalista funkcji',  'Sprzęt, czujniki, powiadomienia, lokalizacja',      'avatar-3', hours.m3, total3);
-    }
+        function renderPricingSection(hours) {
+            const body = document.getElementById('pricingBody');
+            const total = sum(hours.m1) + sum(hours.m2) + sum(hours.m3);
+            const jnr = (total * 90).toLocaleString('pl-PL');
+            const mid = (total * 150).toLocaleString('pl-PL');
+            const snr = (total * 280).toLocaleString('pl-PL');
 
-    function renderPricingSection(hours) {
-        const body = document.getElementById('pricingBody');
-        const total = sum(hours.m1) + sum(hours.m2) + sum(hours.m3);
-        const jnr = (total * 90).toLocaleString('pl-PL');
-        const mid = (total * 150).toLocaleString('pl-PL');
-        const snr = (total * 280).toLocaleString('pl-PL');
-
-        body.innerHTML = `
+            body.innerHTML = `
             <div class="pricing-grid">
                 <div class="pricing-tier">
                     <div class="pricing-tier-label">Junior</div>
@@ -1330,111 +1417,112 @@
                 * Wycena orientacyjna. Ceny rynkowe na 2025 r. dla rynku polskiego. Dla aplikacji „z półki" (np. Flutter / React Native) realny czas może być krótszy o 20–30%. Nie obejmuje kosztów subskrypcji Firebase, App Store / Google Play ani serwera backendowego.
             </p>
         `;
-    }
+        }
 
-    // ============================================================
-    //  HELPER LABELS
-    // ============================================================
+        // ============================================================
+        //  HELPER LABELS
+        // ============================================================
 
-    function appTypeBadge(v) {
-        return {
-            game:      '🎮 Gra mobilna',
-            shop:      '🛒 E-commerce',
-            iot:       '📡 IoT',
-            social:    '💬 Social',
-            utility:   '🛠️ Utility',
-            health:    '🏥 Fitness',
-            education: '📚 Edukacja',
-        }[v] || '📱 Aplikacja';
-    }
+        function appTypeBadge(v) {
+            return {
+                game: '🎮 Gra mobilna',
+                shop: '🛒 E-commerce',
+                iot: '📡 IoT',
+                social: '💬 Social',
+                utility: '🛠️ Utility',
+                health: '🏥 Fitness',
+                education: '📚 Edukacja',
+            }[v] || '📱 Aplikacja';
+        }
 
-    function appTypeLabel(v) {
-        return {
-            game:      'Interaktywna gra mobilna',
-            shop:      'Aplikacja sklepu e-commerce',
-            iot:       'Narzędzie do komunikacji z urządzeniami IoT',
-            social:    'Aplikacja komunikacyjna / społecznościowa',
-            utility:   'Aplikacja narzędziowa',
-            health:    'Aplikacja do śledzenia zdrowia i aktywności',
-            education: 'Aplikacja edukacyjna',
-        }[v] || 'Aplikacja mobilna';
-    }
+        function appTypeLabel(v) {
+            return {
+                game: 'Interaktywna gra mobilna',
+                shop: 'Aplikacja sklepu e-commerce',
+                iot: 'Narzędzie do komunikacji z urządzeniami IoT',
+                social: 'Aplikacja komunikacyjna / społecznościowa',
+                utility: 'Aplikacja narzędziowa',
+                health: 'Aplikacja do śledzenia zdrowia i aktywności',
+                education: 'Aplikacja edukacyjna',
+            }[v] || 'Aplikacja mobilna';
+        }
 
-    function platformName(v) {
-        return { android: 'Android (Kotlin)', ios: 'iOS (Swift)', flutter: 'Flutter (Dart)', rn: 'React Native (JS/TS)' }[v] || '—';
-    }
+        function platformName(v) {
+            return { android: 'Android (Kotlin)', ios: 'iOS (Swift)', flutter: 'Flutter (Dart)', rn: 'React Native (JS/TS)' }[v] || '—';
+        }
 
-    function uiComplexityName(v) {
-        return { simple: 'prosty, 1–3 ekrany', medium: 'średni, 4–8 ekranów', complex: 'rozbudowany, 9+ ekranów' }[v] || '—';
-    }
+        function uiComplexityName(v) {
+            return { simple: 'prosty, 1–3 ekrany', medium: 'średni, 4–8 ekranów', complex: 'rozbudowany, 9+ ekranów' }[v] || '—';
+        }
 
-    function authLabel(v) {
-        return { email: 'logowanie email/hasło', google: 'Google OAuth', biometric: 'biometria' }[v] || '';
-    }
+        function authLabel(v) {
+            return { email: 'logowanie email/hasło', google: 'Google OAuth', biometric: 'biometria' }[v] || '';
+        }
 
-    function storageLabel(v) {
-        return { room: 'lokalna baza Room', firebase: 'Firebase Firestore', api: 'własne REST API' }[v] || '';
-    }
+        function storageLabel(v) {
+            return { room: 'lokalna baza Room', firebase: 'Firebase Firestore', api: 'własne REST API' }[v] || '';
+        }
 
-    function notifLabel(v) {
-        return { local: 'lokalne powiadomienia', push: 'push (FCM)' }[v] || '';
-    }
+        function notifLabel(v) {
+            return { local: 'lokalne powiadomienia', push: 'push (FCM)' }[v] || '';
+        }
 
-    function locLabel(v) {
-        return { gps: 'GPS', maps: 'Google Maps' }[v] || '';
-    }
+        function locLabel(v) {
+            return { gps: 'GPS', maps: 'Google Maps' }[v] || '';
+        }
 
-    function hwLabel(v) {
-        return { camera: 'aparat / QR', sensors: 'czujniki ruchu', bluetooth: 'BLE' }[v] || '';
-    }
+        function hwLabel(v) {
+            return { camera: 'aparat / QR', sensors: 'czujniki ruchu', bluetooth: 'BLE' }[v] || '';
+        }
 
-    function appTypeContrib(v) {
-        const map = {
-            game: {
-                m1: { task: 'Game loop, Canvas/SurfaceView, animacje, UI gry', h: 28 },
-                m2: null,
-                m3: { task: 'Logika rozgrywki, fizyka, kolizje, AI przeciwników', h: 22 },
-            },
-            shop: {
-                m1: { task: 'Widoki produktów, koszyk, ekran zamówień, UI', h: 18 },
-                m2: { task: 'Model produktów, logika koszyka, historia zamówień', h: 14 },
-                m3: null,
-            },
-            iot: {
-                m1: { task: 'Dashboard urządzeń IoT, wykresy stanu, ekrany sterowania', h: 18 },
-                m2: null,
-                m3: { task: 'Protokoły IoT (MQTT / HTTP polling), parsowanie danych', h: 22 },
-            },
-            social: {
-                m1: { task: 'UI czatu, profil użytkownika, feed i listy znajomych', h: 20 },
-                m2: { task: 'Synchronizacja wiadomości real-time, model relacji', h: 18 },
-                m3: null,
-            },
-            utility: {
-                m1: { task: 'UI narzędzia, formularze, widoki wyników', h: 12 },
-                m2: null,
-                m3: null,
-            },
-            health: {
-                m1: { task: 'UI aktywności, wykresy postępów, historia', h: 18 },
-                m2: { task: 'Baza danych treningów, dieta, modele pomiarów', h: 14 },
-                m3: { task: 'Integracja czujnika kroków (pedometer), czujniki tętna', h: 12 },
-            },
-            education: {
-                m1: { task: 'UI lekcji, quizów, ekran postępów i gamifikacja', h: 18 },
-                m2: { task: 'Model kursów, wyników, postępów użytkownika', h: 14 },
-                m3: null,
-            },
-        };
-        return map[v] || {};
-    }
+        function appTypeContrib(v) {
+            const map = {
+                game: {
+                    m1: { task: 'Game loop, Canvas/SurfaceView, animacje, UI gry', h: 28 },
+                    m2: null,
+                    m3: { task: 'Logika rozgrywki, fizyka, kolizje, AI przeciwników', h: 22 },
+                },
+                shop: {
+                    m1: { task: 'Widoki produktów, koszyk, ekran zamówień, UI', h: 18 },
+                    m2: { task: 'Model produktów, logika koszyka, historia zamówień', h: 14 },
+                    m3: null,
+                },
+                iot: {
+                    m1: { task: 'Dashboard urządzeń IoT, wykresy stanu, ekrany sterowania', h: 18 },
+                    m2: null,
+                    m3: { task: 'Protokoły IoT (MQTT / HTTP polling), parsowanie danych', h: 22 },
+                },
+                social: {
+                    m1: { task: 'UI czatu, profil użytkownika, feed i listy znajomych', h: 20 },
+                    m2: { task: 'Synchronizacja wiadomości real-time, model relacji', h: 18 },
+                    m3: null,
+                },
+                utility: {
+                    m1: { task: 'UI narzędzia, formularze, widoki wyników', h: 12 },
+                    m2: null,
+                    m3: null,
+                },
+                health: {
+                    m1: { task: 'UI aktywności, wykresy postępów, historia', h: 18 },
+                    m2: { task: 'Baza danych treningów, dieta, modele pomiarów', h: 14 },
+                    m3: { task: 'Integracja czujnika kroków (pedometer), czujniki tętna', h: 12 },
+                },
+                education: {
+                    m1: { task: 'UI lekcji, quizów, ekran postępów i gamifikacja', h: 18 },
+                    m2: { task: 'Model kursów, wyników, postępów użytkownika', h: 14 },
+                    m3: null,
+                },
+            };
+            return map[v] || {};
+        }
 
-    // ============================================================
-    //  START
-    // ============================================================
+        // ============================================================
+        //  START
+        // ============================================================
 
-    init();
+        init();
     </script>
 
 </body>
+
 </html>
