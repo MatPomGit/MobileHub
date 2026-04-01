@@ -108,6 +108,18 @@ const ARTICLES = {
     'mediapipe-mobile':      'wiki/mediapipe-mobile.md',
     'ai-mobile-ux':          'wiki/ai-mobile-ux.md',
     'edge-ai-future':        'wiki/edge-ai-future.md',
+    'file-formats-intro':    'wiki/file-formats-intro.md',
+    'json-xml-formats':      'wiki/json-xml-formats.md',
+    'csv-yaml-toml':         'wiki/csv-yaml-toml.md',
+    'image-formats-mobile':  'wiki/image-formats-mobile.md',
+    'audio-video-formats':   'wiki/audio-video-formats.md',
+    '3d-model-formats':      'wiki/3d-model-formats.md',
+    'ml-file-formats':       'wiki/ml-file-formats.md',
+    'binary-serialization':  'wiki/binary-serialization.md',
+    'compression-mobile':    'wiki/compression-mobile.md',
+    'document-formats':      'wiki/document-formats.md',
+    'database-file-formats': 'wiki/database-file-formats.md',
+    'data-storage-best-practices': 'wiki/data-storage-best-practices.md',
 };
 
 // NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
@@ -214,6 +226,18 @@ const METADATA = {
     'mediapipe-mobile':      { category: 'Lokalna AI na urządzeniu',       title: 'MediaPipe — kompleksowe rozwiązania AI',             icon: 'fa-solid fa-wand-magic-sparkles' },
     'ai-mobile-ux':          { category: 'Lokalna AI na urządzeniu',       title: 'Projektowanie UX aplikacji z lokalną AI',            icon: 'fa-solid fa-hand-pointer' },
     'edge-ai-future':        { category: 'Lokalna AI na urządzeniu',       title: 'Przyszłość Edge AI — trendy i kierunki rozwoju',     icon: 'fa-solid fa-rocket' },
+    'file-formats-intro':    { category: 'Formaty plików i przechowywanie danych', title: 'Wprowadzenie do formatów plików w aplikacjach mobilnych', icon: 'fa-solid fa-file-circle-question' },
+    'json-xml-formats':      { category: 'Formaty plików i przechowywanie danych', title: 'JSON i XML — formaty wymiany danych',                     icon: 'fa-solid fa-code' },
+    'csv-yaml-toml':         { category: 'Formaty plików i przechowywanie danych', title: 'CSV, YAML i TOML — lekkie formaty danych i konfiguracji', icon: 'fa-solid fa-table' },
+    'image-formats-mobile':  { category: 'Formaty plików i przechowywanie danych', title: 'Formaty obrazów w aplikacjach mobilnych',                 icon: 'fa-solid fa-image' },
+    'audio-video-formats':   { category: 'Formaty plików i przechowywanie danych', title: 'Formaty audio i wideo w aplikacjach mobilnych',           icon: 'fa-solid fa-film' },
+    '3d-model-formats':      { category: 'Formaty plików i przechowywanie danych', title: 'Formaty modeli 3D w aplikacjach mobilnych',               icon: 'fa-solid fa-cube' },
+    'ml-file-formats':       { category: 'Formaty plików i przechowywanie danych', title: 'Formaty plików modeli uczenia maszynowego',               icon: 'fa-solid fa-brain' },
+    'binary-serialization':  { category: 'Formaty plików i przechowywanie danych', title: 'Binarne formaty serializacji danych',                     icon: 'fa-solid fa-file-zipper' },
+    'compression-mobile':    { category: 'Formaty plików i przechowywanie danych', title: 'Kompresja danych w aplikacjach mobilnych',                icon: 'fa-solid fa-compress' },
+    'document-formats':      { category: 'Formaty plików i przechowywanie danych', title: 'Formaty dokumentów w aplikacjach mobilnych',              icon: 'fa-solid fa-file-lines' },
+    'database-file-formats': { category: 'Formaty plików i przechowywanie danych', title: 'Formaty plików baz danych w aplikacjach mobilnych',       icon: 'fa-solid fa-database' },
+    'data-storage-best-practices': { category: 'Formaty plików i przechowywanie danych', title: 'Dobre praktyki przechowywania danych',              icon: 'fa-solid fa-shield-halved' },
 };
 
 // NAPRAWKA: ikony kategorii używają pełnej klasy FA
@@ -231,6 +255,7 @@ const CATEGORIES = [
     { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','lua-mobile-games','unity-advanced','game-physics','game-monetization','gamedev-market'] },
     { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui','visual-odometry','fuzja-modalnosci-kalman'] },
     { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','ai-legal-aspects','mediapipe-mobile','ai-mobile-ux','edge-ai-future'] },
+    { id: 'cat-file-formats', name: 'Formaty plików i przechowywanie danych', icon: 'fa-solid fa-folder-open',        articles: ['file-formats-intro','json-xml-formats','csv-yaml-toml','image-formats-mobile','audio-video-formats','3d-model-formats','ml-file-formats','binary-serialization','compression-mobile','document-formats','database-file-formats','data-storage-best-practices'] },
     { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
 ];
 
