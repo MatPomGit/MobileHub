@@ -3504,15 +3504,7 @@
                 </button>
                 <button class="pull-shortcut" data-tab="projekt">
                     <i class="fa-solid fa-laptop-code"></i>
-                    <span>Projekt</span>
-                </button>
-                <button class="pull-shortcut" data-tab="pierwsza">
-                    <i class="fa-solid fa-rocket"></i>
-                    <span>Aplikacja</span>
-                </button>
-                <button class="pull-shortcut" data-tab="projektowanie">
-                    <i class="fa-solid fa-wand-magic-sparkles"></i>
-                    <span>Projekt</span>
+                    <span>Laboratoria</span>
                 </button>
                 <button class="pull-shortcut" data-tab="materialy">
                     <i class="fa-solid fa-file-arrow-down"></i>
@@ -3619,15 +3611,6 @@
             <button class="tab-btn" data-tab="egzamin" id="tab-egzamin">
                 <i class="fa-solid fa-graduation-cap"></i>
                 Wykłady
-            </button>
-            <button class="tab-btn" data-tab="pierwsza" id="tab-pierwsza">
-                <i class="fa-solid fa-rocket"></i>
-                Moja pierwsza aplikacja
-                <span class="tab-badge">Nowe</span>
-            </button>
-            <button class="tab-btn" data-tab="projektowanie" id="tab-projektowanie">
-                <i class="fa-solid fa-wand-magic-sparkles"></i>
-                Projektowanie aplikacji
             </button>
             <button class="tab-btn" data-tab="materialy" id="tab-materialy">
                 <i class="fa-solid fa-file-arrow-down"></i>
@@ -3814,6 +3797,42 @@
                         umiejętności PAM.</p>
                     <p> Laboratorium nr 4 - zgłoszenie tematu (kwiecień), Laboratorium nr 8 - prezentacja na
                         ostatnich (lub przedostatnich) zajęciach. </p>
+                </div>
+            </div>
+
+            <h3 class="section-title">Spójna ścieżka realizacji projektu</h3>
+            <div class="cards-grid">
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-flag-checkered"></i>
+                        <strong>Etap 1 — od zera do działającego MVP</strong>
+                    </div>
+                    <p style="line-height:1.6;color:var(--text-muted);margin-top:8px;">
+                        Zacznij od praktycznego przewodnika „Moja pierwsza aplikacja mobilna”. Ta część prowadzi Cię
+                        przez przygotowanie środowiska, strukturę projektu i pierwsze kluczowe funkcje, które później
+                        rozszerzysz do pełnego projektu zaliczeniowego.
+                    </p>
+                    <iframe id="iframe-pierwsza-lab" src="pierwsza-aplikacja.html"
+                        style="border:none; width:100%; display:block; min-height:600px; margin-top:12px; border-radius:12px;"
+                        title="Moja pierwsza aplikacja — przewodnik krok po kroku"
+                        onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
+                    </iframe>
+                </div>
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-sitemap"></i>
+                        <strong>Etap 2 — projektowanie i dokumentacja techniczna</strong>
+                    </div>
+                    <p style="line-height:1.6;color:var(--text-muted);margin-top:8px;">
+                        Następnie użyj kreatora „Projektowanie aplikacji”, aby zamienić pomysł w plan realizacji:
+                        zakres, zadania, roboczogodziny, wycenę i bazę pod dokumenty BRD/FRD/TRD. Potem wdrażaj plan
+                        zgodnie z harmonogramem laboratoriów poniżej.
+                    </p>
+                    <iframe id="iframe-projektowanie-lab" src="projektowanie-aplikacji.html"
+                        style="border:none; width:100%; display:block; min-height:600px; margin-top:12px; border-radius:12px;"
+                        title="Projektowanie aplikacji — interaktywny kreator projektu"
+                        onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
+                    </iframe>
                 </div>
             </div>
 
@@ -4316,24 +4335,6 @@
         </div>
     </div><!-- /panel-egzamin -->
 
-    <!-- TAB PANEL: MOJA PIERWSZA APLIKACJA -->
-    <div class="tab-panel" id="panel-pierwsza">
-        <iframe id="iframe-pierwsza" src="pierwsza-aplikacja.html"
-            style="border:none; width:100%; display:block; min-height:600px;"
-            title="Moja pierwsza aplikacja — przewodnik krok po kroku"
-            onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
-        </iframe>
-    </div><!-- /panel-pierwsza -->
-
-    <!-- TAB PANEL: PROJEKTOWANIE APLIKACJI -->
-    <div class="tab-panel" id="panel-projektowanie">
-        <iframe id="iframe-projektowanie" src="projektowanie-aplikacji.html"
-            style="border:none; width:100%; display:block; min-height:600px;"
-            title="Projektowanie aplikacji — interaktywny kreator projektu"
-            onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
-        </iframe>
-    </div><!-- /panel-projektowanie -->
-
     <!-- TAB PANEL: MATERIAŁY -->
     <div class="tab-panel" id="panel-materialy">
         <div class="info-panel">
@@ -4464,19 +4465,11 @@
         </button>
         <button class="bottom-nav-btn" data-tab="projekt">
             <i class="fa-solid fa-laptop-code"></i>
-            <span>Projekt</span>
+            <span>Lab</span>
         </button>
         <button class="bottom-nav-btn" data-tab="egzamin">
             <i class="fa-solid fa-graduation-cap"></i>
             <span>Egzamin</span>
-        </button>
-        <button class="bottom-nav-btn" data-tab="pierwsza">
-            <i class="fa-solid fa-rocket"></i>
-            <span>Aplikacja</span>
-        </button>
-        <button class="bottom-nav-btn" data-tab="projektowanie">
-            <i class="fa-solid fa-wand-magic-sparkles"></i>
-            <span>Kreator</span>
         </button>
         <button class="bottom-nav-btn" data-tab="materialy">
             <i class="fa-solid fa-file-arrow-down"></i>
@@ -4560,22 +4553,6 @@
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('panel-' + tab)?.classList.add('active');
 
-            // Resize "pierwsza" iframe once its panel is visible
-            if (tab === 'pierwsza') {
-                const iframe = document.getElementById('iframe-pierwsza');
-                if (iframe) {
-                    const resize = () => {
-                        const h = iframe.contentWindow?.document?.body?.scrollHeight;
-                        if (h && h > 100) { iframe.style.height = (h + 40) + 'px'; }
-                    };
-                    if (iframe.contentWindow?.document?.readyState === 'complete') {
-                        resize();
-                    } else {
-                        iframe.addEventListener('load', resize, { once: true });
-                    }
-                }
-            }
-
             // Resize "studenci" iframe once its panel is visible
             if (tab === 'studenci') {
                 const iframe = document.getElementById('iframe-studenci');
@@ -4600,10 +4577,11 @@
                 }
             }
 
-            // Resize "projektowanie" iframe once its panel is visible
-            if (tab === 'projektowanie') {
-                const iframe = document.getElementById('iframe-projektowanie');
-                if (iframe) {
+            // Resize embedded iframes in "Laboratoria" panel
+            if (tab === 'projekt') {
+                ['iframe-pierwsza-lab', 'iframe-projektowanie-lab'].forEach(id => {
+                    const iframe = document.getElementById(id);
+                    if (!iframe) return;
                     const resize = () => {
                         try {
                             const h = iframe.contentWindow?.document?.body?.scrollHeight;
@@ -4621,7 +4599,7 @@
                     } catch (e) {
                         iframe.style.height = '900px';
                     }
-                }
+                });
             }
 
             // Show/hide sidebar toggle (only for wiki panel)
