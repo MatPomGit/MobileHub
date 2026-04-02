@@ -206,7 +206,7 @@ function makeCover() {
       borders:{top:{style:BorderStyle.NONE},bottom:{style:BorderStyle.NONE},left:{style:BorderStyle.NONE},right:{style:BorderStyle.NONE}},
       shading:{type:ShadingType.CLEAR,fill:COL.h1Accent},margins:{top:120,bottom:120,left:200,right:200},
       children:[new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"ĆWICZENIE LABORATORYJNE FLUTTER 2",font:F,size:22,bold:true,color:"FFFFFF"})]})]
-    })]})]},
+    })]})]}),
 
     new Table({width:{size:PW,type:WidthType.DXA},columnWidths:[PW],rows:[new TableRow({children:[new TableCell({
       width:{size:PW,type:WidthType.DXA},
@@ -217,7 +217,7 @@ function makeCover() {
         new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:80,after:0},children:[new TextRun({text:"i Testy Widgetów",font:F,size:36,bold:true,color:"54C5F8"})]}),
         new Paragraph({alignment:AlignmentType.CENTER,spacing:{before:100,after:0},children:[new TextRun({text:"Programowanie Aplikacji Mobilnych — moduł Flutter",font:F,size:20,color:"93C5FD",italics:true})]}),
       ]
-    })]})]},
+    })]})]}),
 
     sp(400),
     new Paragraph({alignment:AlignmentType.CENTER,children:[new TextRun({text:"Projekt: WeatherApp v2 — rozszerzenie projektu z Flutter Lab 1",font:F,size:22,color:"374151"})]}),
