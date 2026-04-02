@@ -881,6 +881,16 @@
                         <p class="empty-hint">Uzupełnij kreator, aby zobaczyć szacowaną wycenę.</p>
                     </div>
                 </div>
+
+                <div class="summary-section" id="docsSummary">
+                    <div class="summary-section-header">
+                        <div class="summary-section-icon icon-teal"><i class="fa-solid fa-file-signature"></i></div>
+                        <h3>Punkty kluczowe dokumentacji (BRD / FRD / TRD)</h3>
+                    </div>
+                    <div class="summary-section-body" id="docsBody">
+                        <p class="empty-hint">Wypełnij kreator, aby automatycznie wygenerować szkic dokumentacji projektu.</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -1258,10 +1268,49 @@
                 target.push({ task: stripEmojiPrefix(f.label) + ' (' + f.desc + ')', h: f.hours });
             });
 
+            balanceTeamHours(m1, m2, m3);
             return { m1, m2, m3 };
         }
 
         function sum(arr) { return arr.reduce((s, t) => s + t.h, 0); }
+
+        function balanceTeamHours(m1, m2, m3) {
+            const team = [m1, m2, m3];
+            const totals = team.map(sum);
+            const target = Math.round((totals[0] + totals[1] + totals[2]) / 3);
+            const tolerance = 4;
+            const balancingPools = [
+                [
+                    'Design system + dokumentacja komponentów UI',
+                    'Scenariusze onboardingowe i mikrointerakcje',
+                    'Ujednolicenie komunikatów błędów i stanów pustych',
+                ],
+                [
+                    'Testy integracyjne API i kontraktów danych',
+                    'Przygotowanie migracji danych + walidacja',
+                    'Instrumentacja logów i monitoringu błędów',
+                ],
+                [
+                    'Testy end-to-end scenariuszy użytkownika',
+                    'Optymalizacja wydajności i zużycia baterii',
+                    'Hardening uprawnień i fallback offline',
+                ],
+            ];
+
+            team.forEach((tasks, idx) => {
+                let gap = target - sum(tasks);
+                let poolIdx = 0;
+                while (gap > tolerance && poolIdx < balancingPools[idx].length) {
+                    const block = Math.min(8, Math.max(4, Math.round(gap / 2)));
+                    tasks.push({
+                        task: `${balancingPools[idx][poolIdx]} (wyrównanie obciążenia zespołu)`,
+                        h: block
+                    });
+                    gap = target - sum(tasks);
+                    poolIdx += 1;
+                }
+            });
+        }
 
         // Removes the leading emoji character(s) and following space from a label string,
         // returning only the textual description (e.g. "📷 Aparat" → "Aparat").
@@ -1332,6 +1381,7 @@
             renderFeaturesSection(hours);
             renderTeamSection(hours);
             renderPricingSection(hours);
+            renderDocumentsSection(hours);
         }
 
         function renderFeaturesSection(hours) {
@@ -1417,6 +1467,74 @@
                 * Wycena orientacyjna. Ceny rynkowe na 2025 r. dla rynku polskiego. Dla aplikacji „z półki" (np. Flutter / React Native) realny czas może być krótszy o 20–30%. Nie obejmuje kosztów subskrypcji Firebase, App Store / Google Play ani serwera backendowego.
             </p>
         `;
+        }
+
+        function renderDocumentsSection(hours) {
+            const body = document.getElementById('docsBody');
+            const total = sum(hours.m1) + sum(hours.m2) + sum(hours.m3);
+            const title = generateTitle();
+            const brd = generateBrdPoints(total, title);
+            const frd = generateFrdPoints();
+            const trd = generateTrdPoints(hours, total);
+
+            const listHtml = (items) => items.map(item => `<li>${item}</li>`).join('');
+            body.innerHTML = `
+            <div style="display:grid;gap:12px;">
+                <div>
+                    <h4 style="font-size:0.85rem;margin-bottom:6px;color:var(--accent);">BRD — Business Requirements Document</h4>
+                    <ul style="padding-left:18px;line-height:1.5;font-size:0.82rem;">${listHtml(brd)}</ul>
+                </div>
+                <div>
+                    <h4 style="font-size:0.85rem;margin-bottom:6px;color:var(--green);">FRD — Functional Requirements Document</h4>
+                    <ul style="padding-left:18px;line-height:1.5;font-size:0.82rem;">${listHtml(frd)}</ul>
+                </div>
+                <div>
+                    <h4 style="font-size:0.85rem;margin-bottom:6px;color:var(--teal);">TRD — Technical Requirements Document</h4>
+                    <ul style="padding-left:18px;line-height:1.5;font-size:0.82rem;">${listHtml(trd)}</ul>
+                </div>
+            </div>
+        `;
+        }
+
+        function generateBrdPoints(totalHours, title) {
+            const appType = appTypeLabel(state.appType);
+            const platform = platformName(state.platform);
+            return [
+                `Cel biznesowy: dostarczenie rozwiązania typu „${title}”, które odpowiada na potrzeby użytkowników docelowych.`,
+                `Zakres projektu: ${appType} realizowana na platformie ${platform} wraz z kluczowymi funkcjami wynikającymi z konfiguratora.`,
+                `Wartość dla użytkownika: uproszczenie codziennych zadań i poprawa doświadczenia mobilnego dzięki spójnemu UX.`,
+                `Metryki sukcesu MVP: stabilność podstawowych scenariuszy, pozytywny feedback testerów i gotowość do prezentacji laboratoryjnej.`,
+                `Szacowany nakład pracy: ${totalHours} roboczogodzin, realizacja w iteracjach zgodnych z harmonogramem laboratoriów.`,
+            ];
+        }
+
+        function generateFrdPoints() {
+            const points = [
+                `Funkcje podstawowe: nawigacja między ekranami, obsługa stanów UI i walidacja danych wejściowych.`,
+            ];
+            if (state.auth && state.auth !== 'none') points.push(`Uwierzytelnianie użytkownika: ${authLabel(state.auth)}.`);
+            if (state.dataStorage && state.dataStorage !== 'none') points.push(`Warstwa danych: ${storageLabel(state.dataStorage)}.`);
+            if (state.notifications && state.notifications !== 'none') points.push(`Powiadomienia: ${notifLabel(state.notifications)}.`);
+            if (state.location && state.location !== 'none') points.push(`Lokalizacja: ${locLabel(state.location)}.`);
+            const hw = selectedHardware().map(hw => hwLabel(hw)).filter(Boolean);
+            if (hw.length) points.push(`Integracje sprzętowe: ${hw.join(', ')}.`);
+            const extras = EXTRA_FEATURES.filter(f => activeExtras[f.id]).map(f => stripEmojiPrefix(f.label));
+            if (extras.length) points.push(`Funkcje rozszerzone: ${extras.join(', ')}.`);
+            points.push('Kryteria akceptacji: każdy scenariusz użytkownika kończy się poprawnym wynikiem oraz obsługą błędów.');
+            return points;
+        }
+
+        function generateTrdPoints(hours, totalHours) {
+            const stack = platformName(state.platform);
+            const uiHours = sum(hours.m1), dataHours = sum(hours.m2), featHours = sum(hours.m3);
+            const arch = state.uiComplexity === 'complex' ? 'Clean Architecture / MVVM z wyraźnym podziałem modułów' : 'MVVM z modularnym podziałem warstw';
+            return [
+                `Stos technologiczny: ${stack}; architektura rekomendowana: ${arch}.`,
+                `Podział techniczny pracy: UI/UX ${uiHours}h, dane i logika ${dataHours}h, funkcje sprzętowe/rozszerzone ${featHours}h.`,
+                `Wymagania jakościowe: wersjonowanie Git, code review, testy manualne i podstawowe testy automatyczne dla krytycznych funkcji.`,
+                'Bezpieczeństwo i niezawodność: walidacja wejścia, kontrola uprawnień, bezpieczne przechowywanie danych wrażliwych.',
+                `Plan wdrożenia: MVP + iteracyjne rozszerzenia; łączny budżet czasu ${totalHours}h.`,
+            ];
         }
 
         // ============================================================
