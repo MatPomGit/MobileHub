@@ -64,7 +64,7 @@
             --header-h: 48px;
             --tabbar-h: 41px;
             --chrome-h: calc(var(--header-h) + var(--tabbar-h));
-            --wiki-font-size: 15px;
+            --wiki-font-size: 12px;
             --wiki-font-scale: 0.9;
         }
 
@@ -1229,7 +1229,7 @@
             font-size: 1em;
             margin-bottom: 0.7em;
             color: var(--text);
-            line-height: 1.4;
+            line-height: 1.3;
         }
 
         #wikiArticle ul,
@@ -1238,7 +1238,8 @@
         }
 
         #wikiArticle li {
-            margin-bottom: 3px;
+            margin-bottom: 2px;
+            line-height: 1.3;
         }
 
         #wikiArticle strong {
@@ -1327,9 +1328,15 @@
             padding: 20px;
             overflow-x: auto;
             font-family: var(--mono);
-            font-size: calc(0.9em * var(--wiki-font-scale));
-            line-height: 1.35;
+            font-size: calc(0.82em * var(--wiki-font-scale));
+            line-height: 1.25;
             box-shadow: var(--shadow-lg);
+            color: #e6edf7;
+        }
+
+        .code-block-wrapper pre code,
+        .code-block-wrapper pre code * {
+            color: inherit;
         }
 
         .copy-code-btn {
