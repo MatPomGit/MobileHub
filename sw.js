@@ -1,9 +1,12 @@
-const CACHE_NAME = 'pam-wiki-v2';
+const CACHE_NAME = 'pam-wiki-v3';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',
+    './styles.css',
     './pam-wiki.js',
     './pam-files.js',
+    './quiz-module.js',
+    './dev-mode.js',
     './assets/favicon.ico',
     './assets/ico3.png',
     './assets/icon-192.png',
