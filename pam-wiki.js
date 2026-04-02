@@ -128,8 +128,6 @@ const ARTICLES = {
     'data-storage-best-practices': 'wiki/data-storage-best-practices.md',
 };
 
-// NAPRAWKA: ikony używają pełnej klasy FA (np. "fa-brands fa-android")
-// zamiast samej nazwy ikony — buildSidebar() nie dokłada już hardkodowanego "fa-solid"
 const METADATA = {
     'mobile-os':            { category: 'Projektowanie i OS',             title: 'Systemy operacyjne urządzeń mobilnych',    icon: 'fa-solid fa-mobile-screen-button' },
     'mobile-design':        { category: 'Projektowanie i OS',             title: 'Projektowanie aplikacji mobilnych',        icon: 'fa-solid fa-pen-ruler' },
@@ -252,7 +250,6 @@ const METADATA = {
     'data-storage-best-practices': { category: 'Formaty plików i przechowywanie danych', title: 'Dobre praktyki przechowywania danych',              icon: 'fa-solid fa-shield-halved' },
 };
 
-// NAPRAWKA: ikony kategorii używają pełnej klasy FA
 const CATEGORIES = [
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing','app-distribution'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
@@ -374,8 +371,6 @@ function buildSidebar() {
     CATEGORIES.forEach(cat => {
         const sec = document.createElement('div');
         sec.className = 'wiki-category';
-        // NAPRAWKA: ikony kategorii i artykułów mają już pełną klasę FA w danych —
-        // nie doklejamy hardkodowanego "fa-solid", tylko używamy icon bezpośrednio
         sec.innerHTML = `
             <h4 class="cat-header" data-cat="${cat.id}">
                 <i class="${cat.icon}"></i>
