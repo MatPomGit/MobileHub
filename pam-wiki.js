@@ -25,6 +25,7 @@ const ARTICLES = {
     'android-data':         'wiki/android-data.md',
     'android-network':      'wiki/android-network.md',
     'android-testing':      'wiki/android-testing.md',
+    'agp-upgrade-assistant':'wiki/agp-upgrade-assistant.md',
     'xcode-ios':            'wiki/xcode-ios.md',
     'swift-basics':         'wiki/swift-basics.md',
     'swiftui-advanced':     'wiki/swiftui-advanced.md',
@@ -145,6 +146,7 @@ const METADATA = {
     'android-data':         { category: 'Programowanie natywne Android',  title: 'Przechowywanie danych — Room',             icon: 'fa-solid fa-database' },
     'android-network':      { category: 'Programowanie natywne Android',  title: 'Sieć i REST API — Retrofit',               icon: 'fa-solid fa-network-wired' },
     'android-testing':      { category: 'Programowanie natywne Android',  title: 'Testowanie aplikacji Android',             icon: 'fa-solid fa-flask' },
+    'agp-upgrade-assistant':{ category: 'Programowanie natywne Android',  title: 'Asystent uaktualniania AGP — praktyka zaawansowana', icon: 'fa-solid fa-screwdriver-wrench' },
     'xcode-ios':            { category: 'Programowanie natywne iOS',      title: 'Xcode — Swift & SwiftUI',                  icon: 'fa-brands fa-apple' },
     'swift-basics':         { category: 'Programowanie natywne iOS',      title: 'Swift — podstawy języka',                  icon: 'fa-solid fa-terminal' },
     'swiftui-advanced':     { category: 'Programowanie natywne iOS',      title: 'SwiftUI — zaawansowane techniki',          icon: 'fa-solid fa-wand-magic-sparkles' },
@@ -249,7 +251,7 @@ const CATEGORIES = [
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing','app-distribution'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
-    { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing'] },
+    { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','agp-upgrade-assistant'] },
     { id: 'cat-ios',      name: 'Programowanie natywne iOS',      icon: 'fa-brands fa-apple',               articles: ['xcode-ios','swift-basics','swiftui-advanced','ios-networking','ios-data','ios-notifications'] },
     { id: 'cat-cross',    name: 'Cross-platform i PWA',           icon: 'fa-solid fa-layer-group',          articles: ['cross-platform','flutter-advanced','react-native','pwa-advanced','kmp-multiplatform','buildozer','mobile-docker'] },
     { id: 'cat-sensors',  name: 'Obsługa sensorów',               icon: 'fa-solid fa-compass',              articles: ['sensors','camera-api','location-maps','audio-microphone','biometrics'] },
@@ -644,4 +646,3 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 });
-
