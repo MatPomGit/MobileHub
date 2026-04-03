@@ -2016,7 +2016,7 @@ footer strong {
     display: none;
     position: fixed;
     bottom: 24px;
-    right: 24px;
+    left: 16px;
     width: 52px;
     height: 48px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
@@ -2480,7 +2480,7 @@ footer strong {
 
     /* info panel mobile */
     .info-panel {
-        padding: 20px 16px 40px;
+        padding: 20px 16px calc(72px + env(safe-area-inset-bottom));
     }
 
     .info-panel-header h2 {
