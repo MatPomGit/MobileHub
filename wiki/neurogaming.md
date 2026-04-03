@@ -20,7 +20,7 @@ Neurogaming (*brain-computer game interface*) to dziedzina łącząca neurotechn
 | 2023 | OpenBCI Galea — zintegrowany headset BCI + VR (Eye, EMG, EEG, PPG) |
 | 2025 | Masowy rynek mobilnych aplikacji BCI na Android i iOS |
 
-Pierwsze gry komercyjne bazujące na EEG pojawiły się ok. 2009 r. razem z tańszymi urządzeniami dla konsumentów. Dziś mobilne aplikacje do neurofeedbacku i lekkie zestawy EEG (waga &lt;100 g) pozwalają na neurogaming poza laboratorium.
+Pierwsze gry komercyjne bazujące na EEG pojawiły się ok. 2009 r. razem z tańszymi urządzeniami dla konsumentów. Dziś mobilne aplikacje do neurofeedbacku i lekkie zestawy EEG (waga <100 g) pozwalają na neurogaming poza laboratorium.
 
 ---
 
