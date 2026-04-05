@@ -443,7 +443,7 @@ targets = [
     ("Zbyt mały 3mm", 50, 3),
 ]
 for name, D, W in targets:
-    MT, ID = touch_touch_fitts = touch_fitts(D, W)
+    MT, ID = touch_fitts(D, W)
     print(f"{name}: MT={MT:.0f} ms" if MT != float('inf') else f"{name}: NIE DOSIĘGALNY")
 ```
 
