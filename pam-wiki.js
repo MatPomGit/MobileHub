@@ -12,6 +12,7 @@ const ARTICLES = {
     'android-ecosystem':    'wiki/android-ecosystem.md',
     'ios-ecosystem':        'wiki/ios-ecosystem.md',
     'mobile-security':      'wiki/mobile-security.md',
+    'social-media-integration': 'wiki/social-media-integration.md',
     'mobile-performance':   'wiki/mobile-performance.md',
     'mobile-hardware':      'wiki/mobile-hardware.md',
     'ui-ux':                'wiki/ui-ux.md',
@@ -138,6 +139,7 @@ const METADATA = {
     'android-ecosystem':    { category: 'Projektowanie i OS',             title: 'Ekosystem Android i Google Play',          icon: 'fa-brands fa-android' },
     'ios-ecosystem':        { category: 'Projektowanie i OS',             title: 'Ekosystem iOS i App Store',                icon: 'fa-brands fa-apple' },
     'mobile-security':      { category: 'Projektowanie i OS',             title: 'Bezpieczeństwo aplikacji mobilnych',       icon: 'fa-solid fa-shield-halved' },
+    'social-media-integration': { category: 'Projektowanie i OS',        title: 'Integracja mediów społecznościowych',       icon: 'fa-solid fa-share-nodes' },
     'mobile-performance':   { category: 'Projektowanie i OS',             title: 'Wydajność aplikacji mobilnych',            icon: 'fa-solid fa-gauge-high' },
     'mobile-hardware':      { category: 'Architektura sprzętu',           title: 'Architektura i budowa urządzeń mobilnych', icon: 'fa-solid fa-microchip' },
     'ui-ux':                { category: 'Metody interakcji UI/UX',        title: 'Metody interakcji i projektowanie UI/UX',  icon: 'fa-solid fa-hand-pointer' },
@@ -259,7 +261,7 @@ const METADATA = {
 };
 
 const CATEGORIES = [
-    { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing','app-distribution','app-updates'] },
+    { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','social-media-integration','mobile-performance','app-publishing','app-distribution','app-updates'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
     { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','termux','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','android-lint','agp-upgrade-assistant','file-storage-mobile'] },
