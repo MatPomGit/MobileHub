@@ -97,6 +97,7 @@ const ARTICLES = {
     'egzamin-teoretyczny':   'wiki/egzamin-teoretyczny.md',
     'app-publishing':        'wiki/app-publishing.md',
     'app-distribution':      'wiki/app-distribution.md',
+    'app-updates':           'wiki/app-updates.md',
     'app-design-process':    'wiki/app-design-process.md',
     'app-metadata':          'wiki/app-metadata.md',
     'file-storage-mobile':   'wiki/file-storage-mobile.md',
@@ -221,6 +222,7 @@ const METADATA = {
     'egzamin-teoretyczny':   { category: 'Zaliczenie',                    title: 'Egzamin teoretyczny — przygotowanie',      icon: 'fa-solid fa-graduation-cap' },
     'app-publishing':        { category: 'Projektowanie i OS',            title: 'Publikacja i promocja własnej aplikacji',  icon: 'fa-solid fa-rocket' },
     'app-distribution':      { category: 'Projektowanie i OS',            title: 'Metody dystrybucji — Google Play i F-Droid', icon: 'fa-solid fa-store' },
+    'app-updates':           { category: 'Projektowanie i OS',            title: 'Wypuszczanie aktualizacji własnej aplikacji', icon: 'fa-solid fa-arrows-rotate' },
     'app-design-process':    { category: 'Projektowanie i OS',            title: 'Proces projektowania — Brief, BRD, FRD, TRD', icon: 'fa-solid fa-file-lines' },
     'app-metadata':          { category: 'Projektowanie i OS',            title: 'Zbieranie metadanych przez aplikację',      icon: 'fa-solid fa-tags' },
     'file-storage-mobile':   { category: 'Programowanie natywne Android', title: 'Zapisywanie i odczyt plików na urządzeniu mobilnym', icon: 'fa-solid fa-file-arrow-down' },
@@ -257,7 +259,7 @@ const METADATA = {
 };
 
 const CATEGORIES = [
-    { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing','app-distribution'] },
+    { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','mobile-performance','app-publishing','app-distribution','app-updates'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
     { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','termux','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','android-lint','agp-upgrade-assistant','file-storage-mobile'] },
