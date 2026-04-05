@@ -1869,6 +1869,46 @@ header {
     border-radius: 2px;
 }
 
+.tool-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+}
+
+.tool-card-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    margin-top: 14px;
+    padding: 8px 14px;
+    background: var(--accent-light);
+    color: var(--accent);
+    border-radius: 8px;
+    font-size: 12px;
+    font-weight: 700;
+    align-self: flex-start;
+    transition: background var(--transition), color var(--transition);
+}
+
+.tool-card:hover .tool-card-btn {
+    background: var(--accent);
+    color: #fff;
+}
+
+.scoring-grid {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 20px;
+    margin-bottom: 32px;
+    align-items: start;
+}
+
+.scoring-grid .score-table {
+    margin-bottom: 0;
+}
+
 .topic-accordion {
     margin-bottom: 40px;
 }
@@ -2117,6 +2157,10 @@ footer strong {
     }
 
     .cards-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .scoring-grid {
         grid-template-columns: 1fr;
     }
 
