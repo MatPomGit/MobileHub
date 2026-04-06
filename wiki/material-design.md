@@ -275,3 +275,202 @@ val AppShapes = Shapes(
 - [Material Theme Builder](https://material-foundation.github.io/material-theme-builder/)
 - [Compose Material 3](https://developer.android.com/jetpack/compose/designsystems/material3)
 - [Material Symbols (ikony)](https://fonts.google.com/icons)
+
+## Typografia w MD3
+
+Material Design 3 definiuje precyzyjną **skalę typograficzną** (Type Scale) złożoną z pięciu rodzin ról, z których każda ma warianty rozmiaru: Large, Medium i Small. Dzięki temu projektant zawsze wie, których stylów użyć w zależności od hierarchii wizualnej.
+
+| Rola | Użycie | Domyślny rozmiar |
+|------|--------|-----------------|
+| `displayLarge` | Tytuły hero, splash screen | 57 sp |
+| `headlineLarge` | Nagłówki sekcji, ekranów | 32 sp |
+| `titleLarge` | Pasek aplikacji (TopAppBar) | 22 sp |
+| `titleMedium` | Nagłówki kart, list | 16 sp |
+| `bodyLarge` | Główny tekst artykułów | 16 sp |
+| `bodyMedium` | Standardowy tekst interfejsu | 14 sp |
+| `labelLarge` | Etykiety przycisków | 14 sp |
+| `labelSmall` | Etykiety chipów, badge | 11 sp |
+
+Aby użyć własnego fontu z Google Fonts (np. **Nunito**) z funkcją _Downloadable Fonts_ (Android pobiera font przy pierwszym użyciu, bez bundlowania w APK):
+
+```kotlin
+// res/font/nunito.xml — deskryptor downloadable font
+<?xml version="1.0" encoding="utf-8"?>
+<font-family xmlns:app="http://schemas.android.com/apk/res-auto"
+    app:fontProviderAuthority="com.google.android.gms.fonts"
+    app:fontProviderPackage="com.google.android.gms"
+    app:fontProviderQuery="Nunito"
+    app:fontProviderCerts="@array/com_google_android_gms_fonts_certs" />
+
+// W Compose — załaduj font i zbuduj Typography
+val nunitoFamily = FontFamily(
+    Font(R.font.nunito, weight = FontWeight.Normal),
+    Font(R.font.nunito_medium, weight = FontWeight.Medium),
+    Font(R.font.nunito_bold, weight = FontWeight.Bold)
+)
+
+val AppTypography = Typography(
+    displayLarge  = TextStyle(fontFamily = nunitoFamily, fontWeight = FontWeight.Normal,
+                              fontSize = 57.sp, lineHeight = 64.sp, letterSpacing = (-0.25).sp),
+    headlineLarge = TextStyle(fontFamily = nunitoFamily, fontWeight = FontWeight.Bold,
+                              fontSize = 32.sp, lineHeight = 40.sp),
+    titleLarge    = TextStyle(fontFamily = nunitoFamily, fontWeight = FontWeight.Bold,
+                              fontSize = 22.sp, lineHeight = 28.sp),
+    bodyLarge     = TextStyle(fontFamily = nunitoFamily, fontWeight = FontWeight.Normal,
+                              fontSize = 16.sp, lineHeight = 24.sp, letterSpacing = 0.5.sp),
+    labelLarge    = TextStyle(fontFamily = nunitoFamily, fontWeight = FontWeight.Medium,
+                              fontSize = 14.sp, lineHeight = 20.sp, letterSpacing = 0.1.sp),
+)
+```
+
+Ważna kwestia dostępności: **nie blokuj skalowania fontów**. Użytkownicy ze słabym wzrokiem zwiększają rozmiar czcionek systemowych. Używaj jednostki `sp` (nie `dp`) dla tekstu oraz `wrapContentHeight` dla kontenerów, aby layout nie "łamał się" przy `fontScale = 1.5`.
+
+```kotlin
+// Testowanie dużych fontów w Compose Preview
+@Preview(fontScale = 1.5f, name = "Large font")
+@Composable
+fun ItemCardPreview() { ItemCard(title = "Przykładowy tytuł zadania") }
+```
+
+## Adaptacyjne layouty — ekrany i foldables
+
+Telefony składane (foldables) i tablety wymagają innego układu nawigacji niż smartfon. MD3 dostarcza klasę `WindowSizeClass` i komponent `NavigationSuiteScaffold`, które automatycznie dobierają właściwy wzorzec nawigacji do rozmiaru okna.
+
+```kotlin
+// build.gradle.kts
+implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0")
+implementation("androidx.compose.material3:material3-adaptive:1.0.0")
+
+// Główny ekran — adaptive navigation
+@OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
+@Composable
+fun AdaptiveApp() {
+    val navController = rememberNavController()
+    val currentRoute by navController.currentBackStackEntryAsState()
+
+    // NavigationSuiteScaffold automatycznie wybiera:
+    // - NavigationBar   (telefon — portrait)
+    // - NavigationRail  (telefon — landscape / mały tablet)
+    // - NavigationDrawer (duży tablet / desktop)
+    NavigationSuiteScaffold(
+        navigationSuiteItems = {
+            TopLevelDest.entries.forEach { dest ->
+                item(
+                    icon = { Icon(if (currentRoute?.destination?.route == dest.route)
+                                     dest.selectedIcon else dest.icon, null) },
+                    label = { Text(dest.label) },
+                    selected = currentRoute?.destination?.route == dest.route,
+                    onClick = { navController.navigate(dest.route) {
+                        launchSingleTop = true; restoreState = true
+                    }}
+                )
+            }
+        }
+    ) {
+        NavHost(navController, startDestination = TopLevelDest.HOME.route) {
+            composable(TopLevelDest.HOME.route)     { HomeScreen() }
+            composable(TopLevelDest.SEARCH.route)   { SearchScreen() }
+            composable(TopLevelDest.PROFILE.route)  { ProfileScreen() }
+        }
+    }
+}
+
+// Dwupanelowy layout dla tabletu (lista + szczegóły)
+@Composable
+fun AdaptiveListDetail() {
+    val navigator = rememberListDetailPaneScaffoldNavigator<String>()
+
+    ListDetailPaneScaffold(
+        directive = navigator.scaffoldDirective,
+        value = navigator.scaffoldValue,
+        listPane = {
+            AnimatedPane {
+                TaskListPane(
+                    onTaskClick = { taskId ->
+                        navigator.navigateTo(ListDetailPaneScaffoldRole.Detail, taskId)
+                    }
+                )
+            }
+        },
+        detailPane = {
+            AnimatedPane {
+                val taskId = navigator.currentDestination?.content
+                if (taskId != null) TaskDetailPane(taskId)
+                else Box(Modifier.fillMaxSize(), Alignment.Center) {
+                    Text("Wybierz zadanie z listy")
+                }
+            }
+        }
+    )
+}
+```
+
+Na urządzeniach składanych `WindowSizeClass` zmienia się dynamicznie podczas rozkładania telefonu — Compose automatycznie przebudowuje UI, przełączając np. z jednej kolumny na dwie.
+
+## Motion i przejścia — Motion System MD3
+
+Material Design 3 definiuje cztery główne wzorce animacji przejść między ekranami, opisane w specyfikacji **Motion System**. W Compose Navigation animacje konfiguruje się parametrami `enterTransition`, `exitTransition` etc.
+
+```kotlin
+// build.gradle.kts
+implementation("androidx.compose.animation:animation:1.7.0")
+
+// Shared Axis — poruszanie się wzdłuż osi X/Y/Z (hierarchia ekranów)
+fun NavGraphBuilder.sharedAxisComposable(
+    route: String,
+    content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
+) {
+    composable(
+        route = route,
+        enterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ) + fadeIn(tween(300))
+        },
+        exitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { -it / 3 },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ) + fadeOut(tween(150))
+        },
+        popEnterTransition = {
+            slideInHorizontally(
+                initialOffsetX = { -it / 3 },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ) + fadeIn(tween(300))
+        },
+        popExitTransition = {
+            slideOutHorizontally(
+                targetOffsetX = { it },
+                animationSpec = tween(300, easing = FastOutSlowInEasing)
+            ) + fadeOut(tween(150))
+        },
+        content = content
+    )
+}
+
+// Fade Through — przełączanie niezwiązanych widoków (np. zakładki nav bar)
+val fadeThroughEnter = fadeIn(tween(210, delayMillis = 90)) +
+    scaleIn(initialScale = 0.92f, animationSpec = tween(210, delayMillis = 90))
+val fadeThroughExit = fadeOut(tween(90))
+
+// Container Transform — element listy → szczegóły (Shared Element)
+// Wymaga Compose 1.7+ i Material3 1.3+
+@Composable
+fun TaskCard(task: Task, onOpen: () -> Unit) {
+    val interactionSource = remember { MutableInteractionSource() }
+    ElevatedCard(
+        onClick = onOpen,
+        modifier = Modifier
+            .sharedElement(                               // oznacz element jako "shared"
+                rememberSharedContentState(key = "task-${task.id}"),
+                animatedVisibilityScope = LocalAnimatedVisibilityScope.current!!
+            )
+    ) {
+        Text(task.title, Modifier.padding(16.dp))
+    }
+}
+```
+
+Animacje w MD3 korzystają z krzywej `Emphasized` (niestandardowy cubic-bezier), która daje fizycznie realistyczne, szybko startujące i płynnie zwalniające ruchy. Unikaj `LinearEasing` — sprawia wrażenie mechanicznego i niezgodnego z systemem.

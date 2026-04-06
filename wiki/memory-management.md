@@ -295,3 +295,158 @@ Java_com_example_NativeProcessor_processAudioBuffer(
 - [Coil Image Loading](https://coil-kt.github.io/coil/)
 - [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
 - [Android NDK](https://developer.android.com/ndk/guides)
+
+## Zarządzanie pamięcią w iOS — ARC
+
+iOS i macOS używają **Automatic Reference Counting (ARC)** — mechanizmu zarządzania pamięcią opartego na zliczaniu referencji, wbudowanego bezpośrednio w kompilator Swift/Objective-C. W przeciwieństwie do Garbage Collectora (Android), ARC **nie pauzuje aplikacji** — zwalnianie pamięci następuje deterministycznie w momencie, gdy licznik referencji obiektu spada do zera.
+
+```swift
+// ARC w praktyce — silne vs słabe referencje
+class NetworkManager {
+    // strong (domyślne) — zwiększa licznik referencji
+    var delegate: TaskDelegate?      // UWAGA: może prowadzić do retain cycle!
+
+    // weak — nie zwiększa licznika, automatycznie nil gdy obiekt dealokowany
+    weak var weakDelegate: TaskDelegate?
+
+    // unowned — jak weak, ale zakłada że obiekt ZAWSZE istnieje (crash jeśli nie)
+    unowned var owner: AppController
+    
+    init(owner: AppController) { self.owner = owner }
+}
+
+// Retain cycle — klasyczna pułapka ARC
+class TaskViewModel {
+    var onTasksLoaded: (() -> Void)?    // closure trzyma silną referencję
+
+    func loadTasks() {
+        NetworkService.shared.fetch { [weak self] tasks in
+            // BEZ [weak self]: closure → TaskViewModel → closure = cycle!
+            guard let self else { return }
+            self.tasks = tasks
+            self.onTasksLoaded?()
+        }
+    }
+}
+
+// Retain cycle między dwoma obiektami — rozwiązanie z weak/unowned
+class Parent {
+    var child: Child?
+    deinit { print("Parent deallocated") }
+}
+
+class Child {
+    weak var parent: Parent?    // weak przerywa cycle
+    deinit { print("Child deallocated") }
+}
+
+// Listy przechwytywania w zamknięciach (capture lists)
+class TimerController {
+    var count = 0
+
+    func startTimer() {
+        // [weak self] — bezpieczne gdy controller może być dealokowany podczas działania timera
+        Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
+            guard let self else { return }
+            self.count += 1
+            print("Tick: \(self.count)")
+        }
+
+        // [unowned self] — gdy mamy pewność, że controller przeżyje timer
+        // np. gdy timer jest własnością controller-a i zostanie unieważniony w deinit
+        Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [unowned self] _ in
+            self.finish()
+        }
+    }
+
+    deinit {
+        print("TimerController deallocated")
+        // Timer MUSI być unieważniony przed dealokacją! Inaczej crash.
+    }
+}
+```
+
+Regułą generalną: **closures = `[weak self]`**, chyba że masz pewność co do czasu życia obiektu. Właściwości delegatów (delegate pattern) powinny być zawsze `weak`.
+
+## Narzędzia diagnostyczne iOS — Instruments
+
+Xcode dołącza aplikację **Instruments** — zaawansowane narzędzie profilowania, które umożliwia śledzenie allocacji pamięci, wykrywanie wycieków i analizę zużycia CPU w czasie rzeczywistym.
+
+Dwa najważniejsze instrumenty przy diagnozowaniu pamięci:
+
+**Allocations** — pokazuje historię alokacji obiektów: ile ich jest, ile RAM zajmują, jakie stosy wywołań je utworzyły. Kluczowy widok to "Heap Shot" — migawka sterty przed i po operacji (np. przejście do ekranu i powrót). Jeśli po powrocie heap rośnie — mamy wyciek.
+
+**Leaks** — aktywnie wykrywa obiekty, do których nie ma żadnych silnych referencji z korzenia grafu obiektów (root set), ale które nadal zajmują pamięć (klasyczny symptom retain cycle). Instrument zaznacza wycieki czerwoną kropką na osi czasu.
+
+```swift
+// Typowy scenariusz wycieku — ViewController niezwolniony po dismiss
+class ListViewController: UIViewController {
+    // BŁĄD: silna referencja do self w closure NotificationCenter
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        NotificationCenter.default.addObserver(
+            forName: .dataUpdated,
+            object: nil,
+            queue: .main
+        ) { _ in
+            self.reload()       // WYCIEK — VC żyje wiecznie dzięki NC
+        }
+    }
+    // POPRAWKA:
+    private var observer: NSObjectProtocol?
+
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        observer = NotificationCenter.default.addObserver(
+            forName: .dataUpdated, object: nil, queue: .main
+        ) { [weak self] _ in
+            self?.reload()
+        }
+    }
+
+    deinit {
+        if let observer { NotificationCenter.default.removeObserver(observer) }
+    }
+}
+
+// Pomocnicza metoda weryfikująca dealokację w testach
+#if DEBUG
+extension UIViewController {
+    func verifyDeallocated(after delay: TimeInterval = 2.0) {
+        let className = String(describing: type(of: self))
+        let weakRef = WeakRef(self)
+        DispatchQueue.main.asyncAfter(deadline: .now() + delay) {
+            if weakRef.value != nil {
+                print("⚠️ MEMORY LEAK: \(className) not deallocated!")
+            }
+        }
+    }
+}
+#endif
+```
+
+Uruchamiaj Instruments na fizycznym urządzeniu (nie symulatorze) — symulator nie oddaje rzeczywistego zużycia pamięci ani zachowania ARC pod presją systemu.
+
+## Porównanie — Android GC vs iOS ARC
+
+Dwa dominujące podejścia do automatycznego zarządzania pamięcią w mobile mają fundamentalnie różne charakterystyki wydajnościowe i wzorce błędów.
+
+| Cecha | Android — GC (Garbage Collector) | iOS — ARC |
+|-------|----------------------------------|-----------|
+| **Mechanizm** | Śledzenie grafu obiektów, sweep & compact | Zliczanie referencji w czasie kompilacji |
+| **Czas zwalniania** | Niedeterministyczny — GC decyduje kiedy | Deterministyczny — natychmiast gdy RC=0 |
+| **Pauzy aplikacji** | Tak — GC Stop-the-World (zwykle < 1 ms w ART) | Brak pauz GC |
+| **Overhead CPU** | Cykliczny (GC runs) | Rozłożony (inc/dec RC przy każdym przypisaniu) |
+| **Cykle referencji** | GC je wykrywa i zbiera | Prowadzą do wycieku — developer musi im zapobiegać |
+| **Typowy wyciek** | Trzymanie kontekstu Activity statycznie | Retain cycle (strong ↔ strong) |
+| **Narzędzia debug** | Memory Profiler (Android Studio), LeakCanary | Instruments (Allocations, Leaks), Xcode Memory Graph |
+| **Alokacja na stosie** | Tylko wartości prymitywne | Struktury (struct) zawsze na stosie — zero overhead RC |
+| **Fragmentacja** | GC compact scala heap | Brak kompaktowania — potencjalna fragmentacja |
+
+**Praktyczne implikacje dla programisty:**
+
+W Androidzie głównym zagrożeniem jest **trzymanie referencji do kontekstu** (Activity/Fragment) w obiektach o dłuższym czasie życia (singleton, ViewModel, coroutines bez zakresu). GC nigdy nie zwolni obiektu, dopóki istnieje do niego choćby jedna silna referencja.
+
+W iOS głównym zagrożeniem są **retain cycles** — dwa obiekty trzymające się nawzajem silnymi referencjami. ARC nie potrafi ich wykryć — RC nigdy nie spada do zera. Rozwiązanie: jeden z powiązań zawsze `weak` lub `unowned`.
+
+W Flutter (Dart) działa GC wzorowany na V8 — podobny do Android ART, lecz optymalizowany pod krótko-żyjące obiekty widgetów. Dart kompiluje do kodu natywnego, więc pauzy GC są rzadkie i krótkie.

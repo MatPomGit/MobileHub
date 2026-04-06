@@ -309,3 +309,218 @@ func bindSearch() {
 - [Alamofire](https://github.com/Alamofire/Alamofire)
 - [Swift Concurrency](https://docs.swift.org/swift-book/documentation/the-swift-programming-language/concurrency/)
 - [Combine Framework](https://developer.apple.com/documentation/combine)
+
+## URLCache i zarządzanie cache HTTP
+
+`URLCache` to wbudowany mechanizm cache HTTP w iOS, przechowujący odpowiedzi na dysku i w pamięci. Domyślna instancja ma 4 MB pamięci i 20 MB dysku — w większości aplikacji warto ją skonfigurować.
+
+### Konfiguracja i polityki cache
+
+```swift
+// Konfiguracja globalnego cache przy starcie aplikacji
+let cache = URLCache(
+    memoryCapacity: 20 * 1024 * 1024,   // 20 MB RAM
+    diskCapacity: 100 * 1024 * 1024,    // 100 MB dysk
+    diskPath: "network_cache"
+)
+URLCache.shared = cache
+
+// URLSession z dedykowanym cache
+let sessionConfig = URLSessionConfiguration.default
+sessionConfig.urlCache = cache
+sessionConfig.requestCachePolicy = .returnCacheDataElseLoad   // zawsze próbuj cache
+let session = URLSession(configuration: sessionConfig)
+
+// Nadpisanie polityki per żądanie
+var request = URLRequest(url: URL(string: "https://api.example.com/products")!)
+request.cachePolicy = .reloadRevalidatingCacheData  // wyślij ETag/If-None-Match
+```
+
+### Obsługa ETag i Last-Modified
+
+```swift
+// Ręczna obsługa ETag dla precyzyjnej rewalidacji
+class ETagAwareLoader {
+    private var etags: [URL: String] = [:]
+
+    func fetch(url: URL) async throws -> Data {
+        var request = URLRequest(url: url)
+        if let etag = etags[url] {
+            request.setValue(etag, forHTTPHeaderField: "If-None-Match")
+        }
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+        guard let http = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
+
+        if http.statusCode == 304 {
+            // Serwer potwierdził, że zasób się nie zmienił — zwróć z cache
+            return URLCache.shared.cachedResponse(for: request)?.data ?? data
+        }
+        if let newEtag = http.value(forHTTPHeaderField: "ETag") {
+            etags[url] = newEtag
+        }
+        return data
+    }
+}
+```
+
+Polityki cache (`URLRequest.CachePolicy`) warto dobierać do kontekstu: `returnCacheDataDontLoad` sprawdza się w trybie offline, `reloadIgnoringLocalCacheData` — przy pull-to-refresh. Serwer kontroluje czas życia cache przez nagłówek `Cache-Control: max-age=300`.
+
+## WebSocket w iOS — URLSessionWebSocketTask
+
+`URLSessionWebSocketTask` to natywne API do WebSocket dostępne od iOS 13, zintegrowane z `URLSession` i wspierające async/await.
+
+### Nawiązanie połączenia i obsługa wiadomości
+
+```swift
+actor WebSocketClient {
+    private var task: URLSessionWebSocketTask?
+    private let url: URL
+    private var reconnectDelay: TimeInterval = 1
+
+    init(url: URL) { self.url = url }
+
+    func connect() {
+        task = URLSession.shared.webSocketTask(with: url)
+        task?.resume()
+        Task { await receiveLoop() }
+        Task { await pingLoop() }
+        reconnectDelay = 1
+    }
+
+    func send(_ text: String) async throws {
+        try await task?.send(.string(text))
+    }
+
+    func send(_ data: Data) async throws {
+        try await task?.send(.data(data))
+    }
+
+    // Pętla odbioru wiadomości
+    private func receiveLoop() async {
+        guard let task else { return }
+        do {
+            while true {
+                let message = try await task.receive()
+                switch message {
+                case .string(let text): handleText(text)
+                case .data(let data):   handleData(data)
+                @unknown default: break
+                }
+            }
+        } catch {
+            // Połączenie zerwane — automatyczne ponowne połączenie z backoff
+            await scheduleReconnect()
+        }
+    }
+
+    // Ping co 25 s — utrzymanie połączenia przez NAT/serwery proxy
+    private func pingLoop() async {
+        while task?.state == .running {
+            try? await Task.sleep(nanoseconds: 25_000_000_000)
+            task?.sendPing { error in
+                if let error { print("Ping failed: \(error)") }
+            }
+        }
+    }
+
+    private func scheduleReconnect() async {
+        try? await Task.sleep(nanoseconds: UInt64(reconnectDelay * 1_000_000_000))
+        reconnectDelay = min(reconnectDelay * 2, 60)  // exponential backoff, max 60 s
+        connect()
+    }
+
+    private func handleText(_ text: String) { /* parsowanie JSON, aktualizacja UI */ }
+    private func handleData(_ data: Data) { /* przetwarzanie danych binarnych */ }
+}
+```
+
+Użycie `actor` gwarantuje bezpieczeństwo wątkowe bez ręcznych locków. Wzorzec exponential backoff przy ponownych połączeniach jest standardem — bez niego dziesiątki klientów mogłyby jednocześnie zaatakować serwer po jego restarcie.
+
+## Background Downloads — URLSession background configuration
+
+Pobieranie dużych plików (wideo, bazy danych, archiwów) wymaga działania nawet po przejściu aplikacji w tło lub jej zamknięciu przez system. `URLSessionConfiguration.background` przenosi transfer do procesu demona systemowego.
+
+### Konfiguracja i delegat
+
+```swift
+// Unikalny identyfikator sesji — musi być stały w aplikacji
+private let backgroundSessionID = "com.example.app.background-download"
+
+// Tworzenie sesji (może być wołana wielokrotnie — system przywróci tę samą sesję)
+lazy var backgroundSession: URLSession = {
+    let config = URLSessionConfiguration.background(
+        withIdentifier: backgroundSessionID
+    )
+    config.isDiscretionary = false        // zacznij natychmiast, nie czekaj na tanie Wi-Fi
+    config.sessionSendsLaunchEvents = true // obudź aplikację po zakończeniu
+    return URLSession(configuration: config, delegate: self, delegateQueue: nil)
+}()
+
+// Uruchomienie pobierania
+func startDownload(url: URL) {
+    let task = backgroundSession.downloadTask(with: url)
+    task.earliestBeginDate = nil  // zacznij jak najszybciej
+    task.resume()
+}
+
+// AppDelegate — obsługa zdarzenia przebudzenia przez system
+func application(
+    _ application: UIApplication,
+    handleEventsForBackgroundURLSession identifier: String,
+    completionHandler: @escaping () -> Void
+) {
+    // Zachowaj completion handler — wywołaj go PO zakończeniu wszystkich delegatów
+    BackgroundDownloadManager.shared.completionHandler = completionHandler
+}
+```
+
+### URLSessionDownloadDelegate
+
+```swift
+extension DownloadService: URLSessionDownloadDelegate {
+    // Wywoływane gdy plik jest gotowy (nawet jeśli app była zamknięta)
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didFinishDownloadingTo location: URL
+    ) {
+        // location to plik tymczasowy — MUSIMY go od razu przenieść
+        let dest = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+            .appendingPathComponent(downloadTask.originalRequest!.url!.lastPathComponent)
+        try? FileManager.default.moveItem(at: location, to: dest)
+        BackgroundDownloadManager.shared.completionHandler?()
+        BackgroundDownloadManager.shared.completionHandler = nil
+    }
+
+    // Postęp pobierania (aktualizuj UI tylko jeśli app na pierwszym planie)
+    func urlSession(
+        _ session: URLSession,
+        downloadTask: URLSessionDownloadTask,
+        didWriteData bytesWritten: Int64,
+        totalBytesWritten: Int64,
+        totalBytesExpectedToWrite: Int64
+    ) {
+        let progress = Double(totalBytesWritten) / Double(totalBytesExpectedToWrite)
+        DispatchQueue.main.async {
+            self.progressPublisher.send(progress)
+        }
+    }
+
+    // Obsługa błędów i wznawiania przerwanego pobierania
+    func urlSession(
+        _ session: URLSession,
+        task: URLSessionTask,
+        didCompleteWithError error: Error?
+    ) {
+        guard let error = error as NSError?,
+              let resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData] as? Data
+        else { return }
+        // Serwer wspiera Range — wznów od miejsca przerwania
+        let resumeTask = backgroundSession.downloadTask(withResumeData: resumeData)
+        resumeTask.resume()
+    }
+}
+```
+
+Kluczowe zasady: completion handler z `handleEventsForBackgroundURLSession` musi być wywołany po obsłudze wszystkich zdarzeń delegata — inaczej system ponownie obudzi aplikację. Plik tymczasowy pod `location` jest usuwany natychmiast po powrocie z `didFinishDownloadingTo`, więc przeniesienie musi nastąpić synchronicznie wewnątrz tej metody.

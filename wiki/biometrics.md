@@ -297,3 +297,191 @@ class PasskeyManager(private val context: Context) {
 - [LocalAuthentication (Apple)](https://developer.apple.com/documentation/localauthentication)
 - [Credential Manager](https://developer.android.com/training/sign-in/credential-manager)
 - [WebAuthn / FIDO2](https://webauthn.guide/)
+
+## Biometria w iOS — LocalAuthentication
+
+Framework **LocalAuthentication** pozwala uwierzytelniać użytkownika za pomocą Face ID, Touch ID lub kodu PIN jako mechanizmu awaryjnego — bez dostępu do surowych danych biometrycznych.
+
+### LAContext i evaluatePolicy
+
+```swift
+import LocalAuthentication
+
+class BiometricAuthService {
+    private let context = LAContext()
+
+    func authenticate() async -> Bool {
+        var error: NSError?
+        guard context.canEvaluatePolicy(
+            .deviceOwnerAuthenticationWithBiometrics, error: &error
+        ) else {
+            // Brak biometrii — fallback do kodu PIN
+            return await authenticateWithPasscode()
+        }
+
+        do {
+            // Opis wyświetlany w oknie systemowym
+            let reason = "Zaloguj się, aby uzyskać dostęp do danych konta."
+            return try await context.evaluatePolicy(
+                .deviceOwnerAuthenticationWithBiometrics,
+                localizedReason: reason
+            )
+        } catch LAError.userFallback {
+            return await authenticateWithPasscode()
+        } catch LAError.biometryLockout {
+            // Zbyt wiele nieudanych prób — wymagany kod PIN
+            return await authenticateWithPasscode()
+        } catch {
+            return false
+        }
+    }
+
+    private func authenticateWithPasscode() async -> Bool {
+        let fallbackContext = LAContext()
+        return (try? await fallbackContext.evaluatePolicy(
+            .deviceOwnerAuthentication,
+            localizedReason: "Wprowadź kod, aby kontynuować."
+        )) ?? false
+    }
+}
+```
+
+### Uprawnienie Face ID i Info.plist
+
+Aplikacja używająca Face ID **musi** zawierać klucz `NSFaceIDUsageDescription` w `Info.plist`, inaczej zostanie odrzucona przez App Store Review. Opis powinien wyjaśniać cel w języku zrozumiałym dla użytkownika (np. „Używamy Face ID, aby chronić Twoje dane finansowe."). Touch ID nie wymaga osobnego uprawnienia.
+
+Typ biometrii dostępny na urządzeniu można sprawdzić przez `context.biometryType` (`.faceID`, `.touchID`, `.opticID` na Vision Pro, `.none`), co pozwala wyświetlić odpowiednią ikonę w interfejsie.
+
+## WebAuthn — biometria w aplikacjach webowych i PWA
+
+**WebAuthn** (Web Authentication API) to standard W3C/FIDO2 umożliwiający uwierzytelnianie bez haseł w przeglądarkach i aplikacjach webowych. Zamiast hasła użytkownik używa klucza kryptograficznego przechowywanego w urządzeniu, a potwierdzenie tożsamości odbywa się przez biometrię.
+
+### Rejestracja klucza (navigator.credentials.create)
+
+```typescript
+// Rejestracja nowego passkey
+async function registerPasskey(userId: string, userName: string): Promise<void> {
+    // challenge pochodzi z serwera — nigdy nie generuj go po stronie klienta
+    const challenge = await fetchChallengeFromServer();
+
+    const credential = await navigator.credentials.create({
+        publicKey: {
+            challenge,
+            rp: { name: "MobileHub App", id: "mobilehub.example.com" },
+            user: {
+                id: Uint8Array.from(userId, c => c.charCodeAt(0)),
+                name: userName,
+                displayName: userName
+            },
+            pubKeyCredParams: [
+                { alg: -7, type: "public-key" },   // ES256
+                { alg: -257, type: "public-key" }  // RS256
+            ],
+            authenticatorSelection: {
+                residentKey: "required",            // passkey przechowywany na urządzeniu
+                userVerification: "required"        // wymaga biometrii/PIN
+            },
+            timeout: 60000
+        }
+    }) as PublicKeyCredential;
+
+    // Wyślij odpowiedź na serwer do weryfikacji i zapisania
+    await sendRegistrationToServer(credential);
+}
+
+// Logowanie z istniejącym passkey
+async function loginWithPasskey(): Promise<void> {
+    const challenge = await fetchChallengeFromServer();
+    const assertion = await navigator.credentials.get({
+        publicKey: { challenge, userVerification: "required" }
+    }) as PublicKeyCredential;
+    await verifyAssertionOnServer(assertion);
+}
+```
+
+**Passkeys** są zsynchronizowane przez iCloud Keychain (Apple) lub Google Password Manager, co oznacza, że klucz zarejestrowany na iPhone'ie działa też na Macu. FIDO2 eliminuje problemy z phishingiem — klucz jest powiązany z domeną (`rp.id`) i nie zadziała na fałszywej stronie. Android od wersji 9, iOS od 16 i wszystkie główne przeglądarki obsługują WebAuthn.
+
+## Klucze kryptograficzne chronione biometrią
+
+Połączenie biometrii z kluczami kryptograficznymi pozwala budować scenariusze, w których sama biometria **nie tylko uwierzytelnia użytkownika, lecz odblokowuje klucz** do szyfrowania danych — żaden klucz nie istnieje poza sprzętowym modułem bezpieczeństwa.
+
+### Android Keystore + BiometricPrompt + CryptoObject
+
+```kotlin
+// Generowanie klucza w Android Keystore z wymaganą biometrią
+fun generateBiometricKey(keyAlias: String) {
+    val keyGenSpec = KeyGenParameterSpec.Builder(
+        keyAlias,
+        KeyProperties.PURPOSE_ENCRYPT or KeyProperties.PURPOSE_DECRYPT
+    )
+        .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
+        .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
+        .setUserAuthenticationRequired(true)                   // wymaga biometrii
+        .setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG)
+        .setInvalidatedByBiometricEnrollment(true)             // unieważnia klucz po dodaniu nowego odcisku
+        .build()
+
+    KeyGenerator.getInstance(KeyProperties.KEY_ALGORITHM_AES, "AndroidKeyStore")
+        .apply { init(keyGenSpec) }
+        .generateKey()
+}
+
+// Szyfrowanie danych z potwierdzeniem biometrycznym
+fun encryptWithBiometric(
+    fragment: Fragment,
+    keyAlias: String,
+    plaintext: ByteArray,
+    onSuccess: (ByteArray, ByteArray) -> Unit  // ciphertext, iv
+) {
+    val key = (KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
+        .getKey(keyAlias, null) as SecretKey)
+    val cipher = Cipher.getInstance("AES/CBC/PKCS7Padding").apply {
+        init(Cipher.ENCRYPT_MODE, key)
+    }
+    val cryptoObject = BiometricPrompt.CryptoObject(cipher)
+
+    BiometricPrompt(fragment, ContextCompat.getMainExecutor(fragment.requireContext()),
+        object : BiometricPrompt.AuthenticationCallback() {
+            override fun onAuthenticationSucceeded(result: BiometricPrompt.AuthenticationResult) {
+                val encryptedData = result.cryptoObject!!.cipher!!.doFinal(plaintext)
+                onSuccess(encryptedData, cipher.iv)
+            }
+        }
+    ).authenticate(
+        BiometricPrompt.PromptInfo.Builder()
+            .setTitle("Potwierdź tożsamość")
+            .setNegativeButtonText("Anuluj")
+            .build(),
+        cryptoObject
+    )
+}
+```
+
+### iOS SecureEnclave
+
+Na iOS klucze prywatne mogą być przechowywane w **Secure Enclave** — dedykowanym procesorze bezpieczeństwa, z którego klucz nigdy nie wychodzi:
+
+```swift
+// Generowanie klucza EC w Secure Enclave wymagającego biometrii
+let accessControl = SecAccessControlCreateWithFlags(
+    nil,
+    kSecAttrAccessibleWhenUnlockedThisDeviceOnly,
+    [.privateKeyUsage, .biometryCurrentSet],  // .biometryCurrentSet unieważnia przy zmianie biometrii
+    nil
+)!
+
+let keyAttributes: [String: Any] = [
+    kSecAttrKeyType as String: kSecAttrKeyTypeECSECPrimeRandom,
+    kSecAttrKeySizeInBits as String: 256,
+    kSecAttrTokenID as String: kSecAttrTokenIDSecureEnclave,
+    kSecPrivateKeyAttrs as String: [
+        kSecAttrIsPermanent as String: true,
+        kSecAttrApplicationTag as String: "com.example.app.signKey",
+        kSecAttrAccessControl as String: accessControl
+    ]
+]
+var error: Unmanaged<CFError>?
+let privateKey = SecKeyCreateRandomKey(keyAttributes as CFDictionary, &error)
+```
+
+Operacja podpisywania (`SecKeyCreateSignature`) automatycznie wywołuje okno Face ID/Touch ID. Klucz publiczny można wysłać na serwer i weryfikować podpisy bez przechowywania tajnych danych po stronie backendowej — to wzorzec używany przez Apple Pay i passkeys.

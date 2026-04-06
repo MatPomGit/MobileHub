@@ -293,3 +293,233 @@ data class TimedPose(val timestampMs: Long, val x: Float, val y: Float, val head
 - [Compose Canvas](https://developer.android.com/jetpack/compose/graphics/draw/overview)
 - [Robot Web Tools](https://robotwebtools.github.io/)
 - [Nav2 Action Server](https://nav2.ros.org/tutorials/docs/navigation2_with_keepout_filter.html)
+
+## Mapa i wizualizacja otoczenia
+
+Aplikacja sterowania robotem powinna prezentować mini-mapę pokazującą aktualną pozycję robota, wykryte przeszkody oraz zaplanowaną ścieżkę nawigacji. Implementację opieramy na Compose `Canvas`, który daje pełną kontrolę nad rysowaniem wektorowych elementów.
+
+```kotlin
+@Composable
+fun RobotMiniMap(
+    modifier: Modifier = Modifier,
+    robotPose: RobotPose,
+    obstacles: List<Obstacle>,
+    plannedPath: List<Offset>,
+    mapSizeMeters: Float = 10f
+) {
+    Canvas(modifier = modifier
+        .background(Color(0xFF1A1A2E))
+        .clipToBounds()
+    ) {
+        val scale = size.minDimension / mapSizeMeters
+        val center = Offset(size.width / 2f, size.height / 2f)
+
+        // Siatka pomocnicza
+        val gridStep = scale * 1f // co 1 metr
+        val gridColor = Color.White.copy(alpha = 0.06f)
+        var x = center.x % gridStep
+        while (x < size.width) { drawLine(gridColor, Offset(x, 0f), Offset(x, size.height), 1f); x += gridStep }
+        var y = center.y % gridStep
+        while (y < size.height) { drawLine(gridColor, Offset(0f, y), Offset(size.width, y), 1f); y += gridStep }
+
+        // Zaplanowana ścieżka
+        if (plannedPath.size >= 2) {
+            val pathPoints = plannedPath.map { worldToScreen(it, robotPose, scale, center) }
+            for (i in 1 until pathPoints.size) {
+                drawLine(Color(0xFF2196F3).copy(alpha = 0.7f), pathPoints[i - 1], pathPoints[i], strokeWidth = 3f,
+                    pathEffect = PathEffect.dashPathEffect(floatArrayOf(10f, 6f)))
+            }
+        }
+
+        // Przeszkody
+        obstacles.forEach { obs ->
+            val pos = worldToScreen(obs.position, robotPose, scale, center)
+            drawCircle(Color(0xFFFF5722).copy(alpha = 0.8f), obs.radius * scale, pos)
+        }
+
+        // Robot — trójkąt wskazujący kierunek
+        val robotPos = center // robot zawsze w centrum mini-mapy
+        rotate(Math.toDegrees(robotPose.heading.toDouble()).toFloat(), robotPos) {
+            val path = Path().apply {
+                moveTo(robotPos.x, robotPos.y - 16f)
+                lineTo(robotPos.x - 10f, robotPos.y + 10f)
+                lineTo(robotPos.x + 10f, robotPos.y + 10f)
+                close()
+            }
+            drawPath(path, Color(0xFF4CAF50))
+        }
+    }
+}
+
+fun DrawScope.worldToScreen(world: Offset, robotPose: RobotPose, scale: Float, center: Offset): Offset {
+    val dx = world.x - robotPose.x
+    val dy = world.y - robotPose.y
+    return Offset(center.x + dx * scale, center.y - dy * scale)
+}
+```
+
+Mini-mapa powinna być umieszczona w rogu ekranu sterowania jako `Box` z `Alignment.TopEnd`, z rozmiarem około `150.dp × 150.dp`. Dodaj przycisk do przełączania między widokiem skoncentrowanym na robocie a widokiem globalnym mapy.
+
+## Planowanie misji — waypoints
+
+Interfejs ustawiania punktów trasy pozwala operatorowi zdefiniować sekwencję miejsc docelowych dla autonomicznej nawigacji. Punkty trasy mogą być dodawane przez kliknięcie na mini-mapę lub ręczne wpisanie współrzędnych.
+
+```kotlin
+@Composable
+fun WaypointList(
+    waypoints: List<Waypoint>,
+    onAdd: (Waypoint) -> Unit,
+    onRemove: (Int) -> Unit,
+    onReorder: (Int, Int) -> Unit,
+    onStartMission: () -> Unit
+) {
+    val reorderState = rememberReorderableLazyListState(
+        onMove = { from, to -> onReorder(from.index, to.index) }
+    )
+
+    Column {
+        Text("Punkty trasy", style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.padding(horizontal = 16.dp, vertical = 8.dp))
+
+        LazyColumn(
+            state = reorderState.listState,
+            modifier = Modifier
+                .weight(1f)
+                .reorderable(reorderState),
+            contentPadding = PaddingValues(horizontal = 16.dp)
+        ) {
+            itemsIndexed(waypoints, key = { _, w -> w.id }) { index, waypoint ->
+                ReorderableItem(reorderState, key = waypoint.id) { isDragging ->
+                    val elevation by animateDpAsState(if (isDragging) 8.dp else 0.dp)
+                    WaypointRow(
+                        index = index + 1,
+                        waypoint = waypoint,
+                        elevation = elevation,
+                        onRemove = { onRemove(index) },
+                        dragHandle = { detectReorderAfterLongPress(reorderState) }
+                    )
+                }
+            }
+        }
+
+        Row(Modifier.padding(16.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            OutlinedButton(onClick = { onAdd(Waypoint.fromCurrentMapCenter()) }, modifier = Modifier.weight(1f)) {
+                Icon(Icons.Default.AddLocation, null)
+                Spacer(Modifier.width(4.dp))
+                Text("Dodaj punkt")
+            }
+            Button(onClick = onStartMission, enabled = waypoints.isNotEmpty(), modifier = Modifier.weight(1f)) {
+                Icon(Icons.Default.PlayArrow, null)
+                Spacer(Modifier.width(4.dp))
+                Text("Start misji")
+            }
+        }
+    }
+}
+
+@Composable
+fun WaypointRow(index: Int, waypoint: Waypoint, elevation: Dp, onRemove: () -> Unit, dragHandle: Modifier.() -> Modifier) {
+    ElevatedCard(elevation = CardDefaults.cardElevation(elevation), modifier = Modifier.fillMaxWidth().padding(vertical = 4.dp)) {
+        Row(Modifier.padding(12.dp), verticalAlignment = Alignment.CenterVertically) {
+            Icon(Icons.Default.DragHandle, null, modifier = Modifier.dragHandle(), tint = Color.Gray)
+            Spacer(Modifier.width(8.dp))
+            Box(Modifier.size(28.dp).background(MaterialTheme.colorScheme.primary, CircleShape),
+                contentAlignment = Alignment.Center) {
+                Text("$index", color = Color.White, fontWeight = FontWeight.Bold, fontSize = 12.sp)
+            }
+            Spacer(Modifier.width(12.dp))
+            Column(Modifier.weight(1f)) {
+                Text(waypoint.label.ifEmpty { "Punkt $index" }, fontWeight = FontWeight.Medium)
+                Text("x=%.2f  y=%.2f".format(waypoint.x, waypoint.y),
+                    style = MaterialTheme.typography.bodySmall, color = Color.Gray, fontFamily = FontFamily.Monospace)
+            }
+            IconButton(onClick = onRemove) { Icon(Icons.Default.Delete, null, tint = MaterialTheme.colorScheme.error) }
+        }
+    }
+}
+```
+
+Punkty trasy są wysyłane do robota jako lista celów Nav2 `NavigateThroughPoses` przez protokół rosbridge. Podczas wykonywania misji aktywny punkt trasy jest podświetlany animowaną ramką na mini-mapie.
+
+## Tryby sterowania i gesty
+
+Profesjonalne aplikacje sterowania robotem oferują co najmniej dwa tryby: **ręczny** (joystick — pełna kontrola operatora) oraz **autonomiczny** (robot realizuje zadaną misję, operator może jedynie zatwierdzać lub anulować). Przełączanie trybów powinno być świadome i wymagać wyraźnej akcji, aby zapobiec przypadkowym zmianom.
+
+```kotlin
+enum class ControlMode { MANUAL, AUTONOMOUS, EMERGENCY }
+
+@Composable
+fun ModeSelector(
+    currentMode: ControlMode,
+    onModeChange: (ControlMode) -> Unit
+) {
+    var showConfirm by remember { mutableStateOf<ControlMode?>(null) }
+
+    // Swipe w górę = protokół awaryjny
+    val swipeState = rememberSwipeableState(initialValue = 0)
+    LaunchedEffect(swipeState.currentValue) {
+        if (swipeState.currentValue == 1) onModeChange(ControlMode.EMERGENCY)
+    }
+
+    Column(Modifier.swipeable(swipeState, anchors = mapOf(0f to 0, -200f to 1),
+        orientation = Orientation.Vertical, thresholds = { _, _ -> FractionalThreshold(0.5f) })) {
+
+        // Wskaźnik aktywnego trybu
+        val modeColor = when (currentMode) {
+            ControlMode.MANUAL     -> Color(0xFF2196F3)
+            ControlMode.AUTONOMOUS -> Color(0xFF4CAF50)
+            ControlMode.EMERGENCY  -> Color(0xFFF44336)
+        }
+        val modeLabel = when (currentMode) {
+            ControlMode.MANUAL     -> "RĘCZNY"
+            ControlMode.AUTONOMOUS -> "AUTONOMICZNY"
+            ControlMode.EMERGENCY  -> "AWARYJNY"
+        }
+
+        AnimatedContent(targetState = currentMode) { mode ->
+            Row(Modifier.fillMaxWidth().background(modeColor.copy(0.15f)).padding(10.dp),
+                horizontalArrangement = Arrangement.Center, verticalAlignment = Alignment.CenterVertically) {
+                Box(Modifier.size(8.dp).background(modeColor, CircleShape))
+                Spacer(Modifier.width(8.dp))
+                Text(modeLabel, color = modeColor, fontWeight = FontWeight.Bold, letterSpacing = 2.sp)
+            }
+        }
+
+        // Przyciski przełączania
+        Row(Modifier.padding(8.dp), horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+            listOf(ControlMode.MANUAL, ControlMode.AUTONOMOUS).forEach { mode ->
+                FilterChip(
+                    selected = currentMode == mode,
+                    onClick = { if (currentMode != mode) showConfirm = mode },
+                    label = { Text(if (mode == ControlMode.MANUAL) "Ręczny" else "Auto") },
+                    leadingIcon = {
+                        Icon(if (mode == ControlMode.MANUAL) Icons.Default.SportsEsports else Icons.Default.SmartToy,
+                            null, Modifier.size(16.dp))
+                    }
+                )
+            }
+        }
+    }
+
+    // Dialog potwierdzenia zmiany trybu
+    showConfirm?.let { targetMode ->
+        AlertDialog(
+            onDismissRequest = { showConfirm = null },
+            title = { Text("Zmień tryb?") },
+            text = { Text("Przełączenie na tryb ${targetMode.name.lowercase()} zatrzyma bieżące zadanie robota.") },
+            confirmButton = {
+                TextButton(onClick = { onModeChange(targetMode); showConfirm = null }) { Text("Potwierdź") }
+            },
+            dismissButton = { TextButton(onClick = { showConfirm = null }) { Text("Anuluj") } }
+        )
+    }
+}
+```
+
+Swipe w górę uruchamia protokół awaryjny i wysyła polecenie `cmd_vel` z zerową prędkością do robota. Zmiana trybu jest logowana z timestampem, aby ułatwić debugowanie zdarzeń po incydentach. Wizualne wskaźniki trybu (kolor paska statusu, haptyczne wibracje przy zmianie) poprawiają świadomość sytuacyjną operatora.
+
+| Tryb | Joystick | Autonomia | Emergency Stop | Dostępność |
+|---|---|---|---|---|
+| Ręczny | ✅ Aktywny | ❌ | ✅ Zawsze | Zawsze |
+| Autonomiczny | ❌ | ✅ Aktywna | ✅ Zawsze | Zawsze |
+| Awaryjny | ❌ | ❌ | — (już zatrzymany) | Restart wymagany |
