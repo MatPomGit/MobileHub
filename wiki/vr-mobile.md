@@ -198,6 +198,434 @@ class VrVideoActivity : VrVideoActivity() {
 }
 ```
 
+## 7. Unity dla VR mobilnego
+
+Unity to najpopularniejszy silnik do tworzenia aplikacji VR na urządzenia mobilne. Dzięki **XR Interaction Toolkit** (XRI) zapewnia ujednolicone API niezależnie od docelowej platformy (Cardboard, Meta Quest, HTC Vive Focus).
+
+### Konfiguracja projektu pod Cardboard / Android
+
+1. **Package Manager** → dodaj `com.unity.xr.interaction.toolkit` oraz `com.google.xr.cardboard`.
+2. **Project Settings → XR Plug-in Management** → zaznaczyć „Cardboard XR Plugin" dla platformy Android.
+3. **Player Settings** → Minimum API Level: Android 8.0 (API 26), Architecture: ARM64.
+4. Kamera sceny musi być opakowana w prefab **XR Rig** (Camera Offset → Main Camera).
+
+```csharp
+using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
+
+public class VRCardboardManager : MonoBehaviour
+{
+    [SerializeField] private XROrigin xrOrigin;
+
+    void Start()
+    {
+        // Włącz tryb stereo (split-screen) wymagany przez Cardboard
+        XRSettings.enabled = true;
+        // Ustaw renderScale = 1.0 aby uniknąć artefaktów na słabszym GPU
+        XRSettings.eyeTextureResolutionScale = 1.0f;
+
+        Debug.Log($"XR aktywny: {XRSettings.isDeviceActive}");
+        Debug.Log($"Urządzenie: {XRSettings.loadedDeviceName}");
+    }
+
+    void Update()
+    {
+        // Odczyt orientacji głowy przez InputDevice
+        InputDevice headDevice = InputDevices.GetDeviceAtXRNode(XRNode.Head);
+        if (headDevice.TryGetFeatureValue(CommonUsages.deviceRotation, out Quaternion rotation))
+        {
+            // Możemy np. obracać dodatkowe obiekty razem z głową
+            transform.rotation = rotation;
+        }
+    }
+
+    // Wywołaj po kliknięciu przycisku powrotu / triggera Cardboard
+    public void RecenterView()
+    {
+        InputTracking.Recenter();
+    }
+}
+```
+
+### XR Interaction Toolkit — Ray Interactor
+
+```csharp
+using UnityEngine;
+using UnityEngine.XR.Interaction.Toolkit;
+
+// Dołącz do obiektu XRGazeInteractor (spójrzenie = selekcja)
+public class GazeSelector : XRBaseInteractor
+{
+    [SerializeField] private float gazeHoldTime = 2.0f;
+    private XRBaseInteractable currentTarget;
+    private float gazeTimer;
+
+    protected override void OnHoverEntered(HoverEnterEventArgs args)
+    {
+        base.OnHoverEntered(args);
+        currentTarget = args.interactableObject as XRBaseInteractable;
+        gazeTimer = 0f;
+    }
+
+    protected override void OnHoverExited(HoverExitEventArgs args)
+    {
+        base.OnHoverExited(args);
+        currentTarget = null;
+        gazeTimer = 0f;
+    }
+
+    public override void ProcessInteractor(XRInteractionUpdateOrder.UpdatePhase phase)
+    {
+        base.ProcessInteractor(phase);
+        if (currentTarget != null)
+        {
+            gazeTimer += Time.deltaTime;
+            if (gazeTimer >= gazeHoldTime)
+            {
+                interactionManager.SelectEnter(this, currentTarget);
+                gazeTimer = 0f;
+            }
+        }
+    }
+}
+```
+
+---
+
+## 8. Optymalizacja renderowania VR
+
+VR mobilne jest wyjątkowo wymagające: musimy rysować scenę **dwa razy** (po jednym widoku na każde oko) przy 72–90 FPS na ograniczonym GPU smartfona. Kluczowe techniki optymalizacji:
+
+### Single-Pass Stereo Rendering
+
+Zamiast dwóch osobnych drawcall-i na oko, GPU rysuje oba widoki w jednym przebiegu używając **Instanced Stereo** lub **Multi-View** (rozszerzenie OpenGL ES `GL_OVR_multiview2`).
+
+```csharp
+// Unity: włącz w Player Settings → XR Settings → Stereo Rendering Mode
+// "Single Pass Instanced" — najlepsza opcja dla nowoczesnych GPU
+
+// W shaderze GLSL/HLSL konieczne jest użycie wbudowanych makr Unity:
+// UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input)
+// UNITY_VERTEX_OUTPUT_STEREO
+
+// Przykład własnego shadera kompatybilnego z single-pass instanced:
+/*
+Shader "Custom/VR_Unlit"
+{
+    SubShader {
+        Pass {
+            CGPROGRAM
+            #pragma vertex vert
+            #pragma fragment frag
+            #include "UnityCG.cginc"
+
+            struct appdata { float4 vertex : POSITION; UNITY_VERTEX_INPUT_INSTANCE_ID };
+            struct v2f    { float4 pos : SV_POSITION; UNITY_VERTEX_OUTPUT_STEREO };
+
+            v2f vert(appdata v) {
+                v2f o;
+                UNITY_SETUP_INSTANCE_ID(v);
+                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
+                o.pos = UnityObjectToClipPos(v.vertex);
+                return o;
+            }
+            fixed4 frag(v2f i) : SV_Target { return fixed4(1,1,1,1); }
+            ENDCG
+        }
+    }
+}
+*/
+```
+
+### Foveated Rendering
+
+Urządzenia z eye-trackingiem (np. Meta Quest Pro) lub bez (Fixed Foveated Rendering — FFR) renderują centrum ekranu w pełnej rozdzielczości, a peryferia w niższej — zgodnie z tym, że obwód pola widzenia jest mało wrażliwy na szczegóły.
+
+```csharp
+using Unity.XR.Oculus; // lub odpowiedni plugin producenta
+
+public class FoveatedRenderingSetup : MonoBehaviour
+{
+    void Start()
+    {
+        // Meta Quest: ustaw Fixed Foveated Rendering na poziomie "High"
+        OculusSettings.fixedFoveatedRenderingLevel = FixedFoveatedRenderingLevel.High;
+        OculusSettings.useDynamicFixedFoveatedRendering = true;
+        Debug.Log("FFR włączony");
+    }
+}
+```
+
+### Level of Detail (LOD)
+
+```csharp
+using UnityEngine;
+
+// Dodaj komponent LODGroup do każdego złożonego modelu
+public class VRLodConfigurator : MonoBehaviour
+{
+    void Awake()
+    {
+        var lodGroup = GetComponent<LODGroup>();
+        if (lodGroup == null) return;
+
+        LOD[] lods = new LOD[3];
+        // LOD0 — pełna jakość, widoczna do ~15m
+        lods[0] = new LOD(0.6f, GetRenderers("LOD0"));
+        // LOD1 — zredukowana geometria, 15–40m
+        lods[1] = new LOD(0.2f, GetRenderers("LOD1"));
+        // LOD2 — billboardy lub bardzo prosta siatka, >40m
+        lods[2] = new LOD(0.05f, GetRenderers("LOD2"));
+
+        lodGroup.SetLODs(lods);
+        lodGroup.RecalculateBounds();
+    }
+
+    private Renderer[] GetRenderers(string childName)
+    {
+        Transform t = transform.Find(childName);
+        return t != null ? t.GetComponentsInChildren<Renderer>() : new Renderer[0];
+    }
+}
+```
+
+**Dodatkowe zalecenia:**
+- Ogranicz liczbę dynamicznych świateł do **max 1** (preferuj baked lighting).
+- Używaj **Occlusion Culling** — nie renderuj obiektów schowanych za innymi.
+- Ogranicz liczbę draw call-i do <100 na klatkę (batching, GPU Instancing).
+- Tekstury: format **ASTC** (Android) lub **PVRTC** (iOS), mipmapy zawsze włączone.
+
+---
+
+## 9. Tryb kinowy — odtwarzacz VR wideo
+
+Tryb kinowy (Cinema Mode) symuluje duży ekran kina wewnątrz wirtualnej przestrzeni. Film równirectangularny (equirectangular, format sferyczny 2:1) jest nakładany na wewnętrzną powierzchnię sfery, a kamera umieszczona w jej centrum.
+
+```kotlin
+// Android / OpenGL ES — renderowanie wideo 360° na sferze
+class CinemaVrRenderer(private val context: Context) : GvrView.StereoRenderer {
+
+    private var sphereVbo = 0
+    private var program = 0
+    private var surfaceTexture: SurfaceTexture? = null
+    private var mediaPlayer: MediaPlayer? = null
+
+    // Tekstura z MediaPlayer wymaga GL_TEXTURE_EXTERNAL_OES
+    private val VERTEX_SHADER = """
+        attribute vec4 aPosition;
+        attribute vec2 aTexCoord;
+        uniform mat4 uMVPMatrix;
+        varying vec2 vTexCoord;
+        void main() {
+            gl_Position = uMVPMatrix * aPosition;
+            vTexCoord = aTexCoord;
+        }
+    """.trimIndent()
+
+    private val FRAGMENT_SHADER = """
+        #extension GL_OES_EGL_image_external : require
+        precision mediump float;
+        uniform samplerExternalOES uTexture;
+        varying vec2 vTexCoord;
+        void main() {
+            gl_FragColor = texture2D(uTexture, vTexCoord);
+        }
+    """.trimIndent()
+
+    override fun onSurfaceCreated(config: EGLConfig) {
+        program = buildShaderProgram(VERTEX_SHADER, FRAGMENT_SHADER)
+        sphereVbo = buildEquirectangularSphere(radius = 50f, stacks = 40, slices = 40)
+
+        // Utwórz SurfaceTexture i podepnij do MediaPlayer
+        val texId = createExternalTexture()
+        surfaceTexture = SurfaceTexture(texId)
+        val surface = Surface(surfaceTexture)
+
+        mediaPlayer = MediaPlayer().apply {
+            setDataSource(context, Uri.parse("android.resource://${context.packageName}/raw/cinema_360"))
+            setSurface(surface)
+            isLooping = true
+            prepare()
+            start()
+        }
+    }
+
+    override fun onDrawEye(eye: Eye) {
+        surfaceTexture?.updateTexImage()   // pobierz najnowszą klatkę z dekodera
+
+        GLES20.glClear(GLES20.GL_COLOR_BUFFER_BIT or GLES20.GL_DEPTH_BUFFER_BIT)
+        GLES20.glUseProgram(program)
+
+        val mvp = FloatArray(16)
+        // Użyj tylko rotacji (brak translacji — kamera zawsze w centrum sfery)
+        val view = FloatArray(16)
+        eye.getEyeView(view, 0)
+        Matrix.multiplyMM(mvp, 0, eye.getPerspective(0.1f, 200f), 0, view, 0)
+
+        val mvpLoc = GLES20.glGetUniformLocation(program, "uMVPMatrix")
+        GLES20.glUniformMatrix4fv(mvpLoc, 1, false, mvp, 0)
+
+        drawSphere(sphereVbo)
+    }
+
+    override fun onNewFrame(headTransform: HeadTransform) {}
+    override fun onFinishFrame(viewport: Viewport) {}
+    override fun onSurfaceChanged(w: Int, h: Int) { GLES20.glViewport(0, 0, w, h) }
+    override fun onRendererShutdown() { mediaPlayer?.release() }
+}
+```
+
+**Format equirectangular (2:1):**
+```
+Szerokość : Wysokość = 2 : 1
+Przykład: 3840 × 1920 px (4K 360°)
+
+Rzut: każdy piksel (x, y) odpowiada kątom:
+  azymut φ = (x / W) × 360° − 180°
+  elewacja θ = (y / H) × 180° − 90°  (−90° = dół, +90° = góra)
+```
+
+Stereo 360° (Over/Under):
+```
+Górna połowa → lewe oko
+Dolna połowa → prawe oko
+(każda połowa to osobna klatka equirectangular)
+```
+
+---
+
+## 10. Projektowanie UI w VR
+
+Tradycyjne UI (nakładka 2D na ekran) nie działa w VR — elementy przyczepione do kamery powodują dyskomfort i chorobę symulacyjną. Całe UI musi być umieszczone w **przestrzeni świata** (World Space).
+
+### World-Space Canvas w Unity
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+[RequireComponent(typeof(Canvas))]
+public class VRWorldSpaceUI : MonoBehaviour
+{
+    [Header("Ustawienia panelu")]
+    [SerializeField] private Transform cameraTransform;
+    [SerializeField] private float distanceFromCamera = 2.5f;  // metry
+    [SerializeField] private float panelWidth  = 0.6f;         // metry w świecie
+    [SerializeField] private float panelHeight = 0.4f;
+
+    [Header("Billboard")]
+    [SerializeField] private bool faceCamera = true;
+
+    private Canvas canvas;
+
+    void Awake()
+    {
+        canvas = GetComponent<Canvas>();
+        canvas.renderMode = RenderMode.WorldSpace;
+
+        // Skonfiguruj rozmiar — 1 unit Canvas = 1 mm ekranu (przelicz na metry)
+        var rt = canvas.GetComponent<RectTransform>();
+        rt.sizeDelta = new Vector2(panelWidth * 1000f, panelHeight * 1000f);
+        rt.localScale  = Vector3.one * 0.001f;  // 1 px = 1 mm = 0.001 m
+    }
+
+    void LateUpdate()
+    {
+        if (cameraTransform == null) return;
+
+        // Umieść panel przed kamerą na zadanej odległości
+        Vector3 forward = cameraTransform.forward;
+        forward.y = 0;
+        forward.Normalize();
+
+        transform.position = cameraTransform.position + forward * distanceFromCamera
+                             + Vector3.up * -0.1f;  // lekko poniżej linii wzroku
+
+        if (faceCamera)
+            transform.rotation = Quaternion.LookRotation(forward);
+    }
+}
+```
+
+### Gaze-Based UI — wskaźnik wzroku (reticle)
+
+```csharp
+using UnityEngine;
+using UnityEngine.UI;
+
+public class VRGazeReticle : MonoBehaviour
+{
+    [SerializeField] private Image fillImage;       // kółko "ładowania"
+    [SerializeField] private float activationTime = 1.5f;
+
+    private IGazeTarget currentTarget;
+    private float progress;
+
+    void Update()
+    {
+        Ray ray = new Ray(Camera.main.transform.position,
+                          Camera.main.transform.forward);
+
+        if (Physics.Raycast(ray, out RaycastHit hit, maxDistance: 10f))
+        {
+            var target = hit.collider.GetComponent<IGazeTarget>();
+            if (target != currentTarget)
+            {
+                currentTarget = target;
+                progress = 0f;
+            }
+
+            if (currentTarget != null)
+            {
+                progress += Time.deltaTime / activationTime;
+                fillImage.fillAmount = progress;
+
+                if (progress >= 1f)
+                {
+                    currentTarget.OnGazeSelect();
+                    currentTarget = null;
+                    progress = 0f;
+                }
+            }
+            else
+            {
+                fillImage.fillAmount = 0f;
+            }
+        }
+        else
+        {
+            currentTarget = null;
+            fillImage.fillAmount = 0f;
+        }
+    }
+}
+
+public interface IGazeTarget
+{
+    void OnGazeSelect();
+    void OnGazeEnter();
+    void OnGazeExit();
+}
+```
+
+### Zasady projektowania UI dla VR
+
+| Zasada | Wartość / Opis |
+|--------|---------------|
+| Minimalna odległość panelu | ≥ 1,5 m od oczu (inaczej zez) |
+| Optymalna odległość | 2–4 m |
+| Kąt widzenia panelu | ±30° od centrum (strefa komfortu) |
+| Minimalna wielkość przycisku | 60×60 px przy 1000 px/m |
+| Kontrast tekstu | ≥ 4,5:1 (WCAG AA) |
+| Animacje | Brak nagłych zmian jasności; fade zamiast flash |
+| Czcionka | Bezszeryfowa, ≥ 36 sp ekwiwalentne |
+| Feedback | Zawsze wizualny + opcjonalnie wibracja |
+
+**Wskazówka:** Nigdy nie umieszczaj ważnych informacji bezpośrednio na górze lub dole ekranu — użytkownik może nie pochylać głowy podczas sesji VR.
+
+---
+
 ## Alternatywy — Unity i Godot
 
 Dla poważnych gier VR na mobile lepszym wyborem jest silnik gier:
