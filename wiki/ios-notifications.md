@@ -296,3 +296,209 @@ func startDeliveryActivity(orderId: String, itemName: String, etaMinutes: Int) {
 - [APNs Overview](https://developer.apple.com/documentation/usernotifications/setting_up_a_remote_notification_server)
 - [Live Activities](https://developer.apple.com/documentation/activitykit)
 - [Push Notification Tutorial (Hacking with Swift)](https://www.hackingwithswift.com/read/33/overview)
+
+## Focus Modes i powiadomienia (iOS 15+)
+
+Tryby skupienia (Focus Modes) — Nie przeszkadzać, Praca, Sen, Gry — pozwalają użytkownikowi blokować większość powiadomień. Domyślnie aplikacja **nie wie**, że Focus jest aktywny, a jej powiadomienia są po prostu wyciszane. iOS 15 wprowadził jednak mechanizm, który pozwala krytycznym powiadomieniom komunikacyjnym ominąć filtr Focus.
+
+### Sprawdzanie stanu Focus
+
+Bezpośrednie odpytanie aktywnego trybu Focus **nie jest możliwe** ze względów prywatności. Aplikacja może jedynie sprawdzić uprawnienia do powiadomień i reagować na zmiany ich statusu:
+
+```swift
+import UserNotifications
+
+func checkNotificationStatus() async {
+    let settings = await UNUserNotificationCenter.current().notificationSettings()
+    switch settings.authorizationStatus {
+    case .authorized:
+        print("Powiadomienia włączone")
+    case .denied:
+        print("Powiadomienia zablokowane przez użytkownika")
+    case .provisional:
+        print("Tymczasowe (ciche) powiadomienia")
+    case .notDetermined:
+        print("Użytkownik jeszcze nie zdecydował")
+    @unknown default: break
+    }
+    // Uwaga: .authorized nie oznacza, że Focus ich nie blokuje
+}
+```
+
+### Communication Notifications — omijanie Focus
+
+Powiadomienia **komunikacyjne** (rozmowy, wiadomości) mogą być skonfigurowane, by omijały Focus Mode — ale wymagają specjalnej integracji z SiriKit Intent i oznaczenia nadawcy jako osoby z kontaktów.
+
+```swift
+import Intents
+
+// 1. Zbuduj INSendMessageIntent z danymi nadawcy
+func buildCommunicationContent(
+    sender: String,
+    senderAvatarURL: URL?,
+    message: String,
+    conversationId: String
+) -> UNMutableNotificationContent {
+    
+    // Tożsamość osoby — używana przez iOS do matchowania z kontaktami
+    let handle = INPersonHandle(value: sender, type: .unknown)
+    let avatar: INImage?
+    if let url = senderAvatarURL,
+       let data = try? Data(contentsOf: url) {
+        avatar = INImage(imageData: data)
+    } else {
+        avatar = nil
+    }
+
+    let person = INPerson(
+        personHandle: handle,
+        nameComponents: nil,
+        displayName: sender,
+        image: avatar,
+        contactIdentifier: nil,
+        customIdentifier: sender
+    )
+
+    let intent = INSendMessageIntent(
+        recipients: nil,
+        outgoingMessageType: .outgoingMessageText,
+        content: message,
+        speakableGroupName: nil,
+        conversationIdentifier: conversationId,
+        serviceName: "MyApp",
+        sender: person,
+        attachments: nil
+    )
+    // Przekaż intent bezpośrednio jako interakcję — iOS uczy się priorytetyzacji
+    let interaction = INInteraction(intent: intent, response: nil)
+    interaction.direction = .incoming
+    interaction.donate(completion: nil)
+
+    // Opakuj intent w treść powiadomienia
+    let content = UNMutableNotificationContent()
+    content.title = sender
+    content.body = message
+    content.sound = .default
+    content.categoryIdentifier = "CHAT_MESSAGE"
+    
+    if let updatedContent = try? content.updating(from: intent) {
+        return updatedContent as! UNMutableNotificationContent
+    }
+    return content
+}
+
+// 2. Zarejestruj kategorię komunikacyjną
+func registerCommunicationCategory() {
+    let replyAction = UNTextInputNotificationAction(
+        identifier: "REPLY_ACTION",
+        title: "Odpowiedz",
+        options: [],
+        textInputButtonTitle: "Wyślij",
+        textInputPlaceholder: "Wpisz wiadomość…"
+    )
+
+    let category = UNNotificationCategory(
+        identifier: "CHAT_MESSAGE",
+        actions: [replyAction],
+        intentIdentifiers: [
+            INSendMessageIntentIdentifier   // deklaruje kategorię jako komunikacyjną
+        ],
+        options: [.customDismissAction]
+    )
+    UNUserNotificationCenter.current().setNotificationCategories([category])
+}
+```
+
+Kluczowe wymaganie: aplikacja musi mieć włączone `NSUserActivityTypes` z `INSendMessageIntentIdentifier` w `Info.plist` oraz uprawnienie `com.apple.developer.usernotifications.communication` w entitlements (wymaga specjalnego profilu prowizji).
+
+Poziom przerywania `interruption-level: time-sensitive` jest osobnym mechanizmem — nie omija Focus automatycznie, ale iOS może wyświetlić go z opóźnieniem zamiast całkowicie zablokować, jeśli użytkownik zezwolił na "Time Sensitive" dla danej aplikacji w ustawieniach Focus.
+
+## Grupowanie powiadomień i threadIdentifier
+
+Gdy aplikacja wysyła wiele powiadomień (np. wiadomości czatu, alerty z kilku zadań), domyślnie iOS wyświetla je jako osobne banery. Pole `thread-id` pozwala zgrupować je w jedno rozwinięte powiadomienie, co znacząco poprawia czytelność centrum powiadomień.
+
+```swift
+// Grupowanie przez threadIdentifier
+func scheduleGroupedNotification(
+    message: String,
+    conversationId: String,
+    sender: String,
+    messageCount: Int
+) {
+    let content = UNMutableNotificationContent()
+    content.title = sender
+    content.body = message
+    content.sound = .default
+
+    // Powiadomienia z tym samym threadIdentifier zostaną zgrupowane
+    content.threadIdentifier = "conversation_\(conversationId)"
+
+    // summaryArgument — tekst wyświetlany gdy grupa jest zwinięta:
+    // np. "3 wiadomości od Anna Kowalska"
+    content.summaryArgument = sender
+    // summaryArgumentCount — waga tego powiadomienia w liczniku grupy
+    content.summaryArgumentCount = 1
+
+    let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+    let request = UNNotificationRequest(
+        identifier: "msg_\(conversationId)_\(UUID().uuidString)",
+        content: content,
+        trigger: trigger
+    )
+    UNUserNotificationCenter.current().add(request)
+}
+
+// Zarządzanie badge — licznik na ikonie aplikacji
+class BadgeManager {
+    // Ustaw konkretną wartość
+    static func setBadge(_ count: Int) {
+        UNUserNotificationCenter.current().setBadgeCount(count) { error in
+            if let error { print("Badge error: \(error)") }
+        }
+    }
+
+    // Wyczyść badge gdy aplikacja jest otwarta
+    static func clearBadge() {
+        setBadge(0)
+    }
+
+    // Oblicz badge sumując nieprzeczytane ze wszystkich wątków
+    static func updateBadgeFromUnread(conversations: [Conversation]) {
+        let total = conversations.reduce(0) { $0 + $1.unreadCount }
+        setBadge(total)
+    }
+}
+
+// Zastąp wszystkie oczekujące powiadomienia z danego wątku nowym (collapse)
+func updateOrCollapseThread(conversationId: String, latestMessage: String, totalUnread: Int) {
+    let center = UNUserNotificationCenter.current()
+    let threadId = "conversation_\(conversationId)"
+
+    // Usuń stare powiadomienia tego wątku
+    center.getDeliveredNotifications { notifications in
+        let ids = notifications
+            .filter { $0.request.content.threadIdentifier == threadId }
+            .map { $0.request.identifier }
+        center.removeDeliveredNotifications(withIdentifiers: ids)
+
+        // Dodaj jedno zbiorcze powiadomienie
+        let content = UNMutableNotificationContent()
+        content.title = "Nowe wiadomości"
+        content.body = totalUnread == 1
+            ? latestMessage
+            : "\(totalUnread) nowych wiadomości"
+        content.threadIdentifier = threadId
+        content.badge = NSNumber(value: totalUnread)
+        content.sound = .default
+
+        let request = UNNotificationRequest(
+            identifier: "summary_\(threadId)",
+            content: content,
+            trigger: UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
+        )
+        center.add(request)
+    }
+}
+```
+
+Grupowanie działa niezależnie od Focus Modes i jest czysto wizualnym mechanizmem centrum powiadomień. Na iPadOS grupy są wyświetlane inaczej niż na iPhonie — warto testować oba formaty. Od iOS 15 można też ustawić `interruptionLevel = .passive`, by powiadomienie trafiło **tylko** do centrum powiadomień bez banera i dźwięku — idealne dla powiadomień informacyjnych, które nie wymagają natychmiastowej reakcji.
