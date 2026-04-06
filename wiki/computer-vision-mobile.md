@@ -265,3 +265,152 @@ print(f"Rozmiar: {len(tflite_model)/1024:.0f} KB")
 - [MediaPipe Tasks](https://developers.google.com/mediapipe/solutions/guide)
 - [ONNX Runtime Mobile](https://onnxruntime.ai/docs/tutorials/mobile/)
 - [Roboflow — trenowanie i eksport modeli](https://roboflow.com)
+
+---
+
+## Rozpoznawanie tekstu (OCR) — ML Kit Text Recognition v2
+
+ML Kit Text Recognition v2 obsługuje łaciński, chiński, japoński, koreański i devanagari bez konieczności pobierania dodatkowych modeli. Model działa w pełni on-device.
+
+### Konfiguracja
+
+```kotlin
+// build.gradle.kts
+implementation("com.google.mlkit:text-recognition:16.0.0")
+// Dla cyrylicy / innych skryptów:
+// implementation("com.google.mlkit:text-recognition-chinese:16.0.0")
+```
+
+### Rozpoznawanie z kamery (ImageProxy → InputImage)
+
+```kotlin
+class OcrAnalyzer(
+    private val onResult: (String) -> Unit
+) : ImageAnalysis.Analyzer {
+
+    private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+
+    @androidx.camera.core.ExperimentalGetImage
+    override fun analyze(imageProxy: ImageProxy) {
+        val mediaImage = imageProxy.image ?: run { imageProxy.close(); return }
+        val inputImage = InputImage.fromMediaImage(mediaImage, imageProxy.imageInfo.rotationDegrees)
+
+        recognizer.process(inputImage)
+            .addOnSuccessListener { visionText ->
+                val fullText = buildString {
+                    for (block in visionText.textBlocks) {        // akapit
+                        for (line in block.lines) {               // linia
+                            for (element in line.elements) {      // słowo
+                                append(element.text).append(' ')
+                            }
+                            appendLine()
+                        }
+                        appendLine("---")
+                    }
+                }
+                onResult(fullText.trim())
+            }
+            .addOnCompleteListener { imageProxy.close() }
+    }
+}
+```
+
+### Rozpoznawanie z galerii
+
+```kotlin
+fun recognizeFromUri(context: Context, uri: Uri, onResult: (String) -> Unit) {
+    val inputImage = InputImage.fromFilePath(context, uri)
+    TextRecognition
+        .getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
+        .process(inputImage)
+        .addOnSuccessListener { visionText ->
+            onResult(visionText.text)
+        }
+}
+```
+
+### Struktura wynikowa
+
+| Poziom | Klasa ML Kit | Opis |
+|--------|-------------|------|
+| Blok | `TextBlock` | Akapit lub kolumna tekstu |
+| Linia | `Line` | Pojedyncza linia |
+| Element | `Element` | Słowo lub token |
+| Symbol | `Symbol` | Pojedynczy znak (opcjonalnie) |
+
+Każdy obiekt udostępnia `boundingBox: Rect?` oraz `cornerPoints: Array<Point>?` — można narysować ramki na Canvas w Compose, analogicznie do sekcji o detekcji obiektów.
+
+---
+
+## Segmentacja semantyczna — DeepLab na TFLite
+
+Segmentacja semantyczna przypisuje każdemu pikselowi etykietę klasy (np. „droga", „niebo", „osoba") — w odróżnieniu od detekcji obiektów, która zwraca tylko ramkę. Wynikiem jest maska o rozdzielczości wejściowej.
+
+### Uruchomienie modelu DeepLab v3
+
+```kotlin
+class SemanticSegmentor(context: Context) {
+    private val MODEL_SIZE = 257   // DeepLab v3 MobileNetV2 257×257
+    private val NUM_CLASSES = 21   // Pascal VOC
+
+    private val interpreter = Interpreter(
+        FileUtil.loadMappedFile(context, "deeplabv3_257_mv_gpu.tflite"),
+        Interpreter.Options().apply { addDelegate(GpuDelegate()) }
+    )
+
+    // Zwraca tablicę [MODEL_SIZE * MODEL_SIZE] z indeksami klas
+    fun segment(bitmap: Bitmap): IntArray {
+        val resized = Bitmap.createScaledBitmap(bitmap, MODEL_SIZE, MODEL_SIZE, true)
+        val input   = TensorImage.fromBitmap(resized)
+
+        // Wyjście: [1, 257, 257, 21] — score per klasa
+        val outputBuffer = TensorBuffer.createFixedSize(
+            intArrayOf(1, MODEL_SIZE, MODEL_SIZE, NUM_CLASSES), DataType.FLOAT32
+        )
+        interpreter.run(input.buffer, outputBuffer.buffer)
+
+        val scores = outputBuffer.floatArray
+        return IntArray(MODEL_SIZE * MODEL_SIZE) { px ->
+            (0 until NUM_CLASSES).maxByOrNull { cls -> scores[px * NUM_CLASSES + cls] } ?: 0
+        }
+    }
+}
+```
+
+### Wizualizacja maski jako kolorowa nakładka w Compose Canvas
+
+```kotlin
+val PASCAL_COLORS = intArrayOf(
+    0xFF000000.toInt(), // tło
+    0xFF800000.toInt(), // samolot
+    0xFF008000.toInt(), // rower
+    0xFF808000.toInt(), // ptak
+    0xFF000080.toInt(), // łódka
+    0xFF800080.toInt(), // butelka
+    0xFF008080.toInt(), // autobus
+    0xFF808080.toInt(), // samochód
+    0xFFC00000.toInt(), // kot
+    0xFF40C000.toInt(), // krzesło
+    0xFF00C000.toInt(), // krowa
+    // … pozostałe 10 klas
+)
+
+@Composable
+fun SegmentationOverlay(maskIndices: IntArray, modelSize: Int) {
+    val maskBitmap = remember(maskIndices) {
+        val pixels = IntArray(maskIndices.size) { i ->
+            PASCAL_COLORS.getOrElse(maskIndices[i]) { 0x80FF00FF.toInt() }
+        }
+        Bitmap.createBitmap(pixels, modelSize, modelSize, Bitmap.Config.ARGB_8888)
+    }
+    Canvas(modifier = Modifier.fillMaxSize()) {
+        drawImage(
+            image   = maskBitmap.asImageBitmap(),
+            dstSize = IntSize(size.width.toInt(), size.height.toInt()),
+            alpha   = 0.55f
+        )
+    }
+}
+```
+
+Nakładka jest renderowana z `alpha = 0.55f`, dzięki czemu oryginalny obraz z kamery pozostaje widoczny pod kolorową maską. Każda klasa Pascal VOC ma unikalny kolor — użytkownik od razu widzi, które obszary zostały rozpoznane jako droga, ludzie lub pojazdy.

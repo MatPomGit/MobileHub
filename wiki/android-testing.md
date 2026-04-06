@@ -323,3 +323,164 @@ fun getFilteredTasks_returnsOnlyActive_whenFilterEnabled() = runTest {
 - [Compose Testing](https://developer.android.com/jetpack/compose/testing)
 - [Turbine](https://github.com/cashapp/turbine)
 - [MockK](https://mockk.io)
+
+---
+
+## Hilt — dependency injection w testach
+
+Hilt upraszcza wstrzykiwanie zależności w testach instrumentalnych: zamiast ręcznie tworzyć grafy obiektów, podmienisz konkretne implementacje za pomocą adnotacji.
+
+### Konfiguracja
+
+```kotlin
+// build.gradle.kts (moduł app)
+androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+kspAndroidTest("com.google.dagger:hilt-compiler:2.51.1")
+```
+
+### Podmiana repozytorium w teście
+
+```kotlin
+// Fałszywa implementacja
+class FakeTaskRepository : TaskRepository {
+    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+    override fun getTasks(): Flow<List<Task>> = _tasks
+    override suspend fun addTask(task: Task) { _tasks.update { it + task } }
+    override suspend fun deleteTask(id: Int) { _tasks.update { list -> list.filter { it.id != id } } }
+}
+
+// Moduł zastępujący produkcyjny
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces   = [RepositoryModule::class]
+)
+@Module
+object FakeRepositoryModule {
+    @Provides
+    @Singleton
+    fun provideTaskRepository(): TaskRepository = FakeTaskRepository()
+}
+```
+
+### Test z HiltAndroidRule
+
+```kotlin
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
+class TaskListScreenTest {
+
+    @get:Rule(order = 0) val hiltRule  = HiltAndroidRule(this)
+    @get:Rule(order = 1) val composeRule = createAndroidComposeRule<MainActivity>()
+
+    @Inject lateinit var repository: TaskRepository
+
+    @Before
+    fun setUp() {
+        hiltRule.inject()
+    }
+
+    @Test
+    fun emptyState_showsPlaceholder() {
+        composeRule.onNodeWithText("Brak zadań").assertIsDisplayed()
+    }
+
+    @Test
+    fun afterAddingTask_taskAppearsOnList() = runTest {
+        repository.addTask(Task(1, "Zakupy", isCompleted = false))
+        composeRule.onNodeWithText("Zakupy").assertIsDisplayed()
+    }
+}
+```
+
+`HiltAndroidRule` inicjalizuje komponent Hilt przed każdym testem. `@Inject` w ciele testu pozwala korzystać z tego samego grafu co testowana aktywność — tyle że z fałszywymi zależnościami.
+
+---
+
+## Robot Pattern — testy UI czytelne jak specyfikacja
+
+Robot Pattern (wzorzec robotów) separuje *co* testujemy (logika testu) od *jak* wchodzimy w interakcję z ekranem (szczegóły Compose). Każdy ekran otrzymuje klasę „robota", która enkapsuluje selektory i akcje.
+
+### Klasa robota dla ekranu zadań
+
+```kotlin
+class TaskRobot(private val composeRule: ComposeContentTestRule) {
+
+    // Akcje
+    fun typeTaskTitle(title: String): TaskRobot {
+        composeRule.onNodeWithTag("input_title").performTextInput(title)
+        return this
+    }
+
+    fun clickAddButton(): TaskRobot {
+        composeRule.onNodeWithContentDescription("Dodaj zadanie").performClick()
+        return this
+    }
+
+    fun clickTaskItem(title: String): TaskRobot {
+        composeRule.onNodeWithText(title).performClick()
+        return this
+    }
+
+    fun swipeToDelete(title: String): TaskRobot {
+        composeRule.onNodeWithText(title)
+            .performTouchInput { swipeLeft() }
+        return this
+    }
+
+    // Asercje
+    fun assertTaskVisible(title: String): TaskRobot {
+        composeRule.onNodeWithText(title).assertIsDisplayed()
+        return this
+    }
+
+    fun assertTaskNotVisible(title: String): TaskRobot {
+        composeRule.onNodeWithText(title).assertDoesNotExist()
+        return this
+    }
+
+    fun assertEmptyState(): TaskRobot {
+        composeRule.onNodeWithText("Brak zadań").assertIsDisplayed()
+        return this
+    }
+}
+```
+
+### Testy z użyciem robota — czytelność jak BDD
+
+```kotlin
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
+class TaskRobotTest {
+
+    @get:Rule(order = 0) val hiltRule    = HiltAndroidRule(this)
+    @get:Rule(order = 1) val composeRule = createAndroidComposeRule<MainActivity>()
+
+    private val robot by lazy { TaskRobot(composeRule) }
+
+    @Before fun setUp() = hiltRule.inject()
+
+    @Test
+    fun `adding task shows it on list`() {
+        robot
+            .assertEmptyState()
+            .typeTaskTitle("Kupić mleko")
+            .clickAddButton()
+            .assertTaskVisible("Kupić mleko")
+    }
+
+    @Test
+    fun `swiping task removes it from list`() {
+        robot
+            .typeTaskTitle("Do usunięcia")
+            .clickAddButton()
+            .assertTaskVisible("Do usunięcia")
+            .swipeToDelete("Do usunięcia")
+            .assertTaskNotVisible("Do usunięcia")
+    }
+}
+```
+
+Zalety wzorca:
+- Zmiana selektora (np. `testTag`) wymaga edycji tylko robota, nie wszystkich testów.
+- Testy czyta się jak specyfikację funkcjonalną.
+- Płynne API (każda metoda zwraca `this`) pozwala chainować kroki bez zbędnych zmiennych.

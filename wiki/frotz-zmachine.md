@@ -240,3 +240,124 @@ Dla większych, nowocześniejszych gier IF często wybierane są inne środowisk
 - testowalności systemów opartych o stan.
 
 W kontekście aplikacji mobilnych Frotz pokazuje, że nawet bardzo stare koncepcje (bytecode + interpreter) pozostają aktualne i praktyczne — szczególnie tam, gdzie liczy się prostota, niezawodność i niskie zużycie zasobów.
+
+---
+
+## 13. Ekosystem gier tekstowych — Inform, TADS, Twine
+
+Frotz obsługuje wyłącznie format Z-machine, ale świat interaktywnej fikcji obejmuje kilka innych narzędzi autorskich i formatów. Zrozumienie ekosystemu pomaga dobrać właściwe narzędzie do projektu edukacyjnego lub własnej gry.
+
+### Inform 7
+
+Inform 7 to język programowania zaprojektowany tak, by przypominał angielski prozę:
+
+```inform7
+The kitchen is a room. "Pachniesz kawą i tostami."
+The coffee cup is on the table. The cup is a container.
+Instead of taking the coffee cup:
+    say "Za gorące — lepiej poczekaj chwilę.";
+    stop the action.
+```
+
+Kompilator Inform 7 generuje pliki `.z8` (Z-machine 8) lub `.ulx` (Glulx). Gry z-maszynowe uruchamia Frotz; gry Glulx wymagają interpretera **Glulxe** lub **Gargoyle**. Inform 7 jest de facto standardem dla „poważnej" interaktywnej fikcji.
+
+### TADS 3
+
+TADS (Text Adventure Development System) to język obiektowy z C++-podobną składnią:
+
+```tads3
+modify Room
+    roomBeforeAction() {
+        if (gActionIs(Take) && gDobj == hotCup) {
+            "Za gorące — poczekaj. ";
+            exit;
+        }
+    }
+;
+```
+
+TADS 3 produkuje własny format binarny `.t3`, który uruchamia interpreter **FrobTADS** (terminal) lub **QTads** (GUI). Na Androida dostępna jest nieoficjalna wersja FrobTADS przez Termux.
+
+### Twine 2
+
+Twine 2 to narzędzie oparte na grafie węzłów z hiperłączami — bliższe visual novel niż klasycznym przygodówkom tekstowym:
+
+```twee
+:: Start
+Stoisz przed [[zamkniętymi drzwiami|Drzwi]] albo [[oknem|Okno]].
+
+:: Drzwi
+Drzwi są zamknięte na klucz. Wracasz do [[Start]].
+```
+
+Twine eksportuje gotowe pliki HTML działające w przeglądarce — nie wymaga osobnego interpretera. Na urządzeniach mobilnych wystarczy WebView, co czyni go idealnym do prostych prototypów.
+
+### Tabela porównawcza
+
+| Narzędzie | Format wyjściowy | Interpreter mobilny | Krzywa uczenia |
+|-----------|-----------------|-------------------|----------------|
+| Inform 7  | `.z8`, `.ulx`   | Frotz (z8), Gargoyle | Wysoka |
+| TADS 3    | `.t3`           | FrobTADS (Termux)  | Średnia |
+| Twine 2   | `.html`         | Przeglądarka / WebView | Niska |
+| Ink (Inkle) | `.json`       | Środowisko Unity / własne | Niska–średnia |
+
+---
+
+## 14. Frotz w edukacji programowania
+
+Z-machine i Frotz to zaskakująco bogaty materiał dydaktyczny dla kursów programowania mobilnego. Poniżej kilka konkretnych zastosowań.
+
+### Projektowanie parserów
+
+Klasyczny parser Z-machine rozpoznaje struktury w formie `CZASOWNIK RZECZOWNIK` lub `CZASOWNIK PRZYSŁÓWEK RZECZOWNIK`. Studenci mogą zaimplementować uproszczony parser w Kotlinie:
+
+```kotlin
+data class Command(val verb: String, val noun: String?)
+
+fun parseInput(input: String): Command {
+    val tokens = input.trim().lowercase().split(" ")
+    return when (tokens.size) {
+        1    -> Command(tokens[0], null)
+        else -> Command(tokens[0], tokens.drop(1).joinToString(" "))
+    }
+}
+
+fun handleCommand(cmd: Command, state: GameState): String = when (cmd.verb) {
+    "look"      -> state.currentRoom.description
+    "take"      -> state.tryTake(cmd.noun ?: return "Co wziąć?")
+    "inventory" -> state.inventory.joinToString(", ").ifEmpty { "Nic nie masz." }
+    "go"        -> state.tryMove(cmd.noun ?: return "Dokąd?")
+    else        -> "Nie rozumiem."
+}
+```
+
+Ćwiczenie: rozbuduj parser o obsługę wyrażeń `PUT X IN Y` i `UNLOCK DOOR WITH KEY`.
+
+### Maszyny stanów
+
+Każdy pokój w grze IF to węzeł grafu, a przejścia między pokojami to krawędzie. Studenci modelują `GameState` jako maszynę stanów skończonych i testują przejścia jednostkowo z JUnit:
+
+```kotlin
+@Test
+fun `going north from kitchen leads to hallway`() {
+    val state = GameState(startRoom = Room.KITCHEN)
+    state.execute("go north")
+    assertEquals(Room.HALLWAY, state.currentRoom)
+}
+```
+
+### Koncepcje maszyny wirtualnej
+
+Porównanie architektury Z-machine (stos wywołań, zmienne lokalne / globalne, opcodes) z Dalvik/ART pozwala studentom zobaczyć, że JVM, Dalvik i Z-machine rozwiązują te same problemy projektowe w zbliżony sposób.
+
+### Ćwiczenia laboratoryjne (kurs mobilny)
+
+| Nr | Zadanie | Technologie |
+|----|---------|------------|
+| L1 | Zaimplementuj parser komend i silnik pokojów | Kotlin, data class, sealed class |
+| L2 | Serializuj stan gry do pliku JSON (save/restore) | `kotlinx.serialization` |
+| L3 | Osadź silnik IF w aplikacji Compose | ViewModel + StateFlow + LazyColumn |
+| L4 | Dodaj syntezę mowy do narracji | Android TTS API |
+| L5 | Zintegruj gotowy plik `.z5` przez bibliotekę Frotz JNI | NDK, JNI, CMake |
+
+Każde laboratorium buduje na poprzednim — studenci kończą kurs z działającą aplikacją mobilną będącą interpreterem gier tekstowych.

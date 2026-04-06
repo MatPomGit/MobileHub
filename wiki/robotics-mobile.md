@@ -316,3 +316,165 @@ class ObjectDetector(context: Context) {
 - [Nav2 — Navigation2](https://nav2.ros.org/)
 - [TensorFlow Lite Android](https://www.tensorflow.org/lite/android)
 - [OpenCV Android SDK](https://opencv.org/android/)
+
+---
+
+## Bluetooth Low Energy — sterowanie Arduino/ESP32
+
+Wiele prostych robotów amatorskich używa mikrokontrolerów (Arduino Uno, ESP32) z modułem BLE zamiast pełnego stosu ROS. Android udostępnia kompletne API do komunikacji GATT.
+
+### Skanowanie urządzeń BLE
+
+```kotlin
+class BleRobotScanner(context: Context) {
+    private val bluetoothManager =
+        context.getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+    private val scanner = bluetoothManager.adapter.bluetoothLeScanner
+
+    private val scanCallback = object : ScanCallback() {
+        override fun onScanResult(callbackType: Int, result: ScanResult) {
+            if (result.device.name?.startsWith("RobotBLE") == true) {
+                scanner.stopScan(this)
+                connectToDevice(result.device)
+            }
+        }
+    }
+
+    fun startScan() {
+        val filter = ScanFilter.Builder()
+            .setServiceUuid(ParcelUuid.fromString(ROBOT_SERVICE_UUID))
+            .build()
+        val settings = ScanSettings.Builder()
+            .setScanMode(ScanSettings.SCAN_MODE_LOW_LATENCY)
+            .build()
+        scanner.startScan(listOf(filter), settings, scanCallback)
+    }
+}
+```
+
+### Połączenie GATT i wysyłanie komend silniku
+
+Po odkryciu urządzenia nawiązujemy połączenie GATT i piszemy do charakterystyki sterownika silników. Protokół jest prosty: jeden bajt kierunku + jeden bajt prędkości (0–255).
+
+```kotlin
+class RobotGattCallback(
+    private val onConnected: (BluetoothGatt) -> Unit
+) : BluetoothGattCallback() {
+
+    override fun onConnectionStateChange(gatt: BluetoothGatt, status: Int, newState: Int) {
+        if (newState == BluetoothProfile.STATE_CONNECTED) {
+            gatt.discoverServices()
+        }
+    }
+
+    override fun onServicesDiscovered(gatt: BluetoothGatt, status: Int) {
+        if (status == BluetoothGatt.GATT_SUCCESS) onConnected(gatt)
+    }
+}
+
+fun sendMotorCommand(gatt: BluetoothGatt, direction: Byte, speed: Byte) {
+    val service = gatt.getService(UUID.fromString(ROBOT_SERVICE_UUID))
+    val characteristic = service.getCharacteristic(UUID.fromString(MOTOR_CHAR_UUID))
+    characteristic.value = byteArrayOf(direction, speed)
+    characteristic.writeType = BluetoothGattCharacteristic.WRITE_TYPE_NO_RESPONSE
+    gatt.writeCharacteristic(characteristic)
+}
+
+// Komendy kierunku
+const val DIR_FORWARD: Byte  = 0x01
+const val DIR_BACKWARD: Byte = 0x02
+const val DIR_LEFT: Byte     = 0x03
+const val DIR_RIGHT: Byte    = 0x04
+const val DIR_STOP: Byte     = 0x00
+```
+
+### Podłączenie do wirtualnego joysticka (Compose)
+
+```kotlin
+@Composable
+fun BleJoystick(gatt: BluetoothGatt?) {
+    val scope = rememberCoroutineScope()
+    JoystickControl(
+        onDirectionChange = { dx, dy ->
+            val direction = when {
+                dy < -0.5f -> DIR_FORWARD
+                dy >  0.5f -> DIR_BACKWARD
+                dx < -0.5f -> DIR_LEFT
+                dx >  0.5f -> DIR_RIGHT
+                else        -> DIR_STOP
+            }
+            val speed = (maxOf(kotlin.math.abs(dx), kotlin.math.abs(dy)) * 255).toInt().toByte()
+            gatt?.let { scope.launch(Dispatchers.IO) { sendMotorCommand(it, direction, speed) } }
+        }
+    )
+}
+```
+
+Połączenie joysticka z sescją GATT zapewnia opóźnienie poniżej 20 ms, co jest wystarczające do płynnego sterowania.
+
+---
+
+## Przetwarzanie obrazu z kamery dla robotyki
+
+Kamera smartfona może zastąpić dedykowany sensor w zadaniach takich jak śledzenie linii lub wykrywanie przeszkód. CameraX + TFLite zapewniają potok z niskim opóźnieniem.
+
+### Konfiguracja ImageAnalysis w CameraX
+
+```kotlin
+val imageAnalysis = ImageAnalysis.Builder()
+    .setTargetResolution(Size(640, 480))
+    .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+    .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+    .build()
+
+imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
+    val bitmap = imageProxy.toBitmap()          // extension fun z CameraX 1.3+
+    val result = lineFollower.analyze(bitmap)
+    robotController.applyVisionCommand(result)
+    imageProxy.close()
+}
+```
+
+### Detektor linii — TFLite + ML Kit
+
+```kotlin
+class LineFollower(context: Context) {
+    // Model wytrenowany na czarnej linii na białym tle (klasyfikacja: lewo/prosto/prawo/stop)
+    private val interpreter = Interpreter(
+        FileUtil.loadMappedFile(context, "line_follower.tflite"),
+        Interpreter.Options().apply { addDelegate(GpuDelegate()) }
+    )
+
+    fun analyze(bitmap: Bitmap): DriveCommand {
+        val input  = TensorImage.fromBitmap(bitmap)
+        val output = TensorBuffer.createFixedSize(intArrayOf(1, 4), DataType.FLOAT32)
+        interpreter.run(input.buffer, output.buffer)
+
+        val scores = output.floatArray
+        return when (scores.indices.maxByOrNull { scores[it] }) {
+            0    -> DriveCommand.TURN_LEFT
+            1    -> DriveCommand.STRAIGHT
+            2    -> DriveCommand.TURN_RIGHT
+            else -> DriveCommand.STOP
+        }
+    }
+}
+
+enum class DriveCommand { TURN_LEFT, STRAIGHT, TURN_RIGHT, STOP }
+```
+
+### Szacowanie głębi (MiDaS)
+
+Dla zadań unikania przeszkód można użyć modelu MiDaS (monocular depth) dostępnego jako `.tflite`:
+
+```kotlin
+fun estimateDepth(bitmap: Bitmap): FloatArray {
+    val resized = Bitmap.createScaledBitmap(bitmap, 256, 256, true)
+    val input   = TensorImage.fromBitmap(resized)
+    val output  = TensorBuffer.createFixedSize(intArrayOf(1, 256, 256, 1), DataType.FLOAT32)
+    depthInterpreter.run(input.buffer, output.buffer)
+    return output.floatArray   // mapa 256×256 znormalizowanych wartości głębi
+}
+```
+
+Piksel o wartości bliskiej `1.0` oznacza obiekt blisko kamery. Wystarczy sprawdzić środkowy obszar mapy, by wykryć przeszkodę przed robotem i wydać komendę `STOP`.
