@@ -297,6 +297,174 @@ eas submit --platform ios    # Bezpośredni upload do App Store Connect
 | Ekosystem bibliotek | ✅ npm — ogromny | ⚠️ pub.dev — rośnie |
 | Web/Desktop | ⚠️ Eksperymentalny | ✅ Stabilny |
 
+## Animacje — React Native Animated i Reanimated 3
+
+React Native Reanimated 3 to biblioteka animacji działająca na wątku UI (*UI thread*), dzięki czemu animacje osiągają stałe 60–120 fps nawet gdy JS thread jest zajęty. Kluczowe API to `useSharedValue`, `useAnimatedStyle`, `withSpring` i `withTiming`.
+
+```typescript
+import Animated, {
+  useSharedValue,
+  useAnimatedStyle,
+  withSpring,
+  withTiming,
+  runOnJS,
+} from 'react-native-reanimated';
+
+// Fade-in + slide-in po zamontowaniu komponentu
+function AnimatedCard({ title }: { title: string }) {
+  const opacity = useSharedValue(0);
+  const translateY = useSharedValue(30);
+
+  useEffect(() => {
+    opacity.value = withTiming(1, { duration: 400 });
+    translateY.value = withSpring(0, {
+      damping: 18,
+      stiffness: 120,
+    });
+  }, []);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    opacity: opacity.value,
+    transform: [{ translateY: translateY.value }],
+  }));
+
+  return (
+    <Animated.View style={[styles.card, animatedStyle]}>
+      <Text>{title}</Text>
+    </Animated.View>
+  );
+}
+```
+
+```typescript
+// Animacja naciśnięcia przycisku — scale bounce
+function AnimatedButton({ onPress, label }: { onPress: () => void; label: string }) {
+  const scale = useSharedValue(1);
+
+  const animatedStyle = useAnimatedStyle(() => ({
+    transform: [{ scale: scale.value }],
+  }));
+
+  return (
+    <Animated.View style={animatedStyle}>
+      <Pressable
+        onPressIn={() => { scale.value = withSpring(0.93); }}
+        onPressOut={() => { scale.value = withSpring(1); }}
+        onPress={onPress}
+      >
+        <Text>{label}</Text>
+      </Pressable>
+    </Animated.View>
+  );
+}
+```
+
+Reanimated 3 integruje się z React Native Gesture Handler przez `useAnimatedGestureHandler` (lub nowe `Gesture` API), umożliwiając budowę swipe-to-dismiss, karuzeli i innych złożonych interakcji bez żadnej komunikacji przez most JS.
+
+## Testowanie — Jest + React Native Testing Library
+
+React Native Testing Library (`@testing-library/react-native`) pozwala testować komponenty z perspektywy użytkownika — znajdując elementy po roli, tekście i etykiecie, a nie po strukturze DOM.
+
+```typescript
+// __tests__/LoginForm.test.tsx
+import React from 'react';
+import { render, fireEvent, waitFor, screen } from '@testing-library/react-native';
+import { LoginForm } from '../components/LoginForm';
+
+describe('LoginForm', () => {
+  it('wyświetla błąd przy pustym haśle', async () => {
+    render(<LoginForm onSuccess={jest.fn()} />);
+
+    fireEvent.changeText(screen.getByPlaceholderText('Email'), 'test@example.com');
+    fireEvent.press(screen.getByRole('button', { name: 'Zaloguj się' }));
+
+    await waitFor(() => {
+      expect(screen.getByText('Hasło jest wymagane')).toBeTruthy();
+    });
+  });
+
+  it('wywołuje onSuccess po poprawnym logowaniu', async () => {
+    const mockSuccess = jest.fn();
+    render(<LoginForm onSuccess={mockSuccess} />);
+
+    fireEvent.changeText(screen.getByPlaceholderText('Email'), 'user@example.com');
+    fireEvent.changeText(screen.getByPlaceholderText('Hasło'), 'secret123');
+    fireEvent.press(screen.getByRole('button', { name: 'Zaloguj się' }));
+
+    await waitFor(() => expect(mockSuccess).toHaveBeenCalledTimes(1));
+  });
+});
+```
+
+```typescript
+// Mockowanie React Navigation w testach
+jest.mock('@react-navigation/native', () => ({
+  ...jest.requireActual('@react-navigation/native'),
+  useNavigation: () => ({ navigate: jest.fn(), goBack: jest.fn() }),
+  useRoute: () => ({ params: { id: '42' } }),
+}));
+
+// Test async — zmiana stanu po fetch
+it('wyświetla listę produktów po załadowaniu', async () => {
+  jest.spyOn(global, 'fetch').mockResolvedValue({
+    json: async () => [{ id: 1, name: 'Produkt A' }],
+  } as Response);
+
+  render(<ProductList />);
+  expect(screen.getByTestId('loading-indicator')).toBeTruthy();
+
+  await waitFor(() => {
+    expect(screen.getByText('Produkt A')).toBeTruthy();
+  });
+});
+```
+
+Uruchamianie testów: `npx jest --watchAll`. Konfiguracja w `jest.config.js` powinna zawierać `preset: 'react-native'` oraz transformIgnorePatterns dla bibliotek ES module.
+
+## Performance — Hermes i optymalizacje
+
+**Hermes** to silnik JS zoptymalizowany przez Meta dla React Native — kompiluje JavaScript do bytecode podczas budowania, co skraca czas uruchomienia aplikacji nawet o 40%. Jest domyślnie włączony od RN 0.70.
+
+Kluczowe zasady optymalizacji wydajności:
+
+| Problem | Rozwiązanie |
+|---------|-------------|
+| Długa lista elementów | `FlatList` lub `FlashList` zamiast `ScrollView` |
+| Zbędne re-rendery | `React.memo`, `useCallback`, `useMemo` |
+| Ciężkie komponenty w liście | `getItemLayout` + stała wysokość elementu |
+| Wolne obrazy | `react-native-fast-image` z cache |
+| Wiele obliczeń w JS | Worklets Reanimated lub JSI |
+
+```typescript
+// FlashList (Shopify) — 10x szybszy od FlatList dla dużych list
+import { FlashList } from '@shopify/flash-list';
+
+function ProductList({ products }: { products: Product[] }) {
+  const renderItem = useCallback(
+    ({ item }: { item: Product }) => <ProductCard product={item} />,
+    []
+  );
+
+  return (
+    <FlashList
+      data={products}
+      renderItem={renderItem}
+      estimatedItemSize={80}   // kluczowe dla wydajności
+      keyExtractor={(item) => item.id.toString()}
+    />
+  );
+}
+
+// Zapobieganie zbędnym re-renderom
+const ProductCard = React.memo(({ product }: { product: Product }) => (
+  <View style={styles.card}>
+    <Text>{product.name}</Text>
+  </View>
+));
+```
+
+Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevTools standalone) — zakładka *Profiler* pokazuje czas renderowania każdego komponentu. Zwróć uwagę na komponenty renderujące się częściej niż kilkanaście razy na sekundę bez wyraźnego powodu (np. przy braku zmian danych wejściowych) — to sygnał zbędnych re-renderów.
+
 ## Linki
 
 - [React Native Docs](https://reactnative.dev/docs/getting-started)
@@ -304,3 +472,68 @@ eas submit --platform ios    # Bezpośredni upload do App Store Connect
 - [Expo](https://expo.dev/docs)
 - [Zustand](https://github.com/pmndrs/zustand)
 - [New Architecture](https://reactnative.dev/docs/new-architecture-intro)
+
+## Push Notifications — Expo Notifications i Firebase
+
+Powiadomienia push to kluczowy kanał angażowania użytkowników. W React Native najwygodniejsze jest użycie `expo-notifications` (Universal Push Notifications z Expo) lub `@react-native-firebase/messaging` (FCM).
+
+```typescript
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+
+// Konfiguracja zachowania powiadomień
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+});
+
+// Rejestracja i pobieranie tokenu push
+async function registerForPushNotifications(): Promise<string | null> {
+    if (!Device.isDevice) return null;
+    
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    
+    if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+    }
+    
+    if (finalStatus !== 'granted') return null;
+    
+    // Expo Push Token — działa na Android i iOS
+    const token = await Notifications.getExpoPushTokenAsync({
+        projectId: 'YOUR_EXPO_PROJECT_ID',
+    });
+    return token.data;  // np. "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]"
+}
+
+// Hook do obsługi powiadomień w komponencie
+function useNotifications() {
+    useEffect(() => {
+        const subscription = Notifications.addNotificationReceivedListener(notification => {
+            console.log('Odebrano powiadomienie:', notification.request.content.title);
+        });
+        
+        const responseSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+            const data = response.notification.request.content.data;
+            // Nawiguj do właściwego ekranu
+        });
+        
+        return () => {
+            subscription.remove();
+            responseSubscription.remove();
+        };
+    }, []);
+}
+```
+
+Wysyłanie przez Expo Push Service:
+```bash
+curl -X POST https://exp.host/--/api/v2/push/send \
+  -H "Content-Type: application/json" \
+  -d '{"to":"ExponentPushToken[xxx]","title":"Nowa wiadomość","body":"Sprawdź aplikację"}'
+```

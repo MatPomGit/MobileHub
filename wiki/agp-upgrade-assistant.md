@@ -252,3 +252,167 @@ W praktyce oznacza to szybsze aktualizacje, mniej awarii builda i łatwiejsze ut
 - Android Developers — Android Gradle Plugin: https://developer.android.com/build
 - Android Developers — Migrate to new AGP versions: https://developer.android.com/build/releases/gradle-plugin
 - Gradle Docs — Build performance i configuration cache: https://docs.gradle.org/
+
+---
+
+## Configuration Cache — korzyści i pułapki po migracji AGP
+
+Configuration Cache (CC) to mechanizm Gradle serializujący wynik fazy konfiguracji do pliku binarnego. Przy kolejnym wywołaniu z identycznym zestawem wejść Gradle pomija tę fazę całkowicie, skracając czas „first build" nawet o 40–60% w dużych projektach.
+
+### Włączenie
+
+```properties
+# gradle.properties
+org.gradle.configuration-cache=true
+org.gradle.configuration-cache-problems=warn   # warn zamiast fail podczas migracji
+```
+
+Po pierwszym udanym buildzie w katalogu projektu pojawia się `.gradle/configuration-cache/`. Wpis w `--info` potwierdza trafienie: `Reusing configuration cache.`
+
+### Typowe niezgodności po migracji AGP
+
+| Problem | Objaw | Rozwiązanie |
+|---------|-------|------------|
+| `project.exec {}` w bloku konfiguracji | `ConfigurationCacheError: invocation of 'Task.project' at execution time` | Przenieś do `@TaskAction` lub użyj `providers.exec` |
+| `buildSrc` z dostępem do `project` | Serializacja nie jest możliwa | Refaktoruj do convention plugin w `build-logic/` |
+| Niestandardowy `Task` bez `@Input`/`@Output` | Cache miss przy każdym buildzie | Dodaj adnotacje lub `@Internal` dla pól bez wpływu na wynik |
+| `rootProject.file(...)` w pluginie | Błąd serializacji ścieżki | Użyj `layout.projectDirectory` lub `layout.buildDirectory` |
+
+### Debugowanie
+
+```bash
+# Tryb ostrzeżeń — build nie przerywa przy problemach
+./gradlew assembleDebug --configuration-cache-problems=warn 2>&1 | grep -i "cache problem"
+
+# Pełny raport HTML zapisywany w build/reports/configuration-cache/
+./gradlew assembleDebug --configuration-cache
+# → otwórz build/reports/configuration-cache/<hash>/configuration-cache-report.html
+```
+
+### Weryfikacja trafienia cache w CI
+
+```yaml
+# .github/workflows/build.yml
+- name: Build with CC
+  run: ./gradlew assembleRelease --configuration-cache
+- name: Assert cache was reused
+  run: |
+    ./gradlew assembleRelease --configuration-cache 2>&1 | \
+      grep "Reusing configuration cache" || exit 1
+```
+
+Drugi krok upewnia się, że żaden commit nie „zepsuł" cache — regresja natychmiast widoczna w CI.
+
+---
+
+## Isolation Projects — nowy tryb Gradle
+
+Project Isolation (Izolacja projektów) to eksperymentalna funkcja Gradle, która idzie krok dalej niż Configuration Cache: wymusza, by każdy projekt konfigurował się **niezależnie**, bez dostępu do modelu innych projektów. Umożliwia to w pełni równoległą konfigurację.
+
+### Włączenie
+
+```properties
+# gradle.properties
+org.gradle.unsafe.isolated-projects=true
+# Isolation Projects wymaga też włączonego CC
+org.gradle.configuration-cache=true
+```
+
+### Co to zmienia w praktyce
+
+W trybie izolacji każdy `Project` widzi tylko siebie. Typowe antywzorce, które przestają działać:
+
+```kotlin
+// ❌ Niedozwolone w Isolated Projects
+subprojects {
+    apply(plugin = "kotlin-android")
+}
+
+allprojects {
+    repositories { google() }
+}
+
+// ✅ Poprawny zamiennik — convention plugin w build-logic/
+// build-logic/src/main/kotlin/android-library-convention.gradle.kts
+plugins {
+    id("com.android.library")
+    kotlin("android")
+}
+android {
+    compileSdk = libs.versions.compileSdk.get().toInt()
+}
+```
+
+Bloki `subprojects {}` i `allprojects {}` w pliku root `build.gradle.kts` muszą zostać zastąpione pluginami konwencji stosowanymi per moduł.
+
+### Aktualny stan i ograniczenia
+
+| Aspekt | Stan (Gradle 8.x) |
+|--------|-------------------|
+| Stabilność | Eksperymentalna (`unsafe` w nazwie flagi) |
+| Wsparcie AGP | Częściowe — AGP 8.3+ ma wstępną kompatybilność |
+| Zysk wydajnościowy | 20–50% szybsza konfiguracja w projektach > 50 modułów |
+| Blokery | Wiele pluginów third-party jeszcze niezgodnych |
+
+Rekomendacja: włącz Isolated Projects na gałęzi `experiment/`, uruchom build, przejrzyj raport CC i eliminuj niezgodności stopniowo. Nie włączaj na `main` do czasu stabilizacji w Gradle 9.x.
+
+## Lint po migracji AGP — nowe reguły i baseline
+
+Nowe wersje AGP często dodają reguły Lint, które wykrywają problemy niewidoczne w poprzednich wersjach. Po migracji warto uruchomić analizę i zaktualizować baseline.
+
+### Generowanie baseline Lint
+
+Baseline pozwala zatwierdzić istniejące ostrzeżenia i śledzić tylko nowe naruszenia:
+
+```bash
+# Wygeneruj nowy baseline po migracji
+./gradlew :app:lintDebug -PupdateLintBaseline
+# Plik: app/lint-baseline.xml
+```
+
+### Konfiguracja Lint w build.gradle.kts
+
+```kotlin
+android {
+    lint {
+        // Traktuj błędy Lint jako błędy buildu (zalecane w CI)
+        abortOnError = true
+        // Plik baseline — ignoruj pre-istniejące problemy
+        baseline = file("lint-baseline.xml")
+        // Wyłącz reguły generujące fałszywe pozytywy po AGP upgrade
+        disable += "GradleDependency"
+        // Włącz reguły eksperymentalne
+        enable += "UnusedResources"
+        // Generuj raporty
+        htmlReport = true
+        htmlOutput = file("build/reports/lint-results.html")
+        xmlReport = true
+        sarifReport = true  // Format SARIF dla GitHub Actions
+    }
+}
+```
+
+### Integracja z GitHub Actions
+
+```yaml
+# .github/workflows/lint.yml
+- name: Run Lint
+  run: ./gradlew :app:lintDebug
+
+- name: Upload SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: app/build/reports/lint-results.sarif
+```
+
+Wyniki Lint pojawiają się bezpośrednio jako adnotacje w diff pull requesta na GitHubie.
+
+### Najczęstsze nowe reguły po migracji AGP 8.x
+
+| Reguła | Opis | Akcja |
+|--------|------|-------|
+| `UnusedResources` | Nieużywane pliki res/ | Usuń lub dodaj do shrinkResources |
+| `MissingApplicationIcon` | Brak ikony adaptive | Utwórz `ic_launcher.xml` |
+| `PermissionImpliesUnsupportedChromeOsHardware` | Uprawnienia niezgodne z ChromeOS | Dodaj `uses-feature android:required="false"` |
+| `CredentialDependency` | Użycie przestarzałego Credentials API | Migruj do Credential Manager |
+| `ExifInterface` | Bezpośrednie użycie java.text zamiast AndroidX | Użyj `androidx.exifinterface` |

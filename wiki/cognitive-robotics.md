@@ -299,6 +299,172 @@ Większość osiągnięć dotyczy izolowanych zadań. Tworzenie robotów radząc
 - [CLARION](#wiki-clarion-architecture)
 - [Computer-aided diagnosis](#wiki-computer-aided-diagnosis)
 
+## BDI — Beliefs, Desires, Intentions
+
+Model BDI (*Beliefs, Desires, Intentions*) to jedna z najpopularniejszych formalnych teorii agentów racjonalnych, wywodząca się z filozofii praktycznego rozumowania. W robotyce poznawczej stanowi most między niskopoziomową percepcją a planowaniem wysokiego poziomu.
+
+- **Beliefs** (przekonania) — aktualny model świata agenta: co robot wie lub sądzi o środowisku, innych agentach, własnym stanie
+- **Desires** (pragnienia) — stany końcowe lub sytuacje, które agent chciałby osiągnąć (cele długoterminowe)
+- **Intentions** (intencje) — plany, które agent postanowił realizować; stanowią filtr ograniczający możliwe działania
+
+Kluczowa różnica między desires a intentions: agent może mieć sprzeczne pragnienia (pojechać w dwie strony naraz), ale intencje są spójnym zobowiązaniem do konkretnej ścieżki działania.
+
+### Pętla BDI — pseudokod w Pythonie
+
+```python
+class BDIAgent:
+    """Uproszczona implementacja agenta BDI dla robota."""
+
+    def __init__(self):
+        self.beliefs: dict  = {}  # model świata
+        self.desires: list  = []  # cele końcowe
+        self.intentions: list = []  # aktualnie realizowane plany
+
+    # --- Percepcja i aktualizacja przekonań ---
+    def perceive(self) -> dict:
+        """Pobierz dane z sensorów i zwróć obserwację."""
+        return {
+            "obstacle_ahead": self.lidar.detect_obstacle(),
+            "target_visible": self.camera.detect_target(),
+            "battery_level": self.battery.get_level(),
+        }
+
+    def update_beliefs(self, observation: dict):
+        """Uaktualnij model świata na podstawie nowych obserwacji."""
+        self.beliefs.update(observation)
+        # Inferencja — np. jeśli bateria < 20%, dodaj przekonanie "low_battery"
+        if self.beliefs.get("battery_level", 100) < 20:
+            self.beliefs["low_battery"] = True
+
+    # --- Generowanie pragnień ---
+    def generate_desires(self) -> list:
+        """Wygeneruj cele na podstawie aktualnych przekonań."""
+        desires = []
+        if self.beliefs.get("target_visible"):
+            desires.append({"goal": "reach_target", "priority": 10})
+        if self.beliefs.get("low_battery"):
+            desires.append({"goal": "recharge", "priority": 15})  # wyższy priorytet
+        if self.beliefs.get("obstacle_ahead"):
+            desires.append({"goal": "avoid_obstacle", "priority": 20})
+        return sorted(desires, key=lambda d: -d["priority"])
+
+    # --- Selekcja intencji ---
+    def select_intention(self, desires: list) -> dict | None:
+        """Wybierz najbardziej pilny cel jako aktualną intencję."""
+        if not desires:
+            return None
+        # Prosta polityka: wybierz pragnienie o najwyższym priorytecie
+        return desires[0]
+
+    # --- Wykonanie ---
+    def execute(self, intention: dict):
+        """Wykonaj akcję realizującą wybraną intencję."""
+        goal = intention.get("goal")
+        if goal == "reach_target":
+            self.navigate_to_target()
+        elif goal == "avoid_obstacle":
+            self.swerve_around_obstacle()
+        elif goal == "recharge":
+            self.navigate_to_charging_station()
+
+    # --- Główna pętla kognitywna ---
+    def run(self):
+        while True:
+            observation     = self.perceive()
+            self.update_beliefs(observation)
+            desires         = self.generate_desires()
+            intention       = self.select_intention(desires)
+            if intention:
+                self.intentions = [intention]
+                self.execute(intention)
+```
+
+Praktyczne implementacje BDI dla robotyki to m.in. **JADE** (Java Agent DEvelopment), **Jason** (język AgentSpeak) oraz rozszerzenia ROS2 oparte na Behavior Trees z semantyką BDI.
+
+---
+
+## Planowanie sekwencji działań — STRIPS i PDDL
+
+Klasyczne planowanie symboliczne polega na znalezieniu sekwencji operatorów transformujących stan początkowy do stanu docelowego. Jest to komplement dla reaktywnych architektur — tam gdzie BDI reaguje na bodźce, planer symboliczny oblicza długie sekwencje działań.
+
+### STRIPS — podstawy
+
+STRIPS (*Stanford Research Institute Problem Solver*, 1971) definiuje problem planowania przez:
+
+- **Stan** — zbiór faktów (predykatów) prawdziwych w danej chwili
+- **Operator** — akcja z warunkami wstępnymi (*preconditions*) i efektami (*add/delete lists*)
+- **Cel** — podzbiór faktów, które mają być prawdziwe po zakończeniu planu
+
+```
+Operator: pick_up(robot, object, location)
+  Preconditions:  at(robot, location) ∧ at(object, location) ∧ ¬holding(robot, anything)
+  Add effects:    holding(robot, object)
+  Delete effects: at(object, location)
+```
+
+### PDDL — język opisu domen planowania
+
+PDDL (*Planning Domain Definition Language*) to standaryzowany format opisu domen i problemów planowania, obsługiwany przez planery jak **Fast Downward**, **FF** czy **LAMA**.
+
+```lisp
+;; Domena: robot zbierający obiekty
+(define (domain warehouse-robot)
+  (:requirements :strips :typing)
+  (:types robot object location)
+
+  (:predicates
+    (at ?r - robot ?l - location)
+    (obj-at ?o - object ?l - location)
+    (holding ?r - robot ?o - object)
+    (connected ?l1 - location ?l2 - location))
+
+  ;; Operator 1: Przemieszczenie robota
+  (:action move
+    :parameters (?r - robot ?from ?to - location)
+    :precondition (and (at ?r ?from) (connected ?from ?to))
+    :effect (and (at ?r ?to) (not (at ?r ?from))))
+
+  ;; Operator 2: Podniesienie obiektu
+  (:action pick-up
+    :parameters (?r - robot ?o - object ?l - location)
+    :precondition (and (at ?r ?l) (obj-at ?o ?l))
+    :effect (and (holding ?r ?o) (not (obj-at ?o ?l))))
+
+  ;; Operator 3: Odłożenie obiektu
+  (:action put-down
+    :parameters (?r - robot ?o - object ?l - location)
+    :precondition (and (at ?r ?l) (holding ?r ?o))
+    :effect (and (obj-at ?o ?l) (not (holding ?r ?o)))))
+```
+
+### Integracja z ROS2 — wywołanie planera z Pythona
+
+```python
+import subprocess
+import tempfile
+import os
+
+def plan_task(domain_file: str, problem_file: str) -> list[str]:
+    """Wywołaj Fast Downward i zwróć listę akcji planu."""
+    result = subprocess.run(
+        ["fast-downward", domain_file, problem_file,
+         "--search", "astar(blind())"],
+        capture_output=True, text=True, timeout=30
+    )
+    # Parsuj plik sas_plan generowany przez Fast Downward
+    plan = []
+    if os.path.exists("sas_plan"):
+        with open("sas_plan") as f:
+            for line in f:
+                if not line.startswith(";"):
+                    plan.append(line.strip().strip("()"))
+    return plan
+
+# Wynik: ['move robot1 loc_a loc_b', 'pick-up robot1 box1 loc_b', ...]
+```
+
+Planowanie symboliczne jest użyteczne dla zadań logistycznych (sortowanie, kompletacja zamówień), inspekcji przemysłowej i robotyki domowej, gdzie możliwe stany świata dają się opisać predykatami. Jego ograniczeniem jest wrażliwość na niepełną wiedzę o świecie — dlatego łączy się je z percepcją probabilistyczną i architekturami reaktywnymi.
+
 ## Linki zewnętrzne
 
 - [IEEE Robotics and Automation Society](https://www.ieee-ras.org/)

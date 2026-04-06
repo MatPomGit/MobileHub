@@ -268,3 +268,154 @@ class PricingExperiment {
 - [Firebase Analytics](https://firebase.google.com/docs/analytics)
 - [Firebase Remote Config](https://firebase.google.com/docs/remote-config)
 - [App Store Connect — Revenue Reports](https://developer.apple.com/app-store-connect/)
+
+## Reklamy nagradzane (Rewarded Ads)
+
+Reklamy nagradzane różnią się fundamentalnie od interstitiali: to **gracz decyduje**, czy chce obejrzeć reklamę w zamian za konkretną nagrodę w grze (życie, walutę, hint). Ten model szanuje autonomię gracza i jest znacznie mniej inwazyjny, co przekłada się na lepszy sentyment i wyższe eCPM.
+
+### Kiedy pokazywać reklamy nagradzane?
+
+Najlepsze miejsca na rewarded ad:
+- **Bezpośrednio po przegranym poziomie** — „Obejrzyj reklamę, aby kontynuować od tego miejsca"
+- **Przed dostępem do bonusowej zawartości** — dodatkowe skrzynie, premium zawartość
+- **Uzupełnienie waluty** — „Obejrzyj, żeby otrzymać 50 monet"
+- **Przyspieszenie produkcji** — zamiast czekać godzinę, obejrzyj 30-sekundową reklamę
+
+### Implementacja AdMob RewardedAd
+
+```kotlin
+class RewardedAdManager(private val activity: Activity) {
+    private var rewardedAd: RewardedAd? = null
+
+    fun loadRewardedAd() {
+        val adRequest = AdRequest.Builder().build()
+        RewardedAd.load(
+            activity,
+            "ca-app-pub-3940256099942544/5224354917",  // test Ad Unit ID
+            adRequest,
+            object : RewardedAdLoadCallback() {
+                override fun onAdLoaded(ad: RewardedAd) {
+                    rewardedAd = ad
+                    ad.fullScreenContentCallback = object : FullScreenContentCallback() {
+                        override fun onAdDismissedFullScreenContent() {
+                            rewardedAd = null
+                            loadRewardedAd()  // preload kolejnej reklamy
+                        }
+                        override fun onAdFailedToShowFullScreenContent(error: AdError) {
+                            rewardedAd = null
+                        }
+                    }
+                }
+                override fun onAdFailedToLoad(error: LoadAdError) {
+                    rewardedAd = null
+                }
+            }
+        )
+    }
+
+    fun showRewardedAd(onRewarded: (String, Int) -> Unit, onSkipped: () -> Unit) {
+        val ad = rewardedAd ?: run { onSkipped(); return }
+        ad.show(activity) { rewardItem ->
+            // Callback wywoływany TYLKO gdy gracz obejrzał do końca
+            onRewarded(rewardItem.type, rewardItem.amount)
+            // Przykład: onRewarded("coins", 100)
+        }
+    }
+}
+```
+
+### Porównanie: Rewarded Ads vs Interstitials
+
+| Aspekt | Rewarded Ads | Interstitials |
+|--------|-------------|---------------|
+| **Kontrola gracza** | Pełna (opt-in) | Brak (wymuszone) |
+| **Fill Rate** | 90–99% | 85–95% |
+| **eCPM (USD)** | $10–$30 | $2–$8 |
+| **Sentyment gracza** | Pozytywny | Neutralny / negatywny |
+| **Ryzyko odejścia** | Niskie | Umiarkowane |
+| **Najlepsza konfiguracja** | Po przegranym poziomie | Między poziomami |
+
+> **Zasada dobrego UX:** zawsze pokaż graczowi nagrodę *przed* wyświetleniem reklamy — „Obejrzyj 30-sekundową reklamę, aby otrzymać ×2 monety." Nigdy nie ukrywaj wartości nagrody.
+
+---
+
+## Battle Pass — implementacja sezonowa
+
+Battle Pass (popularyzowany przez Fortnite) to sezonowy model postępu z dwoma ścieżkami nagród: **darmową** (dostępną dla wszystkich graczy) i **premium** (dla płacących). Zamiast jednorazowego zakupu, gracz kupuje dostęp do sezonu trwającego zwykle 6–10 tygodni.
+
+### Jak działa Battle Pass?
+
+- **Sezon** ma określony czas trwania (np. 60 dni) i pule nagród (100 tierów)
+- Gracz zdobywa XP przez granie, kończenie wyzwań, logowanie się codziennie
+- Każde N punktów XP awansuje gracza o jeden tier
+- Tier odblokowuje nagrody z puli darmowej lub premium (jeśli gracz zapłacił)
+- Po zakończeniu sezonu nagrody są **nieodwracalnie niedostępne** — FOMO motywuje do grania
+
+### Kluczowe dane klasy BattlePass w Kotlinie
+
+```kotlin
+data class BattlePassState(
+    val seasonId: Int,
+    val seasonEndTimestamp: Long,        // Unix timestamp
+    val isPremium: Boolean,
+    val currentXp: Int,
+    val xpPerTier: Int = 1000,
+    val totalTiers: Int = 100
+) {
+    val currentTier: Int get() = (currentXp / xpPerTier).coerceAtMost(totalTiers)
+    val progressInTier: Float get() = (currentXp % xpPerTier) / xpPerTier.toFloat()
+    val remainingSecondsInSeason: Long get() =
+        (seasonEndTimestamp - System.currentTimeMillis() / 1000).coerceAtLeast(0)
+    val isSeasonActive: Boolean get() = remainingSecondsInSeason > 0
+}
+
+data class BattlePassTier(
+    val tier: Int,
+    val freeReward: Reward?,
+    val premiumReward: Reward?,
+    val isUnlocked: Boolean
+)
+
+data class Reward(
+    val id: String,
+    val name: String,
+    val type: RewardType,  // COSMETIC, CURRENCY, XP_BOOST
+    val quantity: Int
+)
+
+enum class RewardType { COSMETIC, CURRENCY, XP_BOOST, EMOTE }
+```
+
+### Logika odblokowywania nagród
+
+```kotlin
+class BattlePassManager(private val state: BattlePassState) {
+
+    fun getUnlockedTiers(): List<BattlePassTier> =
+        (1..state.currentTier).map { tier ->
+            BattlePassTier(
+                tier = tier,
+                freeReward = getFreeRewardForTier(tier),
+                premiumReward = if (state.isPremium) getPremiumRewardForTier(tier) else null,
+                isUnlocked = true
+            )
+        }
+
+    fun addXp(amount: Int): BattlePassState {
+        val newXp = (state.currentXp + amount).coerceAtMost(state.totalTiers * state.xpPerTier)
+        val oldTier = state.currentTier
+        val newState = state.copy(currentXp = newXp)
+        val tiersPassed = newState.currentTier - oldTier
+        if (tiersPassed > 0) notifyTierUnlocked(oldTier + 1..newState.currentTier)
+        return newState
+    }
+
+    private fun notifyTierUnlocked(tierRange: IntRange) {
+        tierRange.forEach { tier ->
+            // Wyślij push notyfikację lub event analytics
+        }
+    }
+}
+```
+
+Kluczowe metryki Battle Pass: **sell-through rate** (% graczy kupujących premium), **tier completion rate** (ile tierów gracze kończą), **daily active quests completion** i **season retention** (czy gracz loguje się do końca sezonu).

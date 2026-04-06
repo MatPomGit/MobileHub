@@ -323,3 +323,239 @@ fun getFilteredTasks_returnsOnlyActive_whenFilterEnabled() = runTest {
 - [Compose Testing](https://developer.android.com/jetpack/compose/testing)
 - [Turbine](https://github.com/cashapp/turbine)
 - [MockK](https://mockk.io)
+
+---
+
+## Hilt — dependency injection w testach
+
+Hilt upraszcza wstrzykiwanie zależności w testach instrumentalnych: zamiast ręcznie tworzyć grafy obiektów, podmienisz konkretne implementacje za pomocą adnotacji.
+
+### Konfiguracja
+
+```kotlin
+// build.gradle.kts (moduł app)
+androidTestImplementation("com.google.dagger:hilt-android-testing:2.51.1")
+kspAndroidTest("com.google.dagger:hilt-compiler:2.51.1")
+```
+
+### Podmiana repozytorium w teście
+
+```kotlin
+// Fałszywa implementacja
+class FakeTaskRepository : TaskRepository {
+    private val _tasks = MutableStateFlow<List<Task>>(emptyList())
+    override fun getTasks(): Flow<List<Task>> = _tasks
+    override suspend fun addTask(task: Task) { _tasks.update { it + task } }
+    override suspend fun deleteTask(id: Int) { _tasks.update { list -> list.filter { it.id != id } } }
+}
+
+// Moduł zastępujący produkcyjny
+@TestInstallIn(
+    components = [SingletonComponent::class],
+    replaces   = [RepositoryModule::class]
+)
+@Module
+object FakeRepositoryModule {
+    @Provides
+    @Singleton
+    fun provideTaskRepository(): TaskRepository = FakeTaskRepository()
+}
+```
+
+### Test z HiltAndroidRule
+
+```kotlin
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
+class TaskListScreenTest {
+
+    @get:Rule(order = 0) val hiltRule  = HiltAndroidRule(this)
+    @get:Rule(order = 1) val composeRule = createAndroidComposeRule<MainActivity>()
+
+    @Inject lateinit var repository: TaskRepository
+
+    @Before
+    fun setUp() {
+        hiltRule.inject()
+    }
+
+    @Test
+    fun emptyState_showsPlaceholder() {
+        composeRule.onNodeWithText("Brak zadań").assertIsDisplayed()
+    }
+
+    @Test
+    fun afterAddingTask_taskAppearsOnList() = runTest {
+        repository.addTask(Task(1, "Zakupy", isCompleted = false))
+        composeRule.onNodeWithText("Zakupy").assertIsDisplayed()
+    }
+}
+```
+
+`HiltAndroidRule` inicjalizuje komponent Hilt przed każdym testem. `@Inject` w ciele testu pozwala korzystać z tego samego grafu co testowana aktywność — tyle że z fałszywymi zależnościami.
+
+---
+
+## Robot Pattern — testy UI czytelne jak specyfikacja
+
+Robot Pattern (wzorzec robotów) separuje *co* testujemy (logika testu) od *jak* wchodzimy w interakcję z ekranem (szczegóły Compose). Każdy ekran otrzymuje klasę „robota", która enkapsuluje selektory i akcje.
+
+### Klasa robota dla ekranu zadań
+
+```kotlin
+class TaskRobot(private val composeRule: ComposeContentTestRule) {
+
+    // Akcje
+    fun typeTaskTitle(title: String): TaskRobot {
+        composeRule.onNodeWithTag("input_title").performTextInput(title)
+        return this
+    }
+
+    fun clickAddButton(): TaskRobot {
+        composeRule.onNodeWithContentDescription("Dodaj zadanie").performClick()
+        return this
+    }
+
+    fun clickTaskItem(title: String): TaskRobot {
+        composeRule.onNodeWithText(title).performClick()
+        return this
+    }
+
+    fun swipeToDelete(title: String): TaskRobot {
+        composeRule.onNodeWithText(title)
+            .performTouchInput { swipeLeft() }
+        return this
+    }
+
+    // Asercje
+    fun assertTaskVisible(title: String): TaskRobot {
+        composeRule.onNodeWithText(title).assertIsDisplayed()
+        return this
+    }
+
+    fun assertTaskNotVisible(title: String): TaskRobot {
+        composeRule.onNodeWithText(title).assertDoesNotExist()
+        return this
+    }
+
+    fun assertEmptyState(): TaskRobot {
+        composeRule.onNodeWithText("Brak zadań").assertIsDisplayed()
+        return this
+    }
+}
+```
+
+### Testy z użyciem robota — czytelność jak BDD
+
+```kotlin
+@HiltAndroidTest
+@RunWith(AndroidJUnit4::class)
+class TaskRobotTest {
+
+    @get:Rule(order = 0) val hiltRule    = HiltAndroidRule(this)
+    @get:Rule(order = 1) val composeRule = createAndroidComposeRule<MainActivity>()
+
+    private val robot by lazy { TaskRobot(composeRule) }
+
+    @Before fun setUp() = hiltRule.inject()
+
+    @Test
+    fun `adding task shows it on list`() {
+        robot
+            .assertEmptyState()
+            .typeTaskTitle("Kupić mleko")
+            .clickAddButton()
+            .assertTaskVisible("Kupić mleko")
+    }
+
+    @Test
+    fun `swiping task removes it from list`() {
+        robot
+            .typeTaskTitle("Do usunięcia")
+            .clickAddButton()
+            .assertTaskVisible("Do usunięcia")
+            .swipeToDelete("Do usunięcia")
+            .assertTaskNotVisible("Do usunięcia")
+    }
+}
+```
+
+Zalety wzorca:
+- Zmiana selektora (np. `testTag`) wymaga edycji tylko robota, nie wszystkich testów.
+- Testy czyta się jak specyfikację funkcjonalną.
+- Płynne API (każda metoda zwraca `this`) pozwala chainować kroki bez zbędnych zmiennych.
+
+## Testy End-to-End — Maestro i UI Automator
+
+Testy end-to-end (E2E) weryfikują cały przepływ aplikacji od interfejsu użytkownika po bazę danych i sieć. W ekosystemie Android dostępne są dwa główne narzędzia: **UI Automator 2** (wbudowany w AndroidX) i **Maestro** (YAML-based, zero-konfiguracji).
+
+### Maestro — testy E2E w YAML
+
+Maestro pozwala pisać scenariusze testowe w czytelnym YAML bez znajomości Kotlin/Java:
+
+```yaml
+# flows/add_task.yaml
+appId: com.example.tasks
+---
+- launchApp
+- assertVisible: "Lista zadań"
+- tapOn: "Dodaj zadanie"
+- assertVisible: "Nowe zadanie"
+- tapOn:
+    id: "task_input"
+- inputText: "Zadanie testowe E2E"
+- tapOn: "Zapisz"
+- assertVisible: "Zadanie testowe E2E"
+- pressBack
+```
+
+Uruchamianie na podłączonym urządzeniu:
+```bash
+maestro test flows/add_task.yaml
+maestro test flows/          # wszystkie flow w katalogu
+maestro studio               # interaktywny debugger
+```
+
+### UI Automator 2 — testy poza granicami aplikacji
+
+UI Automator pozwala testować interakcje z innymi aplikacjami i powiadomieniami systemowymi:
+
+```kotlin
+@RunWith(AndroidJUnit4::class)
+class NotificationE2ETest {
+    private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+    @Test
+    fun notification_tapAction_opensCorrectScreen() {
+        // Uruchom aplikację
+        val intent = InstrumentationRegistry.getInstrumentation().context
+            .packageManager.getLaunchIntentForPackage("com.example.tasks")
+        InstrumentationRegistry.getInstrumentation().context.startActivity(intent)
+
+        // Poczekaj na główny ekran
+        device.wait(Until.hasObject(By.text("Lista zadań")), 3000)
+
+        // Otwórz panel powiadomień
+        device.openNotification()
+        device.wait(Until.hasObject(By.text("Nowe przypomnienie")), 3000)
+
+        // Kliknij powiadomienie
+        device.findObject(By.text("Nowe przypomnienie")).click()
+
+        // Zweryfikuj, że otworzył się właściwy ekran
+        device.wait(Until.hasObject(By.text("Szczegóły zadania")), 3000)
+        assertTrue(device.hasObject(By.text("Szczegóły zadania")))
+    }
+}
+```
+
+### Porównanie podejść do testowania UI
+
+| Narzędzie | Poziom | Szybkość | Izolacja | Scenariusze |
+|-----------|--------|----------|----------|-------------|
+| **Compose Test** | Komponent | Szybkie | Wysoka | Unit UI |
+| **Espresso** | Activity/Fragment | Średnia | Średnia | Przepływy wewnątrz app |
+| **UI Automator 2** | System | Wolne | Niska | Powiadomienia, multi-app |
+| **Maestro** | E2E | Wolne | Niska | Pełne scenariusze |
+
+Zalecana strategia: 70% Compose/Espresso, 20% UI Automator, 10% Maestro dla krytycznych przepływów.

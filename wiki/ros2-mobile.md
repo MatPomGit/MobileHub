@@ -130,6 +130,106 @@ class Nav2Controller(private val bridge: Ros2Bridge) {
 }
 ```
 
+## Architektura komunikacji ROS2 z aplikacją mobilną
+
+Aplikacja mobilna nie może bezpośrednio używać bibliotek `rclpy` ani `rclcpp`, ponieważ działają one na systemie Linux robota, a nie na Androidzie czy iOS. Istnieją trzy główne podejścia do komunikacji:
+
+| Podejście | Protokół | Środowisko | Zastosowanie |
+|-----------|----------|------------|--------------|
+| **rosbridge_suite** | WebSocket + JSON | Dowolna platforma z WebSocket | Aplikacje mobilne, webowe, prototypy |
+| **rclnodejs** | DDS (natywne ROS2) | Node.js (backend/serwer pośredniczący) | Serwery middleware, Electron |
+| **micro-ROS** | DDS over Serial/UDP | Mikrokontrolery (ESP32, STM32) | Wbudowane węzły na robotach |
+
+**rosbridge_suite** jest de facto standardem dla aplikacji mobilnych. Serwer `rosbridge_server` uruchamiany na robocie eksponuje WebSocket na porcie 9090. Każda wiadomość to JSON z polami `op` (np. `subscribe`, `publish`, `call_service`) oraz `topic`/`msg`. Protokół jest lekki i nie wymaga żadnych natywnych bibliotek ROS po stronie klienta.
+
+```
+┌─────────────────┐         WebSocket (JSON)        ┌─────────────────────┐
+│  Aplikacja      │ ◄──────────────────────────────► │  rosbridge_server   │
+│  mobilna        │         port 9090                │  (robot / ROS2 PC)  │
+│  (Android/iOS)  │                                  │                     │
+└─────────────────┘                                  │  /chatter topic     │
+                                                     │  /cmd_vel topic     │
+                                                     │  /navigate_to_pose  │
+                                                     └─────────────────────┘
+```
+
+**rclnodejs** uruchamia się jako serwer Node.js i może rozmawiać z ROS2 przez natywne DDS, a z aplikacją mobilną przez REST lub Socket.IO. Jest użyteczny gdy potrzebna jest logika pośrednicząca (agregacja, transformacja danych) lub gdy aplikacja mobilna wymaga HTTP zamiast WebSocket.
+
+**micro-ROS** działa bezpośrednio na mikrokontrolerze (np. ESP32 na robocie) i komunikuje się z ROS2 PC przez serial lub UDP. Nie jest interfejsem dla aplikacji mobilnych — jest węzłem ROS2 na urządzeniu embedded.
+
+## Konfiguracja rosbridge na robocie
+
+Zanim aplikacja mobilna połączy się z robotem, należy uruchomić `rosbridge_server` i upewnić się, że sieć jest skonfigurowana poprawnie.
+
+```bash
+# Instalacja rosbridge_suite (ROS2 Humble)
+sudo apt install ros-humble-rosbridge-suite
+
+# Uruchomienie serwera (domyślny port 9090)
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml
+```
+
+Poniższy plik launch pozwala skonfigurować port, SSL i inne parametry:
+
+```python
+# ros2_ws/src/my_robot/launch/rosbridge.launch.py
+from launch import LaunchDescription
+from launch_ros.actions import Node
+
+def generate_launch_description():
+    return LaunchDescription([
+        Node(
+            package='rosbridge_server',
+            executable='rosbridge_websocket',
+            name='rosbridge_websocket',
+            parameters=[{
+                'port': 9090,
+                'address': '0.0.0.0',          # nasłuchuje na wszystkich interfejsach
+                'ssl': False,                   # True gdy używasz TLS
+                # 'certfile': '/path/to/cert.pem',
+                # 'keyfile': '/path/to/key.pem',
+                'authenticate': False,          # True + 'secret' gdy włączone tokeny
+                # 'secret': 'my_secret_token',
+                'max_message_size': 10_000_000, # 10 MB — potrzebne dla map OccupancyGrid
+                'unregister_timeout': 10.0,
+            }],
+        )
+    ])
+```
+
+### Konfiguracja sieciowa
+
+Robot i telefon muszą być w tej samej sieci WiFi lub połączone przez hotspot. Sprawdź adres IP robota:
+
+```bash
+# Na robocie
+hostname -I           # np. 192.168.1.105
+ip addr show wlan0    # szczegóły interfejsu WiFi
+
+# Test połączenia z telefonu (np. przez Termux lub w logach aplikacji)
+# WebSocket URL: ws://192.168.1.105:9090
+```
+
+### Bezpieczeństwo połączenia
+
+W sieci produkcyjnej (np. robot w hali fabrycznej) należy włączyć TLS i uwierzytelnianie:
+
+```kotlin
+// Włącz uwierzytelnianie tokenem — klient musi wysłać:
+// {"op": "auth", "mac": "", "client": "", "dest": "", "rand": "", "t": 0, "level": "", "end": 0}
+// Przed subskrypcją/publikacją
+
+// W aplikacji Kotlin — dodanie tokenu autoryzacyjnego
+val authMessage = JSONObject().apply {
+    put("op", "auth")
+    put("secret", "my_secret_token")
+    put("t", System.currentTimeMillis() / 1000)
+}
+webSocket.send(authMessage.toString())
+```
+
+Dla środowisk o podwyższonych wymaganiach bezpieczeństwa (szpitale, zakłady przemysłowe) rozważ tunelowanie przez VPN (WireGuard) zamiast bezpośredniego wystawiania portu 9090 na sieć.
+
 ## Linki
 
 - [ROS2 Documentation](https://docs.ros.org/en/humble/)
@@ -303,3 +403,85 @@ fun RosLogView(logs: List<RosLog>) {
 - [Nav2 Simple Commander](https://nav2.ros.org/commander_api/index.html)
 - [ROS2 Messages](https://github.com/ros2/common_interfaces)
 - [Foxglove Studio — ROS2 visualization](https://foxglove.dev)
+
+## Bezpieczeństwo i autoryzacja — ROS2 Security
+
+ROS2 obsługuje DDS Security (standardem OMG), który zapewnia szyfrowanie, uwierzytelnianie i autoryzację komunikacji między węzłami. Dla połączeń mobilnych przez publiczną sieć WiFi jest to kluczowe.
+
+### SROS2 — konfiguracja bezpieczeństwa
+
+```bash
+# Tworzenie kluczy i certyfikatów dla węzłów
+ros2 security create_keystore /path/to/keystore
+ros2 security create_key /path/to/keystore /rosbridge_server
+ros2 security create_key /path/to/keystore /robot_controller
+
+# Uruchomienie rosbridge z zabezpieczeniami
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml \
+  ssl:=true \
+  certfile:=/path/to/cert.pem \
+  keyfile:=/path/to/key.pem \
+  port:=9090
+```
+
+### Uwierzytelnianie tokenem w aplikacji mobilnej
+
+```kotlin
+class SecureRosBridge(
+    private val serverUrl: String,
+    private val authToken: String
+) {
+    private val client = OkHttpClient.Builder()
+        .pingInterval(10, TimeUnit.SECONDS)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $authToken")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
+    fun connect(onConnected: () -> Unit, onError: (String) -> Unit) {
+        val request = Request.Builder()
+            .url(serverUrl)  // wss:// dla TLS
+            .build()
+        
+        client.newWebSocket(request, object : WebSocketListener() {
+            override fun onOpen(ws: WebSocket, response: Response) = onConnected()
+            override fun onFailure(ws: WebSocket, t: Throwable, r: Response?) = 
+                onError(t.message ?: "Błąd połączenia")
+        })
+    }
+}
+```
+
+### Monitorowanie przepustowości i QoS
+
+ROS2 DDS umożliwia konfigurację Quality of Service (QoS) — ważne przy połączeniu WiFi z ograniczoną przepustowością:
+
+```kotlin
+// Polityka QoS przez rosbridge — ustawiana po stronie ROS2
+// W aplikacji mobilnej możesz ograniczyć częstotliwość subskrypcji:
+fun subscribeWithThrottle(
+    topic: String, 
+    msgType: String, 
+    throttleMs: Int,
+    callback: (JsonObject) -> Unit
+) {
+    val msg = mapOf(
+        "op" to "subscribe",
+        "topic" to topic,
+        "type" to msgType,
+        "throttle_rate" to throttleMs,  // ms między wiadomościami
+        "queue_length" to 1             // tylko najnowsza wiadomość
+    )
+    webSocket?.send(gson.toJson(msg))
+    topicCallbacks[topic] = callback
+}
+```
+
+Typowe ustawienia dla połączeń mobilnych:
+- `/camera/image_compressed`: throttle 200ms (5 fps)
+- `/scan` (LiDAR): throttle 100ms (10 fps)
+- `/odom`: throttle 50ms (20 fps)
+- `/cmd_vel`: bez throttle (pełna responsywność)

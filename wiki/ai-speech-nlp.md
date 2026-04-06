@@ -278,3 +278,174 @@ On-device NLP dojrzało do punktu, gdzie większość zadań przetwarzania mowy 
 - [MediaPipe — kompleksowe rozwiązania AI](#mediapipe-mobile)
 - [AI w przetwarzaniu obrazu na urządzeniu](#ai-image-processing)
 - [Audio i mikrofon](#audio-microphone)
+
+## 9. Named Entity Recognition (NER) na urządzeniu
+
+Rozpoznawanie nazwanych encji (*Named Entity Recognition*, NER) to zadanie ekstrakcji strukturyzowanych informacji z tekstu: **imion i nazwisk**, **lokalizacji**, **organizacji**, **dat** i innych typów encji. Na urządzeniu mobilnym NER jest szczególnie użyteczne jako etap przetwarzania po STT — np. „Zadzwoń do Anny Kowalskiej jutro o 10" → ekstrakcja osoby, czasu.
+
+### Model NER na TFLite — HerBERT lub XLM-RoBERTa
+
+Do języka polskiego najlepszą opcją on-device jest **HerBERT** (Allegro, trenowany na polskich korpusach) lub wielojęzyczny **XLM-RoBERTa** dostrojony dla zadania NER z etykietami BIO.
+
+```kotlin
+class OnDeviceNER(context: Context) {
+    private val interpreter = Interpreter(
+        FileUtil.loadMappedFile(context, "herbert_ner_int8.tflite"),
+        Interpreter.Options().apply { numThreads = 2 }
+    )
+    private val tokenizer = BertTokenizer(context.assets.open("herbert_vocab.txt"))
+
+    // Etykiety BIO — kolejność musi odpowiadać modelowi
+    private val labels = listOf(
+        "O",
+        "B-PER", "I-PER",    // osoba
+        "B-LOC", "I-LOC",    // lokalizacja
+        "B-ORG", "I-ORG",    // organizacja
+        "B-DATE", "I-DATE"   // data/czas
+    )
+
+    data class Entity(val text: String, val type: String, val start: Int, val end: Int)
+
+    fun extractEntities(text: String): List<Entity> {
+        val tokens = tokenizer.tokenize(text, maxLen = 128)
+        val inputIds  = Array(1) { tokens.inputIds }
+        val inputMask = Array(1) { tokens.attentionMask }
+
+        // Wyjście: [1, seqLen, numLabels] — logity dla każdego tokenu
+        val output = Array(1) { Array(128) { FloatArray(labels.size) } }
+        interpreter.run(arrayOf(inputIds, inputMask), mapOf(0 to output))
+
+        return decodeBIOTags(text, tokens.tokenList, output[0])
+    }
+
+    private fun decodeBIOTags(
+        originalText: String,
+        tokenList: List<String>,
+        logits: Array<FloatArray>
+    ): List<Entity> {
+        val entities = mutableListOf<Entity>()
+        var currentEntity: StringBuilder? = null
+        var currentType = ""
+        var charOffset = 0
+
+        tokenList.forEachIndexed { i, token ->
+            val labelIdx = logits[i].indices.maxByOrNull { logits[i][it] } ?: 0
+            val label = labels[labelIdx]
+
+            when {
+                label.startsWith("B-") -> {
+                    currentEntity?.let { entities.add(Entity(it.toString(), currentType, 0, 0)) }
+                    currentEntity = StringBuilder(token.removePrefix("##"))
+                    currentType = label.substring(2)
+                }
+                label.startsWith("I-") && currentEntity != null -> {
+                    val tokenText = token.removePrefix("##")
+                    if (token.startsWith("##")) currentEntity?.append(tokenText)
+                    else currentEntity?.append(" $tokenText")
+                }
+                else -> {
+                    currentEntity?.let { entities.add(Entity(it.toString(), currentType, 0, 0)) }
+                    currentEntity = null
+                }
+            }
+        }
+        currentEntity?.let { entities.add(Entity(it.toString(), currentType, 0, 0)) }
+        return entities
+    }
+}
+```
+
+### Przykład użycia po STT
+
+```kotlin
+// Integracja STT → NER
+val transcript = whisperRecognizer.recognize(audioFile)
+// → "Wyślij e-mail do Piotra Nowaka w poniedziałek"
+
+val entities = nerModel.extractEntities(transcript)
+// → [Entity("Piotra Nowaka", "PER"), Entity("poniedziałek", "DATE")]
+
+entities.forEach { entity ->
+    when (entity.type) {
+        "PER"  -> contactFinder.search(entity.text)
+        "DATE" -> calendarHelper.parseDate(entity.text)
+        "LOC"  -> mapIntent.navigate(entity.text)
+        else   -> {}
+    }
+}
+```
+
+---
+
+## 10. Ocena jakości STT — metryki WER i CER
+
+Porównując silniki STT lub dostrajając własny model, potrzebujemy obiektywnych metryk. Dwie kluczowe to **WER** (*Word Error Rate*) i **CER** (*Character Error Rate*).
+
+### Definicje
+
+**WER** mierzy liczbę błędów na poziomie słów:
+
+```
+WER = (S + D + I) / N
+```
+
+gdzie: `S` = podstawienia, `D` = usunięcia, `I` = wstawienia, `N` = liczba słów w referencji.
+
+**CER** — analogicznie na poziomie znaków. Lepszy dla języków aglutynacyjnych (jak turecki, fiński) lub gdy litery ważniejsze niż słowa (OCR). Dla polskiego WER jest zazwyczaj wystarczający.
+
+### Obliczanie WER w Pythonie
+
+```python
+def compute_wer(reference: str, hypothesis: str) -> float:
+    """Oblicza Word Error Rate metodą odległości edycyjnej (Levenshtein)."""
+    ref_words = reference.lower().split()
+    hyp_words = hypothesis.lower().split()
+    n = len(ref_words)
+    m = len(hyp_words)
+
+    # Macierz DP
+    dp = [[0] * (m + 1) for _ in range(n + 1)]
+    for i in range(n + 1): dp[i][0] = i
+    for j in range(m + 1): dp[0][j] = j
+
+    for i in range(1, n + 1):
+        for j in range(1, m + 1):
+            if ref_words[i-1] == hyp_words[j-1]:
+                dp[i][j] = dp[i-1][j-1]
+            else:
+                dp[i][j] = 1 + min(dp[i-1][j], dp[i][j-1], dp[i-1][j-1])
+
+    return dp[n][m] / max(n, 1)
+
+def compute_cer(reference: str, hypothesis: str) -> float:
+    """Oblicza Character Error Rate."""
+    ref = reference.replace(" ", "")
+    hyp = hypothesis.replace(" ", "")
+    return compute_wer(" ".join(ref), " ".join(hyp))
+
+# Przykład:
+ref = "dobry wieczór panie premierze"
+hyp = "dobry wieczór panie premieże"
+print(f"WER: {compute_wer(ref, hyp):.2%}")   # WER: 25.00%
+print(f"CER: {compute_cer(ref, hyp):.2%}")   # CER: 3.57%
+```
+
+### Benchmarki dla języka polskiego
+
+| Model / Silnik | WER (PL) | CER (PL) | Tryb | Rozmiar |
+|----------------|----------|----------|------|---------|
+| **Whisper tiny** | ~18% | ~6% | offline | 39 MB |
+| **Whisper base** | ~12% | ~4% | offline | 74 MB |
+| **Whisper small** | ~8% | ~2.5% | offline | 244 MB |
+| **Google STT API** | ~5% | ~1.8% | online | — |
+| **Azure Speech** | ~6% | ~2% | online | — |
+
+> Wartości WER dla języka polskiego — na korpusie CLARIN-PL Common Voice. Wyniki zależą silnie od akcentu, jakości mikrofonu i tempa mowy.
+
+### Wskazówki poprawy jakości STT
+
+- **Redukcja szumu** przed rozpoznawaniem (WebRTC NS, RNNoise)
+- **VAD** — nie wysyłaj ciszy do modelu STT
+- **Biasing językowy** — zasilaj model listą spodziewanych słów (nazw, komend)
+- **Normalizacja tekstu** po stronie hipotetycznej i referencyjnej przed liczeniem WER (usunięcie interpunkcji, lowercase)
+- **Kwantyzacja INT8** nie pogarsza istotnie WER (różnica < 1 pp) przy 4× mniejszym modelu
