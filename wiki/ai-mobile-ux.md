@@ -897,7 +897,7 @@ fun ResultsScreen(viewModel: InferenceViewModel) {
 ### 8.2 Dostępność na iOS — VoiceOver
 
 ```swift
-// SwiftUI — accesibility dla dynamicznych wyników AI
+// SwiftUI — accessibility dla dynamicznych wyników AI
 struct AccessibleResultCard: View {
     let result: ClassificationResult
 
