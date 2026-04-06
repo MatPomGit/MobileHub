@@ -410,7 +410,7 @@ fun BleJoystick(gatt: BluetoothGatt?) {
 }
 ```
 
-Połączenie joysticka z sescją GATT zapewnia opóźnienie poniżej 20 ms, co jest wystarczające do płynnego sterowania.
+Połączenie joysticka z sesją GATT zapewnia opóźnienie poniżej 20 ms, co jest wystarczające do płynnego sterowania.
 
 ---
 

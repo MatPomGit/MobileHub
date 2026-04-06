@@ -252,7 +252,7 @@ Frotz obsługuje wyłącznie format Z-machine, ale świat interaktywnej fikcji o
 Inform 7 to język programowania zaprojektowany tak, by przypominał angielski prozę:
 
 ```inform7
-The kitchen is a room. "Pachniesz kawą i tostami."
+The kitchen is a room. "Pachnie kawą i tostami."
 The coffee cup is on the table. The cup is a container.
 Instead of taking the coffee cup:
     say "Za gorące — lepiej poczekaj chwilę.";
