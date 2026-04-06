@@ -312,8 +312,381 @@ Reguła:   GC Alloc w klatce == 0  (nie alokuj w Update!)
 Target:   < 16.67ms całkowity czas klatki dla 60 FPS
 ```
 
+## Addressables — system zarządzania zasobami
+
+System Addressables pozwala ładować zasoby asynchronicznie, zmniejszać rozmiar APK i zarządzać pamięcią na urządzeniach mobilnych.
+
+```csharp
+using UnityEngine.AddressableAssets;
+using UnityEngine.ResourceManagement.AsyncOperations;
+
+public class AddressablesManager : MonoBehaviour
+{
+    [SerializeField] private AssetReference enemyPrefabRef;
+    [SerializeField] private AssetLabelReference levelLabel;
+
+    private List<AsyncOperationHandle> loadedHandles = new List<AsyncOperationHandle>();
+
+    // Asynchroniczne ładowanie pojedynczego prefabu
+    public async void LoadEnemyAsync(Vector3 spawnPosition)
+    {
+        var handle = Addressables.LoadAssetAsync<GameObject>(enemyPrefabRef);
+        await handle.Task;
+
+        if (handle.Status == AsyncOperationStatus.Succeeded)
+        {
+            Instantiate(handle.Result, spawnPosition, Quaternion.identity);
+            loadedHandles.Add(handle); // zapamiętaj do zwolnienia pamięci
+        }
+        else
+        {
+            Debug.LogError($"Błąd ładowania: {handle.OperationException}");
+        }
+    }
+
+    // Ładowanie wielu assetów po etykiecie
+    public async void LoadLevelAssets(string label)
+    {
+        var handle = Addressables.LoadAssetsAsync<Sprite>(label, sprite =>
+        {
+            Debug.Log($"Załadowano sprite: {sprite.name}");
+        });
+        await handle.Task;
+        loadedHandles.Add(handle);
+    }
+
+    // Zwalnianie pamięci — kluczowe na mobile!
+    private void OnDestroy()
+    {
+        foreach (var handle in loadedHandles)
+        {
+            if (handle.IsValid())
+                Addressables.Release(handle);
+        }
+    }
+
+    // Pobieranie rozmiaru do pobrania przed załadowaniem
+    public async void CheckDownloadSize(string label)
+    {
+        var sizeHandle = Addressables.GetDownloadSizeAsync(label);
+        await sizeHandle.Task;
+        long sizeBytes = sizeHandle.Result;
+        Debug.Log($"Rozmiar do pobrania: {sizeBytes / 1024} KB");
+        Addressables.Release(sizeHandle);
+    }
+}
+```
+
+**Dobre praktyki Addressables na mobile:**
+- Grupuj assety w paczki według scen lub poziomów — ładuj tylko to, co potrzebne
+- Zwalniaj uchwyty (`Release`) natychmiast po opuszczeniu sceny
+- Używaj `Addressables.InstantiateAsync` zamiast `LoadAsset + Instantiate`, by Addressables śledziło cykl życia obiektów
+
+## Cieniowanie i Universal Render Pipeline (URP)
+
+URP (Universal Render Pipeline) to lżejszy potok renderowania zoptymalizowany pod urządzenia mobilne. Zastępuje Built-in RP i oferuje lepszą wydajność na GPU mobilnych.
+
+```csharp
+// Custom URP Renderer Feature — własny efekt post-processingu
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
+
+public class MobileOutlinePass : ScriptableRenderPass
+{
+    private Material outlineMaterial;
+    private RTHandle tempRT;
+    private static readonly int OutlineColor = Shader.PropertyToID("_OutlineColor");
+
+    public MobileOutlinePass(Material mat)
+    {
+        outlineMaterial = mat;
+        // Wykonaj po renderowaniu nieprzezroczystych obiektów
+        renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+    }
+
+    public override void OnCameraSetup(CommandBuffer cmd, ref RenderingData renderingData)
+    {
+        var desc = renderingData.cameraData.cameraTargetDescriptor;
+        desc.depthBufferBits = 0;
+        RenderingUtils.ReAllocateIfNeeded(ref tempRT, desc, name: "_TempOutlineRT");
+    }
+
+    public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
+    {
+        var cmd = CommandBufferPool.Get("MobileOutline");
+        outlineMaterial.SetColor(OutlineColor, Color.yellow);
+
+        Blit(cmd, renderingData.cameraData.renderer.cameraColorTargetHandle,
+             tempRT, outlineMaterial, 0);
+        Blit(cmd, tempRT,
+             renderingData.cameraData.renderer.cameraColorTargetHandle);
+
+        context.ExecuteCommandBuffer(cmd);
+        CommandBufferPool.Release(cmd);
+    }
+
+    public override void OnCameraCleanup(CommandBuffer cmd)
+    {
+        // Zwalniaj RTHandle po każdej klatce
+        tempRT?.Release();
+    }
+}
+```
+
+**Optymalizacja shaderów URP na mobile:**
+- Używaj `Unlit` lub `Simple Lit` zamiast `Lit` tam, gdzie to możliwe
+- Wyłącz cienie dla obiektów drugoplanowych (`Cast Shadows: Off`)
+- Ogranicz liczbę świateł per-obiekt w ustawieniach URP Asset (`Max Additional Lights: 2-4`)
+- Preferuj tekstury skompresowane ETC2 (Android) lub ASTC (iOS/Android)
+
+## Unity Profiler — profilowanie na urządzeniu mobilnym
+
+Profiler Unity umożliwia wykrycie wąskich gardeł CPU, GPU i pamięci bezpośrednio na fizycznym urządzeniu.
+
+```
+Window → Analysis → Profiler  (Ctrl+7)
+
+Podłączenie do urządzenia:
+1. Build Settings → Development Build ✓ + Autoconnect Profiler ✓
+2. Zainstaluj APK/IPA na urządzeniu
+3. Profiler → Target: wybierz urządzenie z listy
+
+Kluczowe metryki:
+├── CPU Usage
+│   ├── PlayerLoop → Update → Scripting  (logika gry)
+│   ├── Physics.Processing              (symulacja fizyki)
+│   └── Rendering.OpaqueGeometry        (draw calle)
+├── GPU Usage
+│   ├── Opaque Pass
+│   ├── Transparent Pass
+│   └── Shadow Pass (wyłącz na mobile gdy zbędne!)
+├── Memory
+│   ├── GC Alloc w klatce → dąż do 0!
+│   ├── Textures / Meshes               (rozmiar w VRAM)
+│   └── Audio Sources
+└── Rendering
+    ├── Batches                         (mniej = lepiej)
+    ├── SetPass Calls
+    └── Triangles / Vertices
+```
+
+```csharp
+// Profilowanie własnego kodu — znaczniki w Profilerze
+using Unity.Profiling;
+
+public class EnemyAI : MonoBehaviour
+{
+    private static readonly ProfilerMarker PathfindingMarker =
+        new ProfilerMarker("EnemyAI.Pathfinding");
+
+    private static readonly ProfilerMarker DetectionMarker =
+        new ProfilerMarker("EnemyAI.Detection");
+
+    void Update()
+    {
+        using (DetectionMarker.Auto())
+        {
+            DetectPlayer(); // ten blok pojawi się w Profilerze
+        }
+
+        using (PathfindingMarker.Auto())
+        {
+            RecalculatePath(); // oddzielny pomiar
+        }
+    }
+}
+```
+
+**Reguły wydajności na mobile:**
+| Metryka | Cel (60 FPS) |
+|---|---|
+| Czas klatki | < 16,67 ms |
+| GC Alloc/klatkę | 0 B |
+| Draw Calls | < 100 |
+| Trójkąty | < 100 000 |
+
+## Input System — nowy system wejścia
+
+Pakiet `com.unity.inputsystem` zastępuje stary `Input` API i obsługuje dotyk, gamepady i akcelerometr w jednolity sposób.
+
+```csharp
+using UnityEngine;
+using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.EnhancedTouch;
+using Touch = UnityEngine.InputSystem.EnhancedTouch.Touch;
+
+public class TouchInputHandler : MonoBehaviour
+{
+    void OnEnable()
+    {
+        EnhancedTouchSupport.Enable();
+        Touch.onFingerDown += OnFingerDown;
+        Touch.onFingerMove += OnFingerMove;
+        Touch.onFingerUp   += OnFingerUp;
+    }
+
+    void OnDisable()
+    {
+        Touch.onFingerDown -= OnFingerDown;
+        Touch.onFingerMove -= OnFingerMove;
+        Touch.onFingerUp   -= OnFingerUp;
+        EnhancedTouchSupport.Disable();
+    }
+
+    private void OnFingerDown(Finger finger)
+    {
+        Ray ray = Camera.main.ScreenPointToRay(finger.currentTouch.screenPosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+            hit.collider.GetComponent<IInteractable>()?.OnTap();
+    }
+
+    private void OnFingerMove(Finger finger)
+    {
+        Vector2 delta = finger.currentTouch.delta;
+        Camera.main.transform.Rotate(Vector3.up, delta.x * 0.2f);
+    }
+
+    private void OnFingerUp(Finger finger) { }
+
+    // Pinch-to-zoom przy dwóch palcach
+    void Update()
+    {
+        var touches = Touch.activeTouches;
+        if (touches.Count == 2)
+        {
+            float prevDist = Vector2.Distance(
+                touches[0].screenPosition - touches[0].delta,
+                touches[1].screenPosition - touches[1].delta);
+            float currDist = Vector2.Distance(
+                touches[0].screenPosition, touches[1].screenPosition);
+
+            Camera.main.orthographicSize = Mathf.Clamp(
+                Camera.main.orthographicSize - (currDist - prevDist) * 0.02f,
+                2f, 20f);
+        }
+    }
+}
+
+// Input Actions — obsługa gamepada i klawiatury jednocześnie
+public class PlayerController : MonoBehaviour
+{
+    private PlayerInputActions inputActions;
+    private Vector2 moveInput;
+
+    void Awake()
+    {
+        inputActions = new PlayerInputActions();
+        inputActions.Player.Move.performed += ctx => moveInput = ctx.ReadValue<Vector2>();
+        inputActions.Player.Move.canceled  += ctx => moveInput = Vector2.zero;
+        inputActions.Player.Jump.performed += _ => Jump();
+    }
+
+    void OnEnable()  => inputActions.Enable();
+    void OnDisable() => inputActions.Disable();
+
+    void FixedUpdate()
+    {
+        GetComponent<Rigidbody>().MovePosition(
+            transform.position + new Vector3(moveInput.x, 0, moveInput.y) * 5f * Time.fixedDeltaTime);
+    }
+
+    void Jump() => GetComponent<Rigidbody>().AddForce(Vector3.up * 400f);
+}
+```
+
+## AR Foundation — rozszerzona rzeczywistość w Unity
+
+AR Foundation to warstwa abstrakcji nad ARCore (Android) i ARKit (iOS), pozwalająca pisać jeden kod dla obu platform.
+
+**Wymagania:** Pakiety `com.unity.xr.arfoundation`, `com.unity.xr.arcore` (Android), `com.unity.xr.arkit` (iOS).
+
+```csharp
+using UnityEngine;
+using UnityEngine.XR.ARFoundation;
+using UnityEngine.XR.ARSubsystems;
+using System.Collections.Generic;
+
+[RequireComponent(typeof(ARRaycastManager))]
+public class ARObjectPlacer : MonoBehaviour
+{
+    [SerializeField] private GameObject placedPrefab;
+    private ARRaycastManager raycastManager;
+    private ARPlaneManager planeManager;
+    private GameObject spawnedObject;
+    private List<ARRaycastHit> hits = new List<ARRaycastHit>();
+
+    void Awake()
+    {
+        raycastManager = GetComponent<ARRaycastManager>();
+        planeManager   = GetComponent<ARPlaneManager>();
+    }
+
+    void Update()
+    {
+        if (Input.touchCount == 0) return;
+
+        Touch touch = Input.GetTouch(0);
+        if (touch.phase != TouchPhase.Began) return;
+
+        // Rzut promienia na wykryte płaszczyzny AR
+        if (raycastManager.Raycast(touch.position, hits, TrackableType.PlaneWithinPolygon))
+        {
+            Pose hitPose = hits[0].pose;
+
+            if (spawnedObject == null)
+                spawnedObject = Instantiate(placedPrefab, hitPose.position, hitPose.rotation);
+            else
+            {
+                spawnedObject.transform.position = hitPose.position;
+                spawnedObject.transform.rotation = hitPose.rotation;
+            }
+
+            // Ukryj płaszczyzny po umieszczeniu obiektu
+            SetPlanesVisible(false);
+        }
+    }
+
+    private void SetPlanesVisible(bool visible)
+    {
+        foreach (ARPlane plane in planeManager.trackables)
+            plane.gameObject.SetActive(visible);
+        planeManager.enabled = visible;
+    }
+}
+
+// Śledzenie twarzy — ARKit/ARCore
+public class FaceTracker : MonoBehaviour
+{
+    private ARFaceManager faceManager;
+
+    void OnEnable()  => faceManager.facesChanged += OnFacesChanged;
+    void OnDisable() => faceManager.facesChanged -= OnFacesChanged;
+
+    private void OnFacesChanged(ARFacesChangedEventArgs args)
+    {
+        foreach (ARFace face in args.added)
+            Debug.Log($"Wykryto twarz: {face.trackableId}");
+
+        foreach (ARFace face in args.updated)
+        {
+            // Pobierz siatkę twarzy do nałożenia maski
+            Mesh mesh = face.mesh;
+        }
+    }
+}
+```
+
+**Konfiguracja AR Foundation:**
+1. `Project Settings → XR Plug-in Management` → włącz ARCore (Android) / ARKit (iOS)
+2. Android: minimalny API Level 24, włącz `Internet` i `Camera` permissions
+3. iOS: dodaj `NSCameraUsageDescription` w `Info.plist`
+4. Scena: dodaj `AR Session` i `AR Session Origin` (lub `XR Origin`) jako obiekty główne
+
 ## Linki dodatkowe
 
 - [Unity Mobile Best Practices](https://unity.com/how-to/mobile-game-optimization)
 - [Universal Render Pipeline](https://docs.unity3d.com/Packages/com.unity.render-pipelines.universal@latest)
 - [Unity Profiler](https://docs.unity3d.com/Manual/Profiler.html)
+- [Addressables Documentation](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html)
+- [Unity Input System](https://docs.unity3d.com/Packages/com.unity.inputsystem@latest)
+- [AR Foundation](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest)
