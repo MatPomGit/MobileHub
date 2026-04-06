@@ -355,3 +355,64 @@ Bloki `subprojects {}` i `allprojects {}` w pliku root `build.gradle.kts` muszą
 | Blokery | Wiele pluginów third-party jeszcze niezgodnych |
 
 Rekomendacja: włącz Isolated Projects na gałęzi `experiment/`, uruchom build, przejrzyj raport CC i eliminuj niezgodności stopniowo. Nie włączaj na `main` do czasu stabilizacji w Gradle 9.x.
+
+## Lint po migracji AGP — nowe reguły i baseline
+
+Nowe wersje AGP często dodają reguły Lint, które wykrywają problemy niewidoczne w poprzednich wersjach. Po migracji warto uruchomić analizę i zaktualizować baseline.
+
+### Generowanie baseline Lint
+
+Baseline pozwala zatwierdzić istniejące ostrzeżenia i śledzić tylko nowe naruszenia:
+
+```bash
+# Wygeneruj nowy baseline po migracji
+./gradlew :app:lintDebug -PupdateLintBaseline
+# Plik: app/lint-baseline.xml
+```
+
+### Konfiguracja Lint w build.gradle.kts
+
+```kotlin
+android {
+    lint {
+        // Traktuj błędy Lint jako błędy buildu (zalecane w CI)
+        abortOnError = true
+        // Plik baseline — ignoruj pre-istniejące problemy
+        baseline = file("lint-baseline.xml")
+        // Wyłącz reguły generujące fałszywe pozytywy po AGP upgrade
+        disable += "GradleDependency"
+        // Włącz reguły eksperymentalne
+        enable += "UnusedResources"
+        // Generuj raporty
+        htmlReport = true
+        htmlOutput = file("build/reports/lint-results.html")
+        xmlReport = true
+        sarifReport = true  // Format SARIF dla GitHub Actions
+    }
+}
+```
+
+### Integracja z GitHub Actions
+
+```yaml
+# .github/workflows/lint.yml
+- name: Run Lint
+  run: ./gradlew :app:lintDebug
+
+- name: Upload SARIF
+  uses: github/codeql-action/upload-sarif@v3
+  with:
+    sarif_file: app/build/reports/lint-results.sarif
+```
+
+Wyniki Lint pojawiają się bezpośrednio jako adnotacje w diff pull requesta na GitHubie.
+
+### Najczęstsze nowe reguły po migracji AGP 8.x
+
+| Reguła | Opis | Akcja |
+|--------|------|-------|
+| `UnusedResources` | Nieużywane pliki res/ | Usuń lub dodaj do shrinkResources |
+| `MissingApplicationIcon` | Brak ikony adaptive | Utwórz `ic_launcher.xml` |
+| `PermissionImpliesUnsupportedChromeOsHardware` | Uprawnienia niezgodne z ChromeOS | Dodaj `uses-feature android:required="false"` |
+| `CredentialDependency` | Użycie przestarzałego Credentials API | Migruj do Credential Manager |
+| `ExifInterface` | Bezpośrednie użycie java.text zamiast AndroidX | Użyj `androidx.exifinterface` |

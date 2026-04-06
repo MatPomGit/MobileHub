@@ -453,3 +453,65 @@ Dla list z funkcją drag-and-drop dodaj akcję `moveUp`/`moveDown` przez `semant
 - [NestedScroll](https://developer.android.com/reference/kotlin/androidx/compose/ui/input/nestedscroll/package-summary)
 - [PullToRefresh](https://developer.android.com/reference/kotlin/androidx/compose/material3/pulltorefresh/package-summary)
 - [Reorderable](https://github.com/aclassen/ComposeReorderable)
+
+## Gesty na iOS — UIGestureRecognizer
+
+Na iOS gesty obsługuje system `UIGestureRecognizer` (UIKit) lub odpowiedniki w SwiftUI (`.gesture()` modyfikator). SwiftUI ujednolica API gestów, czyniąc je podobnymi do Compose.
+
+```swift
+import SwiftUI
+
+struct ZoomableImageView: View {
+    @State private var scale: CGFloat = 1.0
+    @State private var lastScale: CGFloat = 1.0
+    @State private var offset: CGSize = .zero
+    @State private var lastOffset: CGSize = .zero
+    
+    var body: some View {
+        Image("sample")
+            .resizable()
+            .scaledToFit()
+            .scaleEffect(scale)
+            .offset(offset)
+            .gesture(
+                MagnificationGesture()
+                    .onChanged { value in
+                        scale = lastScale * value
+                    }
+                    .onEnded { _ in
+                        lastScale = scale
+                        // Ogranicz zoom
+                        scale = max(0.5, min(scale, 5.0))
+                        lastScale = scale
+                    }
+            )
+            .simultaneousGesture(
+                DragGesture()
+                    .onChanged { value in
+                        offset = CGSize(
+                            width: lastOffset.width + value.translation.width,
+                            height: lastOffset.height + value.translation.height
+                        )
+                    }
+                    .onEnded { _ in lastOffset = offset }
+            )
+            .onTapGesture(count: 2) {
+                // Double tap — reset zoom
+                withAnimation(.spring()) {
+                    scale = 1.0
+                    offset = .zero
+                    lastScale = 1.0
+                    lastOffset = .zero
+                }
+            }
+    }
+}
+```
+
+Kluczowe modyfikatory SwiftUI dla gestów:
+- `.onTapGesture(count:)` — tap i double-tap
+- `.gesture(DragGesture())` — przeciąganie
+- `.gesture(MagnificationGesture())` — pinch-to-zoom
+- `.gesture(RotationGesture())` — obrót
+- `.simultaneousGesture()` — gesty równoległe
+- `.highPriorityGesture()` — nadpisanie gestów rodzica

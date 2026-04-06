@@ -414,3 +414,62 @@ fun SegmentationOverlay(maskIndices: IntArray, modelSize: Int) {
 ```
 
 Nakładka jest renderowana z `alpha = 0.55f`, dzięki czemu oryginalny obraz z kamery pozostaje widoczny pod kolorową maską. Każda klasa Pascal VOC ma unikalny kolor — użytkownik od razu widzi, które obszary zostały rozpoznane jako droga, ludzie lub pojazdy.
+
+## CameraX — integracja z analizą obrazu
+
+CameraX to biblioteka AndroidX upraszczająca obsługę kamery. Łączy się bezpośrednio z pipeline'em wizji komputerowej przez `ImageAnalysis`:
+
+```kotlin
+@Composable
+fun CameraVisionPreview(
+    onDetections: (List<DetectionResult>) -> Unit
+) {
+    val context = LocalContext.current
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val detector = remember { ObjectDetector(context) }
+
+    val preview = Preview.Builder().build()
+    val imageAnalyzer = ImageAnalysis.Builder()
+        .setTargetResolution(Size(640, 480))
+        .setBackpressureStrategy(ImageAnalysis.STRATEGY_KEEP_ONLY_LATEST)
+        .setOutputImageFormat(ImageAnalysis.OUTPUT_IMAGE_FORMAT_RGBA_8888)
+        .build()
+        .also { analysis ->
+            analysis.setAnalyzer(Executors.newSingleThreadExecutor()) { imageProxy ->
+                val bitmap = imageProxy.toBitmap()
+                val results = detector.detect(bitmap)
+                onDetections(results)
+                imageProxy.close()
+            }
+        }
+
+    val cameraProviderFuture = remember { ProcessCameraProvider.getInstance(context) }
+    AndroidView(
+        factory = { ctx ->
+            PreviewView(ctx).also { previewView ->
+                cameraProviderFuture.addListener({
+                    val cameraProvider = cameraProviderFuture.get()
+                    preview.setSurfaceProvider(previewView.surfaceProvider)
+                    cameraProvider.bindToLifecycle(
+                        lifecycleOwner,
+                        CameraSelector.DEFAULT_BACK_CAMERA,
+                        preview, imageAnalyzer
+                    )
+                }, ContextCompat.getMainExecutor(ctx))
+            }
+        },
+        modifier = Modifier.fillMaxSize()
+    )
+}
+```
+
+### Porównanie bibliotek wizji komputerowej
+
+| Biblioteka | Modele gotowe | Własny model | Platforma | Konfiguracja |
+|------------|--------------|-------------|-----------|-------------|
+| **ML Kit** | ✅ Tak | ❌ Nie | Android + iOS | Minimalna |
+| **TFLite** | ❌ Nie | ✅ Tak | Android + iOS | Średnia |
+| **MediaPipe Tasks** | ✅ Tak | ⚠️ Ograniczone | Android + iOS | Minimalna |
+| **ONNX Runtime** | ❌ Nie | ✅ Tak | Android + iOS | Średnia |
+| **PyTorch Mobile** | ❌ Nie | ✅ Tak | Android + iOS | Zaawansowana |
+| **OpenCV Android** | ❌ Nie | ✅ Tak | Android | Zaawansowana |

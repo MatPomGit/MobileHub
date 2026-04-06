@@ -472,3 +472,68 @@ Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevT
 - [Expo](https://expo.dev/docs)
 - [Zustand](https://github.com/pmndrs/zustand)
 - [New Architecture](https://reactnative.dev/docs/new-architecture-intro)
+
+## Push Notifications — Expo Notifications i Firebase
+
+Powiadomienia push to kluczowy kanał angażowania użytkowników. W React Native najwygodniejsze jest użycie `expo-notifications` (Universal Push Notifications z Expo) lub `@react-native-firebase/messaging` (FCM).
+
+```typescript
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
+
+// Konfiguracja zachowania powiadomień
+Notifications.setNotificationHandler({
+    handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: true,
+    }),
+});
+
+// Rejestracja i pobieranie tokenu push
+async function registerForPushNotifications(): Promise<string | null> {
+    if (!Device.isDevice) return null;
+    
+    const { status: existingStatus } = await Notifications.getPermissionsAsync();
+    let finalStatus = existingStatus;
+    
+    if (existingStatus !== 'granted') {
+        const { status } = await Notifications.requestPermissionsAsync();
+        finalStatus = status;
+    }
+    
+    if (finalStatus !== 'granted') return null;
+    
+    // Expo Push Token — działa na Android i iOS
+    const token = await Notifications.getExpoPushTokenAsync({
+        projectId: 'YOUR_EXPO_PROJECT_ID',
+    });
+    return token.data;  // np. "ExponentPushToken[xxxxxxxxxxxxxxxxxxxxxx]"
+}
+
+// Hook do obsługi powiadomień w komponencie
+function useNotifications() {
+    useEffect(() => {
+        const subscription = Notifications.addNotificationReceivedListener(notification => {
+            console.log('Odebrano powiadomienie:', notification.request.content.title);
+        });
+        
+        const responseSubscription = Notifications.addNotificationResponseReceivedListener(response => {
+            const data = response.notification.request.content.data;
+            // Nawiguj do właściwego ekranu
+        });
+        
+        return () => {
+            subscription.remove();
+            responseSubscription.remove();
+        };
+    }, []);
+}
+```
+
+Wysyłanie przez Expo Push Service:
+```bash
+curl -X POST https://exp.host/--/api/v2/push/send \
+  -H "Content-Type: application/json" \
+  -d '{"to":"ExponentPushToken[xxx]","title":"Nowa wiadomość","body":"Sprawdź aplikację"}'
+```

@@ -478,3 +478,55 @@ fun estimateDepth(bitmap: Bitmap): FloatArray {
 ```
 
 Piksel o wartości bliskiej `1.0` oznacza obiekt blisko kamery. Wystarczy sprawdzić środkowy obszar mapy, by wykryć przeszkodę przed robotem i wydać komendę `STOP`.
+
+## MQTT — alternatywa dla rosbridge
+
+MQTT (Message Queuing Telemetry Transport) to lekki protokół publish-subscribe stosowany w IoT i robotyce tam, gdzie rosbridge wydaje się zbyt ciężki. Działa dobrze na słabych połączeniach i urządzeniach embedded.
+
+```kotlin
+dependencies {
+    implementation("org.eclipse.paho:org.eclipse.paho.client.mqttv3:1.2.5")
+    implementation("org.eclipse.paho:org.eclipse.paho.android.service:1.1.1")
+}
+
+class MqttRobotController(private val brokerUrl: String) {
+    private lateinit var client: MqttClient
+
+    fun connect(clientId: String = "mobile_app_${System.currentTimeMillis()}") {
+        client = MqttClient(brokerUrl, clientId, MemoryPersistence())
+        val options = MqttConnectOptions().apply {
+            isCleanSession = true
+            connectionTimeout = 10
+            keepAliveInterval = 30
+        }
+        client.connect(options)
+        
+        // Subskrybuj dane z robota
+        client.subscribe("robot/odom") { _, message ->
+            val data = String(message.payload)
+            // Parsuj JSON z odometrią
+        }
+        client.subscribe("robot/battery") { _, message ->
+            val level = String(message.payload).toFloat()
+            // Aktualizuj UI
+        }
+    }
+
+    fun sendVelocity(linearX: Float, angularZ: Float) {
+        val payload = """{"linear":{"x":$linearX},"angular":{"z":$angularZ}}"""
+        client.publish("robot/cmd_vel", payload.toByteArray(), 0, false)
+    }
+
+    fun disconnect() = client.disconnect()
+}
+```
+
+## Porównanie protokołów komunikacji z robotem
+
+| Protokół | Latencja | Overhead | Złożoność | Przypadek użycia |
+|-----------|---------|----------|-----------|-----------------|
+| **rosbridge (WS)** | Niska | Średni (JSON) | Średnia | Pełna integracja ROS2 |
+| **MQTT** | Bardzo niska | Minimalny | Niska | IoT, prosta robotyka |
+| **gRPC** | Niska | Niski (protobuf) | Wysoka | Wysoka wydajność |
+| **HTTP REST** | Wysoka | Średni | Niska | Komendy niezbyt czułe na czas |
+| **Bluetooth LE** | Niska | Minimalny | Niska | Roboty lokalne, brak WiFi |

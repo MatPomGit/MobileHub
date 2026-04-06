@@ -361,3 +361,39 @@ Porównanie architektury Z-machine (stos wywołań, zmienne lokalne / globalne, 
 | L5 | Zintegruj gotowy plik `.z5` przez bibliotekę Frotz JNI | NDK, JNI, CMake |
 
 Każde laboratorium buduje na poprzednim — studenci kończą kurs z działającą aplikacją mobilną będącą interpreterem gier tekstowych.
+
+## 15. Glulx i Glulxe — następca Z-machine
+
+Z-machine ma ograniczenia pamięci i możliwości graficznych, które stały się wąskim gardłem dla ambitniejszych projektów IF. **Glulx** (Andrew Plotkin, 1999) to nowoczesna alternatywna VM dla Interactive Fiction, a **Glulxe** — odpowiednik Frotz dla plików Glulx.
+
+### Kluczowe różnice Z-machine vs Glulx
+
+| Cecha | Z-machine | Glulx |
+|-------|-----------|-------|
+| Przestrzeń adresowa | Do 512 KB (v8) | 4 GB |
+| Stos | 1 KB (v5) | Nieograniczony |
+| Grafika | Ograniczona (v6) | Przez Glk (zewnętrzne) |
+| Dźwięk | Ograniczony | Przez Glk |
+| Ścieżka dźwiękowa | Nie | Tak |
+| Kodowanie | ZSCII | Unicode (UTF-32) |
+| Format pliku | `.z3`, `.z5`, `.z8` | `.ulx`, `.gblorb` |
+| Popularne narzędzia | Inform 6, Frotz | Inform 7, Glulxe, Quixe |
+
+### Glk — biblioteka portowania I/O
+
+Zarówno Frotz (w nowszych wariantach), jak i Glulxe korzystają z **Glk** (Glk I/O Layer) — standaryzowanego interfejsu wejścia/wyjścia, który oddziela logikę interpretera od warstwy platformowej. Dzięki Glk interpreter można podłączyć do:
+- terminala tekstowego,
+- GUI desktopowego (GTK, SDL),
+- aplikacji mobilnej (przez JNI/FFI),
+- przeglądarki (przez Emscripten/WASM).
+
+Z perspektywy mobilnej Glk jest analogiczny do interfejsu I/O Frotz omówionego wcześniej — stanowi warstwę abstrakcji, którą należy zaimplementować po stronie platformy.
+
+### Quixe i Lectrote — IF w przeglądarce
+
+**Quixe** to interpreter Glulx napisany w JavaScript, działający bezpośrednio w przeglądarce. **Lectrote** to aplikacja desktopowa (Electron) łącząca Quixe z wygodnym interfejsem użytkownika. Oba projekty są dostępne otwartoźródłowo i stanowią punkt wyjścia do tworzenia WebView-based interpreterów IF dla aplikacji mobilnych.
+
+Referencje:
+- [Glulx standard](https://www.eblong.com/zarf/glulx/)
+- [Glk API](https://www.eblong.com/zarf/glk/)
+- [Quixe](https://github.com/erkyrath/quixe)

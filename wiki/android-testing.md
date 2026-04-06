@@ -484,3 +484,78 @@ Zalety wzorca:
 - Zmiana selektora (np. `testTag`) wymaga edycji tylko robota, nie wszystkich testów.
 - Testy czyta się jak specyfikację funkcjonalną.
 - Płynne API (każda metoda zwraca `this`) pozwala chainować kroki bez zbędnych zmiennych.
+
+## Testy End-to-End — Maestro i UI Automator
+
+Testy end-to-end (E2E) weryfikują cały przepływ aplikacji od interfejsu użytkownika po bazę danych i sieć. W ekosystemie Android dostępne są dwa główne narzędzia: **UI Automator 2** (wbudowany w AndroidX) i **Maestro** (YAML-based, zero-konfiguracji).
+
+### Maestro — testy E2E w YAML
+
+Maestro pozwala pisać scenariusze testowe w czytelnym YAML bez znajomości Kotlin/Java:
+
+```yaml
+# flows/add_task.yaml
+appId: com.example.tasks
+---
+- launchApp
+- assertVisible: "Lista zadań"
+- tapOn: "Dodaj zadanie"
+- assertVisible: "Nowe zadanie"
+- tapOn:
+    id: "task_input"
+- inputText: "Zadanie testowe E2E"
+- tapOn: "Zapisz"
+- assertVisible: "Zadanie testowe E2E"
+- pressBack
+```
+
+Uruchamianie na podłączonym urządzeniu:
+```bash
+maestro test flows/add_task.yaml
+maestro test flows/          # wszystkie flow w katalogu
+maestro studio               # interaktywny debugger
+```
+
+### UI Automator 2 — testy poza granicami aplikacji
+
+UI Automator pozwala testować interakcje z innymi aplikacjami i powiadomieniami systemowymi:
+
+```kotlin
+@RunWith(AndroidJUnit4::class)
+class NotificationE2ETest {
+    private val device = UiDevice.getInstance(InstrumentationRegistry.getInstrumentation())
+
+    @Test
+    fun notification_tapAction_opensCorrectScreen() {
+        // Uruchom aplikację
+        val intent = InstrumentationRegistry.getInstrumentation().context
+            .packageManager.getLaunchIntentForPackage("com.example.tasks")
+        InstrumentationRegistry.getInstrumentation().context.startActivity(intent)
+
+        // Poczekaj na główny ekran
+        device.wait(Until.hasObject(By.text("Lista zadań")), 3000)
+
+        // Otwórz panel powiadomień
+        device.openNotification()
+        device.wait(Until.hasObject(By.text("Nowe przypomnienie")), 3000)
+
+        // Kliknij powiadomienie
+        device.findObject(By.text("Nowe przypomnienie")).click()
+
+        // Zweryfikuj, że otworzył się właściwy ekran
+        device.wait(Until.hasObject(By.text("Szczegóły zadania")), 3000)
+        assertTrue(device.hasObject(By.text("Szczegóły zadania")))
+    }
+}
+```
+
+### Porównanie podejść do testowania UI
+
+| Narzędzie | Poziom | Szybkość | Izolacja | Scenariusze |
+|-----------|--------|----------|----------|-------------|
+| **Compose Test** | Komponent | Szybkie | Wysoka | Unit UI |
+| **Espresso** | Activity/Fragment | Średnia | Średnia | Przepływy wewnątrz app |
+| **UI Automator 2** | System | Wolne | Niska | Powiadomienia, multi-app |
+| **Maestro** | E2E | Wolne | Niska | Pełne scenariusze |
+
+Zalecana strategia: 70% Compose/Espresso, 20% UI Automator, 10% Maestro dla krytycznych przepływów.

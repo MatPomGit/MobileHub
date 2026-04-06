@@ -243,3 +243,48 @@ Dwie najczęściej stosowane miary w badaniach ergonomii mobilnej:
 - [Material Design — Accessibility](https://m3.material.io/foundations/accessible-design/overview)
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
 - [Nielsen Norman Group — Touch UX](https://www.nngroup.com/topic/touch-gestures/)
+
+## Ergonomia multiplatformowa — iOS vs Android
+
+Użytkownicy przyzwyczajeni do jednej platformy mają określone oczekiwania co do gestów i rozmieszczenia elementów UI. Aplikacja cross-platformowa powinna respektować te wzorce.
+
+### Kluczowe różnice ergonomiczne platform
+
+| Aspekt | iOS (Apple HIG) | Android (Material 3) |
+|--------|----------------|---------------------|
+| Nawigacja wstecz | Gest przesunięcia od lewej krawędzi | Gest od dołu (Android 10+) lub przycisk |
+| Nawigacja główna | Tab bar na dole (5 zakładek max) | Navigation bar na dole lub Drawer |
+| Akcje kontekstowe | Swipe w lewo → przyciski | Swipe → ujawnienie akcji lub długie przytrzymanie |
+| Pasek statusu | Bezpieczna strefa (notch) | Pasek statusu, edge-to-edge (Android 15+) |
+| FAB | Rzadziej stosowany | Standardowy element Material |
+| Modalne dolne arkusze | Standardowe (half/full detents) | BottomSheet (expanded/collapsed) |
+| Minimalna strefa dotyku | 44×44 pt | 48×48 dp |
+| Typografia | SF Pro (Dynamic Type) | Roboto (M3 Type Scale) |
+
+### Adaptive Layout dla foldables i tabletów
+
+Na większych ekranach ergonomia wymaga innego rozkładu: treść po lewej, szczegóły po prawej, nawigacja jako boczny pasek. Jetpack Compose WindowSizeClass ułatwia adaptację:
+
+```kotlin
+@Composable
+fun AdaptiveTaskApp() {
+    val windowSizeClass = calculateWindowSizeClass()
+    
+    when (windowSizeClass.widthSizeClass) {
+        WindowWidthSizeClass.Compact -> {
+            // Telefon: bottom nav + single pane
+            BottomNavLayout()
+        }
+        WindowWidthSizeClass.Medium -> {
+            // Składany/mały tablet: navigation rail + single pane
+            NavigationRailLayout()
+        }
+        WindowWidthSizeClass.Expanded -> {
+            // Tablet/desktop: permanent nav drawer + two pane
+            PermanentDrawerLayout()
+        }
+    }
+}
+```
+
+Dostosowanie ergonomii do rozmiaru ekranu to inwestycja, która zyska na znaczeniu wraz z rosnącą popularnością foldables.

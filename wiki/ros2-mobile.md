@@ -403,3 +403,85 @@ fun RosLogView(logs: List<RosLog>) {
 - [Nav2 Simple Commander](https://nav2.ros.org/commander_api/index.html)
 - [ROS2 Messages](https://github.com/ros2/common_interfaces)
 - [Foxglove Studio — ROS2 visualization](https://foxglove.dev)
+
+## Bezpieczeństwo i autoryzacja — ROS2 Security
+
+ROS2 obsługuje DDS Security (standardem OMG), który zapewnia szyfrowanie, uwierzytelnianie i autoryzację komunikacji między węzłami. Dla połączeń mobilnych przez publiczną sieć WiFi jest to kluczowe.
+
+### SROS2 — konfiguracja bezpieczeństwa
+
+```bash
+# Tworzenie kluczy i certyfikatów dla węzłów
+ros2 security create_keystore /path/to/keystore
+ros2 security create_key /path/to/keystore /rosbridge_server
+ros2 security create_key /path/to/keystore /robot_controller
+
+# Uruchomienie rosbridge z zabezpieczeniami
+ros2 launch rosbridge_server rosbridge_websocket_launch.xml \
+  ssl:=true \
+  certfile:=/path/to/cert.pem \
+  keyfile:=/path/to/key.pem \
+  port:=9090
+```
+
+### Uwierzytelnianie tokenem w aplikacji mobilnej
+
+```kotlin
+class SecureRosBridge(
+    private val serverUrl: String,
+    private val authToken: String
+) {
+    private val client = OkHttpClient.Builder()
+        .pingInterval(10, TimeUnit.SECONDS)
+        .addInterceptor { chain ->
+            val request = chain.request().newBuilder()
+                .addHeader("Authorization", "Bearer $authToken")
+                .build()
+            chain.proceed(request)
+        }
+        .build()
+
+    fun connect(onConnected: () -> Unit, onError: (String) -> Unit) {
+        val request = Request.Builder()
+            .url(serverUrl)  // wss:// dla TLS
+            .build()
+        
+        client.newWebSocket(request, object : WebSocketListener() {
+            override fun onOpen(ws: WebSocket, response: Response) = onConnected()
+            override fun onFailure(ws: WebSocket, t: Throwable, r: Response?) = 
+                onError(t.message ?: "Błąd połączenia")
+        })
+    }
+}
+```
+
+### Monitorowanie przepustowości i QoS
+
+ROS2 DDS umożliwia konfigurację Quality of Service (QoS) — ważne przy połączeniu WiFi z ograniczoną przepustowością:
+
+```kotlin
+// Polityka QoS przez rosbridge — ustawiana po stronie ROS2
+// W aplikacji mobilnej możesz ograniczyć częstotliwość subskrypcji:
+fun subscribeWithThrottle(
+    topic: String, 
+    msgType: String, 
+    throttleMs: Int,
+    callback: (JsonObject) -> Unit
+) {
+    val msg = mapOf(
+        "op" to "subscribe",
+        "topic" to topic,
+        "type" to msgType,
+        "throttle_rate" to throttleMs,  // ms między wiadomościami
+        "queue_length" to 1             // tylko najnowsza wiadomość
+    )
+    webSocket?.send(gson.toJson(msg))
+    topicCallbacks[topic] = callback
+}
+```
+
+Typowe ustawienia dla połączeń mobilnych:
+- `/camera/image_compressed`: throttle 200ms (5 fps)
+- `/scan` (LiDAR): throttle 100ms (10 fps)
+- `/odom`: throttle 50ms (20 fps)
+- `/cmd_vel`: bez throttle (pełna responsywność)
