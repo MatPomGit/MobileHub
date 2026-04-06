@@ -756,8 +756,8 @@ class CameraXMediaPipeActivity : AppCompatActivity() {
 
         val matrix = Matrix().apply {
             postRotate(imageProxy.imageInfo.rotationDegrees.toFloat())
-            // Odbij dla kamery frontowej
-            postScale(-1f, 1f, imageProxy.width.toFloat(), imageProxy.height.toFloat())
+            // Odbij dla kamery frontowej (obrót względem centrum obrazu)
+            postScale(-1f, 1f, imageProxy.width / 2f, imageProxy.height / 2f)
         }
 
         val rotatedBitmap = Bitmap.createBitmap(
