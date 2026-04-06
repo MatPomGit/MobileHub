@@ -297,3 +297,162 @@ class CloudSyncManager {
 - [CloudKit Docs](https://developer.apple.com/documentation/cloudkit)
 - [Keychain Services](https://developer.apple.com/documentation/security/keychain_services)
 - [SwiftData WWDC23](https://developer.apple.com/videos/play/wwdc2023/10154/)
+
+## Core Data — migracja schematu
+
+Wraz z rozwojem aplikacji model danych nieuchronnie się zmienia: dodajemy atrybuty, zmieniamy typy lub relacje. Core Data obsługuje dwie strategie migracji: **lekką** (automatic/lightweight) i **ręczną** z modelem mapowania.
+
+### Migracja lekka
+
+Migracja lekka działa automatycznie, gdy zmiany są proste — dodanie opcjonalnego atrybutu, zmiana nazwy encji z użyciem `renamingIdentifier`, usunięcie relacji. Wystarczy zaznaczyć opcje przy ładowaniu store:
+
+```swift
+let options: [String: Any] = [
+    NSMigratePersistentStoresAutomaticallyOption: true,
+    NSInferMappingModelAutomaticallyOption: true
+]
+try coordinator.addPersistentStore(
+    ofType: NSSQLiteStoreType,
+    configurationName: nil,
+    at: storeURL,
+    options: options
+)
+```
+
+W Xcode tworzymy nową wersję modelu: **Editor → Add Model Version**. Aktualną wersję zaznaczamy w inspektorze pliku `.xcdatamodeld` (zielona strzałka). Stare wersje pozostają w projekcie — Core Data porównuje je automatycznie.
+
+### Migracja z modelem mapowania (Mapping Model)
+
+Gdy zmiana jest złożona — np. rozdzielamy `fullName` na `firstName` i `lastName` — potrzebujemy `NSMappingModel` oraz niestandardowej klasy `NSEntityMigrationPolicy`:
+
+```swift
+class PersonMigrationPolicy: NSEntityMigrationPolicy {
+    override func createDestinationInstances(
+        forSource sInstance: NSManagedObject,
+        in mapping: NSEntityMapping,
+        manager: NSMigrationManager
+    ) throws {
+        try super.createDestinationInstances(forSource: sInstance, in: mapping, manager: manager)
+        guard
+            let dest = manager.destinationInstances(
+                forEntityMappingName: mapping.name, sourceInstances: [sInstance]
+            ).first,
+            let fullName = sInstance.value(forKey: "fullName") as? String
+        else { return }
+        let parts = fullName.split(separator: " ", maxSplits: 1)
+        dest.setValue(String(parts.first ?? ""), forKey: "firstName")
+        dest.setValue(parts.count > 1 ? String(parts[1]) : "", forKey: "lastName")
+    }
+}
+```
+
+Plik `.xcmappingmodel` łączy starą wersję modelu z nową i wskazuje klasę polityki dla encji `Person`. Migracja uruchamiana jest przez `NSMigrationManager.migrateStore(from:to:)`. Warto zawsze testować migracje na kopii produkcyjnej bazy przed wdrożeniem.
+
+## GRDB.swift — SQLite dla iOS
+
+**GRDB.swift** to nowoczesna biblioteka SQLite dla Swift, będąca alternatywą dla Core Data i SwiftData. Oferuje bezpośredni dostęp do SQL z wygodnym API wysokiego poziomu, migracjami opartymi na kodzie oraz integracją z Combine/async-await.
+
+### Definicja schematu i migracje
+
+```swift
+import GRDB
+
+// Model
+struct Task: Codable, FetchableRecord, PersistableRecord {
+    var id: Int64?
+    var title: String
+    var isDone: Bool
+    var createdAt: Date
+}
+
+// Konfiguracja bazy z migracjami
+func openDatabase(at path: String) throws -> DatabaseQueue {
+    let dbQueue = try DatabaseQueue(path: path)
+    var migrator = DatabaseMigrator()
+
+    migrator.registerMigration("v1") { db in
+        try db.create(table: "task") { t in
+            t.autoIncrementedPrimaryKey("id")
+            t.column("title", .text).notNull()
+            t.column("isDone", .boolean).notNull().defaults(to: false)
+            t.column("createdAt", .datetime).notNull()
+        }
+    }
+    migrator.registerMigration("v2") { db in
+        try db.alter(table: "task") { t in
+            t.add(column: "priority", .integer).defaults(to: 0)
+        }
+    }
+    try migrator.migrate(dbQueue)
+    return dbQueue
+}
+```
+
+### Zapytania i integracja z Combine
+
+```swift
+// Zapis
+try dbQueue.write { db in
+    var task = Task(id: nil, title: "Kupić mleko", isDone: false, createdAt: Date())
+    try task.insert(db)
+}
+
+// Odczyt z filtrem
+let pending = try dbQueue.read { db in
+    try Task.filter(Column("isDone") == false)
+             .order(Column("createdAt").desc)
+             .fetchAll(db)
+}
+
+// Combine — obserwacja zmian na żywo
+let publisher = ValueObservation
+    .tracking { db in try Task.fetchAll(db) }
+    .publisher(in: dbQueue, scheduling: .immediate)
+    .sink(receiveCompletion: { _ in }, receiveValue: { tasks in
+        print("Zadania: \(tasks.count)")
+    })
+```
+
+GRDB nie wymaga generatora kodu ani `.xcdatamodeld`. Migracje są czytelne i testowalne, a zapytania kompilują się do czystego SQL — łatwego do debugowania z `db.trace { print($0) }`.
+
+## Bezpieczne przechowywanie — szyfrowanie plików
+
+Dane wrażliwe (tokeny, dane zdrowotne, dokumenty finansowe) wymagają szyfrowania w spoczynku, niezależnie od szyfrowania na poziomie systemu.
+
+### Data Protection Classes
+
+iOS oferuje cztery klasy ochrony pliku, określające kiedy klucz deszyfrujący jest dostępny:
+
+| Klasa | Dostępność klucza |
+|---|---|
+| `NSFileProtectionComplete` | Tylko gdy urządzenie odblokowane |
+| `NSFileProtectionCompleteUnlessOpen` | Plik otwarty przed blokadą pozostaje dostępny |
+| `NSFileProtectionCompleteUntilFirstUserAuthentication` | Po pierwszym odblokowaniu po restarcie |
+| `NSFileProtectionNone` | Zawsze dostępny |
+
+```swift
+// Ustawienie klasy ochrony przy zapisie
+let url = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
+    .appendingPathComponent("sensitive.json")
+
+try data.write(to: url, options: .completeFileProtection)
+
+// Weryfikacja atrybutu
+let attrs = try FileManager.default.attributesOfItem(atPath: url.path)
+print(attrs[.protectionKey] ?? "brak")  // FileProtectionType.complete
+```
+
+### SQLCipher — szyfrowanie bazy SQLite
+
+Dla aplikacji wymagających szyfrowanej bazy SQLite, SQLCipher (lub GRDB z rozszerzeniem `GRDBCipher`) szyfruje każdą stronę pliku bazy kluczem AES-256:
+
+```swift
+// GRDB + SQLCipher
+var config = Configuration()
+config.prepareDatabase { db in
+    try db.usePassphrase("super-tajne-hasło")
+}
+let dbQueue = try DatabaseQueue(path: dbPath, configuration: config)
+```
+
+Klucz szyfrowania nigdy nie powinien być zakodowany na stałe w źródle — należy go generować losowo i przechowywać w **Keychain** z atrybutem `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`. Łącząc Data Protection z SQLCipher, uzyskujemy obronę warstwową: nawet fizyczny dostęp do pliku nie pozwoli odczytać danych bez klucza z Keychain, a klucz z Keychain jest niedostępny bez odblokowania urządzenia.
