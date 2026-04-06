@@ -283,6 +283,171 @@ fun ReorderableTaskList(
 }
 ```
 
+## Animacje gestów — Compose Animated
+
+Gesty są znacznie bardziej satysfakcjonujące, gdy towarzyszą im płynne animacje reagujące na ruch palca. Compose oferuje `Animatable` oraz `spring()`/`tween()` do budowania efektów takich jak „gumowa taśma" (*rubber band*) — element podąża za palcem, ale po zwolnieniu wraca sprężyście na miejsce.
+
+```kotlin
+@Composable
+fun RubberBandCard(content: @Composable () -> Unit) {
+    val offsetX = remember { Animatable(0f) }
+    val offsetY = remember { Animatable(0f) }
+    val coroutineScope = rememberCoroutineScope()
+
+    Box(
+        modifier = Modifier
+            .offset { IntOffset(offsetX.value.roundToInt(), offsetY.value.roundToInt()) }
+            .pointerInput(Unit) {
+                detectDragGestures(
+                    onDrag = { _, dragAmount ->
+                        coroutineScope.launch {
+                            // Opór — element przesuwa się o połowę drogi palca
+                            offsetX.snapTo(offsetX.value + dragAmount.x * 0.4f)
+                            offsetY.snapTo(offsetY.value + dragAmount.y * 0.4f)
+                        }
+                    },
+                    onDragEnd = {
+                        coroutineScope.launch {
+                            // Sprężysty powrót do centrum
+                            offsetX.animateTo(
+                                targetValue = 0f,
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessLow
+                                )
+                            )
+                            offsetY.animateTo(
+                                targetValue = 0f,
+                                animationSpec = spring(
+                                    dampingRatio = Spring.DampingRatioMediumBouncy,
+                                    stiffness = Spring.StiffnessLow
+                                )
+                            )
+                        }
+                    }
+                )
+            }
+    ) {
+        content()
+    }
+}
+```
+
+Dla animacji pozycji opartych na gestach swipe warto skorzystać z `SwipeableV2State` w połączeniu z `Animatable`, definiując progi (*thresholds*), po przekroczeniu których element „zatrzaskuje się" w nowej pozycji.
+
+```kotlin
+// Animacja skali podczas pinch — płynna z tween
+val scale = remember { Animatable(1f) }
+LaunchedEffect(gestureScale) {
+    scale.animateTo(
+        targetValue = gestureScale.coerceIn(0.5f, 3f),
+        animationSpec = tween(durationMillis = 50, easing = LinearEasing)
+    )
+}
+```
+
+## Obsługa gestów nawigacyjnych Androida
+
+Od Androida 10 system oferuje nawigację gestami zamiast przycisków. Aplikacje muszą obsługiwać gest „wstecz" (przeciągnięcie z krawędzi ekranu). W Compose dostępne są dwa mechanizmy: `BackHandler` do blokowania gestu wstecz oraz `PredictiveBackHandler` (Android 14+) do animowania przejścia przed faktycznym powrotem.
+
+```kotlin
+// BackHandler — blokowanie gestu wstecz (np. gdy formularz ma niezapisane zmiany)
+@Composable
+fun EditScreen(hasUnsavedChanges: Boolean, onBack: () -> Unit) {
+    var showDialog by remember { mutableStateOf(false) }
+
+    BackHandler(enabled = hasUnsavedChanges) {
+        showDialog = true
+    }
+
+    if (showDialog) {
+        AlertDialog(
+            onDismissRequest = { showDialog = false },
+            title = { Text("Niezapisane zmiany") },
+            text = { Text("Czy chcesz odrzucić zmiany?") },
+            confirmButton = {
+                TextButton(onClick = { showDialog = false; onBack() }) { Text("Odrzuć") }
+            },
+            dismissButton = {
+                TextButton(onClick = { showDialog = false }) { Text("Anuluj") }
+            }
+        )
+    }
+}
+```
+
+```kotlin
+// PredictiveBackHandler — własna animacja przewidywalnego gestu wstecz (API 34+)
+@Composable
+fun ScreenWithPredictiveBack(onBack: () -> Unit) {
+    val scale = remember { Animatable(1f) }
+    val coroutineScope = rememberCoroutineScope()
+
+    PredictiveBackHandler { progress ->
+        // progress: Flow<BackEventCompat> emitujący postęp od 0.0 do 1.0
+        try {
+            progress.collect { backEvent ->
+                scale.snapTo(1f - backEvent.progress * 0.15f)
+            }
+            // Gest zakończony — wróć wstecz
+            onBack()
+        } catch (e: CancellationException) {
+            // Gest anulowany — przywróć skalę
+            scale.animateTo(1f, spring())
+        }
+    }
+
+    Box(modifier = Modifier.scale(scale.value)) {
+        // Zawartość ekranu
+    }
+}
+```
+
+Należy zadbać o właściwe ustawienie `WindowCompat.setDecorFitsSystemWindows(window, false)` w `Activity`, aby rysować pod paskami systemowymi i nie blokować obszarów gestów.
+
+## Dostępność gestów
+
+Interfejsy oparte wyłącznie na gestach mogą być trudne lub niemożliwe do obsługi dla użytkowników korzystających z TalkBack lub Switch Access. Każdy złożony gest powinien mieć alternatywę.
+
+**Zasady dostępności gestów:**
+
+- Gesty wielodotykowe (pinch, rotation) muszą mieć alternatywę w postaci przycisków (`+`/`-` dla zoomu).
+- Elementy przeciągalne powinny eksponować akcje dostępności `CustomAction` przez `semantics`.
+- Elementy swipeable powinny mieć rolę semantyczną i etykietę opisującą dostępne akcje.
+
+```kotlin
+@Composable
+fun AccessibleSwipeItem(
+    item: Task,
+    onDelete: () -> Unit,
+    onArchive: () -> Unit
+) {
+    Box(
+        modifier = Modifier
+            .semantics {
+                // Rola i etykieta dla TalkBack
+                contentDescription = "Zadanie: ${item.title}"
+                // Niestandardowe akcje dostępne przez menu TalkBack
+                customActions = listOf(
+                    CustomAccessibilityAction(
+                        label = "Usuń zadanie",
+                        action = { onDelete(); true }
+                    ),
+                    CustomAccessibilityAction(
+                        label = "Archiwizuj zadanie",
+                        action = { onArchive(); true }
+                    )
+                )
+            }
+            // ... swipe gesture modifier
+    ) {
+        Text(item.title)
+    }
+}
+```
+
+Dla list z funkcją drag-and-drop dodaj akcję `moveUp`/`moveDown` przez `semantics`, co pozwala użytkownikom TalkBack zmieniać kolejność bez gestu przeciągania. Android Accessibility Scanner (`com.google.android.apps.accessibility.auditor`) automatycznie wykrywa elementy bez opisów i zbyt małe cele dotykowe.
+
 ## Linki dodatkowe
 
 - [NestedScroll](https://developer.android.com/reference/kotlin/androidx/compose/ui/input/nestedscroll/package-summary)
