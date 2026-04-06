@@ -303,3 +303,245 @@ kotlin {
 - [SQLDelight](https://sqldelight.github.io/sqldelight/)
 - [SKIE — Swift/Kotlin Interface Enhancer](https://skie.touchlab.co/)
 - [KMP Sample — TouchLab](https://github.com/touchlab/KaMPKit)
+
+## Testowanie kodu współdzielonego
+
+Jedną z największych zalet KMP jest możliwość testowania logiki biznesowej raz, w `commonTest`, i uruchamiania tych samych testów na JVM (Android) oraz natywnym kompilatorze iOS (Kotlin/Native). Testy piszemy przy użyciu biblioteki `kotlin.test`, która jest multiplatformowym odpowiednikiem JUnit.
+
+```kotlin
+// commonTest — test repozytorium z mockiem
+class TaskRepositoryTest {
+
+    private lateinit var repository: TaskRepository
+    private val fakeDb = FakeTaskDatabase()
+
+    @BeforeTest
+    fun setup() {
+        repository = TaskRepository(fakeDb)
+    }
+
+    @Test
+    fun `insertTask dodaje zadanie do listy`() = runTest {
+        repository.insertTask("Zakupy", "Mleko, chleb")
+        val tasks = repository.getAllTasks().first()
+        assertEquals(1, tasks.size)
+        assertEquals("Zakupy", tasks.first().title)
+    }
+
+    @Test
+    fun `toggleTask zmienia status is_done`() = runTest {
+        repository.insertTask("Zadanie", "")
+        val id = repository.getAllTasks().first().first().id
+        repository.toggleTask(id, isDone = true)
+        val updated = repository.getAllTasks().first().first()
+        assertTrue(updated.isDone)
+    }
+
+    @Test
+    fun `getAllTasks zwraca pustą listę dla nowej bazy`() = runTest {
+        val tasks = repository.getAllTasks().first()
+        assertTrue(tasks.isEmpty())
+    }
+}
+```
+
+Do mockowania zależności w `commonTest` zalecana jest biblioteka **MockK for KMP** (`io.mockk:mockk-common`) lub ręczne implementacje fake'ów, jak powyższy `FakeTaskDatabase`. MockK obsługuje zarówno JVM, jak i Kotlin/Native (od wersji 1.13+):
+
+```kotlin
+// build.gradle.kts — zależności testowe
+sourceSets {
+    commonTest.dependencies {
+        implementation(kotlin("test"))
+        implementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.8.1")
+        implementation("io.mockk:mockk-common:1.13.11")
+    }
+    androidUnitTest.dependencies {
+        implementation("io.mockk:mockk:1.13.11")
+    }
+    iosTest.dependencies {
+        implementation("io.mockk:mockk-common:1.13.11")
+    }
+}
+```
+
+Uruchomienie testów na obu platformach:
+
+```bash
+# Testy na JVM (szybkie, zalecane do CI)
+./gradlew :shared:jvmTest
+
+# Testy na symulatorze iOS (Kotlin/Native)
+./gradlew :shared:iosSimulatorArm64Test
+
+# Wszystkie testy naraz
+./gradlew :shared:allTests
+```
+
+Testy asynchroniczne używają `runTest` z `kotlinx-coroutines-test`, który automatycznie zarządza `TestCoroutineScheduler` i pozwala używać `advanceTimeBy()` do symulacji opóźnień bez czekania w czasie rzeczywistym. Dobra pokrycie testami `commonMain` gwarantuje, że logika biznesowa działa identycznie niezależnie od platformy.
+
+## Compose Multiplatform — wspólny UI
+
+Compose Multiplatform (CMP), rozwijany przez JetBrains, rozszerza Jetpack Compose poza Androida — ten sam kod `@Composable` działa na **Android**, **Desktop (JVM)**, **iOS** (eksperymentalnie od 1.6) i **Web (Wasm)**. Jest to uzupełnienie KMP, gdy zależy nam na współdzieleniu nie tylko logiki, ale też interfejsu użytkownika.
+
+```kotlin
+// composeApp/src/commonMain/kotlin/App.kt
+@Composable
+fun App(viewModel: TaskListViewModel) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    MaterialTheme {
+        Scaffold(
+            topBar = {
+                TopAppBar(title = { Text("Moje Zadania") })
+            },
+            floatingActionButton = {
+                FloatingActionButton(onClick = { viewModel.showAddDialog() }) {
+                    Icon(Icons.Default.Add, contentDescription = "Dodaj zadanie")
+                }
+            }
+        ) { padding ->
+            when {
+                state.isLoading -> Box(Modifier.fillMaxSize(), Alignment.Center) { CircularProgressIndicator() }
+                state.tasks.isEmpty() -> EmptyState(Modifier.padding(padding))
+                else -> TaskList(tasks = state.tasks, onToggle = viewModel::toggle,
+                    modifier = Modifier.padding(padding))
+            }
+        }
+    }
+}
+```
+
+Konfiguracja projektu Compose Multiplatform w `build.gradle.kts`:
+
+```kotlin
+// composeApp/build.gradle.kts
+plugins {
+    alias(libs.plugins.kotlinMultiplatform)
+    alias(libs.plugins.composeMultiplatform)
+    alias(libs.plugins.composeCompiler)
+}
+
+kotlin {
+    androidTarget()
+    jvm("desktop")    // Desktop
+    // iosArm64(); iosX64(); iosSimulatorArm64()  // iOS (eksperymentalne)
+
+    sourceSets {
+        val desktopMain by getting
+        commonMain.dependencies {
+            implementation(compose.runtime)
+            implementation(compose.foundation)
+            implementation(compose.material3)
+            implementation(compose.ui)
+            implementation(project(":shared"))
+        }
+        androidMain.dependencies { implementation(libs.androidx.activity.compose) }
+        desktopMain.dependencies { implementation(compose.desktop.currentOs) }
+    }
+}
+
+compose.desktop {
+    application {
+        mainClass = "MainKt"
+        nativeDistributions { targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb) }
+    }
+}
+```
+
+| Platforma | Status CMP 1.7 | Uwagi |
+|---|---|---|
+| Android | ✅ Stabilne | Pełna parytety z Jetpack Compose |
+| Desktop (JVM) | ✅ Stabilne | Swing/AWT backend |
+| iOS | ⚠️ Beta | UIKitView dla natywnych widgetów |
+| Web (Wasm) | ⚠️ Alpha | Wymaga przeglądarki z Wasm GC |
+
+Ekrany wspólne dla Androida i Desktopu — np. panel administracyjny aplikacji — mogą być implementowane raz w `commonMain` i uruchamiane bez modyfikacji. Dla iOS wciąż zalecane jest natywne SwiftUI połączone z KMP ViewModel przez SKIE.
+
+## Logowanie i diagnostyka
+
+W projektach KMP nie można użyć `android.util.Log` ani `NSLog` bezpośrednio w `commonMain`. Dedykowane biblioteki logowania dla KMP zapewniają jednolite API na wszystkich platformach.
+
+**Napier** (lekki, zero-dependencies) to jedna z najpopularniejszych opcji:
+
+```kotlin
+// commonMain — inicjalizacja i użycie
+import io.github.aakira.napier.Napier
+import io.github.aakira.napier.DebugAntilog
+
+// Android — w Application.onCreate()
+Napier.base(DebugAntilog())
+
+// iOS — w AppDelegate / @main struct
+NapierProxy.shared.initLogger()  // przez SKIE lub objc bridging
+
+// Użycie w commonMain — identyczne na obu platformach
+class TaskListViewModel : ViewModel() {
+    init {
+        Napier.i("ViewModel zainicjalizowany", tag = "TaskListVM")
+    }
+
+    fun toggle(id: Long) {
+        Napier.d("Toggle zadania id=$id", tag = "TaskListVM")
+        viewModelScope.launch {
+            try {
+                toggleTask(id)
+                Napier.i("Zadanie $id przełączone", tag = "TaskListVM")
+            } catch (e: Exception) {
+                Napier.e("Błąd przełączania zadania $id", e, tag = "TaskListVM")
+            }
+        }
+    }
+}
+```
+
+**Kermit** (TouchLab) oferuje bardziej rozbudowane możliwości, w tym integrację z Crashlytics i Sentry:
+
+```kotlin
+// Konfiguracja Kermit z wieloma sink'ami
+val logger = Logger(
+    config = StaticConfig(
+        logWriterList = listOf(
+            CommonWriter(),                          // konsola
+            CrashReportingLogWriter(minSeverity = Severity.Error)  // Crashlytics
+        )
+    ),
+    tag = "AppLogger"
+)
+
+// Dedykowany logger dla modułu
+private val log = Logger.withTag("NetworkModule")
+
+suspend fun fetchData(): Result<Data> {
+    log.d { "Rozpoczynam pobieranie danych" }
+    return try {
+        val data = api.getData()
+        log.i { "Pobrano ${data.size} rekordów" }
+        Result.success(data)
+    } catch (e: Exception) {
+        log.e(e) { "Błąd pobierania danych" }
+        Result.failure(e)
+    }
+}
+```
+
+Zależności w `build.gradle.kts`:
+
+```kotlin
+commonMain.dependencies {
+    // Napier
+    implementation("io.github.aakira:napier:2.7.1")
+    // lub Kermit
+    implementation("co.touchlab:kermit:2.0.3")
+    implementation("co.touchlab:kermit-crashlytics:2.0.3")
+}
+```
+
+| Cecha | Napier | Kermit |
+|---|---|---|
+| Rozmiar biblioteki | ~30 KB | ~80 KB |
+| Integracja Crashlytics | ❌ | ✅ |
+| Custom sink | ✅ | ✅ |
+| Structured logging | ❌ | ⚠️ Podstawowe |
+| Aktywne utrzymanie | ✅ | ✅ |
+
+W środowisku produkcyjnym zaleca się ustawienie minimalnego poziomu logowania na `Info` lub `Warning`, a w trybie debug — `Verbose`. Poziomy: `Verbose → Debug → Info → Warning → Error → Assert`. Crash reporting powinien przechwytywać logi poziomu `Error` i wyżej, aby każdy nieobsłużony wyjątek był automatycznie raportowany do systemu monitoringu.
