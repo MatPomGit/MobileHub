@@ -215,7 +215,7 @@ Termux używa niestandardowego portu **8022**, ponieważ standardowy port 22 wym
 Na komputerze stacjonarnym (Windows/macOS/Linux):
 
 ```bash
-# Generowanie pary kluczy (jesli jeszcze nie masz)
+# Generowanie pary kluczy (jeśli jeszcze nie masz)
 ssh-keygen -t ed25519 -C "moj-komputer"
 
 # Skopiowanie klucza publicznego do Termux
@@ -225,9 +225,9 @@ ssh-copy-id -p 8022 -i ~/.ssh/id_ed25519.pub <IP_TELEFONU>
 Alternatywnie — bezpośrednio w Termux:
 
 ```bash
-# Utworz katalog .ssh i plik authorized_keys
+# Utwórz katalog .ssh i plik authorized_keys
 mkdir -p ~/.ssh && chmod 700 ~/.ssh
-# Wklej zawartosc swojego klucza publicznego
+# Wklej zawartość swojego klucza publicznego
 echo "ssh-ed25519 AAAA... moj-komputer" >> ~/.ssh/authorized_keys
 chmod 600 ~/.ssh/authorized_keys
 ```
@@ -235,7 +235,7 @@ chmod 600 ~/.ssh/authorized_keys
 ### 7.3 Łączenie z telefonu z komputera
 
 ```bash
-# Polaczenie (zastap adresem IP telefonu)
+# Połączenie (zastąp adresem IP telefonu)
 ssh -p 8022 <IP_TELEFONU>
 ```
 
@@ -281,10 +281,10 @@ pkg install termux-api
 ### 8.2 Powiadomienia systemowe
 
 ```bash
-# Wyslij powiadomienie
-termux-notification --title "Zadanie zakonczone" --content "Skrypt backup.sh wykonal sie poprawnie."
+# Wyślij powiadomienie
+termux-notification --title "Zadanie zakończone" --content "Skrypt backup.sh wykonał się poprawnie."
 
-# Powiadomienie z ikoną i dzwiekiem
+# Powiadomienie z ikoną i dźwiękiem
 termux-notification \
   --title "Alert" \
   --content "Wykryto zmiane pliku!" \
@@ -305,26 +305,26 @@ termux-vibrate -d 300 && sleep 0.2 && termux-vibrate -d 500
 ### 8.4 Aparat i latarka
 
 ```bash
-# Zrob zdjecie tylnym aparatem i zapisz do pliku
+# Zrób zdjęcie tylnym aparatem i zapisz do pliku
 termux-camera-photo -c back ~/storage/dcim/foto_$(date +%Y%m%d_%H%M%S).jpg
 
-# Wlacz latarke
+# Włącz latarkę
 termux-torch on
 
-# Wylacz latarke
+# Wyłącz latarkę
 termux-torch off
 ```
 
 ### 8.5 Kontakty i SMS
 
 ```bash
-# Lista kontaktow (JSON)
+# Lista kontaktów (JSON)
 termux-contact-list | jq '.[].name'
 
-# Wyslanie SMS (wymaga uprawnien)
-termux-sms-send -n "+48123456789" "Wiadomosc testowa z Termux"
+# Wysłanie SMS (wymaga uprawnień)
+termux-sms-send -n "+48123456789" "Wiadomość testowa z Termux"
 
-# Odczyt ostatnich SMS-ow
+# Odczyt ostatnich SMS-ów
 termux-sms-list -l 10 | jq '.[].body'
 ```
 
@@ -363,8 +363,8 @@ if [ $? -eq 0 ]; then
     --content "Zapisano: backup_$DATA.tar.gz"
 else
   termux-notification \
-    --title "Backup BLAD" \
-    --content "Backup nie powiodl sie!"
+    --title "Backup BŁĄD" \
+    --content "Backup nie powiódł się!"
 fi
 ```
 
@@ -392,13 +392,13 @@ crontab -e
 Przykładowe wpisy w crontab:
 
 ```cron
-# Backup co dobe o 23:00
+# Backup co dobę o 23:00
 0 23 * * * ~/backup.sh
 
-# Powiadomienie przypominajace o commitcie co godzine w godzinach pracy
-0 9-17 * * 1-5 termux-notification --title "Pamietaj o git commit!" --content "Czy zapisales postepy?"
+# Powiadomienie przypominające o commitcie co godzinę w godzinach pracy
+0 9-17 * * 1-5 termux-notification --title "Pamiętaj o git commit!" --content "Czy zapisałeś postępy?"
 
-# Synchronizacja z chmura co 30 minut
+# Synchronizacja z chmurą co 30 minut
 */30 * * * * rclone sync ~/projekty remote:MojeDysk/projekty
 ```
 
@@ -410,10 +410,10 @@ Alternatywą dla crona jest **termux-job-scheduler**, który lepiej integruje si
 # Zaplanuj uruchomienie skryptu co 15 minut
 termux-job-scheduler --script ~/backup.sh --period-ms 900000
 
-# Lista zaplanowanych zadan
+# Lista zaplanowanych zadań
 termux-job-scheduler --pending
 
-# Anulowanie zadan
+# Anulowanie zadań
 termux-job-scheduler --cancel-all
 ```
 
@@ -429,8 +429,8 @@ HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" "$URL")
 
 if [ "$HTTP_CODE" != "200" ]; then
   termux-notification \
-    --title "ALERT: Serwis niedostepny" \
-    --content "$URL zwrocil kod $HTTP_CODE" \
+    --title "ALERT: Serwis niedostępny" \
+    --content "$URL zwrócił kod $HTTP_CODE" \
     --sound \
     --vibrate 1000
 fi
@@ -447,7 +447,7 @@ Po wykonaniu `termux-setup-storage` struktura wygląda następująco:
 ```
 ~/ (katalog domowy Termux)
 ├── storage/
-│   ├── shared/        → /sdcard (cala pamiec wewnetrzna)
+│   ├── shared/        → /sdcard (cała pamięć wewnętrzna)
 │   ├── dcim/          → /sdcard/DCIM
 │   ├── downloads/     → /sdcard/Download
 │   ├── movies/        → /sdcard/Movies
@@ -469,10 +469,11 @@ rclone config
 # Synchronizacja lokalnego katalogu do chmury
 rclone sync ~/projekty remote:Termux-Backup
 
-# Pobieranie plikow z chmury
+# Pobieranie plików z chmury
 rclone copy remote:Termux-Backup ~/projekty
 
-# Montowanie dysku w chmurze jako lokalny katalog
+# Montowanie dysku w chmurze jako lokalny katalog (wymaga FUSE; na większości nietrootowanych urządzeń
+# użyj zamiast tego: rclone copy / rclone sync)
 mkdir -p ~/chmura
 rclone mount remote: ~/chmura --daemon
 ```
@@ -488,7 +489,7 @@ scp -P 8022 projekt.zip <IP_TELEFONU>:~/
 # Kopiowanie katalogu
 scp -P 8022 -r ~/MojProjekt <IP_TELEFONU>:~/projekty/
 
-# Uzycie rsync dla efektywnej synchronizacji
+# Użycie rsync dla efektywnej synchronizacji
 rsync -avz -e "ssh -p 8022" ~/MojProjekt/ <IP_TELEFONU>:~/projekty/MojProjekt/
 ```
 
@@ -523,16 +524,16 @@ Termux dobrze współpracuje z:
 Przydatna konfiguracja tmux (`~/.tmux.conf`):
 
 ```bash
-# Zmiana prefiksu na Ctrl+a (latwiej osiagalne na klawiaturze mobilnej)
+# Zmiana prefiksu na Ctrl+a (łatwiej osiągalne na klawiaturze mobilnej)
 set -g prefix C-a
 unbind C-b
 bind C-a send-prefix
 
-# Podzial poziomy i pionowy
+# Podział poziomy i pionowy
 bind | split-window -h
 bind - split-window -v
 
-# Wlaczenie myszy
+# Włączenie myszy
 set -g mouse on
 ```
 
