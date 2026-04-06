@@ -1686,6 +1686,7 @@ header {
 .info-panel-header p {
     color: var(--text-muted);
     font-size: 12px;
+    line-height: 1.5;
     margin-top: 4px;
 }
 
@@ -1745,6 +1746,7 @@ header {
 .info-card ul {
     font-size: 12px;
     color: var(--text-muted);
+    line-height: 1.5;
     margin: 6px 0 0 16px;
 }
 
@@ -1792,7 +1794,9 @@ header {
 }
 
 .milestone-info span {
+    display: block;
     font-size: 13px;
+    line-height: 1.5;
     color: var(--text-muted);
 }
 
@@ -2023,6 +2027,7 @@ header {
     gap: 12px;
     align-items: flex-start;
     font-size: 13px;
+    line-height: 1.5;
 }
 
 .hint-box i {
