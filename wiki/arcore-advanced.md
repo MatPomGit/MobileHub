@@ -251,6 +251,155 @@ fun hostCloudAnchor(session: Session, anchor: Anchor,
 }
 ```
 
+## Nagrywanie sesji AR — ARCore Recording & Playback API
+
+ARCore Recording & Playback API umożliwia nagrywanie pełnej sesji AR do pliku MP4 i późniejsze odtwarzanie jej jakby była rzeczywistą kamerą. To potężne narzędzie dla deweloperów: zamiast szukać specyficznego oświetlenia lub powierzchni podczas debugowania, możesz nagrać problematyczną sesję i odtwarzać ją wielokrotnie.
+
+### Zastosowania
+
+- **Raportowanie błędów** — deweloper nagrywa sesję pokazującą błąd i dołącza plik do zgłoszenia
+- **Testy CI** — automatyczne testy AR uruchamiane na nagraniach zamiast na fizycznym urządzeniu
+- **Demonstracje** — prezentacja AR bez konieczności fizycznego bycia w konkretnym miejscu
+- **Benchmarking** — pomiar wydajności na identycznej sekwencji klatek
+
+### Nagrywanie sesji
+
+```kotlin
+import com.google.ar.core.RecordingConfig
+import com.google.ar.core.RecordingStatus
+
+class ARSessionRecorder(private val session: Session) {
+
+    fun startRecording(outputUri: Uri): Boolean {
+        val config = RecordingConfig(session).apply {
+            setMp4DatasetUri(outputUri)
+            setAutoStopOnPause(false)  // kontynuuj nagrywanie gdy app schodzi w tło
+        }
+
+        return try {
+            session.startRecording(config)
+            true
+        } catch (e: RecordingFailedException) {
+            Log.e("ARRecorder", "Nie można rozpocząć nagrywania: ${e.message}")
+            false
+        }
+    }
+
+    fun stopRecording(): RecordingStatus {
+        session.stopRecording()
+        return session.recordingStatus
+        // RecordingStatus.OK — nagranie zapisane
+        // RecordingStatus.IO_ERROR — błąd zapisu
+    }
+
+    fun isRecording(): Boolean =
+        session.recordingStatus == RecordingStatus.OK
+}
+```
+
+### Odtwarzanie sesji (Playback)
+
+```kotlin
+class ARSessionPlayback(private val session: Session) {
+
+    fun startPlayback(datasetUri: Uri): Boolean {
+        return try {
+            // Ustaw URI PRZED wznowieniem sesji (przed session.resume())
+            session.setPlaybackDatasetUri(datasetUri)
+            true
+        } catch (e: PlaybackFailedException) {
+            Log.e("ARPlayback", "Błąd playback: ${e.message}")
+            false
+        }
+    }
+
+    fun getPlaybackStatus(): PlaybackStatus = session.playbackStatus
+    // PlaybackStatus.OK — odtwarzanie aktywne
+    // PlaybackStatus.FINISHED — sekwencja zakończona
+    // PlaybackStatus.NONE — brak aktywnego playbacku
+}
+```
+
+> **Ważne:** podczas odtwarzania ARCore ignoruje fizyczną kamerę — widok pochodzi z nagrania. Gesty i interakcja użytkownika działają normalnie, ale śledzenie jest oparte na danych z pliku MP4.
+
+---
+
+## Raw Depth a Smoothed Depth — różnice i zastosowania
+
+ARCore Depth API dostarcza dwa typy obrazów głębi, każdy zoptymalizowany pod inne zastosowania. Wybór właściwego bezpośrednio wpływa na jakość efektów AR i wydajność aplikacji.
+
+### Porównanie
+
+| Właściwość | Raw Depth (`acquireRawDepthImage16Bits`) | Smoothed Depth (`acquireDepthImage16Bits`) |
+|---|---|---|
+| **Opóźnienie** | Niższe (~1 klatka) | Wyższe (akumulacja wielu klatek) |
+| **Szum** | Wyższy (wartości skaczą) | Niższy (wygładzony temporalnie) |
+| **Kompletność** | Niepełna — wiele pikseli = 0 | Pełniejsza — luki wypełnione |
+| **Accuracy** | ±5–10 cm | ±2–5 cm |
+| **Zastosowanie** | Okludowanie, real-time effects | Pomiary, skanowanie 3D |
+
+### Kiedy używać Raw Depth?
+
+Raw Depth jest lepszy gdy **ważna jest latencja** i dopuszczamy pewien szum:
+
+```kotlin
+fun processRawDepth(frame: Frame) {
+    try {
+        // Raw depth — szybszy, bardziej aktualny, ale z lukami (wartość 0 = nieznana)
+        val rawDepthImage = frame.acquireRawDepthImage16Bits()
+        val confidenceImage = frame.acquireRawDepthConfidenceImage()
+
+        val depthBuffer = rawDepthImage.planes[0].buffer.asShortBuffer()
+        val confidenceBuffer = confidenceImage.planes[0].buffer
+
+        val width = rawDepthImage.width
+        val height = rawDepthImage.height
+
+        // Okludowanie obiektów wirtualnych — porównuj z głębią wirtualną
+        for (y in 0 until height) {
+            for (x in 0 until width) {
+                val depthMm = depthBuffer.get(y * width + x).toInt() and 0xFFFF
+                val confidence = confidenceBuffer.get(y * width + x).toInt() and 0xFF
+
+                if (depthMm > 0 && confidence > 127) {  // tylko pewne piksele
+                    val depthMeters = depthMm / 1000f
+                    // Użyj do testu zasłaniania obiektu wirtualnego
+                }
+            }
+        }
+
+        rawDepthImage.close()
+        confidenceImage.close()
+    } catch (e: NotYetAvailableException) { /* pomiń klatkę */ }
+}
+```
+
+### Kiedy używać Smoothed Depth?
+
+Smoothed Depth jest lepszy gdy **potrzebna jest dokładność** i możemy zaakceptować opóźnienie:
+
+```kotlin
+fun measureDistance(frame: Frame, screenX: Float, screenY: Float): Float? {
+    return try {
+        // Smoothed depth — dokładniejszy, spójny temporalnie
+        val depthImage = frame.acquireDepthImage16Bits()
+        val width = depthImage.width
+        val height = depthImage.height
+
+        val pixelX = (screenX / /* screenWidth */ 1080f * width).toInt().coerceIn(0, width - 1)
+        val pixelY = (screenY / /* screenHeight */ 1920f * height).toInt().coerceIn(0, height - 1)
+
+        val buffer = depthImage.planes[0].buffer.asShortBuffer()
+        val depthMm = buffer.get(pixelY * width + pixelX).toInt() and 0xFFFF
+        depthImage.close()
+
+        if (depthMm > 0) depthMm / 1000f else null  // zwróć w metrach
+    } catch (e: NotYetAvailableException) { null }
+}
+```
+
+> **Reguła praktyczna:** użyj **Raw Depth** do efektów wizualnych w czasie rzeczywistym (okludowanie, cienie), a **Smoothed Depth** do pomiarów, eksportu siatek 3D i wyświetlania dokładnych odległości użytkownikowi.
+
 ## Linki
 
 - [ARCore Docs](https://developers.google.com/ar/develop/java/quickstart)
