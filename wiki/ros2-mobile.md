@@ -214,12 +214,12 @@ ip addr show wlan0    # szczegóły interfejsu WiFi
 
 W sieci produkcyjnej (np. robot w hali fabrycznej) należy włączyć TLS i uwierzytelnianie:
 
-```python
-# Włącz uwierzytelnianie tokenem — klient musi wysłać:
-# {"op": "auth", "mac": "", "client": "", "dest": "", "rand": "", "t": 0, "level": "", "end": 0}
-# Przed subskrypcją/publikacją
+```kotlin
+// Włącz uwierzytelnianie tokenem — klient musi wysłać:
+// {"op": "auth", "mac": "", "client": "", "dest": "", "rand": "", "t": 0, "level": "", "end": 0}
+// Przed subskrypcją/publikacją
 
-# W aplikacji Kotlin — dodanie tokenu autoryzacyjnego
+// W aplikacji Kotlin — dodanie tokenu autoryzacyjnego
 val authMessage = JSONObject().apply {
     put("op", "auth")
     put("secret", "my_secret_token")

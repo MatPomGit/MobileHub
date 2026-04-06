@@ -301,7 +301,7 @@ fun RubberBandCard(content: @Composable () -> Unit) {
                 detectDragGestures(
                     onDrag = { _, dragAmount ->
                         coroutineScope.launch {
-                            // Opór — element przesuwa się o połowę drogi palca
+                            // Opór — element przesuwa się o połowy drogi palca
                             offsetX.snapTo(offsetX.value + dragAmount.x * 0.4f)
                             offsetY.snapTo(offsetY.value + dragAmount.y * 0.4f)
                         }

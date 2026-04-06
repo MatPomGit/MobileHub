@@ -463,7 +463,7 @@ const ProductCard = React.memo(({ product }: { product: Product }) => (
 ));
 ```
 
-Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevTools standalone) — zakładka *Profiler* pokazuje czas renderowania każdego komponentu. Zwróć uwagę na komponenty renderujące się częściej niż 30 razy na sekundę.
+Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevTools standalone) — zakładka *Profiler* pokazuje czas renderowania każdego komponentu. Zwróć uwagę na komponenty renderujące się częściej niż kilkanaście razy na sekundę bez wyraźnego powodu (np. przy braku zmian danych wejściowych) — to sygnał zbędnych re-renderów.
 
 ## Linki
 
