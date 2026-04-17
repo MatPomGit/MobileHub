@@ -768,6 +768,114 @@
             font-style: italic;
             padding: 8px 0;
         }
+
+        /* ===== EVALUATION MODE ===== */
+        .evaluation-cta {
+            background: linear-gradient(135deg, #ffedd5 0%, #fef3c7 100%);
+            border: 2px solid #f97316;
+            border-radius: var(--radius);
+            padding: 12px;
+            margin-bottom: 12px;
+            box-shadow: 0 8px 24px rgba(249, 115, 22, 0.2);
+        }
+
+        .evaluation-cta-desc {
+            font-size: 0.8rem;
+            color: #9a3412;
+            font-weight: 700;
+            line-height: 1.35;
+            margin-bottom: 8px;
+        }
+
+        .evaluation-toggle-btn {
+            width: 100%;
+            border: 0;
+            border-radius: 10px;
+            padding: 10px 12px;
+            font-family: var(--font);
+            font-size: 0.88rem;
+            font-weight: 700;
+            cursor: pointer;
+            color: #fff;
+            background: linear-gradient(135deg, #ea580c 0%, #dc2626 100%);
+            box-shadow: 0 8px 20px rgba(220, 38, 38, 0.28);
+        }
+
+        .evaluation-toggle-btn.active {
+            background: linear-gradient(135deg, #16a34a 0%, #059669 100%);
+            box-shadow: 0 8px 20px rgba(5, 150, 105, 0.26);
+        }
+
+        .evaluation-panel {
+            margin-top: 10px;
+            background: var(--surface);
+            border: 1px solid #fed7aa;
+            border-radius: 10px;
+            padding: 10px;
+        }
+
+        .evaluation-member {
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 8px;
+            margin-bottom: 8px;
+            background: #fff;
+        }
+
+        .evaluation-member:last-child {
+            margin-bottom: 0;
+        }
+
+        .evaluation-member-title {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 6px;
+        }
+
+        .evaluation-task {
+            display: flex;
+            gap: 8px;
+            align-items: flex-start;
+            font-size: 0.76rem;
+            color: var(--text);
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .evaluation-task input {
+            margin-top: 2px;
+        }
+
+        .grade-grid {
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .grade-card {
+            border-radius: 8px;
+            padding: 8px 6px;
+            text-align: center;
+            border: 1px solid #fed7aa;
+            background: #fff7ed;
+        }
+
+        .grade-card .who {
+            font-size: 0.72rem;
+            color: #9a3412;
+            font-weight: 700;
+            margin-bottom: 3px;
+        }
+
+        .grade-card .value {
+            font-size: 1.2rem;
+            font-weight: 800;
+            color: #c2410c;
+        }
     </style>
 </head>
 
@@ -801,6 +909,20 @@
 
         <!-- LEFT: QUESTIONS -->
         <div class="designer-left">
+            <div class="evaluation-cta">
+                <p class="evaluation-cta-desc">
+                    Tryb oceny dla prowadzącego: zaznacz wykonane elementy projektu i oblicz oceny dla całego zespołu.
+                </p>
+                <button class="evaluation-toggle-btn" id="evaluationToggleBtn">
+                    <i class="fa-solid fa-graduation-cap" style="margin-right:6px"></i>Włącz tryb oceny
+                </button>
+                <div class="evaluation-panel" id="evaluationPanel" style="display:none;">
+                    <p class="empty-hint" id="evaluationHint">Wypełnij kreator, aby aktywować checklistę oceny.</p>
+                    <div id="evaluationChecklist"></div>
+                    <div class="grade-grid" id="gradesGrid" style="display:none;"></div>
+                </div>
+            </div>
+
             <p class="questions-title"><i class="fa-solid fa-circle-question" style="margin-right:5px"></i>Pytania
                 konfiguracyjne</p>
 
@@ -1007,6 +1129,8 @@
         let state = {};         // { appType: 'game', platform: 'android', ... }
         let activeExtras = {};  // { adv_camera: true, ... }
         let answeredCount = 0;
+        let evaluationModeEnabled = false;
+        let completedEvaluationTasks = {};
 
         // ============================================================
         //  INIT
@@ -1016,6 +1140,7 @@
             renderQuestions();
             renderExtraFeatures();
             document.getElementById('resetBtn').addEventListener('click', resetAll);
+            document.getElementById('evaluationToggleBtn').addEventListener('click', toggleEvaluationMode);
         }
 
         function renderQuestions() {
@@ -1150,12 +1275,17 @@
             state = {};
             activeExtras = {};
             answeredCount = 0;
+            completedEvaluationTasks = {};
+            evaluationModeEnabled = false;
             renderQuestions();
             renderExtraFeatures();
             document.getElementById('extraSection').style.display = 'none';
             document.getElementById('resetBtn').style.display = 'none';
             document.getElementById('summaryPlaceholder').style.display = '';
             document.getElementById('summaryContent').style.display = 'none';
+            document.getElementById('evaluationToggleBtn').classList.remove('active');
+            document.getElementById('evaluationToggleBtn').innerHTML = '<i class="fa-solid fa-graduation-cap" style="margin-right:6px"></i>Włącz tryb oceny';
+            document.getElementById('evaluationPanel').style.display = 'none';
             updateProgress();
         }
 
@@ -1365,6 +1495,7 @@
             if (answeredCount === 0) {
                 document.getElementById('summaryPlaceholder').style.display = '';
                 document.getElementById('summaryContent').style.display = 'none';
+                renderEvaluationModule(null);
                 return;
             }
 
@@ -1382,6 +1513,129 @@
             renderTeamSection(hours);
             renderPricingSection(hours);
             renderDocumentsSection(hours);
+            renderEvaluationModule(hours);
+        }
+
+        // Przełącza widoczność modułu oceny i zmienia wygląd przycisku akcji.
+        function toggleEvaluationMode() {
+            evaluationModeEnabled = !evaluationModeEnabled;
+            const btn = document.getElementById('evaluationToggleBtn');
+            const panel = document.getElementById('evaluationPanel');
+            btn.classList.toggle('active', evaluationModeEnabled);
+            btn.innerHTML = evaluationModeEnabled
+                ? '<i class="fa-solid fa-list-check" style="margin-right:6px"></i>Wyłącz tryb oceny'
+                : '<i class="fa-solid fa-graduation-cap" style="margin-right:6px"></i>Włącz tryb oceny';
+            panel.style.display = evaluationModeEnabled ? '' : 'none';
+
+            if (evaluationModeEnabled) {
+                if (answeredCount > 0) {
+                    renderEvaluationModule(calcHours());
+                } else {
+                    renderEvaluationModule(null);
+                }
+            }
+        }
+
+        // Renderuje checklistę zadań i dynamicznie wylicza oceny zespołu na podstawie zaznaczeń.
+        function renderEvaluationModule(hours) {
+            const hint = document.getElementById('evaluationHint');
+            const checklist = document.getElementById('evaluationChecklist');
+            const gradesGrid = document.getElementById('gradesGrid');
+            checklist.innerHTML = '';
+
+            if (!evaluationModeEnabled) return;
+            if (!hours) {
+                hint.style.display = '';
+                gradesGrid.style.display = 'none';
+                return;
+            }
+
+            hint.style.display = 'none';
+            const groups = [
+                { id: 1, name: 'Członek 1 (UI/UX)', tasks: hours.m1 },
+                { id: 2, name: 'Członek 2 (Dane)', tasks: hours.m2 },
+                { id: 3, name: 'Członek 3 (Funkcje)', tasks: hours.m3 },
+            ];
+
+            groups.forEach(group => {
+                const totalHours = sum(group.tasks);
+                const completedHours = group.tasks.reduce((acc, task) => {
+                    const key = taskEvaluationKey(group.id, task.task);
+                    return completedEvaluationTasks[key] ? acc + task.h : acc;
+                }, 0);
+
+                const memberCard = document.createElement('div');
+                memberCard.className = 'evaluation-member';
+                memberCard.innerHTML = `
+                    <div class="evaluation-member-title">
+                        <span>${group.name}</span>
+                        <span>${completedHours}/${totalHours}h</span>
+                    </div>
+                `;
+
+                group.tasks.forEach(task => {
+                    const key = taskEvaluationKey(group.id, task.task);
+                    const row = document.createElement('label');
+                    row.className = 'evaluation-task';
+                    row.innerHTML = `
+                        <input type="checkbox" data-task-key="${key}" ${completedEvaluationTasks[key] ? 'checked' : ''}>
+                        <span>${task.task} <strong>(${task.h}h)</strong></span>
+                    `;
+                    memberCard.appendChild(row);
+                });
+
+                checklist.appendChild(memberCard);
+            });
+
+            checklist.querySelectorAll('input[type="checkbox"]').forEach(input => {
+                input.addEventListener('change', (event) => {
+                    const key = event.target.dataset.taskKey;
+                    completedEvaluationTasks[key] = event.target.checked;
+                    renderEvaluationModule(calcHours());
+                });
+            });
+
+            renderGradeCards(hours);
+            gradesGrid.style.display = '';
+        }
+
+        // Buduje stabilny klucz identyfikujący zadanie dla konkretnego członka zespołu.
+        function taskEvaluationKey(memberId, taskName) {
+            return `m${memberId}:${taskName}`;
+        }
+
+        // Przelicza procent realizacji na ocenę akademicką z krokiem co 0.5.
+        function completionToGrade(completedHours, totalHours) {
+            if (totalHours <= 0) return 2.0;
+            const ratio = completedHours / totalHours;
+            let raw = ratio < 0.5 ? 2 : (2 + ratio * 3);
+            raw = Math.max(2, Math.min(5, raw));
+            return Math.round(raw * 2) / 2;
+        }
+
+        // Renderuje kafelki ocen dla wszystkich trzech członków zespołu.
+        function renderGradeCards(hours) {
+            const gradesGrid = document.getElementById('gradesGrid');
+            const members = [
+                { id: 1, label: 'Członek 1', tasks: hours.m1 },
+                { id: 2, label: 'Członek 2', tasks: hours.m2 },
+                { id: 3, label: 'Członek 3', tasks: hours.m3 },
+            ];
+
+            gradesGrid.innerHTML = members.map(member => {
+                const totalHours = sum(member.tasks);
+                const completedHours = member.tasks.reduce((acc, task) => {
+                    const key = taskEvaluationKey(member.id, task.task);
+                    return completedEvaluationTasks[key] ? acc + task.h : acc;
+                }, 0);
+                const grade = completionToGrade(completedHours, totalHours).toFixed(1).replace('.', ',');
+                return `
+                    <div class="grade-card">
+                        <div class="who">${member.label}</div>
+                        <div class="value">${grade}</div>
+                    </div>
+                `;
+            }).join('');
         }
 
         function renderFeaturesSection(hours) {
