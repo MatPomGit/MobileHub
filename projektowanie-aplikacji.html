@@ -1034,6 +1034,8 @@
                     { val: 'utility', label: '🛠️ Narzędzie / Utility', desc: 'Kalkulator, organizer, notatnik, skaner' },
                     { val: 'health', label: '🏥 Zdrowie / Fitness', desc: 'Śledzenie aktywności i zdrowia' },
                     { val: 'education', label: '📚 Edukacja', desc: 'Nauka, quizy, kursy, e-learning' },
+                    { val: 'finance', label: '💰 Finanse osobiste', desc: 'Budżet, wydatki, cele oszczędnościowe' },
+                    { val: 'travel', label: '✈️ Podróże', desc: 'Planowanie wyjazdu, rezerwacje, mapa atrakcji' },
                 ]
             },
             {
@@ -1044,6 +1046,8 @@
                     { val: 'ios', label: '🍎 iOS (Swift)', desc: 'Natywna aplikacja na iPhone / iPad' },
                     { val: 'flutter', label: '🦋 Flutter (Dart)', desc: 'Jedna baza kodu — Android i iOS' },
                     { val: 'rn', label: '⚛️ React Native', desc: 'JS/TS dla obu platform' },
+                    { val: 'kmp', label: '🧩 Kotlin Multiplatform', desc: 'Wspólna logika + natywne UI' },
+                    { val: 'pwa', label: '🌐 PWA', desc: 'Aplikacja webowa instalowalna na telefonie' },
                 ]
             },
             {
@@ -1053,6 +1057,7 @@
                     { val: 'simple', label: '📄 Prosty (1–3 ekrany)', desc: 'Minimalna nawigacja, jedno zadanie' },
                     { val: 'medium', label: '📋 Średni (4–8 ekranów)', desc: 'Kilka sekcji, zakładki lub drawer' },
                     { val: 'complex', label: '📚 Rozbudowany (9+ ekranów)', desc: 'Wiele widoków, role użytkownika' },
+                    { val: 'enterprise', label: '🏢 Enterprise (12+ ekranów)', desc: 'Panel admina, workflow, wiele ról' },
                 ]
             },
             {
@@ -1063,6 +1068,8 @@
                     { val: 'email', label: '📧 Email + hasło', desc: 'Klasyczna rejestracja i logowanie' },
                     { val: 'google', label: '🔑 Google / Social login', desc: 'OAuth przez Google lub inne usługi' },
                     { val: 'biometric', label: '🪪 Biometryczne', desc: 'Odcisk palca lub Face ID' },
+                    { val: 'apple', label: '🍎 Sign in with Apple', desc: 'Logowanie Apple ID dla iOS' },
+                    { val: 'magiclink', label: '✨ Magic Link', desc: 'Logowanie linkiem wysyłanym e-mailowo' },
                 ]
             },
             {
@@ -1074,6 +1081,7 @@
                     { val: 'room', label: '🗃️ Lokalna baza (Room / SQLite)', desc: 'Pełna baza danych on-device' },
                     { val: 'firebase', label: '🔥 Firebase Firestore / RTDB', desc: 'Baza NoSQL w chmurze Google' },
                     { val: 'api', label: '🌐 Własne REST API', desc: 'Serwer + HTTP/JSON lub GraphQL' },
+                    { val: 'supabase', label: '🐘 Supabase (PostgreSQL)', desc: 'Baza SQL + auth + storage w chmurze' },
                 ]
             },
             {
@@ -1083,6 +1091,7 @@
                     { val: 'none', label: '🚫 Bez powiadomień', desc: '' },
                     { val: 'local', label: '🔔 Lokalne', desc: 'Zaplanowane przez AlarmManager / WorkManager' },
                     { val: 'push', label: '📲 Push (Firebase FCM)', desc: 'Powiadomienia zdalne z serwera' },
+                    { val: 'inapp', label: '💬 In-app inbox', desc: 'Centrum wiadomości i alertów w aplikacji' },
                 ]
             },
             {
@@ -1092,6 +1101,7 @@
                     { val: 'none', label: '🚫 Bez lokalizacji', desc: '' },
                     { val: 'gps', label: '📍 Podstawowe GPS', desc: 'Bieżąca lokalizacja użytkownika' },
                     { val: 'maps', label: '🗺️ Mapy (Google Maps)', desc: 'Wyświetlanie mapy, markery, trasy' },
+                    { val: 'geofencing', label: '🧭 Geofencing', desc: 'Reguły wejścia/wyjścia z obszaru' },
                 ]
             },
             {
@@ -1103,6 +1113,8 @@
                     { val: 'camera', label: '📷 Aparat / skaner QR', desc: 'Zdjęcia, wideo, kody kreskowe' },
                     { val: 'sensors', label: '📐 Czujniki ruchu', desc: 'Akcelerometr, żyroskop, orientacja' },
                     { val: 'bluetooth', label: '📶 Bluetooth / BLE', desc: 'Komunikacja z peryferiami' },
+                    { val: 'nfc', label: '📳 NFC', desc: 'Odczyt/zapis tagów i kart' },
+                    { val: 'microphone', label: '🎙️ Mikrofon / audio', desc: 'Nagrywanie i analiza dźwięku' },
                 ]
             },
         ];
@@ -1120,6 +1132,10 @@
             { id: 'charts', label: '📊 Wykresy i statystyki', hours: 10, member: 1, desc: 'MPAndroidChart / Compose Charts' },
             { id: 'dark_mode', label: '🌙 Dynamic Theme', hours: 6, member: 1, desc: 'Material You, persystencja motywu' },
             { id: 'accessibility', label: '♿ Dostępność (a11y)', hours: 10, member: 1, desc: 'TalkBack, napisy, kontrast, skalowanie' },
+            { id: 'analytics', label: '📈 Analityka produktu', hours: 8, member: 2, desc: 'Zdarzenia, lejki, retencja i KPI' },
+            { id: 'offline_first', label: '📦 Tryb offline-first', hours: 16, member: 2, desc: 'Cache, synchronizacja i kolejki retry' },
+            { id: 'auto_tests', label: '🧪 Testy automatyczne', hours: 14, member: 3, desc: 'Unit/UI tests, smoke, regresja' },
+            { id: 'ci_cd', label: '🚀 CI/CD', hours: 12, member: 3, desc: 'Pipeline build/test/deploy i podpisywanie paczek' },
         ];
 
         // ============================================================
@@ -1321,13 +1337,13 @@
 
             // --- Platform ---
             if (state.platform) {
-                const ph = { android: 6, ios: 10, flutter: 14, rn: 12 }[state.platform] || 0;
+                const ph = { android: 6, ios: 10, flutter: 14, rn: 12, kmp: 18, pwa: 8 }[state.platform] || 0;
                 m1.push({ task: `Konfiguracja projektu ${platformName(state.platform)}`, h: ph });
             }
 
             // --- UI Complexity ---
             if (state.uiComplexity) {
-                const uh = { simple: 8, medium: 22, complex: 44 }[state.uiComplexity] || 0;
+                const uh = { simple: 8, medium: 22, complex: 44, enterprise: 56 }[state.uiComplexity] || 0;
                 m1.push({ task: `Ekrany i nawigacja (${uiComplexityName(state.uiComplexity)})`, h: uh });
             }
 
@@ -1345,6 +1361,8 @@
                     email: { task: 'Rejestracja / logowanie email + hasło', h: 8 },
                     google: { task: 'Logowanie przez Google OAuth 2.0', h: 12 },
                     biometric: { task: 'Uwierzytelnianie biometryczne (Fingerprint / Face ID)', h: 12 },
+                    apple: { task: 'Sign in with Apple (tokeny, nonce, walidacja)', h: 12 },
+                    magiclink: { task: 'Logowanie typu Magic Link + obsługa deep-linków', h: 10 },
                 }[state.auth];
                 if (at) m2.push(at);
             }
@@ -1356,6 +1374,7 @@
                     room: { task: 'Room ORM — baza SQLite, encje, DAO, migracje', h: 18 },
                     firebase: { task: 'Firebase Firestore — kolekcje, CRUD, reguły, real-time', h: 22 },
                     api: { task: 'REST API klient — Retrofit / Ktor, endpointy, auth interceptor', h: 28 },
+                    supabase: { task: 'Supabase SDK — PostgreSQL, polityki RLS, auth i storage', h: 24 },
                 }[state.dataStorage];
                 if (dt) m2.push(dt);
             }
@@ -1365,6 +1384,7 @@
                 const nt = {
                     local: { task: 'Lokalne powiadomienia — AlarmManager / WorkManager', h: 6 },
                     push: { task: 'Firebase FCM — token, handler, kanały powiadomień', h: 14 },
+                    inapp: { task: 'In-app inbox — centrum wiadomości i status odczytu', h: 10 },
                 }[state.notifications];
                 if (nt) m3.push(nt);
             }
@@ -1374,6 +1394,7 @@
                 const lt = {
                     gps: { task: 'Lokalizacja GPS — FusedLocationProvider, uprawnienia', h: 6 },
                     maps: { task: 'Google Maps SDK — mapa, markery, geofencing, routing', h: 16 },
+                    geofencing: { task: 'Geofencing API — reguły wejścia/wyjścia i automatyzacje', h: 12 },
                 }[state.location];
                 if (lt) m3.push(lt);
             }
@@ -1386,6 +1407,8 @@
                         camera: { task: 'CameraX / Camera2 API — zdjęcia, wideo, skanowanie QR', h: 10 },
                         sensors: { task: 'SensorManager — akcelerometr, żyroskop, orientacja urządzenia', h: 8 },
                         bluetooth: { task: 'BLE GATT — skanowanie, parowanie, odczyt/zapis charakterystyk', h: 18 },
+                        nfc: { task: 'NFC API — odczyt/zapis tagów NDEF i obsługa sesji', h: 10 },
+                        microphone: { task: 'AudioRecord/MediaRecorder — nagrywanie i podstawowa analiza audio', h: 12 },
                     }[h];
                     if (ht) m3.push(ht);
                 });
@@ -1482,8 +1505,10 @@
                 utility: 'Aplikacja narzędziowa',
                 health: 'Aplikacja fitness',
                 education: 'Aplikacja edukacyjna',
+                finance: 'Aplikacja finansowa',
+                travel: 'Aplikacja podróżnicza',
             }[state.appType] || 'Aplikacja mobilna';
-            const plat = { android: 'Android', ios: 'iOS', flutter: 'Flutter', rn: 'React Native' }[state.platform] || '';
+            const plat = { android: 'Android', ios: 'iOS', flutter: 'Flutter', rn: 'React Native', kmp: 'Kotlin Multiplatform', pwa: 'PWA' }[state.platform] || '';
             return plat ? `${base} (${plat})` : base;
         }
 
@@ -1804,6 +1829,8 @@
                 utility: '🛠️ Utility',
                 health: '🏥 Fitness',
                 education: '📚 Edukacja',
+                finance: '💰 Finanse',
+                travel: '✈️ Podróże',
             }[v] || '📱 Aplikacja';
         }
 
@@ -1816,35 +1843,37 @@
                 utility: 'Aplikacja narzędziowa',
                 health: 'Aplikacja do śledzenia zdrowia i aktywności',
                 education: 'Aplikacja edukacyjna',
+                finance: 'Aplikacja do zarządzania finansami osobistymi',
+                travel: 'Aplikacja do planowania i obsługi podróży',
             }[v] || 'Aplikacja mobilna';
         }
 
         function platformName(v) {
-            return { android: 'Android (Kotlin)', ios: 'iOS (Swift)', flutter: 'Flutter (Dart)', rn: 'React Native (JS/TS)' }[v] || '—';
+            return { android: 'Android (Kotlin)', ios: 'iOS (Swift)', flutter: 'Flutter (Dart)', rn: 'React Native (JS/TS)', kmp: 'Kotlin Multiplatform', pwa: 'PWA (Web)' }[v] || '—';
         }
 
         function uiComplexityName(v) {
-            return { simple: 'prosty, 1–3 ekrany', medium: 'średni, 4–8 ekranów', complex: 'rozbudowany, 9+ ekranów' }[v] || '—';
+            return { simple: 'prosty, 1–3 ekrany', medium: 'średni, 4–8 ekranów', complex: 'rozbudowany, 9+ ekranów', enterprise: 'enterprise, 12+ ekranów' }[v] || '—';
         }
 
         function authLabel(v) {
-            return { email: 'logowanie email/hasło', google: 'Google OAuth', biometric: 'biometria' }[v] || '';
+            return { email: 'logowanie email/hasło', google: 'Google OAuth', biometric: 'biometria', apple: 'Sign in with Apple', magiclink: 'Magic Link' }[v] || '';
         }
 
         function storageLabel(v) {
-            return { room: 'lokalna baza Room', firebase: 'Firebase Firestore', api: 'własne REST API' }[v] || '';
+            return { room: 'lokalna baza Room', firebase: 'Firebase Firestore', api: 'własne REST API', supabase: 'Supabase (PostgreSQL)' }[v] || '';
         }
 
         function notifLabel(v) {
-            return { local: 'lokalne powiadomienia', push: 'push (FCM)' }[v] || '';
+            return { local: 'lokalne powiadomienia', push: 'push (FCM)', inapp: 'in-app inbox' }[v] || '';
         }
 
         function locLabel(v) {
-            return { gps: 'GPS', maps: 'Google Maps' }[v] || '';
+            return { gps: 'GPS', maps: 'Google Maps', geofencing: 'geofencing' }[v] || '';
         }
 
         function hwLabel(v) {
-            return { camera: 'aparat / QR', sensors: 'czujniki ruchu', bluetooth: 'BLE' }[v] || '';
+            return { camera: 'aparat / QR', sensors: 'czujniki ruchu', bluetooth: 'BLE', nfc: 'NFC', microphone: 'mikrofon / audio' }[v] || '';
         }
 
         function appTypeContrib(v) {
@@ -1883,6 +1912,16 @@
                     m1: { task: 'UI lekcji, quizów, ekran postępów i gamifikacja', h: 18 },
                     m2: { task: 'Model kursów, wyników, postępów użytkownika', h: 14 },
                     m3: null,
+                },
+                finance: {
+                    m1: { task: 'Dashboard finansowy, widoki budżetu i celów oszczędnościowych', h: 20 },
+                    m2: { task: 'Model transakcji, kategorie, limity i reguły budżetowe', h: 18 },
+                    m3: { task: 'Import historii operacji i alerty przekroczenia budżetu', h: 10 },
+                },
+                travel: {
+                    m1: { task: 'UI planera podróży, harmonogram i lista miejsc', h: 18 },
+                    m2: { task: 'Model rezerwacji, walut, kosztów i dokumentów podróży', h: 16 },
+                    m3: { task: 'Integracja map tras i przypomnienia geolokalizacyjne', h: 12 },
                 },
             };
             return map[v] || {};
