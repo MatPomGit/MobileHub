@@ -876,6 +876,37 @@
             font-weight: 800;
             color: #c2410c;
         }
+
+        .grade-card.pass {
+            border-color: #86efac;
+            background: #f0fdf4;
+        }
+
+        .grade-card.pass .value {
+            color: #15803d;
+        }
+
+        .grade-card.fail {
+            border-color: #fecaca;
+            background: #fef2f2;
+        }
+
+        .grade-card.fail .value {
+            color: #b91c1c;
+        }
+
+        .grade-card .status {
+            margin-top: 4px;
+            font-size: 0.68rem;
+            font-weight: 700;
+        }
+
+        .evaluation-rule-note {
+            margin-top: 8px;
+            font-size: 0.72rem;
+            color: #7c2d12;
+            line-height: 1.35;
+        }
     </style>
 </head>
 
@@ -920,6 +951,7 @@
                     <p class="empty-hint" id="evaluationHint">Wypełnij kreator, aby aktywować checklistę oceny.</p>
                     <div id="evaluationChecklist"></div>
                     <div class="grade-grid" id="gradesGrid" style="display:none;"></div>
+                    <p class="evaluation-rule-note" id="evaluationRuleNote" style="display:none;"></p>
                 </div>
             </div>
 
@@ -1566,12 +1598,14 @@
             const hint = document.getElementById('evaluationHint');
             const checklist = document.getElementById('evaluationChecklist');
             const gradesGrid = document.getElementById('gradesGrid');
+            const ruleNote = document.getElementById('evaluationRuleNote');
             checklist.innerHTML = '';
 
             if (!evaluationModeEnabled) return;
             if (!hours) {
                 hint.style.display = '';
                 gradesGrid.style.display = 'none';
+                ruleNote.style.display = 'none';
                 return;
             }
 
@@ -1629,38 +1663,57 @@
             return `m${memberId}:${taskName}`;
         }
 
-        // Przelicza procent realizacji na ocenę akademicką z krokiem co 0.5.
+        // Przelicza procent realizacji na ocenę wg progów zaliczeniowych projektu.
+        // Założenie: od oceny 3.0 projekt jest zaliczony.
         function completionToGrade(completedHours, totalHours) {
             if (totalHours <= 0) return 2.0;
-            const ratio = completedHours / totalHours;
-            let raw = ratio < 0.5 ? 2 : (2 + ratio * 3);
-            raw = Math.max(2, Math.min(5, raw));
-            return Math.round(raw * 2) / 2;
+            const percent = (completedHours / totalHours) * 100;
+            if (percent < 50) return 2.0;
+            if (percent < 60) return 3.0;
+            if (percent < 70) return 3.5;
+            if (percent < 85) return 4.0;
+            if (percent < 95) return 4.5;
+            return 5.0;
+        }
+
+        // Sprawdza, czy ocena spełnia minimalny próg zaliczenia.
+        function isPassingGrade(grade) {
+            return grade >= 3.0;
         }
 
         // Renderuje kafelki ocen dla wszystkich trzech członków zespołu.
         function renderGradeCards(hours) {
             const gradesGrid = document.getElementById('gradesGrid');
+            const ruleNote = document.getElementById('evaluationRuleNote');
             const members = [
                 { id: 1, label: 'Członek 1', tasks: hours.m1 },
                 { id: 2, label: 'Członek 2', tasks: hours.m2 },
                 { id: 3, label: 'Członek 3', tasks: hours.m3 },
             ];
 
-            gradesGrid.innerHTML = members.map(member => {
+            const grades = members.map(member => {
                 const totalHours = sum(member.tasks);
                 const completedHours = member.tasks.reduce((acc, task) => {
                     const key = taskEvaluationKey(member.id, task.task);
                     return completedEvaluationTasks[key] ? acc + task.h : acc;
                 }, 0);
-                const grade = completionToGrade(completedHours, totalHours).toFixed(1).replace('.', ',');
+                const gradeNum = completionToGrade(completedHours, totalHours);
+                const isPass = isPassingGrade(gradeNum);
+                const grade = gradeNum.toFixed(1).replace('.', ',');
                 return `
-                    <div class="grade-card">
+                    <div class="grade-card ${isPass ? 'pass' : 'fail'}">
                         <div class="who">${member.label}</div>
                         <div class="value">${grade}</div>
+                        <div class="status">${isPass ? 'Zaliczone' : 'Niezaliczone'}</div>
                     </div>
                 `;
-            }).join('');
+            });
+
+            gradesGrid.innerHTML = grades.join('');
+
+            // Komunikat opisuje progi ocen zgodne z zasadami zaliczenia projektu.
+            ruleNote.style.display = '';
+            ruleNote.textContent = 'Progi: <50% = 2.0, 50–59% = 3.0, 60–69% = 3.5, 70–84% = 4.0, 85–94% = 4.5, ≥95% = 5.0. Zaliczenie od 3.0.';
         }
 
         function renderFeaturesSection(hours) {
