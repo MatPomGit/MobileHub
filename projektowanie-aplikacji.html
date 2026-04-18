@@ -908,10 +908,62 @@
             line-height: 1.35;
         }
 
+        /* Szybki skrót zapewnia natychmiastowy dostęp do modułu oceny z dowolnego miejsca kreatora. */
+        .evaluation-shortcut-wrap {
+            display: flex;
+            justify-content: flex-end;
+            width: min(1200px, calc(100% - 32px));
+            margin: 8px auto 12px;
+        }
+
+        .evaluation-shortcut-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #fdba74;
+            border-radius: 999px;
+            background: #fff7ed;
+            color: #9a3412;
+            font-weight: 700;
+            font-size: 0.8rem;
+            padding: 8px 12px;
+            cursor: pointer;
+            box-shadow: 0 6px 18px rgba(249, 115, 22, 0.16);
+        }
+
+        .evaluation-shortcut-badge {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 20px;
+            height: 20px;
+            border-radius: 999px;
+            font-size: 0.68rem;
+            font-weight: 800;
+            color: #fff;
+            background: #16a34a;
+            padding: 0 6px;
+        }
+
         @media (max-width: 768px) {
             .evaluation-cta {
                 padding: 10px;
                 margin-bottom: 10px;
+            }
+
+            .evaluation-shortcut-wrap {
+                position: sticky;
+                top: 8px;
+                z-index: 8;
+                margin-top: 6px;
+                width: calc(100% - 20px);
+            }
+
+            .evaluation-shortcut-btn {
+                width: 100%;
+                justify-content: center;
+                padding: 10px 12px;
+                font-size: 0.84rem;
             }
 
             .evaluation-cta-desc {
@@ -1007,6 +1059,13 @@
             <div class="progress-bar-fill" id="progressFill" style="width:0%"></div>
         </div>
         <span class="progress-label" id="progressLabel">Pytanie 1 z 8 — zacznij odpowiadać</span>
+    </div>
+    <div class="evaluation-shortcut-wrap">
+        <button class="evaluation-shortcut-btn" id="evaluationShortcutBtn" type="button">
+            <i class="fa-solid fa-graduation-cap"></i>
+            Szybki dostęp: ocena prowadzącego
+            <span class="evaluation-shortcut-badge" id="evaluationShortcutBadge" style="display:none;">0%</span>
+        </button>
     </div>
 
     <!-- TWO-COLUMN LAYOUT -->
@@ -1263,6 +1322,8 @@
             renderExtraFeatures();
             document.getElementById('resetBtn').addEventListener('click', resetAll);
             document.getElementById('evaluationToggleBtn').addEventListener('click', toggleEvaluationMode);
+            document.getElementById('evaluationShortcutBtn').addEventListener('click', focusEvaluationModule);
+            syncEvaluationShortcutState();
         }
 
         function renderQuestions() {
@@ -1409,6 +1470,7 @@
             document.getElementById('evaluationToggleBtn').innerHTML = '<i class="fa-solid fa-graduation-cap" style="margin-right:6px"></i>Włącz tryb oceny';
             document.getElementById('evaluationPanel').style.display = 'none';
             updateProgress();
+            syncEvaluationShortcutState();
         }
 
         function updateProgress() {
@@ -1666,6 +1728,16 @@
                 }
                 scrollEvaluationPanelIntoView();
             }
+            syncEvaluationShortcutState();
+        }
+
+        // Zapewnia szybkie przejście do modułu oceny i automatycznie go aktywuje przy pierwszym użyciu.
+        function focusEvaluationModule() {
+            if (!evaluationModeEnabled) {
+                toggleEvaluationMode();
+            } else {
+                document.querySelector('.evaluation-cta')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            }
         }
 
         // Ułatwia szybkie przejście do modułu oceny na telefonie po jego aktywacji.
@@ -1797,6 +1869,41 @@
             // Komunikat opisuje progi ocen zgodne z zasadami zaliczenia projektu.
             ruleNote.style.display = '';
             ruleNote.textContent = 'Progi: <50% = 2.0, 50–59% = 3.0, 60–69% = 3.5, 70–84% = 4.0, 85–94% = 4.5, ≥95% = 5.0. Zaliczenie od 3.0.';
+            syncEvaluationShortcutState(hours);
+        }
+
+        // Aktualizuje etykietę skrótu tak, aby prowadzący od razu widział status gotowości do oceny.
+        function syncEvaluationShortcutState(hours = null) {
+            const shortcutBtn = document.getElementById('evaluationShortcutBtn');
+            const shortcutBadge = document.getElementById('evaluationShortcutBadge');
+            if (!shortcutBtn || !shortcutBadge) return;
+
+            if (!evaluationModeEnabled) {
+                shortcutBtn.title = 'Kliknij, aby otworzyć moduł oceny prowadzącego';
+            } else {
+                shortcutBtn.title = 'Moduł oceny jest aktywny';
+            }
+
+            if (!hours && answeredCount > 0) {
+                hours = calcHours();
+            }
+
+            if (!hours) {
+                shortcutBadge.style.display = 'none';
+                return;
+            }
+
+            const totalHours = sum(hours.m1) + sum(hours.m2) + sum(hours.m3);
+            const completedHours = [1, 2, 3].reduce((acc, memberId) => {
+                const memberTasks = hours[`m${memberId}`] || [];
+                return acc + memberTasks.reduce((memberAcc, task) => {
+                    const key = taskEvaluationKey(memberId, task.task);
+                    return completedEvaluationTasks[key] ? memberAcc + task.h : memberAcc;
+                }, 0);
+            }, 0);
+            const completionPct = totalHours > 0 ? Math.round((completedHours / totalHours) * 100) : 0;
+            shortcutBadge.textContent = `${completionPct}%`;
+            shortcutBadge.style.display = '';
         }
 
         function renderFeaturesSection(hours) {
