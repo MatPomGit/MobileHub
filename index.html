@@ -536,6 +536,90 @@
                 </table>
             </div>
 
+            <div class="lecturer-grading-card" id="lecturerGradingCard">
+                <div class="lecturer-grading-header">
+                    <div>
+                        <h4><i class="fa-solid fa-chalkboard-user"></i> Moduł oceniania dla wykładowcy</h4>
+                        <p>Wprowadź punkty cząstkowe, aby automatycznie obliczyć wynik końcowy i sugestię informacji zwrotnej.</p>
+                    </div>
+                    <button type="button" class="grading-reset-btn" id="gradingResetBtn">
+                        <i class="fa-solid fa-rotate-left"></i> Reset
+                    </button>
+                </div>
+
+                <div class="grading-criteria-list" id="gradingCriteriaList">
+                    <div class="grading-row" data-criterion-label="Działające funkcje podstawowe" data-criterion-max="30">
+                        <div class="grading-row-title">
+                            <strong>Działające funkcje podstawowe</strong>
+                            <span>Maks. 30 pkt</span>
+                        </div>
+                        <input type="range" min="0" max="30" value="0" class="grading-range" aria-label="Działające funkcje podstawowe">
+                        <input type="number" min="0" max="30" value="0" class="grading-number" aria-label="Punkty za działające funkcje podstawowe">
+                    </div>
+                    <div class="grading-row" data-criterion-label="Jakość kodu i architektura" data-criterion-max="20">
+                        <div class="grading-row-title">
+                            <strong>Jakość kodu i architektura</strong>
+                            <span>Maks. 20 pkt</span>
+                        </div>
+                        <input type="range" min="0" max="20" value="0" class="grading-range" aria-label="Jakość kodu i architektura">
+                        <input type="number" min="0" max="20" value="0" class="grading-number" aria-label="Punkty za jakość kodu i architekturę">
+                    </div>
+                    <div class="grading-row" data-criterion-label="Interfejs użytkownika i UX" data-criterion-max="15">
+                        <div class="grading-row-title">
+                            <strong>Interfejs użytkownika i UX</strong>
+                            <span>Maks. 15 pkt</span>
+                        </div>
+                        <input type="range" min="0" max="15" value="0" class="grading-range" aria-label="Interfejs użytkownika i UX">
+                        <input type="number" min="0" max="15" value="0" class="grading-number" aria-label="Punkty za interfejs użytkownika i UX">
+                    </div>
+                    <div class="grading-row" data-criterion-label="Komunikacja sieciowa i dane" data-criterion-max="15">
+                        <div class="grading-row-title">
+                            <strong>Komunikacja sieciowa i dane</strong>
+                            <span>Maks. 15 pkt</span>
+                        </div>
+                        <input type="range" min="0" max="15" value="0" class="grading-range" aria-label="Komunikacja sieciowa i dane">
+                        <input type="number" min="0" max="15" value="0" class="grading-number" aria-label="Punkty za komunikację sieciową i dane">
+                    </div>
+                    <div class="grading-row" data-criterion-label="Prezentacja i dokumentacja" data-criterion-max="10">
+                        <div class="grading-row-title">
+                            <strong>Prezentacja i dokumentacja</strong>
+                            <span>Maks. 10 pkt</span>
+                        </div>
+                        <input type="range" min="0" max="10" value="0" class="grading-range" aria-label="Prezentacja i dokumentacja">
+                        <input type="number" min="0" max="10" value="0" class="grading-number" aria-label="Punkty za prezentację i dokumentację">
+                    </div>
+                    <div class="grading-row" data-criterion-label="Dodatkowe funkcje i kreatywność" data-criterion-max="10">
+                        <div class="grading-row-title">
+                            <strong>Dodatkowe funkcje i kreatywność</strong>
+                            <span>Maks. 10 pkt</span>
+                        </div>
+                        <input type="range" min="0" max="10" value="0" class="grading-range" aria-label="Dodatkowe funkcje i kreatywność">
+                        <input type="number" min="0" max="10" value="0" class="grading-number" aria-label="Punkty za dodatkowe funkcje i kreatywność">
+                    </div>
+                </div>
+
+                <div class="grading-summary">
+                    <div class="grading-summary-stat">
+                        <span>Łącznie punktów</span>
+                        <strong id="gradingTotal">0 / 100</strong>
+                    </div>
+                    <div class="grading-summary-stat">
+                        <span>Proponowana ocena</span>
+                        <strong id="gradingGrade">2.0</strong>
+                    </div>
+                    <div class="grading-summary-stat">
+                        <span>Status</span>
+                        <strong id="gradingStatus" class="grading-status fail">Nie zaliczono</strong>
+                    </div>
+                </div>
+
+                <label class="grading-feedback-label" for="gradingFeedback">Sugestia informacji zwrotnej</label>
+                <textarea id="gradingFeedback" class="grading-feedback" readonly></textarea>
+                <button type="button" class="grading-copy-btn" id="gradingCopyBtn">
+                    <i class="fa-solid fa-copy"></i> Kopiuj komentarz
+                </button>
+            </div>
+
             <h3 class="section-title">Przykładowe tematy projektów</h3>
             <div class="cards-grid">
                 <div class="info-card">
@@ -1826,6 +1910,131 @@
                 });
                 grid.appendChild(btn);
             });
+        })();
+
+        (function () {
+            const gradingCard = document.getElementById('lecturerGradingCard');
+            if (!gradingCard) return;
+
+            const rows = Array.from(gradingCard.querySelectorAll('.grading-row'));
+            const totalEl = document.getElementById('gradingTotal');
+            const gradeEl = document.getElementById('gradingGrade');
+            const statusEl = document.getElementById('gradingStatus');
+            const feedbackEl = document.getElementById('gradingFeedback');
+            const copyBtn = document.getElementById('gradingCopyBtn');
+            const resetBtn = document.getElementById('gradingResetBtn');
+
+            const gradeThresholds = [
+                { min: 91, grade: '5.0' },
+                { min: 81, grade: '4.5' },
+                { min: 71, grade: '4.0' },
+                { min: 61, grade: '3.5' },
+                { min: 51, grade: '3.0' },
+                { min: 0, grade: '2.0' }
+            ];
+
+            // Funkcja normalizuje wpisaną wartość, aby zawsze mieściła się w zakresie punktowym kryterium.
+            function clampValue(value, max) {
+                const safeValue = Number.isFinite(value) ? value : 0;
+                return Math.min(Math.max(0, safeValue), max);
+            }
+
+            // Funkcja mapuje wynik punktowy na ocenę zgodnie z tabelą progów.
+            function getGradeFromScore(score) {
+                const threshold = gradeThresholds.find(item => score >= item.min) || gradeThresholds[gradeThresholds.length - 1];
+                return threshold.grade;
+            }
+
+            // Funkcja buduje gotową informację zwrotną z listą mocnych stron i obszarów do poprawy.
+            function buildFeedback(totalScore, grade, weakAreas) {
+                const statusText = totalScore >= 51 ? 'Projekt zaliczony.' : 'Projekt nie spełnia jeszcze progu zaliczenia.';
+                const strengthsText = totalScore >= 81
+                    ? 'Bardzo dobra realizacja wymagań i wysoka jakość wykonania.'
+                    : totalScore >= 61
+                        ? 'Solidna realizacja podstawowych wymagań.'
+                        : 'Widoczny potencjał, ale projekt wymaga dopracowania kluczowych elementów.';
+
+                const improvementsText = weakAreas.length
+                    ? `Obszary do poprawy: ${weakAreas.join(', ')}.`
+                    : 'Brak krytycznych braków — utrzymaj obecny poziom jakości.';
+
+                return `Wynik końcowy: ${totalScore}/100, ocena ${grade}. ${statusText} ${strengthsText} ${improvementsText}`;
+            }
+
+            // Funkcja przelicza cały formularz ocen i aktualizuje widok podsumowania.
+            function updateSummary() {
+                let totalScore = 0;
+                const weakAreas = [];
+
+                rows.forEach(row => {
+                    const max = Number(row.dataset.criterionMax || 0);
+                    const label = row.dataset.criterionLabel || 'Kryterium';
+                    const rangeInput = row.querySelector('.grading-range');
+                    const numberInput = row.querySelector('.grading-number');
+                    const points = clampValue(Number(numberInput.value), max);
+                    totalScore += points;
+
+                    if (max > 0 && points / max < 0.6) {
+                        weakAreas.push(label);
+                    }
+
+                    rangeInput.value = String(points);
+                    numberInput.value = String(points);
+                });
+
+                const grade = getGradeFromScore(totalScore);
+                const passed = totalScore >= 51;
+
+                totalEl.textContent = `${totalScore} / 100`;
+                gradeEl.textContent = grade;
+                statusEl.textContent = passed ? 'Zaliczono' : 'Nie zaliczono';
+                statusEl.classList.toggle('pass', passed);
+                statusEl.classList.toggle('fail', !passed);
+                feedbackEl.value = buildFeedback(totalScore, grade, weakAreas);
+            }
+
+            rows.forEach(row => {
+                const max = Number(row.dataset.criterionMax || 0);
+                const rangeInput = row.querySelector('.grading-range');
+                const numberInput = row.querySelector('.grading-number');
+
+                rangeInput.addEventListener('input', () => {
+                    numberInput.value = rangeInput.value;
+                    updateSummary();
+                });
+
+                numberInput.addEventListener('input', () => {
+                    const normalized = clampValue(Number(numberInput.value), max);
+                    rangeInput.value = String(normalized);
+                    numberInput.value = String(normalized);
+                    updateSummary();
+                });
+            });
+
+            if (resetBtn) {
+                resetBtn.addEventListener('click', () => {
+                    rows.forEach(row => {
+                        const rangeInput = row.querySelector('.grading-range');
+                        const numberInput = row.querySelector('.grading-number');
+                        rangeInput.value = '0';
+                        numberInput.value = '0';
+                    });
+                    updateSummary();
+                });
+            }
+
+            if (copyBtn && feedbackEl) {
+                copyBtn.addEventListener('click', async () => {
+                    if (!navigator.clipboard || !feedbackEl.value) return;
+                    await navigator.clipboard.writeText(feedbackEl.value);
+                    copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Skopiowano';
+                    setTimeout(() => {
+                        copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopiuj komentarz';
+                    }, 1200);
+                });
+            }
+
+            updateSummary();
         })();
     </script>
 
