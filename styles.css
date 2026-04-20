@@ -277,6 +277,51 @@ a:hover {
     box-shadow: var(--shadow-lg);
 }
 
+.grading-shortcut-card {
+    margin: 16px 0 22px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid var(--border);
+    background: linear-gradient(135deg, var(--accent-light), var(--surface));
+    box-shadow: var(--shadow);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+}
+
+.grading-shortcut-copy strong {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+}
+
+.grading-shortcut-copy p {
+    margin-top: 6px;
+    color: var(--text-muted);
+    font-size: 11px;
+}
+
+.grading-shortcut-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 12px;
+    border-radius: 10px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    font-size: 11px;
+    white-space: nowrap;
+    box-shadow: var(--shadow);
+}
+
+.grading-shortcut-btn:hover {
+    color: #fff;
+    filter: brightness(1.05);
+}
+
 .scroll-progress {
     position: fixed;
     top: 0;
@@ -2363,6 +2408,16 @@ footer strong {
     .theme-picker-dropdown {
         right: 0;
         left: auto;
+    }
+
+    .grading-shortcut-card {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .grading-shortcut-btn {
+        width: 100%;
+        justify-content: center;
     }
 }
 
