@@ -11,10 +11,11 @@
         - Prezentacja live: zajecia/live/wyklady/w01-intro-live.html
         Struktura slajdów odwzorowuje główne sekcje tematyczne z wersji PDF.
     -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css"
-        onerror="this.href='https://unpkg.com/reveal.js@5/dist/reveal.css'">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css" id="theme-link"
-        onerror="this.href='https://unpkg.com/reveal.js@5/dist/theme/black.css'">
+    <!-- Preferujemy lokalne zasoby Reveal.js (stabilność), a CDN traktujemy jako fallback. -->
+    <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css"
+        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
+    <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link"
+        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
     <style>
         .reveal h1, .reveal h2 { text-transform: none; }
         .lecture-meta { font-size: 0.8em; opacity: 0.85; }
@@ -76,27 +77,27 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+    <script src="../vendor/reveal.js/dist/reveal.js"
+        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+    <script src="live-reveal-enhancements.js"></script>
     <script>
-        // Fallback CDN: jeżeli jsDelivr jest niedostępny, doładuj Reveal.js z unpkg.
+        // Fallback poziomu 2: jeżeli lokalny zasób i jsDelivr zawiodą, doładuj Reveal.js z unpkg.
         if (typeof window.Reveal === 'undefined') {
             const fallbackScript = document.createElement('script');
             fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
-            fallbackScript.onload = initializeReveal;
+            fallbackScript.onload = initializeLecture;
             document.body.appendChild(fallbackScript);
         } else {
-            initializeReveal();
+            initializeLecture();
         }
 
-        function initializeReveal() {
-            // Konfiguracja live: klawiatura + pasek postępu + numer slajdu.
-            Reveal.initialize({
-                controls: true,
-                progress: true,
-                slideNumber: true,
-                hash: true,
-                keyboard: true,
-                transition: 'slide'
+        function initializeLecture() {
+            // Rozszerzona konfiguracja live: auto-animacje, płynne przejścia i nawigacja klawiaturą.
+            initializeLiveReveal({
+                transition: 'slide',
+                backgroundTransition: 'fade',
+                autoAnimate: true,
+                autoAnimateDuration: 0.8,
             });
         }
     </script>
