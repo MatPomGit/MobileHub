@@ -1,106 +1,71 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W10 – Programowanie gier mobilnych (live)</title>
-    <!--
-        Mapowanie wykład → wersja live:
-        - PDF źródłowy: zajecia/wyklady/pam_w10_games.pdf
-        - Prezentacja live: zajecia/live/wyklady/w10-games-live.html
-        Struktura slajdów odwzorowuje główne sekcje tematyczne z wersji PDF.
-    -->
-    <!-- Preferujemy lokalne zasoby Reveal.js (stabilność), a CDN traktujemy jako fallback. -->
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
-    <style>
-        .reveal h1, .reveal h2 { text-transform: none; }
-        .lecture-meta { font-size: 0.8em; opacity: 0.85; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W10 – Gry mobilne i game design (live)</title>
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
+  <link rel="stylesheet" href="live-theme.css">
 </head>
-
 <body>
-    <div class="reveal">
-        <div class="slides">
-            <section>
-                <h1>W10 – Programowanie gier mobilnych</h1>
-                <p class="lecture-meta">Wersja live oparta o PDF: pam_w10_games.pdf</p>
-                <p>Użyj klawiszy strzałek lub spacji, aby przechodzić między slajdami.</p>
-            </section>
-            <section>
-                <h2>Pętle gry i architektura gameplay</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Monetyzacja i ekonomia gry</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>UI, onboarding i retencja</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Wydajność grafiki oraz fizyki</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Analityka i live-ops</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Podsumowanie</h2>
-                <p>Ta wersja live agreguje najważniejsze bloki merytoryczne wykładu i wspiera prowadzenie zajęć na żywo.</p>
-            </section>
-        </div>
+  <div class="reveal">
+    <div class="slides lecture-template" data-lecture-template="v2">
+      <section class="slide-cover" data-section="otwarcie">
+        <h1>W10 – Gry mobilne i game design</h1>
+        <p class="lecture-meta">Wersja live oparta o PDF: pam_w10_games.pdf</p>
+        <p>Tryb prowadzącego: <kbd>P</kbd> panel • <kbd>T</kbd> timer • <kbd>N</kbd> notatki.</p>
+      </section>
+
+      <section class="slide-block goals-slide" data-section="cele-efekty">
+        <h2>Cele i efekty uczenia</h2>
+        <ul><li>Projektować core loop i onboarding gracza.</li><li>Łączyć monetyzację z etyką UX.</li><li>Wykorzystywać analitykę do live-ops.</li></ul>
+      </section>
+
+      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Definicja core loop</h2><article class="info-card"><h3>Definicja</h3><p>Core loop to powtarzalny cykl akcji, nagrody i progresu utrzymujący zaangażowanie gracza.</p><h3>Przykład inżynierski</h3><p>Walcz → zdobywaj zasoby → ulepszaj postać → odblokuj nową misję.</p></article></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Modele monetyzacji</h2><div class="comparison-grid"><div class="comparison-header"><div>Opcja</div><div>Konsekwencje projektowe</div></div><div class="comparison-row"><div>Premium</div><div>Jednorazowy zakup, przewidywalny UX</div></div><div class="comparison-row"><div>F2P + IAP</div><div>Wysoka skala, ryzyko paywalli</div></div><div class="comparison-row"><div>Ads-hybrid</div><div>Niższy próg wejścia, ale możliwa frustracja</div></div></div></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Cykl live-ops</h2><ol class="timeline"><li>Wydarzenie sezonowe</li><li>Pomiar KPI</li><li>Balans ekonomii</li><li>Patch i komunikacja</li></ol></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Pułapka designerska</h2><aside class="callout trap"><strong>Pułapka projektowa:</strong> Nadmierna liczba walut i ekranów sklepu obniża retencję D1 przez przeciążenie poznawcze.</aside></section>
+
+      <section class="slide-block case-study-slide" data-section="case-study">
+        <h2>Case study / praktyka inżynierska</h2>
+        <article class="info-card"><h3>Sytuacja projektowa</h3><p>Case: po skróceniu tutoriala do 90 sekund retencja D1 wzrosła z 31% do 44% bez zmiany budżetu UA.</p></article>
+      </section>
+
+      <section class="slide-block mistakes-slide" data-section="najczestsze-bledy">
+        <h2>Najczęstsze błędy</h2>
+        <aside class="callout trap"><strong>Antywzorce, których unikamy:</strong> ich koszt to dług techniczny i spadek jakości produktu.</aside>
+        <ul><li>Brak celów na pierwsze 5 minut gry.</li><li>Balans ekonomii bez testów A/B.</li><li>Optymalizacja tylko pod high-end GPU.</li></ul>
+      </section>
+
+      <section class="slide-block quiz-slide" data-section="quiz">
+        <h2>Pytania kontrolne + mini quiz</h2>
+        <div class="quiz-checkpoint"><h3>Checkpoint</h3><ol><li>Który KPI opisuje długoterminowe utrzymanie gracza?</li><li>Jak odróżnić zdrową monetyzację od dark pattern?</li></ol></div>
+      </section>
     </div>
+  </div>
 
-    <script src="../vendor/reveal.js/dist/reveal.js"
-        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
-    <script src="live-reveal-enhancements.js"></script>
-    <script>
-        // Fallback poziomu 2: jeżeli lokalny zasób i jsDelivr zawiodą, doładuj Reveal.js z unpkg.
-        if (typeof window.Reveal === 'undefined') {
-            const fallbackScript = document.createElement('script');
-            fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
-            fallbackScript.onload = initializeLecture;
-            document.body.appendChild(fallbackScript);
-        } else {
-            initializeLecture();
-        }
+  <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+  <script src="live-reveal-enhancements.js"></script>
+  <script>
+    function initializeLecture() {
+      initializeLiveReveal({
+        transition: 'slide',
+        backgroundTransition: 'fade',
+        autoAnimate: true,
+        autoAnimateDuration: 0.8,
+        presenterNotesEnabled: true,
+      });
+    }
 
-        function initializeLecture() {
-            // Rozszerzona konfiguracja live: auto-animacje, płynne przejścia i nawigacja klawiaturą.
-            initializeLiveReveal({
-                transition: 'slide',
-                backgroundTransition: 'fade',
-                autoAnimate: true,
-                autoAnimateDuration: 0.8,
-            });
-        }
-    </script>
+    if (typeof window.Reveal === 'undefined') {
+      const fallbackScript = document.createElement('script');
+      fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
+      fallbackScript.onload = initializeLecture;
+      document.body.appendChild(fallbackScript);
+    } else {
+      initializeLecture();
+    }
+  </script>
 </body>
-
 </html>
