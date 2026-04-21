@@ -341,6 +341,7 @@ final router = GoRouter(
 );
 ```
 
+{% raw %}
 ```typescript
 // React Navigation — Native Stack + Bottom Tabs
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
@@ -367,6 +368,7 @@ function RootNavigator() {
   );
 }
 ```
+{% endraw %}
 
 GoRouter i React Navigation stosują podobną filozofię deklaratywną. KMP Voyager pozwala współdzielić logikę nawigacji między Androidem i iOS przy użyciu `Screen` i `Navigator` w `commonMain`, co redukuje duplikację kodu.
 
@@ -399,6 +401,7 @@ void main() {
 }
 ```
 
+{% raw %}
 ```typescript
 // React Native Testing Library — test komponentu
 import { render, fireEvent, screen } from '@testing-library/react-native';
@@ -412,6 +415,7 @@ test('usuwa pozycję po naciśnięciu przycisku usuń', () => {
   expect(onRemove).toHaveBeenCalledWith('1');
 });
 ```
+{% endraw %}
 
 ```kotlin
 // KMP — commonTest (testy logiki biznesowej współdzielone między platformami)

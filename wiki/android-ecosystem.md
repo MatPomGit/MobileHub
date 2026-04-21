@@ -165,7 +165,7 @@ lane :deploy_production do
 end
 ```
 
-Plik YAML definiuje workflow GitHub Actions wyzwalany automatycznie przez zdarzenie `push` na tagach pasujących do wzorca `v*` (np. `v1.2.3`). Taki wyzwalacz jest preferowany nad automatycznym buildowaniem każdego commita, bo w Google Play można przesyłać tylko wersje z rosnącym `versionCode` — tag Git naturalnie oznacza świadomą decyzję o wydaniu nowej wersji. Krok `setup-java` zapewnia powtarzalne środowisko budowania (zawsze Java 17 z dystrybucją Temurin), bo różne wersje JDK mogą generować różne wyniki kompilacji. Sekrety (`${{ secrets.* }}`) są wstrzykiwane jako zmienne środowiskowe — GitHub szyfruje je po stronie platformy i maskuje w logach, więc nie ma ryzyka ich wycieku nawet przy publicznym repozytorium.
+Plik YAML definiuje workflow GitHub Actions wyzwalany automatycznie przez zdarzenie `push` na tagach pasujących do wzorca `v*` (np. `v1.2.3`). Taki wyzwalacz jest preferowany nad automatycznym buildowaniem każdego commita, bo w Google Play można przesyłać tylko wersje z rosnącym `versionCode` — tag Git naturalnie oznacza świadomą decyzję o wydaniu nowej wersji. Krok `setup-java` zapewnia powtarzalne środowisko budowania (zawsze Java 17 z dystrybucją Temurin), bo różne wersje JDK mogą generować różne wyniki kompilacji. Sekrety ({% raw %}`${{ secrets.* }}`{% endraw %}) są wstrzykiwane jako zmienne środowiskowe — GitHub szyfruje je po stronie platformy i maskuje w logach, więc nie ma ryzyka ich wycieku nawet przy publicznym repozytorium.
 
 ```yaml
 # GitHub Actions — wyzwalanie przy tagu git

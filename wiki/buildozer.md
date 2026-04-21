@@ -618,7 +618,7 @@ jobs:
         uses: actions/cache@v4
         with:
           path: .buildozer
-          key: buildozer-${{ hashFiles('buildozer.spec') }}
+          {% raw %}key: buildozer-${{ hashFiles('buildozer.spec') }}{% endraw %}
 
       - name: Install dependencies
         run: |
