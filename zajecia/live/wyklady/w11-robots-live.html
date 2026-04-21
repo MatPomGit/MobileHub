@@ -1,106 +1,71 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W11 – Programowanie autonomicznych robotów (live)</title>
-    <!--
-        Mapowanie wykład → wersja live:
-        - PDF źródłowy: zajecia/wyklady/pam_w11_robots.pdf
-        - Prezentacja live: zajecia/live/wyklady/w11-robots-live.html
-        Struktura slajdów odwzorowuje główne sekcje tematyczne z wersji PDF.
-    -->
-    <!-- Preferujemy lokalne zasoby Reveal.js (stabilność), a CDN traktujemy jako fallback. -->
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
-    <style>
-        .reveal h1, .reveal h2 { text-transform: none; }
-        .lecture-meta { font-size: 0.8em; opacity: 0.85; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W11 – Robotyka mobilna i HRI (live)</title>
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
+  <link rel="stylesheet" href="live-theme.css">
 </head>
-
 <body>
-    <div class="reveal">
-        <div class="slides">
-            <section>
-                <h1>W11 – Programowanie autonomicznych robotów</h1>
-                <p class="lecture-meta">Wersja live oparta o PDF: pam_w11_robots.pdf</p>
-                <p>Użyj klawiszy strzałek lub spacji, aby przechodzić między slajdami.</p>
-            </section>
-            <section>
-                <h2>Podstawy robotyki autonomicznej</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Percepcja i lokalizacja robota</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Planowanie ruchu i sterowanie</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Integracja mobile + robot (HRI)</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Case study wdrożeń i kierunki rozwoju</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Podsumowanie</h2>
-                <p>Ta wersja live agreguje najważniejsze bloki merytoryczne wykładu i wspiera prowadzenie zajęć na żywo.</p>
-            </section>
-        </div>
+  <div class="reveal">
+    <div class="slides lecture-template" data-lecture-template="v2">
+      <section class="slide-cover" data-section="otwarcie">
+        <h1>W11 – Robotyka mobilna i HRI</h1>
+        <p class="lecture-meta">Wersja live oparta o PDF: pam_w11_robots.pdf</p>
+        <p>Tryb prowadzącego: <kbd>P</kbd> panel • <kbd>T</kbd> timer • <kbd>N</kbd> notatki.</p>
+      </section>
+
+      <section class="slide-block goals-slide" data-section="cele-efekty">
+        <h2>Cele i efekty uczenia</h2>
+        <ul><li>Łączyć aplikacje mobilne z robotem przez bezpieczne API.</li><li>Wyjaśniać pipeline percepcja–planowanie–sterowanie.</li><li>Projektować interfejs operatora odporny na błędy.</li></ul>
+      </section>
+
+      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Definicja HRI</h2><article class="info-card"><h3>Definicja</h3><p>Human-Robot Interaction bada i projektuje sposób komunikacji człowieka z robotem.</p><h3>Przykład inżynierski</h3><p>Panel mobilny może udostępniać tryby: manualny, półautonomiczny i awaryjny.</p></article></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Warstwy systemu robota</h2><div class="comparison-grid"><div class="comparison-header"><div>Opcja</div><div>Konsekwencje projektowe</div></div><div class="comparison-row"><div>Percepcja</div><div>Kamery/LiDAR i estymacja otoczenia</div></div><div class="comparison-row"><div>Planowanie</div><div>Wyznaczanie trajektorii i decyzji</div></div><div class="comparison-row"><div>Sterowanie</div><div>Wykonanie ruchu z pętlą sprzężenia</div></div></div></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Cykl zadania autonomicznego</h2><ol class="timeline"><li>Sense</li><li>Model world state</li><li>Plan</li><li>Act + replan</li></ol></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Uwaga egzaminacyjna</h2><aside class="callout exam"><strong>Uwaga egzaminacyjna:</strong> W systemach safety-critical zawsze definiuj stan fail-safe i procedurę ręcznego przejęcia.</aside></section>
+
+      <section class="slide-block case-study-slide" data-section="case-study">
+        <h2>Case study / praktyka inżynierska</h2>
+        <article class="info-card"><h3>Sytuacja projektowa</h3><p>Case: robot magazynowy z panelem mobilnym operatora skrócił czas interwencji serwisowej o 22% dzięki diagnostyce krok-po-kroku.</p></article>
+      </section>
+
+      <section class="slide-block mistakes-slide" data-section="najczestsze-bledy">
+        <h2>Najczęstsze błędy</h2>
+        <aside class="callout trap"><strong>Antywzorce, których unikamy:</strong> ich koszt to dług techniczny i spadek jakości produktu.</aside>
+        <ul><li>Brak walidacji komend krytycznych.</li><li>Brak czytelnego statusu połączenia i opóźnień.</li><li>Niewystarczające logowanie zdarzeń bezpieczeństwa.</li></ul>
+      </section>
+
+      <section class="slide-block quiz-slide" data-section="quiz">
+        <h2>Pytania kontrolne + mini quiz</h2>
+        <div class="quiz-checkpoint"><h3>Checkpoint</h3><ol><li>Dlaczego fail-safe to wymóg architektoniczny, a nie opcja?</li><li>Jakie dane powinny być widoczne operatorowi w czasie rzeczywistym?</li></ol></div>
+      </section>
     </div>
+  </div>
 
-    <script src="../vendor/reveal.js/dist/reveal.js"
-        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
-    <script src="live-reveal-enhancements.js"></script>
-    <script>
-        // Fallback poziomu 2: jeżeli lokalny zasób i jsDelivr zawiodą, doładuj Reveal.js z unpkg.
-        if (typeof window.Reveal === 'undefined') {
-            const fallbackScript = document.createElement('script');
-            fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
-            fallbackScript.onload = initializeLecture;
-            document.body.appendChild(fallbackScript);
-        } else {
-            initializeLecture();
-        }
+  <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+  <script src="live-reveal-enhancements.js"></script>
+  <script>
+    function initializeLecture() {
+      initializeLiveReveal({
+        transition: 'slide',
+        backgroundTransition: 'fade',
+        autoAnimate: true,
+        autoAnimateDuration: 0.8,
+        presenterNotesEnabled: true,
+      });
+    }
 
-        function initializeLecture() {
-            // Rozszerzona konfiguracja live: auto-animacje, płynne przejścia i nawigacja klawiaturą.
-            initializeLiveReveal({
-                transition: 'slide',
-                backgroundTransition: 'fade',
-                autoAnimate: true,
-                autoAnimateDuration: 0.8,
-            });
-        }
-    </script>
+    if (typeof window.Reveal === 'undefined') {
+      const fallbackScript = document.createElement('script');
+      fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
+      fallbackScript.onload = initializeLecture;
+      document.body.appendChild(fallbackScript);
+    } else {
+      initializeLecture();
+    }
+  </script>
 </body>
-
 </html>
