@@ -5,48 +5,34 @@
 
 'use strict';
 
+// To jedyne źródło prawdy dla linków „Materiały do pobrania”.
 const FILES_DATA = [
     {
         section: 'Wykłady',
         icon: 'fa-solid fa-chalkboard-teacher',
         files: [
-            { href: 'wyklady/w1_intro.pdf',           type: 'pdf',  label: 'W1 – Wprowadzenie do PAM' },
-            { href: 'wyklady/w2_hardware.pdf',        type: 'pdf',  label: 'W2 – Architektura sprzętu' },
-            { href: 'wyklady/w3_ui.pdf',              type: 'pdf',  label: 'W3 – Projektowanie UI/UX' },
-            { href: 'wyklady/w4_native.pdf',          type: 'pdf',  label: 'W4 – Projektowanie natywne' },
-            { href: 'wyklady/w5_cross.pdf',          type: 'pdf',  label: 'W4 – Projektowanie cross-platformowe' },
-            { href: 'wyklady/w6_sensors.pdf',         type: 'pdf',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
-            { href: 'wyklady/w7_IoT.pdf',             type: 'pdf',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
-            { href: 'wyklady/w8_affective.pdf',       type: 'pdf',  label: 'W8 – Informatyka afektywna' },
-            { href: 'wyklady/w9_xr.pdf',              type: 'pdf',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
-            { href: 'wyklady/w10_games.pdf',          type: 'pdf',  label: 'W10 – Programowanie gier mobilnych' },
-            { href: 'wyklady/w11_robots.pdf',         type: 'pdf',  label: 'W11 – Programowanie autonomicznych robotów' },
-
-            /*
-            { href: 'wyklady/w3_ui.pptx',             type: 'pptx', label: 'W3 – Projektowanie UI/UX dla urządzeń mobilnych' },
-            { href: 'wyklady/w6_sensors.pptx',        type: 'pptx',  label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
-            { href: 'wyklady/w7_IoT.pptx',            type: 'pptx',  label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
-            { href: 'wyklady/w8_affective_1_4.pptx',      type: 'pptx',  label: 'W8 – Informatyka afektywna' },
-            { href: 'wyklady/w9_xr.pptx',             type: 'pptx',  label: 'W9 – Programowanie aplikacji mobilnych XR' },
-            { href: 'wyklady/w10_games.pptx',         type: 'pptx',  label: 'W10 – Programowanie gier mobilnych' },
-            { href: 'wyklady/w11_robots.pptx',        type: 'pptx',  label: 'W11 – Programowanie autonomicznych robotów' },
-            */
+            { href: 'zajecia/wyklady/pam_w01_intro.pdf',      type: 'pdf', label: 'W1 – Wprowadzenie do PAM' },
+            { href: 'zajecia/wyklady/pam_w02_hardware.pdf',   type: 'pdf', label: 'W2 – Architektura sprzętu' },
+            { href: 'zajecia/wyklady/pam_w03_ui.pdf',         type: 'pdf', label: 'W3 – Projektowanie UI/UX' },
+            { href: 'zajecia/wyklady/pam_w04_natywne.pdf',    type: 'pdf', label: 'W4 – Projektowanie natywne' },
+            { href: 'zajecia/wyklady/pam_w05_cross.pdf',      type: 'pdf', label: 'W5 – Projektowanie cross-platformowe' },
+            { href: 'zajecia/wyklady/pam_w06_sensors.pdf',    type: 'pdf', label: 'W6 – Obsługa sensorów urządzeń mobilnych' },
+            { href: 'zajecia/wyklady/pam_w07_IoT.pdf',        type: 'pdf', label: 'W7 – Programowanie aplikacji współpracujących z IoT' },
+            { href: 'zajecia/wyklady/pam_w08_affective.pdf',  type: 'pdf', label: 'W8 – Informatyka afektywna' },
+            { href: 'zajecia/wyklady/pam_w09_xr.pdf',         type: 'pdf', label: 'W9 – Programowanie aplikacji mobilnych XR' },
+            { href: 'zajecia/wyklady/pam_w10_games.pdf',      type: 'pdf', label: 'W10 – Programowanie gier mobilnych' },
+            { href: 'zajecia/wyklady/pam_w11_robots.pdf',     type: 'pdf', label: 'W11 – Programowanie autonomicznych robotów' },
         ],
     },
     {
         section: 'Laboratoria',
         icon: 'fa-solid fa-flask',
         files: [
-            { href: 'laby/kotlin_1.pdf',        type: 'pdf', label: 'Lab Kotlin 1' },
-            { href: 'laby/kotlin_2.pdf',        type: 'pdf', label: 'Lab Kotlin 2' },
-            { href: 'laby/kotlin_3.pdf',        type: 'pdf', label: 'Lab Kotlin 3' },
-            { href: 'laby/kotlin_4.pdf',        type: 'pdf', label: 'Lab Kotlin 4' },
-            { href: 'laby/kotlin_5.pdf',        type: 'pdf', label: 'Lab Kotlin 5' },
-            { href: 'laby/flutter_1.pdf',       type: 'pdf', label: 'Lab Flutter 1' },
-            { href: 'laby/flutter_2.pdf',       type: 'pdf', label: 'Lab Flutter 2' },
-            { href: 'laby/unity_1.pdf',         type: 'pdf', label: 'Lab Unity 1' },
-            { href: 'laby/tematyprojektow.pdf', type: 'pdf', label: 'Tematy projektów' },
-
+            { href: 'zajecia/laby/kotlin.pdf',           type: 'pdf', label: 'Lab – Kotlin' },
+            { href: 'zajecia/laby/flutter.pdf',          type: 'pdf', label: 'Lab – Flutter' },
+            { href: 'zajecia/laby/unity.pdf',            type: 'pdf', label: 'Lab – Unity' },
+            { href: 'zajecia/laby/react.pdf',            type: 'pdf', label: 'Lab – React' },
+            { href: 'zajecia/laby/tematyprojektow.pdf',  type: 'pdf', label: 'Tematy projektów' },
         ],
     },
 ];
@@ -56,6 +42,7 @@ const FILE_ICON_MAP = {
     pptx: { cls: 'fa-solid fa-file-powerpoint', label: 'PPTX' },
 };
 
+// Buduje sekcję materiałów do pobrania na podstawie FILES_DATA.
 function buildMaterialsPanel() {
     const container = document.getElementById('materials-content');
     if (!container) return;
@@ -112,6 +99,7 @@ function buildMaterialsPanel() {
     });
 }
 
+// Obsługuje filtrowanie list artykułów w panelu wiki po wpisanym tekście.
 function setupSearch() {
     const input = document.getElementById('wikiSearch');
     if (!input) return;
