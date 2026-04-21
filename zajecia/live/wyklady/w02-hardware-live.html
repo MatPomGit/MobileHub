@@ -1,106 +1,71 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W2 – Architektura sprzętu (live)</title>
-    <!--
-        Mapowanie wykład → wersja live:
-        - PDF źródłowy: zajecia/wyklady/pam_w02_hardware.pdf
-        - Prezentacja live: zajecia/live/wyklady/w02-hardware-live.html
-        Struktura slajdów odwzorowuje główne sekcje tematyczne z wersji PDF.
-    -->
-    <!-- Preferujemy lokalne zasoby Reveal.js (stabilność), a CDN traktujemy jako fallback. -->
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
-    <style>
-        .reveal h1, .reveal h2 { text-transform: none; }
-        .lecture-meta { font-size: 0.8em; opacity: 0.85; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W2 – Sprzęt mobilny i ograniczenia (live)</title>
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
+  <link rel="stylesheet" href="live-theme.css">
 </head>
-
 <body>
-    <div class="reveal">
-        <div class="slides">
-            <section>
-                <h1>W2 – Architektura sprzętu</h1>
-                <p class="lecture-meta">Wersja live oparta o PDF: pam_w02_hardware.pdf</p>
-                <p>Użyj klawiszy strzałek lub spacji, aby przechodzić między slajdami.</p>
-            </section>
-            <section>
-                <h2>CPU, GPU i NPU w urządzeniach mobilnych</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Pamięć, magazyn danych i magistrale</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Energooszczędność oraz termika</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Interfejsy łączności (Wi‑Fi, BT, NFC, LTE/5G)</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Wpływ ograniczeń sprzętowych na projekt aplikacji</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Podsumowanie</h2>
-                <p>Ta wersja live agreguje najważniejsze bloki merytoryczne wykładu i wspiera prowadzenie zajęć na żywo.</p>
-            </section>
-        </div>
+  <div class="reveal">
+    <div class="slides lecture-template" data-lecture-template="v2">
+      <section class="slide-cover" data-section="otwarcie">
+        <h1>W2 – Sprzęt mobilny i ograniczenia</h1>
+        <p class="lecture-meta">Wersja live oparta o PDF: pam_w02_hardware.pdf</p>
+        <p>Tryb prowadzącego: <kbd>P</kbd> panel • <kbd>T</kbd> timer • <kbd>N</kbd> notatki.</p>
+      </section>
+
+      <section class="slide-block goals-slide" data-section="cele-efekty">
+        <h2>Cele i efekty uczenia</h2>
+        <ul><li>Analizować wpływ CPU/GPU/NPU na architekturę aplikacji.</li><li>Dobierać formaty danych do ograniczeń RAM i storage.</li><li>Projektować funkcje energooszczędne.</li></ul>
+      </section>
+
+      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>SoC: definicja i rola</h2><article class="info-card"><h3>Definicja</h3><p>SoC integruje CPU, GPU, NPU, modem i kontrolery pamięci.</p><h3>Przykład inżynierski</h3><p>Przykład: inferencja modelu vision na NPU skraca czas i zużycie energii.</p></article></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Porównanie pamięci</h2><div class="comparison-grid"><div class="comparison-header"><div>Opcja</div><div>Konsekwencje projektowe</div></div><div class="comparison-row"><div>RAM</div><div>Szybka, ulotna; krytyczna dla multitaskingu</div></div><div class="comparison-row"><div>UFS/SSD</div><div>Trwałe dane i cache aplikacji</div></div><div class="comparison-row"><div>Cache L1/L2</div><div>Minimalizuje opóźnienia CPU</div></div></div></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Budżet energetyczny sesji</h2><ol class="timeline"><li>Pobudzenie sensora</li><li>Przetwarzanie lokalne</li><li>Synchronizacja z chmurą</li><li>Uśpienie komponentów</li></ol></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Pułapka projektowa</h2><aside class="callout trap"><strong>Pułapka projektowa:</strong> Nie zakładaj stałej wydajności: throttling termiczny zmienia FPS i opóźnienia po kilku minutach obciążenia.</aside></section>
+
+      <section class="slide-block case-study-slide" data-section="case-study">
+        <h2>Case study / praktyka inżynierska</h2>
+        <article class="info-card"><h3>Sytuacja projektowa</h3><p>Case: aplikacja AR obniżyła rozdzielczość śledzenia przy wzroście temperatury >42°C i utrzymała płynność 30 FPS.</p></article>
+      </section>
+
+      <section class="slide-block mistakes-slide" data-section="najczestsze-bledy">
+        <h2>Najczęstsze błędy</h2>
+        <aside class="callout trap"><strong>Antywzorce, których unikamy:</strong> ich koszt to dług techniczny i spadek jakości produktu.</aside>
+        <ul><li>Brak testów na urządzeniach klasy low-end.</li><li>Przetwarzanie dużych obrazów bez downsamplingu.</li><li>Ciągłe odpytywanie GPS bez strategii duty cycle.</li></ul>
+      </section>
+
+      <section class="slide-block quiz-slide" data-section="quiz">
+        <h2>Pytania kontrolne + mini quiz</h2>
+        <div class="quiz-checkpoint"><h3>Checkpoint</h3><ol><li>Dlaczego NPU nie zawsze przyspiesza każdy model?</li><li>Który element najczęściej inicjuje thermal throttling?</li></ol></div>
+      </section>
     </div>
+  </div>
 
-    <script src="../vendor/reveal.js/dist/reveal.js"
-        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
-    <script src="live-reveal-enhancements.js"></script>
-    <script>
-        // Fallback poziomu 2: jeżeli lokalny zasób i jsDelivr zawiodą, doładuj Reveal.js z unpkg.
-        if (typeof window.Reveal === 'undefined') {
-            const fallbackScript = document.createElement('script');
-            fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
-            fallbackScript.onload = initializeLecture;
-            document.body.appendChild(fallbackScript);
-        } else {
-            initializeLecture();
-        }
+  <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+  <script src="live-reveal-enhancements.js"></script>
+  <script>
+    function initializeLecture() {
+      initializeLiveReveal({
+        transition: 'slide',
+        backgroundTransition: 'fade',
+        autoAnimate: true,
+        autoAnimateDuration: 0.8,
+        presenterNotesEnabled: true,
+      });
+    }
 
-        function initializeLecture() {
-            // Rozszerzona konfiguracja live: auto-animacje, płynne przejścia i nawigacja klawiaturą.
-            initializeLiveReveal({
-                transition: 'slide',
-                backgroundTransition: 'fade',
-                autoAnimate: true,
-                autoAnimateDuration: 0.8,
-            });
-        }
-    </script>
+    if (typeof window.Reveal === 'undefined') {
+      const fallbackScript = document.createElement('script');
+      fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
+      fallbackScript.onload = initializeLecture;
+      document.body.appendChild(fallbackScript);
+    } else {
+      initializeLecture();
+    }
+  </script>
 </body>
-
 </html>

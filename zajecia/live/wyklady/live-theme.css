@@ -1,0 +1,180 @@
+:root {
+  --live-bg: #0b1020;
+  --live-surface: #131b34;
+  --live-surface-2: #1a2547;
+  --live-text: #f5f7ff;
+  --live-muted: #c6cbe2;
+  --live-accent: #64b5ff;
+  --live-success: #7fe6a2;
+  --live-warning: #ffd369;
+  --live-danger: #ff8f8f;
+}
+
+.reveal {
+  font-size: 30px;
+}
+
+.reveal .slides {
+  text-align: left;
+}
+
+.reveal h1,
+.reveal h2,
+.reveal h3 {
+  text-transform: none;
+  color: var(--live-text);
+  line-height: 1.2;
+}
+
+.reveal h1 { font-size: 1.8em; }
+.reveal h2 { font-size: 1.35em; margin-bottom: 0.45em; }
+.reveal h3 { font-size: 1.05em; margin: 0.3em 0; }
+.reveal p,
+.reveal li {
+  color: var(--live-muted);
+  line-height: 1.35;
+}
+
+.reveal section {
+  max-width: 1200px;
+}
+
+.slide-cover,
+.slide-block {
+  background: linear-gradient(160deg, rgba(11, 16, 32, 0.94), rgba(19, 27, 52, 0.94));
+  border: 1px solid rgba(100, 181, 255, 0.2);
+  border-radius: 20px;
+  padding: 30px 36px;
+  box-shadow: 0 18px 38px rgba(0, 0, 0, 0.36);
+}
+
+.lecture-meta {
+  font-size: 0.75em;
+  color: var(--live-accent);
+}
+
+.info-card,
+.comparison-grid,
+.quiz-checkpoint,
+.callout {
+  background: var(--live-surface);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 14px;
+  padding: 16px 18px;
+}
+
+.info-card {
+  border-left: 6px solid var(--live-accent);
+}
+
+.comparison-grid {
+  display: grid;
+  gap: 8px;
+}
+
+.comparison-header,
+.comparison-row {
+  display: grid;
+  grid-template-columns: 1.1fr 2fr;
+  gap: 12px;
+  padding: 8px 10px;
+  border-radius: 10px;
+}
+
+.comparison-header {
+  background: rgba(100, 181, 255, 0.18);
+  color: var(--live-text);
+  font-weight: 700;
+}
+
+.comparison-row {
+  background: var(--live-surface-2);
+}
+
+.timeline {
+  margin: 0;
+  padding-left: 0;
+  list-style: none;
+  counter-reset: step;
+}
+
+.timeline li {
+  counter-increment: step;
+  margin: 10px 0;
+  padding: 10px 12px;
+  background: var(--live-surface);
+  border-radius: 12px;
+  border-left: 5px solid var(--live-success);
+}
+
+.timeline li::before {
+  content: counter(step) '. ';
+  color: var(--live-success);
+  font-weight: 700;
+}
+
+.callout.exam {
+  border-left: 6px solid var(--live-warning);
+}
+
+.callout.trap {
+  border-left: 6px solid var(--live-danger);
+}
+
+.quiz-checkpoint {
+  border-left: 6px solid var(--live-success);
+}
+
+.quiz-checkpoint h3 {
+  margin-top: 0;
+}
+
+.quiz-checkpoint ol {
+  margin: 0;
+}
+
+/* Pasek narzędzi prowadzącego z rozszerzeń JS. */
+.presenter-toolbar {
+  position: fixed;
+  right: 16px;
+  top: 14px;
+  z-index: 30;
+  font-family: Inter, Segoe UI, Arial, sans-serif;
+  font-size: 14px;
+  color: var(--live-text);
+  background: rgba(7, 12, 27, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 12px;
+  padding: 10px 12px;
+  min-width: 250px;
+}
+
+.presenter-toolbar strong {
+  color: var(--live-accent);
+}
+
+.presenter-notes {
+  position: fixed;
+  left: 16px;
+  bottom: 16px;
+  z-index: 30;
+  width: min(42vw, 620px);
+  max-height: 34vh;
+  overflow: auto;
+  background: rgba(7, 12, 27, 0.88);
+  border-radius: 12px;
+  padding: 10px 14px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--live-muted);
+  font-size: 0.6em;
+}
+
+.presenter-notes.hidden {
+  display: none;
+}
+
+/* Docelowo utrzymujemy 6–8 linii treści na slajd przez limit wysokości list. */
+.reveal ul,
+.reveal ol {
+  margin-top: 0.2em;
+}
