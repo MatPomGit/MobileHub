@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="pl">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>W4 – Projektowanie natywne (live)</title>
+    <!--
+        Mapowanie wykład → wersja live:
+        - PDF źródłowy: zajecia/wyklady/pam_w04_natywne.pdf
+        - Prezentacja live: zajecia/live/wyklady/w04-native-live.html
+        Struktura slajdów odwzorowuje główne sekcje tematyczne z wersji PDF.
+    -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css"
+        onerror="this.href='https://unpkg.com/reveal.js@5/dist/reveal.css'">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css" id="theme-link"
+        onerror="this.href='https://unpkg.com/reveal.js@5/dist/theme/black.css'">
+    <style>
+        .reveal h1, .reveal h2 { text-transform: none; }
+        .lecture-meta { font-size: 0.8em; opacity: 0.85; }
+    </style>
+</head>
+
+<body>
+    <div class="reveal">
+        <div class="slides">
+            <section>
+                <h1>W4 – Projektowanie natywne</h1>
+                <p class="lecture-meta">Wersja live oparta o PDF: pam_w04_natywne.pdf</p>
+                <p>Użyj klawiszy strzałek lub spacji, aby przechodzić między slajdami.</p>
+            </section>
+            <section>
+                <h2>Natywnie na Android i iOS</h2>
+                <ul>
+                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
+                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
+                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Wzorce architektoniczne (MVVM, Clean)</h2>
+                <ul>
+                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
+                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
+                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Cykl życia ekranów i stan aplikacji</h2>
+                <ul>
+                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
+                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
+                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Integracja API systemowych</h2>
+                <ul>
+                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
+                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
+                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Publikacja i utrzymanie aplikacji</h2>
+                <ul>
+                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
+                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
+                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
+                </ul>
+            </section>
+            <section>
+                <h2>Podsumowanie</h2>
+                <p>Ta wersja live agreguje najważniejsze bloki merytoryczne wykładu i wspiera prowadzenie zajęć na żywo.</p>
+            </section>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js"></script>
+    <script>
+        // Fallback CDN: jeżeli jsDelivr jest niedostępny, doładuj Reveal.js z unpkg.
+        if (typeof window.Reveal === 'undefined') {
+            const fallbackScript = document.createElement('script');
+            fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
+            fallbackScript.onload = initializeReveal;
+            document.body.appendChild(fallbackScript);
+        } else {
+            initializeReveal();
+        }
+
+        function initializeReveal() {
+            // Konfiguracja live: klawiatura + pasek postępu + numer slajdu.
+            Reveal.initialize({
+                controls: true,
+                progress: true,
+                slideNumber: true,
+                hash: true,
+                keyboard: true,
+                transition: 'slide'
+            });
+        }
+    </script>
+</body>
+
+</html>

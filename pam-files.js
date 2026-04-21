@@ -37,18 +37,24 @@ const FILES_DATA = [
     },
 ];
 
-// Dane dla interaktywnych prezentacji live udostępnianych studentom.
+// Dane źródłowe dla modułu „Materiały live”.
+// Każdy wpis mapuje wykład PDF 1:1 na stronę HTML z Reveal.js.
 const LIVE_MATERIALS_DATA = [
     {
         section: 'Wykłady live',
         icon: 'fa-solid fa-tower-broadcast',
         files: [
-            { href: 'zajecia/wyklady/pam_w2_hardware.pptx', type: 'pptx', label: 'W2 – Architektura sprzętu (live)' },
-            { href: 'zajecia/robo/robo_w2.pptx',            type: 'pptx', label: 'W2 – Robotyka mobilna (live)' },
-            { href: 'zajecia/robo/robo_w3.pptx',            type: 'pptx', label: 'W3 – Robotyka mobilna (live)' },
-            { href: 'zajecia/robo/robo_w4.pptx',            type: 'pptx', label: 'W4 – Robotyka mobilna (live)' },
-            { href: 'zajecia/robo/robo_w5.pptx',            type: 'pptx', label: 'W5 – Robotyka mobilna (live)' },
-            { href: 'zajecia/robo/robo_w6.pptx',            type: 'pptx', label: 'W6 – Robotyka mobilna (live)' },
+            { title: 'W1 – Wprowadzenie do PAM',                   livePath: 'zajecia/live/wyklady/w01-intro-live.html',   pdfPath: 'zajecia/wyklady/pam_w01_intro.pdf' },
+            { title: 'W2 – Architektura sprzętu',                  livePath: 'zajecia/live/wyklady/w02-hardware-live.html', pdfPath: 'zajecia/wyklady/pam_w02_hardware.pdf' },
+            { title: 'W3 – Projektowanie UI/UX',                   livePath: 'zajecia/live/wyklady/w03-ui-live.html',       pdfPath: 'zajecia/wyklady/pam_w03_ui.pdf' },
+            { title: 'W4 – Projektowanie natywne',                 livePath: 'zajecia/live/wyklady/w04-native-live.html',   pdfPath: 'zajecia/wyklady/pam_w04_natywne.pdf' },
+            { title: 'W5 – Projektowanie cross-platformowe',       livePath: 'zajecia/live/wyklady/w05-cross-live.html',    pdfPath: 'zajecia/wyklady/pam_w05_cross.pdf' },
+            { title: 'W6 – Obsługa sensorów urządzeń mobilnych',   livePath: 'zajecia/live/wyklady/w06-sensors-live.html',  pdfPath: 'zajecia/wyklady/pam_w06_sensors.pdf' },
+            { title: 'W7 – Programowanie aplikacji z IoT',         livePath: 'zajecia/live/wyklady/w07-iot-live.html',      pdfPath: 'zajecia/wyklady/pam_w07_IoT.pdf' },
+            { title: 'W8 – Informatyka afektywna',                 livePath: 'zajecia/live/wyklady/w08-affective-live.html',pdfPath: 'zajecia/wyklady/pam_w08_affective.pdf' },
+            { title: 'W9 – Programowanie aplikacji mobilnych XR',  livePath: 'zajecia/live/wyklady/w09-xr-live.html',       pdfPath: 'zajecia/wyklady/pam_w09_xr.pdf' },
+            { title: 'W10 – Programowanie gier mobilnych',         livePath: 'zajecia/live/wyklady/w10-games-live.html',    pdfPath: 'zajecia/wyklady/pam_w10_games.pdf' },
+            { title: 'W11 – Programowanie autonomicznych robotów', livePath: 'zajecia/live/wyklady/w11-robots-live.html',   pdfPath: 'zajecia/wyklady/pam_w11_robots.pdf' },
         ],
     },
 ];
@@ -136,35 +142,66 @@ function buildLiveMaterialsPanel() {
         const list = document.createElement('div');
         list.className = 'file-list';
 
+        // Każdy kafelek to „wersja live” + opcjonalny skrót do PDF źródłowego.
         group.files.forEach(file => {
-            const icon = FILE_ICON_MAP[file.type] || { cls: 'fa-solid fa-file', label: file.type.toUpperCase() };
             const a = document.createElement('a');
             a.className = 'file-item';
-            a.href = file.href;
-            a.setAttribute('download', '');
+            a.href = file.livePath;
+            a.target = '_blank';
+            a.rel = 'noopener';
 
             const fileIconDiv = document.createElement('div');
-            fileIconDiv.className = `file-icon ${file.type}`;
+            fileIconDiv.className = 'file-icon html';
             const fileIconI = document.createElement('i');
-            fileIconI.className = icon.cls;
+            fileIconI.className = 'fa-solid fa-person-chalkboard';
             fileIconDiv.appendChild(fileIconI);
 
             const metaDiv = document.createElement('div');
             metaDiv.className = 'file-meta';
             const strong = document.createElement('strong');
-            strong.textContent = file.label;
+            strong.textContent = `${file.title} (live)`;
             const span = document.createElement('span');
-            span.textContent = icon.label;
+            span.textContent = file.pdfPath ? 'Reveal.js + PDF' : 'Reveal.js';
             metaDiv.appendChild(strong);
             metaDiv.appendChild(span);
 
-            const dlIcon = document.createElement('i');
-            dlIcon.className = 'fa-solid fa-download file-download-icon';
+            const actionIcon = document.createElement('i');
+            actionIcon.className = 'fa-solid fa-arrow-up-right-from-square file-download-icon';
 
             a.appendChild(fileIconDiv);
             a.appendChild(metaDiv);
-            a.appendChild(dlIcon);
+            a.appendChild(actionIcon);
             list.appendChild(a);
+
+            if (file.pdfPath) {
+                const pdfLink = document.createElement('a');
+                pdfLink.className = 'file-item';
+                pdfLink.href = file.pdfPath;
+                pdfLink.setAttribute('download', '');
+
+                const pdfIconDiv = document.createElement('div');
+                pdfIconDiv.className = 'file-icon pdf';
+                const pdfIconI = document.createElement('i');
+                pdfIconI.className = 'fa-solid fa-file-pdf';
+                pdfIconDiv.appendChild(pdfIconI);
+
+                const pdfMetaDiv = document.createElement('div');
+                pdfMetaDiv.className = 'file-meta';
+                const pdfStrong = document.createElement('strong');
+                pdfStrong.textContent = `${file.title} (PDF)`;
+                const pdfSpan = document.createElement('span');
+                pdfSpan.textContent = 'PDF';
+                pdfMetaDiv.appendChild(pdfStrong);
+                pdfMetaDiv.appendChild(pdfSpan);
+
+                const pdfDownloadIcon = document.createElement('i');
+                pdfDownloadIcon.className = 'fa-solid fa-download file-download-icon';
+
+                pdfLink.appendChild(pdfIconDiv);
+                pdfLink.appendChild(pdfMetaDiv);
+                pdfLink.appendChild(pdfDownloadIcon);
+                list.appendChild(pdfLink);
+            }
         });
 
         section.appendChild(list);
