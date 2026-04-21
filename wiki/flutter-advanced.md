@@ -458,6 +458,7 @@ output-localization-file: app_localizations.dart
 
 ### Pliki ARB
 
+{% raw %}
 ```json
 // lib/l10n/app_pl.arb
 {
@@ -477,7 +478,9 @@ output-localization-file: app_localizations.dart
   }
 }
 ```
+{% endraw %}
 
+{% raw %}
 ```json
 // lib/l10n/app_en.arb
 {
@@ -487,6 +490,7 @@ output-localization-file: app_localizations.dart
   "lastSync": "Last sync: {date}"
 }
 ```
+{% endraw %}
 
 ### Użycie w widżetach
 
