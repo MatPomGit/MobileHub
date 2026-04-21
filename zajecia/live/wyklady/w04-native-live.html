@@ -1,106 +1,71 @@
 <!DOCTYPE html>
 <html lang="pl">
-
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>W4 – Projektowanie natywne (live)</title>
-    <!--
-        Mapowanie wykład → wersja live:
-        - PDF źródłowy: zajecia/wyklady/pam_w04_natywne.pdf
-        - Prezentacja live: zajecia/live/wyklady/w04-native-live.html
-        Struktura slajdów odwzorowuje główne sekcje tematyczne z wersji PDF.
-    -->
-    <!-- Preferujemy lokalne zasoby Reveal.js (stabilność), a CDN traktujemy jako fallback. -->
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
-    <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link"
-        onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
-    <style>
-        .reveal h1, .reveal h2 { text-transform: none; }
-        .lecture-meta { font-size: 0.8em; opacity: 0.85; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>W4 – Programowanie natywne (live)</title>
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.css'">
+  <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css" id="theme-link" onerror="this.onerror=null;this.href='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/theme/black.css'">
+  <link rel="stylesheet" href="live-theme.css">
 </head>
-
 <body>
-    <div class="reveal">
-        <div class="slides">
-            <section>
-                <h1>W4 – Projektowanie natywne</h1>
-                <p class="lecture-meta">Wersja live oparta o PDF: pam_w04_natywne.pdf</p>
-                <p>Użyj klawiszy strzałek lub spacji, aby przechodzić między slajdami.</p>
-            </section>
-            <section>
-                <h2>Natywnie na Android i iOS</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Wzorce architektoniczne (MVVM, Clean)</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Cykl życia ekranów i stan aplikacji</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Integracja API systemowych</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Publikacja i utrzymanie aplikacji</h2>
-                <ul>
-                    <li>Najważniejsze pojęcia i definicje do omówienia na zajęciach.</li>
-                    <li>Przykłady praktyczne powiązane z laboratoriami i projektami.</li>
-                    <li>Pytania kontrolne do dyskusji ze studentami.</li>
-                </ul>
-            </section>
-            <section>
-                <h2>Podsumowanie</h2>
-                <p>Ta wersja live agreguje najważniejsze bloki merytoryczne wykładu i wspiera prowadzenie zajęć na żywo.</p>
-            </section>
-        </div>
+  <div class="reveal">
+    <div class="slides lecture-template" data-lecture-template="v2">
+      <section class="slide-cover" data-section="otwarcie">
+        <h1>W4 – Programowanie natywne</h1>
+        <p class="lecture-meta">Wersja live oparta o PDF: pam_w04_natywne.pdf</p>
+        <p>Tryb prowadzącego: <kbd>P</kbd> panel • <kbd>T</kbd> timer • <kbd>N</kbd> notatki.</p>
+      </section>
+
+      <section class="slide-block goals-slide" data-section="cele-efekty">
+        <h2>Cele i efekty uczenia</h2>
+        <ul><li>Wyjaśniać zalety i koszty podejścia natywnego.</li><li>Dobierać wzorce MVVM/Clean do skali projektu.</li><li>Planować publikację i utrzymanie aplikacji.</li></ul>
+      </section>
+
+      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Definicja natywności</h2><article class="info-card"><h3>Definicja</h3><p>Aplikacja natywna jest tworzona w języku i SDK platformy docelowej.</p><h3>Przykład inżynierski</h3><p>Android: Kotlin + Jetpack; iOS: Swift + SwiftUI/UIKit.</p></article></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Wzorce architektoniczne</h2><div class="comparison-grid"><div class="comparison-header"><div>Opcja</div><div>Konsekwencje projektowe</div></div><div class="comparison-row"><div>MVC</div><div>Szybki start, trudniejsze utrzymanie</div></div><div class="comparison-row"><div>MVVM</div><div>Lepsza testowalność warstwy prezentacji</div></div><div class="comparison-row"><div>Clean Architecture</div><div>Wysoka modularność i separacja odpowiedzialności</div></div></div></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Cykl wydania</h2><ol class="timeline"><li>Branch feature</li><li>CI + testy</li><li>Beta/TestFlight</li><li>Publikacja + monitoring</li></ol></section>
+<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Pułapka wdrożeniowa</h2><aside class="callout trap"><strong>Pułapka projektowa:</strong> Brak polityki wersjonowania API prowadzi do regresji po aktualizacji klienta.</aside></section>
+
+      <section class="slide-block case-study-slide" data-section="case-study">
+        <h2>Case study / praktyka inżynierska</h2>
+        <article class="info-card"><h3>Sytuacja projektowa</h3><p>Case: zespół medyczny wdrożył feature flags i ograniczył ryzyko błędu krytycznego przy rollout do 5% użytkowników.</p></article>
+      </section>
+
+      <section class="slide-block mistakes-slide" data-section="najczestsze-bledy">
+        <h2>Najczęstsze błędy</h2>
+        <aside class="callout trap"><strong>Antywzorce, których unikamy:</strong> ich koszt to dług techniczny i spadek jakości produktu.</aside>
+        <ul><li>Ciężka logika biznesowa w ViewController/Activity.</li><li>Brak monitoringu crashy po wydaniu.</li><li>Ręczne testowanie bez smoke testów CI.</li></ul>
+      </section>
+
+      <section class="slide-block quiz-slide" data-section="quiz">
+        <h2>Pytania kontrolne + mini quiz</h2>
+        <div class="quiz-checkpoint"><h3>Checkpoint</h3><ol><li>Dlaczego MVVM ułatwia testy?</li><li>Po co rollout progresywny zamiast pełnego release?</li></ol></div>
+      </section>
     </div>
+  </div>
 
-    <script src="../vendor/reveal.js/dist/reveal.js"
-        onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
-    <script src="live-reveal-enhancements.js"></script>
-    <script>
-        // Fallback poziomu 2: jeżeli lokalny zasób i jsDelivr zawiodą, doładuj Reveal.js z unpkg.
-        if (typeof window.Reveal === 'undefined') {
-            const fallbackScript = document.createElement('script');
-            fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
-            fallbackScript.onload = initializeLecture;
-            document.body.appendChild(fallbackScript);
-        } else {
-            initializeLecture();
-        }
+  <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+  <script src="live-reveal-enhancements.js"></script>
+  <script>
+    function initializeLecture() {
+      initializeLiveReveal({
+        transition: 'slide',
+        backgroundTransition: 'fade',
+        autoAnimate: true,
+        autoAnimateDuration: 0.8,
+        presenterNotesEnabled: true,
+      });
+    }
 
-        function initializeLecture() {
-            // Rozszerzona konfiguracja live: auto-animacje, płynne przejścia i nawigacja klawiaturą.
-            initializeLiveReveal({
-                transition: 'slide',
-                backgroundTransition: 'fade',
-                autoAnimate: true,
-                autoAnimateDuration: 0.8,
-            });
-        }
-    </script>
+    if (typeof window.Reveal === 'undefined') {
+      const fallbackScript = document.createElement('script');
+      fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
+      fallbackScript.onload = initializeLecture;
+      document.body.appendChild(fallbackScript);
+    } else {
+      initializeLecture();
+    }
+  </script>
 </body>
-
 </html>
