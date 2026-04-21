@@ -37,6 +37,22 @@ const FILES_DATA = [
     },
 ];
 
+// Dane dla interaktywnych prezentacji live udostępnianych studentom.
+const LIVE_MATERIALS_DATA = [
+    {
+        section: 'Wykłady live',
+        icon: 'fa-solid fa-tower-broadcast',
+        files: [
+            { href: 'zajecia/wyklady/pam_w2_hardware.pptx', type: 'pptx', label: 'W2 – Architektura sprzętu (live)' },
+            { href: 'zajecia/robo/robo_w2.pptx',            type: 'pptx', label: 'W2 – Robotyka mobilna (live)' },
+            { href: 'zajecia/robo/robo_w3.pptx',            type: 'pptx', label: 'W3 – Robotyka mobilna (live)' },
+            { href: 'zajecia/robo/robo_w4.pptx',            type: 'pptx', label: 'W4 – Robotyka mobilna (live)' },
+            { href: 'zajecia/robo/robo_w5.pptx',            type: 'pptx', label: 'W5 – Robotyka mobilna (live)' },
+            { href: 'zajecia/robo/robo_w6.pptx',            type: 'pptx', label: 'W6 – Robotyka mobilna (live)' },
+        ],
+    },
+];
+
 const FILE_ICON_MAP = {
     pdf:  { cls: 'fa-solid fa-file-pdf',        label: 'PDF' },
     pptx: { cls: 'fa-solid fa-file-powerpoint', label: 'PPTX' },
@@ -48,6 +64,63 @@ function buildMaterialsPanel() {
     if (!container) return;
 
     FILES_DATA.forEach(group => {
+        const section = document.createElement('div');
+        section.className = 'files-section';
+
+        const titleEl = document.createElement('h3');
+        titleEl.className = 'files-section-title';
+        const titleIcon = document.createElement('i');
+        titleIcon.className = group.icon;
+        const titleText = document.createTextNode(group.section);
+        titleEl.appendChild(titleIcon);
+        titleEl.appendChild(titleText);
+        section.appendChild(titleEl);
+
+        const list = document.createElement('div');
+        list.className = 'file-list';
+
+        group.files.forEach(file => {
+            const icon = FILE_ICON_MAP[file.type] || { cls: 'fa-solid fa-file', label: file.type.toUpperCase() };
+            const a = document.createElement('a');
+            a.className = 'file-item';
+            a.href = file.href;
+            a.setAttribute('download', '');
+
+            const fileIconDiv = document.createElement('div');
+            fileIconDiv.className = `file-icon ${file.type}`;
+            const fileIconI = document.createElement('i');
+            fileIconI.className = icon.cls;
+            fileIconDiv.appendChild(fileIconI);
+
+            const metaDiv = document.createElement('div');
+            metaDiv.className = 'file-meta';
+            const strong = document.createElement('strong');
+            strong.textContent = file.label;
+            const span = document.createElement('span');
+            span.textContent = icon.label;
+            metaDiv.appendChild(strong);
+            metaDiv.appendChild(span);
+
+            const dlIcon = document.createElement('i');
+            dlIcon.className = 'fa-solid fa-download file-download-icon';
+
+            a.appendChild(fileIconDiv);
+            a.appendChild(metaDiv);
+            a.appendChild(dlIcon);
+            list.appendChild(a);
+        });
+
+        section.appendChild(list);
+        container.appendChild(section);
+    });
+}
+
+// Renderuje panel „Materiały live” z interaktywnymi prezentacjami wykładów.
+function buildLiveMaterialsPanel() {
+    const container = document.getElementById('materials-live-content');
+    if (!container) return;
+
+    LIVE_MATERIALS_DATA.forEach(group => {
         const section = document.createElement('div');
         section.className = 'files-section';
 
@@ -120,3 +193,4 @@ function setupSearch() {
 }
 
 document.addEventListener('DOMContentLoaded', buildMaterialsPanel);
+document.addEventListener('DOMContentLoaded', buildLiveMaterialsPanel);

@@ -970,16 +970,28 @@
 
     <!-- TAB PANEL: MATERIAŁY -->
     <div class="tab-panel" id="panel-materialy">
-        <div class="info-panel">
-            <div class="info-panel-header">
-                <div class="info-panel-icon purple"><i class="fa-solid fa-file-arrow-down"></i></div>
-                <div>
-                    <h2>Materiały do pobrania</h2>
-                    <p>Pliki z wykładów i laboratoriów.</p>
+        <div class="info-panel materials-layout">
+            <section class="materials-card">
+                <div class="info-panel-header">
+                    <div class="info-panel-icon purple"><i class="fa-solid fa-file-arrow-down"></i></div>
+                    <div>
+                        <h2>Materiały do pobrania</h2>
+                        <p>Pliki z wykładów i laboratoriów.</p>
+                    </div>
                 </div>
-            </div>
+                <div id="materials-content"></div>
+            </section>
 
-            <div id="materials-content"></div>
+            <section class="materials-card">
+                <div class="info-panel-header">
+                    <div class="info-panel-icon purple"><i class="fa-solid fa-tower-broadcast"></i></div>
+                    <div>
+                        <h2>Materiały live</h2>
+                        <p>Interaktywne wersje wykładów.</p>
+                    </div>
+                </div>
+                <div id="materials-live-content"></div>
+            </section>
         </div>
     </div><!-- /panel-materialy -->
 
