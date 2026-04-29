@@ -54,11 +54,11 @@
                 </button>
                 <button class="pull-shortcut" data-tab="egzamin">
                     <i class="fa-solid fa-graduation-cap"></i>
-                    <span>Egzamin</span>
+                    <span>Wykłady i egzamin</span>
                 </button>
                 <button class="pull-shortcut" data-tab="projekt">
                     <i class="fa-solid fa-laptop-code"></i>
-                    <span>Laboratoria</span>
+                    <span>Laboratorium i projekt</span>
                 </button>
                 <button class="pull-shortcut" data-tab="materialy">
                     <i class="fa-solid fa-file-arrow-down"></i>
@@ -160,11 +160,11 @@
             </button>
             <button class="tab-btn" data-tab="projekt" id="tab-projekt">
                 <i class="fa-solid fa-laptop-code"></i>
-                Laboratoria
+                Laboratorium i projekt
             </button>
             <button class="tab-btn" data-tab="egzamin" id="tab-egzamin">
                 <i class="fa-solid fa-graduation-cap"></i>
-                Egzamin
+                Wykłady i egzamin
             </button>
             <button class="tab-btn" data-tab="materialy" id="tab-materialy">
                 <i class="fa-solid fa-file-arrow-down"></i>
@@ -693,6 +693,17 @@
                     niedostateczną.
                 </div>
             </div>
+
+            <h3 class="section-title">Połączone kompendium — projekt zaliczeniowy</h3>
+            <div class="info-card" id="projektMergedWikiCard">
+                <div class="info-card-header">
+                    <i class="fa-solid fa-book"></i>
+                    <strong>Treść z artykułu „Projekt zaliczeniowy”</strong>
+                </div>
+                <p style="margin:0 0 10px 0;">Poniżej wczytywana jest treść wiki, aby sekcja laboratoriów i projektu była spójna w jednym miejscu.</p>
+                <div id="projektMergedWikiContent"></div>
+            </div>
+
         </div>
     </div><!-- /panel-projekt -->
 
@@ -966,6 +977,16 @@
                     stosuje się dane wzorce, a nie tylko <em>jak</em> wyglądają. Powodzenia!
                 </div>
             </div>
+
+            <h3 class="section-title">Połączone kompendium — egzamin teoretyczny</h3>
+            <div class="info-card" id="egzaminMergedWikiCard">
+                <div class="info-card-header">
+                    <i class="fa-solid fa-book-open-reader"></i>
+                    <strong>Treść z artykułu „Egzamin teoretyczny”</strong>
+                </div>
+                <p style="margin:0 0 10px 0;">Poniżej wczytywana jest treść wiki, aby materiały egzaminacyjne i zakładka egzamin były połączone.</p>
+                <div id="egzaminMergedWikiContent"></div>
+            </div>
         </div>
     </div><!-- /panel-egzamin -->
 
@@ -1111,11 +1132,11 @@
         </button>
         <button class="bottom-nav-btn" data-tab="projekt">
             <i class="fa-solid fa-laptop-code"></i>
-            <span>Lab</span>
+            <span>Lab+proj</span>
         </button>
         <button class="bottom-nav-btn" data-tab="egzamin">
             <i class="fa-solid fa-graduation-cap"></i>
-            <span>Egzamin</span>
+            <span>Wykłady i egzamin</span>
         </button>
         <button class="bottom-nav-btn" data-tab="materialy">
             <i class="fa-solid fa-file-arrow-down"></i>
@@ -2261,6 +2282,28 @@
                 });
                 articleObserver.observe(articleEl, { childList: true });
             }
+
+            // Ładuje skróconą treść artykułu wiki do wskazanej sekcji zakładki.
+            async function loadMergedWikiArticle(targetId, markdownPath) {
+                const target = document.getElementById(targetId);
+                if (!target) return;
+                try {
+                    const resp = await fetch(markdownPath, { cache: 'no-store' });
+                    if (!resp.ok) throw new Error('HTTP ' + resp.status);
+                    const md = await resp.text();
+                    // Usuwamy pierwszy nagłówek, aby nie dublować tytułów sekcji.
+                    const normalized = md.replace(/^#\s+.+$/m, '').trim();
+                    target.innerHTML = marked.parse(normalized);
+                    if (window.hljs) target.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+                } catch (err) {
+                    target.innerHTML = '<p>Nie udało się wczytać połączonej treści wiki.</p>';
+                    console.warn('Błąd ładowania artykułu wiki:', markdownPath, err);
+                }
+            }
+
+            // Synchronizuje treści między zakładkami i artykułami wiki, żeby uniknąć rozbieżności.
+            loadMergedWikiArticle('projektMergedWikiContent', 'wiki/projekt-zaliczeniowy.md');
+            loadMergedWikiArticle('egzaminMergedWikiContent', 'wiki/egzamin-teoretyczny.md');
 
             // ===== TAB PANEL TRANSITION =====
             const origSwitchTab = window.switchTab;
