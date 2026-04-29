@@ -700,7 +700,10 @@
                     <i class="fa-solid fa-book"></i>
                     <strong>Treść z artykułu „Projekt zaliczeniowy”</strong>
                 </div>
-                <p style="margin:0 0 10px 0;">Poniżej wczytywana jest treść wiki, aby sekcja laboratoriów i projektu była spójna w jednym miejscu.</p>
+                <p style="margin:0 0 10px 0;">
+                  <a href="wiki/projekt-zaliczeniowy.md" target="_blank" rel="noopener" style="font-weight:600; color:#2a5ad7; text-decoration:underline;">Zobacz plik projekt-zaliczeniowy.md w wiki</a><br>
+                  Poniżej wczytywana jest pełna treść wiki, aby sekcja laboratoriów i projektu była spójna w jednym miejscu.
+                </p>
                 <div id="projektMergedWikiContent"></div>
             </div>
 
@@ -1822,7 +1825,7 @@
                         reg,
                         'pam-lecture',
                         nextDateAt(3, 8, 45),           // Wednesday 8:45
-                        '📚 Wykład PAM – za chwilę!',
+                        'Wykład PAM – za chwilę!',
                         'Środa 8:45 – Programowanie aplikacji mobilnych zaczyna się lada moment!'
                     );
                 }
@@ -1832,7 +1835,7 @@
                         reg,
                         'pam-review',
                         nextDateAt(6, 10, 0),           // Saturday 10:00
-                        '📖 Czas na powtórkę!',
+                        'Czas na powtórkę!',
                         'Przejrzyj materiał z ostatniego wykładu PAM. Kolejny wykład już w środę!'
                     );
                 }
@@ -2291,9 +2294,8 @@
                     const resp = await fetch(markdownPath, { cache: 'no-store' });
                     if (!resp.ok) throw new Error('HTTP ' + resp.status);
                     const md = await resp.text();
-                    // Usuwamy pierwszy nagłówek, aby nie dublować tytułów sekcji.
-                    const normalized = md.replace(/^#\s+.+$/m, '').trim();
-                    target.innerHTML = marked.parse(normalized);
+                    // Wyświetl całą treść markdowna, łącznie z tytułem.
+                    target.innerHTML = marked.parse(md);
                     if (window.hljs) target.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
                 } catch (err) {
                     target.innerHTML = '<p>Nie udało się wczytać połączonej treści wiki.</p>';
