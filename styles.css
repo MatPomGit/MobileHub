@@ -3852,3 +3852,61 @@ footer strong {
         transform: scale(0.97);
     }
 }
+
+/* Sekcja materiałów jest dwukolumnowa, a podgląd rozciąga się horyzontalnie pod dwoma kartami. */
+.materials-layout {
+    grid-template-columns: repeat(2, minmax(320px, 1fr));
+}
+
+.materials-preview-card {
+    grid-column: 1 / -1;
+}
+
+/* Kontener przycisków ułatwia szybkie przełączanie podglądu prezentacji live. */
+.presentation-controls {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+
+/* Każdy przycisk reprezentuje jedną prezentację i pokazuje aktywny wybór. */
+.presentation-btn {
+    border: 1px solid var(--border);
+    background: var(--surface2);
+    color: var(--text);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    cursor: pointer;
+    transition: all var(--transition);
+}
+
+.presentation-btn:hover {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.presentation-btn.active {
+    background: var(--accent-light);
+    border-color: var(--accent);
+    color: var(--accent2);
+    font-weight: 700;
+}
+
+/* Iframe ma spójny wygląd i pełną szerokość karty. */
+#presentation-preview {
+    border: 1px solid var(--border);
+    width: 100%;
+    min-height: 560px;
+    border-radius: 12px;
+    background: #fff;
+    display: block;
+    margin-top: 10px;
+}
+
+@media (max-width: 900px) {
+    .materials-layout {
+        grid-template-columns: 1fr;
+    }
+}
