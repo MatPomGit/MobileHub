@@ -295,6 +295,12 @@ Do oddawanego projektu należy dołączyć:
 
 ## Prezentacja projektu
 
+**Przydatne strony:**
+- [Moja pierwsza aplikacja mobilna](../pierwsza-aplikacja.html)
+- [Kreator projektu aplikacji](../projektowanie-aplikacji.html)
+
+
+
 Każdy zespół prezentuje projekt:
 
 - Czas prezentacji: **8–12 minut**,
@@ -316,19 +322,6 @@ Każdy zespół prezentuje projekt:
 
 5. **AR Campus Guide** — Aplikacja pomagająca użytkownikowi odnaleźć się w przestrzeni uczelni. Po skierowaniu telefonu na budynek lub pomieszczenie aplikacja wyświetla informacje w formie nakładki AR. Użytkownik może zobaczyć drogę do wybranej sali lub laboratorium, a system wyświetla strzałki nawigacyjne w przestrzeni rzeczywistej.
 
-6. **Motywacyjna aplikacja do biegania („Run or Shame")** — Aplikacja motywująca użytkownika do regularnego biegania. Użytkownik ustala plan treningów oraz dystans do przebiegnięcia w określonym czasie. Aplikacja monitoruje bieg przy użyciu GPS i zapisuje trasę oraz czas aktywności. W przypadku niewykonania zadania system generuje konsekwencję motywacyjną.
-
-### Kategoria B: Gry mobilne i rozrywka
-
-7. **Gra logiczna „Escape Lab"** — Gracz próbuje wydostać się z wirtualnego laboratorium poprzez rozwiązywanie zagadek logicznych. Każdy poziom zawiera interaktywne elementy, które należy odpowiednio aktywować. Gra powinna wykorzystywać ekran dotykowy oraz gesty użytkownika.
-
-8. **Gra zręcznościowa „Balance Master"** — Celem gry jest utrzymanie równowagi obiektu na ekranie poprzez przechylanie telefonu. Sterowanie odbywa się przy użyciu akcelerometru i żyroskopu. Gracz musi unikać przeszkód i utrzymać obiekt na platformie jak najdłużej.
-
-9. **Mobilna gra strategiczna „Micro Colony"** — Gracz zarządza niewielką kolonią rozwijającą się na ograniczonej przestrzeni. Musi planować rozwój budynków, zarządzać zasobami oraz reagować na zdarzenia losowe. Gra powinna posiadać prosty system ekonomiczny i rozwój technologii.
-
-10. **Gra rytmiczna „Tap Beat"** — Celem gry jest trafne naciskanie elementów pojawiających się na ekranie w rytm muzyki. Gracz zdobywa punkty za poprawne reakcje w określonym czasie. System rankingów pozwala porównywać wyniki między użytkownikami.
-
-11. **Gra symulacyjna „Space Miner"** — Gracz zarządza statkiem kosmicznym wydobywającym surowce z asteroid. Musi planować trasy lotów oraz zarządzać zasobami paliwa i energii. Zebrane surowce mogą być sprzedawane w celu ulepszania statku.
 
 12. **AR Escape Room** — Gra logiczna w rozszerzonej rzeczywistości. Użytkownik rozwiązuje zagadki poprzez interakcję z wirtualnymi obiektami umieszczonymi w realnym otoczeniu. Zadaniem gracza jest odnalezienie wskazówek i rozwiązanie sekwencji zagadek.
 
