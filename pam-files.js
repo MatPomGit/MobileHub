@@ -201,3 +201,37 @@ function setupSearch() {
 
 document.addEventListener('DOMContentLoaded', buildMaterialsPanel);
 document.addEventListener('DOMContentLoaded', buildLiveMaterialsPanel);
+document.addEventListener('DOMContentLoaded', initPresentationPreview);
+
+
+// Tworzy listę przycisków i synchronizuje ją z iframe podglądu prezentacji.
+function initPresentationPreview() {
+    const controls = document.getElementById('presentation-controls');
+    const previewFrame = document.getElementById('presentation-preview');
+    if (!controls || !previewFrame) return;
+
+    // Spłaszczamy dane, aby wykorzystać wszystkie prezentacje live jako źródło podglądu.
+    const livePresentations = LIVE_MATERIALS_DATA.flatMap(group => group.files);
+    if (!livePresentations.length) return;
+
+    const setActivePresentation = (path, buttonEl) => {
+        previewFrame.src = path;
+        controls.querySelectorAll('.presentation-btn').forEach(btn => btn.classList.remove('active'));
+        buttonEl?.classList.add('active');
+    };
+
+    livePresentations.forEach((presentation, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'presentation-btn';
+        button.textContent = presentation.title;
+        button.setAttribute('aria-label', `Otwórz podgląd: ${presentation.title}`);
+        button.addEventListener('click', () => setActivePresentation(presentation.livePath, button));
+        controls.appendChild(button);
+
+        // Ustawiamy pierwszą prezentację jako domyślną, aby iframe nie był pusty.
+        if (index === 0) {
+            setActivePresentation(presentation.livePath, button);
+        }
+    });
+}
