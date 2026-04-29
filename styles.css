@@ -2,40 +2,43 @@
 #egzaminMergedWikiContent {
     background: none !important;
     color: var(--text);
-    font-size: 1.08em;
+    font-size: 1.13em;
     font-family: var(--font), sans-serif;
-    line-height: 1.7;
+    line-height: 1.85;
     box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
+    padding: 0 0 18px 0 !important;
     margin: 0 !important;
+    letter-spacing: 0.01em;
+    transition: none !important;
 }
 
 #egzaminMergedWikiCard h1, #egzaminMergedWikiCard h2, #egzaminMergedWikiCard h3, #egzaminMergedWikiCard h4, #egzaminMergedWikiCard h5 {
     color: var(--accent2);
-    margin-top: 1.6em;
-    margin-bottom: 0.5em;
+    margin-top: 2.1em;
+    margin-bottom: 0.7em;
     font-weight: 800;
+    letter-spacing: 0.01em;
 }
 
 #egzaminMergedWikiCard ul, #egzaminMergedWikiCard ol {
-    margin-left: 2em;
-    margin-bottom: 1em;
+    margin-left: 2.2em;
+    margin-bottom: 1.25em;
 }
 
 #egzaminMergedWikiCard table {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(91,79,207,0.06);
-    margin-bottom: 1.5em;
+    margin-bottom: 2em;
 }
 
 #egzaminMergedWikiCard code, #egzaminMergedWikiCard pre {
     background: #f4f6fb;
     color: #2a1d6b;
     border-radius: 6px;
-    padding: 2px 6px;
-    font-size: 0.98em;
+    padding: 2px 8px;
+    font-size: 1em;
 }
 /* ===== CSS VARIABLES ===== */
 :root {
@@ -2008,40 +2011,43 @@ header {
 #projektMergedWikiContent {
     background: none !important;
     color: var(--text);
-    font-size: 1.08em;
+    font-size: 1.13em;
     font-family: var(--font), sans-serif;
-    line-height: 1.7;
+    line-height: 1.85;
     box-shadow: none !important;
     border: none !important;
-    padding: 0 !important;
+    padding: 0 0 18px 0 !important;
     margin: 0 !important;
+    letter-spacing: 0.01em;
+    transition: none !important;
 }
 
 #projektMergedWikiCard h1, #projektMergedWikiCard h2, #projektMergedWikiCard h3, #projektMergedWikiCard h4, #projektMergedWikiCard h5 {
     color: var(--accent2);
-    margin-top: 1.6em;
-    margin-bottom: 0.5em;
+    margin-top: 2.1em;
+    margin-bottom: 0.7em;
     font-weight: 800;
+    letter-spacing: 0.01em;
 }
 
 #projektMergedWikiCard ul, #projektMergedWikiCard ol {
-    margin-left: 2em;
-    margin-bottom: 1em;
+    margin-left: 2.2em;
+    margin-bottom: 1.25em;
 }
 
 #projektMergedWikiCard table {
     background: #fff;
     border-radius: 8px;
     box-shadow: 0 2px 8px rgba(91,79,207,0.06);
-    margin-bottom: 1.5em;
+    margin-bottom: 2em;
 }
 
 #projektMergedWikiCard code, #projektMergedWikiCard pre {
     background: #f4f6fb;
     color: #2a1d6b;
     border-radius: 6px;
-    padding: 2px 6px;
-    font-size: 0.98em;
+    padding: 2px 8px;
+    font-size: 1em;
 }
 
 .tool-card:hover .tool-card-btn {
