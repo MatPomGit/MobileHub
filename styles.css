@@ -3894,10 +3894,11 @@ footer strong {
     font-weight: 700;
 }
 
-/* Iframe ma spójny wygląd i pełną szerokość karty. */
+/* Iframe ma spójny wygląd, pełną szerokość karty i proporcję 16:9 dla prezentacji. */
 #presentation-preview {
     border: 1px solid var(--border);
     width: 100%;
+    aspect-ratio: 16 / 9;
     min-height: 560px;
     border-radius: 12px;
     background: #fff;
