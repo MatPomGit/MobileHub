@@ -44,17 +44,17 @@ const LIVE_MATERIALS_DATA = [
         section: 'Wykłady live',
         icon: 'fa-solid fa-tower-broadcast',
         files: [
-            { title: 'W1 – Wprowadzenie do PAM',                   livePath: 'zajecia/live/wyklady/w01-intro-live.html' },
-            { title: 'W2 – Architektura sprzętu',                  livePath: 'zajecia/live/wyklady/w02-hardware-live.html' },
-            { title: 'W3 – Projektowanie UI/UX',                   livePath: 'zajecia/live/wyklady/w03-ui-live.html' },
-            { title: 'W4 – Projektowanie natywne',                 livePath: 'zajecia/live/wyklady/w04-native-live.html' },
-            { title: 'W5 – Projektowanie cross-platformowe',       livePath: 'zajecia/live/wyklady/w05-cross-live.html' },
-            { title: 'W6 – Obsługa sensorów urządzeń mobilnych',   livePath: 'zajecia/live/wyklady/w06-sensors-live.html' },
-            { title: 'W7 – Programowanie aplikacji z IoT',         livePath: 'zajecia/live/wyklady/w07-iot-live.html' },
-            { title: 'W8 – Informatyka afektywna',                 livePath: 'zajecia/live/wyklady/w08-affective-live.html' },
-            { title: 'W9 – Programowanie aplikacji mobilnych XR',  livePath: 'zajecia/live/wyklady/w09-xr-live.html' },
-            { title: 'W10 – Programowanie gier mobilnych',         livePath: 'zajecia/live/wyklady/w10-games-live.html' },
-            { title: 'W11 – Programowanie autonomicznych robotów', livePath: 'zajecia/live/wyklady/w11-robots-live.html' },
+            { title: 'W1 – Wprowadzenie do PAM',                   livePath: 'zajecia/live/wyklady/w01-intro-live.html', pdfPath: 'zajecia/wyklady/pam_w01_intro.pdf' },
+            { title: 'W2 – Architektura sprzętu',                  livePath: 'zajecia/live/wyklady/w02-hardware-live.html', pdfPath: 'zajecia/wyklady/pam_w02_hardware.pdf' },
+            { title: 'W3 – Projektowanie UI/UX',                   livePath: 'zajecia/live/wyklady/w03-ui-live.html', pdfPath: 'zajecia/wyklady/pam_w03_ui.pdf' },
+            { title: 'W4 – Projektowanie natywne',                 livePath: 'zajecia/live/wyklady/w04-native-live.html', pdfPath: 'zajecia/wyklady/pam_w04_natywne.pdf' },
+            { title: 'W5 – Projektowanie cross-platformowe',       livePath: 'zajecia/live/wyklady/w05-cross-live.html', pdfPath: 'zajecia/wyklady/pam_w05_cross.pdf' },
+            { title: 'W6 – Obsługa sensorów urządzeń mobilnych',   livePath: 'zajecia/live/wyklady/w06-sensors-live.html', pdfPath: 'zajecia/wyklady/pam_w06_sensors.pdf' },
+            { title: 'W7 – Programowanie aplikacji z IoT',         livePath: 'zajecia/live/wyklady/w07-iot-live.html', pdfPath: 'zajecia/wyklady/pam_w07_IoT.pdf' },
+            { title: 'W8 – Informatyka afektywna',                 livePath: 'zajecia/live/wyklady/w08-affective-live.html', pdfPath: 'zajecia/wyklady/pam_w08_affective.pdf' },
+            { title: 'W9 – Programowanie aplikacji mobilnych XR',  livePath: 'zajecia/live/wyklady/w09-xr-live.html', pdfPath: 'zajecia/wyklady/pam_w09_xr.pdf' },
+            { title: 'W10 – Programowanie gier mobilnych',         livePath: 'zajecia/live/wyklady/w10-games-live.html', pdfPath: 'zajecia/wyklady/pam_w10_games.pdf' },
+            { title: 'W11 – Programowanie autonomicznych robotów', livePath: 'zajecia/live/wyklady/w11-robots-live.html', pdfPath: 'zajecia/wyklady/pam_w11_robots.pdf' },
         ],
     },
 ];
@@ -210,28 +210,70 @@ function initPresentationPreview() {
     const previewFrame = document.getElementById('presentation-preview');
     if (!controls || !previewFrame) return;
 
-    // Spłaszczamy dane, aby wykorzystać wszystkie prezentacje live jako źródło podglądu.
-    const livePresentations = LIVE_MATERIALS_DATA.flatMap(group => group.files);
-    if (!livePresentations.length) return;
+    // Budujemy listy PDF dla wykładów i laboratoriów, aby użytkownik mógł przełączać kontekst podglądu.
+    const lecturePdfs = FILES_DATA
+        .find(group => group.section === 'Wykłady')
+        ?.files
+        .filter(file => file.type === 'pdf')
+        .map(file => ({ title: file.label, path: file.href })) || [];
 
-    const setActivePresentation = (path, buttonEl) => {
-        previewFrame.src = path;
-        controls.querySelectorAll('.presentation-btn').forEach(btn => btn.classList.remove('active'));
-        buttonEl?.classList.add('active');
+    const labPdfs = FILES_DATA
+        .find(group => group.section === 'Laboratoria')
+        ?.files
+        .filter(file => file.type === 'pdf')
+        .map(file => ({ title: file.label, path: file.href })) || [];
+
+    if (!lecturePdfs.length && !labPdfs.length) return;
+
+    let activeMode = lecturePdfs.length ? 'lectures' : 'labs';
+
+    // Czyści i odtwarza listę przycisków źródłowych dla aktualnie wybranego trybu (wykłady/laboratoria).
+    const renderMaterialButtons = (materials) => {
+        controls.querySelectorAll('.presentation-item-btn').forEach(button => button.remove());
+
+        const setActivePresentation = (path, buttonEl) => {
+            previewFrame.src = path;
+            controls.querySelectorAll('.presentation-btn').forEach(btn => btn.classList.remove('active'));
+            buttonEl?.classList.add('active');
+        };
+
+        materials.forEach((material, index) => {
+            const button = document.createElement('button');
+            button.type = 'button';
+            button.className = 'presentation-btn presentation-item-btn';
+            button.textContent = material.title;
+            button.setAttribute('aria-label', `Otwórz podgląd: ${material.title}`);
+            button.addEventListener('click', () => setActivePresentation(material.path, button));
+            controls.appendChild(button);
+
+            // Ustawiamy pierwszy materiał z listy jako domyślny wybór w podglądzie.
+            if (index === 0) {
+                setActivePresentation(material.path, button);
+            }
+        });
     };
 
-    livePresentations.forEach((presentation, index) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.className = 'presentation-btn';
-        button.textContent = presentation.title;
-        button.setAttribute('aria-label', `Otwórz podgląd: ${presentation.title}`);
-        button.addEventListener('click', () => setActivePresentation(presentation.livePath, button));
-        controls.appendChild(button);
+    // Przycisk zmieniający źródło podglądu pomiędzy PDF-ami wykładów i laboratoriów.
+    const modeSwitchButton = document.createElement('button');
+    modeSwitchButton.type = 'button';
+    modeSwitchButton.className = 'presentation-btn presentation-mode-btn';
 
-        // Ustawiamy pierwszą prezentację jako domyślną, aby iframe nie był pusty.
-        if (index === 0) {
-            setActivePresentation(presentation.livePath, button);
-        }
+    const updateMode = () => {
+        const showingLectures = activeMode === 'lectures';
+        const nextModeLabel = showingLectures ? 'Laboratoria PDF' : 'Wykłady PDF';
+        modeSwitchButton.textContent = `Tryb: ${showingLectures ? 'Wykłady PDF' : 'Laboratoria PDF'} · Przełącz na ${nextModeLabel}`;
+
+        const materials = showingLectures ? lecturePdfs : labPdfs;
+        renderMaterialButtons(materials);
+    };
+
+    modeSwitchButton.addEventListener('click', () => {
+        if (!lecturePdfs.length || !labPdfs.length) return;
+        activeMode = activeMode === 'lectures' ? 'labs' : 'lectures';
+        updateMode();
     });
+
+    controls.appendChild(modeSwitchButton);
+    updateMode();
 }
+
