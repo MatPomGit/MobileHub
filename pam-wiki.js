@@ -261,6 +261,7 @@ const METADATA = {
 };
 
 const CATEGORIES = [
+    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','social-media-integration','mobile-performance','app-publishing','app-distribution','app-updates'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
@@ -275,7 +276,6 @@ const CATEGORIES = [
     { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui','visual-odometry','fuzja-modalnosci-kalman'] },
     { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','ai-legal-aspects','mediapipe-mobile','ai-mobile-ux','edge-ai-future'] },
     { id: 'cat-file-formats', name: 'Formaty plików i przechowywanie danych', icon: 'fa-solid fa-folder-open',        articles: ['file-formats-intro','json-xml-formats','csv-yaml-toml','image-formats-mobile','audio-video-formats','3d-model-formats','ml-file-formats','binary-serialization','compression-mobile','document-formats','database-file-formats','data-storage-best-practices'] },
-    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
 ];
 
 // ---- INIT ----
@@ -379,6 +379,8 @@ function buildSidebar() {
     const nav = document.querySelector('.wiki-nav-categories');
     if (!nav) return;
     CATEGORIES.forEach(cat => {
+        // Domyślnie rozwijamy sekcję "Zaliczenie", a pozostałe sekcje pozostają zwinięte.
+        const isDefaultExpanded = cat.id === 'cat-zalicz';
         const sec = document.createElement('div');
         sec.className = 'wiki-category';
         sec.innerHTML = `
@@ -387,16 +389,16 @@ function buildSidebar() {
                 <span>${cat.name}</span>
                 <i class="fa-solid fa-chevron-down toggle-icon"></i>
             </h4>
-            <ul class="cat-list collapsed" id="${cat.id}">
+            <ul class="cat-list ${isDefaultExpanded ? '' : 'collapsed'}" id="${cat.id}">
                 ${cat.articles.map(id => {
                     const m = METADATA[id] || {};
                     return `<li><a href="#${id}" data-article="${id}"><i class="${m.icon || 'fa-solid fa-file'} article-icon"></i>${m.title || id}</a></li>`;
                 }).join('')}
             </ul>`;
         nav.appendChild(sec);
-        // Start collapsed: rotate toggle icon
+        // Utrzymujemy obrót ikony tylko dla sekcji startowo zwiniętych.
         const icon = sec.querySelector('.toggle-icon');
-        if (icon) icon.style.transform = 'rotate(-90deg)';
+        if (icon && !isDefaultExpanded) icon.style.transform = 'rotate(-90deg)';
     });
 
     document.querySelectorAll('.cat-header').forEach(h => {
