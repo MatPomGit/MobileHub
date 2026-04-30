@@ -44,17 +44,17 @@ const LIVE_MATERIALS_DATA = [
         section: 'Wykłady live',
         icon: 'fa-solid fa-tower-broadcast',
         files: [
-            { title: 'W1 – Wprowadzenie do PAM',                   livePath: 'zajecia/live/wyklady/w01-intro-live.html' },
-            { title: 'W2 – Architektura sprzętu',                  livePath: 'zajecia/live/wyklady/w02-hardware-live.html' },
-            { title: 'W3 – Projektowanie UI/UX',                   livePath: 'zajecia/live/wyklady/w03-ui-live.html' },
-            { title: 'W4 – Projektowanie natywne',                 livePath: 'zajecia/live/wyklady/w04-native-live.html' },
-            { title: 'W5 – Projektowanie cross-platformowe',       livePath: 'zajecia/live/wyklady/w05-cross-live.html' },
-            { title: 'W6 – Obsługa sensorów urządzeń mobilnych',   livePath: 'zajecia/live/wyklady/w06-sensors-live.html' },
-            { title: 'W7 – Programowanie aplikacji z IoT',         livePath: 'zajecia/live/wyklady/w07-iot-live.html' },
-            { title: 'W8 – Informatyka afektywna',                 livePath: 'zajecia/live/wyklady/w08-affective-live.html' },
-            { title: 'W9 – Programowanie aplikacji mobilnych XR',  livePath: 'zajecia/live/wyklady/w09-xr-live.html' },
-            { title: 'W10 – Programowanie gier mobilnych',         livePath: 'zajecia/live/wyklady/w10-games-live.html' },
-            { title: 'W11 – Programowanie autonomicznych robotów', livePath: 'zajecia/live/wyklady/w11-robots-live.html' },
+            { title: 'W1 – Wprowadzenie do PAM',                   livePath: 'zajecia/live/wyklady/w01-intro-live.html', pdfPath: 'zajecia/wyklady/pam_w01_intro.pdf' },
+            { title: 'W2 – Architektura sprzętu',                  livePath: 'zajecia/live/wyklady/w02-hardware-live.html', pdfPath: 'zajecia/wyklady/pam_w02_hardware.pdf' },
+            { title: 'W3 – Projektowanie UI/UX',                   livePath: 'zajecia/live/wyklady/w03-ui-live.html', pdfPath: 'zajecia/wyklady/pam_w03_ui.pdf' },
+            { title: 'W4 – Projektowanie natywne',                 livePath: 'zajecia/live/wyklady/w04-native-live.html', pdfPath: 'zajecia/wyklady/pam_w04_natywne.pdf' },
+            { title: 'W5 – Projektowanie cross-platformowe',       livePath: 'zajecia/live/wyklady/w05-cross-live.html', pdfPath: 'zajecia/wyklady/pam_w05_cross.pdf' },
+            { title: 'W6 – Obsługa sensorów urządzeń mobilnych',   livePath: 'zajecia/live/wyklady/w06-sensors-live.html', pdfPath: 'zajecia/wyklady/pam_w06_sensors.pdf' },
+            { title: 'W7 – Programowanie aplikacji z IoT',         livePath: 'zajecia/live/wyklady/w07-iot-live.html', pdfPath: 'zajecia/wyklady/pam_w07_IoT.pdf' },
+            { title: 'W8 – Informatyka afektywna',                 livePath: 'zajecia/live/wyklady/w08-affective-live.html', pdfPath: 'zajecia/wyklady/pam_w08_affective.pdf' },
+            { title: 'W9 – Programowanie aplikacji mobilnych XR',  livePath: 'zajecia/live/wyklady/w09-xr-live.html', pdfPath: 'zajecia/wyklady/pam_w09_xr.pdf' },
+            { title: 'W10 – Programowanie gier mobilnych',         livePath: 'zajecia/live/wyklady/w10-games-live.html', pdfPath: 'zajecia/wyklady/pam_w10_games.pdf' },
+            { title: 'W11 – Programowanie autonomicznych robotów', livePath: 'zajecia/live/wyklady/w11-robots-live.html', pdfPath: 'zajecia/wyklady/pam_w11_robots.pdf' },
         ],
     },
 ];
@@ -226,12 +226,13 @@ function initPresentationPreview() {
         button.className = 'presentation-btn';
         button.textContent = presentation.title;
         button.setAttribute('aria-label', `Otwórz podgląd: ${presentation.title}`);
-        button.addEventListener('click', () => setActivePresentation(presentation.livePath, button));
+        // W podglądzie osadzamy PDF, a stronę live zostawiamy w sekcji „Materiały live”.
+        button.addEventListener('click', () => setActivePresentation(presentation.pdfPath || presentation.livePath, button));
         controls.appendChild(button);
 
         // Ustawiamy pierwszą prezentację jako domyślną, aby iframe nie był pusty.
         if (index === 0) {
-            setActivePresentation(presentation.livePath, button);
+            setActivePresentation(presentation.pdfPath || presentation.livePath, button);
         }
     });
 }
