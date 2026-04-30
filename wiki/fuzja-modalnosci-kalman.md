@@ -26,9 +26,9 @@ W tym artykule pokazuję, jak połączyć te trzy elementy w spójny pipeline pr
 
 Niech stan obiektu/sensora w chwili \(k\) będzie:
 
-\[
+$$
 \mathbf{x}_k = [x, y, z, v_x, v_y, v_z, \psi, \dot\psi]^T
-\]
+$$
 
 Gdzie:
 
@@ -39,15 +39,15 @@ Gdzie:
 
 Model procesu:
 
-\[
+$$
 \mathbf{x}_k = f(\mathbf{x}_{k-1}, \mathbf{u}_{k-1}) + \mathbf{w}_{k-1}, \quad \mathbf{w}\sim\mathcal{N}(0,\mathbf{Q})
-\]
+$$
 
 Model pomiaru dla modalności \(m\):
 
-\[
+$$
 \mathbf{z}^{(m)}_k = h^{(m)}(\mathbf{x}_k) + \mathbf{v}^{(m)}_k, \quad \mathbf{v}^{(m)}\sim\mathcal{N}(0,\mathbf{R}^{(m)}_k)
-\]
+$$
 
 Klucz praktyczny: **\(\mathbf{R}^{(m)}_k\)** nie powinno być stałe. W prawdziwym systemie zależy od warunków (oświetlenie, deszcz, odległość, prędkość, konfuzja detektora, itp.). Tu właśnie GP wnosi dużą wartość.
 
@@ -59,36 +59,36 @@ Klucz praktyczny: **\(\mathbf{R}^{(m)}_k\)** nie powinno być stałe. W prawdziw
 
 Dla modeli liniowych:
 
-\[
+$$
 \mathbf{x}_k = \mathbf{F}\mathbf{x}_{k-1}+\mathbf{B}\mathbf{u}_{k-1}+\mathbf{w}_{k-1}, \quad
 \mathbf{z}_k=\mathbf{H}\mathbf{x}_k+\mathbf{v}_k
-\]
+$$
 
 Kroki:
 
 1. **Predykcja**
-\[
+$$
 \hat{\mathbf{x}}^-_k = \mathbf{F}\hat{\mathbf{x}}_{k-1}+\mathbf{B}\mathbf{u}_{k-1}
-\]
-\[
+$$
+$$
 \mathbf{P}^-_k=\mathbf{F}\mathbf{P}_{k-1}\mathbf{F}^T+\mathbf{Q}
-\]
+$$
 
 2. **Aktualizacja**
-\[
+$$
 \mathbf{y}_k=\mathbf{z}_k-\mathbf{H}\hat{\mathbf{x}}^-_k
-\]
-\[
+$$
+$$
 \mathbf{S}_k=\mathbf{H}\mathbf{P}^-_k\mathbf{H}^T+\mathbf{R}
-\]
-\[
+$$
+$$
 \mathbf{K}_k=\mathbf{P}^-_k\mathbf{H}^T\mathbf{S}_k^{-1}
-\]
-\[
+$$
+$$
 \hat{\mathbf{x}}_k=\hat{\mathbf{x}}^-_k+\mathbf{K}_k\mathbf{y}_k,
 \quad
 \mathbf{P}_k=(\mathbf{I}-\mathbf{K}_k\mathbf{H})\mathbf{P}^-_k
-\]
+$$
 
 ### 3.2 EKF/UKF w praktyce
 
@@ -133,9 +133,9 @@ Jeśli pomiar przychodzi „spóźniony”, mamy opcje:
 
 Dla innowacji \(\mathbf{y}_k\) stosujemy odległość Mahalanobisa:
 
-\[
+$$
 D^2 = \mathbf{y}_k^T\mathbf{S}_k^{-1}\mathbf{y}_k
-\]
+$$
 
 Jeśli \(D^2\) przekracza próg \(\chi^2\), pomiar jest odrzucany lub osłabiany. To krytyczne przy fałszywych detekcjach i częściowej okluzji.
 
@@ -143,7 +143,7 @@ Jeśli \(D^2\) przekracza próg \(\chi^2\), pomiar jest odrzucany lub osłabiany
 
 ## 5. Procesy gaussowskie (GP) w służbie filtracji
 
-## 5.1 Co GP daje ponad klasyczny Kalman?
+### 5.1 Co GP daje ponad klasyczny Kalman?
 
 Filtr Kalmana zakłada, że znamy rozkłady szumu procesu i pomiaru. W praktyce szum jest:
 
@@ -153,32 +153,32 @@ Filtr Kalmana zakłada, że znamy rozkłady szumu procesu i pomiaru. W praktyce 
 
 GP umożliwia model:
 
-\[
+$$
 r(\mathbf{c}) \sim \mathcal{GP}(m(\mathbf{c}), k(\mathbf{c},\mathbf{c'}))
-\]
+$$
 
 Gdzie \(\mathbf{c}\) to kontekst (np. odległość do obiektu, prędkość względna, confidence detektora, warunki pogodowe, illumination score).
 
 Efekt: dla każdej próbki dostajemy predykcję **średniej błędu** i **wariancji błędu**.
 
-## 5.2 Trzy praktyczne zastosowania GP
+### 5.2 Trzy praktyczne zastosowania GP
 
 1. **Bias correction** pomiaru:
-   \[
+   $$
    \tilde{z}=z-\hat{b}_{GP}(\mathbf{c})
-   \]
+   $$
 2. **Adaptacyjne \(R_k\)**:
-   \[
+   $$
    R_k = R_{base} + \sigma^2_{GP}(\mathbf{c})
-   \]
+   $$
 3. **Uczenie residual dynamics** dla składnika procesu (augmentacja modelu):
-   \[
+   $$
    x_k = f(x_{k-1}) + g_{GP}(\mathbf{c}_{k-1}) + w_k
-   \]
+   $$
 
 Najbezpieczniej zacząć od (1) i (2).
 
-## 5.3 Wybór kernela i koszt obliczeń
+### 5.3 Wybór kernela i koszt obliczeń
 
 - RBF/SE: gładkie funkcje, dobry baseline.
 - Matérn: lepszy przy mniej gładkich zjawiskach.
@@ -194,7 +194,7 @@ Klasyczny GP ma koszt \(\mathcal{O}(N^3)\). Do systemów online:
 
 ## 6. SYAC (Soft Yaw Axis Correction): sens i matematyka
 
-## 6.1 Problem yaw drift
+### 6.1 Problem yaw drift
 
 Yaw zwykle dryfuje przez:
 
@@ -205,7 +205,7 @@ Yaw zwykle dryfuje przez:
 
 Twarda korekta (hard reset) powoduje skoki orientacji i destabilizuje tor śledzenia. SYAC wprowadza **miękką korektę**.
 
-## 6.2 Idea SYAC
+### 6.2 Idea SYAC
 
 Mamy:
 
@@ -215,9 +215,9 @@ Mamy:
 
 SYAC zamiast pełnej korekty stosuje:
 
-\[
+$$
 \delta\psi_k = \alpha_k \cdot s(\Delta\psi_k)
-\]
+$$
 
 Gdzie:
 
@@ -225,24 +225,24 @@ Gdzie:
 - \(s(\cdot)\) — funkcja „soft”, np. saturacja \(\tanh\) albo clipped linear.
 
 Przykład:
-\[
+$$
 s(\Delta\psi)=\psi_{max}\tanh\left(\frac{\Delta\psi}{\psi_{scale}}\right)
-\]
+$$
 
 Następnie:
-\[
+$$
 \psi_k \leftarrow \mathrm{wrap}(\psi^-_k + \delta\psi_k)
-\]
+$$
 
 I opcjonalnie aktualizacja \(\dot\psi\) z tłumieniem.
 
-## 6.3 Jak wyznaczyć \(\alpha_k\)?
+### 6.3 Jak wyznaczyć \(\alpha_k\)?
 
 Praktycznie:
 
-\[
+$$
 \alpha_k = w_{qual} \cdot w_{dyn} \cdot w_{cons}
-\]
+$$
 
 - \(w_{qual}\): jakość referencji (confidence detektora, jakość fitu linii, SNR radaru).
 - \(w_{dyn}\): zgodność z dynamiką (duże przyspieszenia poprzeczne -> mniejsza wiara w prostą referencję).
@@ -301,7 +301,7 @@ Dobre praktyki:
 
 ## 9. Metryki i walidacja: jak udowodnić, że działa lepiej?
 
-## 9.1 Metryki estymacji i śledzenia
+### 9.1 Metryki estymacji i śledzenia
 
 - RMSE pozycji i prędkości,
 - RMSE yaw + odsetek skoków > próg,
@@ -309,7 +309,7 @@ Dobre praktyki:
 - ID switches,
 - track fragmentation.
 
-## 9.2 Metryki filtracji probabilistycznej
+### 9.2 Metryki filtracji probabilistycznej
 
 - NIS (Normalized Innovation Squared),
 - NEES (Normalized Estimation Error Squared),
@@ -317,7 +317,7 @@ Dobre praktyki:
 
 Jeśli NIS stale za duży -> zaniżone \(R\) lub zły model; jeśli za mały -> filtr „zbyt ostrożny”.
 
-## 9.3 Testy ablation
+### 9.3 Testy ablation
 
 Porównaj warianty:
 
