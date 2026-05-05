@@ -11,7 +11,7 @@ Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** spr
 |-------------------|----------------------------------------------------|
 | Czas trwania      | 60 minut                                           |
 | Forma             | Test ABCD (jedna poprawna odpowiedź)               |
-| Liczba pytań      | 50 pytań testowych ABCD                             |
+| Liczba pytań      | 50 pytań testowych ABCD                            |
 | Próg zaliczenia   | 51% punktów (26/50)                                |
 
 ### Struktura punktowa
