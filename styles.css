@@ -72,10 +72,12 @@
     --transition: 0.2s ease;
     --font: 'Outfit', sans-serif;
     --mono: 'JetBrains Mono', monospace;
-    --header-h: 48px;
+    /* Obniżamy wysokość górnego paska o ~12.5% dla bardziej kompaktowego układu. */
+    --header-h: 42px;
     --tabbar-h: 41px;
     --chrome-h: calc(var(--header-h) + var(--tabbar-h));
-    --wiki-font-size: 12px;
+    /* Mniejsza bazowa czcionka dla artykułów renderowanych z plików Markdown. */
+    --wiki-font-size: 11px;
     --wiki-font-scale: 0.9;
 }
 
