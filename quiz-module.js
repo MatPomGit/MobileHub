@@ -403,9 +403,9 @@ function renderResultDetails() {
         detail.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
         detail.innerHTML = `
             <h3>${index + 1}. ${question.question}</h3>
-            <p>Kategoria: ${getCategoryLabel(question.category)}</p>
-            <p>Twoja odpowiedź: ${formatAnswer(userAnswerIndex, question.answers)}</p>
-            <p>Poprawna odpowiedź: ${formatAnswer(question.correctIndex, question.answers)}</p>
+            <p><strong>Kategoria:</strong> ${getCategoryLabel(question.category)}</p>
+            <p><strong>Twoja odpowiedź:</strong> ${formatAnswer(userAnswerIndex, question.answers)}</p>
+            <p><strong>Poprawna odpowiedź:</strong> ${formatAnswer(question.correctIndex, question.answers)}</p>
             <p class="muted">${question.explanation}</p>
         `;
 
