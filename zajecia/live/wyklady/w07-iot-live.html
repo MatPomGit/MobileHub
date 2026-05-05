@@ -10,62 +10,91 @@
 </head>
 <body>
   <div class="reveal">
-    <div class="slides lecture-template" data-lecture-template="v2">
+    <div class="slides lecture-template" data-lecture-template="pdf-sync" data-pdf-src="../../wyklady/pam_w07_IoT.pdf">
       <section class="slide-cover" data-section="otwarcie">
         <h1>W7 – IoT i aplikacje mobilne</h1>
-        <p class="lecture-meta">Wersja live oparta o PDF: pam_w07_IoT.pdf</p>
-        <p>Tryb prowadzącego: <kbd>P</kbd> panel • <kbd>T</kbd> timer • <kbd>N</kbd> notatki.</p>
+        <p class="lecture-meta">Wersja live zsynchronizowana 1:1 z PDF: pam_w07_IoT.pdf</p>
+        <p>Każdy kolejny slajd jest renderowany bezpośrednio z odpowiadającej strony PDF.</p>
       </section>
-
-      <section class="slide-block goals-slide" data-section="cele-efekty">
-        <h2>Cele i efekty uczenia</h2>
-        <ul><li>Projektować architekturę mobile + IoT edge + chmura.</li><li>Dobierać protokoły MQTT/HTTP/BLE do scenariusza.</li><li>Wdrażać bezpieczne kanały telemetrii.</li></ul>
-      </section>
-
-      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Definicja digital twin</h2><article class="info-card"><h3>Definicja</h3><p>Digital twin to wirtualna reprezentacja urządzenia aktualizowana danymi telemetrycznymi.</p><h3>Przykład inżynierski</h3><p>W aplikacji smart-home twin pokazuje stan czujnika, baterii i ostatnie alarmy.</p></article></section>
-<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Protokoły komunikacji</h2><div class="comparison-grid"><div class="comparison-header"><div>Opcja</div><div>Konsekwencje projektowe</div></div><div class="comparison-row"><div>MQTT</div><div>Lekki publish/subscribe, idealny dla telemetrii</div></div><div class="comparison-row"><div>HTTP/REST</div><div>Prosty request-response, szerokie wsparcie</div></div><div class="comparison-row"><div>BLE</div><div>Niskie zużycie energii, krótki zasięg</div></div></div></section>
-<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Cykl danych IoT</h2><ol class="timeline"><li>Pomiar na edge</li><li>Broker/ingest</li><li>Reguły i alerty</li><li>Prezentacja mobilna</li></ol></section>
-<section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"><h2>Uwaga egzaminacyjna</h2><aside class="callout exam"><strong>Uwaga egzaminacyjna:</strong> TLS + rotacja kluczy urządzeń to minimum bezpieczeństwa systemu IoT.</aside></section>
-
-      <section class="slide-block case-study-slide" data-section="case-study">
-        <h2>Case study / praktyka inżynierska</h2>
-        <article class="info-card"><h3>Sytuacja projektowa</h3><p>Case: w hali produkcyjnej mobilny dashboard skrócił czas reakcji na alarm temperatury z 12 do 4 minut.</p></article>
-      </section>
-
-      <section class="slide-block mistakes-slide" data-section="najczestsze-bledy">
-        <h2>Najczęstsze błędy</h2>
-        <aside class="callout trap"><strong>Antywzorce, których unikamy:</strong> ich koszt to dług techniczny i spadek jakości produktu.</aside>
-        <ul><li>Przechowywanie kluczy API wprost w aplikacji.</li><li>Brak retry/backoff przy niestabilnej sieci.</li><li>Brak modelu uprawnień dla wielu ról użytkowników.</li></ul>
-      </section>
-
-      <section class="slide-block quiz-slide" data-section="quiz">
-        <h2>Pytania kontrolne + mini quiz</h2>
-        <div class="quiz-checkpoint"><h3>Checkpoint</h3><ol><li>Dlaczego MQTT wygrywa przy dużej liczbie czujników?</li><li>Co powinien zawierać minimalny model telemetryczny?</li></ol></div>
+      <section class="slide-block" data-loading-slide>
+        <h2>Ładowanie slajdów PDF…</h2>
+        <p>Jeśli ładowanie trwa długo, odśwież stronę lub sprawdź połączenie sieciowe.</p>
       </section>
     </div>
   </div>
 
   <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+  <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs" type="module"></script>
   <script src="live-reveal-enhancements.js"></script>
-  <script>
-    function initializeLecture() {
+  <script type="module">
+    // Renderuje każdą stronę PDF jako osobny slajd Reveal.js, zapewniając zgodność treści 1:1.
+    async function renderPdfSlides() {
+      const slidesRoot = document.querySelector('.slides[data-pdf-src]');
+      if (!slidesRoot) return;
+
+      const pdfSrc = slidesRoot.dataset.pdfSrc;
+      const loadingSlide = slidesRoot.querySelector('[data-loading-slide]');
+
+      const pdfjsModule = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
+      pdfjsModule.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+
+      const pdf = await pdfjsModule.getDocument(pdfSrc).promise;
+
+      for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
+        const page = await pdf.getPage(pageNumber);
+        const viewport = page.getViewport({ scale: 1 });
+
+        // Dobór skali do proporcji slajdu, aby tekst pozostał czytelny.
+        const maxWidth = 1280;
+        const maxHeight = 720;
+        const scale = Math.min(maxWidth / viewport.width, maxHeight / viewport.height);
+        const scaledViewport = page.getViewport({ scale });
+
+        const canvas = document.createElement('canvas');
+        const context = canvas.getContext('2d', { alpha: false });
+        canvas.width = Math.floor(scaledViewport.width);
+        canvas.height = Math.floor(scaledViewport.height);
+        canvas.className = 'pdf-page-canvas';
+
+        await page.render({ canvasContext: context, viewport: scaledViewport }).promise;
+
+        const section = document.createElement('section');
+        section.className = 'slide-block pdf-slide';
+        section.dataset.section = 'pdf-page';
+
+        const title = document.createElement('h2');
+        title.textContent = 'Slajd ' + pageNumber;
+
+        const wrapper = document.createElement('div');
+        wrapper.className = 'pdf-slide-wrapper';
+        wrapper.appendChild(canvas);
+
+        section.appendChild(title);
+        section.appendChild(wrapper);
+        slidesRoot.appendChild(section);
+      }
+
+      if (loadingSlide) {
+        loadingSlide.remove();
+      }
+
+      if (window.Reveal?.sync) {
+        window.Reveal.sync();
+      }
+    }
+
+    // Inicjalizuje Reveal.js po zakończeniu renderowania slajdów z PDF.
+    async function initializeLecture() {
+      await renderPdfSlides();
       initializeLiveReveal({
         transition: 'slide',
         backgroundTransition: 'fade',
-        autoAnimate: true,
-        autoAnimateDuration: 0.8,
+        autoAnimate: false,
         presenterNotesEnabled: true,
       });
     }
 
-    if (typeof window.Reveal === 'undefined') {
-      const fallbackScript = document.createElement('script');
-      fallbackScript.src = 'https://unpkg.com/reveal.js@5/dist/reveal.js';
-      fallbackScript.onload = initializeLecture;
-      document.body.appendChild(fallbackScript);
-    } else {
-      initializeLecture();
-    }
+    initializeLecture();
   </script>
 </body>
 </html>
