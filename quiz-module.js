@@ -3,8 +3,9 @@
 const QUIZ_QUESTIONS_URL = 'quiz-questions.json';
 const LETTERS = ['A', 'B', 'C', 'D'];
 const QUIZ_MODE_SIZES = {
-    short: 20,
-    normal: 40
+    // Mapa trybów testu na docelową liczbę pytań w sesji.
+    short: 25,
+    normal: 50
 };
 
 const state = {
@@ -140,7 +141,18 @@ function shuffle(items) {
 // Odczytuje aktualnie wybrany tryb testu z kontrolek formularza.
 function getSelectedMode() {
     const checked = document.querySelector('input[name="quizMode"]:checked')?.value;
-    return checked && QUIZ_MODE_SIZES[checked] ? checked : 'short';
+    // Obsługuje zarówno nazwy trybów (short/normal), jak i ewentualne wartości liczbowe z HTML (np. 25/50).
+    if (checked && QUIZ_MODE_SIZES[checked]) {
+        return checked;
+    }
+
+    if (checked && /^\d+$/.test(checked)) {
+        const targetSize = Number.parseInt(checked, 10);
+        const matchedMode = Object.entries(QUIZ_MODE_SIZES).find(([, size]) => size === targetSize)?.[0];
+        return matchedMode ?? 'short';
+    }
+
+    return 'short';
 }
 
 // Zwraca docelową liczbę pytań dla trybu krótkiego lub normalnego.
