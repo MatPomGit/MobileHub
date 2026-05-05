@@ -41,13 +41,13 @@ W lekkim trybie Doze część aktywności jest ograniczana, ale system nadal dop
 
 Implikacje dla aplikacji:
 
-* **AlarmManager** — `setExact()` nie odpala w Doze, użyj `setExactAndAllowWhileIdle()`
-* **JobScheduler / WorkManager** — odpalane w "maintenance windows"
-* **Network** — blokada połączeń sieciowych w Deep Doze
+* **AlarmManager** - `setExact()` nie odpala w Doze, użyj `setExactAndAllowWhileIdle()`
+* **JobScheduler / WorkManager** - odpalane w "maintenance windows"
+* **Network** - blokada połączeń sieciowych w Deep Doze
 
 Ważne jest, aby architektura aplikacji była odporna na opóźnienia i ponowne próby. Synchronizacja, raportowanie, analityka i odświeżanie danych powinny być projektowane jako operacje tolerujące odroczenie.
 
-## WorkManager — zalecany mechanizm zadań w tle
+## WorkManager - zalecany mechanizm zadań w tle
 
 Na współczesnym Androidzie podstawowym mechanizmem do zadań asynchronicznych, które muszą zostać wykonane niezawodnie, jest `WorkManager`. Biblioteka ta integruje się z ograniczeniami systemu i dobiera odpowiedni mechanizm wykonania zależnie od wersji Androida oraz stanu urządzenia. Dzięki temu zadanie nie musi być ręcznie zarządzane przez `Service`, `AlarmManager` i odbiorniki systemowe.
 
@@ -204,7 +204,7 @@ Batching ma kilka zalet:
 
 Do tego należy dodać lokalne cache, odpowiednie nagłówki HTTP, kompresję oraz unikanie agresywnego odpytywania serwera. W wielu przypadkach lepiej używać mechanizmów push niż cyklicznego pollingu.
 
-## Foreground Service — tylko dla rzeczywiście trwałych zadań
+## Foreground Service - tylko dla rzeczywiście trwałych zadań
 
 Foreground Service to specjalny typ usługi, która pozostaje widoczna dla użytkownika poprzez trwałą notyfikację. Jest to mechanizm przewidziany dla działań faktycznie uzasadniających ciągłą pracę, takich jak:
 
@@ -252,7 +252,7 @@ class LocationTrackingService : Service() {
 
 Foreground Service nie powinien być używany jako sposób obejścia ograniczeń systemowych. Nadużywanie tego mechanizmu pogarsza UX, zwiększa zużycie energii i może prowadzić do problemów z polityką platformy.
 
-## AlarmManager — kiedy potrzebna jest precyzja
+## AlarmManager - kiedy potrzebna jest precyzja
 
 `AlarmManager` służy do planowania zadań w określonym czasie, ale współcześnie powinien być używany ostrożnie. Większość okresowych lub odraczalnych zadań lepiej realizować przez `WorkManager`. `AlarmManager` ma sens głównie wtedy, gdy potrzebne jest zdarzenie o możliwie precyzyjnym czasie, np. przypomnienie dla użytkownika.
 
@@ -303,7 +303,7 @@ Android Studio → View → Tool Windows → App Inspection → Energy Profiler
 Metryki:
   CPU     ████░░  Wysokie przetwarzanie
   NETWORK ██░░░  Nieaktywne pobieranie
-  LOCATION █████ Ciągłe GPS — UWAGA!
+  LOCATION █████ Ciągłe GPS - UWAGA!
 ```
 
 Szczególnie warto obserwować:

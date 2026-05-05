@@ -20,7 +20,7 @@ Najważniejsze reprezentanty tej kategorii to: **Pico-8**, **TIC-80**, **LÖVE (
 
 ---
 
-## Pico-8 — fantasy console
+## Pico-8 - fantasy console
 
 Pico-8 to „wyobraźniowa konsola" (*fantasy console*) stworzona przez Lexaloffle Games. Symuluje fikcyjny sprzęt z lat 80., oferując skrajnie ograniczone środowisko:
 
@@ -39,7 +39,7 @@ Pico-8 to „wyobraźniowa konsola" (*fantasy console*) stworzona przez Lexaloff
 Gra w Pico-8 składa się z trzech funkcji wywoływanych przez środowisko:
 
 ```lua
--- _init() — wywoływana raz na starcie gry
+-- _init() - wywoływana raz na starcie gry
 function _init()
   gracz = {
     x = 64, y = 64,
@@ -50,7 +50,7 @@ function _init()
   poziom = 1
 end
 
--- _update() — logika gry (30 razy/sekundę)
+-- _update() - logika gry (30 razy/sekundę)
 function _update()
   -- Wejście: btn(0)=lewo, btn(1)=prawo, btn(2)=góra, btn(3)=dół
   gracz.vx = 0
@@ -63,7 +63,7 @@ function _update()
   gracz.y = mid(0, gracz.y + gracz.vy, 120)
 end
 
--- _draw() — renderowanie (30 razy/sekundę)
+-- _draw() - renderowanie (30 razy/sekundę)
 function _draw()
   cls(0)                          -- czyść ekran (kolor tła = 0)
   spr(gracz.sp, gracz.x, gracz.y) -- rysuj sprite gracza
@@ -91,8 +91,8 @@ end
 ### Eksport Pico-8 na mobile
 
 Pico-8 pozwala eksportować gry jako:
-- **HTML5** — działa w każdej przeglądarce mobilnej
-- **Natywne** — wymaga licencji lub użycia narzędzi zewnętrznych
+- **HTML5** - działa w każdej przeglądarce mobilnej
+- **Natywne** - wymaga licencji lub użycia narzędzi zewnętrznych
 
 Najczęstszą ścieżką do mobile jest eksport HTML5, a następnie opakowanie w PWA lub użycie Capacitor/Cordova:
 
@@ -101,7 +101,7 @@ Najczęstszą ścieżką do mobile jest eksport HTML5, a następnie opakowanie w
 # (w konsoli Pico-8)
 export nazwa_gry.html
 
-# Opakowanie w PWA — manifest.json
+# Opakowanie w PWA - manifest.json
 {
   "name": "Moja gra Pico-8",
   "short_name": "Gra",
@@ -117,7 +117,7 @@ export nazwa_gry.html
 
 ---
 
-## TIC-80 — otwarty odpowiednik Pico-8
+## TIC-80 - otwarty odpowiednik Pico-8
 
 TIC-80 to darmowa, otwartoźródłowa alternatywa dla Pico-8. Oferuje podobne ograniczenia, ale wspiera więcej języków skryptowania:
 
@@ -133,7 +133,7 @@ TIC-80 to darmowa, otwartoźródłowa alternatywa dla Pico-8. Oferuje podobne og
 ### Przykład w TIC-80 (JavaScript)
 
 ```javascript
-// TIC-80 — skrypt JavaScript
+// TIC-80 - skrypt JavaScript
 var x = 96, y = 68;
 
 function TIC() {
@@ -156,9 +156,9 @@ function TIC() {
 
 ---
 
-## LÖVE (Love2D) — framework Lua dla 2D
+## LÖVE (Love2D) - framework Lua dla 2D
 
-LÖVE to framework do tworzenia gier 2D w języku Lua. W odróżnieniu od Pico-8/TIC-80 nie narzuca ograniczeń technicznych — jest pełnoprawnym silnikiem 2D z obsługą OpenGL.
+LÖVE to framework do tworzenia gier 2D w języku Lua. W odróżnieniu od Pico-8/TIC-80 nie narzuca ograniczeń technicznych - jest pełnoprawnym silnikiem 2D z obsługą OpenGL.
 
 ### Dlaczego LÖVE na mobile?
 
@@ -184,7 +184,7 @@ moja-gra/
 ### Podstawy LÖVE
 
 ```lua
--- conf.lua — konfiguracja okna
+-- conf.lua - konfiguracja okna
 function love.conf(t)
   t.title = "Moja gra mobilna"
   t.window.width  = 480
@@ -195,7 +195,7 @@ end
 ```
 
 ```lua
--- main.lua — logika gry
+-- main.lua - logika gry
 local gracz = { x = 240, y = 700, sz = 32, speed = 300 }
 local pociski = {}
 local ostatniStrzal = 0
@@ -214,7 +214,7 @@ function love.update(dt)
     gracz.x = tx - gracz.sz / 2
   end
 
-  -- Strzał — ogranicznik czasowy
+  -- Strzał - ogranicznik czasowy
   local teraz = love.timer.getTime()
   if teraz - ostatniStrzal > 0.3 then
     table.insert(pociski, { x = gracz.x + gracz.sz/2, y = gracz.y, vy = -500 })
@@ -262,7 +262,7 @@ cp -r ../moja-gra/* app/src/embed/assets/
 
 ---
 
-## Defold — silnik gier od King
+## Defold - silnik gier od King
 
 Defold to darmowy silnik 2D/3D stworzony przez firmę King (twórca Candy Crush). Oferuje wbudowane wsparcie dla iOS i Android bez dodatkowych narzędzi.
 
@@ -277,7 +277,7 @@ Defold to darmowy silnik 2D/3D stworzony przez firmę King (twórca Candy Crush)
 ### Przykład skryptu Defold
 
 ```lua
--- player.script — komponent gracza
+-- player.script - komponent gracza
 local SPEED = 300
 
 function init(self)
@@ -311,7 +311,7 @@ end
 
 ---
 
-## Pyxel — Python fantasy console
+## Pyxel - Python fantasy console
 
 Pyxel to fantasy console napisana w Pythonie, inspirowana Pico-8. Idealna dla osób zaczynających przygodę z tworzeniem gier, szczególnie jeśli już znają Pythona.
 
@@ -359,13 +359,13 @@ pip install pyxel
 pyxel package moja_gra moja_gra.py
 pyxel app2html moja_gra.pyxapp
 
-# Wynik: moja_gra.html — gotowy do hostowania
+# Wynik: moja_gra.html - gotowy do hostowania
 # Działa na mobile w przeglądarce bez instalacji
 ```
 
 ---
 
-## GB Studio — gry w stylu Game Boy
+## GB Studio - gry w stylu Game Boy
 
 GB Studio to wizualny silnik do tworzenia gier w stylu Game Boy (ROMs). Eksportuje m.in. do HTML5, co umożliwia uruchamianie na mobile.
 
@@ -415,7 +415,7 @@ function love.update(dt)
 end
 ```
 
-### Object Pool — recycling obiektów
+### Object Pool - recycling obiektów
 
 Na urządzeniach mobilnych alokacja obiektów jest kosztowna. Object Pool wielokrotnie używa tych samych instancji:
 
@@ -456,7 +456,7 @@ function Pula:zwroc(obj)
 end
 ```
 
-### State Machine — zarządzanie stanami gry
+### State Machine - zarządzanie stanami gry
 
 ```lua
 -- Maszyna stanów dla scen gry (Pico-8)
@@ -550,9 +550,9 @@ end
 
 ## Zasoby i społeczność
 
-- **Lexaloffle BBS** — oficjalne forum Pico-8, tysiące gier do pobrania i nauki
-- **itch.io** — największa platforma dystrybucji gier indie, w tym małych silników
-- **Ludum Dare** — game jam co dwa miesiące, wiele gier tworzonych w Pico-8/LÖVE
-- **LÖVE forum** — love2d.org/forums — aktywna społeczność, gotowe biblioteki
-- **Defold forum** — forum.defold.com — wsparcie oficjalnego zespołu King
-- **Game Off (GitHub)** — roczny game jam promujący open source
+- **Lexaloffle BBS** - oficjalne forum Pico-8, tysiące gier do pobrania i nauki
+- **itch.io** - największa platforma dystrybucji gier indie, w tym małych silników
+- **Ludum Dare** - game jam co dwa miesiące, wiele gier tworzonych w Pico-8/LÖVE
+- **LÖVE forum** - love2d.org/forums - aktywna społeczność, gotowe biblioteki
+- **Defold forum** - forum.defold.com - wsparcie oficjalnego zespołu King
+- **Game Off (GitHub)** - roczny game jam promujący open source

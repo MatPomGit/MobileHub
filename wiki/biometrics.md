@@ -1,8 +1,8 @@
 # Biometria i uwierzytelnianie
 
-Biometria mobilna (odcisk palca, rozpoznawanie twarzy) zastępuje tradycyjne hasła wygodniejszym i bezpieczniejszym uwierzytelnianiem. Android udostępnia BiometricPrompt API, iOS — LocalAuthentication z Face ID i Touch ID.
+Biometria mobilna (odcisk palca, rozpoznawanie twarzy) zastępuje tradycyjne hasła wygodniejszym i bezpieczniejszym uwierzytelnianiem. Android udostępnia BiometricPrompt API, iOS - LocalAuthentication z Face ID i Touch ID.
 
-## BiometricPrompt — Android
+## BiometricPrompt - Android
 
 `BiometricPrompt` to rekomendowane przez Google API do obsługi uwierzytelniania biometrycznego na Androidzie, zapewniające spójny interfejs niezależnie od typu sensora (odcisk palca, twarz, tęczówka). Poniższy przykład implementuje klasę menedżera, która sprawdza dostępność biometrii i wyświetla systemowy dialog uwierzytelniania z obsługą sukcesu, błędu i nieudanej próby. Wyliczenie `BiometricStatus` pozwala czytelnie komunikować różne stany dostępności biometrii w logice aplikacji.
 
@@ -43,13 +43,13 @@ class BiometricAuthManager(private val activity: FragmentActivity) {
                 override fun onAuthenticationError(errorCode: Int, errString: CharSequence) {
                     if (errorCode == BiometricPrompt.ERROR_NEGATIVE_BUTTON ||
                         errorCode == BiometricPrompt.ERROR_USER_CANCELED) {
-                        // Użytkownik anulował — OK
+                        // Użytkownik anulował - OK
                     } else {
                         onError("$errString (kod: $errorCode)")
                     }
                 }
                 override fun onAuthenticationFailed() {
-                    // Odcisk nie pasuje — ale jeszcze może spróbować
+                    // Odcisk nie pasuje - ale jeszcze może spróbować
                     onFailed()
                 }
             }
@@ -77,7 +77,7 @@ enum class BiometricStatus {
 }
 ```
 
-## Kryptografia z biometrią — Cryptographic Auth
+## Kryptografia z biometrią - Cryptographic Auth
 
 Do zabezpieczania kluczy kryptograficznych (np. deszyfrowanie tokenu) biometria musi być powiązana z Android Keystore:
 
@@ -99,7 +99,7 @@ class CryptoAuthManager(private val activity: FragmentActivity) {
                 .setBlockModes(KeyProperties.BLOCK_MODE_CBC)
                 .setEncryptionPaddings(KeyProperties.ENCRYPTION_PADDING_PKCS7)
                 .setUserAuthenticationRequired(true)
-                // Klucz nieważny po zmianie odcisku/PIN — bezpieczeństwo
+                // Klucz nieważny po zmianie odcisku/PIN - bezpieczeństwo
                 .setInvalidatedByBiometricEnrollment(true)
                 // Opcjonalnie: wymagaj re-autentykacji co X sekund
                 .setUserAuthenticationParameters(0, KeyProperties.AUTH_BIOMETRIC_STRONG)
@@ -154,7 +154,7 @@ class CryptoAuthManager(private val activity: FragmentActivity) {
 }
 ```
 
-## Face ID / Touch ID — iOS (LocalAuthentication)
+## Face ID / Touch ID - iOS (LocalAuthentication)
 
 Na platformie iOS uwierzytelnianie biometryczne jest dostępne poprzez framework `LocalAuthentication`, obsługujący zarówno Face ID, jak i Touch ID. Poniższy przykład w Swift implementuje klasę `BiometricAuth` z metodami sprawdzającymi dostępność sensora, przeprowadzającymi prostą autentykację oraz autentykację z fallbackiem do hasła urządzenia. Integracja z SwiftUI jest zaprezentowana jako kompletny widok, który automatycznie inicjuje uwierzytelnianie po wyświetleniu i obsługuje różne scenariusze błędów.
 
@@ -201,7 +201,7 @@ class BiometricAuth {
     }
 }
 
-// SwiftUI — użycie
+// SwiftUI - użycie
 struct SecureView: View {
     @State private var isAuthenticated = false
     @State private var showError = false
@@ -248,7 +248,7 @@ struct SecureView: View {
 }
 ```
 
-## Passkeys / FIDO2 — przyszłość uwierzytelniania
+## Passkeys / FIDO2 - przyszłość uwierzytelniania
 
 Passkeys to standard zastępujący hasła kryptograficznymi kluczami powiązanymi z urządzeniem i biometrią:
 
@@ -298,9 +298,9 @@ class PasskeyManager(private val context: Context) {
 - [Credential Manager](https://developer.android.com/training/sign-in/credential-manager)
 - [WebAuthn / FIDO2](https://webauthn.guide/)
 
-## Biometria w iOS — LocalAuthentication
+## Biometria w iOS - LocalAuthentication
 
-Framework **LocalAuthentication** pozwala uwierzytelniać użytkownika za pomocą Face ID, Touch ID lub kodu PIN jako mechanizmu awaryjnego — bez dostępu do surowych danych biometrycznych.
+Framework **LocalAuthentication** pozwala uwierzytelniać użytkownika za pomocą Face ID, Touch ID lub kodu PIN jako mechanizmu awaryjnego - bez dostępu do surowych danych biometrycznych.
 
 ### LAContext i evaluatePolicy
 
@@ -315,7 +315,7 @@ class BiometricAuthService {
         guard context.canEvaluatePolicy(
             .deviceOwnerAuthenticationWithBiometrics, error: &error
         ) else {
-            // Brak biometrii — fallback do kodu PIN
+            // Brak biometrii - fallback do kodu PIN
             return await authenticateWithPasscode()
         }
 
@@ -329,7 +329,7 @@ class BiometricAuthService {
         } catch LAError.userFallback {
             return await authenticateWithPasscode()
         } catch LAError.biometryLockout {
-            // Zbyt wiele nieudanych prób — wymagany kod PIN
+            // Zbyt wiele nieudanych prób - wymagany kod PIN
             return await authenticateWithPasscode()
         } catch {
             return false
@@ -352,7 +352,7 @@ Aplikacja używająca Face ID **musi** zawierać klucz `NSFaceIDUsageDescription
 
 Typ biometrii dostępny na urządzeniu można sprawdzić przez `context.biometryType` (`.faceID`, `.touchID`, `.opticID` na Vision Pro, `.none`), co pozwala wyświetlić odpowiednią ikonę w interfejsie.
 
-## WebAuthn — biometria w aplikacjach webowych i PWA
+## WebAuthn - biometria w aplikacjach webowych i PWA
 
 **WebAuthn** (Web Authentication API) to standard W3C/FIDO2 umożliwiający uwierzytelnianie bez haseł w przeglądarkach i aplikacjach webowych. Zamiast hasła użytkownik używa klucza kryptograficznego przechowywanego w urządzeniu, a potwierdzenie tożsamości odbywa się przez biometrię.
 
@@ -361,7 +361,7 @@ Typ biometrii dostępny na urządzeniu można sprawdzić przez `context.biometry
 ```typescript
 // Rejestracja nowego passkey
 async function registerPasskey(userId: string, userName: string): Promise<void> {
-    // challenge pochodzi z serwera — nigdy nie generuj go po stronie klienta
+    // challenge pochodzi z serwera - nigdy nie generuj go po stronie klienta
     const challenge = await fetchChallengeFromServer();
 
     const credential = await navigator.credentials.create({
@@ -399,11 +399,11 @@ async function loginWithPasskey(): Promise<void> {
 }
 ```
 
-**Passkeys** są zsynchronizowane przez iCloud Keychain (Apple) lub Google Password Manager, co oznacza, że klucz zarejestrowany na iPhone'ie działa też na Macu. FIDO2 eliminuje problemy z phishingiem — klucz jest powiązany z domeną (`rp.id`) i nie zadziała na fałszywej stronie. Android od wersji 9, iOS od 16 i wszystkie główne przeglądarki obsługują WebAuthn.
+**Passkeys** są zsynchronizowane przez iCloud Keychain (Apple) lub Google Password Manager, co oznacza, że klucz zarejestrowany na iPhone'ie działa też na Macu. FIDO2 eliminuje problemy z phishingiem - klucz jest powiązany z domeną (`rp.id`) i nie zadziała na fałszywej stronie. Android od wersji 9, iOS od 16 i wszystkie główne przeglądarki obsługują WebAuthn.
 
 ## Klucze kryptograficzne chronione biometrią
 
-Połączenie biometrii z kluczami kryptograficznymi pozwala budować scenariusze, w których sama biometria **nie tylko uwierzytelnia użytkownika, lecz odblokowuje klucz** do szyfrowania danych — żaden klucz nie istnieje poza sprzętowym modułem bezpieczeństwa.
+Połączenie biometrii z kluczami kryptograficznymi pozwala budować scenariusze, w których sama biometria **nie tylko uwierzytelnia użytkownika, lecz odblokowuje klucz** do szyfrowania danych - żaden klucz nie istnieje poza sprzętowym modułem bezpieczeństwa.
 
 ### Android Keystore + BiometricPrompt + CryptoObject
 
@@ -459,7 +459,7 @@ fun encryptWithBiometric(
 
 ### iOS SecureEnclave
 
-Na iOS klucze prywatne mogą być przechowywane w **Secure Enclave** — dedykowanym procesorze bezpieczeństwa, z którego klucz nigdy nie wychodzi:
+Na iOS klucze prywatne mogą być przechowywane w **Secure Enclave** - dedykowanym procesorze bezpieczeństwa, z którego klucz nigdy nie wychodzi:
 
 ```swift
 // Generowanie klucza EC w Secure Enclave wymagającego biometrii
@@ -484,4 +484,4 @@ var error: Unmanaged<CFError>?
 let privateKey = SecKeyCreateRandomKey(keyAttributes as CFDictionary, &error)
 ```
 
-Operacja podpisywania (`SecKeyCreateSignature`) automatycznie wywołuje okno Face ID/Touch ID. Klucz publiczny można wysłać na serwer i weryfikować podpisy bez przechowywania tajnych danych po stronie backendowej — to wzorzec używany przez Apple Pay i passkeys.
+Operacja podpisywania (`SecKeyCreateSignature`) automatycznie wywołuje okno Face ID/Touch ID. Klucz publiczny można wysłać na serwer i weryfikować podpisy bez przechowywania tajnych danych po stronie backendowej - to wzorzec używany przez Apple Pay i passkeys.

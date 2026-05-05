@@ -1,16 +1,16 @@
 # UI sterowania robotem
 
-Aplikacja mobilna jako kontroler robota wymaga specyficznego podejścia do projektowania interfejsu — niskie opóźnienia, czytelność w ruchu, jednoznaczna informacja zwrotna i mechanizmy bezpieczeństwa.
+Aplikacja mobilna jako kontroler robota wymaga specyficznego podejścia do projektowania interfejsu - niskie opóźnienia, czytelność w ruchu, jednoznaczna informacja zwrotna i mechanizmy bezpieczeństwa.
 
 ## Wymagania dla interfejsów robotycznych
 
-- **Latencja** — reakcja na gest powinna dotrzeć do robota w <100ms
-- **Fail-safe** — utrata połączenia = natychmiastowe zatrzymanie ruchu
-- **Feedback** — użytkownik musi wiedzieć czy robot odebrał komendę
-- **Ergonomia** — sterowanie jedną ręką podczas trzymania urządzenia
-- **Emergency Stop** — duży, zawsze dostępny przycisk zatrzymania
+- **Latencja** - reakcja na gest powinna dotrzeć do robota w <100ms
+- **Fail-safe** - utrata połączenia = natychmiastowe zatrzymanie ruchu
+- **Feedback** - użytkownik musi wiedzieć czy robot odebrał komendę
+- **Ergonomia** - sterowanie jedną ręką podczas trzymania urządzenia
+- **Emergency Stop** - duży, zawsze dostępny przycisk zatrzymania
 
-## Wirtualny joystick — implementacja
+## Wirtualny joystick - implementacja
 
 ```kotlin
 @Composable
@@ -67,7 +67,7 @@ fun VirtualJoystick(
 }
 ```
 
-## Emergency Stop — przycisk zatrzymania
+## Emergency Stop - przycisk zatrzymania
 
 ```kotlin
 @Composable
@@ -114,7 +114,7 @@ fun EmergencyStopButton(onStop: () -> Unit) {
 ## Tryb pełnoekranowy i orientacja
 
 ```kotlin
-// Sterowanie robotem — wymusz landscape i pełny ekran
+// Sterowanie robotem - wymusz landscape i pełny ekran
 class RobotControlActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -337,7 +337,7 @@ fun RobotMiniMap(
             drawCircle(Color(0xFFFF5722).copy(alpha = 0.8f), obs.radius * scale, pos)
         }
 
-        // Robot — trójkąt wskazujący kierunek
+        // Robot - trójkąt wskazujący kierunek
         val robotPos = center // robot zawsze w centrum mini-mapy
         rotate(Math.toDegrees(robotPose.heading.toDouble()).toFloat(), robotPos) {
             val path = Path().apply {
@@ -360,7 +360,7 @@ fun DrawScope.worldToScreen(world: Offset, robotPose: RobotPose, scale: Float, c
 
 Mini-mapa powinna być umieszczona w rogu ekranu sterowania jako `Box` z `Alignment.TopEnd`, z rozmiarem około `150.dp × 150.dp`. Dodaj przycisk do przełączania między widokiem skoncentrowanym na robocie a widokiem globalnym mapy.
 
-## Planowanie misji — waypoints
+## Planowanie misji - waypoints
 
 Interfejs ustawiania punktów trasy pozwala operatorowi zdefiniować sekwencję miejsc docelowych dla autonomicznej nawigacji. Punkty trasy mogą być dodawane przez kliknięcie na mini-mapę lub ręczne wpisanie współrzędnych.
 
@@ -443,7 +443,7 @@ Punkty trasy są wysyłane do robota jako lista celów Nav2 `NavigateThroughPose
 
 ## Tryby sterowania i gesty
 
-Profesjonalne aplikacje sterowania robotem oferują co najmniej dwa tryby: **ręczny** (joystick — pełna kontrola operatora) oraz **autonomiczny** (robot realizuje zadaną misję, operator może jedynie zatwierdzać lub anulować). Przełączanie trybów powinno być świadome i wymagać wyraźnej akcji, aby zapobiec przypadkowym zmianom.
+Profesjonalne aplikacje sterowania robotem oferują co najmniej dwa tryby: **ręczny** (joystick - pełna kontrola operatora) oraz **autonomiczny** (robot realizuje zadaną misję, operator może jedynie zatwierdzać lub anulować). Przełączanie trybów powinno być świadome i wymagać wyraźnej akcji, aby zapobiec przypadkowym zmianom.
 
 ```kotlin
 enum class ControlMode { MANUAL, AUTONOMOUS, EMERGENCY }
@@ -522,4 +522,4 @@ Swipe w górę uruchamia protokół awaryjny i wysyła polecenie `cmd_vel` z zer
 |---|---|---|---|---|
 | Ręczny | ✅ Aktywny | ❌ | ✅ Zawsze | Zawsze |
 | Autonomiczny | ❌ | ✅ Aktywna | ✅ Zawsze | Zawsze |
-| Awaryjny | ❌ | ❌ | — (już zatrzymany) | Restart wymagany |
+| Awaryjny | ❌ | ❌ | - (już zatrzymany) | Restart wymagany |

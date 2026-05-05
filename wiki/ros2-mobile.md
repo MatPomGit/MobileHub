@@ -2,7 +2,7 @@
 
 ROS2 (Robot Operating System 2) to standard middleware w robotyce. Aplikacja mobilna może komunikować się z robotem przez rosbridge WebSocket lub natywne biblioteki ROS2.
 
-## rosbridge — WebSocket do ROS2
+## rosbridge - WebSocket do ROS2
 
 ```kotlin
 // Klasa do komunikacji z ROS2 przez rosbridge_suite
@@ -100,7 +100,7 @@ fun OdomValue(label: String, value: Double, unit: String) {
 }
 ```
 
-## Nav2 — wysyłanie celów nawigacji
+## Nav2 - wysyłanie celów nawigacji
 
 ```kotlin
 class Nav2Controller(private val bridge: Ros2Bridge) {
@@ -155,7 +155,7 @@ Aplikacja mobilna nie może bezpośrednio używać bibliotek `rclpy` ani `rclcpp
 
 **rclnodejs** uruchamia się jako serwer Node.js i może rozmawiać z ROS2 przez natywne DDS, a z aplikacją mobilną przez REST lub Socket.IO. Jest użyteczny gdy potrzebna jest logika pośrednicząca (agregacja, transformacja danych) lub gdy aplikacja mobilna wymaga HTTP zamiast WebSocket.
 
-**micro-ROS** działa bezpośrednio na mikrokontrolerze (np. ESP32 na robocie) i komunikuje się z ROS2 PC przez serial lub UDP. Nie jest interfejsem dla aplikacji mobilnych — jest węzłem ROS2 na urządzeniu embedded.
+**micro-ROS** działa bezpośrednio na mikrokontrolerze (np. ESP32 na robocie) i komunikuje się z ROS2 PC przez serial lub UDP. Nie jest interfejsem dla aplikacji mobilnych - jest węzłem ROS2 na urządzeniu embedded.
 
 ## Konfiguracja rosbridge na robocie
 
@@ -190,7 +190,7 @@ def generate_launch_description():
                 # 'keyfile': '/path/to/key.pem',
                 'authenticate': False,          # True + 'secret' gdy włączone tokeny
                 # 'secret': 'my_secret_token',
-                'max_message_size': 10_000_000, # 10 MB — potrzebne dla map OccupancyGrid
+                'max_message_size': 10_000_000, # 10 MB - potrzebne dla map OccupancyGrid
                 'unregister_timeout': 10.0,
             }],
         )
@@ -215,11 +215,11 @@ ip addr show wlan0    # szczegóły interfejsu WiFi
 W sieci produkcyjnej (np. robot w hali fabrycznej) należy włączyć TLS i uwierzytelnianie:
 
 ```kotlin
-// Włącz uwierzytelnianie tokenem — klient musi wysłać:
+// Włącz uwierzytelnianie tokenem - klient musi wysłać:
 // {"op": "auth", "mac": "", "client": "", "dest": "", "rand": "", "t": 0, "level": "", "end": 0}
 // Przed subskrypcją/publikacją
 
-// W aplikacji Kotlin — dodanie tokenu autoryzacyjnego
+// W aplikacji Kotlin - dodanie tokenu autoryzacyjnego
 val authMessage = JSONObject().apply {
     put("op", "auth")
     put("secret", "my_secret_token")
@@ -234,7 +234,7 @@ Dla środowisk o podwyższonych wymaganiach bezpieczeństwa (szpitale, zakłady 
 
 - [ROS2 Documentation](https://docs.ros.org/en/humble/)
 - [rosbridge_suite](https://github.com/RobotWebTools/rosbridge_suite)
-- [Nav2 — Navigation Stack](https://nav2.ros.org/)
+- [Nav2 - Navigation Stack](https://nav2.ros.org/)
 
 ## Mapa 2D z pozycją robota
 
@@ -313,7 +313,7 @@ fun RobotMapView(
 }
 ```
 
-## Subskrypcja LaserScan — mapa lidar
+## Subskrypcja LaserScan - mapa lidar
 
 ```kotlin
 class LidarVisualizer(private val bridge: Ros2Bridge) {
@@ -349,7 +349,7 @@ class LidarVisualizer(private val bridge: Ros2Bridge) {
 ## Diagnostyka i logi ROS2
 
 ```kotlin
-// Subskrypcja /rosout — logi ze wszystkich węzłów
+// Subskrypcja /rosout - logi ze wszystkich węzłów
 bridge.subscribe("/rosout", "rcl_interfaces/Log") { msg ->
     val level = msg["level"].asInt
     val name = msg["name"].asString
@@ -402,13 +402,13 @@ fun RosLogView(logs: List<RosLog>) {
 
 - [Nav2 Simple Commander](https://nav2.ros.org/commander_api/index.html)
 - [ROS2 Messages](https://github.com/ros2/common_interfaces)
-- [Foxglove Studio — ROS2 visualization](https://foxglove.dev)
+- [Foxglove Studio - ROS2 visualization](https://foxglove.dev)
 
-## Bezpieczeństwo i autoryzacja — ROS2 Security
+## Bezpieczeństwo i autoryzacja - ROS2 Security
 
 ROS2 obsługuje DDS Security (standardem OMG), który zapewnia szyfrowanie, uwierzytelnianie i autoryzację komunikacji między węzłami. Dla połączeń mobilnych przez publiczną sieć WiFi jest to kluczowe.
 
-### SROS2 — konfiguracja bezpieczeństwa
+### SROS2 - konfiguracja bezpieczeństwa
 
 ```bash
 # Tworzenie kluczy i certyfikatów dla węzłów
@@ -457,10 +457,10 @@ class SecureRosBridge(
 
 ### Monitorowanie przepustowości i QoS
 
-ROS2 DDS umożliwia konfigurację Quality of Service (QoS) — ważne przy połączeniu WiFi z ograniczoną przepustowością:
+ROS2 DDS umożliwia konfigurację Quality of Service (QoS) - ważne przy połączeniu WiFi z ograniczoną przepustowością:
 
 ```kotlin
-// Polityka QoS przez rosbridge — ustawiana po stronie ROS2
+// Polityka QoS przez rosbridge - ustawiana po stronie ROS2
 // W aplikacji mobilnej możesz ograniczyć częstotliwość subskrypcji:
 fun subscribeWithThrottle(
     topic: String, 

@@ -1,8 +1,8 @@
 # Lokalizacja i mapy
 
-GPS i mapy to jedne z najczęściej używanych funkcji aplikacji mobilnych — od nawigacji po geofencing i śledzenie aktywności fizycznej. Android dostarcza Fused Location Provider, a Google Maps SDK i Mapbox umożliwiają bogatą wizualizację.
+GPS i mapy to jedne z najczęściej używanych funkcji aplikacji mobilnych - od nawigacji po geofencing i śledzenie aktywności fizycznej. Android dostarcza Fused Location Provider, a Google Maps SDK i Mapbox umożliwiają bogatą wizualizację.
 
-## Fused Location Provider — Android
+## Fused Location Provider - Android
 
 Fused Location Provider łączy GPS, Wi-Fi, sieć komórkową i czujniki ruchu, automatycznie wybierając najdokładniejsze i najoszczędniejsze źródło lokalizacji:
 
@@ -51,7 +51,7 @@ class LocationRepository(context: Context) {
 ## Strategie dokładności vs. bateria
 
 ```kotlin
-// Tryby lokalizacji — dobierz do potrzeb
+// Tryby lokalizacji - dobierz do potrzeb
 val priority = when (useCase) {
     UseCase.TURN_BY_TURN_NAVIGATION -> Priority.PRIORITY_HIGH_ACCURACY       // GPS, ~50mAh/h
     UseCase.ACTIVITY_TRACKING       -> Priority.PRIORITY_BALANCED_POWER_ACCURACY // Wi-Fi+Cell, ~10mAh/h
@@ -60,7 +60,7 @@ val priority = when (useCase) {
 }
 ```
 
-## Geofencing — strefy powiadomień
+## Geofencing - strefy powiadomień
 
 ```kotlin
 class GeofenceManager(context: Context) {
@@ -118,7 +118,7 @@ class GeofenceBroadcastReceiver : BroadcastReceiver() {
 }
 ```
 
-## Google Maps SDK — Compose
+## Google Maps SDK - Compose
 
 ```kotlin
 dependencies {
@@ -169,7 +169,7 @@ fun MapScreen(viewModel: MapViewModel) {
             )
         }
 
-        // Polilinia — trasa
+        // Polilinia - trasa
         Polyline(
             points = viewModel.routePoints,
             color = Color(0xFF1976D2),
@@ -179,7 +179,7 @@ fun MapScreen(viewModel: MapViewModel) {
             endCap = RoundCap()
         )
 
-        // Okrąg — geofence
+        // Okrąg - geofence
         userLocation?.let {
             Circle(
                 center = LatLng(it.latitude, it.longitude),
@@ -193,7 +193,7 @@ fun MapScreen(viewModel: MapViewModel) {
 }
 ```
 
-## Geocoding — adres ↔ współrzędne
+## Geocoding - adres ↔ współrzędne
 
 ```kotlin
 class GeocoderHelper(private val context: Context) {
@@ -237,10 +237,10 @@ class GeocoderHelper(private val context: Context) {
 }
 ```
 
-## Mapbox — alternatywa dla Google Maps
+## Mapbox - alternatywa dla Google Maps
 
 ```kotlin
-// Mapbox Maps SDK — lepsza personalizacja stylów, offline mapy
+// Mapbox Maps SDK - lepsza personalizacja stylów, offline mapy
 dependencies {
     implementation("com.mapbox.maps:android:11.6.0")
 }
@@ -279,9 +279,9 @@ MapboxMap(
 
 > **Ważne:** Od API 30 nie możesz prosić o `ACCESS_BACKGROUND_LOCATION` razem z pozostałymi uprawnieniami. Użytkownik musi sam przejść do ustawień i wybrać „Zawsze".
 
-## Mapy w aplikacjach iOS — MapKit
+## Mapy w aplikacjach iOS - MapKit
 
-Apple dostarcza własny framework mapowy — **MapKit** — dostępny zarówno w UIKit (przez `MKMapView`), jak i w SwiftUI (przez komponent `Map`). Nie wymaga kluczy API i działa w pełni offline w zakresie renderowania kafelków zapisanych w pamięci podręcznej.
+Apple dostarcza własny framework mapowy - **MapKit** - dostępny zarówno w UIKit (przez `MKMapView`), jak i w SwiftUI (przez komponent `Map`). Nie wymaga kluczy API i działa w pełni offline w zakresie renderowania kafelków zapisanych w pamięci podręcznej.
 
 ### MKMapView w UIKit
 
@@ -335,7 +335,7 @@ class PoiAnnotation: NSObject, MKAnnotation {
     }
 }
 
-// Delegate — customowy widok adnotacji
+// Delegate - customowy widok adnotacji
 extension MapViewController {
     func mapView(_ mapView: MKMapView,
                  viewFor annotation: MKAnnotation) -> MKAnnotationView? {
@@ -370,7 +370,7 @@ extension MapViewController {
 
 ### Mapa w SwiftUI (iOS 17+)
 
-Od iOS 17 API `Map` jest znacznie bogatsze — obsługuje markery, polilinie i nakładki bezpośrednio w deklaratywnym stylu:
+Od iOS 17 API `Map` jest znacznie bogatsze - obsługuje markery, polilinie i nakładki bezpośrednio w deklaratywnym stylu:
 
 ```swift
 import MapKit
@@ -410,7 +410,7 @@ struct ContentMapView: View {
 }
 ```
 
-### Uprawnienia lokalizacji — iOS
+### Uprawnienia lokalizacji - iOS
 
 W pliku `Info.plist` dodaj klucze opisujące powód dostępu do lokalizacji:
 
@@ -456,9 +456,9 @@ class LocationService: NSObject, CLLocationManagerDelegate {
 
 ## Geocoding i reverse geocoding
 
-Geocoding przekształca tekstowy adres na współrzędne geograficzne, a **reverse geocoding** robi odwrotnie — z pary (lat, lng) zwraca czytelny adres. Obie operacje wymagają połączenia z siecią, bo dane są pobierane z serwerów geokodowania.
+Geocoding przekształca tekstowy adres na współrzędne geograficzne, a **reverse geocoding** robi odwrotnie - z pary (lat, lng) zwraca czytelny adres. Obie operacje wymagają połączenia z siecią, bo dane są pobierane z serwerów geokodowania.
 
-### Geocoder w Android — pełny przykład
+### Geocoder w Android - pełny przykład
 
 Poniższy przykład opakowuje `Geocoder` w repozytorium zgodne z korutynami i obsługuje różnicę API (< 33 vs. ≥ 33):
 
@@ -581,7 +581,7 @@ class AddressViewModel: ObservableObject {
 
 ---
 
-## Geofencing — zaawansowana konfiguracja
+## Geofencing - zaawansowana konfiguracja
 
 Geofencing pozwala definiować wirtualne obszary geograficzne i reagować na wejście, wyjście lub przebywanie użytkownika w ich obrębie. System Android monitoruje geofence'y w tle, bez konieczności uruchomienia aplikacji.
 
@@ -681,7 +681,7 @@ class BootReceiver : BroadcastReceiver() {
 }
 ```
 
-### Geofencing na iOS — CLCircularRegion
+### Geofencing na iOS - CLCircularRegion
 
 Na iOS geofencing obsługuje `CLLocationManager` przez klasy `CLCircularRegion`. System może monitorować do 20 regionów jednocześnie:
 
@@ -714,7 +714,7 @@ class GeofenceService: NSObject, CLLocationManagerDelegate {
 
 ---
 
-## Geofencing w Compose — wizualizacja stref
+## Geofencing w Compose - wizualizacja stref
 
 Wyświetlenie geofence'ów jako okręgów na mapie Google Maps Compose jest naturalne dzięki komponentowi `Circle`. Poniższy przykład łączy ViewModel z danymi stref i interaktywną mapą:
 
@@ -790,7 +790,7 @@ fun GeofenceMapScreen(viewModel: GeofenceMapViewModel = hiltViewModel()) {
             Marker(
                 state = MarkerState(position = zone.center),
                 title = zone.name,
-                snippet = "Promień: ${zone.radiusMeters.toInt()} m — " +
+                snippet = "Promień: ${zone.radiusMeters.toInt()} m - " +
                           if (zone.isActive) "aktywna" else "nieaktywna",
                 icon = BitmapDescriptorFactory.defaultMarker(
                     if (zone.isActive) BitmapDescriptorFactory.HUE_GREEN
@@ -810,7 +810,7 @@ Turn-by-turn navigation prowadzi użytkownika przez trasę krok po kroku, podaj�
 
 ### Uruchomienie Google Maps jako zewnętrznej aplikacji
 
-Najprostsze rozwiązanie — przekazanie trasy do zainstalowanej aplikacji Google Maps przez `Intent`:
+Najprostsze rozwiązanie - przekazanie trasy do zainstalowanej aplikacji Google Maps przez `Intent`:
 
 ```kotlin
 fun openGoogleMapsNavigation(
@@ -827,7 +827,7 @@ fun openGoogleMapsNavigation(
     if (intent.resolveActivity(context.packageManager) != null) {
         context.startActivity(intent)
     } else {
-        // Fallback — otwórz w przeglądarce
+        // Fallback - otwórz w przeglądarce
         val webUri = Uri.parse(
             "https://www.google.com/maps/dir/?api=1" +
             "&destination=$destLat,$destLng" +
@@ -838,7 +838,7 @@ fun openGoogleMapsNavigation(
 }
 ```
 
-### Google Maps Directions API — obliczanie trasy
+### Google Maps Directions API - obliczanie trasy
 
 Aby wyświetlić trasę we własnym widoku mapy (bez przełączania do aplikacji), pobierz dane z **Directions API** i narysuj polilinię:
 
@@ -993,7 +993,7 @@ func openGoogleMapsNavigation(to coordinate: CLLocationCoordinate2D) {
 - [Maps Compose](https://github.com/googlemaps/android-maps-compose)
 - [Geofencing API](https://developer.android.com/develop/sensors-and-location/location/geofencing)
 - [Mapbox Android](https://docs.mapbox.com/android/maps/guides/)
-- [MapKit — Apple Developer](https://developer.apple.com/documentation/mapkit)
-- [CLGeocoder — Apple Developer](https://developer.apple.com/documentation/corelocation/clgeocoder)
+- [MapKit - Apple Developer](https://developer.apple.com/documentation/mapkit)
+- [CLGeocoder - Apple Developer](https://developer.apple.com/documentation/corelocation/clgeocoder)
 - [Google Maps Directions API](https://developers.google.com/maps/documentation/directions/overview)
-- [CLLocationManager — Geofencing iOS](https://developer.apple.com/documentation/corelocation/monitoring_the_user_s_proximity_to_geographic_regions)
+- [CLLocationManager - Geofencing iOS](https://developer.apple.com/documentation/corelocation/monitoring_the_user_s_proximity_to_geographic_regions)

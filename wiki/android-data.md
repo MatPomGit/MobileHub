@@ -23,11 +23,11 @@ Chmura / backend               → REST/GraphQL/Firebase itp.       → współd
 
 Nie istnieje jeden mechanizm dobry do wszystkiego. Kluczowa zasada brzmi: **najprostszy mechanizm, który spełnia wymagania, jest zwykle najlepszy**.
 
-## DataStore — nowoczesny następca SharedPreferences
+## DataStore - nowoczesny następca SharedPreferences
 
 DataStore jest rozwijany jako bezpieczniejsza i bardziej przewidywalna alternatywa dla `SharedPreferences`. Android Developers promuje dwa warianty:
-- **Preferences DataStore** — przechowuje pary klucz-wartość,
-- **Proto DataStore** — przechowuje dane typowane na podstawie schema Protocol Buffers. citeturn0search5
+- **Preferences DataStore** - przechowuje pary klucz-wartość,
+- **Proto DataStore** - przechowuje dane typowane na podstawie schema Protocol Buffers. citeturn0search5
 
 ### Kiedy używać DataStore
 
@@ -39,7 +39,7 @@ Używaj DataStore, gdy chcesz przechować:
 
 Nie używaj DataStore jako zamiennika pełnej bazy relacyjnej.
 
-### Preferences DataStore — przykład
+### Preferences DataStore - przykład
 
 Poniższy przykład pokazuje kompletne wdrożenie Preferences DataStore: definicję kluczy, model danych ustawień oraz klasę repozytorium. Repozytorium korzysta z reaktywnego `Flow` do udostępniania aktualnych ustawień i operacji `edit` do bezpiecznego, transakcyjnego ich modyfikowania.
 
@@ -99,7 +99,7 @@ class SettingsRepository(
 - łatwo testować repozytorium ustawień,
 - łatwiej uniknąć błędów współbieżności niż przy bezpośredniej pracy z `SharedPreferences`.
 
-## Proto DataStore — gdy potrzebujesz typów
+## Proto DataStore - gdy potrzebujesz typów
 
 Preferences DataStore przechowuje pary klucz-wartość. Gdy dane stają się bardziej złożone, lepszym wyborem może być Proto DataStore.
 
@@ -115,7 +115,7 @@ Proto DataStore sprawdza się np. wtedy, gdy zapisujesz konfigurację użytkowni
 
 `SharedPreferences` nadal istnieje i bywa spotykane w starszych projektach, ale w nowych materiałach dydaktycznych warto preferować DataStore. Android Developers wprost wskazuje DataStore jako nowocześniejszą alternatywę. citeturn0search5turn1search20
 
-## Dane wrażliwe — szyfrowanie i Android Keystore
+## Dane wrażliwe - szyfrowanie i Android Keystore
 
 W wielu materiałach dydaktycznych jako pierwsza odpowiedź pojawia się `EncryptedSharedPreferences`. To narzędzie nadal istnieje w bibliotece AndroidX Security, ale w praktyce ważniejsze od samej nazwy klasy jest rozumienie modelu bezpieczeństwa: sekretów nie należy przechowywać jawnie, a klucze kryptograficzne warto opierać o Android Keystore oraz oficjalne mechanizmy kryptograficzne platformy. citeturn1search8turn1search12
 
@@ -136,7 +136,7 @@ W wielu materiałach dydaktycznych jako pierwsza odpowiedź pojawia się `Encryp
 4. Ogranicz logowanie danych wrażliwych.
 5. Rozważ czas życia tokenu i mechanizm odświeżania.
 
-## Room — rekomendowana warstwa nad SQLite
+## Room - rekomendowana warstwa nad SQLite
 
 Room jest oficjalnie rekomendowaną biblioteką Jetpack do pracy z relacyjną bazą danych w Androidzie. Android Developers opisuje trzy główne elementy: klasę bazy, encje oraz DAO. Aktualna dokumentacja pokazuje nowsze wydania biblioteki niż starsze przykłady z kursów, np. linię 2.8.x. citeturn0search1turn0search9
 
@@ -370,11 +370,11 @@ Repozytorium może łączyć wiele źródeł danych:
 
 Android Developers rozróżnia kilka scenariuszy zapisu plików. Najważniejsze z perspektywy studenta są trzy:
 
-1. **Internal storage** — pliki prywatne aplikacji.
-2. **Cache directory** — dane tymczasowe, które system może usunąć.
-3. **Mechanizmy współdzielone** (`MediaStore`, Storage Access Framework) — gdy użytkownik ma mieć dostęp do plików poza aplikacją. citeturn0search17
+1. **Internal storage** - pliki prywatne aplikacji.
+2. **Cache directory** - dane tymczasowe, które system może usunąć.
+3. **Mechanizmy współdzielone** (`MediaStore`, Storage Access Framework) - gdy użytkownik ma mieć dostęp do plików poza aplikacją. citeturn0search17
 
-### Internal storage — przykład
+### Internal storage - przykład
 
 Poniższy przykład ilustruje zapis i odczyt pliku tekstowego w pamięci prywatnej aplikacji. Użycie `openFileOutput` z trybem `MODE_PRIVATE` zapewnia, że plik jest widoczny wyłącznie dla tej aplikacji i nie wymaga dodatkowych uprawnień systemowych.
 
@@ -499,7 +499,7 @@ fun `entity maps to domain`() {
 
 ## Ćwiczenia
 
-### Ćwiczenie 1 — ustawienia aplikacji
+### Ćwiczenie 1 - ustawienia aplikacji
 
 Zaimplementuj ekran ustawień z:
 - wyborem motywu,
@@ -511,7 +511,7 @@ Wymagania:
 - ekran po restarcie aplikacji ma odtwarzać stan,
 - `ViewModel` ma obserwować ustawienia jako `Flow`.
 
-### Ćwiczenie 2 — lokalna baza danych
+### Ćwiczenie 2 - lokalna baza danych
 
 Utwórz bazę Room dla aplikacji notatkowej. Każda notatka ma:
 - tytuł,
@@ -525,15 +525,15 @@ Dodaj:
 - sortowanie po dacie,
 - filtrowanie tylko ulubionych.
 
-### Ćwiczenie 3 — migracja
+### Ćwiczenie 3 - migracja
 
 Dodaj do encji nowe pole `category`. Przygotuj migrację bazy z wersji 1 do 2 bez utraty danych. Następnie napisz test migracji.
 
-### Ćwiczenie 4 — pliki
+### Ćwiczenie 4 - pliki
 
 Zaimplementuj eksport listy zadań do pliku tekstowego lub CSV. Zapisz plik w pamięci prywatnej aplikacji i dodaj funkcję odczytu.
 
-### Ćwiczenie 5 — bezpieczeństwo
+### Ćwiczenie 5 - bezpieczeństwo
 
 Przeanalizuj, które dane w aplikacji To-Do są wrażliwe, a które nie. Zaproponuj architekturę przechowywania tokenu, ustawień i lokalnej bazy z uwzględnieniem bezpieczeństwa.
 

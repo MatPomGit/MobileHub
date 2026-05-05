@@ -4,7 +4,7 @@ Computational cognition (kognicja obliczeniowa) to dziedzina nauki badająca pro
 
 ## Czym jest kognicja obliczeniowa?
 
-Kognicja obliczeniowa opiera się na założeniu, że procesy myślowe można opisać jako obliczenia wykonywane na reprezentacjach umysłowych — podobnie jak komputer przetwarza dane zgodnie z algorytmem.
+Kognicja obliczeniowa opiera się na założeniu, że procesy myślowe można opisać jako obliczenia wykonywane na reprezentacjach umysłowych - podobnie jak komputer przetwarza dane zgodnie z algorytmem.
 
 Kluczowe pytania badawcze:
 - Jakie **reprezentacje** przechowuje umysł? (obrazy, koncepty, schematy, wektory cech)
@@ -54,7 +54,7 @@ class BayesianWordRecognizer:
         """
         posteriors = {}
         for word in self.vocabulary:
-            # P(sygnał | słowo) — model akustyczny
+            # P(sygnał | słowo) - model akustyczny
             expected = self.acoustic_model[word]
             likelihood = norm.pdf(
                 acoustic_features, loc=expected, scale=noise_level
@@ -100,7 +100,7 @@ def bayesian_concept_learning(examples, hypothesis_space):
 
 ## Modele sieci neuronowych
 
-### Sieć Hopfielda — model pamięci asocjatywnej
+### Sieć Hopfielda - model pamięci asocjatywnej
 
 Sieć Hopfielda modeluje pamięć jako atraktor dynamiki sieci neuronów:
 
@@ -213,9 +213,9 @@ class ACTRMemoryChunk:
         return 1.0 / (1.0 + math.exp(-(activation - threshold)))
 ```
 
-Szczegółowy opis ACT-R: [ACT-R — Adaptive Control of Thought Rational](#wiki-actr-architecture)
+Szczegółowy opis ACT-R: [ACT-R - Adaptive Control of Thought Rational](#wiki-actr-architecture)
 
-### Model MINERVA 2 — pamięć epizodyczna
+### Model MINERVA 2 - pamięć epizodyczna
 
 Rozpoznawanie wzorców przez sumowanie podobieństwa:
 
@@ -250,7 +250,7 @@ def minerva2_echo(probe, memory_traces, learning_rate=0.7):
 
 ### Teoria perspektywy (Kahneman & Tversky)
 
-Ludzie nie są racjonalnymi aktorami — ich decyzje naruszają teorię oczekiwanej użyteczności:
+Ludzie nie są racjonalnymi aktorami - ich decyzje naruszają teorię oczekiwanej użyteczności:
 
 ```python
 def prospect_theory_value(x, alpha=0.88, beta=0.88, lambda_loss=2.25):
@@ -265,7 +265,7 @@ def prospect_theory_value(x, alpha=0.88, beta=0.88, lambda_loss=2.25):
     else:
         return -lambda_loss * ((-x) ** beta)
 
-# Ważenie prawdopodobieństwa — ludzie przeceniają małe, niedoceniają duże
+# Ważenie prawdopodobieństwa - ludzie przeceniają małe, niedoceniają duże
 def prospect_theory_weight(p, gamma=0.65):
     """Funkcja ważenia prawdopodobieństwa."""
     return p ** gamma / (p ** gamma + (1 - p) ** gamma) ** (1 / gamma)
@@ -286,7 +286,7 @@ Szum: ───┼────────────────────�
          ↓ -a (granica NIE)
 ```
 
-Symulacja DDM pozwala generować syntetyczne dane czasu reakcji i dokładności decyzji, które można porównywać z wynikami eksperymentalnymi. Parametr `drift_rate` odpowiada jakości dowodu sensorycznego, `boundary` — ostrożności decydenta, a szum modeluje wewnętrzną zmienność układu nerwowego. Model ten jest szeroko stosowany do dopasowywania danych psychologicznych z zadań binarnych (np. rozpoznawanie słów, detekcja sygnałów).
+Symulacja DDM pozwala generować syntetyczne dane czasu reakcji i dokładności decyzji, które można porównywać z wynikami eksperymentalnymi. Parametr `drift_rate` odpowiada jakości dowodu sensorycznego, `boundary` - ostrożności decydenta, a szum modeluje wewnętrzną zmienność układu nerwowego. Model ten jest szeroko stosowany do dopasowywania danych psychologicznych z zadań binarnych (np. rozpoznawanie słów, detekcja sygnałów).
 
 ```python
 def simulate_ddm(drift_rate=0.5, boundary=1.0, noise=1.0, dt=0.001):
@@ -334,10 +334,10 @@ import time
 
 def measure_cognitive_load(model, word_pair, prime=None):
     """
-    Mierz czas odpowiedzi modelu na pary słów — analogia do RT w psychologii.
+    Mierz czas odpowiedzi modelu na pary słów - analogia do RT w psychologii.
     """
     if prime:
-        # Priming — poprzedni kontekst wpływa na odpowiedź
+        # Priming - poprzedni kontekst wpływa na odpowiedź
         prompt = f"Słowo: {prime}. Czy '{word_pair[0]}' i '{word_pair[1]}' są powiązane? Odpowiedz tak/nie."
     else:
         prompt = f"Czy '{word_pair[0]}' i '{word_pair[1]}' są powiązane? Odpowiedz tak/nie."
@@ -371,7 +371,7 @@ Systemy predykcji tekstu i gestów (jak SwipeType, QuickType) korzystają z mode
 - [Modele kognitywne](#wiki-cognitive-models)
 - [Modelowanie kognitywne ludzkiej percepcji](#wiki-cognitive-perception)
 - [ACT-R](#wiki-actr-architecture)
-- [Soar — architektura kognitywna](#wiki-soar-architecture)
+- [Soar - architektura kognitywna](#wiki-soar-architecture)
 - [CLARION](#wiki-clarion-architecture)
 - [LIDA](#wiki-lida-architecture)
 - [Reprezentacja wiedzy i wnioskowanie](#wiki-knowledge-representation)
@@ -381,6 +381,6 @@ Systemy predykcji tekstu i gestów (jak SwipeType, QuickType) korzystają z mode
 
 - [Cognitive Science Society](https://cognitivesciencesociety.org/)
 - [Journal of Mathematical Psychology](https://www.journals.elsevier.com/journal-of-mathematical-psychology)
-- [pymc — probabilistyczne programowanie w Pythonie](https://www.pymc.io/)
+- [pymc - probabilistyczne programowanie w Pythonie](https://www.pymc.io/)
 - [ACT-R Project (CMU)](http://act-r.psy.cmu.edu/)
 - [Computational Cognitive Neuroscience (Randall O'Reilly)](https://compcogneuro.org/)

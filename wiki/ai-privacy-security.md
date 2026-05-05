@@ -2,7 +2,7 @@
 
 ## Streszczenie
 
-Lokalna AI na urządzeniach mobilnych oferuje fundamentalną przewagę nad AI chmurową: dane użytkownika nie opuszczają urządzenia. Artykuł omawia techniczne i prawne aspekty prywatności oraz bezpieczeństwa w aplikacjach z lokalną AI — od ochrony modeli i bezpiecznych enklawach sprzętowych, przez federacyjne uczenie maszynowe, aż po zagrożenia adversarialne i wymogi RODO.
+Lokalna AI na urządzeniach mobilnych oferuje fundamentalną przewagę nad AI chmurową: dane użytkownika nie opuszczają urządzenia. Artykuł omawia techniczne i prawne aspekty prywatności oraz bezpieczeństwa w aplikacjach z lokalną AI - od ochrony modeli i bezpiecznych enklawach sprzętowych, przez federacyjne uczenie maszynowe, aż po zagrożenia adversarialne i wymogi RODO.
 
 **Słowa kluczowe:** prywatność AI, bezpieczeństwo modeli, Federated Learning, Differential Privacy, adversarial attacks, RODO, Secure Enclave, on-device AI
 
@@ -25,7 +25,7 @@ Tradycyjne modele AI w chmurze wymagają przesyłania surowych danych (zdjęcia,
 
 Pliki modeli (`.tflite`, `.mlpackage`, `.onnx`) zawierają cenne zasoby intelektualne. Bez ochrony mogą zostać skopiowane z APK/IPA i użyte przez konkurencję.
 
-**Android — szyfrowanie modelu kluczem z Android Keystore:**
+**Android - szyfrowanie modelu kluczem z Android Keystore:**
 
 ```kotlin
 // Generowanie klucza AES w Android Keystore (nie opuszcza bezpiecznej enklawy)
@@ -58,7 +58,7 @@ fun verifyModelIntegrity(modelBytes: ByteArray, expectedHash: String): Boolean {
 }
 ```
 
-**iOS — model w `.mlpackage` z szyfrowaniem:**
+**iOS - model w `.mlpackage` z szyfrowaniem:**
 
 ```swift
 // Core ML obsługuje szyfrowanie modelu natywnie przez MLModelConfiguration
@@ -220,10 +220,10 @@ adversarial = fgsm_attack(input_image, epsilon=0.01, gradient=gradient)
 
 ### 6.2. Obrona przed atakami
 
-- **Adversarial training** — dodawanie adversarial examples do danych treningowych
-- **Input preprocessing** — wymazywanie szumu (JPEG compression, feature squeezing)
-- **Wykrywanie anomalii** — monitorowanie rozkładu wejść w czasie rzeczywistym
-- **Certyfikowana obrona** — randomized smoothing z gwarancją matematyczną
+- **Adversarial training** - dodawanie adversarial examples do danych treningowych
+- **Input preprocessing** - wymazywanie szumu (JPEG compression, feature squeezing)
+- **Wykrywanie anomalii** - monitorowanie rozkładu wejść w czasie rzeczywistym
+- **Certyfikowana obrona** - randomized smoothing z gwarancją matematyczną
 
 ## 7. Wymogi prawne: RODO i AI Act
 
@@ -251,7 +251,7 @@ AI Act klasyfikuje systemy AI według ryzyka:
 Narzędzia do analizy bias i sprawiedliwości modelu:
 
 ```python
-# Fairlearn — analiza bias modelu
+# Fairlearn - analiza bias modelu
 from fairlearn.metrics import MetricFrame, selection_rate
 
 metric_frame = MetricFrame(
@@ -273,8 +273,8 @@ print("Disparate impact:", metric_frame.difference(method='between_groups'))
 - Zakaz zbierania danych biometrycznych bez wyraźnej zgody
 
 **Apple App Store:**
-- *Privacy Nutrition Labels* — obowiązkowe dla wszystkich kategorii danych
-- *App Tracking Transparency* (ATT) — wymagana zgoda dla śledzenia cross-app
+- *Privacy Nutrition Labels* - obowiązkowe dla wszystkich kategorii danych
+- *App Tracking Transparency* (ATT) - wymagana zgoda dla śledzenia cross-app
 - Face ID / Touch ID API (LocalAuthentication) nie ujawnia danych biometrycznych aplikacji
 
 ## 10. Podsumowanie
@@ -294,4 +294,4 @@ Lokalna AI jest naturalnym sojusznikiem prywatności użytkowników, ale wymaga 
 - [Prawne aspekty AI na urządzeniach mobilnych](#ai-legal-aspects)
 - [Sieci neuronowe na urządzeniu mobilnym](#neural-networks-mobile)
 - [Biometria i uwierzytelnianie](#biometrics)
-- [Wnioskowanie lokalne — architektura i wydajność](#on-device-inference)
+- [Wnioskowanie lokalne - architektura i wydajność](#on-device-inference)

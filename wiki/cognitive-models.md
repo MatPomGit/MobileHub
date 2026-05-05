@@ -22,9 +22,9 @@ Modelowanie kognitywne jest wysiłkiem zrozumienia i formalizacji mechanizmów u
 
 Dobry model kognitywny powinien spełniać kryteria (Anderson, 2007):
 1. Zgodność z danymi empirycznymi (czas reakcji, wskaźniki błędów, dane fMRI)
-2. Przewidywalność — generuje nowe, sprawdzalne hipotezy
-3. Parsimonia — wyjaśnia dużo małą liczbą mechanizmów
-4. Operacjonalizacja — jest implementowalny jako program komputerowy
+2. Przewidywalność - generuje nowe, sprawdzalne hipotezy
+3. Parsimonia - wyjaśnia dużo małą liczbą mechanizmów
+4. Operacjonalizacja - jest implementowalny jako program komputerowy
 
 ---
 
@@ -129,10 +129,10 @@ Podejście dynamiczno-systemowe modeluje poznanie jako ewolucję układów róż
 
 Pamięć robocza (Baddeley & Hitch, 1974) to tymczasowy magazyn informacji służący do przetwarzania i manipulacji. Model Baddeleya wyróżnia:
 
-- **Centralny executor** (*central executive*) — kontrola uwagi
-- **Pętla fonologiczna** (*phonological loop*) — informacje werbalne/dźwiękowe
-- **Szkicownik wzrokowo-przestrzenny** (*visuospatial sketchpad*) — obrazy i przestrzeń
-- **Bufor epizodyczny** (*episodic buffer*) — integracja modalna
+- **Centralny executor** (*central executive*) - kontrola uwagi
+- **Pętla fonologiczna** (*phonological loop*) - informacje werbalne/dźwiękowe
+- **Szkicownik wzrokowo-przestrzenny** (*visuospatial sketchpad*) - obrazy i przestrzeń
+- **Bufor epizodyczny** (*episodic buffer*) - integracja modalna
 
 #### Prawo Millera (7 ± 2)
 
@@ -207,10 +207,10 @@ T = a + b × log₂(1 + D/W)
 ```
 
 gdzie:
-- **T** — czas ruchu
-- **D** — odległość do celu
-- **W** — szerokość celu
-- **a, b** — parametry empiryczne (zależne od urządzenia)
+- **T** - czas ruchu
+- **D** - odległość do celu
+- **W** - szerokość celu
+- **a, b** - parametry empiryczne (zależne od urządzenia)
 
 ```python
 import math
@@ -264,14 +264,14 @@ Czas wykonania zadania spada potęgowo wraz z liczbą ćwiczeń. α ≈ 0.2–0.
 
 ## 5. Model GOMS
 
-GOMS (*Goals, Operators, Methods, Selection rules*) — Card, Moran & Newell (1983) — to rodzina technik modelowania poznawczego dla HCI.
+GOMS (*Goals, Operators, Methods, Selection rules*) - Card, Moran & Newell (1983) - to rodzina technik modelowania poznawczego dla HCI.
 
 ### 5.1. Składniki GOMS
 
-- **Goals** — hierarchia celów: cel główny → podcele
-- **Operators** — elementarne akcje (naciśnięcie klawisza, ruch myszki, percepcja)
-- **Methods** — procedury osiągania celów
-- **Selection rules** — reguły wyboru między alternatywnymi metodami
+- **Goals** - hierarchia celów: cel główny → podcele
+- **Operators** - elementarne akcje (naciśnięcie klawisza, ruch myszki, percepcja)
+- **Methods** - procedury osiągania celów
+- **Selection rules** - reguły wyboru między alternatywnymi metodami
 
 ### 5.2. KLM (*Keystroke-Level Model*)
 
@@ -349,7 +349,7 @@ ACT-R (Anderson, 1993–2023) modeluje poznanie przez moduły (percepcja, pamię
 
 ### 6.3. Soar w pigułce
 
-Soar (Laird, 2012) oparty jest na architekturze **Unified Memory** i mechanizmie **impasse resolution** — gdy Soar nie może kontynuować działania, tworzy podprzestrzeń problemu.
+Soar (Laird, 2012) oparty jest na architekturze **Unified Memory** i mechanizmie **impasse resolution** - gdy Soar nie może kontynuować działania, tworzy podprzestrzeń problemu.
 
 ```
 Stan roboczy (Working Memory)

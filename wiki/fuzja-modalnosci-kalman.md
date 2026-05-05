@@ -14,9 +14,9 @@ Dlatego praktyczne śledzenie obiektów jest problemem **fuzji informacji** i **
 
 Trzy narzędzia, które dobrze się uzupełniają:
 
-1. **Filtr Kalmana** — szybka, rekursywna estymacja stanu.
-2. **Procesy gaussowskie (GP)** — modelowanie złożonych, nieliniowych i heteroscedastycznych błędów/szumów.
-3. **SYAC (Soft Yaw Axis Correction)** — praktyczna korekcja dryftu osi yaw (kursu) z miękkim ograniczaniem i kontrolą zaufania do korekty.
+1. **Filtr Kalmana** - szybka, rekursywna estymacja stanu.
+2. **Procesy gaussowskie (GP)** - modelowanie złożonych, nieliniowych i heteroscedastycznych błędów/szumów.
+3. **SYAC (Soft Yaw Axis Correction)** - praktyczna korekcja dryftu osi yaw (kursu) z miękkim ograniczaniem i kontrolą zaufania do korekty.
 
 W tym artykule pokazuję, jak połączyć te trzy elementy w spójny pipeline produkcyjny.
 
@@ -32,10 +32,10 @@ $$
 
 Gdzie:
 
-- \((x,y,z)\) — pozycja,
-- \((v_x,v_y,v_z)\) — prędkość,
-- \(\psi\) — yaw (azymut/kurs),
-- \(\dot\psi\) — yaw rate.
+- \((x,y,z)\) - pozycja,
+- \((v_x,v_y,v_z)\) - prędkość,
+- \(\psi\) - yaw (azymut/kurs),
+- \(\dot\psi\) - yaw rate.
 
 Model procesu:
 
@@ -221,8 +221,8 @@ $$
 
 Gdzie:
 
-- \(0 \leq \alpha_k \leq 1\) — waga zaufania,
-- \(s(\cdot)\) — funkcja „soft”, np. saturacja \(\tanh\) albo clipped linear.
+- \(0 \leq \alpha_k \leq 1\) - waga zaufania,
+- \(s(\cdot)\) - funkcja „soft”, np. saturacja \(\tanh\) albo clipped linear.
 
 Przykład:
 $$
@@ -271,7 +271,7 @@ Wersja rozszerzona: \(\alpha_k\) i \(\psi_{scale}\) przewidywane przez GP na pod
 
 ---
 
-## 8. Praktyczna implementacja SYAC — pseudo-kod
+## 8. Praktyczna implementacja SYAC - pseudo-kod
 
 ```python
 def syac_update(yaw_pred, yaw_ref, quality, dyn_score, consistency,
@@ -368,4 +368,4 @@ W praktyce kluczowe nie jest „najbardziej złożone równanie”, lecz:
 - kontrola stabilności korekcji kątowej,
 - rygorystyczna walidacja statystyczna.
 
-To podejście zwykle poprawia jednocześnie: dokładność, odporność na warunki brzegowe i płynność trajektorii — czyli dokładnie to, czego potrzebują systemy działające w świecie rzeczywistym.
+To podejście zwykle poprawia jednocześnie: dokładność, odporność na warunki brzegowe i płynność trajektorii - czyli dokładnie to, czego potrzebują systemy działające w świecie rzeczywistym.

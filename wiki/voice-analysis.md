@@ -1,38 +1,38 @@
 # Analiza głosu i mowy
 
-Głos człowieka niesie informacje na dwóch poziomach — **semantycznym** (co zostało powiedziane) i **paralinguistycznym** (jak zostało powiedziane: ton, tempo, energia). Ten drugi poziom odzwierciedla stan emocjonalny mówcy i stanowi podstawę dla systemów Speech Emotion Recognition (SER).
+Głos człowieka niesie informacje na dwóch poziomach - **semantycznym** (co zostało powiedziane) i **paralinguistycznym** (jak zostało powiedziane: ton, tempo, energia). Ten drugi poziom odzwierciedla stan emocjonalny mówcy i stanowi podstawę dla systemów Speech Emotion Recognition (SER).
 
-## Cechy akustyczne głosu — przegląd
+## Cechy akustyczne głosu - przegląd
 
 | Cecha | Symbol | Opis | Interpretacja |
 |-------|--------|------|---------------|
 | **Podstawowa częstotliwość** | F0 / Pitch | Częstotliwość drgań fałd głosowych | Wysoka = wzbudzenie / pytanie |
 | **Głośność (RMS Energy)** | E | Amplituda sygnału dźwiękowego | Wysoka = złość / radość |
 | **Tempo mowy** | SR | Liczba sylab lub słów na minutę | Szybkie = lęk / podniecenie |
-| **Jitter** | — | Nieregularność cyklu F0 | Wysoki = smutek / stres |
-| **Shimmer** | — | Nieregularność amplitudy | Wysoki = smutek / znużenie |
-| **HNR** | — | Harmonic-to-Noise Ratio | Niski = chrypka, zmęczenie |
-| **MFCC** | — | Mel-frequency cepstral coefficients | Spektralna barwa głosu |
-| **ZCR** | — | Zero Crossing Rate | Szum vs. tonal |
+| **Jitter** | - | Nieregularność cyklu F0 | Wysoki = smutek / stres |
+| **Shimmer** | - | Nieregularność amplitudy | Wysoki = smutek / znużenie |
+| **HNR** | - | Harmonic-to-Noise Ratio | Niski = chrypka, zmęczenie |
+| **MFCC** | - | Mel-frequency cepstral coefficients | Spektralna barwa głosu |
+| **ZCR** | - | Zero Crossing Rate | Szum vs. tonal |
 
 ## Ekstrakcja cech MFCC na Androidzie
 
-MFCC (Mel-Frequency Cepstral Coefficients) to najważniejsze cechy do klasyfikacji mowy. Opierają się na skali Mel — nieliniowej skali częstotliwości naśladującej percepcję ludzkiego ucha.
+MFCC (Mel-Frequency Cepstral Coefficients) to najważniejsze cechy do klasyfikacji mowy. Opierają się na skali Mel - nieliniowej skali częstotliwości naśladującej percepcję ludzkiego ucha.
 
 ```kotlin
 class MfccExtractor(private val sampleRate: Int = 16000) {
     private val frameSize = 512          // ~32ms przy 16kHz
-    private val hopSize = 256            // ~16ms — 50% overlap
+    private val hopSize = 256            // ~16ms - 50% overlap
     private val numMelFilters = 26       // standardowo 26 lub 40
     private val numMfcc = 13             // 13 współczynników MFCC
 
-    // Okno Hanna — redukuje efekt Gibbsa na krawędziach ramki
+    // Okno Hanna - redukuje efekt Gibbsa na krawędziach ramki
     private fun hannWindow(size: Int): FloatArray =
         FloatArray(size) { n ->
             (0.5f - 0.5f * kotlin.math.cos(2 * Math.PI * n / (size - 1))).toFloat()
         }
 
-    // Pre-emphasis filter — wzmacnia wysokie częstotliwości (+6dB/oktawa)
+    // Pre-emphasis filter - wzmacnia wysokie częstotliwości (+6dB/oktawa)
     private fun preEmphasis(signal: FloatArray, coeff: Float = 0.97f): FloatArray {
         val result = signal.copyOf()
         for (i in signal.size - 1 downTo 1) {
@@ -41,13 +41,13 @@ class MfccExtractor(private val sampleRate: Int = 16000) {
         return result
     }
 
-    // Energia RMS ramki — podstawowa miara głośności
+    // Energia RMS ramki - podstawowa miara głośności
     fun rmsEnergy(frame: FloatArray): Float {
         val sumSq = frame.sumOf { (it * it).toDouble() }.toFloat()
         return kotlin.math.sqrt(sumSq / frame.size)
     }
 
-    // Zero Crossing Rate — ile razy sygnał przecina oś zerową
+    // Zero Crossing Rate - ile razy sygnał przecina oś zerową
     fun zeroCrossingRate(frame: FloatArray): Float {
         var crossings = 0
         for (i in 1 until frame.size) {
@@ -154,13 +154,13 @@ class SpeechEmotionClassifier(context: Context) {
 }
 ```
 
-## Ekstrakcja pitch (F0) — algorytm YIN
+## Ekstrakcja pitch (F0) - algorytm YIN
 
 ```kotlin
-// Algorytm YIN — dobry stosunek dokładności do złożoności obliczeniowej
+// Algorytm YIN - dobry stosunek dokładności do złożoności obliczeniowej
 class PitchDetector(private val sampleRate: Int = 16000) {
-    private val minFreq = 80f    // Hz — dolna granica głosu ludzkiego
-    private val maxFreq = 400f   // Hz — górna granica
+    private val minFreq = 80f    // Hz - dolna granica głosu ludzkiego
+    private val maxFreq = 400f   // Hz - górna granica
 
     private val minPeriod = (sampleRate / maxFreq).toInt()
     private val maxPeriod = (sampleRate / minFreq).toInt()
@@ -242,7 +242,7 @@ class EmotionSmoother(private val windowSize: Int = 15) {
 }
 ```
 
-## Pipeline — pełny system SER
+## Pipeline - pełny system SER
 
 ```
 Mikrofon → Pre-emphasis → Okienkowanie (Hann) → FFT
@@ -263,14 +263,14 @@ Mikrofon → Pre-emphasis → Okienkowanie (Hann) → FFT
 
 ## Linki
 
-- [librosa — Python audio analysis](https://librosa.org/doc/latest/index.html)
-- [openSMILE — speech feature toolkit](https://audeering.github.io/opensmile/)
+- [librosa - Python audio analysis](https://librosa.org/doc/latest/index.html)
+- [openSMILE - speech feature toolkit](https://audeering.github.io/opensmile/)
 - [RAVDESS dataset](https://zenodo.org/record/1188976)
 - [SpeechBrain](https://speechbrain.github.io/)
 
 ## Detekcja aktywności głosowej (VAD)
 
-Detekcja aktywności głosowej (VAD, *Voice Activity Detection*) to etap wstępny, który oddziela fragmenty zawierające mowę od ciszy i szumów tła. Uruchamianie kosztownych modeli STT lub klasyfikacji emocji na fragmentach bez mowy jest stratą zasobów obliczeniowych i może powodować fałszywe wyniki — dlatego VAD jest standardowym pierwszym krokiem w każdym pipeline'ie analizy głosu.
+Detekcja aktywności głosowej (VAD, *Voice Activity Detection*) to etap wstępny, który oddziela fragmenty zawierające mowę od ciszy i szumów tła. Uruchamianie kosztownych modeli STT lub klasyfikacji emocji na fragmentach bez mowy jest stratą zasobów obliczeniowych i może powodować fałszywe wyniki - dlatego VAD jest standardowym pierwszym krokiem w każdym pipeline'ie analizy głosu.
 
 ### Proste VAD oparte na energii
 
@@ -287,7 +287,7 @@ class EnergyVAD(
         val rms = kotlin.math.sqrt(frame.sumOf { (it * it).toDouble() } / frame.size).toFloat()
         return when {
             rms > threshold -> { hangover = hangoverFrames; true }
-            hangover > 0    -> { hangover--; true }  // wygaszanie — nie ucinaj końcówek
+            hangover > 0    -> { hangover--; true }  // wygaszanie - nie ucinaj końcówek
             else            -> false
         }
     }
@@ -301,7 +301,7 @@ class EnergyVAD(
 
 Prosta metoda energetyczna zawodzi w hałaśliwym otoczeniu. Dwa lepsze podejścia to:
 
-**WebRTC VAD** — algorytm oparty na GMM (Gaussian Mixture Models), dostępny przez binding JNI lub wrapper:
+**WebRTC VAD** - algorytm oparty na GMM (Gaussian Mixture Models), dostępny przez binding JNI lub wrapper:
 
 ```kotlin
 // Używa biblioteki webrtc-vad (dostępna jako AAR lub via JNI)
@@ -313,7 +313,7 @@ val result = vad.process(sampleRate = 16000, audioFrame = pcm16bitFrame)
 // Zwraca: IS_SPEECH, NOT_SPEECH, lub ERROR
 ```
 
-**Silero VAD** — model TFLite (~1 MB) osiągający state-of-the-art przy niskim koszcie obliczeniowym:
+**Silero VAD** - model TFLite (~1 MB) osiągający state-of-the-art przy niskim koszcie obliczeniowym:
 
 ```kotlin
 class SileroVAD(context: Context) {
@@ -333,24 +333,24 @@ class SileroVAD(context: Context) {
 
 ### Dlaczego VAD jest kluczowe?
 
-- **STT**: transkrypcja ciszy produkuje losowe słowa lub puste wyniki — VAD eliminuje te fragmenty
+- **STT**: transkrypcja ciszy produkuje losowe słowa lub puste wyniki - VAD eliminuje te fragmenty
 - **SER**: model emocji trenowany na mowie daje bezużyteczne predykcje na szumie
 - **Zużycie energii**: wyłączenie pipeline'u podczas ciszy oszczędza baterię
 - **Latencja**: model działa tylko wtedy, gdy jest co przetwarzać
 
 ---
 
-## Identyfikacja mówcy — Speaker Identification
+## Identyfikacja mówcy - Speaker Identification
 
 Identyfikacja mówcy (*Speaker Identification*) odpowiada na pytanie: **kto mówi?** Jest to zagadnienie pokrewne, ale różne od rozpoznawania mowy (co mówi) i weryfikacji mówcy (czy to ta konkretna osoba).
 
 - **Identyfikacja** (*closed-set*): przypisz nagranie do jednego z N znanych mówców
 - **Weryfikacja** (*speaker verification*): potwierdź, czy nagranie pochodzi od konkretnej osoby
-- **Diaryzacja** (*speaker diarization*): segmentuj nagranie według mówców — „kto mówił kiedy?"
+- **Diaryzacja** (*speaker diarization*): segmentuj nagranie według mówców - „kto mówił kiedy?"
 
 ### Wektory cech mówcy: d-vector i x-vector
 
-Nowoczesne systemy identyfikacji mówcy używają głębokich sieci neuronowych do ekstrakcji **embeddingów mówcy** — wektorów stałej długości opisujących charakterystykę głosu niezależnie od treści. Dwa popularyczne podejścia:
+Nowoczesne systemy identyfikacji mówcy używają głębokich sieci neuronowych do ekstrakcji **embeddingów mówcy** - wektorów stałej długości opisujących charakterystykę głosu niezależnie od treści. Dwa popularyczne podejścia:
 
 | Metoda | Architektura | Rozmiar wektora | Użycie na mobile |
 |--------|-------------|-----------------|-----------------|
@@ -391,7 +391,7 @@ class SpeakerEmbeddingExtractor(context: Context) {
     }
 }
 
-// Podobieństwo kosinusowe — wartość 1.0 = identyczny mówca
+// Podobieństwo kosinusowe - wartość 1.0 = identyczny mówca
 fun cosineSimilarity(a: FloatArray, b: FloatArray): Float {
     val dot = a.indices.sumOf { (a[it] * b[it]).toDouble() }.toFloat()
     return dot  // wektory są już znormalizowane L2
@@ -404,7 +404,7 @@ fun cosineSimilarity(a: FloatArray, b: FloatArray): Float {
 
 ### Praktyczne zastosowania na urządzeniu
 
-- **Personalizacja asystenta głosowego** — różne profile dla różnych użytkowników
-- **Bezpieczeństwo** — weryfikacja tożsamości przez głos (2FA)
-- **Diaryzacja w nagraniach spotkań** — kto i kiedy zabierał głos
-- **Filtrowanie mówców** — ignorowanie głosu z TV w tle, rozpoznaj tylko właściciela urządzenia
+- **Personalizacja asystenta głosowego** - różne profile dla różnych użytkowników
+- **Bezpieczeństwo** - weryfikacja tożsamości przez głos (2FA)
+- **Diaryzacja w nagraniach spotkań** - kto i kiedy zabierał głos
+- **Filtrowanie mówców** - ignorowanie głosu z TV w tle, rozpoznaj tylko właściciela urządzenia

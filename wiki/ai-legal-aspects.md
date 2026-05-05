@@ -1,12 +1,12 @@
-# Prawne aspekty AI na urządzeniach mobilnych — RODO i AI Act
+# Prawne aspekty AI na urządzeniach mobilnych - RODO i AI Act
 
-Rosnące możliwości sztucznej inteligencji na urządzeniach mobilnych stawiają przed twórcami aplikacji nowe wyzwania prawne. Dwa kluczowe akty prawne Unii Europejskiej kształtują dziś ramy tego obszaru: **RODO** (Rozporządzenie o Ochronie Danych Osobowych, ang. GDPR) oraz **AI Act** — pierwsze na świecie kompleksowe prawo regulujące systemy sztucznej inteligencji. Znajomość obu regulacji jest niezbędna dla każdego dewelopera tworzącego aplikacje mobilne z elementami AI.
+Rosnące możliwości sztucznej inteligencji na urządzeniach mobilnych stawiają przed twórcami aplikacji nowe wyzwania prawne. Dwa kluczowe akty prawne Unii Europejskiej kształtują dziś ramy tego obszaru: **RODO** (Rozporządzenie o Ochronie Danych Osobowych, ang. GDPR) oraz **AI Act** - pierwsze na świecie kompleksowe prawo regulujące systemy sztucznej inteligencji. Znajomość obu regulacji jest niezbędna dla każdego dewelopera tworzącego aplikacje mobilne z elementami AI.
 
 ## RODO / GDPR a sztuczna inteligencja na urządzeniach mobilnych
 
 ### Podstawy prawne przetwarzania danych przez AI
 
-RODO (Rozporządzenie (UE) 2016/679) obowiązuje od 25 maja 2018 r. i dotyczy każdego przetwarzania danych osobowych obywateli UE — niezależnie od tego, czy odbywa się w chmurze, czy lokalnie na urządzeniu mobilnym. Modele AI pracujące na danych użytkownika (np. rozpoznawanie twarzy, analiza głosu, klasyfikacja aktywności) **zawsze** wymagają podstawy prawnej z art. 6 RODO.
+RODO (Rozporządzenie (UE) 2016/679) obowiązuje od 25 maja 2018 r. i dotyczy każdego przetwarzania danych osobowych obywateli UE - niezależnie od tego, czy odbywa się w chmurze, czy lokalnie na urządzeniu mobilnym. Modele AI pracujące na danych użytkownika (np. rozpoznawanie twarzy, analiza głosu, klasyfikacja aktywności) **zawsze** wymagają podstawy prawnej z art. 6 RODO.
 
 **Dopuszczalne podstawy prawne:**
 
@@ -19,12 +19,12 @@ RODO (Rozporządzenie (UE) 2016/679) obowiązuje od 25 maja 2018 r. i dotyczy ka
 
 ### Dane szczególnych kategorii a modele AI
 
-Art. 9 RODO szczególnie chroni dane **biometryczne** — a to właśnie one są najczęściej przetwarzane przez modele AI na urządzeniach mobilnych. Rozpoznawanie twarzy, odciski palców, analiza chodu czy głosu to dane biometryczne w rozumieniu RODO, gdy są przetwarzane w celu jednoznacznej identyfikacji osoby fizycznej.
+Art. 9 RODO szczególnie chroni dane **biometryczne** - a to właśnie one są najczęściej przetwarzane przez modele AI na urządzeniach mobilnych. Rozpoznawanie twarzy, odciski palców, analiza chodu czy głosu to dane biometryczne w rozumieniu RODO, gdy są przetwarzane w celu jednoznacznej identyfikacji osoby fizycznej.
 
 Przetwarzanie danych biometrycznych w aplikacji mobilnej wymaga spełnienia jednego z wyjątków z art. 9 ust. 2, najczęściej:
-- **wyraźnej zgody** (lit. a) — musi być oddzielna, konkretna, dobrowolna i świadoma,
+- **wyraźnej zgody** (lit. a) - musi być oddzielna, konkretna, dobrowolna i świadoma,
 - **konieczności ochrony żywotnych interesów** (lit. c),
-- **względów interesu publicznego** (lit. g) — w aplikacjach rządowych lub medycznych.
+- **względów interesu publicznego** (lit. g) - w aplikacjach rządowych lub medycznych.
 
 ```kotlin
 // Przykład: zbieranie świadomej zgody przed uruchomieniem modelu biometrycznego
@@ -58,13 +58,13 @@ fun saveConsentTimestamp(context: Context) {
 RODO w art. 5 formułuje sześć zasad, które bezpośrednio przekładają się na projektowanie systemów AI na urządzeniach mobilnych:
 
 **1. Minimalizacja danych (data minimisation)**
-Model AI powinien pobierać tylko te dane wejściowe, które są niezbędne do realizacji konkretnej funkcji. Jeśli funkcja klasyfikacji aktywności fizycznej nie potrzebuje lokalizacji GPS — nie należy jej pobierać. Architektura *Privacy by Design* wymaga, by ograniczenie zakresu danych było wbudowane w sam model.
+Model AI powinien pobierać tylko te dane wejściowe, które są niezbędne do realizacji konkretnej funkcji. Jeśli funkcja klasyfikacji aktywności fizycznej nie potrzebuje lokalizacji GPS - nie należy jej pobierać. Architektura *Privacy by Design* wymaga, by ograniczenie zakresu danych było wbudowane w sam model.
 
 **2. Ograniczenie celu (purpose limitation)**
 Dane zebrane do jednego celu (np. wykrywanie upadków seniorów) nie mogą być bez odrębnej podstawy prawnej użyte do innego celu (np. analizy wzorców ruchu w celach marketingowych).
 
 **3. Ograniczenie przechowywania (storage limitation)**
-Wyniki inferencji, embeddingi, predykcje AI — wszystkie dane mają swój czas życia. Aplikacja powinna automatycznie usuwać dane po upływie określonego okresu.
+Wyniki inferencji, embeddingi, predykcje AI - wszystkie dane mają swój czas życia. Aplikacja powinna automatycznie usuwać dane po upływie określonego okresu.
 
 ```kotlin
 // Automatyczne usuwanie danych AI po 30 dniach
@@ -88,7 +88,7 @@ WorkManager.getInstance(context).enqueueUniquePeriodicWork(
 ```
 
 **4. Prawidłowość (accuracy)**
-Błędna predykcja AI — szczególnie w kontekście diagnostyki zdrowotnej, scoringu kredytowego czy wykrywania fraudów — może naruszać prawo do poprawności danych. Aplikacje powinny udostępniać mechanizm kwestionowania lub korygowania wyników AI.
+Błędna predykcja AI - szczególnie w kontekście diagnostyki zdrowotnej, scoringu kredytowego czy wykrywania fraudów - może naruszać prawo do poprawności danych. Aplikacje powinny udostępniać mechanizm kwestionowania lub korygowania wyników AI.
 
 **5. Integralność i poufność (integrity and confidentiality)**
 Lokalne modele AI i wyniki ich pracy muszą być chronione przed nieautoryzowanym dostępem. Oznacza to szyfrowanie plików modelu (`.tflite`, `.mlpackage`) i wyników inferencji zapisywanych na urządzeniu.
@@ -118,16 +118,16 @@ W takich przypadkach użytkownik ma prawo żądać **ingerencji człowieka**, wy
 
 ---
 
-## AI Act — unijne prawo o sztucznej inteligencji
+## AI Act - unijne prawo o sztucznej inteligencji
 
 ### Czym jest AI Act?
 
-**Rozporządzenie (UE) 2024/1689** — znane jako **AI Act** — zostało opublikowane 12 lipca 2024 r. i weszło w życie 1 sierpnia 2024 r. Jest pierwszym na świecie kompleksowym aktem prawnym regulującym systemy AI. Stosuje podejście **oparte na ryzyku**: im wyższe ryzyko stwarzane przez system AI, tym ostrzejsze wymagania.
+**Rozporządzenie (UE) 2024/1689** - znane jako **AI Act** - zostało opublikowane 12 lipca 2024 r. i weszło w życie 1 sierpnia 2024 r. Jest pierwszym na świecie kompleksowym aktem prawnym regulującym systemy AI. Stosuje podejście **oparte na ryzyku**: im wyższe ryzyko stwarzane przez system AI, tym ostrzejsze wymagania.
 
 Przepisy wchodzą w życie stopniowo:
-- **1 lutego 2025** — zakaz systemów AI niedopuszczalnego ryzyka (art. 5),
-- **2 sierpnia 2025** — obowiązki dla modeli GPAI i podmiotów notyfikowanych,
-- **2 sierpnia 2026** — pełne stosowanie, w tym wymagania dla systemów wysokiego ryzyka.
+- **1 lutego 2025** - zakaz systemów AI niedopuszczalnego ryzyka (art. 5),
+- **2 sierpnia 2025** - obowiązki dla modeli GPAI i podmiotów notyfikowanych,
+- **2 sierpnia 2026** - pełne stosowanie, w tym wymagania dla systemów wysokiego ryzyka.
 
 ### Klasyfikacja ryzyka systemów AI
 
@@ -135,14 +135,14 @@ AI Act dzieli systemy AI na cztery poziomy ryzyka:
 
 ```
 ┌─────────────────────────────────────────────────────────────────┐
-│  NIEDOPUSZCZALNE RYZYKO — ZAKAZ (art. 5)                        │
+│  NIEDOPUSZCZALNE RYZYKO - ZAKAZ (art. 5)                        │
 │  • Social scoring przez władze publiczne                        │
 │  • Biometryczna identyfikacja w czasie rzeczywistym w           │
 │    przestrzeni publicznej (z wyjątkami dla organów ścigania)    │
 │  • Systemy manipulacji podprogowej                              │
 │  • Wyzysk podatności (wiek, niepełnosprawność)                 │
 ├─────────────────────────────────────────────────────────────────┤
-│  WYSOKIE RYZYKO (załącznik III) — RYGORYSTYCZNE WYMAGANIA      │
+│  WYSOKIE RYZYKO (załącznik III) - RYGORYSTYCZNE WYMAGANIA      │
 │  • Infrastruktura krytyczna                                     │
 │  • Edukacja i kwalifikacje zawodowe                             │
 │  • Zatrudnienie i zarządzanie pracownikami                      │
@@ -151,19 +151,19 @@ AI Act dzieli systemy AI na cztery poziomy ryzyka:
 │  • Zarządzanie migracją i granicami                             │
 │  • Wymiar sprawiedliwości                                       │
 ├─────────────────────────────────────────────────────────────────┤
-│  OGRANICZONE RYZYKO — OBOWIĄZKI PRZEJRZYSTOŚCI                  │
+│  OGRANICZONE RYZYKO - OBOWIĄZKI PRZEJRZYSTOŚCI                  │
 │  • Chatboty / asystenci głosowi                                 │
 │  • Deepfake i syntetyczne treści                                │
 │  • Systemy rekomendacji                                         │
 ├─────────────────────────────────────────────────────────────────┤
-│  MINIMALNE RYZYKO — BRAK WYMAGAŃ                                │
+│  MINIMALNE RYZYKO - BRAK WYMAGAŃ                                │
 │  • Filtry antyspamowe                                           │
 │  • AI w grach                                                   │
 │  • Optymalizacja zużycia baterii                                │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
-### AI Act a aplikacje mobilne — przykłady klasyfikacji
+### AI Act a aplikacje mobilne - przykłady klasyfikacji
 
 | Typ aplikacji mobilnej | Klasyfikacja AI Act | Kluczowe wymagania |
 |------------------------|--------------------|--------------------|
@@ -236,9 +236,9 @@ Systemy wysokiego ryzyka muszą osiągać odpowiedni poziom dokładności i być
 
 Aplikacje mobilne korzystające z chatbotów AI, syntetycznych głosów lub generowania obrazów mają uproszczone, ale realne obowiązki:
 
-- **Chatboty** — użytkownik musi być poinformowany, że prowadzi interakcję z systemem AI (nie dotyczy oczywistych zastosowań artystycznych lub humorystycznych).
-- **Deepfake i syntetyczne treści** — treści wideo, audio lub graficzne wygenerowane lub znacząco zmodyfikowane przez AI muszą być **widocznie oznaczone**.
-- **Syntetyczny głos** — systemy klonowania głosu muszą informować o sztucznym charakterze głosu.
+- **Chatboty** - użytkownik musi być poinformowany, że prowadzi interakcję z systemem AI (nie dotyczy oczywistych zastosowań artystycznych lub humorystycznych).
+- **Deepfake i syntetyczne treści** - treści wideo, audio lub graficzne wygenerowane lub znacząco zmodyfikowane przez AI muszą być **widocznie oznaczone**.
+- **Syntetyczny głos** - systemy klonowania głosu muszą informować o sztucznym charakterze głosu.
 
 ```swift
 // Swift: oznaczanie treści generowanych przez AI (wymaganie art. 50 AI Act)
@@ -268,11 +268,11 @@ extension UIImage {
 
 ### Modele AI ogólnego przeznaczenia (GPAI)
 
-AI Act wprowadza nową kategorię: **modele AI ogólnego przeznaczenia** (ang. General-Purpose AI Models, GPAI) — takie jak GPT-4 czy Gemini. Dostawcy tych modeli mają własne obowiązki (art. 53–55), a deweloperzy budujący na ich bazie aplikacje mobilne muszą:
+AI Act wprowadza nową kategorię: **modele AI ogólnego przeznaczenia** (ang. General-Purpose AI Models, GPAI) - takie jak GPT-4 czy Gemini. Dostawcy tych modeli mają własne obowiązki (art. 53–55), a deweloperzy budujący na ich bazie aplikacje mobilne muszą:
 
 - weryfikować, czy dostawca modelu GPAI spełnia wymogi AI Act,
 - dostosowywać własne systemy do wymagań kategorii ryzyka, w której działa finalna aplikacja,
-- dla modeli o mocy obliczeniowej ≥ 10²⁵ FLOPs — stosować dodatkowe wymagania bezpieczeństwa systemowego.
+- dla modeli o mocy obliczeniowej ≥ 10²⁵ FLOPs - stosować dodatkowe wymagania bezpieczeństwa systemowego.
 
 ---
 
@@ -293,10 +293,10 @@ RODO i AI Act wzajemnie się uzupełniają i w wielu miejscach nakładają się 
 
 ### Ważne różnice
 
-- **RODO** chroni dane osobowe i jest stosowane, gdy **przetwarzane są dane identyfikowalne**. AI Act dotyczy **systemów AI jako takich** — niezależnie od tego, czy przetwarzają dane osobowe.
+- **RODO** chroni dane osobowe i jest stosowane, gdy **przetwarzane są dane identyfikowalne**. AI Act dotyczy **systemów AI jako takich** - niezależnie od tego, czy przetwarzają dane osobowe.
 - **RODO** daje prawa podmiotom danych (dostęp, sprostowanie, usunięcie). **AI Act** daje prawa osobom dotkniętym decyzją systemu AI (nadzór ludzki, wyjaśnialność).
 - **RODO** jest już w pełni stosowane (od 2018). **AI Act** wchodzi stopniowo (2024–2026).
-- Kary: RODO — do 20 mln EUR lub 4% globalnego obrotu; AI Act — do 35 mln EUR lub 7% globalnego obrotu za naruszenie zakazów z art. 5.
+- Kary: RODO - do 20 mln EUR lub 4% globalnego obrotu; AI Act - do 35 mln EUR lub 7% globalnego obrotu za naruszenie zakazów z art. 5.
 
 ---
 
@@ -324,7 +324,7 @@ Przed publikacją aplikacji mobilnej korzystającej z AI warto zweryfikować:
 - [ ] Czy wdrożyłem mechanizmy nadzoru ludzkiego?
 - [ ] Czy system loguje zdarzenia zgodnie z art. 12?
 
-### Privacy by Design — architektura zgodna z przepisami od podstaw
+### Privacy by Design - architektura zgodna z przepisami od podstaw
 
 ```kotlin
 // Wzorzec Privacy by Design: enkapsulacja danych AI z ograniczonym dostępem
@@ -399,13 +399,13 @@ Każda organizacja przetwarzająca dane w imieniu użytkowników musi prowadzić
 
 ## Podsumowanie
 
-Tworzenie aplikacji mobilnych z elementami AI wymaga dziś znajomości dwóch filarów europejskiego prawa cyfrowego. **RODO** reguluje ochronę danych osobowych przetwarzanych przez modele AI — od biometrii po rekomendacje — i wymaga świadomego projektowania pod kątem prywatności (*Privacy by Design*). **AI Act** jako nowe, pionierskie prawo klasyfikuje systemy AI według ryzyka i nakłada obowiązki proporcjonalne do potencjalnych szkód — od prostego obowiązku informowania (chatboty) po rygorystyczne wymagania dokumentacyjne i nadzorcze (diagnostyka medyczna, credit scoring).
+Tworzenie aplikacji mobilnych z elementami AI wymaga dziś znajomości dwóch filarów europejskiego prawa cyfrowego. **RODO** reguluje ochronę danych osobowych przetwarzanych przez modele AI - od biometrii po rekomendacje - i wymaga świadomego projektowania pod kątem prywatności (*Privacy by Design*). **AI Act** jako nowe, pionierskie prawo klasyfikuje systemy AI według ryzyka i nakłada obowiązki proporcjonalne do potencjalnych szkód - od prostego obowiązku informowania (chatboty) po rygorystyczne wymagania dokumentacyjne i nadzorcze (diagnostyka medyczna, credit scoring).
 
 Dla dewelopera mobilnego kluczowe jest:
-1. **Klasyfikacja systemu AI** według AI Act — jeszcze przed projektowaniem architektury,
-2. **Identyfikacja danych osobowych** przetwarzanych przez modele — obowiązki RODO,
-3. **Wdrożenie Privacy by Design** — minimalizacja danych, szyfrowanie, zarządzanie zgodami,
-4. **Dokumentacja i rozliczalność** — rejestr czynności (RODO), dokumentacja techniczna (AI Act),
-5. **Mechanizmy nadzoru ludzkiego** — szczególnie dla systemów wysokiego ryzyka.
+1. **Klasyfikacja systemu AI** według AI Act - jeszcze przed projektowaniem architektury,
+2. **Identyfikacja danych osobowych** przetwarzanych przez modele - obowiązki RODO,
+3. **Wdrożenie Privacy by Design** - minimalizacja danych, szyfrowanie, zarządzanie zgodami,
+4. **Dokumentacja i rozliczalność** - rejestr czynności (RODO), dokumentacja techniczna (AI Act),
+5. **Mechanizmy nadzoru ludzkiego** - szczególnie dla systemów wysokiego ryzyka.
 
 Ignorowanie tych wymagań grozi nie tylko sankcjami finansowymi (do 35 mln EUR), ale też utratą zaufania użytkowników i wykluczeniem z rynku europejskiego.

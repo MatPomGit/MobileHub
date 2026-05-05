@@ -28,9 +28,9 @@ Nie każdy zapis danych powinien jednak trafiać do pliku. Jeżeli dane mają st
 
 Z perspektywy aplikacji mobilnej najczęściej spotkamy trzy modele:
 
-1. **Pamięć prywatna aplikacji** — dostępna tylko dla danej aplikacji.
-2. **Pamięć tymczasowa (cache)** — dane mogą zostać usunięte przez system.
-3. **Pamięć współdzielona / dokumenty użytkownika** — pliki widoczne także poza aplikacją.
+1. **Pamięć prywatna aplikacji** - dostępna tylko dla danej aplikacji.
+2. **Pamięć tymczasowa (cache)** - dane mogą zostać usunięte przez system.
+3. **Pamięć współdzielona / dokumenty użytkownika** - pliki widoczne także poza aplikacją.
 
 Każdy z tych modeli ma inny cel.
 
@@ -75,7 +75,7 @@ Ten model stosujemy, gdy plik ma być dostępny dla użytkownika także poza apl
 
 Tutaj systemy mobilne stosują bardziej restrykcyjne zasady. Aplikacja zwykle nie dostaje „pełnego dostępu do dysku”, lecz działa przez kontrolowane API, np. `MediaStore` lub `Storage Access Framework` na Androidzie oraz katalog `Documents` czy mechanizmy udostępniania na iOS.
 
-## Android — jak zapisywać i odczytywać pliki poprawnie
+## Android - jak zapisywać i odczytywać pliki poprawnie
 
 Android przez lata zmieniał model dostępu do pamięci. Starsze podejście oparte na swobodnym dostępie do external storage zostało ograniczone przez **scoped storage**, czyli model izolujący dane aplikacji i ograniczający możliwość dowolnego operowania na plikach użytkownika.
 
@@ -220,7 +220,7 @@ To rozwiązanie jest bardzo dobre dla:
 - współpracy z chmurą lub zewnętrznym dostawcą dokumentów,
 - aplikacji, które nie powinny same decydować o lokalizacji pliku.
 
-## Uprawnienia na Androidzie — częsty punkt nieporozumień
+## Uprawnienia na Androidzie - częsty punkt nieporozumień
 
 Początkujący programiści często zakładają, że każda operacja na plikach wymaga uprawnienia do pamięci. W nowoczesnym Androidzie to nieprawda.
 
@@ -235,7 +235,7 @@ Dlatego aplikację należy projektować tak, aby korzystała z najmniejszego nie
 
 ## Odczyt plików na Androidzie
 
-Sam zapis to tylko połowa zadania. W realnej aplikacji trzeba jeszcze umieć plik odczytać — albo z pamięci prywatnej aplikacji, albo z katalogu cache, albo z lokalizacji wskazanej przez użytkownika.
+Sam zapis to tylko połowa zadania. W realnej aplikacji trzeba jeszcze umieć plik odczytać - albo z pamięci prywatnej aplikacji, albo z katalogu cache, albo z lokalizacji wskazanej przez użytkownika.
 
 ### Odczyt pliku z pamięci prywatnej
 
@@ -268,7 +268,7 @@ fun readCacheFile(context: Context, fileName: String): String? {
 
 To oznacza, że kod powinien zawsze przewidywać scenariusz braku pliku i potrafić go odtworzyć lub ponownie pobrać.
 
-### Odczyt pliku wskazanego przez użytkownika z dysku — SAF
+### Odczyt pliku wskazanego przez użytkownika z dysku - SAF
 
 Najważniejszy scenariusz „odczytu z dysku” w nowoczesnym Androidzie to użycie **Storage Access Framework** i akcji `ACTION_OPEN_DOCUMENT`. Użytkownik wybiera dokument, a aplikacja dostaje `Uri`, z którego można czytać dane przez `ContentResolver`.
 
@@ -276,7 +276,7 @@ Najważniejszy scenariusz „odczytu z dysku” w nowoczesnym Androidzie to uży
 val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocument()) { uri ->
     if (uri != null) {
         try {
-            val maxSizeBytes = 5 * 1024 * 1024 // np. 5 MB — dostosuj do potrzeb aplikacji
+            val maxSizeBytes = 5 * 1024 * 1024 // np. 5 MB - dostosuj do potrzeb aplikacji
 
             contentResolver.openInputStream(uri)?.use { inputStream ->
                 // Prosta walidacja rozmiaru przed wczytaniem całości do pamięci
@@ -293,7 +293,7 @@ val openDocument = registerForActivityResult(ActivityResultContracts.OpenDocumen
 
                 showImportedContent(text)
             } ?: run {
-                // Strumień nie został otwarty — zgłoś błąd zamiast cicho ignorować problem
+                // Strumień nie został otwarty - zgłoś błąd zamiast cicho ignorować problem
                 showImportError("Nie udało się otworzyć wybranego pliku.")
             }
         } catch (e: IOException) {
@@ -336,14 +336,14 @@ Takie podejście przydaje się m.in. przy:
 - wczytywaniu pliku PDF do podglądu,
 - odczycie załącznika udostępnionego przez inną aplikację.
 
-## iOS — zapis i odczyt plików w aplikacji mobilnej
+## iOS - zapis i odczyt plików w aplikacji mobilnej
 Na iOS aplikacja działa w modelu sandbox, czyli ma własny, odizolowany obszar plików. Najczęściej zapis odbywa się w katalogach aplikacji, np. `Documents`, `Caches` lub `tmp`.
 
 ### Typowe katalogi na iOS
 
-- `Documents` — pliki, które powinny przetrwać i należą do danych użytkownika,
-- `Caches` — dane odtwarzalne i tymczasowe,
-- `tmp` — bardzo krótkotrwałe pliki robocze.
+- `Documents` - pliki, które powinny przetrwać i należą do danych użytkownika,
+- `Caches` - dane odtwarzalne i tymczasowe,
+- `tmp` - bardzo krótkotrwałe pliki robocze.
 
 ### Przykład zapisu do katalogu Documents w Swift
 
@@ -423,8 +423,8 @@ To ważny przykład, ponieważ na iOS plik wybrany przez użytkownika może poch
 
 W większości aplikacji mobilnych operacje na plikach sprowadzają się do dwóch wzorców:
 
-1. **Eksport** — aplikacja generuje plik i zapisuje go w miejscu prywatnym albo wskazanym przez użytkownika.
-2. **Import** — aplikacja otwiera istniejący plik z dysku i przetwarza jego zawartość.
+1. **Eksport** - aplikacja generuje plik i zapisuje go w miejscu prywatnym albo wskazanym przez użytkownika.
+2. **Import** - aplikacja otwiera istniejący plik z dysku i przetwarza jego zawartość.
 
 Przykłady:
 
@@ -437,7 +437,7 @@ Dlatego projektując warstwę plików, warto zawsze uwzględnić **oba kierunki 
 
 ## Flutter, React Native i inne frameworki cross-platform
 
-W aplikacjach cross-platformowych dostęp do plików odbywa się zwykle przez biblioteki pośredniczące, ale zasady systemowe nadal pozostają takie same. Framework nie znosi ograniczeń Androida ani iOS — jedynie ukrywa część różnic pod wspólnym API.
+W aplikacjach cross-platformowych dostęp do plików odbywa się zwykle przez biblioteki pośredniczące, ale zasady systemowe nadal pozostają takie same. Framework nie znosi ograniczeń Androida ani iOS - jedynie ukrywa część różnic pod wspólnym API.
 
 Przykładowe scenariusze:
 
@@ -546,22 +546,22 @@ Dzięki temu każda technologia jest użyta zgodnie z przeznaczeniem.
 
 ## Ćwiczenia
 
-### Ćwiczenie 1 — Android, zapis prywatny
+### Ćwiczenie 1 - Android, zapis prywatny
 
 Napisz funkcję zapisującą notatkę tekstową do pamięci prywatnej aplikacji i funkcję odczytu tej notatki po ponownym uruchomieniu aplikacji.
 
-### Ćwiczenie 2 — Android, import CSV
+### Ćwiczenie 2 - Android, import CSV
 
 Przygotuj ekran z przyciskiem importu pliku CSV przy użyciu `ACTION_OPEN_DOCUMENT`. Po wybraniu pliku odczytaj jego treść i wyświetl ją na ekranie.
 
-### Ćwiczenie 3 — Android, eksport CSV
+### Ćwiczenie 3 - Android, eksport CSV
 
 Przygotuj ekran z przyciskiem eksportu listy rekordów do pliku CSV przy użyciu `ACTION_CREATE_DOCUMENT`.
 
-### Ćwiczenie 4 — iOS, katalog Documents
+### Ćwiczenie 4 - iOS, katalog Documents
 
 Zapisz prosty plik tekstowy do katalogu `Documents`, a następnie odczytaj go po ponownym wejściu na ekran.
 
-### Ćwiczenie 5 — analiza architektury
+### Ćwiczenie 5 - analiza architektury
 
 Dla aplikacji notatkowej wskaż, które dane powinny trafić do bazy, które do plików, a które do prostych ustawień systemowych. Dodatkowo opisz, które pliki aplikacja odczytuje automatycznie, a które powinny być wybierane przez użytkownika.

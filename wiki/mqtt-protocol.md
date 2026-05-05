@@ -1,4 +1,4 @@
-# MQTT — protokół dla IoT
+# MQTT - protokół dla IoT
 
 MQTT (Message Queuing Telemetry Transport) to lekki protokół publish-subscribe zaprojektowany dla urządzeń IoT o ograniczonej przepustowości i mocy. Działa ponad TCP/IP i jest idealny dla czujników, smart home i telemetrii.
 
@@ -24,7 +24,7 @@ MQTT (Message Queuing Telemetry Transport) to lekki protokół publish-subscribe
 | **1** | At least once (może duplikat) | Komendy sterujące |
 | **2** | Exactly once (gwarantowane) | Płatności, alarmy bezpieczeństwa |
 
-## Implementacja MQTT na Android — Eclipse Paho
+## Implementacja MQTT na Android - Eclipse Paho
 
 ```kotlin
 dependencies {
@@ -46,7 +46,7 @@ class MqttManager(private val context: Context) {
             // userName = "user"
             // password = "pass".toCharArray()
 
-            // Last Will Testament — wiadomość wysłana gdy klient się rozłączy
+            // Last Will Testament - wiadomość wysłana gdy klient się rozłączy
             setWill(
                 "devices/$clientId/status",
                 "offline".toByteArray(),
@@ -83,7 +83,7 @@ class MqttManager(private val context: Context) {
 }
 ```
 
-## Tematy (Topics) — konwencje nazewnictwa
+## Tematy (Topics) - konwencje nazewnictwa
 
 ```
 # Hierarchia tematów
@@ -107,7 +107,7 @@ home/
 ## Retained Messages i Last Will
 
 ```kotlin
-// Retained message — broker przechowuje ostatnią wartość
+// Retained message - broker przechowuje ostatnią wartość
 // Nowy subskrybent natychmiast dostaje aktualny stan
 mqtt.publish(
     topic = "home/living_room/temperature",
@@ -115,7 +115,7 @@ mqtt.publish(
     retained = true  // broker zapamięta tę wartość
 )
 
-// Last Will Testament (LWT) — ustawia się przy połączeniu
+// Last Will Testament (LWT) - ustawia się przy połączeniu
 // Gdy klient się nieoczekiwanie rozłączy, broker wysyła tę wiadomość
 val willMessage = MqttMessage("offline".toByteArray()).apply {
     qos = 1; isRetained = true
@@ -162,9 +162,9 @@ fun MqttDashboard(viewModel: MqttViewModel) {
 
 - [Eclipse Paho Android](https://github.com/eclipse/paho.mqtt.android)
 - [HiveMQ MQTT Broker](https://www.hivemq.com/mqtt-broker/)
-- [MQTT Explorer — GUI client](http://mqtt-explorer.com/)
+- [MQTT Explorer - GUI client](http://mqtt-explorer.com/)
 
-## MQTT over TLS — bezpieczna komunikacja
+## MQTT over TLS - bezpieczna komunikacja
 
 ```kotlin
 // Połączenie z brokerem przez TLS (port 8883)
@@ -175,7 +175,7 @@ fun createSecureMqttClient(context: Context): MqttAndroidClient {
     val options = MqttConnectOptions().apply {
         isAutomaticReconnect = true
         socketFactory = sslFactory
-        // Mutual TLS (opcjonalne) — klient uwierzytelnia się certyfikatem
+        // Mutual TLS (opcjonalne) - klient uwierzytelnia się certyfikatem
         // socketFactory = createMutualTLSFactory(clientCert, clientKey)
     }
     return client
@@ -197,12 +197,12 @@ private fun createSSLSocketFactory(context: Context): SSLSocketFactory {
 }
 ```
 
-## Home Assistant — integracja MQTT
+## Home Assistant - integracja MQTT
 
 Home Assistant to popularna platforma smart home z wbudowaną obsługą MQTT:
 
 ```kotlin
-// Autodiscovery — HA automatycznie wykrywa urządzenia przez MQTT
+// Autodiscovery - HA automatycznie wykrywa urządzenia przez MQTT
 fun publishHaDiscovery(bridge: MqttManager) {
     // Konfiguracja czujnika temperatury
     val config = """
@@ -247,15 +247,15 @@ fun subscribeToLightState(bridge: MqttManager, lightId: String, onUpdate: (Boole
 
 - [MQTT Security](https://www.hivemq.com/mqtt-security-fundamentals/)
 - [Home Assistant MQTT](https://www.home-assistant.io/integrations/mqtt/)
-- [Eclipse Mosquitto — self-hosted broker](https://mosquitto.org/)
+- [Eclipse Mosquitto - self-hosted broker](https://mosquitto.org/)
 
 ---
 
-## 1. Poziomy QoS — szczegółowe omówienie
+## 1. Poziomy QoS - szczegółowe omówienie
 
 Quality of Service w MQTT definiuje kontrakt niezawodności dostarczania wiadomości między klientem a brokerem. Wybór poziomu QoS wpływa bezpośrednio na obciążenie sieci i gwarancje dostarczenia.
 
-### QoS 0 — At Most Once (co najwyżej raz)
+### QoS 0 - At Most Once (co najwyżej raz)
 
 Wiadomość jest wysyłana jednorazowo bez potwierdzenia. Broker ani subskrybent nie przechowują stanu. Najszybszy, ale zawodny przy niestabilnym połączeniu.
 
@@ -266,7 +266,7 @@ Nadawca          Broker
 ```
 
 ```kotlin
-// QoS 0 — dane telemetryczne, których utrata jest akceptowalna
+// QoS 0 - dane telemetryczne, których utrata jest akceptowalna
 mqttManager.publish(
     topic = "sensors/temperature",
     payload = "23.5",
@@ -277,9 +277,9 @@ mqttManager.publish(
 
 **Kiedy używać:** odczyty sensorów co kilka sekund (utrata jednego odczytu nie ma znaczenia), strumieniowanie danych GPS, logi diagnostyczne.
 
-### QoS 1 — At Least Once (co najmniej raz)
+### QoS 1 - At Least Once (co najmniej raz)
 
-Wiadomość jest dostarczana przynajmniej raz — może wystąpić duplikacja. Nadawca przechowuje wiadomość do momentu otrzymania `PUBACK` od brokera.
+Wiadomość jest dostarczana przynajmniej raz - może wystąpić duplikacja. Nadawca przechowuje wiadomość do momentu otrzymania `PUBACK` od brokera.
 
 ```
 Nadawca          Broker
@@ -290,7 +290,7 @@ Nadawca          Broker
 ```
 
 ```kotlin
-// QoS 1 — komendy sterujące, gdzie duplikat jest obsłużony po stronie odbiorcy
+// QoS 1 - komendy sterujące, gdzie duplikat jest obsłużony po stronie odbiorcy
 mqttManager.publish(
     topic = "devices/thermostat/setpoint",
     payload = """{"target": 21.0}""",
@@ -306,9 +306,9 @@ mqttManager.subscribe("devices/thermostat/setpoint", qos = 1) { _, payload ->
 
 **Kiedy używać:** komendy sterujące urządzeniami, powiadomienia push, aktualizacje stanu.
 
-### QoS 2 — Exactly Once (dokładnie raz)
+### QoS 2 - Exactly Once (dokładnie raz)
 
-Najbardziej niezawodny poziom — czterostopniowy handshake gwarantuje, że wiadomość dotrze dokładnie raz. Najwyższy narzut sieciowy.
+Najbardziej niezawodny poziom - czterostopniowy handshake gwarantuje, że wiadomość dotrze dokładnie raz. Najwyższy narzut sieciowy.
 
 ```
 Nadawca          Broker           Subskrybent
@@ -323,11 +323,11 @@ Nadawca          Broker           Subskrybent
 ```
 
 ```kotlin
-// QoS 2 — transakcje krytyczne
+// QoS 2 - transakcje krytyczne
 mqttManager.publish(
     topic = "factory/machine/emergency_stop",
     payload = """{"command": "STOP", "timestamp": ${System.currentTimeMillis()}}""",
-    qos = 2  // musi dotrzeć dokładnie raz — podwójne zatrzymanie mogłoby uszkodzić maszynę
+    qos = 2  // musi dotrzeć dokładnie raz - podwójne zatrzymanie mogłoby uszkodzić maszynę
 )
 ```
 
@@ -335,9 +335,9 @@ mqttManager.publish(
 
 ---
 
-## 2. Wiadomości zatrzymane (Retained Messages) — szczegółowe omówienie
+## 2. Wiadomości zatrzymane (Retained Messages) - szczegółowe omówienie
 
-Retained message to specjalna wiadomość przechowywana przez brokera na danym temacie. Każdy nowy subskrybent natychmiast otrzymuje ostatnią zachowaną wiadomość — bez czekania na kolejną publikację.
+Retained message to specjalna wiadomość przechowywana przez brokera na danym temacie. Każdy nowy subskrybent natychmiast otrzymuje ostatnią zachowaną wiadomość - bez czekania na kolejną publikację.
 
 ### Mechanizm działania
 
@@ -364,7 +364,7 @@ fun publishDeviceStatus(isOnline: Boolean) {
     )
 }
 
-// Usuwanie retained message — wysłanie pustego payload
+// Usuwanie retained message - wysłanie pustego payload
 fun clearRetainedMessage(topic: String) {
     mqttManager.publish(
         topic = topic,
@@ -389,7 +389,7 @@ mqttManager.subscribe("devices/+/status", qos = 1) { topic, payload ->
 
 ---
 
-## 3. Last Will and Testament (LWT) — scenariusze rozłączenia
+## 3. Last Will and Testament (LWT) - scenariusze rozłączenia
 
 LWT (Ostatnia Wola) to wiadomość, którą broker wyśle automatycznie, gdy klient rozłączy się w sposób nieoczekiwany (utrata zasilania, awaria sieci, crash aplikacji). Ustawiana jest podczas nawiązywania połączenia.
 
@@ -416,12 +416,12 @@ class MqttPresenceManager(
             isCleanSession = false
             keepAliveInterval = 30  // broker czeka 30s przed uznaniem klienta za offline
 
-            // LWT — wysłane gdy klient zniknie bez DISCONNECT
+            // LWT - wysłane gdy klient zniknie bez DISCONNECT
             setWill(
                 statusTopic,
                 """{"state":"offline","reason":"unexpected"}""".toByteArray(),
                 1,     // QoS 1
-                true   // retained — nowi subskrybenci widzą ostatni stan
+                true   // retained - nowi subskrybenci widzą ostatni stan
             )
         }
 
@@ -456,14 +456,14 @@ class MqttPresenceManager(
 
 ---
 
-## 4. MQTT 5.0 — nowe funkcje protokołu
+## 4. MQTT 5.0 - nowe funkcje protokołu
 
 MQTT 5.0 (wydany w 2019 r.) wprowadza szereg ulepszeń względem wersji 3.1.1, poprawiając diagnostykę, bezpieczeństwo i skalowalność.
 
 ### Właściwości użytkownika (User Properties)
 
 ```kotlin
-// MQTT 5.0 — dodawanie własnych nagłówków do wiadomości
+// MQTT 5.0 - dodawanie własnych nagłówków do wiadomości
 // Wymaga biblioteki HiveMQ MQTT Client
 val message = Mqtt5Publish.builder()
     .topic("sensors/temperature")
@@ -485,12 +485,12 @@ client.publish(message)
 val alertMessage = Mqtt5Publish.builder()
     .topic("alerts/fire_alarm")
     .payload("""{"zone":"kitchen","level":"critical"}""".toByteArray())
-    .messageExpiryInterval(60)  // sekundy — broker odrzuci po 60s
+    .messageExpiryInterval(60)  // sekundy - broker odrzuci po 60s
     .qos(MqttQos.EXACTLY_ONCE)
     .build()
 ```
 
-### Shared Subscriptions — równoważenie obciążenia
+### Shared Subscriptions - równoważenie obciążenia
 
 Shared subscriptions pozwalają wielu klientom subskrybować ten sam temat w trybie round-robin, co umożliwia poziome skalowanie konsumentów.
 
@@ -518,7 +518,7 @@ client.disconnectedWith()
             Mqtt5DisconnectReasonCode.SESSION_TAKEN_OVER ->
                 Log.w("MQTT", "Inne urządzenie przejęło sesję")
             Mqtt5DisconnectReasonCode.KEEP_ALIVE_TIMEOUT ->
-                Log.w("MQTT", "Timeout — sprawdź połączenie sieciowe")
+                Log.w("MQTT", "Timeout - sprawdź połączenie sieciowe")
             else ->
                 Log.e("MQTT", "Rozłączono: $reasonCode")
         }
@@ -537,9 +537,9 @@ Wybór brokera zależy od skali projektu, wymagań bezpieczeństwa i infrastrukt
 | **HiveMQ CE** | Open-source, self-hosted | Do 25 połączeń (Cloud) | MQTT 3.1.1, 5.0, WebSocket | Produkcja IoT, rozbudowane ekosystemy |
 | **EMQX** | Open-source, self-hosted | Do 10 000 połączeń | MQTT, CoAP, LwM2M, WebSocket | Skalowane wdrożenia przemysłowe |
 | **AWS IoT Core** | Managed cloud | Pay-per-use | MQTT, HTTP, WebSocket | Integracja z AWS Lambda, S3, DynamoDB |
-| **broker.hivemq.com** | Publiczny testowy | Brak uwierzytelniania | MQTT 3.1.1 | Testy i nauka — **nie do produkcji** |
+| **broker.hivemq.com** | Publiczny testowy | Brak uwierzytelniania | MQTT 3.1.1 | Testy i nauka - **nie do produkcji** |
 
-### Mosquitto — szybki start
+### Mosquitto - szybki start
 
 ```bash
 # Instalacja na Raspberry Pi / Ubuntu
@@ -560,11 +560,11 @@ keyfile /etc/mosquitto/certs/server.key
 sudo mosquitto_passwd -c /etc/mosquitto/passwd student
 ```
 
-### HiveMQ — rozszerzenia przez wtyczki
+### HiveMQ - rozszerzenia przez wtyczki
 
 HiveMQ wyróżnia się systemem wtyczek (Extensions SDK) umożliwiającym integrację z bazami danych, systemami autoryzacji (OAuth 2.0, LDAP) i potokami przetwarzania danych bez modyfikacji kodu brokera.
 
-### AWS IoT Core — integracja z chmurą
+### AWS IoT Core - integracja z chmurą
 
 ```kotlin
 // Połączenie z AWS IoT Core przez Paho + X.509 certyfikat
@@ -579,11 +579,11 @@ val client = MqttAndroidClient(context, "ssl://<id>.iot.eu-west-1.amazonaws.com:
 
 ---
 
-## 6. Klient MQTT na iOS — Swift
+## 6. Klient MQTT na iOS - Swift
 
 Dla aplikacji iOS dostępne są dwie popularne biblioteki: **CocoaMQTT** (dojrzała, Objective-C/Swift) oraz **MQTT-NIO** (nowoczesna, async/await, SwiftNIO).
 
-### CocoaMQTT — podstawowa integracja
+### CocoaMQTT - podstawowa integracja
 
 ```swift
 import CocoaMQTT
@@ -719,8 +719,8 @@ struct SensorDashboardView: View {
 
 ## Linki końcowe
 
-- [Specyfikacja MQTT 5.0 — OASIS](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
-- [CocoaMQTT — GitHub](https://github.com/emqx/CocoaMQTT)
-- [MQTT-NIO — Swift Server](https://github.com/swift-server-community/mqtt-nio)
+- [Specyfikacja MQTT 5.0 - OASIS](https://docs.oasis-open.org/mqtt/mqtt/v5.0/mqtt-v5.0.html)
+- [CocoaMQTT - GitHub](https://github.com/emqx/CocoaMQTT)
+- [MQTT-NIO - Swift Server](https://github.com/swift-server-community/mqtt-nio)
 - [HiveMQ MQTT Client (Android)](https://github.com/hivemq/hivemq-mqtt-client-android)
-- [EMQX — dokumentacja](https://www.emqx.io/docs/en/latest/)
+- [EMQX - dokumentacja](https://www.emqx.io/docs/en/latest/)

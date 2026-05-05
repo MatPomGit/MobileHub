@@ -1,4 +1,4 @@
-# Łączność bezprzewodowa — LTE, 5G, Wi-Fi 6
+# Łączność bezprzewodowa - LTE, 5G, Wi-Fi 6
 
 Łączność bezprzewodowa to jeden z największych konsumentów energii w urządzeniu mobilnym, a jednocześnie kluczowy czynnik wpływający na wydajność aplikacji sieciowych.
 
@@ -12,7 +12,7 @@
 | **5G Sub-6** | 1–4 Gbps | ~10ms | 600 MHz–6 GHz |
 | **5G mmWave** | 10–20 Gbps | <5ms | 24–100 GHz |
 
-**5G mmWave** — ekstremalnie szybkie, ale zasięg tylko kilkaset metrów, blokowany przez ściany. Praktycznie tylko w gęstych centrach miast.
+**5G mmWave** - ekstremalnie szybkie, ale zasięg tylko kilkaset metrów, blokowany przez ściany. Praktycznie tylko w gęstych centrach miast.
 
 ## Wi-Fi generacje
 
@@ -27,7 +27,7 @@
 
 ## Sprawdzanie połączenia sieciowego
 
-Monitorowanie stanu sieci w aplikacji mobilnej to podstawa dobrego UX — aplikacja powinna reagować na zmiany połączenia, informować użytkownika o braku internetu i dostosowywać zachowanie do rodzaju sieci (Wi-Fi vs. dane komórkowe). Poniższy kod używa `ConnectivityManager.NetworkCallback` opakowanego w `callbackFlow`, dzięki czemu stan sieci jest dostępny jako reaktywny `Flow`. Klasa `NetworkState` reprezentuje zarówno rozłączenie, jak i szczegóły aktywnego połączenia, w tym informację o tym, czy sieć jest rozliczana (metered).
+Monitorowanie stanu sieci w aplikacji mobilnej to podstawa dobrego UX - aplikacja powinna reagować na zmiany połączenia, informować użytkownika o braku internetu i dostosowywać zachowanie do rodzaju sieci (Wi-Fi vs. dane komórkowe). Poniższy kod używa `ConnectivityManager.NetworkCallback` opakowanego w `callbackFlow`, dzięki czemu stan sieci jest dostępny jako reaktywny `Flow`. Klasa `NetworkState` reprezentuje zarówno rozłączenie, jak i szczegóły aktywnego połączenia, w tym informację o tym, czy sieć jest rozliczana (metered).
 
 ```kotlin
 class NetworkMonitor(private val context: Context) {
@@ -73,7 +73,7 @@ sealed class NetworkState {
 
 ## Adaptacja do warunków sieci
 
-Dobra aplikacja mobilna nie traktuje wszystkich połączeń jednakowo — przy wolnym łączu warto obniżyć jakość obrazów, a przy sieci komórkowej (metered) należy pytać użytkownika przed pobraniem dużych plików. Poniższy przykład pokazuje, jak na podstawie zmierzonej przepustowości wybrać odpowiednią jakość zasobów oraz jak wykryć sieć rozliczaną i wyświetlić stosowne ostrzeżenie.
+Dobra aplikacja mobilna nie traktuje wszystkich połączeń jednakowo - przy wolnym łączu warto obniżyć jakość obrazów, a przy sieci komórkowej (metered) należy pytać użytkownika przed pobraniem dużych plików. Poniższy przykład pokazuje, jak na podstawie zmierzonej przepustowości wybrać odpowiednią jakość zasobów oraz jak wykryć sieć rozliczaną i wyświetlić stosowne ostrzeżenie.
 
 ```kotlin
 // Dostosuj jakość do przepustowości
@@ -100,7 +100,7 @@ if (networkState is NetworkState.Connected) {
 Bluetooth Low Energy (BLE) jest zoptymalizowany pod kątem urządzeń IoT i noszonych gadżetów, które przez długi czas działają na baterii. Skanowanie urządzeń BLE polega na wykrywaniu pakietów reklamowych rozgłaszanych przez urządzenia peryferyjne, a filtry UUID usług pozwalają zawęzić wyniki do konkretnego rodzaju urządzeń (np. czujniki tętna, beacony). Poniższy kod demonstruje skanowanie z filtrem po UUID usługi Heart Rate i odczyt poziomu sygnału RSSI.
 
 ```kotlin
-// Bluetooth Low Energy — skanowanie urządzeń
+// Bluetooth Low Energy - skanowanie urządzeń
 val bluetoothManager = getSystemService(BLUETOOTH_SERVICE) as BluetoothManager
 val bluetoothAdapter = bluetoothManager.adapter
 val bleScanner = bluetoothAdapter.bluetoothLeScanner
@@ -132,7 +132,7 @@ bleScanner.startScan(scanFilters, scanSettings, object : ScanCallback() {
 - [BLE Overview](https://developer.android.com/guide/topics/connectivity/bluetooth/ble-overview)
 - [Wi-Fi Aware](https://developer.android.com/guide/topics/connectivity/wifi-aware)
 
-## NFC — Near Field Communication
+## NFC - Near Field Communication
 
 NFC umożliwia wymianę danych przez zbliżenie urządzeń na odległość kilku centymetrów, co jest podstawą płatności zbliżeniowych, inteligentnych plakatów i identyfikatorów dostępu. W Androidzie obsługa tagów NFC w pierwszej kolejności wymaga zarejestrowania `ForegroundDispatch`, aby Activity mogło przechwytywać zbliżone tagi podczas swojego aktywnego stanu. Poniższy przykład pokazuje pełną implementację odczytu tekstu z tagu NDEF, obejmującą cykl życia Activity i bezpieczne zamknięcie połączenia.
 
@@ -192,7 +192,7 @@ class NfcActivity : AppCompatActivity() {
 
 ## USB OTG i Serial Communication
 
-USB OTG (On-The-Go) pozwala telefonowi działać jako host USB, komunikując się z mikrokontrolerami (Arduino, ESP32), analizatorami przemysłowymi czy innymi peryferyjnymi urządzeniami szeregowymi. Przed otwarciem połączenia należy sprawdzić i zażądać uprawnień od systemu — Android chroni dostęp do urządzeń USB poprzez dynamiczny mechanizm zgody. Poniższy menadżer pokazuje listowanie podłączonych urządzeń, weryfikację uprawnień i otwieranie połączenia.
+USB OTG (On-The-Go) pozwala telefonowi działać jako host USB, komunikując się z mikrokontrolerami (Arduino, ESP32), analizatorami przemysłowymi czy innymi peryferyjnymi urządzeniami szeregowymi. Przed otwarciem połączenia należy sprawdzić i zażądać uprawnień od systemu - Android chroni dostęp do urządzeń USB poprzez dynamiczny mechanizm zgody. Poniższy menadżer pokazuje listowanie podłączonych urządzeń, weryfikację uprawnień i otwieranie połączenia.
 
 ```kotlin
 // Komunikacja z urządzeniami USB (mikrokontrolery, czujniki przemysłowe)
@@ -225,7 +225,7 @@ class UsbSerialManager(private val context: Context) {
 Wi-Fi Direct umożliwia bezpośrednią komunikację między urządzeniami bez punktu dostępowego (AP):
 
 ```kotlin
-// WifiP2pManager — odkrywanie urządzeń i tworzenie grupy
+// WifiP2pManager - odkrywanie urządzeń i tworzenie grupy
 class WifiDirectManager(private val context: Context) {
     private val manager = context.getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
     private val channel = manager.initialize(context, Looper.getMainLooper(), null)
@@ -252,7 +252,7 @@ class WifiDirectManager(private val context: Context) {
 
 ## Obsługa trybu offline
 
-Aplikacje mobilne muszą działać poprawnie nawet bez dostępu do sieci — użytkownicy oczekują dostępu do wcześniej przeglądanych treści w metrze czy tunelu. Wzorzec repozytorium z lokalną bazą danych (Room/SQLite) jako cache i synchronizacją sieciową w tle pozwala na seamless UX w każdych warunkach. Poniższy przykład implementuje strategię „cache-first": dane są natychmiast emitowane z bazy lokalnej, a następnie odświeżane z API gdy sieć jest dostępna.
+Aplikacje mobilne muszą działać poprawnie nawet bez dostępu do sieci - użytkownicy oczekują dostępu do wcześniej przeglądanych treści w metrze czy tunelu. Wzorzec repozytorium z lokalną bazą danych (Room/SQLite) jako cache i synchronizacją sieciową w tle pozwala na seamless UX w każdych warunkach. Poniższy przykład implementuje strategię „cache-first": dane są natychmiast emitowane z bazy lokalnej, a następnie odświeżane z API gdy sieć jest dostępna.
 
 ```kotlin
 // Repository pattern z cache i siecią
@@ -274,7 +274,7 @@ class ArticleRepository(
                 dao.insertAll(fresh)
                 emit(fresh)
             } catch (e: Exception) {
-                // Sieć niedostępna — zostają dane z cache
+                // Sieć niedostępna - zostają dane z cache
                 if (cached.isEmpty()) throw e
             }
         }

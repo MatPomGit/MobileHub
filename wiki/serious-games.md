@@ -8,15 +8,15 @@ Gry poważne (*serious games*) to gry komputerowe, których głównym celem **ni
 
 Termin *serious game* został spopularyzowany przez Clarka Abta w książce *Serious Games* (1970), który opisał gry jako narzędzie decyzyjne i symulacyjne. Współcześnie definicja obejmuje szerokie spektrum zastosowań:
 
-> „Gra poważna to gra, w której edukacja (w szerokim sensie: poznawcza, emocjonalna, behawioralna) jest najważniejszym i wymaganym celem, a nie pobocznym celem." — Michael Zyda, 2005
+> „Gra poważna to gra, w której edukacja (w szerokim sensie: poznawcza, emocjonalna, behawioralna) jest najważniejszym i wymaganym celem, a nie pobocznym celem." - Michael Zyda, 2005
 
 ### Oś czasu
 
 | Rok | Wydarzenie |
 |-----|-----------|
 | 1970 | Clark Abt publikuje „Serious Games" |
-| 1980 | „The Oregon Trail" — pierwsze masowe zastosowanie gier w edukacji |
-| 2002 | US Army wydaje „America's Army" — szkoleniowa gra militarna |
+| 1980 | „The Oregon Trail" - pierwsze masowe zastosowanie gier w edukacji |
+| 2002 | US Army wydaje „America's Army" - szkoleniowa gra militarna |
 | 2004 | Ben Sawyer & David Rejeski używają terminu w kontekście cyfrowym |
 | 2006 | Konferencja Serious Games Summit, Waszyngton |
 | 2010 | Pierwsze gry poważne na iOS/Android |
@@ -34,11 +34,11 @@ Gry poważne klasyfikuje się według dziedziny zastosowania:
 Gry wspierające proces nauczania na wszystkich poziomach edukacji.
 
 **Przykłady mobilne:**
-- **Duolingo** — nauka języków przez grywalizację (gamification)
-- **Kahoot!** — quizy klasowe w czasie rzeczywistym
-- **DragonBox** — nauka algebry dla dzieci
-- **Prodigy Math** — matematyka w kontekście RPG fantasy
-- **Khan Academy Kids** — kompleksowa edukacja przedszkolna
+- **Duolingo** - nauka języków przez grywalizację (gamification)
+- **Kahoot!** - quizy klasowe w czasie rzeczywistym
+- **DragonBox** - nauka algebry dla dzieci
+- **Prodigy Math** - matematyka w kontekście RPG fantasy
+- **Khan Academy Kids** - kompleksowa edukacja przedszkolna
 
 **Mechaniki charakterystyczne:**
 - Stopniowanie trudności (*scaffolding*)
@@ -51,11 +51,11 @@ Gry wspierające proces nauczania na wszystkich poziomach edukacji.
 Gry wspomagające rehabilitację, terapię, profilaktykę zdrowotną.
 
 **Przykłady mobilne:**
-- **SuperBetter** — aplikacja oparta na psychologii pozytywnej
-- **Re-Mission** — gra dla pacjentów onkologicznych (badania wykazały zwiększenie adherence do leczenia)
-- **EndeavorRx** — pierwsza gra zatwierdzona przez FDA jako leczenie ADHD
-- **Mango Health** — przypomnienia o lekach przez gamification
-- **Lumosity** — trening poznawczy (kontrowersje co do skuteczności)
+- **SuperBetter** - aplikacja oparta na psychologii pozytywnej
+- **Re-Mission** - gra dla pacjentów onkologicznych (badania wykazały zwiększenie adherence do leczenia)
+- **EndeavorRx** - pierwsza gra zatwierdzona przez FDA jako leczenie ADHD
+- **Mango Health** - przypomnienia o lekach przez gamification
+- **Lumosity** - trening poznawczy (kontrowersje co do skuteczności)
 
 **Wyniki badań:**
 | Zastosowanie | Badanie | Wynik |
@@ -74,7 +74,7 @@ Gry zastępujące lub uzupełniające tradycyjne szkolenia zawodowe.
 - **Medyczne**: Surgical simulators, VirTrainer (dostępny mobilnie przez VR)
 - **Lotnicze**: Symulatory awaryjne dla pilotów
 - **Korporacyjne**: Onboarding gamification, szkolenia BHP
-- **Firefighter VR** — szkolenie strażackie na Oculus + mobile controller
+- **Firefighter VR** - szkolenie strażackie na Oculus + mobile controller
 
 **Schemat projektowania symulacji:**
 
@@ -99,21 +99,21 @@ Ocena (assessment embedded in gameplay)
 Gry projektowane w celu zmiany postaw, budowania empatii lub angażowania w kwestie społeczne.
 
 **Przykłady:**
-- **Darfur is Dying** — symulacja kryzysu humanitarnego
-- **Papers Please** — dylematy moralne uchodźców i biurokracji
-- **That Dragon, Cancer** — narracja o chorobie dziecka
-- **Spent** — symulacja ubóstwa (NYC)
-- **Bury Me My Love** — historia uchodźcy na mobile (BAFTA 2018)
+- **Darfur is Dying** - symulacja kryzysu humanitarnego
+- **Papers Please** - dylematy moralne uchodźców i biurokracji
+- **That Dragon, Cancer** - narracja o chorobie dziecka
+- **Spent** - symulacja ubóstwa (NYC)
+- **Bury Me My Love** - historia uchodźcy na mobile (BAFTA 2018)
 
 ### 5. Korporacyjne i marketingowe (Advergames)
 
 Gry tworzone przez marki w celach promocyjnych lub szkoleniowych dla pracowników.
 
 **Przykłady:**
-- **M&M's Eye Spy Pretzel** — kampania marketingowa
-- **Nike Training Club** — grywalizacja aktywności fizycznej
-- **Starbucks Rewards** — program lojalnościowy jako gra
-- **McDonald's Monopoly** — hybrydowa gra promocyjna
+- **M&M's Eye Spy Pretzel** - kampania marketingowa
+- **Nike Training Club** - grywalizacja aktywności fizycznej
+- **Starbucks Rewards** - program lojalnościowy jako gra
+- **McDonald's Monopoly** - hybrydowa gra promocyjna
 
 ---
 
@@ -121,7 +121,7 @@ Gry tworzone przez marki w celach promocyjnych lub szkoleniowych dla pracownikó
 
 ### Framework MDA (Mechanics, Dynamics, Aesthetics)
 
-Gry poważne korzystają ze standardowego frameworka MDA, z modyfikacją — **cel edukacyjny/terapeutyczny** jest równorzędny z *Aesthetics*:
+Gry poważne korzystają ze standardowego frameworka MDA, z modyfikacją - **cel edukacyjny/terapeutyczny** jest równorzędny z *Aesthetics*:
 
 ```
 ┌──────────────┬──────────────────┬───────────────────────────────┐
@@ -169,7 +169,7 @@ Gry poważne korzystają ze standardowego frameworka MDA, z modyfikacją — **c
 
 ---
 
-## Implementacja gry poważnej na mobile — przykład edukacyjny
+## Implementacja gry poważnej na mobile - przykład edukacyjny
 
 Poniżej przykład prostej gry quizowej w Kotlinie (Android) z mechanikami angażującymi:
 
@@ -204,7 +204,7 @@ data class Question(
     val explanation: String        // wyjaśnienie po odpowiedzi
 )
 
-// UserProgress.kt — dane analityczne
+// UserProgress.kt - dane analityczne
 @Entity(tableName = "progress")
 data class UserProgress(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
@@ -227,7 +227,7 @@ class QuizViewModel @Inject constructor(
     private val _state = MutableStateFlow(QuizState())
     val state: StateFlow<QuizState> = _state.asStateFlow()
 
-    // Adaptacyjny dobór pytań — "computer adaptive testing" (CAT)
+    // Adaptacyjny dobór pytań - "computer adaptive testing" (CAT)
     fun loadNextQuestion() {
         viewModelScope.launch {
             val targetDifficulty = obliczTrudnosc()
@@ -239,7 +239,7 @@ class QuizViewModel @Inject constructor(
     // Algorytm adaptacyjny: jeśli ostatnie 3 odpowiedzi były poprawne → podnieś trudność
     private fun obliczTrudnosc(): Int {
         val historia = _state.value.historia
-        // Potrzebujemy min. 3 odpowiedzi zanim zaczniemy adaptować — wcześniej trzymamy domyślny poziom
+        // Potrzebujemy min. 3 odpowiedzi zanim zaczniemy adaptować - wcześniej trzymamy domyślny poziom
         if (historia.size < 3) return _state.value.aktualnyPoziom
         val ostatnie = historia.takeLast(3)
         val poprawnosc = ostatnie.count { it.poprawna }.toFloat() / ostatnie.size
@@ -274,7 +274,7 @@ class QuizViewModel @Inject constructor(
         }
     }
 
-    // Punkty zależne od czasu i trudności — mechanika pilności
+    // Punkty zależne od czasu i trudności - mechanika pilności
     private fun obliczPunkty(czasMs: Long, trudnosc: Int): Int {
         val bazowe = trudnosc * 100
         val bonus = maxOf(0, 500 - (czasMs / 100).toInt())  // do 500 bonusu za szybkość
@@ -297,7 +297,7 @@ fun QuizScreen(viewModel: QuizViewModel = hiltViewModel()) {
             .padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(12.dp)
     ) {
-        // Pasek postępu — "progress bar" jako mechanika motywacji
+        // Pasek postępu - "progress bar" jako mechanika motywacji
         LinearProgressIndicator(
             progress = { state.postep },
             modifier = Modifier.fillMaxWidth()
@@ -332,7 +332,7 @@ fun QuizScreen(viewModel: QuizViewModel = hiltViewModel()) {
                 )
             }
 
-            // Wyjaśnienie po odpowiedzi — kluczowe dla effective learning
+            // Wyjaśnienie po odpowiedzi - kluczowe dla effective learning
             AnimatedVisibility(visible = state.pokazWyjasnienie) {
                 Card(
                     colors = CardDefaults.cardColors(
@@ -425,14 +425,14 @@ Często mylone pojęcia, które warto rozróżnić:
 
 ### Pułapka „shovelware educational"
 
-Wiele gier edukacyjnych to jedynie quizy z animowanymi postaciami — bez głębokich mechanik angażujących. Kluczowe pytania przy ocenie gry poważnej:
+Wiele gier edukacyjnych to jedynie quizy z animowanymi postaciami - bez głębokich mechanik angażujących. Kluczowe pytania przy ocenie gry poważnej:
 
 1. Czy cel edukacyjny/terapeutyczny jest **wbudowany w mechaniki**, a nie przyklejony na zewnątrz?
 2. Czy gra wymaga od gracza **zastosowania wiedzy**, a nie jedynie jej odtworzenia?
 3. Czy istnieje **pętla feedback-refleksja-próba** (fail-reflect-retry)?
 4. Czy trudność **adaptuje się** do gracza?
 
-### Ocena skuteczności — wymogi badawcze
+### Ocena skuteczności - wymogi badawcze
 
 Rzetelna ocena gry poważnej wymaga:
 - **Randomizowane badania kontrolowane** (RCT) lub quasi-eksperymenty
@@ -475,7 +475,7 @@ Rzetelna ocena gry poważnej wymaga:
 **Platforma**: Android (Jetpack Compose)  
 **Mechaniki**:
 - Pytania wielokrotnego wyboru z obrazem anatomicznym
-- Algorytm adaptacyjny (IRT — Item Response Theory)
+- Algorytm adaptacyjny (IRT - Item Response Theory)
 - Spaced repetition do powtórek (algorytm SM-2 z Anki)
 - Leaderboard klasowy (współzawodnictwo motywujące)
 
@@ -498,10 +498,10 @@ Rzetelna ocena gry poważnej wymaga:
 
 ## Zasoby i literatura
 
-- **Zyda, M. (2005)** — „From Visual Simulation to Virtual Reality to Games", *IEEE Computer*
-- **Gee, J.P. (2003)** — *What Video Games Have to Teach Us About Learning and Literacy*
-- **Serious Games Initiative** — seriousgames.org
-- **Games for Change** — gamesforchange.org — festiwal i platforma social impact games
-- **GDC Vault** — prezentacje z sesji „Serious Games Summit"
-- **Journal of Medical Internet Research** — publikacje nt. health games
-- **EdSurge** — aktualności o edtech i grach edukacyjnych
+- **Zyda, M. (2005)** - „From Visual Simulation to Virtual Reality to Games", *IEEE Computer*
+- **Gee, J.P. (2003)** - *What Video Games Have to Teach Us About Learning and Literacy*
+- **Serious Games Initiative** - seriousgames.org
+- **Games for Change** - gamesforchange.org - festiwal i platforma social impact games
+- **GDC Vault** - prezentacje z sesji „Serious Games Summit"
+- **Journal of Medical Internet Research** - publikacje nt. health games
+- **EdSurge** - aktualności o edtech i grach edukacyjnych

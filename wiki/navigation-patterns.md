@@ -6,7 +6,7 @@ Nawigacja definiuje jak użytkownicy przemieszczają się między ekranami. Zły
 
 ### Stack Navigation
 
-Najprostszy model — ekrany układają się w stos. Powrót = zdejmujesz wierzchołek.
+Najprostszy model - ekrany układają się w stos. Powrót = zdejmujesz wierzchołek.
 
 ```
 [ Home ] → [ List ] → [ Detail ] → [ Edit ]
@@ -33,7 +33,7 @@ Stosuj gdy: 3–5 równorzędnych sekcji, każda z własną historią nawigacji.
 
 ### Drawer Navigation
 
-Ukryte menu boczne — wychodzi z lewej krawędzi.
+Ukryte menu boczne - wychodzi z lewej krawędzi.
 
 Stosuj gdy: wiele sekcji (>5), rzadko odwiedzane, głęboka hierarchia.  
 **Uwaga:** Material 3 zaleca Bottom Navigation nad Drawer dla głównych ekranów.
@@ -51,7 +51,7 @@ sealed class Screen(val route: String) {
     object Settings : Screen("settings")
 }
 
-// NavHost — kontener nawigacji
+// NavHost - kontener nawigacji
 @Composable
 fun AppNavigation() {
     val navController = rememberNavController()
@@ -126,7 +126,7 @@ fun MainScreen() {
 ## Przekazywanie danych między ekranami
 
 ```kotlin
-// METODA 1 — argumenty URL (proste typy)
+// METODA 1 - argumenty URL (proste typy)
 navController.navigate("product/42?highlight=true")
 
 composable(
@@ -142,7 +142,7 @@ composable(
     )
 }
 
-// METODA 2 — SavedStateHandle w ViewModel (złożone obiekty)
+// METODA 2 - SavedStateHandle w ViewModel (złożone obiekty)
 @HiltViewModel
 class ProductViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
@@ -219,7 +219,7 @@ NavHost(
 }
 ```
 
-## NavigationSuiteScaffold — adaptacyjna nawigacja
+## NavigationSuiteScaffold - adaptacyjna nawigacja
 
 Material 3 oferuje NavigationSuiteScaffold który automatycznie dobiera Bottom Bar, Rail lub Drawer:
 
@@ -262,10 +262,10 @@ fun AdaptiveNavigation() {
 }
 ```
 
-## Wzorzec Backstackowy — modal vs push
+## Wzorzec Backstackowy - modal vs push
 
 ```kotlin
-// Modal (dialog/bottom sheet) — nie wchodzi do back stack
+// Modal (dialog/bottom sheet) - nie wchodzi do back stack
 @Composable
 fun ProductScreen(navController: NavController) {
     var showShareSheet by remember { mutableStateOf(false) }
@@ -276,7 +276,7 @@ fun ProductScreen(navController: NavController) {
         }
     }
 
-    // Push — wchodzi do back stack, cofnięcie wraca do ProductScreen
+    // Push - wchodzi do back stack, cofnięcie wraca do ProductScreen
     Button(onClick = { navController.navigate(Screen.Reviews.createRoute(productId)) }) {
         Text("Zobacz recenzje")
     }
@@ -295,12 +295,12 @@ fun ProductScreen(navController: NavController) {
 
 UIKit dostarcza dwa fundamentalne kontrolery nawigacji: `UINavigationController` do nawigacji stosowej oraz `UITabBarController` do nawigacji zakładkowej.
 
-### UINavigationController — stos ekranów
+### UINavigationController - stos ekranów
 
 `UINavigationController` zarządza stosem `UIViewController`. Każde przejście w głąb hierarchii to operacja `push`, powrót to `pop`.
 
 ```swift
-// AppDelegate / SceneDelegate — konfiguracja root
+// AppDelegate / SceneDelegate - konfiguracja root
 let homeVC = HomeViewController()
 let navController = UINavigationController(rootViewController: homeVC)
 window?.rootViewController = navController
@@ -341,7 +341,7 @@ override func viewDidLoad() {
 }
 ```
 
-### UITabBarController — równoległe sekcje
+### UITabBarController - równoległe sekcje
 
 ```swift
 class MainTabBarController: UITabBarController {
@@ -363,7 +363,7 @@ class MainTabBarController: UITabBarController {
 }
 ```
 
-Każda zakładka posiada **własny, niezależny stos nawigacji** — przejście do innej zakładki nie niszczy historii poprzedniej.
+Każda zakładka posiada **własny, niezależny stos nawigacji** - przejście do innej zakładki nie niszczy historii poprzedniej.
 
 ---
 
@@ -374,7 +374,7 @@ SwiftUI oferuje deklaratywne API nawigacji. Począwszy od iOS 16 zalecane jest `
 ### NavigationStack i NavigationLink (iOS 16+)
 
 ```swift
-// Model ścieżki — umożliwia programową nawigację
+// Model ścieżki - umożliwia programową nawigację
 @Observable
 class AppRouter {
     var path = NavigationPath()
@@ -427,9 +427,9 @@ struct HomeView: View {
 }
 ```
 
-### NavigationSplitView — układy dwu- i trzykolumnowe
+### NavigationSplitView - układy dwu- i trzykolumnowe
 
-`NavigationSplitView` jest przeznaczony dla iPada i macOS — automatycznie przełącza się na pełnoekranowy stos na iPhone.
+`NavigationSplitView` jest przeznaczony dla iPada i macOS - automatycznie przełącza się na pełnoekranowy stos na iPhone.
 
 ```swift
 struct SplitRootView: View {
@@ -438,13 +438,13 @@ struct SplitRootView: View {
 
     var body: some View {
         NavigationSplitView {
-            // Kolumna lewa — lista kategorii
+            // Kolumna lewa - lista kategorii
             List(categories, selection: $selectedCategory) { category in
                 Text(category.name).tag(category)
             }
             .navigationTitle("Kategorie")
         } content: {
-            // Kolumna środkowa — elementy wybranej kategorii
+            // Kolumna środkowa - elementy wybranej kategorii
             if let category = selectedCategory {
                 List(category.items, selection: $selectedItem) { item in
                     Text(item.title).tag(item)
@@ -454,7 +454,7 @@ struct SplitRootView: View {
                 Text("Wybierz kategorię")
             }
         } detail: {
-            // Kolumna prawa — szczegóły elementu
+            // Kolumna prawa - szczegóły elementu
             if let item = selectedItem {
                 ItemDetailView(item: item)
             } else {
@@ -467,11 +467,11 @@ struct SplitRootView: View {
 
 ---
 
-## 3. Deep Linking — szczegółowe omówienie
+## 3. Deep Linking - szczegółowe omówienie
 
 Deep linking pozwala uruchomić konkretny ekran aplikacji bezpośrednio z zewnętrznego źródła (link w przeglądarce, powiadomienie push, inna aplikacja).
 
-### Android — Intent Filters i App Links
+### Android - Intent Filters i App Links
 
 W pliku `AndroidManifest.xml` deklarujesz schemat URL obsługiwany przez aktywność:
 
@@ -495,22 +495,22 @@ W pliku `AndroidManifest.xml` deklarujesz schemat URL obsługiwany przez aktywno
 </activity>
 ```
 
-App Links wymagają pliku `/.well-known/assetlinks.json` na serwerze potwierdzającego właściciela domeny — tylko wtedy system otwiera link bezpośrednio w aplikacji bez pytania użytkownika.
+App Links wymagają pliku `/.well-known/assetlinks.json` na serwerze potwierdzającego właściciela domeny - tylko wtedy system otwiera link bezpośrednio w aplikacji bez pytania użytkownika.
 
-### iOS — Universal Links i Custom URL Schemes
+### iOS - Universal Links i Custom URL Schemes
 
 ```swift
-// Info.plist — rejestracja schematu URL
+// Info.plist - rejestracja schematu URL
 // Klucz: CFBundleURLTypes → CFBundleURLSchemes → "myapp"
 
-// SceneDelegate — obsługa przychodzącego linku
+// SceneDelegate - obsługa przychodzącego linku
 func scene(_ scene: UIScene,
            openURLContexts URLContexts: Set<UIOpenURLContext>) {
     guard let url = URLContexts.first?.url else { return }
     DeepLinkHandler.shared.handle(url: url)
 }
 
-// Universal Links — metoda w AppDelegate
+// Universal Links - metoda w AppDelegate
 func application(_ application: UIApplication,
                  continue userActivity: NSUserActivity,
                  restorationHandler: @escaping ([UIUserActivityRestoring]?) -> Void) -> Bool {
@@ -524,14 +524,14 @@ Universal Links wymagają pliku `/.well-known/apple-app-site-association` (AASA)
 
 ---
 
-## 4. Animacje przejść — Compose i SwiftUI
+## 4. Animacje przejść - Compose i SwiftUI
 
 ### Niestandardowe animacje w SwiftUI
 
 SwiftUI pozwala definiować własne efekty wejścia i wyjścia przez protokół `Transition`:
 
 ```swift
-// Własna animacja — wejście od dołu z fade
+// Własna animacja - wejście od dołu z fade
 struct SlideUpTransition: Transition {
     func body(content: Content, phase: TransitionPhase) -> some View {
         content
@@ -594,7 +594,7 @@ composable(
 }
 ```
 
-**Wskazówka:** Animacje przejść powinny trwać **200–350 ms** — krótsze są niezauważalne, dłuższe spowalniają odczuwalnie UX.
+**Wskazówka:** Animacje przejść powinny trwać **200–350 ms** - krótsze są niezauważalne, dłuższe spowalniają odczuwalnie UX.
 
 ---
 
@@ -607,7 +607,7 @@ Dostępność nawigacji jest obowiązkiem prawnym w wielu krajach (WCAG 2.1, Sec
 Czytniki ekranu ogłaszają zawartość ekranu po każdym przejściu. Aby poprawnie opisać nowy ekran:
 
 ```kotlin
-// Compose — semantyczny opis ekranu dla TalkBack
+// Compose - semantyczny opis ekranu dla TalkBack
 @Composable
 fun ProductDetailScreen(product: Product) {
     // Focusuj pierwszy element po wejściu na ekran
@@ -633,7 +633,7 @@ fun ProductDetailScreen(product: Product) {
 ```
 
 ```swift
-// SwiftUI — dostępność po przejściu
+// SwiftUI - dostępność po przejściu
 struct ProductDetailView: View {
     let product: Product
     @AccessibilityFocusState private var isTitleFocused: Bool
@@ -660,7 +660,7 @@ fun EditFormScreen(navController: NavController, hasUnsavedChanges: Boolean) {
     var showDiscardDialog by remember { mutableStateOf(false) }
 
     BackHandler(enabled = hasUnsavedChanges) {
-        // Zamiast natychmiastowego powrotu — pytamy użytkownika
+        // Zamiast natychmiastowego powrotu - pytamy użytkownika
         showDiscardDialog = true
     }
 
@@ -685,7 +685,7 @@ fun EditFormScreen(navController: NavController, hasUnsavedChanges: Boolean) {
 Material Design i Apple HIG wymagają minimalnego obszaru dotyku **48×48 dp (Android)** i **44×44 pt (iOS)**. Zbyt małe cele nawigacyjne są szczególnie problematyczne dla użytkowników z drżeniem rąk.
 
 ```kotlin
-// Kotlin — wymuszenie minimalnego rozmiaru
+// Kotlin - wymuszenie minimalnego rozmiaru
 NavigationBarItem(
     modifier = Modifier.defaultMinSize(minWidth = 48.dp, minHeight = 48.dp),
     // ...
@@ -693,7 +693,7 @@ NavigationBarItem(
 ```
 
 ```swift
-// SwiftUI — zwiększenie obszaru tapnięcia bez zmiany wizualnego rozmiaru
+// SwiftUI - zwiększenie obszaru tapnięcia bez zmiany wizualnego rozmiaru
 Button(action: goBack) {
     Image(systemName: "chevron.left")
         .padding(12) // powiększa obszar dotyku
@@ -703,7 +703,7 @@ Button(action: goBack) {
 
 ---
 
-## Linki — iOS i dostępność
+## Linki - iOS i dostępność
 
 - [UINavigationController](https://developer.apple.com/documentation/uikit/uinavigationcontroller)
 - [NavigationStack (SwiftUI)](https://developer.apple.com/documentation/swiftui/navigationstack)

@@ -4,13 +4,13 @@ Robotyka poznawcza (ang. *Cognitive Robotics*) to interdyscyplinarna dziedzina n
 
 ## Czym jest robotyka poznawcza?
 
-Tradycyjna robotyka skupia się na precyzyjnym wykonywaniu z góry zaprogramowanych zadań w kontrolowanych warunkach. Robotyka poznawcza idzie dalej — wyposażając roboty w zdolność do:
+Tradycyjna robotyka skupia się na precyzyjnym wykonywaniu z góry zaprogramowanych zadań w kontrolowanych warunkach. Robotyka poznawcza idzie dalej - wyposażając roboty w zdolność do:
 
-- **percepcji wielomodalnej** — integracja danych z kamer, mikrofonów, czujników dotyku i propriocepcji
-- **wnioskowania** — budowanie i aktualizowanie wewnętrznych modeli świata
-- **uczenia się** — adaptacja do nowych sytuacji bez jawnego przeprogramowania
-- **planowania** — wybór sekwencji działań prowadzących do celu
-- **interakcji społecznej** — rozumienie intencji, emocji i komunikacji innych agentów
+- **percepcji wielomodalnej** - integracja danych z kamer, mikrofonów, czujników dotyku i propriocepcji
+- **wnioskowania** - budowanie i aktualizowanie wewnętrznych modeli świata
+- **uczenia się** - adaptacja do nowych sytuacji bez jawnego przeprogramowania
+- **planowania** - wybór sekwencji działań prowadzących do celu
+- **interakcji społecznej** - rozumienie intencji, emocji i komunikacji innych agentów
 
 ## Architektura systemów kognitywnych
 
@@ -56,12 +56,12 @@ Kluczowe cechy:
 
 SOAR (State, Operator And Result) to kognitywna architektura opracowana na Uniwersytecie Michigan, oparta na teorii zunifikowanego poznania:
 
-- **Pamięć długotrwała** — proceduralna, semantyczna i epizodyczna
-- **Pamięć robocza** — aktualny stan zadania
-- **Cykl decyzyjny** — elaboracja → selekcja → zastosowanie operatora
-- **Uczenie się przez fragmentaryzację** — automatyczne tworzenie reguł skrótowych (chunking)
+- **Pamięć długotrwała** - proceduralna, semantyczna i epizodyczna
+- **Pamięć robocza** - aktualny stan zadania
+- **Cykl decyzyjny** - elaboracja → selekcja → zastosowanie operatora
+- **Uczenie się przez fragmentaryzację** - automatyczne tworzenie reguł skrótowych (chunking)
 
-Szczegółowy opis architektury: [Soar — architektura kognitywna](#wiki-soar-architecture)
+Szczegółowy opis architektury: [Soar - architektura kognitywna](#wiki-soar-architecture)
 
 ## Percepcja w robotyce poznawczej
 
@@ -267,7 +267,7 @@ Jak powiązać abstrakcyjne symbole (np. "krzesło") z rzeczywistymi doznaniami 
 
 ### Rozumowanie przyczynowe
 
-Robot powinien rozumieć nie tylko *co* się wydarzyło, ale *dlaczego* — i przewidywać konsekwencje swoich działań.
+Robot powinien rozumieć nie tylko *co* się wydarzyło, ale *dlaczego* - i przewidywać konsekwencje swoich działań.
 
 ### Kompromis eksploracja–eksploatacja
 
@@ -279,12 +279,12 @@ Większość osiągnięć dotyczy izolowanych zadań. Tworzenie robotów radząc
 
 ## Zastosowania
 
-- **Roboty asystujące** — opieka nad osobami starszymi i niepełnosprawnymi (np. PARO, Pepper)
-- **Roboty edukacyjne** — interaktywne systemy tutoringu (np. NAO w klasie)
-- **Roboty przemysłowe nowej generacji** — współpraca człowiek–robot (coboty)
-- **Eksploracja kosmiczna** — autonomiczne łaziki (Mars Curiosity, Perseverance)
-- **Roboty chirurgiczne** — wspomaganie precyzji operacji (da Vinci)
-- **Pojazdy autonomiczne** — percepcja i planowanie trasy
+- **Roboty asystujące** - opieka nad osobami starszymi i niepełnosprawnymi (np. PARO, Pepper)
+- **Roboty edukacyjne** - interaktywne systemy tutoringu (np. NAO w klasie)
+- **Roboty przemysłowe nowej generacji** - współpraca człowiek–robot (coboty)
+- **Eksploracja kosmiczna** - autonomiczne łaziki (Mars Curiosity, Perseverance)
+- **Roboty chirurgiczne** - wspomaganie precyzji operacji (da Vinci)
+- **Pojazdy autonomiczne** - percepcja i planowanie trasy
 
 ## Powiązane artykuły
 
@@ -294,22 +294,22 @@ Większość osiągnięć dotyczy izolowanych zadań. Tworzenie robotów radząc
 - [Reprezentacja wiedzy i wnioskowanie](#wiki-knowledge-representation)
 - [Modele kognitywne](#wiki-cognitive-models)
 - [ACT-R](#wiki-actr-architecture)
-- [Soar — architektura kognitywna](#wiki-soar-architecture)
+- [Soar - architektura kognitywna](#wiki-soar-architecture)
 - [LIDA](#wiki-lida-architecture)
 - [CLARION](#wiki-clarion-architecture)
 - [Computer-aided diagnosis](#wiki-computer-aided-diagnosis)
 
-## BDI — Beliefs, Desires, Intentions
+## BDI - Beliefs, Desires, Intentions
 
 Model BDI (*Beliefs, Desires, Intentions*) to jedna z najpopularniejszych formalnych teorii agentów racjonalnych, wywodząca się z filozofii praktycznego rozumowania. W robotyce poznawczej stanowi most między niskopoziomową percepcją a planowaniem wysokiego poziomu.
 
-- **Beliefs** (przekonania) — aktualny model świata agenta: co robot wie lub sądzi o środowisku, innych agentach, własnym stanie
-- **Desires** (pragnienia) — stany końcowe lub sytuacje, które agent chciałby osiągnąć (cele długoterminowe)
-- **Intentions** (intencje) — plany, które agent postanowił realizować; stanowią filtr ograniczający możliwe działania
+- **Beliefs** (przekonania) - aktualny model świata agenta: co robot wie lub sądzi o środowisku, innych agentach, własnym stanie
+- **Desires** (pragnienia) - stany końcowe lub sytuacje, które agent chciałby osiągnąć (cele długoterminowe)
+- **Intentions** (intencje) - plany, które agent postanowił realizować; stanowią filtr ograniczający możliwe działania
 
 Kluczowa różnica między desires a intentions: agent może mieć sprzeczne pragnienia (pojechać w dwie strony naraz), ale intencje są spójnym zobowiązaniem do konkretnej ścieżki działania.
 
-### Pętla BDI — pseudokod w Pythonie
+### Pętla BDI - pseudokod w Pythonie
 
 ```python
 class BDIAgent:
@@ -332,7 +332,7 @@ class BDIAgent:
     def update_beliefs(self, observation: dict):
         """Uaktualnij model świata na podstawie nowych obserwacji."""
         self.beliefs.update(observation)
-        # Inferencja — np. jeśli bateria < 20%, dodaj przekonanie "low_battery"
+        # Inferencja - np. jeśli bateria < 20%, dodaj przekonanie "low_battery"
         if self.beliefs.get("battery_level", 100) < 20:
             self.beliefs["low_battery"] = True
 
@@ -383,17 +383,17 @@ Praktyczne implementacje BDI dla robotyki to m.in. **JADE** (Java Agent DEvelopm
 
 ---
 
-## Planowanie sekwencji działań — STRIPS i PDDL
+## Planowanie sekwencji działań - STRIPS i PDDL
 
-Klasyczne planowanie symboliczne polega na znalezieniu sekwencji operatorów transformujących stan początkowy do stanu docelowego. Jest to komplement dla reaktywnych architektur — tam gdzie BDI reaguje na bodźce, planer symboliczny oblicza długie sekwencje działań.
+Klasyczne planowanie symboliczne polega na znalezieniu sekwencji operatorów transformujących stan początkowy do stanu docelowego. Jest to komplement dla reaktywnych architektur - tam gdzie BDI reaguje na bodźce, planer symboliczny oblicza długie sekwencje działań.
 
-### STRIPS — podstawy
+### STRIPS - podstawy
 
 STRIPS (*Stanford Research Institute Problem Solver*, 1971) definiuje problem planowania przez:
 
-- **Stan** — zbiór faktów (predykatów) prawdziwych w danej chwili
-- **Operator** — akcja z warunkami wstępnymi (*preconditions*) i efektami (*add/delete lists*)
-- **Cel** — podzbiór faktów, które mają być prawdziwe po zakończeniu planu
+- **Stan** - zbiór faktów (predykatów) prawdziwych w danej chwili
+- **Operator** - akcja z warunkami wstępnymi (*preconditions*) i efektami (*add/delete lists*)
+- **Cel** - podzbiór faktów, które mają być prawdziwe po zakończeniu planu
 
 ```
 Operator: pick_up(robot, object, location)
@@ -402,7 +402,7 @@ Operator: pick_up(robot, object, location)
   Delete effects: at(object, location)
 ```
 
-### PDDL — język opisu domen planowania
+### PDDL - język opisu domen planowania
 
 PDDL (*Planning Domain Definition Language*) to standaryzowany format opisu domen i problemów planowania, obsługiwany przez planery jak **Fast Downward**, **FF** czy **LAMA**.
 
@@ -437,7 +437,7 @@ PDDL (*Planning Domain Definition Language*) to standaryzowany format opisu dome
     :effect (and (obj-at ?o ?l) (not (holding ?r ?o)))))
 ```
 
-### Integracja z ROS2 — wywołanie planera z Pythona
+### Integracja z ROS2 - wywołanie planera z Pythona
 
 ```python
 import subprocess
@@ -463,12 +463,12 @@ def plan_task(domain_file: str, problem_file: str) -> list[str]:
 # Wynik: ['move robot1 loc_a loc_b', 'pick-up robot1 box1 loc_b', ...]
 ```
 
-Planowanie symboliczne jest użyteczne dla zadań logistycznych (sortowanie, kompletacja zamówień), inspekcji przemysłowej i robotyki domowej, gdzie możliwe stany świata dają się opisać predykatami. Jego ograniczeniem jest wrażliwość na niepełną wiedzę o świecie — dlatego łączy się je z percepcją probabilistyczną i architekturami reaktywnymi.
+Planowanie symboliczne jest użyteczne dla zadań logistycznych (sortowanie, kompletacja zamówień), inspekcji przemysłowej i robotyki domowej, gdzie możliwe stany świata dają się opisać predykatami. Jego ograniczeniem jest wrażliwość na niepełną wiedzę o świecie - dlatego łączy się je z percepcją probabilistyczną i architekturami reaktywnymi.
 
 ## Linki zewnętrzne
 
 - [IEEE Robotics and Automation Society](https://www.ieee-ras.org/)
 - [ROS 2 Documentation](https://docs.ros.org/en/rolling/)
-- [OpenCog — platforma AGI](https://opencog.org/)
+- [OpenCog - platforma AGI](https://opencog.org/)
 - [iCub Robot (IIT)](https://icub.iit.it/)
 - [DARPA Robotics Challenge](https://www.darpa.mil/program/darpa-robotics-challenge)

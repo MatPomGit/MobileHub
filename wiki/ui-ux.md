@@ -1,6 +1,6 @@
 # Metody interakcji i projektowanie UI/UX
 
-Interfejs mobilny różni się fundamentalnie od desktopowego. Brak myszy i klawiatury, ekran dotykowy, zmienny kontekst użycia (stanie w autobusie, słońce, jedna ręka) — to wszystko wymaga innego podejścia do projektowania interakcji.
+Interfejs mobilny różni się fundamentalnie od desktopowego. Brak myszy i klawiatury, ekran dotykowy, zmienny kontekst użycia (stanie w autobusie, słońce, jedna ręka) - to wszystko wymaga innego podejścia do projektowania interakcji.
 
 ## Gesty dotykowe
 
@@ -131,7 +131,7 @@ Używaj narzędzia [Contrast Checker](https://webaim.org/resources/contrastcheck
 
 ## Mikro-animacje
 
-Animacje nie są tylko ozdobą — komunikują stan systemu i przyczynowość:
+Animacje nie są tylko ozdobą - komunikują stan systemu i przyczynowość:
 
 ```kotlin
 // Animowana widoczność
@@ -160,10 +160,10 @@ val progress by animateFloatAsState(
 
 Pierwsze uruchomienie aplikacji to krytyczny moment. Wzorce:
 
-1. **Benefits onboarding** — "Co możesz zrobić z aplikacją" (3–5 slajdów)
-2. **Progressive disclosure** — funkcje są ujawniane stopniowo, wraz z użyciem
-3. **Blank state** — pusty stan z instrukcją co zrobić jako pierwsze
-4. **Permissions rationale** — wyjaśnij PRZED poproszeniem o uprawnienia
+1. **Benefits onboarding** - "Co możesz zrobić z aplikacją" (3–5 slajdów)
+2. **Progressive disclosure** - funkcje są ujawniane stopniowo, wraz z użyciem
+3. **Blank state** - pusty stan z instrukcją co zrobić jako pierwsze
+4. **Permissions rationale** - wyjaśnij PRZED poproszeniem o uprawnienia
 
 ```kotlin
 // Wyjaśnienie przed uprawnieniem do lokalizacji
@@ -177,11 +177,11 @@ if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATIO
 
 ## Linki
 
-- [Google Material Design — Interaction](https://m3.material.io/foundations/interaction/states/overview)
-- [Apple HIG — Gestures](https://developer.apple.com/design/human-interface-guidelines/gestures)
-- [Nielsen Norman Group — Mobile UX](https://www.nngroup.com/topic/mobile-ux/)
+- [Google Material Design - Interaction](https://m3.material.io/foundations/interaction/states/overview)
+- [Apple HIG - Gestures](https://developer.apple.com/design/human-interface-guidelines/gestures)
+- [Nielsen Norman Group - Mobile UX](https://www.nngroup.com/topic/mobile-ux/)
 
-## Onboarding — pierwsze uruchomienie
+## Onboarding - pierwsze uruchomienie
 
 Pierwsze wrażenie decyduje o retencji. Skuteczny onboarding wyjaśnia wartość aplikacji zanim poprosi o cokolwiek.
 
@@ -237,7 +237,7 @@ fun OnboardingScreen(onFinish: () -> Unit) {
 }
 ```
 
-## Micro-interactions — animacje stanu
+## Micro-interactions - animacje stanu
 
 ```kotlin
 // Like button z animacją
@@ -252,7 +252,7 @@ fun LikeButton(isLiked: Boolean, count: Int, onToggle: () -> Unit) {
     Row(
         modifier = Modifier.clickable(
             interactionSource = remember { MutableInteractionSource() },
-            indication = null  // brak ripple — własna animacja
+            indication = null  // brak ripple - własna animacja
         ) {
             onToggle()
         },
@@ -280,19 +280,19 @@ fun LikeButton(isLiked: Boolean, count: Int, onToggle: () -> Unit) {
 - [Compose Animation](https://developer.android.com/jetpack/compose/animation/introduction)
 - [Nielsen Heuristics](https://www.nngroup.com/articles/ten-usability-heuristics/)
 
-## Metryki UX — pomiar jakości aplikacji
+## Metryki UX - pomiar jakości aplikacji
 
-Dobry design to nie tylko estetyka — to mierzalne efekty. Do podstawowych wskaźników jakości aplikacji mobilnej należą:
+Dobry design to nie tylko estetyka - to mierzalne efekty. Do podstawowych wskaźników jakości aplikacji mobilnej należą:
 
 | Metryka | Opis | Cel |
 |---|---|---|
-| **DAU/MAU** | Daily/Monthly Active Users — stosunek mierzy „lepkość" aplikacji | > 20% |
+| **DAU/MAU** | Daily/Monthly Active Users - stosunek mierzy „lepkość" aplikacji | > 20% |
 | **Retention D1/D7/D30** | % użytkowników wracających po 1, 7 i 30 dniach | D1 > 40%, D30 > 10% |
 | **Crash-free sessions** | % sesji bez awarii | > 99,5% |
-| **ANR rate** | Application Not Responding — zamrożenia > 5 s | < 0,47% (próg Play Store) |
+| **ANR rate** | Application Not Responding - zamrożenia > 5 s | < 0,47% (próg Play Store) |
 | **Screen load time** | Czas do pierwszej interaktywnej klatki | < 300 ms |
 
-### Firebase Analytics — śledzenie przepływów
+### Firebase Analytics - śledzenie przepływów
 
 Firebase Analytics pozwala rejestrować zdarzenia i analizować ścieżki użytkowników (funnel). Integracja w Kotlin:
 
@@ -359,7 +359,7 @@ remoteConfig.fetchAndActivate().addOnCompleteListener { task ->
 4. Ustalamy podział ruchu: 50/50 lub stopniowy rollout (5% → 20% → 100%)
 5. Po zebraniu wystarczającej próby (zazwyczaj 1–2 tygodnie) Firebase wskazuje wariant z istotną statystycznie poprawą
 
-**Stopniowy rollout** to osobna technika — wdrażamy nową funkcję dla 5% użytkowników, monitorujemy crash-free rate i ANR, a następnie zwiększamy procent. Flaga `new_navigation: true` dla 5% pozwala wycofać zmianę bez wydawania nowej wersji aplikacji.
+**Stopniowy rollout** to osobna technika - wdrażamy nową funkcję dla 5% użytkowników, monitorujemy crash-free rate i ANR, a następnie zwiększamy procent. Flaga `new_navigation: true` dla 5% pozwala wycofać zmianę bez wydawania nowej wersji aplikacji.
 
 Warto zapamiętać: nigdy nie testuj więcej niż jednej zmiennej jednocześnie w tym samym eksperymencie, bo nie będziesz w stanie ustalić, co spowodowało zmianę metryki.
 
@@ -370,7 +370,7 @@ Każda aplikacja musi obsługiwać trzy stany poza „happy path": **pusty stan*
 ### Empty state i skeleton loading w Compose
 
 ```kotlin
-// Skeleton loading — efekt shimmer
+// Skeleton loading - efekt shimmer
 @Composable
 fun ShimmerCard(modifier: Modifier = Modifier) {
     val infiniteTransition = rememberInfiniteTransition(label = "shimmer")
@@ -430,4 +430,4 @@ fun ProductListScreen(viewModel: ProductViewModel = hiltViewModel()) {
 }
 ```
 
-Stan błędu (`ErrorState`) powinien zawierać czytelny komunikat (nie „Error 500"), opcję ponowienia akcji oraz — jeśli to możliwe — informację o trybie offline z ostatnimi danymi z cache. Użytkownicy wybaczają błędy, jeśli aplikacja zachowuje się przewidywalnie i daje im kontrolę.
+Stan błędu (`ErrorState`) powinien zawierać czytelny komunikat (nie „Error 500"), opcję ponowienia akcji oraz - jeśli to możliwe - informację o trybie offline z ostatnimi danymi z cache. Użytkownicy wybaczają błędy, jeśli aplikacja zachowuje się przewidywalnie i daje im kontrolę.

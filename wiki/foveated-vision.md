@@ -1,4 +1,4 @@
-# Foveated Vision — Widzenie Fowealne
+# Foveated Vision - Widzenie Fowealne
 
 Foveated Vision (widzenie fowealne) to model widzenia wzorowany na budowie siatkówki oka, w którym rozdzielczość przetwarzanego obrazu jest zróżnicowana przestrzennie: najwyższa w centralnym punkcie fiksacji (odpowiadającym **fovea centralis**), a stopniowo malejąca ku peryferiom. Podejście to pozwala drastycznie zmniejszyć ilość przetwarzanych danych bez utraty percepcyjnie istotnych informacji.
 
@@ -6,7 +6,7 @@ Foveated Vision (widzenie fowealne) to model widzenia wzorowany na budowie siatk
 
 ### Fovea centralis
 
-Fovea to centralne zagłębienie siatkówki, zawierające wyłącznie czopki (fotoreceptory barwne, odpowiedzialne za ostrość). Obejmuje zaledwie **2° kąta widzenia**, lecz odpowiada za większość świadomej percepcji wzrokowej. Poza foveą gęstość czopków gwałtownie spada, a dominują pręciki — odpowiedzialne za widzenie w niskim oświetleniu i detekcję ruchu.
+Fovea to centralne zagłębienie siatkówki, zawierające wyłącznie czopki (fotoreceptory barwne, odpowiedzialne za ostrość). Obejmuje zaledwie **2° kąta widzenia**, lecz odpowiada za większość świadomej percepcji wzrokowej. Poza foveą gęstość czopków gwałtownie spada, a dominują pręciki - odpowiedzialne za widzenie w niskim oświetleniu i detekcję ruchu.
 
 ```
 Rozkład rozdzielczości w oku ludzkim:
@@ -26,8 +26,8 @@ Wizualizacja przestrzenna:
 
 W systemach komputerowych foveated rendering / foveated processing oznacza, że:
 - obszar wokół **punktu fiksacji** (foveal region) jest przetwarzany z pełną rozdzielczością
-- **parafovealna** strefa — z umiarkowaną rozdzielczością
-- **peryferyczna** strefa — z niską rozdzielczością lub uproszczonym przetwarzaniem
+- **parafovealna** strefa - z umiarkowaną rozdzielczością
+- **peryferyczna** strefa - z niską rozdzielczością lub uproszczonym przetwarzaniem
 
 ```
 ┌──────────────────────────────────────────────────────┐
@@ -68,7 +68,7 @@ def log_polar_fovea(frame: np.ndarray,
                     M: float = 40.0) -> np.ndarray:
     """
     Przekształcenie log-polarne względem punktu fiksacji (cx, cy).
-    M — parametr magnification factor (im większy, tym silniejszy efekt fovei).
+    M - parametr magnification factor (im większy, tym silniejszy efekt fovei).
     """
     h, w = frame.shape[:2]
     maxR = np.sqrt(max(cx, w - cx)**2 + max(cy, h - cy)**2)
@@ -101,7 +101,7 @@ def foveated_blur(image: np.ndarray,
     # Sigma rośnie liniowo poza fovea_radius
     sigma_map = np.clip((dist - fovea_radius) / (max(h, w) / 2) * max_sigma, 0, max_sigma)
 
-    # Progresywne rozmycie — kilka stref
+    # Progresywne rozmycie - kilka stref
     for sigma in [3, 6, 10, 15]:
         mask = (sigma_map >= sigma - 1.5) & (sigma_map < sigma + 1.5)
         if mask.any():
@@ -119,7 +119,7 @@ Urządzenia VR/AR renderują dwie klatki 90+ Hz w rozdzielczości 2K–4K na ka�
 
 **Foveated rendering** rozwiązuje ten problem:
 - tylko **foveal region** (centrum spojrzenia) jest renderowany w pełnej rozdzielczości
-- peryferia — w niskiej rozdzielczości (2×–8× mniejsza)
+- peryferia - w niskiej rozdzielczości (2×–8× mniejsza)
 - całkowity koszt renderingu spada o **30–70%** bez zauważalnej utraty jakości
 
 ```
@@ -159,7 +159,7 @@ class FoveatedRenderer(private val xrSession: XrSession) {
 ```
 
 ```glsl
-// Fragment shader — foveated quality falloff
+// Fragment shader - foveated quality falloff
 uniform vec2 u_fixation;   // punkt fiksacji w UV [0,1]
 uniform float u_fovRadius; // promień fovei w UV
 uniform sampler2D u_hires;
@@ -178,14 +178,14 @@ void main() {
 Jeśli brak eye-trackera, centrum fovei jest stałe (środek ekranu). Stosowane w Quest 2, Meta Quest 3, Apple Vision Pro:
 
 ```xml
-<!-- AndroidManifest.xml — włączenie FFR w Oculus SDK -->
+<!-- AndroidManifest.xml - włączenie FFR w Oculus SDK -->
 <meta-data
     android:name="com.samsung.android.vr.application.mode"
     android:value="vr_only" />
 ```
 
 ```kotlin
-// Oculus VRAPI — stały foveated rendering
+// Oculus VRAPI - stały foveated rendering
 val layerFlags = VRAPI_FRAME_LAYER_FLAG_FIXED_TO_VIEW or
                  VRAPI_FRAME_LAYER_FLAG_CHROMATIC_ABERRATION_CORRECTION
 frameLayer.apply {
@@ -277,7 +277,7 @@ Wzorzec przy dysleksji:
 ### Interfejsy sterowane wzrokiem (gaze UI)
 
 ```kotlin
-// Tobii Gaze SDK — Android (uproszczony przykład)
+// Tobii Gaze SDK - Android (uproszczony przykład)
 class GazeInputManager(context: Context) {
     private val gazeController = TobiiGazeController(context)
 
@@ -293,7 +293,7 @@ class GazeInputManager(context: Context) {
 gazeInputManager.startGazeInput { gx, gy ->
     // Podświetl przycisk pod spojrzeniem
     highlightButtonAt(gx, gy)
-    // Po 800 ms fiksacji — aktywuj
+    // Po 800 ms fiksacji - aktywuj
     dwellTimer.restart(gx, gy, thresholdMs = 800) { activateAt(gx, gy) }
 }
 ```
@@ -329,10 +329,10 @@ Mapa jakości kadrów wideo:
 
 ### Foveated Decode (streaming adaptacyjny)
 
-Serwery wideo mogą przesyłać kafelkowane strumienie o różnej jakości; klient pobiera kafelek centralny w pełnej jakości, pozostałe — w niskiej:
+Serwery wideo mogą przesyłać kafelkowane strumienie o różnej jakości; klient pobiera kafelek centralny w pełnej jakości, pozostałe - w niskiej:
 
 ```kotlin
-// Przykład — adaptacyjny downloader kafelków (HLS-like)
+// Przykład - adaptacyjny downloader kafelków (HLS-like)
 data class TilePriority(val tileId: Int, val priority: Float)
 
 fun computeTilePriorities(gazeX: Float, gazeY: Float,
@@ -344,7 +344,7 @@ fun computeTilePriorities(gazeX: Float, gazeY: Float,
             val tileCy = (ty + 0.5f) / tilesY
             val dist = Math.hypot((tileCx - gazeX).toDouble(),
                                    (tileCy - gazeY).toDouble()).toFloat()
-            // Priorytet maleje z odległością — centrum najważniejsze
+            // Priorytet maleje z odległością - centrum najważniejsze
             priorities.add(TilePriority(ty * tilesX + tx, 1f / (1f + dist * 4)))
         }
     }
@@ -377,18 +377,18 @@ class FoveatedDetector(private val model: ObjectDetector) {
 
 ## Ograniczenia i wyzwania
 
-- **Latencja eye-trackera** — opóźnienie > 20 ms powoduje widoczne artefakty (tzw. *foveation lag*)
-- **Kalibracja** — indywidualne różnice w anatomii oka wymagają kalibracji per-użytkownik
-- **Ruch głowy vs. ruch oczu** — system musi rozróżniać sakady od ruchów głowy
-- **Efekt aureoli** (*halo artifact*) — ostra granica strefy fovealnej może być zauważalna przy szybkich sakadach
-- **Wrażliwość peryferyczna na ruch** — oko wykrywa ruch na peryferiach; zbyt mocna degradacja ujawnia artefakty ruchu
+- **Latencja eye-trackera** - opóźnienie > 20 ms powoduje widoczne artefakty (tzw. *foveation lag*)
+- **Kalibracja** - indywidualne różnice w anatomii oka wymagają kalibracji per-użytkownik
+- **Ruch głowy vs. ruch oczu** - system musi rozróżniać sakady od ruchów głowy
+- **Efekt aureoli** (*halo artifact*) - ostra granica strefy fovealnej może być zauważalna przy szybkich sakadach
+- **Wrażliwość peryferyczna na ruch** - oko wykrywa ruch na peryferiach; zbyt mocna degradacja ujawnia artefakty ruchu
 
 ## Powiązane artykuły
 
-- [Active Vision — aktywna wizja](#wiki-active-vision)
+- [Active Vision - aktywna wizja](#wiki-active-vision)
 - [Modelowanie kognitywne ludzkiej percepcji](#wiki-cognitive-perception)
 - [XR i rozszerzona rzeczywistość](#wiki-xr-mobile)
 - [VR mobilne i Google Cardboard](#wiki-vr-mobile)
-- [ARCore — zaawansowane techniki](#wiki-arcore-advanced)
+- [ARCore - zaawansowane techniki](#wiki-arcore-advanced)
 - [GPU i renderowanie grafiki](#wiki-gpu-rendering)
 - [Wyświetlacze i technologie ekranów](#wiki-display-screen)

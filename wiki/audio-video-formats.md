@@ -8,8 +8,8 @@ Wybór odpowiedniego formatu audio i wideo to jedno z kluczowych decyzji projekt
 
 Przed omówieniem konkretnych formatów warto rozróżnić dwa fundamentalne pojęcia:
 
-- **Kodek** (ang. *codec* = *coder-decoder*) — algorytm kompresji i dekompresji danych audio/wideo (np. H.264, AAC, VP9)
-- **Kontener** — format pliku przechowujący zakodowane strumienie audio i wideo wraz z metadanymi (np. MP4, MKV, WebM)
+- **Kodek** (ang. *codec* = *coder-decoder*) - algorytm kompresji i dekompresji danych audio/wideo (np. H.264, AAC, VP9)
+- **Kontener** - format pliku przechowujący zakodowane strumienie audio i wideo wraz z metadanymi (np. MP4, MKV, WebM)
 
 Przykład: plik `.mp4` to kontener, który może zawierać strumień wideo zakodowany kodekiem H.264 i strumień audio zakodowany kodekiem AAC.
 
@@ -25,7 +25,7 @@ MP3 to najstarszy i najbardziej rozpowszechniony format audio z kompresją strat
 - Dobry balans jakości i rozmiaru przy 128–320 kbps
 - Bogatą bibliotekę istniejących plików
 
-**Wada:** Stratna kompresja — traci część informacji dźwiękowych nieodwracalnie.
+**Wada:** Stratna kompresja - traci część informacji dźwiękowych nieodwracalnie.
 
 ### AAC (Advanced Audio Coding)
 
@@ -46,7 +46,7 @@ Format otwarty, preferowany w ekosystemie Android i grach (Godot, Unity opcjonal
 
 ### FLAC (Free Lossless Audio Codec)
 
-Format bezstratny — idealne odwzorowanie oryginału:
+Format bezstratny - idealne odwzorowanie oryginału:
 
 - Kompresja bezstratna (~50–60% mniej niż WAV)
 - Obsługiwany natywnie na Androidzie od wersji 3.1
@@ -150,7 +150,7 @@ Kontener stworzony przez Google, używany w przeglądarkach:
 
 ## Android: MediaPlayer i ExoPlayer
 
-### MediaPlayer — prosty odtwarzacz
+### MediaPlayer - prosty odtwarzacz
 
 `MediaPlayer` jest wbudowanym komponentem Androida, wystarczającym do podstawowego odtwarzania:
 
@@ -169,7 +169,7 @@ val mediaPlayer = MediaPlayer().apply {
 }
 ```
 
-### ExoPlayer — nowoczesne rozwiązanie
+### ExoPlayer - nowoczesne rozwiązanie
 
 ExoPlayer (biblioteka Jetpack Media3) to zalecane rozwiązanie dla zaawansowanych zastosowań:
 
@@ -198,9 +198,9 @@ override fun onStop() {
 ```
 
 ExoPlayer obsługuje natywnie:
-- **HLS** (HTTP Live Streaming) — standard Apple, używany przez Netflix, Twitch
-- **DASH** (Dynamic Adaptive Streaming over HTTP) — standard MPEG
-- **SmoothStreaming** — format Microsoft
+- **HLS** (HTTP Live Streaming) - standard Apple, używany przez Netflix, Twitch
+- **DASH** (Dynamic Adaptive Streaming over HTTP) - standard MPEG
+- **SmoothStreaming** - format Microsoft
 - Adaptacyjny bitrate (ABR)
 
 ---
@@ -304,19 +304,19 @@ player.play()
 
 ### Archiwizacja
 
-- Audio: FLAC — bezstratna kompresja, przyszłościowy
-- Wideo: H.265 / AV1 — najlepsza kompresja bez utraty jakości
+- Audio: FLAC - bezstratna kompresja, przyszłościowy
+- Wideo: H.265 / AV1 - najlepsza kompresja bez utraty jakości
 
 ---
 
 ## Dobre praktyki
 
-- Zawsze sprawdzaj obsługiwane formaty na docelowych urządzeniach — różne wersje Androida mają różne zestawy kodeków
+- Zawsze sprawdzaj obsługiwane formaty na docelowych urządzeniach - różne wersje Androida mają różne zestawy kodeków
 - Używaj `ExoPlayer`/`Media3` zamiast `MediaPlayer` w nowych projektach Android
-- Na iOS korzystaj z `AVFoundation` — zapewnia dostęp do sprzętowej akceleracji
-- Dla strumieniowania wybierz **HLS** — najlepsza kompatybilność i wsparcie CDN
-- Testuj odtwarzanie przy różnych prędkościach sieci (3G, WiFi) — adaptacyjny bitrate jest kluczowy
-- Kompresuj wideo po stronie serwera, nie na urządzeniu mobilnym — oszczędzaj baterię
+- Na iOS korzystaj z `AVFoundation` - zapewnia dostęp do sprzętowej akceleracji
+- Dla strumieniowania wybierz **HLS** - najlepsza kompatybilność i wsparcie CDN
+- Testuj odtwarzanie przy różnych prędkościach sieci (3G, WiFi) - adaptacyjny bitrate jest kluczowy
+- Kompresuj wideo po stronie serwera, nie na urządzeniu mobilnym - oszczędzaj baterię
 
 ---
 

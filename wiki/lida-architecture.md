@@ -1,4 +1,4 @@
-# LIDA — Learning Intelligent Distribution Agent
+# LIDA - Learning Intelligent Distribution Agent
 
 ## Streszczenie
 
@@ -12,19 +12,19 @@ Większość architektur kognitywnych skupia się na efektywnym rozwiązywaniu p
 
 Projekt LIDA zainicjował Stan Franklin, wcześniej znany z prac nad semantyką języków programowania i teorią agentów. Inspiracji dostarczyła praca Baarsa (1988) *A Cognitive Theory of Consciousness*, w której zaproponował on metaforę teatru: świadomość jest jak reflektor sceniczny, który chwilowo oświetla wybrany aspekt sytuacji i udostępnia go aktorom w ciemności (nieświadomym procesom roboczym). Franklin (z Graesserem, 1997) zastosował tę metaforę do budowy architektury agentowej.
 
-LIDA jest aktywnie rozwijana przez Laboratorium Cognitive Computing Research Group (CCRG) na University of Memphis. Dostępna jest implementacja Java — LIDA Framework — z rozbudowanym zestawem modułów i interfejsów.
+LIDA jest aktywnie rozwijana przez Laboratorium Cognitive Computing Research Group (CCRG) na University of Memphis. Dostępna jest implementacja Java - LIDA Framework - z rozbudowanym zestawem modułów i interfejsów.
 
-## 2. Global Workspace Theory — podstawy teoretyczne
+## 2. Global Workspace Theory - podstawy teoretyczne
 
 ### 2.1. Teoria Baarsa
 
 Bernard Baars zaproponował, że ludzki mózg jest zorganizowany jako zbiór wyspecjalizowanych, równoległych procesów (*processors*), które na co dzień działają niezależnie. Świadomość dostępu (*access consciousness*) pojawia się wtedy, gdy wynik jednego z procesów zostaje wybrany i rozesłany (*broadcast*) do wszystkich pozostałych procesorów jednocześnie. Ten globalny broadcast umożliwia integrację informacji i koordynację zachowania.
 
-Metafora globalnej przestrzeni roboczej (*global workspace*) odwołuje się do idei środka wymiany: informacja, która trafi do globalnej przestrzeni, staje się dostępna dla wszystkich modułów systemu — pamięci, planowania, mowy, emocji itd.
+Metafora globalnej przestrzeni roboczej (*global workspace*) odwołuje się do idei środka wymiany: informacja, która trafi do globalnej przestrzeni, staje się dostępna dla wszystkich modułów systemu - pamięci, planowania, mowy, emocji itd.
 
 ### 2.2. Neuronaukowe podstawy GWT
 
-Teoria Baarsa znalazła wsparcie neuronaukowe w pracach Dehaene'a i Changeux (*Global Neuronal Workspace Theory*, GNWT). Badania fMRI i EEG pokazują, że bodziec docierający do świadomości wyzwala szerokie, synchroniczne aktywacje we frontoparietal network — sieciach czołowo-ciemieniowych. Ten empiryczny wzorzec odpowiada pojęciu globalnego broadcastu.
+Teoria Baarsa znalazła wsparcie neuronaukowe w pracach Dehaene'a i Changeux (*Global Neuronal Workspace Theory*, GNWT). Badania fMRI i EEG pokazują, że bodziec docierający do świadomości wyzwala szerokie, synchroniczne aktywacje we frontoparietal network - sieciach czołowo-ciemieniowych. Ten empiryczny wzorzec odpowiada pojęciu globalnego broadcastu.
 
 Franklin zaimplementował GWT w postaci architektury agentowej, w której globalny broadcast jest mechanizmem dystrybucji informacji między modułami systemu.
 
@@ -34,13 +34,13 @@ Franklin zaimplementował GWT w postaci architektury agentowej, w której global
 
 Cykl kognitywny LIDA składa się z trzech następujących po sobie faz, powtarzających się ciągle w trakcie działania agenta:
 
-**Faza 1 — Percepcja i rozumienie (Perception and Understanding)**
+**Faza 1 - Percepcja i rozumienie (Perception and Understanding)**
 Agent odbiera sygnały sensoryczne i przetwarza je przez hierarchię percepcyjną (*Perceptual Memory* i *Workspace*). Efektem jest budowanie bieżącej sytuacji w *Conscious Contents*.
 
-**Faza 2 — Globalny broadcast i uwaga (Attention and Broadcast)**
+**Faza 2 - Globalny broadcast i uwaga (Attention and Broadcast)**
 Mechanizm uwagi (*attention codelet*) identyfikuje najważniejsze treści i umieszcza je w *Global Workspace*. Stąd broadcast rozsyła informacje do wszystkich modułów pamięci i procesorów działania.
 
-**Faza 3 — Selekcja i wykonanie działania (Action Selection and Execution)**
+**Faza 3 - Selekcja i wykonanie działania (Action Selection and Execution)**
 Na podstawie otrzymanego broadcastu proceduralna pamięć zachowań proponuje schematy działania (*behavior schemes*). Mechanizm selekcji wybiera jeden schemat i inicjuje wykonanie.
 
 Typowy czas jednego cyklu wynosi 80–400 ms, co odpowiada granicy psychologicznej *cognitive moment*.
@@ -50,15 +50,15 @@ Typowy czas jednego cyklu wynosi 80–400 ms, co odpowiada granicy psychologiczn
 ```
 Środowisko
     ↓ sygnały sensoryczne
-[Sensory Memory] — bardzo krótka pamięć (<0.5 s)
+[Sensory Memory] - bardzo krótka pamięć (<0.5 s)
     ↓
-[Perceptual Memory / PAM] — rozpoznanie obiektów i relacji
+[Perceptual Memory / PAM] - rozpoznanie obiektów i relacji
     ↓
-[Workspace (Conscious Contents)] — bieżąca sytuacja
+[Workspace (Conscious Contents)] - bieżąca sytuacja
     ↑         ↓
-[Transient    [Attention Codelets] — selekcja istotnych treści
+[Transient    [Attention Codelets] - selekcja istotnych treści
  Episodic          ↓
- Memory]   [Global Workspace] — wybrany fragment świadomości
+ Memory]   [Global Workspace] - wybrany fragment świadomości
                    ↓ Global Broadcast
     ┌──────────────┼───────────────────────┐
     ↓              ↓                       ↓
@@ -75,14 +75,14 @@ Typowy czas jednego cyklu wynosi 80–400 ms, co odpowiada granicy psychologiczn
 
 ### 4.1. Pamięć sensoryczna (*Sensory Memory*)
 
-Pamięć sensoryczna przechowuje surowe reprezentacje sensoryczne przez bardzo krótki czas (poniżej 0,5 s). Jest odpowiednikiem pamięci ikonicznej i echoicznej Sperlingowego modelu. Dane w tej pamięci nie są semantycznie przetworzone — to surowy *input* ze środowiska.
+Pamięć sensoryczna przechowuje surowe reprezentacje sensoryczne przez bardzo krótki czas (poniżej 0,5 s). Jest odpowiednikiem pamięci ikonicznej i echoicznej Sperlingowego modelu. Dane w tej pamięci nie są semantycznie przetworzone - to surowy *input* ze środowiska.
 
-### 4.2. Pamięć percepcyjna/asocjacyjna (PAM — Perceptual Associative Memory)
+### 4.2. Pamięć percepcyjna/asocjacyjna (PAM - Perceptual Associative Memory)
 
-PAM przechowuje wyuczone schematy percepcyjne — wzorce pozwalające rozpoznawać obiekty, zdarzenia i relacje w sygnałach sensorycznych. W implementacji Java LIDA Framework PAM jest zrealizowany jako sieć węzłów z wagami asocjacyjnymi. Rozpoznanie wzorca polega na aktywacji odpowiednich węzłów.
+PAM przechowuje wyuczone schematy percepcyjne - wzorce pozwalające rozpoznawać obiekty, zdarzenia i relacje w sygnałach sensorycznych. W implementacji Java LIDA Framework PAM jest zrealizowany jako sieć węzłów z wagami asocjacyjnymi. Rozpoznanie wzorca polega na aktywacji odpowiednich węzłów.
 
 ```java
-// Przykładowy kod LIDA Framework (Java) — uproszczony
+// Przykładowy kod LIDA Framework (Java) - uproszczony
 PamNodeImpl node = new PamNodeImpl();
 node.setLabel("obstacle");
 node.setActivation(0.0);
@@ -98,13 +98,13 @@ if (node.getActivation() > threshold) {
 
 ### 4.3. Workspace i Conscious Contents
 
-Workspace jest przestrzenią roboczą, w której budowana jest *current situational model* — reprezentacja aktualnej sytuacji. Składa się ze struktur (*node structures*) budowanych przez PAM i dostosowywanych przez odwoływanie się do pamięci długotrwałych (deklaratywnej i epizodycznej).
+Workspace jest przestrzenią roboczą, w której budowana jest *current situational model* - reprezentacja aktualnej sytuacji. Składa się ze struktur (*node structures*) budowanych przez PAM i dostosowywanych przez odwoływanie się do pamięci długotrwałych (deklaratywnej i epizodycznej).
 
 Conscious Contents to ta część Workspace, która jest aktualnie uznana za najbardziej istotną i gotowa do umieszczenia w Global Workspace.
 
 ### 4.4. Transient Episodic Memory (TEM)
 
-TEM jest krótkotrwałą pamięcią epizodyczną, przechowującą sekwencję ostatnich globalnych broadcastów. Służy do budowania krótkoterminowego kontekstu działania — agent może przypomnieć sobie, co się wydarzyło kilka cykli temu, bez konieczności odwoływania się do długotrwałej pamięci epizodycznej.
+TEM jest krótkotrwałą pamięcią epizodyczną, przechowującą sekwencję ostatnich globalnych broadcastów. Służy do budowania krótkoterminowego kontekstu działania - agent może przypomnieć sobie, co się wydarzyło kilka cykli temu, bez konieczności odwoływania się do długotrwałej pamięci epizodycznej.
 
 ### 4.5. Pamięć deklaratywna (Declarative Memory)
 
@@ -116,7 +116,7 @@ Pamięć epizodyczna (Long-Term) jest zapełniana przez konsolidację danych z T
 
 ### 4.7. Pamięć proceduralna (Procedural Memory)
 
-Pamięć proceduralna przechowuje schematy zachowań (*behavior schemes*) — gotowe wzorce działania w określonych kontekstach. Każdy schemat ma kontekst aktywacji (jakie warunki w broadcastie go uruchamiają), ciało działania (lista kroków) i ewentualne wyniki uczenia się. Schematy konkurują ze sobą o selekcję.
+Pamięć proceduralna przechowuje schematy zachowań (*behavior schemes*) - gotowe wzorce działania w określonych kontekstach. Każdy schemat ma kontekst aktywacji (jakie warunki w broadcastie go uruchamiają), ciało działania (lista kroków) i ewentualne wyniki uczenia się. Schematy konkurują ze sobą o selekcję.
 
 ```python
 # Pseudo-kod reprezentacji schematu zachowania
@@ -159,15 +159,15 @@ Attention codelets to wyspecjalizowane moduły monitorujące Workspace i oceniaj
 
 ### 5.1. Mechanizm selekcji
 
-W każdym cyklu uwaga codelets tworzą koalicje — grupy węzłów o wspólnych treściach i wzajemnie wzmacniającej się aktywacji. Koalicja o najwyższej aktywności zdobywa Global Workspace i inicjuje broadcast. Mechanizm ten modeluje rywalizację o dostęp do świadomości — analogon neuronalnych oscillacji gamma obserwowanych w badaniach świadomości.
+W każdym cyklu uwaga codelets tworzą koalicje - grupy węzłów o wspólnych treściach i wzajemnie wzmacniającej się aktywacji. Koalicja o najwyższej aktywności zdobywa Global Workspace i inicjuje broadcast. Mechanizm ten modeluje rywalizację o dostęp do świadomości - analogon neuronalnych oscillacji gamma obserwowanych w badaniach świadomości.
 
 ### 5.2. Efekty broadcastu
 
 Global broadcast:
-1. aktualizuje Declarative Memory — treści broadcastu mogą konsolidować się w długotrwałej pamięci,
-2. aktualizuje Episodic Memory — broadcast jest zapisywany jako nowy epizod,
-3. aktywuje Behavior Schemes w Procedural Memory — treści broadcastu dopasowują schematy zachowań,
-4. informuje Learning Modules — moduły uczenia się adaptują wagi na podstawie treści broadcastu.
+1. aktualizuje Declarative Memory - treści broadcastu mogą konsolidować się w długotrwałej pamięci,
+2. aktualizuje Episodic Memory - broadcast jest zapisywany jako nowy epizod,
+3. aktywuje Behavior Schemes w Procedural Memory - treści broadcastu dopasowują schematy zachowań,
+4. informuje Learning Modules - moduły uczenia się adaptują wagi na podstawie treści broadcastu.
 
 ```python
 class GlobalWorkspace:
@@ -202,9 +202,9 @@ Uczenie Hebbiańskie jest realizowane w sieciach percepcyjnych (PAM). Aktywacja 
 Δw_ij = η · a_i · a_j
 
 gdzie:
-  Δw_ij — zmiana wagi połączenia między węzłami i oraz j
-  η — współczynnik uczenia
-  a_i, a_j — aktywacje węzłów
+  Δw_ij - zmiana wagi połączenia między węzłami i oraz j
+  η - współczynnik uczenia
+  a_i, a_j - aktywacje węzłów
 ```
 
 ### 6.2. Uczenie przez wzmocnienie (Reinforcement Learning)
@@ -341,11 +341,11 @@ class MobileLIDAAgent:
 
 ### 9.1. Świadomość dostępu a świadomość fenomenalna
 
-Filozofia umysłu rozróżnia świadomość dostępu (*access consciousness*) — informacja dostępna do kontroli zachowań i raportowania — od świadomości fenomenalnej (*phenomenal consciousness*) — subiektywnych qualiów. LIDA modeluje explicite świadomość dostępu przez mechanizm global broadcastu. Nie rości sobie pretensji do realizacji świadomości fenomenalnej.
+Filozofia umysłu rozróżnia świadomość dostępu (*access consciousness*) - informacja dostępna do kontroli zachowań i raportowania - od świadomości fenomenalnej (*phenomenal consciousness*) - subiektywnych qualiów. LIDA modeluje explicite świadomość dostępu przez mechanizm global broadcastu. Nie rości sobie pretensji do realizacji świadomości fenomenalnej.
 
 ### 9.2. Znaczenie dla AI
 
-To rozróżnienie ma konsekwencje praktyczne: architektura LIDA może być oceniana funkcjonalnie na podstawie testowalnych przewidywań dotyczących przepływu informacji, a nie przez meta-filozoficzne pytania o subiektywność. Franklin argumentuje, że agenty LIDA wykazują funkcjonalne ekwiwalenty uwagi, świadomości dostępu i uczenia się w kontekście — co jest wystarczające dla celów inżynierskich.
+To rozróżnienie ma konsekwencje praktyczne: architektura LIDA może być oceniana funkcjonalnie na podstawie testowalnych przewidywań dotyczących przepływu informacji, a nie przez meta-filozoficzne pytania o subiektywność. Franklin argumentuje, że agenty LIDA wykazują funkcjonalne ekwiwalenty uwagi, świadomości dostępu i uczenia się w kontekście - co jest wystarczające dla celów inżynierskich.
 
 ## 10. Porównanie z innymi architekturami
 
@@ -377,7 +377,7 @@ LIDA ma kilka istotnych ograniczeń. Po pierwsze, czas cyklu kognitywnego (80–
 
 ## 12. Podsumowanie
 
-LIDA jest architekturą kognitywną o wyraźnym profilu teoretycznym: opiera się na GWT Baarsa i modeluje funkcjonalny analog świadomości dostępu jako mechanizm dystrybucji informacji. Trójfazowy cykl kognitywny, wielowarstwowy system pamięci, mechanizm uwagi przez koalicje i różnorodne mechanizmy uczenia tworzą spójną i biologicznie motywowaną całość. Dla studentów programowania aplikacji mobilnych LIDA jest ważnym przykładem architektury ukierunkowanej na reaktywne, kontekstowe przetwarzanie informacji — wzorzec przydatny w projektowaniu inteligentnych asystentów i aplikacji adaptacyjnych.
+LIDA jest architekturą kognitywną o wyraźnym profilu teoretycznym: opiera się na GWT Baarsa i modeluje funkcjonalny analog świadomości dostępu jako mechanizm dystrybucji informacji. Trójfazowy cykl kognitywny, wielowarstwowy system pamięci, mechanizm uwagi przez koalicje i różnorodne mechanizmy uczenia tworzą spójną i biologicznie motywowaną całość. Dla studentów programowania aplikacji mobilnych LIDA jest ważnym przykładem architektury ukierunkowanej na reaktywne, kontekstowe przetwarzanie informacji - wzorzec przydatny w projektowaniu inteligentnych asystentów i aplikacji adaptacyjnych.
 
 ## Literatura
 
@@ -396,7 +396,7 @@ LIDA jest architekturą kognitywną o wyraźnym profilu teoretycznym: opiera si�
 
 - [Modele kognitywne](cognitive-models.md)
 - [Obliczeniowe modelowanie poznania](computational-cognition.md)
-- [Soar — architektura kognitywna](soar-architecture.md)
+- [Soar - architektura kognitywna](soar-architecture.md)
 - [ACT-R](actr-architecture.md)
 - [CLARION](clarion-architecture.md)
 - [Inteligentny agent](intelligent-agent.md)

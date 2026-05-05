@@ -1,11 +1,11 @@
-# A Portable Z-Machine Interpreter — Frotz
+# A Portable Z-Machine Interpreter - Frotz
 
 ## 1. Czym jest Frotz i skąd się wziął?
 
 **Frotz** to otwartoźródłowy interpreter maszyny wirtualnej **Z-machine**, zaprojektowanej pierwotnie przez firmę **Infocom** do uruchamiania tekstowych gier przygodowych (Interactive Fiction, IF), takich jak *Zork*, *Planetfall* czy *The Hitchhiker’s Guide to the Galaxy*. Nazwa „A Portable Z-Machine Interpreter” podkreśla dwa kluczowe cele projektu:
 
-1. **Portable** — przenośność pomiędzy systemami i architekturami.
-2. **Z-Machine Interpreter** — wierna interpretacja plików historii (`.z3`, `.z5`, `.z8` itd.).
+1. **Portable** - przenośność pomiędzy systemami i architekturami.
+2. **Z-Machine Interpreter** - wierna interpretacja plików historii (`.z3`, `.z5`, `.z8` itd.).
 
 W praktyce Frotz stał się jednym z najważniejszych narzędzi ekosystemu IF, ponieważ:
 
@@ -76,9 +76,9 @@ Dzięki temu sam rdzeń może być wspólny, a implementacja „opakowania” mo
 
 W praktyce funkcjonuje kilka odmian:
 
-- **dumb-frotz** — wersja minimalna, zwykle bez zaawansowanego formatowania,
-- **frotz curses/terminal** — klasyczne uruchamianie w terminalu,
-- **pFrotz / porty mobilne** — adaptacje pod Androida, iOS i inne systemy.
+- **dumb-frotz** - wersja minimalna, zwykle bez zaawansowanego formatowania,
+- **frotz curses/terminal** - klasyczne uruchamianie w terminalu,
+- **pFrotz / porty mobilne** - adaptacje pod Androida, iOS i inne systemy.
 
 ---
 
@@ -163,7 +163,7 @@ Interfejs tekstowy może być korzystny dla:
 
 ---
 
-## 8. Integracja z Android/iOS — praktyczny workflow
+## 8. Integracja z Android/iOS - praktyczny workflow
 
 ## 8.1 Android
 
@@ -196,11 +196,11 @@ Analogicznie:
 
 Przy pracy z Frotz warto pamiętać o kilku punktach:
 
-1. **Różnice portów** — nie każdy port ma identyczne wsparcie kolorów/ekranu.
-2. **Kodowanie znaków** — starsze gry mogą mieć ograniczenia znaków narodowych.
-3. **Ścieżki zapisu** — mobilne sandboxy wymagają jawnej obsługi katalogów aplikacji.
-4. **Interakcja dotykowa** — parser był projektowany pod klawiaturę, trzeba dodać ergonomiczne skróty.
-5. **Licencje gier** — interpreter jest osobny od praw autorskich do story files.
+1. **Różnice portów** - nie każdy port ma identyczne wsparcie kolorów/ekranu.
+2. **Kodowanie znaków** - starsze gry mogą mieć ograniczenia znaków narodowych.
+3. **Ścieżki zapisu** - mobilne sandboxy wymagają jawnej obsługi katalogów aplikacji.
+4. **Interakcja dotykowa** - parser był projektowany pod klawiaturę, trzeba dodać ergonomiczne skróty.
+5. **Licencje gier** - interpreter jest osobny od praw autorskich do story files.
 
 ---
 
@@ -216,7 +216,7 @@ Dla większych, nowocześniejszych gier IF często wybierane są inne środowisk
 
 ---
 
-## 11. Jak zacząć — mini checklista laboratoryjna
+## 11. Jak zacząć - mini checklista laboratoryjna
 
 1. Pobierz interpreter Frotz dla swojej platformy.
 2. Przygotuj legalny story file (`.z3/.z5/.z8`).
@@ -239,11 +239,11 @@ Dla większych, nowocześniejszych gier IF często wybierane są inne środowisk
 - projektowania interfejsów tekstowych,
 - testowalności systemów opartych o stan.
 
-W kontekście aplikacji mobilnych Frotz pokazuje, że nawet bardzo stare koncepcje (bytecode + interpreter) pozostają aktualne i praktyczne — szczególnie tam, gdzie liczy się prostota, niezawodność i niskie zużycie zasobów.
+W kontekście aplikacji mobilnych Frotz pokazuje, że nawet bardzo stare koncepcje (bytecode + interpreter) pozostają aktualne i praktyczne - szczególnie tam, gdzie liczy się prostota, niezawodność i niskie zużycie zasobów.
 
 ---
 
-## 13. Ekosystem gier tekstowych — Inform, TADS, Twine
+## 13. Ekosystem gier tekstowych - Inform, TADS, Twine
 
 Frotz obsługuje wyłącznie format Z-machine, ale świat interaktywnej fikcji obejmuje kilka innych narzędzi autorskich i formatów. Zrozumienie ekosystemu pomaga dobrać właściwe narzędzie do projektu edukacyjnego lub własnej gry.
 
@@ -255,7 +255,7 @@ Inform 7 to język programowania zaprojektowany tak, by przypominał angielski p
 The kitchen is a room. "Pachnie kawą i tostami."
 The coffee cup is on the table. The cup is a container.
 Instead of taking the coffee cup:
-    say "Za gorące — lepiej poczekaj chwilę.";
+    say "Za gorące - lepiej poczekaj chwilę.";
     stop the action.
 ```
 
@@ -269,7 +269,7 @@ TADS (Text Adventure Development System) to język obiektowy z C++-podobną skł
 modify Room
     roomBeforeAction() {
         if (gActionIs(Take) && gDobj == hotCup) {
-            "Za gorące — poczekaj. ";
+            "Za gorące - poczekaj. ";
             exit;
         }
     }
@@ -280,7 +280,7 @@ TADS 3 produkuje własny format binarny `.t3`, który uruchamia interpreter **Fr
 
 ### Twine 2
 
-Twine 2 to narzędzie oparte na grafie węzłów z hiperłączami — bliższe visual novel niż klasycznym przygodówkom tekstowym:
+Twine 2 to narzędzie oparte na grafie węzłów z hiperłączami - bliższe visual novel niż klasycznym przygodówkom tekstowym:
 
 ```twee
 :: Start
@@ -290,7 +290,7 @@ Stoisz przed [[zamkniętymi drzwiami|Drzwi]] albo [[oknem|Okno]].
 Drzwi są zamknięte na klucz. Wracasz do [[Start]].
 ```
 
-Twine eksportuje gotowe pliki HTML działające w przeglądarce — nie wymaga osobnego interpretera. Na urządzeniach mobilnych wystarczy WebView, co czyni go idealnym do prostych prototypów.
+Twine eksportuje gotowe pliki HTML działające w przeglądarce - nie wymaga osobnego interpretera. Na urządzeniach mobilnych wystarczy WebView, co czyni go idealnym do prostych prototypów.
 
 ### Tabela porównawcza
 
@@ -360,11 +360,11 @@ Porównanie architektury Z-machine (stos wywołań, zmienne lokalne / globalne, 
 | L4 | Dodaj syntezę mowy do narracji | Android TTS API |
 | L5 | Zintegruj gotowy plik `.z5` przez bibliotekę Frotz JNI | NDK, JNI, CMake |
 
-Każde laboratorium buduje na poprzednim — studenci kończą kurs z działającą aplikacją mobilną będącą interpreterem gier tekstowych.
+Każde laboratorium buduje na poprzednim - studenci kończą kurs z działającą aplikacją mobilną będącą interpreterem gier tekstowych.
 
-## 15. Glulx i Glulxe — następca Z-machine
+## 15. Glulx i Glulxe - następca Z-machine
 
-Z-machine ma ograniczenia pamięci i możliwości graficznych, które stały się wąskim gardłem dla ambitniejszych projektów IF. **Glulx** (Andrew Plotkin, 1999) to nowoczesna alternatywna VM dla Interactive Fiction, a **Glulxe** — odpowiednik Frotz dla plików Glulx.
+Z-machine ma ograniczenia pamięci i możliwości graficznych, które stały się wąskim gardłem dla ambitniejszych projektów IF. **Glulx** (Andrew Plotkin, 1999) to nowoczesna alternatywna VM dla Interactive Fiction, a **Glulxe** - odpowiednik Frotz dla plików Glulx.
 
 ### Kluczowe różnice Z-machine vs Glulx
 
@@ -379,17 +379,17 @@ Z-machine ma ograniczenia pamięci i możliwości graficznych, które stały si�
 | Format pliku | `.z3`, `.z5`, `.z8` | `.ulx`, `.gblorb` |
 | Popularne narzędzia | Inform 6, Frotz | Inform 7, Glulxe, Quixe |
 
-### Glk — biblioteka portowania I/O
+### Glk - biblioteka portowania I/O
 
-Zarówno Frotz (w nowszych wariantach), jak i Glulxe korzystają z **Glk** (Glk I/O Layer) — standaryzowanego interfejsu wejścia/wyjścia, który oddziela logikę interpretera od warstwy platformowej. Dzięki Glk interpreter można podłączyć do:
+Zarówno Frotz (w nowszych wariantach), jak i Glulxe korzystają z **Glk** (Glk I/O Layer) - standaryzowanego interfejsu wejścia/wyjścia, który oddziela logikę interpretera od warstwy platformowej. Dzięki Glk interpreter można podłączyć do:
 - terminala tekstowego,
 - GUI desktopowego (GTK, SDL),
 - aplikacji mobilnej (przez JNI/FFI),
 - przeglądarki (przez Emscripten/WASM).
 
-Z perspektywy mobilnej Glk jest analogiczny do interfejsu I/O Frotz omówionego wcześniej — stanowi warstwę abstrakcji, którą należy zaimplementować po stronie platformy.
+Z perspektywy mobilnej Glk jest analogiczny do interfejsu I/O Frotz omówionego wcześniej - stanowi warstwę abstrakcji, którą należy zaimplementować po stronie platformy.
 
-### Quixe i Lectrote — IF w przeglądarce
+### Quixe i Lectrote - IF w przeglądarce
 
 **Quixe** to interpreter Glulx napisany w JavaScript, działający bezpośrednio w przeglądarce. **Lectrote** to aplikacja desktopowa (Electron) łącząca Quixe z wygodnym interfejsem użytkownika. Oba projekty są dostępne otwartoźródłowo i stanowią punkt wyjścia do tworzenia WebView-based interpreterów IF dla aplikacji mobilnych.
 

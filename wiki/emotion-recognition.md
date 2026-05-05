@@ -10,7 +10,7 @@ Klatka video → Detekcja twarzy → Normalizacja → Ekstrakcja cech → Klasyf
 
 ## Modele klasyfikacji emocji
 
-### FER2013 — zbiór danych
+### FER2013 - zbiór danych
 
 FER2013 (Facial Expression Recognition 2013) to popularny zbiór danych zawierający 35 887 obrazów twarzy oznaczonych 7 emocjami. Dokładność najlepszych modeli na tym zbiorze to ~73%.
 
@@ -57,7 +57,7 @@ class EmotionClassifier(context: Context) {
 ## Detekcja punktów charakterystycznych twarzy
 
 ```kotlin
-// MediaPipe Face Mesh — 478 punktów twarzy
+// MediaPipe Face Mesh - 478 punktów twarzy
 class FaceGeometryAnalyzer {
 
     // Indeksy kluczowych punktów wg MediaPipe Face Mesh
@@ -133,35 +133,35 @@ class EmotionSmoother(private val windowSize: Int = 10) {
 
 Rozpoznawanie emocji budzi poważne pytania etyczne, którym każdy deweloper powinien poświęcić uwagę:
 
-- **Bias** — modele trenowane głównie na twarzach osób z USA/Europy mogą słabiej działać na innych grupach etnicznych
-- **Kontekst** — ten sam wyraz twarzy ma różne znaczenia w różnych kulturach
-- **Zgoda** — analiza emocji powinna odbywać się wyłącznie za wyraźną zgodą użytkownika
-- **Przechowywanie** — surowe zdjęcia twarzy to dane biometryczne chronione RODO
+- **Bias** - modele trenowane głównie na twarzach osób z USA/Europy mogą słabiej działać na innych grupach etnicznych
+- **Kontekst** - ten sam wyraz twarzy ma różne znaczenia w różnych kulturach
+- **Zgoda** - analiza emocji powinna odbywać się wyłącznie za wyraźną zgodą użytkownika
+- **Przechowywanie** - surowe zdjęcia twarzy to dane biometryczne chronione RODO
 
 ```kotlin
-// Przetwarzaj dane lokalnie — nie wysyłaj zdjęć twarzy na serwer
+// Przetwarzaj dane lokalnie - nie wysyłaj zdjęć twarzy na serwer
 class PrivacyAwareEmotionAnalyzer {
     // Cały inference na urządzeniu (on-device ML)
     private val emotionClassifier = EmotionClassifier(context)
 
     fun analyzeWithPrivacy(frame: Bitmap): EmotionResult {
-        // 1. Wykryj twarz — tylko bounding box, nie obraz
+        // 1. Wykryj twarz - tylko bounding box, nie obraz
         val faces = detectFaces(frame)
 
-        // 2. Wycinek twarzy — krótkotrwały, nigdy nie zapisuj
+        // 2. Wycinek twarzy - krótkotrwały, nigdy nie zapisuj
         val faceRegion = cropFace(frame, faces.first().boundingBox)
 
-        // 3. Klasyfikacja — tylko wynik (etykiety + pewność)
+        // 3. Klasyfikacja - tylko wynik (etykiety + pewność)
         val result = emotionClassifier.classify(faceRegion)
 
-        // 4. Zwróć etykiety — nie przechowuj obrazu
+        // 4. Zwróć etykiety - nie przechowuj obrazu
         faceRegion.recycle()
         return EmotionResult(result)
     }
 }
 ```
 
-## ML Kit — gotowe rozpoznawanie twarzy od Google
+## ML Kit - gotowe rozpoznawanie twarzy od Google
 
 ```kotlin
 dependencies {
@@ -263,7 +263,7 @@ fun EmotionCameraScreen(viewModel: EmotionViewModel) {
 
 Oprócz wyrazu twarzy, emocje można mierzyć za pomocą sygnałów fizjologicznych. Dwie metody dostępne na urządzeniach mobilnych to **rPPG** (remote photoplethysmography) oraz **galwaniczna reakcja skóry** (GSR).
 
-### rPPG — tętno z kamery
+### rPPG - tętno z kamery
 
 rPPG mierzy zmienność rytmu serca (HRV) poprzez analizę mikrozmian koloru skóry wywołanych pulsowaniem krwi. Kamera rejestruje zmiany jasności kanału czerwonego (R) w obszarze twarzy.
 
@@ -297,7 +297,7 @@ class RPPGAnalyzer {
         return (peaks / durationSeconds) * 60f
     }
 
-    /** HRV (RMSSD) jako wskaźnik stresu — niskie HRV → wysoki stres */
+    /** HRV (RMSSD) jako wskaźnik stresu - niskie HRV → wysoki stres */
     fun computeHRV(): Float {
         val intervals = mutableListOf<Float>()
         // uproszczone: różnice między kolejnymi wartościami szczytowymi
@@ -320,7 +320,7 @@ class RPPGAnalyzer {
 
 ### Galwaniczna reakcja skóry (GSR)
 
-GSR mierzy przewodność elektryczną skóry — wzrasta przy pobudzeniu emocjonalnym. W smartfonach można ją uzyskać z czujników kontaktowych (np. Galaxy Watch, Fitbit). Dane przychodzą przez Bluetooth/BLE:
+GSR mierzy przewodność elektryczną skóry - wzrasta przy pobudzeniu emocjonalnym. W smartfonach można ją uzyskać z czujników kontaktowych (np. Galaxy Watch, Fitbit). Dane przychodzą przez Bluetooth/BLE:
 
 ```kotlin
 class GSREmotionMapper {
@@ -336,7 +336,7 @@ class GSREmotionMapper {
 
 ## 2. Analiza głosu
 
-Głos jest bogatym nośnikiem emocji. Parametry akustyczne — **pitch (F0)**, **energia**, **tempo mówienia** i **prozodia** — pozwalają klasyfikować emocje niezależnie od treści słów.
+Głos jest bogatym nośnikiem emocji. Parametry akustyczne - **pitch (F0)**, **energia**, **tempo mówienia** i **prozodia** - pozwalają klasyfikować emocje niezależnie od treści słów.
 
 ### Ekstrakcja cech audio na Androidzie
 
@@ -504,7 +504,7 @@ class MlKitFaceAnalyzer(
     }
 }
 
-// Activity / Fragment — uruchomienie CameraX
+// Activity / Fragment - uruchomienie CameraX
 fun startCamera(context: Context, lifecycleOwner: LifecycleOwner,
                 previewView: PreviewView, analyzer: ImageAnalysis.Analyzer) {
     val cameraProviderFuture = ProcessCameraProvider.getInstance(context)
@@ -593,10 +593,10 @@ class EmotionEvaluator(private val labels: List<String>) {
 
 ### Typowe problemy z dokładnością
 
-- **Nierównowaga klas** — klasa `disgust` w FER2013 ma tylko 547 próbek vs 8989 (`neutral`). Stosuj `class_weight` podczas treningu lub techniki augmentacji.
-- **Mylenie podobnych emocji** — `fear` i `surprise` są często mylone (podobny wyraz twarzy); `sad` i `neutral` też.
-- **Oświetlenie i kąt** — model trenowany na twarzach frontowych słabiej działa przy profilu bocznym. Augmentacja (rotation, brightness jitter) poprawia generalizację.
-- **Benchmark on-device** — na Pixel 7 (TFLite + NNAPI), model 48×48 działa z opóźnieniem ~8 ms/klatka; MediaPipe FaceMesh ~12 ms/klatka.
+- **Nierównowaga klas** - klasa `disgust` w FER2013 ma tylko 547 próbek vs 8989 (`neutral`). Stosuj `class_weight` podczas treningu lub techniki augmentacji.
+- **Mylenie podobnych emocji** - `fear` i `surprise` są często mylone (podobny wyraz twarzy); `sad` i `neutral` też.
+- **Oświetlenie i kąt** - model trenowany na twarzach frontowych słabiej działa przy profilu bocznym. Augmentacja (rotation, brightness jitter) poprawia generalizację.
+- **Benchmark on-device** - na Pixel 7 (TFLite + NNAPI), model 48×48 działa z opóźnieniem ~8 ms/klatka; MediaPipe FaceMesh ~12 ms/klatka.
 
 ### Zalecenia dla środowiska produkcyjnego
 
@@ -609,8 +609,8 @@ class EmotionEvaluator(private val labels: List<String>) {
 
 ## Linki uzupełniające
 
-- [rPPG — Remote Heart Rate Estimation](https://arxiv.org/abs/2005.02683)
-- [SER — Speech Emotion Recognition survey](https://arxiv.org/abs/1912.10458)
+- [rPPG - Remote Heart Rate Estimation](https://arxiv.org/abs/2005.02683)
+- [SER - Speech Emotion Recognition survey](https://arxiv.org/abs/1912.10458)
 - [TarsosDSP (audio DSP for Android)](https://github.com/JorenSix/TarsosDSP)
 - [FER2013 Kaggle](https://www.kaggle.com/datasets/msambare/fer2013)
 - [ML Kit Face Detection](https://developers.google.com/ml-kit/vision/face-detection)

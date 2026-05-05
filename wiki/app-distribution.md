@@ -1,4 +1,4 @@
-# Metody Dystrybucji Aplikacji Mobilnych — Google Play, F-Droid i Alternatywne Kanały
+# Metody Dystrybucji Aplikacji Mobilnych - Google Play, F-Droid i Alternatywne Kanały
 
 Dystrybucja aplikacji mobilnej to nie tylko „wrzucenie pliku do sklepu”. To świadomy wybór **kanału dostarczania**, modelu aktualizacji, sposobu budowania zaufania użytkowników oraz poziomu kontroli nad bezpieczeństwem i monetyzacją. Dla Androida wybór jest szczególnie szeroki: można publikować w **Google Play**, w repozytorium **F-Droid**, w sklepach producentów, poprzez **enterprise distribution**, a nawet bezpośrednio przez **sideloading APK**. Każda z tych ścieżek ma inne wymagania techniczne, prawne i biznesowe.
 
@@ -18,7 +18,7 @@ W praktyce decyzja o sposobie dystrybucji wpływa na cały cykl życia produktu:
 
 ### 1.1 Dystrybucja przez oficjalny sklep platformy
 
-To najczęstszy model. Dla Androida oznacza zwykle **Google Play**, a dla iOS — **App Store**.
+To najczęstszy model. Dla Androida oznacza zwykle **Google Play**, a dla iOS - **App Store**.
 
 **Cechy charakterystyczne:**
 - centralny proces publikacji i review,
@@ -51,7 +51,7 @@ Taki model wybiera się, gdy:
 
 ### 1.3 Sideloading / bezpośrednia instalacja APK
 
-Polega na udostępnieniu użytkownikowi pliku `.apk` poza sklepem — np. na stronie projektu, w GitHub Releases, w systemie MDM lub w intranecie firmy.
+Polega na udostępnieniu użytkownikowi pliku `.apk` poza sklepem - np. na stronie projektu, w GitHub Releases, w systemie MDM lub w intranecie firmy.
 
 **Typowe zastosowania:**
 - testy beta poza sklepem,
@@ -77,7 +77,7 @@ To podejście dobrze sprawdza się w aplikacjach magazynowych, serwisowych, logi
 
 ---
 
-## 2. Dystrybucja na Androidzie — przegląd kanałów
+## 2. Dystrybucja na Androidzie - przegląd kanałów
 
 Android jest bardziej otwarty niż iOS, dlatego pozwala na współistnienie wielu modeli dystrybucji.
 
@@ -213,9 +213,9 @@ To oznacza, że Google Play jest świetnym kanałem do skalowania produktu, ale 
 
 ---
 
-## 4. F-Droid — czym jest i dla kogo jest przeznaczony
+## 4. F-Droid - czym jest i dla kogo jest przeznaczony
 
-**F-Droid** to katalog aplikacji Android skoncentrowany na wolnym i otwartym oprogramowaniu (FOSS — Free and Open Source Software). Dla wielu użytkowników jest on nie tylko alternatywą dla Google Play, ale wręcz manifestem podejścia do prywatności, transparentności i niezależności od komercyjnych platform.
+**F-Droid** to katalog aplikacji Android skoncentrowany na wolnym i otwartym oprogramowaniu (FOSS - Free and Open Source Software). Dla wielu użytkowników jest on nie tylko alternatywą dla Google Play, ale wręcz manifestem podejścia do prywatności, transparentności i niezależności od komercyjnych platform.
 
 ### 4.1 Filozofia F-Droid
 
@@ -300,7 +300,7 @@ flavor fdroid   -> bez trackerów, bez Play Services, z otwartymi zamiennikami
 
 ---
 
-## 5. Google Play vs F-Droid — porównanie strategiczne
+## 5. Google Play vs F-Droid - porównanie strategiczne
 
 | Obszar | Google Play | F-Droid |
 |-------|-------------|---------|
@@ -478,7 +478,7 @@ Oznacza to, że F-Droid lepiej pasuje do projektów społecznościowych i narzę
 
 ## 9. Rekomendowane strategie wydawnicze
 
-### Strategia A — produkt komercyjny dla szerokiego rynku
+### Strategia A - produkt komercyjny dla szerokiego rynku
 
 **Rekomendacja:** głównie **Google Play**.
 
@@ -488,7 +488,7 @@ Dodatkowo można używać:
 - Crashlytics i Android Vitals,
 - kampanii ASO i płatnego user acquisition.
 
-### Strategia B — projekt open source z naciskiem na prywatność
+### Strategia B - projekt open source z naciskiem na prywatność
 
 **Rekomendacja:** **F-Droid + Google Play** lub samo **F-Droid**.
 
@@ -498,7 +498,7 @@ Warto wtedy:
 - ograniczyć telemetrię,
 - jasno opisać model finansowania projektu.
 
-### Strategia C — aplikacja firmowa wewnętrzna
+### Strategia C - aplikacja firmowa wewnętrzna
 
 **Rekomendacja:** **Managed Google Play** lub MDM/enterprise.
 
@@ -508,7 +508,7 @@ Najważniejsze są wtedy:
 - automatyczne aktualizacje w ramach floty,
 - możliwość szybkiego wycofania wersji.
 
-### Strategia D — narzędzie dla społeczności technicznej
+### Strategia D - narzędzie dla społeczności technicznej
 
 **Rekomendacja:** **F-Droid + GitHub Releases + własna strona**.
 

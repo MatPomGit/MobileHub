@@ -1,4 +1,4 @@
-# Zaliczenie wykładów — Programowanie Aplikacji Mobilnych
+# Zaliczenie wykładów - Programowanie Aplikacji Mobilnych
 
 Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** sprawdza znajomość zagadnień omawianych na wykładach i laboratoriach.
 
@@ -30,93 +30,93 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 - Architektura systemu Android (Linux kernel, HAL, ART, warstwy aplikacji),
 - Architektura iOS (XNU kernel, Core OS, Core Services, Media, Cocoa Touch),
-- Cykl życia aplikacji Android — stany Activity i Fragment,
-- Cykl życia aplikacji iOS — stany UIApplicationDelegate,
+- Cykl życia aplikacji Android - stany Activity i Fragment,
+- Cykl życia aplikacji iOS - stany UIApplicationDelegate,
 - Porównanie Android vs iOS: bezpieczeństwo, fragmentacja, dystrybucja.
 
 ### 2. Projektowanie Interfejsu Użytkownika
 
-- Zasady Material Design 3 — kolory, typografia, komponenty,
+- Zasady Material Design 3 - kolory, typografia, komponenty,
 - Wytyczne Human Interface Guidelines (Apple),
-- Wzorce nawigacji — Bottom Navigation, Drawer, Tabs, Backstack,
-- Dostępność (Accessibility) — WCAG, TalkBack, VoiceOver, contrast ratio,
+- Wzorce nawigacji - Bottom Navigation, Drawer, Tabs, Backstack,
+- Dostępność (Accessibility) - WCAG, TalkBack, VoiceOver, contrast ratio,
 - Responsive design i adaptacja do różnych rozmiarów ekranów.
 
 ### 3. Architektura aplikacji mobilnych
 
-- Wzorzec MVC, MVP, MVVM — porównanie, zalety i wady,
-- Clean Architecture — warstwy Presentation / Domain / Data,
-- Repository Pattern — abstrakcja źródła danych,
-- Dependency Injection — Hilt (Android), Swinject (iOS),
-- SOLID — zasady i ich zastosowanie w mobile,
-- Wzorce reaktywne — Flow, LiveData, Combine, RxSwift.
+- Wzorzec MVC, MVP, MVVM - porównanie, zalety i wady,
+- Clean Architecture - warstwy Presentation / Domain / Data,
+- Repository Pattern - abstrakcja źródła danych,
+- Dependency Injection - Hilt (Android), Swinject (iOS),
+- SOLID - zasady i ich zastosowanie w mobile,
+- Wzorce reaktywne - Flow, LiveData, Combine, RxSwift.
 
 ### 4. Programowanie Android (Kotlin / Jetpack)
 
-- Kotlin — klasy data, sealed, korutyny (suspend, launch, async, flow),
-- Jetpack Compose — composable, State, recomposition, side effects,
-- ViewModel i StateFlow — zarządzanie stanem UI,
-- Room — Entity, DAO, Database, relacje, migracje,
-- Retrofit + OkHttp — REST API, interceptory, konwersja JSON,
-- WorkManager — zadania w tle, Chain, Constraints,
-- Navigation Component — NavGraph, NavController, deeplinki.
+- Kotlin - klasy data, sealed, korutyny (suspend, launch, async, flow),
+- Jetpack Compose - composable, State, recomposition, side effects,
+- ViewModel i StateFlow - zarządzanie stanem UI,
+- Room - Entity, DAO, Database, relacje, migracje,
+- Retrofit + OkHttp - REST API, interceptory, konwersja JSON,
+- WorkManager - zadania w tle, Chain, Constraints,
+- Navigation Component - NavGraph, NavController, deeplinki.
 
 ### 5. Programowanie iOS (Swift / SwiftUI)
 
-- Swift — opcjonale, closures, protokoły, generics, async/await,
-- SwiftUI — View, State, Binding, ObservableObject, EnvironmentObject,
-- UIKit — UIViewController lifecycle, Auto Layout, Storyboard vs Code,
-- CoreData — NSManagedObject, NSFetchRequest, NSPersistentContainer,
-- URLSession — data task, async/await, Codable, JSONDecoder,
-- Combine — Publisher, Subscriber, Operator, sink, assign.
+- Swift - opcjonale, closures, protokoły, generics, async/await,
+- SwiftUI - View, State, Binding, ObservableObject, EnvironmentObject,
+- UIKit - UIViewController lifecycle, Auto Layout, Storyboard vs Code,
+- CoreData - NSManagedObject, NSFetchRequest, NSPersistentContainer,
+- URLSession - data task, async/await, Codable, JSONDecoder,
+- Combine - Publisher, Subscriber, Operator, sink, assign.
 
 ### 6. Cross-Platform i PWA
 
-- Flutter — Widget tree, StatelessWidget vs StatefulWidget, BLoC, Provider,
-- React Native — komponenty, hooks, Redux, Metro bundler,
-- Kotlin Multiplatform — shared code, expect/actual, KMP Mobile,
-- PWA — Service Worker, Cache API, Web App Manifest, offline-first,
+- Flutter - Widget tree, StatelessWidget vs StatefulWidget, BLoC, Provider,
+- React Native - komponenty, hooks, Redux, Metro bundler,
+- Kotlin Multiplatform - shared code, expect/actual, KMP Mobile,
+- PWA - Service Worker, Cache API, Web App Manifest, offline-first,
 - Porównanie: wydajność, dostęp do natywnych API, community.
 
 ### 7. Hardware i obsługa sensorów
 
-- Camera2 API / AVFoundation — preview, capture, analiza obrazu,
-- GPS i geolokalizacja — uprawnienia, foreground vs background,
-- Sensor Manager — akcelerometr, żyroskop, magnetometr,
-- Biometria — BiometricPrompt (Android), LocalAuthentication (iOS),
-- Bluetooth LE — GATT, charakterystyki, skanowanie, parowanie.
+- Camera2 API / AVFoundation - preview, capture, analiza obrazu,
+- GPS i geolokalizacja - uprawnienia, foreground vs background,
+- Sensor Manager - akcelerometr, żyroskop, magnetometr,
+- Biometria - BiometricPrompt (Android), LocalAuthentication (iOS),
+- Bluetooth LE - GATT, charakterystyki, skanowanie, parowanie.
 
 ### 8. Sieć i komunikacja
 
-- REST API — metody HTTP, kody statusu, nagłówki, autentykacja JWT,
-- WebSocket — połączenie full-duplex, zastosowania w real-time,
-- MQTT — architektura broker/client, QoS levels, tematy,
-- Firebase — Firestore, Realtime DB, FCM (push notifications),
+- REST API - metody HTTP, kody statusu, nagłówki, autentykacja JWT,
+- WebSocket - połączenie full-duplex, zastosowania w real-time,
+- MQTT - architektura broker/client, QoS levels, tematy,
+- Firebase - Firestore, Realtime DB, FCM (push notifications),
 - SSL Pinning i bezpieczeństwo komunikacji sieciowej.
 
 ### 9. Bezpieczeństwo aplikacji mobilnych
 
-- OWASP Mobile Top 10 — najczęstsze zagrożenia,
-- Bezpieczne przechowywanie danych — Keychain (iOS), Keystore (Android),
-- Obfuskacja kodu — ProGuard/R8 (Android), Bitcode (iOS),
-- Certificate Pinning — zapobieganie MITM,
-- Uprawnienia — runtime permissions, principle of least privilege.
+- OWASP Mobile Top 10 - najczęstsze zagrożenia,
+- Bezpieczne przechowywanie danych - Keychain (iOS), Keystore (Android),
+- Obfuskacja kodu - ProGuard/R8 (Android), Bitcode (iOS),
+- Certificate Pinning - zapobieganie MITM,
+- Uprawnienia - runtime permissions, principle of least privilege.
 
 ### 10. Testowanie aplikacji mobilnych
 
-- Piramida testów — unit testy, integracyjne, UI (end-to-end),
-- JUnit 4/5, MockK, Turbine — Android unit testing,
-- Espresso, UI Automator — testy instrumentalne Android,
-- XCTest, XCUITest — testy iOS,
-- Firebase Test Lab, BrowserStack — chmurowe farmy urządzeń.
+- Piramida testów - unit testy, integracyjne, UI (end-to-end),
+- JUnit 4/5, MockK, Turbine - Android unit testing,
+- Espresso, UI Automator - testy instrumentalne Android,
+- XCTest, XCUITest - testy iOS,
+- Firebase Test Lab, BrowserStack - chmurowe farmy urządzeń.
 
 ### 11. Wydajność i optymalizacja
 
-- Profilowanie — Android Profiler, Xcode Instruments,
-- Zarządzanie pamięcią — garbage collection (ART), ARC (iOS),
-- Renderowanie UI — 60/120 Hz, jank, overdraw, recomposition,
-- Sieć — caching, kompresja, lazy loading, paginacja,
-- Bateria — JobScheduler, WorkManager, tryb Doze.
+- Profilowanie - Android Profiler, Xcode Instruments,
+- Zarządzanie pamięcią - garbage collection (ART), ARC (iOS),
+- Renderowanie UI - 60/120 Hz, jank, overdraw, recomposition,
+- Sieć - caching, kompresja, lazy loading, paginacja,
+- Bateria - JobScheduler, WorkManager, tryb Doze.
 
 ## Przykładowe pytania testowe
 
@@ -143,7 +143,7 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 **3.** Które z poniższych zdań opisuje POPRAWNIE właściwość `StateFlow` w Kotlinie?
 
 - a) Nie przechowuje ostatniej wartości
-- b) **Jest hot flow — zawsze emituje ostatnią wartość nowym subskrybentom** ✓
+- b) **Jest hot flow - zawsze emituje ostatnią wartość nowym subskrybentom** ✓
 - c) Może emitować `null` jako wartość początkową bez określenia domyślnej
 - d) Automatycznie anuluje się po rotacji ekranu
 
@@ -191,11 +191,11 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 ### Strategia przygotowania
 
-1. **Zacznij od wykładów** — przejrzyj slajdy i notatki z każdego tematu,
-2. **Korzystaj z tej bazy wiedzy** — każdy temat ma dedykowany artykuł z przykładami kodu,
-3. **Ćwicz na przykładach** — samodzielnie wpisz i uruchom przykłady kodu,
-4. **Powtarzaj aktywnie** — twórz własne fiszki, pytaj się siebie,
-5. **Rozwiązuj ćwiczenia** — wróć do zadań z laboratoriów.
+1. **Zacznij od wykładów** - przejrzyj slajdy i notatki z każdego tematu,
+2. **Korzystaj z tej bazy wiedzy** - każdy temat ma dedykowany artykuł z przykładami kodu,
+3. **Ćwicz na przykładach** - samodzielnie wpisz i uruchom przykłady kodu,
+4. **Powtarzaj aktywnie** - twórz własne fiszki, pytaj się siebie,
+5. **Rozwiązuj ćwiczenia** - wróć do zadań z laboratoriów.
 
 ### Najczęstsze błędy studentów
 
@@ -216,4 +216,4 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 - [Flutter Documentation](https://docs.flutter.dev/)
 - Slajdy z wykładów i materiały z laboratoriów
 
-> **Powodzenia!** Pamiętaj, że egzamin sprawdza rozumienie — nie pamięciowe odtwarzanie. Skup się na zrozumieniu *dlaczego* stosuje się dane wzorce, a nie tylko *jak* wyglądają.
+> **Powodzenia!** Pamiętaj, że egzamin sprawdza rozumienie - nie pamięciowe odtwarzanie. Skup się na zrozumieniu *dlaczego* stosuje się dane wzorce, a nie tylko *jak* wyglądają.

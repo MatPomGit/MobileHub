@@ -1,4 +1,4 @@
-# SwiftUI — zaawansowane techniki
+# SwiftUI - zaawansowane techniki
 
 SwiftUI to deklaratywny framework UI Apple, dostępny od iOS 13. Wersja iOS 17+ przynosi Observable macro i znaczące uproszczenia state management.
 
@@ -58,7 +58,7 @@ class ShopViewModel {
     }
 }
 
-// Widok — automatycznie odświeża się przy zmianie stanu
+// Widok - automatycznie odświeża się przy zmianie stanu
 struct ShopView: View {
     @State private var viewModel = ShopViewModel()
 
@@ -105,7 +105,7 @@ Text("Produkt A")
 ## Animacje i przejścia
 
 ```swift
-// Matched geometry effect — płynne przejścia między widokami
+// Matched geometry effect - płynne przejścia między widokami
 struct HeroAnimationView: View {
     @Namespace private var namespace
     @State private var isExpanded = false
@@ -138,7 +138,7 @@ Image(systemName: "star.fill")
 - [WWDC SwiftUI Sessions](https://developer.apple.com/videos/swiftui)
 - [SwiftUI Lab](https://swiftui-lab.com)
 
-## TipKit — wskazówki w UI (iOS 17+)
+## TipKit - wskazówki w UI (iOS 17+)
 
 ```swift
 // Definiowanie wskazówki
@@ -147,7 +147,7 @@ struct SearchTip: Tip {
     var message: Text? { Text("Użyj paska wyszukiwania, aby znaleźć produkty po nazwie lub kategorii.") }
     var image: Image? { Image(systemName: "magnifyingglass") }
 
-    // Warunek pokazania — tylko po 3 uruchomieniach
+    // Warunek pokazania - tylko po 3 uruchomieniach
     static let appLaunchCount = Event(id: "appLaunch")
 
     var rules: [Rule] {
@@ -169,7 +169,7 @@ struct SearchBar: View {
 }
 ```
 
-## SwiftData (iOS 17+) — trwałe przechowywanie
+## SwiftData (iOS 17+) - trwałe przechowywanie
 
 ```swift
 import SwiftData
@@ -220,7 +220,7 @@ struct TaskListView: View {
 }
 ```
 
-## Combine — reaktywne programowanie
+## Combine - reaktywne programowanie
 
 ```swift
 import Combine
@@ -320,11 +320,11 @@ struct TaskWidgetEntryView: View {
 - [WidgetKit](https://developer.apple.com/documentation/widgetkit)
 - [TipKit](https://developer.apple.com/documentation/tipkit)
 
-## Własne layouty — Layout Protocol (iOS 16+)
+## Własne layouty - Layout Protocol (iOS 16+)
 
 Protokół `Layout` wprowadzony w iOS 16 umożliwia tworzenie w pełni własnych algorytmów rozmieszczania widoków. Jest to znacznie potężniejsze rozwiązanie niż `ZStack`/`HStack`/`VStack`, ponieważ daje pełną kontrolę nad rozmiarem i pozycją każdego child view w oparciu o ich preferencje.
 
-Przykładem praktycznego zastosowania jest **masonry grid** (waterfall layout) — wielokolumnowy układ, gdzie elementy mają różne wysokości, a każdy nowy element trafia do najkrótszej kolumny:
+Przykładem praktycznego zastosowania jest **masonry grid** (waterfall layout) - wielokolumnowy układ, gdzie elementy mają różne wysokości, a każdy nowy element trafia do najkrótszej kolumny:
 
 ```swift
 struct MasonryLayout: Layout {
@@ -363,7 +363,7 @@ struct MasonryLayout: Layout {
     }
 }
 
-// Użycie — galeria zdjęć w układzie waterfall
+// Użycie - galeria zdjęć w układzie waterfall
 struct PhotoGallery: View {
     let photos: [Photo]
 
@@ -386,7 +386,7 @@ Protokół `Layout` wymaga implementacji tylko dwóch metod: `sizeThatFits` (okr
 
 ## Canvas i SwiftUI Graphics
 
-`Canvas` w SwiftUI to widok zapewniający natywny dostęp do Core Graphics, zoptymalizowany pod kątem wydajności — wszystkie rysowanie odbywa się w jednym przebiegu, bez tworzenia podwidoków. Idealnie nadaje się do wykresów, niestandardowych wskaźników postępu i animacji generatywnych.
+`Canvas` w SwiftUI to widok zapewniający natywny dostęp do Core Graphics, zoptymalizowany pod kątem wydajności - wszystkie rysowanie odbywa się w jednym przebiegu, bez tworzenia podwidoków. Idealnie nadaje się do wykresów, niestandardowych wskaźników postępu i animacji generatywnych.
 
 ```swift
 // Pierścień postępu z gradientem i etykietą
@@ -459,7 +459,7 @@ struct LineChart: View {
 }
 ```
 
-`Canvas` można łączyć z `TimelineView` do tworzenia animacji w czasie rzeczywistym — wystarczy przekazać `context.resolveSymbol` dla referencji do innych widoków lub użyć `AnimatableData` do płynnego przejścia wartości.
+`Canvas` można łączyć z `TimelineView` do tworzenia animacji w czasie rzeczywistym - wystarczy przekazać `context.resolveSymbol` dla referencji do innych widoków lub użyć `AnimatableData` do płynnego przejścia wartości.
 
 ## Dostępność w SwiftUI
 
@@ -477,7 +477,7 @@ struct ProductCard: View {
                 placeholder: { Color.gray }
                 .frame(width: 60, height: 60)
                 .cornerRadius(8)
-                // Obraz dekoracyjny — VoiceOver powinien go pominąć
+                // Obraz dekoracyjny - VoiceOver powinien go pominąć
                 .accessibilityHidden(true)
 
             VStack(alignment: .leading) {
@@ -504,7 +504,7 @@ struct ProductCard: View {
     }
 }
 
-// Niestandardowy rotor VoiceOver — nawigacja po cenach
+// Niestandardowy rotor VoiceOver - nawigacja po cenach
 struct PriceRotorModifier: ViewModifier {
     let products: [Product]
 

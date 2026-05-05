@@ -21,7 +21,7 @@ Modele te mają zastosowania praktyczne: projektowanie ikon aplikacji, rozmieszc
 
 ### 1.1. Dlaczego modelowanie percepcji jest trudne?
 
-Percepcja to problem **odwrotny** (*inverse problem*): z danych 2D siatkówki rekonstruujemy 3D świat. Problem jest z definicji źle postawiony — nieskończenie wiele konfiguracji 3D może dać ten sam obraz 2D. Mózg rozwiązuje go przez **założenia a priori** (*priors*): regularność środowiska, symetria, spójność czasowa.
+Percepcja to problem **odwrotny** (*inverse problem*): z danych 2D siatkówki rekonstruujemy 3D świat. Problem jest z definicji źle postawiony - nieskończenie wiele konfiguracji 3D może dać ten sam obraz 2D. Mózg rozwiązuje go przez **założenia a priori** (*priors*): regularność środowiska, symetria, spójność czasowa.
 
 ```python
 # Ilustracja problemu odwrotnego w percepcji głębi
@@ -55,7 +55,7 @@ David Marr (1982) zaproponował analizę systemów poznawczych na trzech pozioma
 | **Algorytmiczny** (*Algorithmic*) | Jak to jest obliczane? | Operator Canny, DoG |
 | **Implementacyjny** (*Implementational*) | W czym jest to zrealizowane? | Komórki dwubiegunowe siatkówki |
 
-Ta trójpoziomowa hierarchia jest kluczowym narzędziem konceptualnym w neuronauce obliczeniowej — pozwala oddzielić pytania o funkcję od pytań o mechanizm i substrat.
+Ta trójpoziomowa hierarchia jest kluczowym narzędziem konceptualnym w neuronauce obliczeniowej - pozwala oddzielić pytania o funkcję od pytań o mechanizm i substrat.
 
 ### 2.2. Drogi wzrokowe w mózgu
 
@@ -259,7 +259,7 @@ def simulate_scanpath(saliency_map, n_fixations=10, noise_sigma=30):
 
 ### 5.1. Analiza sceny audytywnej (*Auditory Scene Analysis*)
 
-Analiza sceny audytywnej (Bregman, 1990) to proces segregacji dźwięków z mieszaniny — identyfikacja, który dźwięk pochodzi z którego źródła.
+Analiza sceny audytywnej (Bregman, 1990) to proces segregacji dźwięków z mieszaniny - identyfikacja, który dźwięk pochodzi z którego źródła.
 
 Mechanizmy grupowania strumieni audytywnych (*auditory stream segregation*):
 
@@ -352,7 +352,7 @@ print(f"Zintegrowane: {est:.2f}°, σ²={var:.2f}")
 
 ## 8. Pętla percepcja-działanie (*Perception-Action Loop*)
 
-Percepcja nie jest pasywna — jest ściśle sprzężona z działaniem przez pętlę sprzężenia zwrotnego:
+Percepcja nie jest pasywna - jest ściśle sprzężona z działaniem przez pętlę sprzężenia zwrotnego:
 
 ```
 Środowisko
@@ -366,7 +366,7 @@ Percepcja nie jest pasywna — jest ściśle sprzężona z działaniem przez pę
   Działanie  ────→ zmiana środowiska ┘
 ```
 
-**Aktywna wizja** (*active vision*): oczy poruszamy nie tylko by zobaczyć, ale by kontrolować działanie. Badania Yarbus (1967) wykazały, że wzorce ruchów oczu zależą od zadania — oglądając ten sam obraz, inaczej patrzymy pytając „ile osób jest w pokoju?" vs „jaki wiek mają osoby?".
+**Aktywna wizja** (*active vision*): oczy poruszamy nie tylko by zobaczyć, ale by kontrolować działanie. Badania Yarbus (1967) wykazały, że wzorce ruchów oczu zależą od zadania - oglądając ten sam obraz, inaczej patrzymy pytając „ile osób jest w pokoju?" vs „jaki wiek mają osoby?".
 
 ---
 
@@ -516,7 +516,7 @@ Modelowanie kognitywne percepcji dostarcza solidnych naukowych podstaw dla proje
 2. **Prawo Fittsa** i **Cowan's 4** wyznaczają limity fizyczne i pamięciowe interakcji
 3. **Integracja multimodalna** (wzrok + dotyk + dźwięk) może redukować obciążenie poznawcze
 4. **Eye-tracking** pozwala empirycznie weryfikować predykcje modeli
-5. **Predykcyjne kodowanie** sugeruje, że oczekiwania użytkownika są fundamentalne — interfejsy powinny być przewidywalne
+5. **Predykcyjne kodowanie** sugeruje, że oczekiwania użytkownika są fundamentalne - interfejsy powinny być przewidywalne
 
 Kierunki przyszłych badań: **foveted rendering** dla AR/VR (renderowanie wysokorozdzielcze tylko tam, gdzie patrzy użytkownik), **gaze-based interaction** dla urządzeń mobilnych, **neuroadaptive interfaces** dostosowujące się do mierzonych stanów poznawczych.
 

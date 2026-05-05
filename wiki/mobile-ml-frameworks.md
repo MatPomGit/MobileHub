@@ -1,6 +1,6 @@
 # Frameworki ML na urządzeniu: TFLite, Core ML, ONNX
 
-Wdrożenie modelu uczenia maszynowego na urządzeniu mobilnym wymaga wyboru odpowiedniego frameworka wnioskowania (*inference runtime*). Trzy dominujące rozwiązania — TensorFlow Lite, Core ML i ONNX Runtime Mobile — różnią się wspieranymi platformami, formatami modeli, dostępnymi akceleratorami i ekosystemem narzędzi. Znajomość każdego z nich jest kluczowa przy podejmowaniu decyzji projektowych.
+Wdrożenie modelu uczenia maszynowego na urządzeniu mobilnym wymaga wyboru odpowiedniego frameworka wnioskowania (*inference runtime*). Trzy dominujące rozwiązania - TensorFlow Lite, Core ML i ONNX Runtime Mobile - różnią się wspieranymi platformami, formatami modeli, dostępnymi akceleratorami i ekosystemem narzędzi. Znajomość każdego z nich jest kluczowa przy podejmowaniu decyzji projektowych.
 
 ## TensorFlow Lite
 
@@ -8,7 +8,7 @@ TensorFlow Lite (TFLite) to lekka wersja TensorFlow przeznaczona na urządzenia 
 
 ### Format modelu
 
-Modele TFLite zapisywane są w formacie **FlatBuffers** (`.tflite`) — płaskim, binarnym formatem serializacji opracowanym przez Google. FlatBuffers pozwala na bezpośredni dostęp do danych bez potrzeby parsowania, co minimalizuje czas zimnego startu.
+Modele TFLite zapisywane są w formacie **FlatBuffers** (`.tflite`) - płaskim, binarnym formatem serializacji opracowanym przez Google. FlatBuffers pozwala na bezpośredni dostęp do danych bez potrzeby parsowania, co minimalizuje czas zimnego startu.
 
 Konwersja z TensorFlow/Keras:
 
@@ -117,7 +117,7 @@ class TFLiteClassifier(private val context: Context) {
 }
 ```
 
-#### Task API — wysokopoziomowy interfejs
+#### Task API - wysokopoziomowy interfejs
 
 TFLite Task Library oferuje gotowe API dla typowych zadań:
 
@@ -163,7 +163,7 @@ Core ML to natywny framework Apple do wnioskowania lokalnego, dostępny na iOS, 
 
 ### Format modelu
 
-Core ML używa formatu **`.mlpackage`** (wcześniej `.mlmodel`) — paczki zawierającej skompilowany model oraz metadane. Narzędzie `coremltools` konwertuje modele z PyTorch, TensorFlow, scikit-learn i innych środowisk.
+Core ML używa formatu **`.mlpackage`** (wcześniej `.mlmodel`) - paczki zawierającej skompilowany model oraz metadane. Narzędzie `coremltools` konwertuje modele z PyTorch, TensorFlow, scikit-learn i innych środowisk.
 
 ```python
 import coremltools as ct
@@ -268,7 +268,7 @@ func classifyAsync(image: UIImage) async throws -> [VNClassificationObservation]
 }
 ```
 
-### Create ML — trening na urządzeniu Apple
+### Create ML - trening na urządzeniu Apple
 
 Create ML pozwala trenować (lub dostosowywać *fine-tune*) modele bezpośrednio na Macu lub iPadzie Pro, bez potrzeby zewnętrznych narzędzi:
 
@@ -291,7 +291,7 @@ ONNX Runtime (ORT) to wieloplatformowy silnik wnioskowania opracowany przez Micr
 
 ### Dlaczego ONNX?
 
-Format ONNX jest neutralny producencko — modele można trenować w PyTorch, TensorFlow, scikit-learn i eksportować do jednego formatu obsługiwanego przez dziesiątki runtime'ów. ONNX Runtime Mobile wspiera Android, iOS, React Native i Flutter.
+Format ONNX jest neutralny producencko - modele można trenować w PyTorch, TensorFlow, scikit-learn i eksportować do jednego formatu obsługiwanego przez dziesiątki runtime'ów. ONNX Runtime Mobile wspiera Android, iOS, React Native i Flutter.
 
 ### Konwersja do ONNX
 
@@ -485,18 +485,18 @@ Orientacyjne wartości latencji wnioskowania na urządzeniach z 2023/2024 roku:
 
 ## Dobre praktyki
 
-1. **Zawsze mierz na urządzeniu fizycznym** — emulatory nie odwzorowują wydajności NPU/GPU
-2. **Używaj asynchronicznego wnioskowania** — nigdy nie blokuj wątku głównego (UI thread)
-3. **Buforuj instancje modelu** — tworzenie sesji/Interpreter jest kosztowne, rób to raz przy starcie
-4. **Stosuj batching** gdy to możliwe — przetwarzaj kilka elementów jednocześnie
-5. **Monitoruj zużycie pamięci** — ładuj modele on-demand i zwalniaj po użyciu w przypadku dużych modeli
-6. **Testuj scenariusze fallback** — sprawdź czy aplikacja działa poprawnie gdy NPU/GPU jest niedostępny (CPU-only fallback)
-7. **Kwantyzuj modele** — INT8/INT4 to zwykle 3–4× mniejszy rozmiar i 2–3× większa szybkość przy minimalnej stracie dokładności
+1. **Zawsze mierz na urządzeniu fizycznym** - emulatory nie odwzorowują wydajności NPU/GPU
+2. **Używaj asynchronicznego wnioskowania** - nigdy nie blokuj wątku głównego (UI thread)
+3. **Buforuj instancje modelu** - tworzenie sesji/Interpreter jest kosztowne, rób to raz przy starcie
+4. **Stosuj batching** gdy to możliwe - przetwarzaj kilka elementów jednocześnie
+5. **Monitoruj zużycie pamięci** - ładuj modele on-demand i zwalniaj po użyciu w przypadku dużych modeli
+6. **Testuj scenariusze fallback** - sprawdź czy aplikacja działa poprawnie gdy NPU/GPU jest niedostępny (CPU-only fallback)
+7. **Kwantyzuj modele** - INT8/INT4 to zwykle 3–4× mniejszy rozmiar i 2–3× większa szybkość przy minimalnej stracie dokładności
 
 ## Zobacz też
 
 - [Wprowadzenie do lokalnej AI na urządzeniu mobilnym](#local-ai-intro)
 - [Kwantyzacja i optymalizacja modeli AI](#model-quantization)
-- [Wnioskowanie lokalne — architektura i wydajność](#on-device-inference)
-- [MediaPipe — kompleksowe rozwiązania AI](#mediapipe-mobile)
+- [Wnioskowanie lokalne - architektura i wydajność](#on-device-inference)
+- [MediaPipe - kompleksowe rozwiązania AI](#mediapipe-mobile)
 - [AI w przetwarzaniu obrazu na urządzeniu](#ai-image-processing)

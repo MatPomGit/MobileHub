@@ -1,14 +1,14 @@
-# Przyszłość Edge AI — trendy i kierunki rozwoju
+# Przyszłość Edge AI - trendy i kierunki rozwoju
 
 ## Streszczenie
 
-Artykuł omawia najważniejsze trendy kształtujące przyszłość lokalnej sztucznej inteligencji na urządzeniach mobilnych. Od gwałtownego wzrostu wydajności procesorów neuronowych (NPU), przez multimodalne modele działające w czasie rzeczywistym, aż po federacyjne uczenie maszynowe i generatywną AI na smartfonie — Edge AI przestaje być ciekawostką badawczą i staje się fundamentem nowoczesnych aplikacji mobilnych. Artykuł przedstawia praktyczne przykłady kodu, porównania sprzętowe oraz mapę drogową rozwoju technologii na lata 2025–2030, uwzględniając kontekst regulacyjny UE i kwestie zrównoważonego rozwoju.
+Artykuł omawia najważniejsze trendy kształtujące przyszłość lokalnej sztucznej inteligencji na urządzeniach mobilnych. Od gwałtownego wzrostu wydajności procesorów neuronowych (NPU), przez multimodalne modele działające w czasie rzeczywistym, aż po federacyjne uczenie maszynowe i generatywną AI na smartfonie - Edge AI przestaje być ciekawostką badawczą i staje się fundamentem nowoczesnych aplikacji mobilnych. Artykuł przedstawia praktyczne przykłady kodu, porównania sprzętowe oraz mapę drogową rozwoju technologii na lata 2025–2030, uwzględniając kontekst regulacyjny UE i kwestie zrównoważonego rozwoju.
 
 **Słowa kluczowe:** Edge AI, NPU, on-device inference, Federated Learning, Gemini Nano, ONNX, multimodal AI, Green AI, EU AI Act, mobile AI roadmap
 
 ---
 
-## 1. Ewolucja sprzętu — NPU jako silnik Edge AI
+## 1. Ewolucja sprzętu - NPU jako silnik Edge AI
 
 ### 1.1 Historia i trajektoria wzrostu wydajności
 
@@ -28,17 +28,17 @@ Procesory neuronowe (Neural Processing Units, NPU) wbudowane w mobilne SoC (Syst
 | MediaTek Dimensity 9300 | 2023 | 35 | Mid-to-high Android |
 | Google Tensor G4 | 2024 | ~50 (szac.) | Pixel 9 |
 
-Wzrost ten oznacza, że w 2024 roku typowy flagowy smartfon dysponuje mocą obliczeniową NPU porównywalną z dedykowanymi akceleratorami AI sprzed kilku lat. Co istotniejsze, wzrost TOPS idzie w parze z poprawą efektywności energetycznej — nowe NPU wykonują więcej operacji na wat, co jest kluczowe dla urządzeń bateryjnych.
+Wzrost ten oznacza, że w 2024 roku typowy flagowy smartfon dysponuje mocą obliczeniową NPU porównywalną z dedykowanymi akceleratorami AI sprzed kilku lat. Co istotniejsze, wzrost TOPS idzie w parze z poprawą efektywności energetycznej - nowe NPU wykonują więcej operacji na wat, co jest kluczowe dla urządzeń bateryjnych.
 
 ### 1.2 Architektura nowoczesnych NPU
 
 Współczesne mobilne NPU to złożone jednostki wielopotokowe. Typowa architektura obejmuje:
 
-- **MAC (Multiply-Accumulate) arrays** — masywnie równoległe tablice do mnożenia macierzy
-- **Pamięć SRAM on-chip** — bufor minimalizujący transfer danych do RAM
-- **Silnik kwantyzacji** — sprzętowe wsparcie dla INT8, INT4, a coraz częściej FP16
-- **Kontroler DMA** — efektywny transfer modelu z pamięci masowej
-- **Dedykowane ścieżki dla operacji transformerowych** — w najnowszych układach
+- **MAC (Multiply-Accumulate) arrays** - masywnie równoległe tablice do mnożenia macierzy
+- **Pamięć SRAM on-chip** - bufor minimalizujący transfer danych do RAM
+- **Silnik kwantyzacji** - sprzętowe wsparcie dla INT8, INT4, a coraz częściej FP16
+- **Kontroler DMA** - efektywny transfer modelu z pamięci masowej
+- **Dedykowane ścieżki dla operacji transformerowych** - w najnowszych układach
 
 Apple Neural Engine w A18 Pro dodał sprzętowe wsparcie dla mechanizmów **attention** (kluczowych dla modeli LLM), co pozwala na uruchamianie modeli klasy 3B parametrów w czasie rzeczywistym.
 
@@ -55,15 +55,15 @@ Analitycy branżowi przewidują, że do 2027 roku:
 
 ## 2. Multimodalność na urządzeniu
 
-### 2.1 Gemini Nano Multimodal — przełom 2024
+### 2.1 Gemini Nano Multimodal - przełom 2024
 
 **Gemini Nano** to rodzina małych modeli Google zaprojektowanych do działania bezpośrednio na urządzeniu. Wersja **Gemini Nano 2** (debiut z Pixel 9 Pro, 2024) jako pierwsza masowa implementacja obsługuje natywnie wiele modalności jednocześnie:
 
-- 📝 **Tekst** — rozumienie i generowanie języka naturalnego
-- 🖼️ **Obraz** — opis, analiza, OCR, pytania o zawartość obrazu
-- 🎵 **Audio** — transkrypcja mowy, analiza dźwięku
+- 📝 **Tekst** - rozumienie i generowanie języka naturalnego
+- 🖼️ **Obraz** - opis, analiza, OCR, pytania o zawartość obrazu
+- 🎵 **Audio** - transkrypcja mowy, analiza dźwięku
 
-Gemini Nano Multimodal działa przez **Android AICore** — systemową usługę AI dostępną od Androida 14 QPR1. Deweloperzy uzyskują dostęp przez **Google AI Edge SDK**:
+Gemini Nano Multimodal działa przez **Android AICore** - systemową usługę AI dostępną od Androida 14 QPR1. Deweloperzy uzyskują dostęp przez **Google AI Edge SDK**:
 
 ```kotlin
 // Przykład użycia Gemini Nano Multimodal przez Google AI Edge SDK
@@ -118,10 +118,10 @@ Poza ekosystemem Google, rozwijają się alternatywne rozwiązania open-source:
 
 Uruchamianie modeli multimodalnych lokalnie wiąże się z kilkoma wyzwaniami:
 
-- **Rozmiar modelu** — enkodery obrazu (np. CLIP ViT-L/14) zajmują 300–600 MB niezależnie od LLM
-- **Zarządzanie pamięcią** — jednoczesne ładowanie encodera wizyjnego i dekodera tekstowego może przekraczać 4 GB RAM
-- **Buforowanie tokenów** — inferencja na sekwencjach multimodalnych wymaga efektywnego KV-cache
-- **Czas do pierwszego tokenu (TTFT)** — przetwarzanie obrazu przed generacją tekstu dodaje 200–800 ms latencji
+- **Rozmiar modelu** - enkodery obrazu (np. CLIP ViT-L/14) zajmują 300–600 MB niezależnie od LLM
+- **Zarządzanie pamięcią** - jednoczesne ładowanie encodera wizyjnego i dekodera tekstowego może przekraczać 4 GB RAM
+- **Buforowanie tokenów** - inferencja na sekwencjach multimodalnych wymaga efektywnego KV-cache
+- **Czas do pierwszego tokenu (TTFT)** - przetwarzanie obrazu przed generacją tekstu dodaje 200–800 ms latencji
 
 ---
 
@@ -143,12 +143,12 @@ Uruchamianie modeli multimodalnych lokalnie wiąże się z kilkoma wyzwaniami:
 [Urządzenie C]──gradients──┘
 ```
 
-### 3.2 Google Federated Learning — implementacja praktyczna
+### 3.2 Google Federated Learning - implementacja praktyczna
 
 Google stosuje FL w produkcji od 2017 roku (klawiatura Gboard). Framework **TensorFlow Federated (TFF)** oraz lżejszy **Google AI Edge Federated** umożliwiają implementację FL w aplikacjach mobilnych.
 
 ```python
-# Strona serwera — definicja procesu FL z TensorFlow Federated
+# Strona serwera - definicja procesu FL z TensorFlow Federated
 import tensorflow_federated as tff
 import tensorflow as tf
 
@@ -180,7 +180,7 @@ fedavg_process = tff.learning.algorithms.build_weighted_fed_avg(
 # Runda treningowa
 state = fedavg_process.initialize()
 for round_num in range(50):
-    # sampled_clients — lista danych klientów dostępnych w tej rundzie
+    # sampled_clients - lista danych klientów dostępnych w tej rundzie
     result = fedavg_process.next(state, sampled_clients)
     state = result.state
     metrics = result.metrics
@@ -188,7 +188,7 @@ for round_num in range(50):
 ```
 
 ```kotlin
-// Strona klienta Android — lokalne trenowanie z FL SDK
+// Strona klienta Android - lokalne trenowanie z FL SDK
 import org.tensorflow.lite.task.core.BaseOptions
 import com.google.android.gms.tflite.client.TfLiteInitializationOptions
 
@@ -206,7 +206,7 @@ class FederatedLearningClient(private val context: Context) {
         var loss = 0f
         for (step in 0 until localSteps) {
             val batch = localTrainingData.random()
-            // W uproszczeniu — rzeczywiste FL SDK obsługuje automatycznie
+            // W uproszczeniu - rzeczywiste FL SDK obsługuje automatycznie
             loss += trainStep(interpreter, batch)
         }
 
@@ -223,12 +223,12 @@ class FederatedLearningClient(private val context: Context) {
 
 ### 3.3 Personalizacja bez utraty prywatności
 
-FL sam w sobie nie gwarantuje pełnej prywatności — gradienty mogą ujawniać informacje o danych treningowych poprzez **gradient inversion attacks**. Dlatego nowoczesne systemy FL łączą kilka mechanizmów ochronnych:
+FL sam w sobie nie gwarantuje pełnej prywatności - gradienty mogą ujawniać informacje o danych treningowych poprzez **gradient inversion attacks**. Dlatego nowoczesne systemy FL łączą kilka mechanizmów ochronnych:
 
-- **Differential Privacy (DP)** — dodawanie szumu kalibrowanego do gradientów przed wysłaniem
-- **Secure Aggregation** — kryptograficzne sumowanie gradientów bez wglądu serwera w indywidualne wartości
-- **Compression** — kompresja gradientów redukująca zarówno transfer jak i ryzyko wycieku
-- **Selective Updates** — wysyłanie tylko statystycznie znaczących zmian (sparsifikacja)
+- **Differential Privacy (DP)** - dodawanie szumu kalibrowanego do gradientów przed wysłaniem
+- **Secure Aggregation** - kryptograficzne sumowanie gradientów bez wglądu serwera w indywidualne wartości
+- **Compression** - kompresja gradientów redukująca zarówno transfer jak i ryzyko wycieku
+- **Selective Updates** - wysyłanie tylko statystycznie znaczących zmian (sparsifikacja)
 
 ---
 
@@ -244,7 +244,7 @@ Przypadki użycia:
 - 🗣️ Adaptacja rozpoznawania mowy do akcentu/głosu
 - 📧 Filtr spamu uczący się na wiadomościach konkretnego użytkownika
 
-### 4.2 LoRA na urządzeniu — efektywne dostrajanie
+### 4.2 LoRA na urządzeniu - efektywne dostrajanie
 
 **LoRA (Low-Rank Adaptation)** to najpopularniejsza technika efektywnego fine-tuningu, szczególnie przydatna na edge ze względu na minimalne wymagania pamięciowe. Zamiast aktualizować wszystkie wagi modelu, LoRA dodaje dwie małe macierze niskiego rzędu:
 
@@ -259,7 +259,7 @@ from peft import LoraConfig, get_peft_model, TaskType
 from transformers import AutoModelForSequenceClassification
 import torch
 
-# Konfiguracja LoRA — małe adaptery
+# Konfiguracja LoRA - małe adaptery
 lora_config = LoraConfig(
     task_type=TaskType.SEQ_CLS,
     r=4,                    # rząd macierzy (niski = mniej parametrów)
@@ -274,7 +274,7 @@ base_model = AutoModelForSequenceClassification.from_pretrained(
     num_labels=2
 )
 
-# Model z adapterami LoRA — trenuje tylko ~0.5% parametrów
+# Model z adapterami LoRA - trenuje tylko ~0.5% parametrów
 peft_model = get_peft_model(base_model, lora_config)
 peft_model.print_trainable_parameters()
 # Wynik: trainable params: 147,456 || all params: 66,511,874 (~0.22%)
@@ -302,10 +302,10 @@ peft_model.save_pretrained("./lora_adapters_mobile")
 
 Generowanie obrazów przez modele dyfuzji było jeszcze w 2022 roku niemożliwe lokalnie na mobile. Rok 2023–2024 przyniósł kilka przełomów:
 
-- **Core ML Stable Diffusion** (Apple, 2022) — pierwsze działające SD 1.5 na iPhone 14 Pro (~30 s/obraz)
-- **MLC LLM + SD** (2023) — generowanie z ~8 s/obraz na iPhone 15 Pro dzięki Metal GPU
-- **SDXL-Turbo Mobile** (2024) — modele konsystencyjne generujące w 1–4 krokach, ~2–5 s/obraz
-- **Stable Diffusion 3 Mobile** (2024) — zoptymalizowana wersja SD3 dla urządzeń z 6+ GB RAM
+- **Core ML Stable Diffusion** (Apple, 2022) - pierwsze działające SD 1.5 na iPhone 14 Pro (~30 s/obraz)
+- **MLC LLM + SD** (2023) - generowanie z ~8 s/obraz na iPhone 15 Pro dzięki Metal GPU
+- **SDXL-Turbo Mobile** (2024) - modele konsystencyjne generujące w 1–4 krokach, ~2–5 s/obraz
+- **Stable Diffusion 3 Mobile** (2024) - zoptymalizowana wersja SD3 dla urządzeń z 6+ GB RAM
 
 ```swift
 // Integracja Core ML Stable Diffusion na iOS
@@ -367,7 +367,7 @@ Synteza mowy stała się możliwa lokalnie dzięki małym modelom jak **Kokoro-8
 
 ## 6. Standardy wymiany modeli AI
 
-### 6.1 ONNX — lingua franca modeli AI
+### 6.1 ONNX - lingua franca modeli AI
 
 **ONNX (Open Neural Network Exchange)** to otwarty format wymiany modeli AI, tworzony przez Microsoft, Facebook i inne firmy. Pozwala na eksport modelu z jednego frameworka (PyTorch, TensorFlow) i uruchomienie go w dowolnym środowisku z ONNX Runtime.
 
@@ -475,14 +475,14 @@ Samsung wprowadził własny format optymalizowany pod kątem układów **Exynos*
 
 - **`huggingface_hub` CLI** do pobierania skwantyzowanych modeli w GGUF/ONNX
 - **Spaces** hostujące demo modeli z eksportem do formatów mobilnych
-- Filtrowanie modeli po tagu `mobile`, `edge`, `quantized` — tysiące gotowych modeli
+- Filtrowanie modeli po tagu `mobile`, `edge`, `quantized` - tysiące gotowych modeli
 - Integracja z **llama.cpp** dla szybkiego testowania modeli na desktop przed deploymentem mobile
 
 ```bash
 # Pobieranie skwantyzowanego modelu dla mobile z Hugging Face
 pip install huggingface_hub
 
-# Model LLM w formacie GGUF (Q4_K_M — dobry kompromis jakość/rozmiar)
+# Model LLM w formacie GGUF (Q4_K_M - dobry kompromis jakość/rozmiar)
 huggingface-cli download \
   bartowski/Llama-3.2-3B-Instruct-GGUF \
   Llama-3.2-3B-Instruct-Q4_K_M.gguf \
@@ -543,19 +543,19 @@ class LocalLLMService {
 
 ### 7.3 Inne projekty open-source kształtujące ekosystem
 
-- **MLC LLM** — kompiluje modele LLM do WebGPU, Metal, CUDA, OpenCL; działa na iOS przez Metal
-- **llama.cpp** — C++ runtime dla modeli GGUF; backend dla większości lokalnych aplikacji LLM
-- **whisper.cpp** — wydajna implementacja Whisper ASR na CPU/GPU/NPU
-- **ExecuTorch** (Meta) — lekki runtime PyTorch dla wbudowanych i mobilnych urządzeń
-- **ONNX Runtime Mobile** — okrojona wersja ORT zoptymalizowana pod minimalne zużycie pamięci
+- **MLC LLM** - kompiluje modele LLM do WebGPU, Metal, CUDA, OpenCL; działa na iOS przez Metal
+- **llama.cpp** - C++ runtime dla modeli GGUF; backend dla większości lokalnych aplikacji LLM
+- **whisper.cpp** - wydajna implementacja Whisper ASR na CPU/GPU/NPU
+- **ExecuTorch** (Meta) - lekki runtime PyTorch dla wbudowanych i mobilnych urządzeń
+- **ONNX Runtime Mobile** - okrojona wersja ORT zoptymalizowana pod minimalne zużycie pamięci
 
 ---
 
-## 8. Edge Mesh — poza chmurą i poza pojedynczym urządzeniem
+## 8. Edge Mesh - poza chmurą i poza pojedynczym urządzeniem
 
 ### 8.1 Koncepcja edge mesh
 
-**Edge mesh** (siatka urządzeń brzegowych) to architektura, w której wnioskowanie i uczenie AI jest rozproszone między wiele urządzeń w pobliżu fizycznym lub sieciowym — bez udziału centralnej chmury.
+**Edge mesh** (siatka urządzeń brzegowych) to architektura, w której wnioskowanie i uczenie AI jest rozproszone między wiele urządzeń w pobliżu fizycznym lub sieciowym - bez udziału centralnej chmury.
 
 ```
 [iPhone A] <──────── BLE/WiFi Direct ────────> [iPad B]
@@ -568,10 +568,10 @@ class LocalLLMService {
 ```
 
 Scenariusze użycia:
-- **Collaborative inference** — duży model jest podzielony między kilka urządzeń (pipeline parallelism)
-- **Ensemble on edge** — wiele urządzeń klasyfikuje równolegle, wyniki są agregowane
-- **Specjalizacja zadań** — jedno urządzenie przetwarza audio, inne obraz, wyniki są łączone
-- **Edge caching** — popularne odpowiedzi modelu są cachowane lokalnie w sieci
+- **Collaborative inference** - duży model jest podzielony między kilka urządzeń (pipeline parallelism)
+- **Ensemble on edge** - wiele urządzeń klasyfikuje równolegle, wyniki są agregowane
+- **Specjalizacja zadań** - jedno urządzenie przetwarza audio, inne obraz, wyniki są łączone
+- **Edge caching** - popularne odpowiedzi modelu są cachowane lokalnie w sieci
 
 ### 8.2 Technologie wspierające edge mesh
 
@@ -585,11 +585,11 @@ Scenariusze użycia:
 
 ---
 
-## 9. Green AI — zrównoważony rozwój Edge AI
+## 9. Green AI - zrównoważony rozwój Edge AI
 
 ### 9.1 Ślad energetyczny AI mobilnej
 
-Paradoksalnie, przeniesienie AI z chmury na urządzenie może być zarówno **bardziej** jak i **mniej** energochłonne — zależnie od kontekstu:
+Paradoksalnie, przeniesienie AI z chmury na urządzenie może być zarówno **bardziej** jak i **mniej** energochłonne - zależnie od kontekstu:
 
 | Scenariusz | Zużycie energii | Emisja CO2 |
 |---|---|---|
@@ -602,11 +602,11 @@ Paradoksalnie, przeniesienie AI z chmury na urządzenie może być zarówno **ba
 
 ### 9.2 Techniki Green AI na mobile
 
-- **Adaptacyjna jakość modelu** — niższa jakość gdy bateria < 20%, wyższa przy ładowaniu
-- **Przetwarzanie wsadowe** — grupowanie wielu zapytań AI zamiast osobnych inferencji
-- **Early exit** — zatrzymanie inferencji przy wystarczającej pewności predykcji
-- **Model pruning** — zmniejszenie modelu przez usunięcie nieaktywnych neuronów
-- **Harmonogram obciążeń AI** — odkładanie intensywnych zadań na czas ładowania z sieci
+- **Adaptacyjna jakość modelu** - niższa jakość gdy bateria < 20%, wyższa przy ładowaniu
+- **Przetwarzanie wsadowe** - grupowanie wielu zapytań AI zamiast osobnych inferencji
+- **Early exit** - zatrzymanie inferencji przy wystarczającej pewności predykcji
+- **Model pruning** - zmniejszenie modelu przez usunięcie nieaktywnych neuronów
+- **Harmonogram obciążeń AI** - odkładanie intensywnych zadań na czas ładowania z sieci
 
 ```kotlin
 // Adaptacyjne wybieranie jakości modelu zależnie od stanu urządzenia
@@ -658,10 +658,10 @@ class AdaptiveAIQualityManager(private val context: Context) {
 
 Większość aplikacji mobilnych z AI należy do kategorii **minimalnego lub ograniczonego ryzyka**, niemniej AI Act wprowadza wymagania dotyczące:
 
-- **Przejrzystości** — użytkownik musi wiedzieć, że rozmawia z AI (chatbot, agent)
-- **Oznaczania treści generowanych** — deepfake audio/wideo wymaga wyraźnego oznaczenia
-- **Modele ogólnego przeznaczenia (GPAI)** — modele powyżej 10^25 FLOPs treningowych podlegają dodatkowym obowiązkom (nie dotyczy modeli edge, które są znacznie mniejsze)
-- **Open-source** — modele open-source mają ograniczone zwolnienia z obowiązków GPAI
+- **Przejrzystości** - użytkownik musi wiedzieć, że rozmawia z AI (chatbot, agent)
+- **Oznaczania treści generowanych** - deepfake audio/wideo wymaga wyraźnego oznaczenia
+- **Modele ogólnego przeznaczenia (GPAI)** - modele powyżej 10^25 FLOPs treningowych podlegają dodatkowym obowiązkom (nie dotyczy modeli edge, które są znacznie mniejsze)
+- **Open-source** - modele open-source mają ograniczone zwolnienia z obowiązków GPAI
 
 ### 10.3 Harmonogram wdrożenia AI Act
 
@@ -670,7 +670,7 @@ Większość aplikacji mobilnych z AI należy do kategorii **minimalnego lub ogr
 | 01.08.2024 | Wejście w życie AI Act |
 | 02.02.2025 | Zakaz praktyk zakazanych (Art. 5) zaczyna obowiązywać |
 | 02.08.2025 | Przepisy dot. GPAI i governance (Art. 52, 53) |
-| 02.08.2026 | Pełne wdrożenie — systemy wysokiego ryzyka |
+| 02.08.2026 | Pełne wdrożenie - systemy wysokiego ryzyka |
 | 02.08.2027 | Przepisy dot. systemów wbudowanych w produkty regulowane |
 
 ### 10.4 Praktyczna checklista compliance dla Edge AI app
@@ -704,11 +704,11 @@ Większość aplikacji mobilnych z AI należy do kategorii **minimalnego lub ogr
 
 **Neuromorphic computing:** Układy inspirowane biologicznym mózgiem (Intel Loihi, IBM NorthPole) mogą radykalnie zmienić efektywność inferencji ciągłej.
 
-**Photonic AI chips:** Układy fotoniki krzemowej do mnożenia macierzy z prędkością światła — pierwsze implementacje mobilne możliwe po 2028.
+**Photonic AI chips:** Układy fotoniki krzemowej do mnożenia macierzy z prędkością światła - pierwsze implementacje mobilne możliwe po 2028.
 
-**On-device RLHF:** Uczenie ze wzmocnieniem z ludzkiej informacji zwrotnej bezpośrednio na urządzeniu — model dostosowuje się do preferencji użytkownika bez serwera.
+**On-device RLHF:** Uczenie ze wzmocnieniem z ludzkiej informacji zwrotnej bezpośrednio na urządzeniu - model dostosowuje się do preferencji użytkownika bez serwera.
 
-### 11.3 Scenariusz 2030 — wizja
+### 11.3 Scenariusz 2030 - wizja
 
 > W 2030 roku przeciętny smartfon dysponuje NPU o wydajności 500+ TOPS i 16 GB dedykowanej pamięci LPDDR6. Na urządzeniu działa stały asystent osobisty oparty na modelu ~30B parametrów (skwantyzowanym do INT2), znający pełną historię, preferencje i kontekst użytkownika. Asystent rozumie obraz z kamery, dźwięk otoczenia i ekran w czasie rzeczywistym. Federacyjne uczenie pozwala na ciągłą personalizację bez wysyłania danych. Sieć edge mesh urządzeń w domu umożliwia uruchamianie modeli zbyt dużych dla jednego telefonu przez rozproszenie obliczeń między smartfonem, tabletem i telewizorem.
 
@@ -726,6 +726,6 @@ Edge AI na urządzeniach mobilnych przeszło drogę od prostych klasyfikatorów 
 - [Kwantyzacja i optymalizacja modeli AI](model-quantization.md)
 - [Frameworki ML na urządzeniu: TFLite, Core ML, ONNX](mobile-ml-frameworks.md)
 - [Modele językowe LLM na urządzeniu](llm-on-device.md)
-- [Wnioskowanie lokalne — architektura i wydajność](on-device-inference.md)
+- [Wnioskowanie lokalne - architektura i wydajność](on-device-inference.md)
 - [Prywatność i bezpieczeństwo w lokalnej AI](ai-privacy-security.md)
 - [Prawne aspekty AI na urządzeniach mobilnych](ai-legal-aspects.md)

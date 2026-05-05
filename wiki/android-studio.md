@@ -1,4 +1,4 @@
-# Programowanie natywne Android — Android Studio
+# Programowanie natywne Android - Android Studio
 
 Android Studio to oficjalne środowisko programistyczne do tworzenia aplikacji na Androida, oparte na IntelliJ IDEA. Współczesne aplikacje natywne najczęściej buduje się w języku Kotlin, z użyciem Jetpack Compose do interfejsu użytkownika oraz bibliotek Jetpack do architektury, nawigacji, przechowywania danych i testowania.
 
@@ -26,9 +26,9 @@ Dobrze zaprojektowana aplikacja powinna:
 
 Najczęściej stosowany układ warstw wygląda następująco:
 
-- **UI layer** — ekrany Compose, obsługa zdarzeń użytkownika, prezentacja stanu,
-- **domain layer** — opcjonalna warstwa przypadków użycia,
-- **data layer** — repozytoria, źródła lokalne i zdalne, mapowanie modeli.
+- **UI layer** - ekrany Compose, obsługa zdarzeń użytkownika, prezentacja stanu,
+- **domain layer** - opcjonalna warstwa przypadków użycia,
+- **data layer** - repozytoria, źródła lokalne i zdalne, mapowanie modeli.
 
 ## Struktura projektu Android
 
@@ -184,13 +184,13 @@ W skryptach dydaktycznych i projektach zespołowych lepiej pisać:
 - „użyj aktualnej stabilnej wersji biblioteki”,
 - niż przywiązywać studentów do numeru, który za kilka miesięcy będzie nieaktualny.
 
-## Jetpack Compose — podstawy
+## Jetpack Compose - podstawy
 
 Compose opiera się na trzech filarach:
 
-- **deklaratywności** — opisujesz wynikowy interfejs,
-- **stanie** — UI jest funkcją stanu,
-- **rekombinacji** — po zmianie stanu framework przelicza tylko potrzebne fragmenty drzewa UI.
+- **deklaratywności** - opisujesz wynikowy interfejs,
+- **stanie** - UI jest funkcją stanu,
+- **rekombinacji** - po zmianie stanu framework przelicza tylko potrzebne fragmenty drzewa UI.
 
 ### Composable functions
 
@@ -431,7 +431,7 @@ fun AppNavGraph() {
 - Nie przekazuj dużych obiektów przez trasę. Lepiej przekazać identyfikator i pobrać dane w ekranie docelowym.
 - Dla testowalności dobrze jest przekazywać callbacki nawigacyjne do ekranu zamiast przekazywać `NavController` w głąb drzewa UI.
 
-## Room — lokalna baza danych
+## Room - lokalna baza danych
 
 Room upraszcza pracę z SQLite, zapewnia sprawdzanie zapytań SQL podczas kompilacji i integruje się z `Flow` oraz korutynami.
 
@@ -451,7 +451,7 @@ data class TaskEntity(
 
 ### DAO
 
-DAO (Data Access Object) opisuje operacje na tabeli za pomocą adnotacji Room. Metoda zwracająca `Flow<List<TaskEntity>>` umożliwia reaktywne obserwowanie zmian w bazie — każda modyfikacja tabeli automatycznie emituje zaktualizowaną listę do wszystkich obserwatorów.
+DAO (Data Access Object) opisuje operacje na tabeli za pomocą adnotacji Room. Metoda zwracająca `Flow<List<TaskEntity>>` umożliwia reaktywne obserwowanie zmian w bazie - każda modyfikacja tabeli automatycznie emituje zaktualizowaną listę do wszystkich obserwatorów.
 
 ```kotlin
 @Dao
@@ -704,7 +704,7 @@ fun CameraPermissionExample() {
 - Nie proś o wiele uprawnień na starcie, jeśli nie są jeszcze potrzebne.
 - Uwzględnij sytuację odmowy i działanie aplikacji w trybie ograniczonym.
 
-## Architektura aplikacji — zalecany przepływ danych
+## Architektura aplikacji - zalecany przepływ danych
 
 Dobrą praktyką jest **jednokierunkowy przepływ danych**:
 
@@ -717,17 +717,17 @@ Dobrą praktyką jest **jednokierunkowy przepływ danych**:
 
 Taki model upraszcza debugowanie i testowanie, ponieważ wiadomo, skąd pochodzi zmiana na ekranie.
 
-## Projekt praktyczny — prosty menedżer zadań
+## Projekt praktyczny - prosty menedżer zadań
 
 Poniżej propozycja miniarchitektury dla aplikacji „Lista zadań”:
 
-- `TaskEntity` — model lokalnej bazy,
-- `Task` — model domenowy,
-- `TaskDao` — dostęp do Room,
-- `TaskRepository` — operacje na danych,
-- `TaskViewModel` — stan ekranu,
-- `TaskScreen` — interfejs Compose,
-- `AppNavGraph` — nawigacja.
+- `TaskEntity` - model lokalnej bazy,
+- `Task` - model domenowy,
+- `TaskDao` - dostęp do Room,
+- `TaskRepository` - operacje na danych,
+- `TaskViewModel` - stan ekranu,
+- `TaskScreen` - interfejs Compose,
+- `AppNavGraph` - nawigacja.
 
 ### Rozszerzenia funkcjonalne projektu
 
@@ -773,12 +773,12 @@ W małym przykładzie bywa to kuszące, ale w większej aplikacji szybko prowadz
 
 Android Studio udostępnia zestaw narzędzi, które studenci powinni umieć stosować:
 
-- **Logcat** — analiza logów aplikacji,
-- **Debugger** — breakpointy, podgląd zmiennych, krokowe wykonanie,
-- **Layout Inspector** — analiza drzewa UI,
-- **Profiler** — pamięć, CPU, sieć i energia,
-- **App Inspection** — wgląd w Room, DataStore i WorkManager,
-- **Preview w Compose** — szybki podgląd komponentów bez uruchamiania całej aplikacji.
+- **Logcat** - analiza logów aplikacji,
+- **Debugger** - breakpointy, podgląd zmiennych, krokowe wykonanie,
+- **Layout Inspector** - analiza drzewa UI,
+- **Profiler** - pamięć, CPU, sieć i energia,
+- **App Inspection** - wgląd w Room, DataStore i WorkManager,
+- **Preview w Compose** - szybki podgląd komponentów bez uruchamiania całej aplikacji.
 
 ### Przykład Compose Preview
 
@@ -861,13 +861,13 @@ class TaskRepositoryTest {
 
 ## Ćwiczenia praktyczne
 
-### Ćwiczenie 1 — licznik ze stanem lokalnym
+### Ćwiczenie 1 - licznik ze stanem lokalnym
 
 Zaimplementuj ekran z licznikiem i przyciskiem reset. Następnie rozbuduj go tak, aby stan przetrwał obrót ekranu.
 
 **Cel dydaktyczny:** zrozumienie `rememberSaveable`.
 
-### Ćwiczenie 2 — formularz dodawania zadania
+### Ćwiczenie 2 - formularz dodawania zadania
 
 Zaprojektuj formularz z polem tekstowym i przyciskiem „Dodaj”. Po kliknięciu zadanie ma pojawić się na liście.
 
@@ -877,7 +877,7 @@ Zaprojektuj formularz z polem tekstowym i przyciskiem „Dodaj”. Po kliknięci
 - czyszczenie pola po dodaniu,
 - wyświetlenie listy z użyciem `LazyColumn`.
 
-### Ćwiczenie 3 — Room
+### Ćwiczenie 3 - Room
 
 Dodaj trwałe przechowywanie zadań w bazie Room.
 
@@ -887,7 +887,7 @@ Dodaj trwałe przechowywanie zadań w bazie Room.
 - usuwanie zadania,
 - odczyt listy po ponownym uruchomieniu aplikacji.
 
-### Ćwiczenie 4 — ekran szczegółów
+### Ćwiczenie 4 - ekran szczegółów
 
 Dodaj nawigację do szczegółów zadania.
 
@@ -897,7 +897,7 @@ Dodaj nawigację do szczegółów zadania.
 - pobranie obiektu na ekranie szczegółów,
 - prezentacja pełnych danych.
 
-### Ćwiczenie 5 — integracja z API
+### Ćwiczenie 5 - integracja z API
 
 Połącz aplikację z publicznym REST API i wyświetl wyniki w Compose.
 
@@ -908,7 +908,7 @@ Połącz aplikację z publicznym REST API i wyświetl wyniki w Compose.
 - ponowienie próby,
 - logowanie zapytań w trybie debug.
 
-### Ćwiczenie 6 — uprawnienia
+### Ćwiczenie 6 - uprawnienia
 
 Dodaj funkcję korzystającą z aparatu lub lokalizacji.
 
@@ -918,7 +918,7 @@ Dodaj funkcję korzystającą z aparatu lub lokalizacji.
 - prośba o zgodę w czasie działania,
 - obsługa odmowy.
 
-### Ćwiczenie 7 — refaktoryzacja architektury
+### Ćwiczenie 7 - refaktoryzacja architektury
 
 Przepisz małą aplikację napisaną „w jednym pliku” do układu z warstwami `ui`, `data`, `repository`, `viewmodel`.
 
@@ -968,11 +968,11 @@ ma solidną podstawę do budowy bardziej złożonych aplikacji mobilnych.
 
 ## Linki
 
-- [Android Developers — Jetpack Compose](https://developer.android.com/compose)
-- [Android Developers — App Architecture](https://developer.android.com/topic/architecture)
-- [Android Developers — Navigation for Compose](https://developer.android.com/develop/ui/compose/navigation)
-- [Android Developers — Room](https://developer.android.com/training/data-storage/room)
-- [Android Developers — Permissions](https://developer.android.com/training/permissions/requesting)
-- [Android Developers — Connectivity](https://developer.android.com/develop/connectivity/network-ops/connecting)
+- [Android Developers - Jetpack Compose](https://developer.android.com/compose)
+- [Android Developers - App Architecture](https://developer.android.com/topic/architecture)
+- [Android Developers - Navigation for Compose](https://developer.android.com/develop/ui/compose/navigation)
+- [Android Developers - Room](https://developer.android.com/training/data-storage/room)
+- [Android Developers - Permissions](https://developer.android.com/training/permissions/requesting)
+- [Android Developers - Connectivity](https://developer.android.com/develop/connectivity/network-ops/connecting)
 - [Android Studio Download](https://developer.android.com/studio)
 - [Kotlin Documentation](https://kotlinlang.org/docs/home.html)

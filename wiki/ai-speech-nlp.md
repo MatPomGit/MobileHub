@@ -204,7 +204,7 @@ class SentimentClassifier(context: Context) {
 
 Wykrywanie słowa kluczowego (*wake word detection*) to stale działający na urządzeniu model, który nasłuchuje określonej frazy (np. „Hej Siri", „Ok Google") i aktywuje aplikację.
 
-**Porcupine** (Picovoice) — modele ~50 KB, latencja < 1 ms, dostępny dla Androida i iOS:
+**Porcupine** (Picovoice) - modele ~50 KB, latencja < 1 ms, dostępny dla Androida i iOS:
 
 ```kotlin
 val porcupine = Porcupine.Builder()
@@ -275,15 +275,15 @@ On-device NLP dojrzało do punktu, gdzie większość zadań przetwarzania mowy 
 - [Wprowadzenie do lokalnej AI na urządzeniu mobilnym](#local-ai-intro)
 - [Sieci neuronowe na urządzeniu mobilnym](#neural-networks-mobile)
 - [Modele językowe LLM na urządzeniu](#llm-on-device)
-- [MediaPipe — kompleksowe rozwiązania AI](#mediapipe-mobile)
+- [MediaPipe - kompleksowe rozwiązania AI](#mediapipe-mobile)
 - [AI w przetwarzaniu obrazu na urządzeniu](#ai-image-processing)
 - [Audio i mikrofon](#audio-microphone)
 
 ## 9. Named Entity Recognition (NER) na urządzeniu
 
-Rozpoznawanie nazwanych encji (*Named Entity Recognition*, NER) to zadanie ekstrakcji strukturyzowanych informacji z tekstu: **imion i nazwisk**, **lokalizacji**, **organizacji**, **dat** i innych typów encji. Na urządzeniu mobilnym NER jest szczególnie użyteczne jako etap przetwarzania po STT — np. „Zadzwoń do Anny Kowalskiej jutro o 10" → ekstrakcja osoby, czasu.
+Rozpoznawanie nazwanych encji (*Named Entity Recognition*, NER) to zadanie ekstrakcji strukturyzowanych informacji z tekstu: **imion i nazwisk**, **lokalizacji**, **organizacji**, **dat** i innych typów encji. Na urządzeniu mobilnym NER jest szczególnie użyteczne jako etap przetwarzania po STT - np. „Zadzwoń do Anny Kowalskiej jutro o 10" → ekstrakcja osoby, czasu.
 
-### Model NER na TFLite — HerBERT lub XLM-RoBERTa
+### Model NER na TFLite - HerBERT lub XLM-RoBERTa
 
 Do języka polskiego najlepszą opcją on-device jest **HerBERT** (Allegro, trenowany na polskich korpusach) lub wielojęzyczny **XLM-RoBERTa** dostrojony dla zadania NER z etykietami BIO.
 
@@ -295,7 +295,7 @@ class OnDeviceNER(context: Context) {
     )
     private val tokenizer = BertTokenizer(context.assets.open("herbert_vocab.txt"))
 
-    // Etykiety BIO — kolejność musi odpowiadać modelowi
+    // Etykiety BIO - kolejność musi odpowiadać modelowi
     private val labels = listOf(
         "O",
         "B-PER", "I-PER",    // osoba
@@ -311,7 +311,7 @@ class OnDeviceNER(context: Context) {
         val inputIds  = Array(1) { tokens.inputIds }
         val inputMask = Array(1) { tokens.attentionMask }
 
-        // Wyjście: [1, seqLen, numLabels] — logity dla każdego tokenu
+        // Wyjście: [1, seqLen, numLabels] - logity dla każdego tokenu
         val output = Array(1) { Array(128) { FloatArray(labels.size) } }
         interpreter.run(arrayOf(inputIds, inputMask), mapOf(0 to output))
 
@@ -377,7 +377,7 @@ entities.forEach { entity ->
 
 ---
 
-## 10. Ocena jakości STT — metryki WER i CER
+## 10. Ocena jakości STT - metryki WER i CER
 
 Porównując silniki STT lub dostrajając własny model, potrzebujemy obiektywnych metryk. Dwie kluczowe to **WER** (*Word Error Rate*) i **CER** (*Character Error Rate*).
 
@@ -391,7 +391,7 @@ WER = (S + D + I) / N
 
 gdzie: `S` = podstawienia, `D` = usunięcia, `I` = wstawienia, `N` = liczba słów w referencji.
 
-**CER** — analogicznie na poziomie znaków. Lepszy dla języków aglutynacyjnych (jak turecki, fiński) lub gdy litery ważniejsze niż słowa (OCR). Dla polskiego WER jest zazwyczaj wystarczający.
+**CER** - analogicznie na poziomie znaków. Lepszy dla języków aglutynacyjnych (jak turecki, fiński) lub gdy litery ważniejsze niż słowa (OCR). Dla polskiego WER jest zazwyczaj wystarczający.
 
 ### Obliczanie WER w Pythonie
 
@@ -437,15 +437,15 @@ print(f"CER: {compute_cer(ref, hyp):.2%}")   # CER: 3.57%
 | **Whisper tiny** | ~18% | ~6% | offline | 39 MB |
 | **Whisper base** | ~12% | ~4% | offline | 74 MB |
 | **Whisper small** | ~8% | ~2.5% | offline | 244 MB |
-| **Google STT API** | ~5% | ~1.8% | online | — |
-| **Azure Speech** | ~6% | ~2% | online | — |
+| **Google STT API** | ~5% | ~1.8% | online | - |
+| **Azure Speech** | ~6% | ~2% | online | - |
 
-> Wartości WER dla języka polskiego — na korpusie CLARIN-PL Common Voice. Wyniki zależą silnie od akcentu, jakości mikrofonu i tempa mowy.
+> Wartości WER dla języka polskiego - na korpusie CLARIN-PL Common Voice. Wyniki zależą silnie od akcentu, jakości mikrofonu i tempa mowy.
 
 ### Wskazówki poprawy jakości STT
 
 - **Redukcja szumu** przed rozpoznawaniem (WebRTC NS, RNNoise)
-- **VAD** — nie wysyłaj ciszy do modelu STT
-- **Biasing językowy** — zasilaj model listą spodziewanych słów (nazw, komend)
+- **VAD** - nie wysyłaj ciszy do modelu STT
+- **Biasing językowy** - zasilaj model listą spodziewanych słów (nazw, komend)
 - **Normalizacja tekstu** po stronie hipotetycznej i referencyjnej przed liczeniem WER (usunięcie interpunkcji, lowercase)
 - **Kwantyzacja INT8** nie pogarsza istotnie WER (różnica < 1 pp) przy 4× mniejszym modelu

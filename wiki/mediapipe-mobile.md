@@ -1,8 +1,8 @@
-# MediaPipe — kompleksowe rozwiązania AI
+# MediaPipe - kompleksowe rozwiązania AI
 
 ## Streszczenie
 
-Artykuł omawia MediaPipe — framework Google do budowy wielomodalnych potoków AI na Androidzie, iOS i w przeglądarce. Opisano architekturę Tasks API, gotowe rozwiązania z zakresu wizji komputerowej (Face Detection, Hand Landmarker, Pose Landmarker, Image Segmentation, Object Detection), przetwarzania tekstu (Text Classification, Language Detection) oraz audio (Audio Classification). Przedstawiono integrację z CameraX i AVFoundation, tworzenie własnych grafów w C++ oraz LLM Inference API do uruchamiania lokalnych modeli językowych.
+Artykuł omawia MediaPipe - framework Google do budowy wielomodalnych potoków AI na Androidzie, iOS i w przeglądarce. Opisano architekturę Tasks API, gotowe rozwiązania z zakresu wizji komputerowej (Face Detection, Hand Landmarker, Pose Landmarker, Image Segmentation, Object Detection), przetwarzania tekstu (Text Classification, Language Detection) oraz audio (Audio Classification). Przedstawiono integrację z CameraX i AVFoundation, tworzenie własnych grafów w C++ oraz LLM Inference API do uruchamiania lokalnych modeli językowych.
 
 **Słowa kluczowe:** MediaPipe, Tasks API, Face Landmarker, Hand Landmarker, Pose Landmarker, Image Segmentation, Object Detection, CameraX, AVFoundation, LLM Inference, TFLite, on-device AI, potok AI
 
@@ -10,7 +10,7 @@ Artykuł omawia MediaPipe — framework Google do budowy wielomodalnych potoków
 
 ## 1. Czym jest MediaPipe?
 
-MediaPipe to otwartoźródłowy framework Google do budowy wielomodalnych, wieloplatformowych potoków przetwarzania danych w czasie rzeczywistym. Umożliwia uruchamianie modeli AI bezpośrednio na urządzeniu mobilnym — bez konieczności połączenia z serwerem — przy wysokiej wydajności i niskich opóźnieniach.
+MediaPipe to otwartoźródłowy framework Google do budowy wielomodalnych, wieloplatformowych potoków przetwarzania danych w czasie rzeczywistym. Umożliwia uruchamianie modeli AI bezpośrednio na urządzeniu mobilnym - bez konieczności połączenia z serwerem - przy wysokiej wydajności i niskich opóźnieniach.
 
 ### 1.1 Ewolucja frameworka
 
@@ -22,7 +22,7 @@ MediaPipe przeszedł w latach 2022–2024 istotną transformację:
 | 2022+ | Gotowe rozwiązania wysokopoziomowe | **MediaPipe Tasks API** |
 | 2023+ | Lokalne LLM | **LLM Inference API** |
 
-Obecnie zalecane podejście to **MediaPipe Tasks API** — zestaw gotowych, zoptymalizowanych komponentów wywoływanych przez SDK dla Androida, iOS, Pythona i JavaScript.
+Obecnie zalecane podejście to **MediaPipe Tasks API** - zestaw gotowych, zoptymalizowanych komponentów wywoływanych przez SDK dla Androida, iOS, Pythona i JavaScript.
 
 ### 1.2 Architektura Tasks API
 
@@ -46,7 +46,7 @@ Obecnie zalecane podejście to **MediaPipe Tasks API** — zestaw gotowych, zopt
 
 Każdy task przyjmuje dane wejściowe (obraz, tekst, audio), przetwarza je przez zoptymalizowany model TFLite i zwraca ustrukturyzowane wyniki (obiekty, współrzędne, etykiety).
 
-### 1.3 Dodawanie zależności — Android
+### 1.3 Dodawanie zależności - Android
 
 ```kotlin
 // build.gradle.kts (module)
@@ -62,7 +62,7 @@ dependencies {
 }
 ```
 
-### 1.4 Dodawanie zależności — iOS (CocoaPods)
+### 1.4 Dodawanie zależności - iOS (CocoaPods)
 
 ```ruby
 # Podfile
@@ -102,7 +102,7 @@ val options = FaceLandmarkerOptions.builder()
 
 ---
 
-## 3. Vision — detekcja i analiza twarzy
+## 3. Vision - detekcja i analiza twarzy
 
 ### 3.1 Face Detection
 
@@ -152,7 +152,7 @@ class FaceDetectorHelper(private val context: Context) {
 }
 ```
 
-### 3.2 Face Landmarker — 478 punktów twarzy
+### 3.2 Face Landmarker - 478 punktów twarzy
 
 Face Landmarker dostarcza siatkę 478 punktów charakterystycznych twarzy (Face Mesh), umożliwiając precyzyjne śledzenie geometrii twarzy, wyrażeń mimicznych i efektów AR.
 
@@ -202,7 +202,7 @@ class FaceLandmarkerHelper(
     fun close() = landmarker.close()
 }
 
-// Obsługa wyników — rysowanie siatki 478 punktów
+// Obsługa wyników - rysowanie siatki 478 punktów
 fun drawFaceMesh(canvas: Canvas, result: FaceLandmarkerResult, imageWidth: Int, imageHeight: Int) {
     result.faceLandmarks().forEach { landmarks ->
         // Rysuj punkty
@@ -227,9 +227,9 @@ fun drawFaceMesh(canvas: Canvas, result: FaceLandmarkerResult, imageWidth: Int, 
 
 ---
 
-## 4. Vision — śledzenie dłoni i postawy ciała
+## 4. Vision - śledzenie dłoni i postawy ciała
 
-### 4.1 Hand Landmarker — 21 punktów dłoni
+### 4.1 Hand Landmarker - 21 punktów dłoni
 
 Hand Landmarker wykrywa i śledzi 21 punktów na każdej dłoni w czasie rzeczywistym, umożliwiając rozpoznawanie gestów i sterowanie interfejsem.
 
@@ -286,7 +286,7 @@ WRIST(0) → THUMB_CMC(1) → THUMB_MCP(2) → THUMB_IP(3) → THUMB_TIP(4)
          → PINKY_MCP(17) → PIP(18) → DIP(19) → TIP(20)
 ```
 
-### 4.2 Pose Landmarker — 33 punkty postawy ciała
+### 4.2 Pose Landmarker - 33 punkty postawy ciała
 
 ```kotlin
 // PoseLandmarkerHelper.kt
@@ -344,7 +344,7 @@ Modele Pose Landmarker różnią się dokładnością i szybkością:
 
 ---
 
-## 5. Vision — segmentacja i detekcja obiektów
+## 5. Vision - segmentacja i detekcja obiektów
 
 ### 5.1 Image Segmentation
 
@@ -461,7 +461,7 @@ Dostępne modele EfficientDet:
 
 ---
 
-## 6. Text — klasyfikacja i wykrywanie języka
+## 6. Text - klasyfikacja i wykrywanie języka
 
 ### 6.1 Text Classification
 
@@ -540,7 +540,7 @@ println(langDetector.detect("Bonjour le monde!"))  // "fr"
 
 ---
 
-## 7. Audio — klasyfikacja dźwięków
+## 7. Audio - klasyfikacja dźwięków
 
 ### 7.1 Audio Classification
 
@@ -701,7 +701,7 @@ class GemmaService {
 
 ---
 
-## 9. Integracja z CameraX — Android
+## 9. Integracja z CameraX - Android
 
 ### 9.1 Konfiguracja CameraX z MediaPipe
 
@@ -771,7 +771,7 @@ class CameraXMediaPipeActivity : AppCompatActivity() {
 
 ---
 
-## 10. Integracja z AVFoundation — iOS
+## 10. Integracja z AVFoundation - iOS
 
 ### 10.1 Konfiguracja sesji kamery z MediaPipe
 
@@ -1034,7 +1034,7 @@ performanceLogger.recordInference(startMs, SystemClock.uptimeMillis())
 Log.d("Perf", performanceLogger.getStats().toString())
 ```
 
-### 12.3 Wybór delegata — porównanie wydajności
+### 12.3 Wybór delegata - porównanie wydajności
 
 | Delegat | Zalety | Wady | Kiedy używać |
 |---|---|---|---|
@@ -1061,13 +1061,13 @@ val baseOptions = BaseOptions.builder()
 
 ## 13. Dobre praktyki
 
-1. **Używaj trybu `LIVE_STREAM`** z kamerą — asynchroniczne callbacki nie blokują wątku kamery.
-2. **Zamykaj taski** wywołując `.close()` w `onDestroy()` / `deinit` — modele zajmują znaczną ilość pamięci GPU.
-3. **Unikaj tworzenia obiektów w pętli klatek** — alokuj `BitmapImageBuilder`, `MPImage` raz lub korzystaj z pul.
-4. **Skaluj obraz przed przetworzeniem** — większość modeli nie wymaga rozdzielczości 4K; 640×480 zwykle wystarczy.
-5. **Ogranicz liczbę wykrywanych obiektów** (`setNumHands`, `setNumFaces`, `setMaxResults`) — każdy dodatkowy obiekt zwiększa czas inferecji.
-6. **Testuj na urządzeniu, nie tylko emulatorze** — emulator nie posiada dedykowanego GPU; wyniki wydajnościowe będą fałszywe.
-7. **Pobieraj modele `.task` przez Asset Delivery** (Google Play) lub z serwera — nie bundluj dużych plików w APK.
+1. **Używaj trybu `LIVE_STREAM`** z kamerą - asynchroniczne callbacki nie blokują wątku kamery.
+2. **Zamykaj taski** wywołując `.close()` w `onDestroy()` / `deinit` - modele zajmują znaczną ilość pamięci GPU.
+3. **Unikaj tworzenia obiektów w pętli klatek** - alokuj `BitmapImageBuilder`, `MPImage` raz lub korzystaj z pul.
+4. **Skaluj obraz przed przetworzeniem** - większość modeli nie wymaga rozdzielczości 4K; 640×480 zwykle wystarczy.
+5. **Ogranicz liczbę wykrywanych obiektów** (`setNumHands`, `setNumFaces`, `setMaxResults`) - każdy dodatkowy obiekt zwiększa czas inferecji.
+6. **Testuj na urządzeniu, nie tylko emulatorze** - emulator nie posiada dedykowanego GPU; wyniki wydajnościowe będą fałszywe.
+7. **Pobieraj modele `.task` przez Asset Delivery** (Google Play) lub z serwera - nie bundluj dużych plików w APK.
 
 ---
 
@@ -1075,7 +1075,7 @@ val baseOptions = BaseOptions.builder()
 
 - [Modele językowe LLM na urządzeniu mobilnym](llm-on-device.md)
 - [Frameworki ML na mobile](mobile-ml-frameworks.md)
-- [Wnioskowanie lokalne — architektura i wydajność](on-device-inference.md)
+- [Wnioskowanie lokalne - architektura i wydajność](on-device-inference.md)
 - [Kwantyzacja i optymalizacja modeli AI](model-quantization.md)
 - [AI mowy i NLP na mobile](ai-speech-nlp.md)
 - [Wprowadzenie do lokalnego AI na mobile](local-ai-intro.md)

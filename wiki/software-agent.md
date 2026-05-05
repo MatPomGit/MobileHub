@@ -1,10 +1,10 @@
 # Agent programowy (Software Agent)
 
-Agent programowy (*software agent*) to autonomiczny program komputerowy, który postrzega swoje środowisko poprzez dane wejściowe, przetwarza je i podejmuje działania w celu realizacji zdefiniowanych celów — bez ciągłej ingerencji człowieka. To jeden z fundamentalnych konceptów nowoczesnej inżynierii oprogramowania i sztucznej inteligencji.
+Agent programowy (*software agent*) to autonomiczny program komputerowy, który postrzega swoje środowisko poprzez dane wejściowe, przetwarza je i podejmuje działania w celu realizacji zdefiniowanych celów - bez ciągłej ingerencji człowieka. To jeden z fundamentalnych konceptów nowoczesnej inżynierii oprogramowania i sztucznej inteligencji.
 
 ## Definicja i cechy
 
-Termin „agent" pochodzi z łaciny (*agere* — działać) i w kontekście informatyki oznacza byt zdolny do samodzielnego działania. Klasyczna definicja (Wooldridge & Jennings, 1995) wyróżnia cztery podstawowe własności agenta:
+Termin „agent" pochodzi z łaciny (*agere* - działać) i w kontekście informatyki oznacza byt zdolny do samodzielnego działania. Klasyczna definicja (Wooldridge & Jennings, 1995) wyróżnia cztery podstawowe własności agenta:
 
 | Własność | Opis |
 |----------|------|
@@ -94,9 +94,9 @@ class ReactiveAgent:
 Model BDI to najważniejsza architektura dla praktycznych agentów inteligentnych. Opisuje stan mentalny agenta przez trzy komponenty:
 
 ```
-Beliefs  — co agent wie/sądzi o świecie
-Desires  — jakie stany agent chce osiągnąć (cele)
-Intentions — do czego agent jest aktualnie zobowiązany (plany w toku)
+Beliefs  - co agent wie/sądzi o świecie
+Desires  - jakie stany agent chce osiągnąć (cele)
+Intentions - do czego agent jest aktualnie zobowiązany (plany w toku)
 ```
 
 ```python
@@ -187,7 +187,7 @@ Model łączy podejście reaktywne i deliberatywne w trzy warstwy:
 
 Systemy wieloagentowe (*Multi-Agent Systems*, MAS) to środowiska, w których wiele agentów współdziała, negocjuje lub konkuruje.
 
-### Komunikacja między agentami — FIPA ACL
+### Komunikacja między agentami - FIPA ACL
 
 Standard FIPA ACL (Agent Communication Language) definiuje ustrukturyzowane komunikaty:
 
@@ -228,14 +228,14 @@ class BuyerAgent(BDIAgent):
 
 Agenty mogą koordynować działania przez:
 
-- **Aukcje** (Vickrey, angielska, holenderska) — alokacja zasobów
-- **Protokół Contract Net** — zlecanie podzadań agentom z najlepszą ofertą
-- **Argumentation** — wymiana argumentów do osiągnięcia konsensusu
-- **Stygmergia** — pośrednia koordynacja przez modyfikację środowiska (jak mrówki)
+- **Aukcje** (Vickrey, angielska, holenderska) - alokacja zasobów
+- **Protokół Contract Net** - zlecanie podzadań agentom z najlepszą ofertą
+- **Argumentation** - wymiana argumentów do osiągnięcia konsensusu
+- **Stygmergia** - pośrednia koordynacja przez modyfikację środowiska (jak mrówki)
 
 ```python
 class ContractNetInitiator:
-    """Protokół Contract Net — zleceniodawca."""
+    """Protokół Contract Net - zleceniodawca."""
 
     def __init__(self, task, participants):
         self.task = task
@@ -339,14 +339,14 @@ Final Answer: "W Rzeszowie jest 12°C i zachmurzenie."
 - [Robotyka poznawcza](#wiki-cognitive-robotics)
 - [Computational cognition](#wiki-computational-cognition)
 - [ACT-R](#wiki-actr-architecture)
-- [Soar — architektura kognitywna](#wiki-soar-architecture)
+- [Soar - architektura kognitywna](#wiki-soar-architecture)
 - [LIDA](#wiki-lida-architecture)
 - [CLARION](#wiki-clarion-architecture)
 
 ## Linki zewnętrzne
 
-- [FIPA — Foundation for Intelligent Physical Agents](http://www.fipa.org/)
-- [JADE — Java Agent DEvelopment Framework](https://jade.tilab.com/)
+- [FIPA - Foundation for Intelligent Physical Agents](http://www.fipa.org/)
+- [JADE - Java Agent DEvelopment Framework](https://jade.tilab.com/)
 - [LangChain Agents Documentation](https://python.langchain.com/docs/modules/agents/)
-- [Russell & Norvig: Artificial Intelligence — A Modern Approach](https://aima.cs.berkeley.edu/)
-- [AgentSpeak / Jason — BDI Agent Language](https://jason.sourceforge.net/)
+- [Russell & Norvig: Artificial Intelligence - A Modern Approach](https://aima.cs.berkeley.edu/)
+- [AgentSpeak / Jason - BDI Agent Language](https://jason.sourceforge.net/)

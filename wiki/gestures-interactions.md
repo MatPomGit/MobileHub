@@ -1,6 +1,6 @@
 # Gesty i interakcje dotykowe
 
-Ekran dotykowy to główny interfejs urządzenia mobilnego. Dobrze zaprojektowane gesty są intuicyjne i niedostrzegalne — użytkownik po prostu robi to, co chce, bez zastanawiania się nad mechaniką.
+Ekran dotykowy to główny interfejs urządzenia mobilnego. Dobrze zaprojektowane gesty są intuicyjne i niedostrzegalne - użytkownik po prostu robi to, co chce, bez zastanawiania się nad mechaniką.
 
 ## Podstawowe gesty
 
@@ -14,7 +14,7 @@ Ekran dotykowy to główny interfejs urządzenia mobilnego. Dobrze zaprojektowan
 | **Pinch** | Ściągnięcie/rozkroczenie dwóch palców | Zoom in/out |
 | **Rotate** | Obrót dwóch palców | Obracanie mapy/zdjęcia |
 
-## Compose — Gesty
+## Compose - Gesty
 
 Jetpack Compose dostarcza gotowych detektorów gestów, które można łatwo podłączyć do dowolnego komponentu za pomocą modyfikatora `pointerInput`. Dzięki nim obsługa tapnięć, długiego przytrzymania czy przeciągania sprowadza się do kilku linii kodu. Poniższy przykład pokazuje, jak wykrywać różne typy gestów oraz zaimplementować mechanizm „swipe to dismiss" na karcie zadania.
 
@@ -42,7 +42,7 @@ Box(
         }
 )
 
-// Przeciąganie karty — swipe to dismiss
+// Przeciąganie karty - swipe to dismiss
 val dismissState = rememberSwipeToDismissBoxState(
     confirmValueChange = { value ->
         if (value == SwipeToDismissBoxValue.EndToStart) {
@@ -70,7 +70,7 @@ SwipeToDismissBox(
 }
 ```
 
-## Transformacje — pinch to zoom
+## Transformacje - pinch to zoom
 
 Obsługa gestów wielodotykowych, takich jak powiększanie (pinch-to-zoom) czy obracanie, wymaga śledzenia wielu punktów dotykowych jednocześnie. Compose upraszcza ten proces dzięki funkcji `detectTransformGestures`, która zwraca zagregowane wartości zoomu, przesunięcia i obrotu. Poniższy przykład pokazuje komponent obrazu reagującego na wszystkie trzy rodzaje transformacji.
 
@@ -104,7 +104,7 @@ fun ZoomableImage(painter: Painter) {
 }
 ```
 
-## Haptic Feedback — sprzężenie dotykowe
+## Haptic Feedback - sprzężenie dotykowe
 
 Wibracyjne sprzężenie zwrotne (haptic feedback) poprawia odczucie interakcji, dając użytkownikowi potwierdzenie dotykowe po wykonaniu akcji. Odpowiednio dobrana haptyka sprawia, że aplikacja czuje się bardziej responsywna i dopracowana. Poniżej przykład przycisku z feedbackiem haptycznym oraz omówienie dostępnych typów wibracji.
 
@@ -127,7 +127,7 @@ HapticFeedbackType.TextHandleMove  // przesuwanie kursora tekstu
 // Dla zaawansowanej haptyki użyj VibrationEffect (API 26+)
 ```
 
-## Cel dotyku — minimalne rozmiary
+## Cel dotyku - minimalne rozmiary
 
 Zgodnie z Material Design 3 i WCAG, minimalny obszar dotyku to **48×48 dp**:
 
@@ -138,7 +138,7 @@ Icon(
     contentDescription = "Zamknij",
     modifier = Modifier
         .size(24.dp)
-        .padding(12.dp)  // BŁĄD — zmniejsza obszar
+        .padding(12.dp)  // BŁĄD - zmniejsza obszar
 
 // POPRAWNIE
 IconButton(
@@ -155,11 +155,11 @@ IconButton(
 
 ## Linki
 
-- [Gestures — Compose](https://developer.android.com/compose/touch-input/gestures)
+- [Gestures - Compose](https://developer.android.com/compose/touch-input/gestures)
 - [Material 3 Touch Targets](https://m3.material.io/foundations/accessible-design/accessibility-basics)
 - [Haptic Feedback](https://developer.android.com/develop/ui/views/haptics)
 
-## Nestedscroll — koordynacja przewijania
+## Nestedscroll - koordynacja przewijania
 
 W złożonych layoutach z wieloma przewijalnymi sekcjami konieczna jest koordynacja przewijania między komponentami rodzica i potomka. Mechanizm `NestedScroll` w Compose pozwala przekazywać zdarzenia scroll do właściwego komponentu zgodnie z zdefiniowaną logiką. Poniższy przykład demonstruje zwijający się pasek aplikacji (collapsing toolbar) oraz implementację własnego `NestedScrollConnection`.
 
@@ -187,7 +187,7 @@ fun CollapsingToolbarLayout(
     }
 }
 
-// Custom NestedScrollConnection — własna logika
+// Custom NestedScrollConnection - własna logika
 val nestedScrollConnection = object : NestedScrollConnection {
     override fun onPreScroll(available: Offset, source: NestedScrollSource): Offset {
         // Przechwytuj scroll przed przekazaniem do potomka
@@ -239,7 +239,7 @@ fun RefreshableContent(
 }
 ```
 
-## Drag and Drop — reorder listy
+## Drag and Drop - reorder listy
 
 Możliwość ręcznego sortowania elementów listy metodą „przeciągnij i upuść" znacząco poprawia użyteczność aplikacji do zarządzania zadaniami czy playlistami. Biblioteka `ComposeReorderable` dostarcza gotową integrację z `LazyColumn`, obsługując animacje i zmianę indeksów. Poniższy przykład implementuje przewijalną listę zadań z ikoną uchwytu do przeciągania.
 
@@ -283,9 +283,9 @@ fun ReorderableTaskList(
 }
 ```
 
-## Animacje gestów — Compose Animated
+## Animacje gestów - Compose Animated
 
-Gesty są znacznie bardziej satysfakcjonujące, gdy towarzyszą im płynne animacje reagujące na ruch palca. Compose oferuje `Animatable` oraz `spring()`/`tween()` do budowania efektów takich jak „gumowa taśma" (*rubber band*) — element podąża za palcem, ale po zwolnieniu wraca sprężyście na miejsce.
+Gesty są znacznie bardziej satysfakcjonujące, gdy towarzyszą im płynne animacje reagujące na ruch palca. Compose oferuje `Animatable` oraz `spring()`/`tween()` do budowania efektów takich jak „gumowa taśma" (*rubber band*) - element podąża za palcem, ale po zwolnieniu wraca sprężyście na miejsce.
 
 ```kotlin
 @Composable
@@ -301,7 +301,7 @@ fun RubberBandCard(content: @Composable () -> Unit) {
                 detectDragGestures(
                     onDrag = { _, dragAmount ->
                         coroutineScope.launch {
-                            // Opór — element przesuwa się o połowy drogi palca
+                            // Opór - element przesuwa się o połowy drogi palca
                             offsetX.snapTo(offsetX.value + dragAmount.x * 0.4f)
                             offsetY.snapTo(offsetY.value + dragAmount.y * 0.4f)
                         }
@@ -336,7 +336,7 @@ fun RubberBandCard(content: @Composable () -> Unit) {
 Dla animacji pozycji opartych na gestach swipe warto skorzystać z `SwipeableV2State` w połączeniu z `Animatable`, definiując progi (*thresholds*), po przekroczeniu których element „zatrzaskuje się" w nowej pozycji.
 
 ```kotlin
-// Animacja skali podczas pinch — płynna z tween
+// Animacja skali podczas pinch - płynna z tween
 val scale = remember { Animatable(1f) }
 LaunchedEffect(gestureScale) {
     scale.animateTo(
@@ -351,7 +351,7 @@ LaunchedEffect(gestureScale) {
 Od Androida 10 system oferuje nawigację gestami zamiast przycisków. Aplikacje muszą obsługiwać gest „wstecz" (przeciągnięcie z krawędzi ekranu). W Compose dostępne są dwa mechanizmy: `BackHandler` do blokowania gestu wstecz oraz `PredictiveBackHandler` (Android 14+) do animowania przejścia przed faktycznym powrotem.
 
 ```kotlin
-// BackHandler — blokowanie gestu wstecz (np. gdy formularz ma niezapisane zmiany)
+// BackHandler - blokowanie gestu wstecz (np. gdy formularz ma niezapisane zmiany)
 @Composable
 fun EditScreen(hasUnsavedChanges: Boolean, onBack: () -> Unit) {
     var showDialog by remember { mutableStateOf(false) }
@@ -377,7 +377,7 @@ fun EditScreen(hasUnsavedChanges: Boolean, onBack: () -> Unit) {
 ```
 
 ```kotlin
-// PredictiveBackHandler — własna animacja przewidywalnego gestu wstecz (API 34+)
+// PredictiveBackHandler - własna animacja przewidywalnego gestu wstecz (API 34+)
 @Composable
 fun ScreenWithPredictiveBack(onBack: () -> Unit) {
     val scale = remember { Animatable(1f) }
@@ -389,10 +389,10 @@ fun ScreenWithPredictiveBack(onBack: () -> Unit) {
             progress.collect { backEvent ->
                 scale.snapTo(1f - backEvent.progress * 0.15f)
             }
-            // Gest zakończony — wróć wstecz
+            // Gest zakończony - wróć wstecz
             onBack()
         } catch (e: CancellationException) {
-            // Gest anulowany — przywróć skalę
+            // Gest anulowany - przywróć skalę
             scale.animateTo(1f, spring())
         }
     }
@@ -454,7 +454,7 @@ Dla list z funkcją drag-and-drop dodaj akcję `moveUp`/`moveDown` przez `semant
 - [PullToRefresh](https://developer.android.com/reference/kotlin/androidx/compose/material3/pulltorefresh/package-summary)
 - [Reorderable](https://github.com/aclassen/ComposeReorderable)
 
-## Gesty na iOS — UIGestureRecognizer
+## Gesty na iOS - UIGestureRecognizer
 
 Na iOS gesty obsługuje system `UIGestureRecognizer` (UIKit) lub odpowiedniki w SwiftUI (`.gesture()` modyfikator). SwiftUI ujednolica API gestów, czyniąc je podobnymi do Compose.
 
@@ -496,7 +496,7 @@ struct ZoomableImageView: View {
                     .onEnded { _ in lastOffset = offset }
             )
             .onTapGesture(count: 2) {
-                // Double tap — reset zoom
+                // Double tap - reset zoom
                 withAnimation(.spring()) {
                     scale = 1.0
                     offset = .zero
@@ -509,9 +509,9 @@ struct ZoomableImageView: View {
 ```
 
 Kluczowe modyfikatory SwiftUI dla gestów:
-- `.onTapGesture(count:)` — tap i double-tap
-- `.gesture(DragGesture())` — przeciąganie
-- `.gesture(MagnificationGesture())` — pinch-to-zoom
-- `.gesture(RotationGesture())` — obrót
-- `.simultaneousGesture()` — gesty równoległe
-- `.highPriorityGesture()` — nadpisanie gestów rodzica
+- `.onTapGesture(count:)` - tap i double-tap
+- `.gesture(DragGesture())` - przeciąganie
+- `.gesture(MagnificationGesture())` - pinch-to-zoom
+- `.gesture(RotationGesture())` - obrót
+- `.simultaneousGesture()` - gesty równoległe
+- `.highPriorityGesture()` - nadpisanie gestów rodzica

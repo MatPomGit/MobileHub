@@ -80,7 +80,7 @@ fun VirtualJoystick(
 }
 ```
 
-### ROS2 Bridge — komunikacja z robotem
+### ROS2 Bridge - komunikacja z robotem
 
 ```kotlin
 // rosbridge_suite WebSocket API
@@ -133,9 +133,9 @@ class RosBridge(private val url: String) {
 }
 ```
 
-## Autonomiczna nawigacja — podstawy
+## Autonomiczna nawigacja - podstawy
 
-### ROS2 Nav2 — stack nawigacyjny
+### ROS2 Nav2 - stack nawigacyjny
 
 Nav2 to główny stack nawigacyjny ROS2. Aplikacja mobilna może wysyłać cele nawigacyjne:
 
@@ -167,7 +167,7 @@ private fun yawToQuaternion(yaw: Double): Map<String, Double> {
 
 ## Wizualizacja danych robotycznych
 
-### Mapa 2D — OccupancyGrid
+### Mapa 2D - OccupancyGrid
 
 ```kotlin
 // Renderowanie mapy OccupancyGrid z /map topic
@@ -220,10 +220,10 @@ fun RobotMap(
 
 ## Smartphone jako mózg robota
 
-Smartfon można fizycznie zamontować na robocie — zapewnia CPU/GPU, WiFi/BLE, GPS, IMU i kamerę w jednym urządzeniu:
+Smartfon można fizycznie zamontować na robocie - zapewnia CPU/GPU, WiFi/BLE, GPS, IMU i kamerę w jednym urządzeniu:
 
 ```kotlin
-// Robot Patrol — autonomiczny patrol z kamerą
+// Robot Patrol - autonomiczny patrol z kamerą
 class PatrolRobot(
     private val motor: BluetoothMotorController,
     private val sensorManager: SensorManager
@@ -271,7 +271,7 @@ class PatrolRobot(
 
 ## On-device AI dla robotyki
 
-TensorFlow Lite pozwala uruchamiać modele ML bezpośrednio na smartfonie — bez internetu:
+TensorFlow Lite pozwala uruchamiać modele ML bezpośrednio na smartfonie - bez internetu:
 
 ```kotlin
 // Detekcja obiektów na kamerze (MobileNetV2 SSD)
@@ -313,13 +313,13 @@ class ObjectDetector(context: Context) {
 
 - [ROS2 Documentation](https://docs.ros.org/en/humble/)
 - [rosbridge_suite](https://github.com/RobotWebTools/rosbridge_suite)
-- [Nav2 — Navigation2](https://nav2.ros.org/)
+- [Nav2 - Navigation2](https://nav2.ros.org/)
 - [TensorFlow Lite Android](https://www.tensorflow.org/lite/android)
 - [OpenCV Android SDK](https://opencv.org/android/)
 
 ---
 
-## Bluetooth Low Energy — sterowanie Arduino/ESP32
+## Bluetooth Low Energy - sterowanie Arduino/ESP32
 
 Wiele prostych robotów amatorskich używa mikrokontrolerów (Arduino Uno, ESP32) z modułem BLE zamiast pełnego stosu ROS. Android udostępnia kompletne API do komunikacji GATT.
 
@@ -435,7 +435,7 @@ imageAnalysis.setAnalyzer(cameraExecutor) { imageProxy ->
 }
 ```
 
-### Detektor linii — TFLite + ML Kit
+### Detektor linii - TFLite + ML Kit
 
 ```kotlin
 class LineFollower(context: Context) {
@@ -479,7 +479,7 @@ fun estimateDepth(bitmap: Bitmap): FloatArray {
 
 Piksel o wartości bliskiej `1.0` oznacza obiekt blisko kamery. Wystarczy sprawdzić środkowy obszar mapy, by wykryć przeszkodę przed robotem i wydać komendę `STOP`.
 
-## MQTT — alternatywa dla rosbridge
+## MQTT - alternatywa dla rosbridge
 
 MQTT (Message Queuing Telemetry Transport) to lekki protokół publish-subscribe stosowany w IoT i robotyce tam, gdzie rosbridge wydaje się zbyt ciężki. Działa dobrze na słabych połączeniach i urządzeniach embedded.
 

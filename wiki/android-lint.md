@@ -1,4 +1,4 @@
-# Android Lint — analiza statyczna kodu
+# Android Lint - analiza statyczna kodu
 
 Android Lint to wbudowane narzędzie do statycznej analizy kodu, które wykrywa błędy, ostrzeżenia i problemy z wydajnością, bezpieczeństwem oraz dostępnością bez konieczności uruchamiania aplikacji. Jest integralną częścią Android Studio i systemu budowania Gradle.
 
@@ -8,18 +8,18 @@ Lint skanuje pliki źródłowe projektu (kod Kotlin/Java, zasoby XML, plik manif
 
 Główne kategorie sprawdzeń:
 
-- **Correctness** — potencjalne błędy logiczne i użycia API
-- **Security** — luki bezpieczeństwa, np. nieszyfrowane dane, eksponowane komponenty
-- **Performance** — nieefektywne operacje, wycieki pamięci
-- **Usability** — problemy z UX, brakujące opisy content description
-- **Accessibility** — naruszenia dostępności dla osób z niepełnosprawnościami
-- **Internationalization** — problemy z lokalizacją i kodowaniem znaków
+- **Correctness** - potencjalne błędy logiczne i użycia API
+- **Security** - luki bezpieczeństwa, np. nieszyfrowane dane, eksponowane komponenty
+- **Performance** - nieefektywne operacje, wycieki pamięci
+- **Usability** - problemy z UX, brakujące opisy content description
+- **Accessibility** - naruszenia dostępności dla osób z niepełnosprawnościami
+- **Internationalization** - problemy z lokalizacją i kodowaniem znaków
 
 ## Uruchamianie Lint
 
 ### Z Android Studio
 
-Lint uruchamia się automatycznie podczas edycji kodu — podkreślenia i ikony na marginesie sygnalizują ostrzeżenia i błędy. Pełną analizę można uruchomić ręcznie:
+Lint uruchamia się automatycznie podczas edycji kodu - podkreślenia i ikony na marginesie sygnalizują ostrzeżenia i błędy. Pełną analizę można uruchomić ręcznie:
 
 ```
 Analyze → Inspect Code… → Whole project → OK
@@ -68,9 +68,9 @@ android {
 
 | Poziom       | Opis                                                         |
 |--------------|--------------------------------------------------------------|
-| **Fatal**    | Krytyczny błąd — build jest zatrzymywany                     |
+| **Fatal**    | Krytyczny błąd - build jest zatrzymywany                     |
 | **Error**    | Błąd wymagający naprawy                                      |
-| **Warning**  | Ostrzeżenie — zalecana poprawa                               |
+| **Warning**  | Ostrzeżenie - zalecana poprawa                               |
 | **Information** | Informacja pomocnicza                                     |
 | **Ignore**   | Problem jest wyciszony                                       |
 
@@ -152,7 +152,7 @@ class LogUsageDetector : Detector(), Detector.UastScanner {
                 issue = ISSUE,
                 scope = node,
                 location = context.getLocation(node),
-                message = "Avoid using `Log` directly — use a logging abstraction instead."
+                message = "Avoid using `Log` directly - use a logging abstraction instead."
             )
         }
     }
@@ -255,7 +255,7 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 }
 ```
 
-## Lint w Android Studio — skróty
+## Lint w Android Studio - skróty
 
 | Skrót (Mac / Win/Linux)          | Akcja                                    |
 |----------------------------------|------------------------------------------|
@@ -266,12 +266,12 @@ if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
 
 ## Linki
 
-- [Android Lint — dokumentacja oficjalna](https://developer.android.com/studio/write/lint)
+- [Android Lint - dokumentacja oficjalna](https://developer.android.com/studio/write/lint)
 - [Lista wbudowanych reguł Lint](https://googlesamples.github.io/android-custom-lint-rules/checks/index.md.html)
 - [Tworzenie własnych reguł Lint](https://developer.android.com/studio/write/lint#create-custom)
 - [Lint w Jetpack Compose](https://developer.android.com/develop/ui/compose/tooling/lint)
 
-## Lint a testy — integracja z JUnit
+## Lint a testy - integracja z JUnit
 
 Własne reguły Lint powinny być testowane tak samo jak każdy inny kod produkcyjny. Biblioteka `lint-tests` dostarcza klasę `LintDetectorTest`, która pozwala uruchamiać dowolny detektor na fragmentach kodu i weryfikować oczekiwane wyniki bez uruchamiania pełnego procesu budowania.
 
@@ -310,7 +310,7 @@ class LogUsageDetectorTest : LintDetectorTest() {
             )
             .run()
             .expect("""
-                src/MyClass.kt:4: Warning: Avoid using `Log` directly — use a logging abstraction instead. [DirectLogUsage]
+                src/MyClass.kt:4: Warning: Avoid using `Log` directly - use a logging abstraction instead. [DirectLogUsage]
                             Log.e("TAG", "Błąd krytyczny")
                             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
                 0 errors, 1 warnings
@@ -336,7 +336,7 @@ class LogUsageDetectorTest : LintDetectorTest() {
 }
 ```
 
-Metoda `expect()` przyjmuje dokładny tekst raportu Lint — łącznie z numerem linii, opisem problemu i identyfikatorem reguły. Metoda `expectClean()` sprawdza, że detektor nie zgłosił żadnych problemów. Testy można uruchamiać standardowym poleceniem `./gradlew :lint-checks:test`.
+Metoda `expect()` przyjmuje dokładny tekst raportu Lint - łącznie z numerem linii, opisem problemu i identyfikatorem reguły. Metoda `expectClean()` sprawdza, że detektor nie zgłosił żadnych problemów. Testy można uruchamiać standardowym poleceniem `./gradlew :lint-checks:test`.
 
 Dobrą praktyką jest tworzenie oddzielnych klas testowych dla każdego detektora oraz pokrywanie zarówno przypadków pozytywnych (kod naruszający regułę), jak i negatywnych (kod poprawny). Pozwala to wychwycić regresje przy aktualizacji API Lint.
 
@@ -368,7 +368,7 @@ dependencies {
 }
 ```
 
-Reguły zdefiniowane w module `lint-checks` są stosowane automatycznie do kodu Kotlin w `commonMain`, `androidMain` i `iosMain` (o ile pliki mają rozszerzenie `.kt`). Warto jednak pamiętać, że `UastScanner` analizuje jedynie kod Kotlin/Java — pliki Swift lub C++ pozostają poza zasięgiem Lint.
+Reguły zdefiniowane w module `lint-checks` są stosowane automatycznie do kodu Kotlin w `commonMain`, `androidMain` i `iosMain` (o ile pliki mają rozszerzenie `.kt`). Warto jednak pamiętać, że `UastScanner` analizuje jedynie kod Kotlin/Java - pliki Swift lub C++ pozostają poza zasięgiem Lint.
 
 Zalecana struktura reguł współdzielonych w KMP:
 
@@ -380,7 +380,7 @@ Zalecana struktura reguł współdzielonych w KMP:
 
 Reguły dotyczące wyłącznie kodu iOS (np. sprawdzanie API Swift przez skrypty zewnętrzne) należy obsłużyć oddzielnym narzędziem, takim jak SwiftLint.
 
-## Najlepsze praktyki — Lint w dużych projektach
+## Najlepsze praktyki - Lint w dużych projektach
 
 W dużych projektach z wieloma modułami i setkami tysięcy linii kodu zarządzanie regułami Lint wymaga przemyślanej organizacji, aby nie spowalniać developmentu i zachować wartość analizy.
 
@@ -389,7 +389,7 @@ W dużych projektach z wieloma modułami i setkami tysięcy linii kodu zarządza
 **Polityka Lint per moduł.** Poszczególne moduły mogą mieć różne progi tolerancji. Moduły stabilne działają z `abortOnError = true`, natomiast moduły legacy dopuszczają `warningsAsErrors = false` z aktywnym baseline:
 
 ```kotlin
-// Moduł legacy — konfiguracja z baseline
+// Moduł legacy - konfiguracja z baseline
 android {
     lint {
         baseline = file("lint-baseline.xml")
@@ -402,7 +402,7 @@ android {
 **Cykliczna aktualizacja baseline.** Baseline nie powinien rosnąć w nieskończoność. Ustal harmonogram (np. raz na sprint) regeneracji pliku i wymuszaj redukcję liczby wpisów:
 
 ```bash
-# Regeneracja baseline — usuwa naprawione wpisy
+# Regeneracja baseline - usuwa naprawione wpisy
 ./gradlew lintDebug -Dlint.baselines.continue=true
 
 # Sprawdzenie liczby wpisów w baseline
@@ -417,7 +417,7 @@ grep -c "<issue" app/lint-baseline.xml
 
 ```bash
 #!/bin/bash
-# ci/lint-metrics.sh — eksport metryk Lint do pliku CSV
+# ci/lint-metrics.sh - eksport metryk Lint do pliku CSV
 REPORT="app/build/reports/lint-results-debug.xml"
 DATE=$(date +%Y-%m-%d)
 ERRORS=$(xmllint --xpath "count(//issue[@severity='Error'])" "$REPORT" 2>/dev/null || echo 0)
@@ -429,7 +429,7 @@ echo "Lint: $ERRORS błędów, $WARNINGS ostrzeżeń ($DATE)"
 **Grupowanie reguł per zespół.** W mono-repo z wieloma zespołami można przypisać reguły do konkretnych modułów przez osobne pliki `lint.xml` w katalogach podprojektów:
 
 ```xml
-<!-- feature/payments/lint.xml — surowsze reguły dla modułu płatności -->
+<!-- feature/payments/lint.xml - surowsze reguły dla modułu płatności -->
 <?xml version="1.0" encoding="UTF-8"?>
 <lint>
     <!-- Każde logowanie danych finansowych jest błędem krytycznym -->
@@ -451,7 +451,7 @@ android {
 
 Takie podejście pozwala na stopniowe zaostrzanie polityki Lint w newralgicznych modułach bez wymuszania tych samych standardów w całym projekcie od razu. Moduły o wysokim priorytecie bezpieczeństwa (płatności, autentykacja, przechowywanie danych) mogą mieć `warningsAsErrors = true`, podczas gdy starsze moduły UI korzystają z baseline do zarządzania długiem technicznym.
 
-**Dependency-aware Lint.** Od AGP 8.0+ Lint może analizować zależności między modułami — reguła `LintAwareModularization` pozwala wykryć, gdy moduł `:feature:login` importuje bezpośrednio klasę z modułu `:feature:profile`, co narusza architekturę. Tworzenie takich reguł wymaga implementacji `GradleScanner` zamiast standardowego `UastScanner`:
+**Dependency-aware Lint.** Od AGP 8.0+ Lint może analizować zależności między modułami - reguła `LintAwareModularization` pozwala wykryć, gdy moduł `:feature:login` importuje bezpośrednio klasę z modułu `:feature:profile`, co narusza architekturę. Tworzenie takich reguł wymaga implementacji `GradleScanner` zamiast standardowego `UastScanner`:
 
 ```kotlin
 class ModularizationDetector : Detector(), GradleScanner {
@@ -466,7 +466,7 @@ class ModularizationDetector : Detector(), GradleScanner {
             val importedFeature = Regex(":feature:(\\w+)").find(value)?.groupValues?.get(1)
             if (importedFeature != null && importedFeature != currentFeature) {
                 context.report(ISSUE, context.getLocation(statementCookie),
-                    "Moduł feature:$currentFeature nie powinien zależeć od feature:$importedFeature bezpośrednio — użyj warstwy :core lub :api.")
+                    "Moduł feature:$currentFeature nie powinien zależeć od feature:$importedFeature bezpośrednio - użyj warstwy :core lub :api.")
             }
         }
     }

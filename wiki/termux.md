@@ -1,4 +1,4 @@
-# Termux — terminal emulator with packages
+# Termux - terminal emulator with packages
 
 ## 1. Czym jest Termux?
 
@@ -24,7 +24,7 @@ Termux tworzy przestrzeń użytkownika w katalogu aplikacji Android i udostępni
 3. własne repozytoria pakietów,
 4. warstwę dostępu do API Androida (przez dodatkowe moduły i integracje).
 
-Katalog domowy Termux to `/data/data/com.termux/files/home` (`~`), a prefiks instalacyjny to `/data/data/com.termux/files/usr`. Standardowe ścieżki systemu Linux, takie jak `/usr/bin`, nie istnieją — zamiast nich Termux używa własnych odpowiedników w prefiksie.
+Katalog domowy Termux to `/data/data/com.termux/files/home` (`~`), a prefiks instalacyjny to `/data/data/com.termux/files/usr`. Standardowe ścieżki systemu Linux, takie jak `/usr/bin`, nie istnieją - zamiast nich Termux używa własnych odpowiedników w prefiksie.
 
 W odróżnieniu od klasycznego Linuxa desktopowego:
 
@@ -94,7 +94,7 @@ Dostępne repozytoria można sprawdzić i zmienić poleceniem:
 termux-change-repo
 ```
 
-Dzięki temu Termux jest dobrym środowiskiem do nauki administracji CLI i pracy z zależnościami. Dla pakietów Pythona używa się standardowo `pip`, a dla Node.js — `npm` lub `yarn`.
+Dzięki temu Termux jest dobrym środowiskiem do nauki administracji CLI i pracy z zależnościami. Dla pakietów Pythona używa się standardowo `pip`, a dla Node.js - `npm` lub `yarn`.
 
 ---
 
@@ -117,13 +117,13 @@ Dzięki temu Termux jest dobrym środowiskiem do nauki administracji CLI i pracy
 ### 5.3 DevOps „on the go"
 
 - łączenie po SSH z serwerami,
-- proste operacje Git — `pull`, `push`, `commit`,
+- proste operacje Git - `pull`, `push`, `commit`,
 - diagnostyka usług i endpointów (`ping`, `nmap`, `curl`),
 - zdalny dostęp do telefonu jako serwera SSH z komputera.
 
 ---
 
-## 6. Termux + Git + Python — mini workflow
+## 6. Termux + Git + Python - mini workflow
 
 Przykładowy scenariusz laboratoryjny:
 
@@ -222,7 +222,7 @@ ssh-keygen -t ed25519 -C "moj-komputer"
 ssh-copy-id -p 8022 -i ~/.ssh/id_ed25519.pub <IP_TELEFONU>
 ```
 
-Alternatywnie — bezpośrednio w Termux:
+Alternatywnie - bezpośrednio w Termux:
 
 ```bash
 # Utwórz katalog .ssh i plik authorized_keys
@@ -265,7 +265,7 @@ Następnie wystarczy: `ssh moj-telefon`.
 
 ---
 
-## 8. Termux:API — dostęp do funkcji Androida
+## 8. Termux:API - dostęp do funkcji Androida
 
 Pakiet **Termux:API** umożliwia interakcję z systemem Android bezpośrednio z linii poleceń: wysyłanie powiadomień, obsługę aparatu, wibracji, czytanie kontaktów i wiele więcej.
 
@@ -375,7 +375,7 @@ chmod +x ~/backup.sh
 ~/backup.sh
 ```
 
-### 9.2 Harmonogram zadań — cron
+### 9.2 Harmonogram zadań - cron
 
 Termux obsługuje crona przez pakiet `cronie`:
 
@@ -456,7 +456,7 @@ Po wykonaniu `termux-setup-storage` struktura wygląda następująco:
 └── .ssh/
 ```
 
-### 10.2 Synchronizacja z chmurą — rclone
+### 10.2 Synchronizacja z chmurą - rclone
 
 `rclone` pozwala synchronizować pliki z Google Drive, Dropbox, OneDrive i innymi serwisami:
 
@@ -515,11 +515,11 @@ du -sh ~/projekty/*/
 
 Termux dobrze współpracuje z:
 
-- **tmux** — sesje i splity terminala; pozwala utrzymać uruchomione procesy nawet gdy aplikacja przejdzie w tło,
-- **vim/neovim** — edycja kodu z obsługą pluginów,
-- **git** — wersjonowanie projektów,
-- **openssh** — zdalna administracja i serwer SSH,
-- **rclone/rsync** — synchronizacja danych z chmurą i innymi urządzeniami.
+- **tmux** - sesje i splity terminala; pozwala utrzymać uruchomione procesy nawet gdy aplikacja przejdzie w tło,
+- **vim/neovim** - edycja kodu z obsługą pluginów,
+- **git** - wersjonowanie projektów,
+- **openssh** - zdalna administracja i serwer SSH,
+- **rclone/rsync** - synchronizacja danych z chmurą i innymi urządzeniami.
 
 Przydatna konfiguracja tmux (`~/.tmux.conf`):
 
@@ -553,7 +553,7 @@ W zastosowaniach edukacyjnych można budować cały pipeline „CLI-first", ucz�
 Aby zapobiec ubijaniu Termux przez system, warto:
 
 1. Wyłączyć optymalizację baterii dla Termux w ustawieniach Androida,
-2. Uruchomić sesję tmux — procesy przetrwają nawet zamknięcie aplikacji,
+2. Uruchomić sesję tmux - procesy przetrwają nawet zamknięcie aplikacji,
 3. Uruchomić Termux jako usługę na pierwszym planie (opcja w menu powiadomień).
 
 ### 12.2 Bezpieczeństwo
@@ -561,7 +561,7 @@ Aby zapobiec ubijaniu Termux przez system, warto:
 Zalecenia:
 
 1. Aktualizować pakiety regularnie: `pkg update && pkg upgrade`,
-2. Używać kluczy SSH zamiast haseł — wygeneruj parę kluczy poleceniem `ssh-keygen -t ed25519`,
+2. Używać kluczy SSH zamiast haseł - wygeneruj parę kluczy poleceniem `ssh-keygen -t ed25519`,
 3. Unikać uruchamiania niezweryfikowanych skryptów ze źródeł zewnętrznych,
 4. Chronić tokeny/API keys przez zmienne środowiskowe i `.gitignore`,
 5. Wyłączać serwer SSH gdy nie jest potrzebny: `pkill sshd`,
@@ -579,7 +579,7 @@ Termux świetnie sprawdza się na zajęciach z:
 - podstaw cyberbezpieczeństwa (higiena kluczy, uprawnień i sekretów),
 - programowania w Pythonie i Node.js.
 
-Zaletą jest niski próg wejścia: wystarczy telefon i klawiatura ekranowa (lub Bluetooth). Studenci mogą w prosty sposób zademonstrować działanie serwera HTTP, skryptu automatyzacji czy połączenia SSH — bez potrzeby konfigurowania maszyn wirtualnych.
+Zaletą jest niski próg wejścia: wystarczy telefon i klawiatura ekranowa (lub Bluetooth). Studenci mogą w prosty sposób zademonstrować działanie serwera HTTP, skryptu automatyzacji czy połączenia SSH - bez potrzeby konfigurowania maszyn wirtualnych.
 
 Przykładowe ćwiczenia laboratoryjne:
 
@@ -593,12 +593,12 @@ Przykładowe ćwiczenia laboratoryjne:
 
 ## 14. Dobre praktyki pracy
 
-- Używaj aliasów i pliku `~/.bashrc` / `~/.zshrc` — np. `alias ll='ls -la'`,
+- Używaj aliasów i pliku `~/.bashrc` / `~/.zshrc` - np. `alias ll='ls -la'`,
 - Trzymaj projekty w czytelnej strukturze katalogów (`~/projekty/nazwa-projektu/`),
 - Zapisuj gotowe procedury jako skrypty `.sh` z komentarzami,
 - Stosuj repozytorium Git nawet dla małych projektów i commituj regularnie,
 - Dokumentuj środowisko (`README`, lista pakietów, instrukcja setupu),
-- Używaj tmux do zarządzania sesjami — pozwala wracać do przerwanej pracy,
+- Używaj tmux do zarządzania sesjami - pozwala wracać do przerwanej pracy,
 - Rób regularne backupy danych z Termux do chmury lub komputera.
 
 ---
@@ -607,4 +607,4 @@ Przykładowe ćwiczenia laboratoryjne:
 
 **Termux** to praktyczne środowisko „Linux-like" na Androidzie: lekkie, elastyczne i bardzo przydatne do nauki programowania, automatyzacji oraz pracy administratorskiej w trybie mobilnym. Dzięki pakietowi **Termux:API** studenci mogą eksplorować możliwości platformy Android bezpośrednio z terminala, a wbudowany serwer SSH umożliwia wygodną pracę zdalną.
 
-Dla kursów aplikacji mobilnych Termux jest świetnym narzędziem uzupełniającym — szczególnie tam, gdzie liczy się szybkie prototypowanie, praca w terminalu i zrozumienie, jak warstwa systemowa Androida udostępnia swoje zasoby zewnętrznym narzędziom.
+Dla kursów aplikacji mobilnych Termux jest świetnym narzędziem uzupełniającym - szczególnie tam, gdzie liczy się szybkie prototypowanie, praca w terminalu i zrozumienie, jak warstwa systemowa Androida udostępnia swoje zasoby zewnętrznym narzędziom.

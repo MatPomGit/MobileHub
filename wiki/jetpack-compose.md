@@ -1,19 +1,19 @@
-# Jetpack Compose — Deklaratywny UI
+# Jetpack Compose - Deklaratywny UI
 
-Jetpack Compose to nowoczesny toolkit UI dla Androida oparty na deklaratywnym paradygmacie. Zamiast manipulować drzewem widoków XML, opisujesz **co** ma być wyświetlone dla danego stanu — Compose sam aktualizuje UI gdy stan się zmienia.
+Jetpack Compose to nowoczesny toolkit UI dla Androida oparty na deklaratywnym paradygmacie. Zamiast manipulować drzewem widoków XML, opisujesz **co** ma być wyświetlone dla danego stanu - Compose sam aktualizuje UI gdy stan się zmienia.
 
-## Paradygmat deklaratywny — zmiana myślenia
+## Paradygmat deklaratywny - zmiana myślenia
 
 ```kotlin
 // STARY sposób (imperatywny, XML+View)
-// Fragment.kt — ręczna synchronizacja stanu z widokami
+// Fragment.kt - ręczna synchronizacja stanu z widokami
 binding.titleTextView.text = task.title
 binding.doneCheckbox.isChecked = task.isDone
 binding.dueDateTextView.visibility = if (task.dueDate != null) View.VISIBLE else View.GONE
 binding.dueDate.text = task.dueDate?.format(dateFormatter) ?: ""
 
 // NOWY sposób (deklaratywny, Compose)
-// Opisz jak UI ma wyglądać dla danego stanu — Compose synchronizuje automatycznie
+// Opisz jak UI ma wyglądać dla danego stanu - Compose synchronizuje automatycznie
 @Composable
 fun TaskCard(task: Task) {
     Column(modifier = Modifier.padding(16.dp)) {
@@ -24,15 +24,15 @@ fun TaskCard(task: Task) {
 }
 ```
 
-## Rekomposycja — jak Compose aktualizuje UI
+## Rekomposycja - jak Compose aktualizuje UI
 
 ```kotlin
-// State w Compose — tylko zmiana State triggeruje rekomposycję
+// State w Compose - tylko zmiana State triggeruje rekomposycję
 @Composable
 fun Counter() {
     var count by remember { mutableIntStateOf(0) }
     //                      ↑ remember = zachowaj wartość między rekomposycjami
-    //           ↑ delegat Kotlin — automatyczna obsługa getValue/setValue
+    //           ↑ delegat Kotlin - automatyczna obsługa getValue/setValue
 
     Column(horizontalAlignment = Alignment.CenterHorizontally) {
         Text("Kliknięć: $count", style = MaterialTheme.typography.headlineMedium)
@@ -40,14 +40,14 @@ fun Counter() {
     }
 }
 
-// rememberSaveable — przeżywa obrót ekranu i zapis stanu
+// rememberSaveable - przeżywa obrót ekranu i zapis stanu
 @Composable
 fun SearchBar() {
     var query by rememberSaveable { mutableStateOf("") }
     TextField(value = query, onValueChange = { query = it }, label = { Text("Szukaj") })
 }
 
-// State Hoisting — przenieś stan "w górę" aby udostępnić wielu komponentom
+// State Hoisting - przenieś stan "w górę" aby udostępnić wielu komponentom
 @Composable
 fun TaskListScreen(viewModel: TaskViewModel = hiltViewModel()) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
@@ -61,7 +61,7 @@ fun TaskListScreen(viewModel: TaskViewModel = hiltViewModel()) {
     )
 }
 
-// "Dumb" komponent — tylko UI, zero logiki
+// "Dumb" komponent - tylko UI, zero logiki
 @Composable
 private fun TaskListContent(
     tasks: List<Task>,
@@ -72,12 +72,12 @@ private fun TaskListContent(
 ) { /* ... */ }
 ```
 
-## Layout — podstawowe kompozycje
+## Layout - podstawowe kompozycje
 
 ```kotlin
 @Composable
 fun LayoutExamples() {
-    // Column — pionowy stos
+    // Column - pionowy stos
     Column(
         modifier = Modifier.fillMaxWidth().padding(16.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -88,7 +88,7 @@ fun LayoutExamples() {
         Button(onClick = {}) { Text("Akcja") }
     }
 
-    // Row — poziomy rząd
+    // Row - poziomy rząd
     Row(
         modifier = Modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -99,7 +99,7 @@ fun LayoutExamples() {
         Checkbox(checked = false, onCheckedChange = {})
     }
 
-    // Box — nakładanie warstw (jak FrameLayout)
+    // Box - nakładanie warstw (jak FrameLayout)
     Box(modifier = Modifier.size(200.dp)) {
         Image(painter = painterResource(R.drawable.bg), contentDescription = null, modifier = Modifier.fillMaxSize())
         Text("Nałożony tekst", modifier = Modifier.align(Alignment.BottomCenter).padding(8.dp), color = Color.White)
@@ -108,7 +108,7 @@ fun LayoutExamples() {
         }
     }
 
-    // LazyColumn — wydajna lista (odpowiednik RecyclerView)
+    // LazyColumn - wydajna lista (odpowiednik RecyclerView)
     LazyColumn(
         contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
         verticalArrangement = Arrangement.spacedBy(8.dp)
@@ -125,7 +125,7 @@ fun LayoutExamples() {
 }
 ```
 
-## Modifier — dekorowanie komponentów
+## Modifier - dekorowanie komponentów
 
 ```kotlin
 // Modifier = reusable chain opisujący rozmiar, pozycję, zachowanie, wygląd
@@ -245,7 +245,7 @@ data class TaskUiState(
 
 ## Nawigacja w Compose
 
-Jetpack Compose Navigation zastępuje `FragmentManager` — ekrany to zwykłe funkcje `@Composable`, a przepływ między nimi kontroluje `NavController`.
+Jetpack Compose Navigation zastępuje `FragmentManager` - ekrany to zwykłe funkcje `@Composable`, a przepływ między nimi kontroluje `NavController`.
 
 ### Zależności
 
@@ -271,7 +271,7 @@ class MainActivity : ComponentActivity() {
     }
 }
 
-// Definicja tras — wygodnie jako sealed class lub object
+// Definicja tras - wygodnie jako sealed class lub object
 sealed class Screen(val route: String) {
     object TaskList  : Screen("task_list")
     object TaskDetail: Screen("task_detail/{taskId}") {
@@ -318,13 +318,13 @@ fun AppNavGraph(navController: NavHostController) {
 
 ```kotlin
 // Przekazywanie wyniku między ekranami za pomocą SavedStateHandle
-// W AddTaskScreen — zapis wyniku przed powrotem
+// W AddTaskScreen - zapis wyniku przed powrotem
 navController.previousBackStackEntry
     ?.savedStateHandle
     ?.set("newTaskTitle", enteredTitle)
 navController.popBackStack()
 
-// W TaskListScreen — odczyt wyniku
+// W TaskListScreen - odczyt wyniku
 @Composable
 fun TaskListScreen(viewModel: TaskViewModel = hiltViewModel(), ...) {
     val navBackStackEntry = rememberNavController() // ← dostęp przez LocalNavController
@@ -363,7 +363,7 @@ class TaskDetailViewModel @Inject constructor(
 
 ## Efekty uboczne (Side Effects)
 
-W Compose efekty uboczne muszą być kontrolowane — nie wolno ich wywoływać bezpośrednio w ciele kompozycji, bo rekomposycja może nastąpić wielokrotnie. Dostępne są dedykowane API.
+W Compose efekty uboczne muszą być kontrolowane - nie wolno ich wywoływać bezpośrednio w ciele kompozycji, bo rekomposycja może nastąpić wielokrotnie. Dostępne są dedykowane API.
 
 ### LaunchedEffect
 
@@ -380,7 +380,7 @@ fun SearchScreen(query: String) {
             results = emptyList()
             return@LaunchedEffect
         }
-        delay(300) // debounce — poczekaj 300ms od ostatniego znaku
+        delay(300) // debounce - poczekaj 300ms od ostatniego znaku
         results = searchApi(query)
     }
 
@@ -389,7 +389,7 @@ fun SearchScreen(query: String) {
     }
 }
 
-// LaunchedEffect z kluczem Unit — odpowiednik viewModelScope.launch w Compose,
+// LaunchedEffect z kluczem Unit - odpowiednik viewModelScope.launch w Compose,
 // uruchamia się tylko raz przy pierwszej kompozycji
 @Composable
 fun OneTimeEffect() {
@@ -401,7 +401,7 @@ fun OneTimeEffect() {
 
 ### DisposableEffect
 
-Dla efektów wymagających sprzątania — rejestracja listenerów, subskrypcji, callbacków systemowych.
+Dla efektów wymagających sprzątania - rejestracja listenerów, subskrypcji, callbacków systemowych.
 
 ```kotlin
 @Composable
@@ -416,7 +416,7 @@ fun LocationTracker(onLocationUpdate: (Location) -> Unit) {
             LocationManager.GPS_PROVIDER, 1000L, 0f, listener
         )
 
-        // onDispose — wywołane gdy komponent wychodzi z drzewa
+        // onDispose - wywołane gdy komponent wychodzi z drzewa
         onDispose {
             locationManager.removeUpdates(listener)
         }
@@ -435,7 +435,7 @@ fun ConfirmExitDialog(isDialogOpen: Boolean, onDismiss: () -> Unit) {
 ### SideEffect i rememberCoroutineScope
 
 ```kotlin
-// SideEffect — synchronizacja stanu Compose z kodem spoza Compose.
+// SideEffect - synchronizacja stanu Compose z kodem spoza Compose.
 // Wywoływany po każdej UDANEJ rekomposycji.
 @Composable
 fun AnalyticsScreen(screenName: String, tracker: AnalyticsTracker) {
@@ -444,7 +444,7 @@ fun AnalyticsScreen(screenName: String, tracker: AnalyticsTracker) {
     }
 }
 
-// rememberCoroutineScope — scope powiązany z kompozycją,
+// rememberCoroutineScope - scope powiązany z kompozycją,
 // używany gdy potrzebujesz uruchomić coroutine z handlera zdarzeń (onClick itp.)
 @Composable
 fun SaveButton(onSave: suspend () -> Unit) {
@@ -483,7 +483,7 @@ Gdy standardowe `Column`, `Row`, `Box` nie wystarczają, możesz zbudować włas
 ### Layout composable
 
 ```kotlin
-// Własny layout — dzieci ułożone w siatce kaskadowej (waterfall/staggered)
+// Własny layout - dzieci ułożone w siatce kaskadowej (waterfall/staggered)
 @Composable
 fun StaggeredGrid(
     columns: Int = 2,
@@ -540,7 +540,7 @@ fun PhotoGallery(photos: List<Photo>) {
 
 ### Intrinsic measurements
 
-`IntrinsicSize` pozwala zapytać dzieci o ich "naturalny" rozmiar przed finalnym pomiarze — przydatne gdy chcesz np. wyrównać wysokości elementów w `Row`.
+`IntrinsicSize` pozwala zapytać dzieci o ich "naturalny" rozmiar przed finalnym pomiarze - przydatne gdy chcesz np. wyrównać wysokości elementów w `Row`.
 
 ```kotlin
 // Problem: jak sprawić, żeby Divider miał taką samą wysokość jak najwyższy element Row?
@@ -572,8 +572,8 @@ fun TwoTextsWithDivider(text1: String, text2: String) {
     }
 }
 
-// IntrinsicSize.Max — Row przyjmuje wysokość najwyższego możliwego dziecka
-// IntrinsicSize.Min — Row przyjmuje minimalną potrzebną wysokość
+// IntrinsicSize.Max - Row przyjmuje wysokość najwyższego możliwego dziecka
+// IntrinsicSize.Min - Row przyjmuje minimalną potrzebną wysokość
 ```
 
 ### Własny Modifier z drawWithContent
@@ -628,7 +628,7 @@ class TaskListScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
-    // createAndroidComposeRule<MainActivity>() — gdy potrzebujesz Activity
+    // createAndroidComposeRule<MainActivity>() - gdy potrzebujesz Activity
 
     @Test
     fun taskList_displaysTasksCorrectly() {
@@ -763,14 +763,14 @@ fun lazyColumn_scrollsToItem() {
 
 ## Compose + Room (Flow)
 
-Room zwraca `Flow<T>` z zapytań — Compose może subskrybować ten strumień bezpośrednio, automatycznie aktualizując UI przy każdej zmianie w bazie danych.
+Room zwraca `Flow<T>` z zapytań - Compose może subskrybować ten strumień bezpośrednio, automatycznie aktualizując UI przy każdej zmianie w bazie danych.
 
 ### Definicja DAO z Flow
 
 ```kotlin
 @Dao
 interface TaskDao {
-    // Flow — zapytanie reaktywne, emituje nowe wyniki przy każdej zmianie tabeli
+    // Flow - zapytanie reaktywne, emituje nowe wyniki przy każdej zmianie tabeli
     @Query("SELECT * FROM tasks ORDER BY createdAt DESC")
     fun getAllTasks(): Flow<List<TaskEntity>>
 
@@ -818,7 +818,7 @@ class TaskViewModel @Inject constructor(
     private val repository: TaskRepository
 ) : ViewModel() {
 
-    // stateIn konwertuje Flow<T> na StateFlow<T> — ma aktualną wartość (value)
+    // stateIn konwertuje Flow<T> na StateFlow<T> - ma aktualną wartość (value)
     val tasks: StateFlow<List<Task>> = repository
         .getAllTasks()
         .stateIn(
@@ -852,15 +852,15 @@ class TaskViewModel @Inject constructor(
 }
 ```
 
-### Compose — collectAsStateWithLifecycle
+### Compose - collectAsStateWithLifecycle
 
 ```kotlin
-// collectAsStateWithLifecycle — bezpieczna subskrypcja uwzględniająca cykl życia
-// (zatrzymuje kolekcję gdy aplikacja jest w tle — oszczędza zasoby)
+// collectAsStateWithLifecycle - bezpieczna subskrypcja uwzględniająca cykl życia
+// (zatrzymuje kolekcję gdy aplikacja jest w tle - oszczędza zasoby)
 @Composable
 fun TaskListScreen(viewModel: TaskViewModel = hiltViewModel()) {
 
-    // ✅ Zalecane — uwzględnia lifecycle
+    // ✅ Zalecane - uwzględnia lifecycle
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     // ⚠️ Możliwe, ale zbiera też gdy app jest w tle
@@ -891,7 +891,7 @@ fun TaskListScreen(viewModel: TaskViewModel = hiltViewModel()) {
                         done    = uiState.doneCount,
                         pending = uiState.pendingCount
                     )
-                    // Lista reaktywna — automatycznie aktualizuje się przy zmianach w Room
+                    // Lista reaktywna - automatycznie aktualizuje się przy zmianach w Room
                     LazyColumn(
                         contentPadding = PaddingValues(16.dp),
                         verticalArrangement = Arrangement.spacedBy(8.dp)

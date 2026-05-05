@@ -118,10 +118,10 @@ Ergonomiczna aplikacja szybko komunikuje skutek działania. Użytkownik nie powi
 
 ### Ergonomiczny feedback powinien być:
 
-- **natychmiastowy** — reakcja po tapnięciu jest widoczna od razu,
-- **czytelny** — komunikat nie może być niejednoznaczny,
-- **proporcjonalny** — drobna akcja nie wymaga ciężkiego modala,
-- **odwracalny** — tam gdzie to możliwe, daj opcję cofnięcia.
+- **natychmiastowy** - reakcja po tapnięciu jest widoczna od razu,
+- **czytelny** - komunikat nie może być niejednoznaczny,
+- **proporcjonalny** - drobna akcja nie wymaga ciężkiego modala,
+- **odwracalny** - tam gdzie to możliwe, daj opcję cofnięcia.
 
 Przykłady:
 
@@ -181,7 +181,7 @@ Zarówno Apple, jak i Google publikują wytyczne projektowe, które zawierają s
 | Minimalny rozmiar celu dotykowego | 44 × 44 pt | 48 × 48 dp |
 | Nawigacja główna | Tab Bar (dół ekranu) | Navigation Bar (dół) lub Navigation Rail (tablet) |
 | Gesty systemowe | Swipe z dołu (home), z góry (centrum sterowania) | Swipe z boków/dołu (nawigacja gestami) |
-| Bezpieczne obszary | `safeAreaInsets` — obowiązkowe | `WindowInsets` — padding systemowy |
+| Bezpieczne obszary | `safeAreaInsets` - obowiązkowe | `WindowInsets` - padding systemowy |
 | Powrót wstecz | Swipe z lewej krawędzi (natywny) | Swipe z lewej lub prawej krawędzi |
 | Akcja główna (FAB) | Brak oficjalnego FAB w HIG | FAB w prawym dolnym rogu |
 | Minimalny kontrast tekstu | 4.5:1 (WCAG AA) | 4.5:1 (WCAG AA) |
@@ -193,32 +193,32 @@ Najważniejsza różnica ergonomiczna dotyczy **umieszczenia nawigacji**: iOS wy
 
 Warto pamiętać, że HIG aktualizuje zalecenia co roku przy okazji WWDC, a Material Design 3 wprowadzono w 2021 roku z dynamicznymi kolorami (Material You). Projektując cross-platform, trzymaj się wspólnych zasad (cele ≥ 44–48 dp/pt, nawigacja na dole) i dostosowuj detale do każdej platformy osobno.
 
-## Testowanie ergonomii — metody
+## Testowanie ergonomii - metody
 
-Sama analityczna ocena projektu nie wystarczy — prawdziwa ergonomia ujawnia się dopiero podczas obserwacji użytkowników. Poniżej opisane są podstawowe metody stosowane w procesie weryfikacji.
+Sama analityczna ocena projektu nie wystarczy - prawdziwa ergonomia ujawnia się dopiero podczas obserwacji użytkowników. Poniżej opisane są podstawowe metody stosowane w procesie weryfikacji.
 
 ### Ocena heurystyczna (Nielsen)
 
 10 heurystyk Nielsena Normana można bezpośrednio zastosować do aplikacji mobilnych:
 
-1. **Widoczność stanu systemu** — czy użytkownik zawsze wie, co się dzieje (ładowanie, postęp, sukces)?
-2. **Zgodność z rzeczywistością** — czy język aplikacji i metafory są zrozumiałe bez instrukcji?
-3. **Swoboda i kontrola** — czy można cofnąć każdą ważną akcję?
-4. **Spójność** — czy podobne akcje działają tak samo w całej aplikacji?
-5. **Zapobieganie błędom** — czy formularz waliduje dane zanim użytkownik spróbuje je wysłać?
-6. **Rozpoznawanie zamiast przypominania** — czy opcje są widoczne, nie ukryte w pamięci?
-7. **Elastyczność i efektywność** — czy zaawansowani użytkownicy mogą korzystać ze skrótów?
-8. **Minimalistyczny design** — czy na ekranie nie ma zbędnych informacji?
-9. **Pomoc w rozpoznaniu błędów** — czy komunikaty błędów wskazują rozwiązanie?
-10. **Dokumentacja** — czy aplikacja działa bez instrukcji, a pomoc jest łatwo dostępna?
+1. **Widoczność stanu systemu** - czy użytkownik zawsze wie, co się dzieje (ładowanie, postęp, sukces)?
+2. **Zgodność z rzeczywistością** - czy język aplikacji i metafory są zrozumiałe bez instrukcji?
+3. **Swoboda i kontrola** - czy można cofnąć każdą ważną akcję?
+4. **Spójność** - czy podobne akcje działają tak samo w całej aplikacji?
+5. **Zapobieganie błędom** - czy formularz waliduje dane zanim użytkownik spróbuje je wysłać?
+6. **Rozpoznawanie zamiast przypominania** - czy opcje są widoczne, nie ukryte w pamięci?
+7. **Elastyczność i efektywność** - czy zaawansowani użytkownicy mogą korzystać ze skrótów?
+8. **Minimalistyczny design** - czy na ekranie nie ma zbędnych informacji?
+9. **Pomoc w rozpoznaniu błędów** - czy komunikaty błędów wskazują rozwiązanie?
+10. **Dokumentacja** - czy aplikacja działa bez instrukcji, a pomoc jest łatwo dostępna?
 
 ### Testy użyteczności na prawdziwych urządzeniach
 
 Żaden emulator nie zastąpi testów na fizycznym urządzeniu trzymanym w ręce. Przydatne techniki:
 
 - **Test jednej ręki**: poproś uczestnika o wykonanie zadania trzymając telefon jedną ręką (bez użycia drugiej).
-- **Test w ruchu**: test na chodzącej osobie — ujawnia problemy z czytelnością i precyzją dotyku.
-- **Think-aloud protocol**: uczestnik mówi głośno, co myśli — rejestruje wahania i frustracje.
+- **Test w ruchu**: test na chodzącej osobie - ujawnia problemy z czytelnością i precyzją dotyku.
+- **Think-aloud protocol**: uczestnik mówi głośno, co myśli - rejestruje wahania i frustracje.
 
 ### Android Accessibility Scanner
 
@@ -234,17 +234,17 @@ Uruchamiaj skaner na każdym kluczowym ekranie podczas sprint review. Raport mo�
 
 Dwie najczęściej stosowane miary w badaniach ergonomii mobilnej:
 
-- **Task Completion Rate (TCR)** — odsetek użytkowników, którzy wykonali zadanie bez pomocy. Cel: > 90%.
-- **System Usability Scale (SUS)** — kwestionariusz 10 pytań, wynik 0–100. Wynik ≥ 68 oznacza akceptowalną użyteczność; ≥ 85 — doskonałą.
+- **Task Completion Rate (TCR)** - odsetek użytkowników, którzy wykonali zadanie bez pomocy. Cel: > 90%.
+- **System Usability Scale (SUS)** - kwestionariusz 10 pytań, wynik 0–100. Wynik ≥ 68 oznacza akceptowalną użyteczność; ≥ 85 - doskonałą.
 
 ## Linki
 
-- [Material Design — Understanding layout](https://m3.material.io/foundations/layout/understanding-layout/overview)
-- [Material Design — Accessibility](https://m3.material.io/foundations/accessible-design/overview)
+- [Material Design - Understanding layout](https://m3.material.io/foundations/layout/understanding-layout/overview)
+- [Material Design - Accessibility](https://m3.material.io/foundations/accessible-design/overview)
 - [Apple Human Interface Guidelines](https://developer.apple.com/design/human-interface-guidelines/)
-- [Nielsen Norman Group — Touch UX](https://www.nngroup.com/topic/touch-gestures/)
+- [Nielsen Norman Group - Touch UX](https://www.nngroup.com/topic/touch-gestures/)
 
-## Ergonomia multiplatformowa — iOS vs Android
+## Ergonomia multiplatformowa - iOS vs Android
 
 Użytkownicy przyzwyczajeni do jednej platformy mają określone oczekiwania co do gestów i rozmieszczenia elementów UI. Aplikacja cross-platformowa powinna respektować te wzorce.
 

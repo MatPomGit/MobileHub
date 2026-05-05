@@ -1,6 +1,6 @@
 # Formaty obrazów w aplikacjach mobilnych
 
-Obrazy to zazwyczaj największy składnik aplikacji mobilnej pod względem zajmowanej przestrzeni dyskowej i zużycia pamięci RAM. Zły wybór formatu może sprawić, że aplikacja ważąca 30 MB mogłaby ważyć 15 MB, a ekran listy produktów zużywający 400 MB RAM mógłby działać w połowie tej przestrzeni. Znajomość formatów obrazów — ich algorytmów kompresji, wsparcia platformowego i specyficznych zastosowań — jest jedną z kluczowych umiejętności optymalizacyjnych programisty mobilnego.
+Obrazy to zazwyczaj największy składnik aplikacji mobilnej pod względem zajmowanej przestrzeni dyskowej i zużycia pamięci RAM. Zły wybór formatu może sprawić, że aplikacja ważąca 30 MB mogłaby ważyć 15 MB, a ekran listy produktów zużywający 400 MB RAM mógłby działać w połowie tej przestrzeni. Znajomość formatów obrazów - ich algorytmów kompresji, wsparcia platformowego i specyficznych zastosowań - jest jedną z kluczowych umiejętności optymalizacyjnych programisty mobilnego.
 
 ## Formaty rastrowe
 
@@ -11,7 +11,7 @@ Obrazy rastrowe przechowują dane jako siatkę pikseli. Każdy piksel ma określ
 JPEG używa kompresji stratnej opartej na dyskretnej transformacie kosinusowej (DCT). Algorytm usuwa szczegóły wizualne trudne do zauważenia przez ludzkie oko, co pozwala na dramatyczną redukcję rozmiaru.
 
 **Charakterystyka:**
-- Kompresja stratna — każdy zapis degraduje jakość,
+- Kompresja stratna - każdy zapis degraduje jakość,
 - Brak kanału alfa (przezroczystości),
 - Doskonały do zdjęć i obrazów z gradientami,
 - Słaby przy ostrych krawędziach i tekście (artefakty blokowe),
@@ -32,7 +32,7 @@ Zdjęcie 3000×2000 px:
 PNG używa kompresji bezstratnej (algorytm Deflate). Jakość obrazu jest zawsze zachowana, ale pliki są znacznie większe niż JPEG.
 
 **Charakterystyka:**
-- Kompresja bezstratna — idealna wierna kopia oryginału,
+- Kompresja bezstratna - idealna wierna kopia oryginału,
 - Pełna obsługa kanału alfa (przezroczystość),
 - Doskonały do ikon, elementów UI, tekstu, logo,
 - Za duży dla zdjęć fotograficznych,
@@ -47,7 +47,7 @@ Logo 512×512 px z przezroczystością:
 
 ### WebP
 
-WebP został opracowany przez Google i wydany w 2010 roku. Oferuje zarówno kompresję stratną (opartą na VP8), jak i bezstratną (VP8L), a od wersji rozszerzonej — animacje.
+WebP został opracowany przez Google i wydany w 2010 roku. Oferuje zarówno kompresję stratną (opartą na VP8), jak i bezstratną (VP8L), a od wersji rozszerzonej - animacje.
 
 **Charakterystyka:**
 - Stratna WebP jest ~25–35% mniejsza niż JPEG przy tej samej jakości,
@@ -86,7 +86,7 @@ AVIF to format oparty na kodeku wideo AV1, standaryzowany przez Alliance for Ope
 
 ### HEIF / HEIC (High Efficiency Image File Format)
 
-HEIF to kontener, a HEIC — konkretny format używający kodeka HEVC (H.265). Stosowany domyślnie przez aparat w iPhone'ach od iOS 11.
+HEIF to kontener, a HEIC - konkretny format używający kodeka HEVC (H.265). Stosowany domyślnie przez aparat w iPhone'ach od iOS 11.
 
 **Charakterystyka:**
 - ~40–50% mniejszy niż JPEG przy tej samej jakości,
@@ -128,7 +128,7 @@ SVG jest formatem opartym na XML, opisującym grafikę wektorową za pomocą ksz
 </svg>
 ```
 
-Android nie obsługuje SVG natywnie w `ImageView`. Zamiast tego używa się formatu **VectorDrawable** — Androidowego odpowiednika SVG opartego na tym samym systemie ścieżek, ale z rozszerzeniami dla animacji i tematów.
+Android nie obsługuje SVG natywnie w `ImageView`. Zamiast tego używa się formatu **VectorDrawable** - Androidowego odpowiednika SVG opartego na tym samym systemie ścieżek, ale z rozszerzeniami dla animacji i tematów.
 
 ### VectorDrawable (Android)
 
@@ -473,7 +473,7 @@ Zdjęcie 1920×1080 px:
   JPEG 500 KB na dysku → 1920 × 1080 × 4 = ~8 MB w RAM!
   PNG 2 MB na dysku   → 1920 × 1080 × 4 = ~8 MB w RAM!
   
-  Rozmiar pliku ≠ zużycie RAM — liczy się rozdzielczość.
+  Rozmiar pliku ≠ zużycie RAM - liczy się rozdzielczość.
 ```
 
 Możesz zmniejszyć zużycie RAM konfigurując format pikseli:
@@ -484,7 +484,7 @@ val options = BitmapFactory.Options().apply {
     inPreferredConfig = Bitmap.Config.RGB_565   // 2 bajty zamiast 4
 }
 
-// Android 8+ — zrzuć do pamięci GPU (poza heap Javy)
+// Android 8+ - zrzuć do pamięci GPU (poza heap Javy)
 val options = BitmapFactory.Options().apply {
     inPreferredConfig = Bitmap.Config.HARDWARE
 }
@@ -567,10 +567,10 @@ suspend fun batchConvertToWebP(
 
 Wybór formatu obrazu ma realny wpływ na wydajność, rozmiar aplikacji i wrażenia użytkownika. Kluczowe zasady:
 
-- **Nowe projekty Android**: preferuj **WebP** dla zdjęć i ikon z przezroczystością — mniejszy rozmiar, pełna obsługa od API 18.
-- **Wsparcie iOS 14+**: WebP działa na obu platformach — dobry wybór dla projektów cross-platform.
-- **Ikony i elementy UI bez przezroczystości**: użyj **VectorDrawable** (Android) lub **SVG przez bibliotekę** (iOS) — skalowalne i mają pomijalny rozmiar.
+- **Nowe projekty Android**: preferuj **WebP** dla zdjęć i ikon z przezroczystością - mniejszy rozmiar, pełna obsługa od API 18.
+- **Wsparcie iOS 14+**: WebP działa na obu platformach - dobry wybór dla projektów cross-platform.
+- **Ikony i elementy UI bez przezroczystości**: użyj **VectorDrawable** (Android) lub **SVG przez bibliotekę** (iOS) - skalowalne i mają pomijalny rozmiar.
 - **Zdjęcia z aparatu iOS**: obsługuj **HEIC** przy wczytywaniu, konwertuj na JPEG/WebP przed uploadem.
-- **Nie optymalizuj zużycia RAM przez format** — optymalizuj przez zmniejszenie rozdzielczości i konfigurację `Bitmap.Config`.
-- **Zawsze używaj biblioteki** (Coil, Glide, Kingfisher) do wczytywania obrazów z sieci — ręczna implementacja cache i lazy loadingu jest podatna na błędy.
-- **Mierz, nie zgaduj** — użyj Android Profiler lub Instruments (iOS), aby sprawdzić rzeczywiste zużycie pamięci przez obrazy.
+- **Nie optymalizuj zużycia RAM przez format** - optymalizuj przez zmniejszenie rozdzielczości i konfigurację `Bitmap.Config`.
+- **Zawsze używaj biblioteki** (Coil, Glide, Kingfisher) do wczytywania obrazów z sieci - ręczna implementacja cache i lazy loadingu jest podatna na błędy.
+- **Mierz, nie zgaduj** - użyj Android Profiler lub Instruments (iOS), aby sprawdzić rzeczywiste zużycie pamięci przez obrazy.

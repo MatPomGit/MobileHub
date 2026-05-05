@@ -1,10 +1,10 @@
 # Architektura i budowa urządzeń mobilnych
 
-Zrozumienie sprzętu urządzenia mobilnego pozwala pisać lepsze, wydajniejsze aplikacje — wiedzieć, dlaczego pewne operacje są kosztowne, jak efektywnie korzystać z baterii i jak interpretować ograniczenia platformy.
+Zrozumienie sprzętu urządzenia mobilnego pozwala pisać lepsze, wydajniejsze aplikacje - wiedzieć, dlaczego pewne operacje są kosztowne, jak efektywnie korzystać z baterii i jak interpretować ograniczenia platformy.
 
 ## Procesory mobilne (SoC)
 
-Sercem urządzenia mobilnego jest **SoC** (System on a Chip) — układ scalony integrujący CPU, GPU, pamięć RAM, modem, DSP i inne komponenty na jednym krzemie.
+Sercem urządzenia mobilnego jest **SoC** (System on a Chip) - układ scalony integrujący CPU, GPU, pamięć RAM, modem, DSP i inne komponenty na jednym krzemie.
 
 ### Główni producenci SoC
 
@@ -34,24 +34,24 @@ System operacyjny dynamicznie przydziela zadania do odpowiednich rdzeni. Intensy
 ## GPU mobilny
 
 GPU w urządzeniach mobilnych:
-- **Qualcomm Adreno** — wysoka kompatybilność, dobra wydajność OpenGL ES i Vulkan
-- **ARM Mali** — używany przez Samsung Exynos i MediaTek
-- **Apple GPU** — własna architektura, zintegrowana z Metal API
-- **Imagination PowerVR** — używany w starszych urządzeniach Apple i MediaTek
+- **Qualcomm Adreno** - wysoka kompatybilność, dobra wydajność OpenGL ES i Vulkan
+- **ARM Mali** - używany przez Samsung Exynos i MediaTek
+- **Apple GPU** - własna architektura, zintegrowana z Metal API
+- **Imagination PowerVR** - używany w starszych urządzeniach Apple i MediaTek
 
 Do programowania grafiki mobilnej służą:
-- **OpenGL ES 3.2** — cross-platform, legacy
-- **Vulkan** — niski poziom, wysoka wydajność, Android 7+
-- **Metal** — Apple, najwyższa wydajność na iOS
-- **OpenCL / Metal Compute** — obliczenia GPGPU
+- **OpenGL ES 3.2** - cross-platform, legacy
+- **Vulkan** - niski poziom, wysoka wydajność, Android 7+
+- **Metal** - Apple, najwyższa wydajność na iOS
+- **OpenCL / Metal Compute** - obliczenia GPGPU
 
 ## Neural Processing Unit (NPU)
 
 Nowoczesne SoC zawierają dedykowany **NPU** (Neural Processing Unit) lub AI Accelerator do wydajnego wykonywania sieci neuronowych:
 
-- Apple Neural Engine (ANE) — np. 38 TOPS w A17 Pro
-- Qualcomm Hexagon NPU — Snapdragon 8 Gen 3: 73 TOPS
-- Google TPU — w chipach Tensor
+- Apple Neural Engine (ANE) - np. 38 TOPS w A17 Pro
+- Qualcomm Hexagon NPU - Snapdragon 8 Gen 3: 73 TOPS
+- Google TPU - w chipach Tensor
 
 Dostęp do NPU z poziomu aplikacji:
 ```kotlin
@@ -65,14 +65,14 @@ val model = Interpreter(modelBuffer, InterpreterOptions().apply {
 
 ### RAM
 - Zakres: 3–16 GB (typowo 6–8 GB w mid-range)
-- Architektura: LPDDR5X — bardzo niskie zużycie energii
-- **Brak swap** w tradycyjnym sensie — system agresywnie zabija procesy w tle (OOM Killer)
+- Architektura: LPDDR5X - bardzo niskie zużycie energii
+- **Brak swap** w tradycyjnym sensie - system agresywnie zabija procesy w tle (OOM Killer)
 
 > **Implikacja:** Twoja aplikacja może zostać zabita w każdej chwili gdy działa w tle. Implementuj `onSaveInstanceState()` i `ViewModel` do zachowania stanu.
 
 ### Storage
-- eMMC 5.1 — starsze/tańsze urządzenia, ~300 MB/s odczyt
-- UFS 3.1 / UFS 4.0 — flagowce, >2 GB/s odczyt
+- eMMC 5.1 - starsze/tańsze urządzenia, ~300 MB/s odczyt
+- UFS 3.1 / UFS 4.0 - flagowce, >2 GB/s odczyt
 
 ## Bateria i zarządzanie energią
 
@@ -133,10 +133,10 @@ xxhdpi(3x):   1dp = 3px  ← typowy flagship
 ## Linki
 
 - [Qualcomm Snapdragon Tech Specs](https://www.qualcomm.com/snapdragon)
-- [Android Performance — Docs](https://developer.android.com/topic/performance)
+- [Android Performance - Docs](https://developer.android.com/topic/performance)
 - [Apple Silicon Overview](https://developer.apple.com/documentation/apple-silicon)
 
-## Neural Processing Unit (NPU) — AI na urządzeniu
+## Neural Processing Unit (NPU) - AI na urządzeniu
 
 Nowoczesne SoC zawierają dedykowane jednostki AI (NPU/Neural Engine) zoptymalizowane pod wnioskowanie modeli ML:
 
@@ -147,12 +147,12 @@ Nowoczesne SoC zawierają dedykowane jednostki AI (NPU/Neural Engine) zoptymaliz
 | Dimensity 9300 | APU 790 | 33 TOPS |
 | Google Tensor G4 | TPU | ~30 TOPS |
 
-TOPS = Tera Operations Per Second — liczba miliardów operacji na sekundę
+TOPS = Tera Operations Per Second - liczba miliardów operacji na sekundę
 
 ### Użycie NPU z Android NNAPI
 
 ```kotlin
-// TensorFlow Lite + NNAPI Delegate — automatycznie używa NPU jeśli dostępne
+// TensorFlow Lite + NNAPI Delegate - automatycznie używa NPU jeśli dostępne
 val options = Interpreter.Options().apply {
     addDelegate(NnApiDelegate())        // NPU/DSP acceleration
     // Fallback do GPU jeśli NNAPI niedostępne
@@ -161,7 +161,7 @@ val options = Interpreter.Options().apply {
 }
 val interpreter = Interpreter(loadModelFile(), options)
 
-// Google AI Edge (dawniej MediaPipe) — wyższy poziom abstrakcji
+// Google AI Edge (dawniej MediaPipe) - wyższy poziom abstrakcji
 val imageClassifier = ImageClassifier.createFromOptions(
     context,
     ImageClassifier.ImageClassifierOptions.builder()
@@ -175,7 +175,7 @@ val imageClassifier = ImageClassifier.createFromOptions(
 )
 ```
 
-## Pamięć masowa — eMMC vs UFS vs NVMe
+## Pamięć masowa - eMMC vs UFS vs NVMe
 
 | Typ | Odczyt | Zapis | Zastosowanie |
 |-----|--------|-------|-------------|
@@ -211,12 +211,12 @@ fun benchmarkStorage(context: Context) {
 }
 ```
 
-## Thermal Throttling — zarządzanie ciepłem
+## Thermal Throttling - zarządzanie ciepłem
 
 Przegrzanie procesora powoduje automatyczne zmniejszenie taktowania (throttling):
 
 ```kotlin
-// Thermal API (Android 11+) — monitor temperatury
+// Thermal API (Android 11+) - monitor temperatury
 class ThermalMonitor(context: Context) {
     private val powerManager = context.getSystemService(Context.POWER_SERVICE) as PowerManager
 

@@ -4,21 +4,21 @@ Testowanie to integralna część profesjonalnego rozwoju aplikacji. Android ofe
 
 ## Piramida testów
 
-Piramida testów ilustruje zalecaną strategię pokrycia testowego w aplikacjach mobilnych. Testy jednostkowe stanowią podstawę — jest ich najwięcej, działają najszybciej i są najtańsze w utrzymaniu. Im wyżej w piramidzie, tym testy są wolniejsze i kosztowniejsze, dlatego powinno ich być mniej.
+Piramida testów ilustruje zalecaną strategię pokrycia testowego w aplikacjach mobilnych. Testy jednostkowe stanowią podstawę - jest ich najwięcej, działają najszybciej i są najtańsze w utrzymaniu. Im wyżej w piramidzie, tym testy są wolniejsze i kosztowniejsze, dlatego powinno ich być mniej.
 
 ```
         /\
-       /UI\          ← Testy UI (Espresso, Compose Test) — wolne
+       /UI\          ← Testy UI (Espresso, Compose Test) - wolne
       /----\
-     / Integ\        ← Testy integracyjne (Room, Hilt) — średnie
+     / Integ\        ← Testy integracyjne (Room, Hilt) - średnie
     /--------\
-   /  Jednostk\      ← Testy jednostkowe (JUnit, Mockk) — szybkie, wiele
+   /  Jednostk\      ← Testy jednostkowe (JUnit, Mockk) - szybkie, wiele
   /────────────\
 ```
 
-## Testy jednostkowe — JUnit 5 + MockK
+## Testy jednostkowe - JUnit 5 + MockK
 
-JUnit 5 to standardowy framework testowy dla JVM, a MockK — biblioteka dedykowana do mockowania obiektów w Kotlinie. Poniższy przykład pokazuje test ViewModel z użyciem fałszywych implementacji use case'ów, co pozwala testować logikę prezentacji w izolacji od warstwy danych. Wzorzec Given-When-Then czytelnie oddziela konfigurację testu, wykonanie akcji i weryfikację wyniku.
+JUnit 5 to standardowy framework testowy dla JVM, a MockK - biblioteka dedykowana do mockowania obiektów w Kotlinie. Poniższy przykład pokazuje test ViewModel z użyciem fałszywych implementacji use case'ów, co pozwala testować logikę prezentacji w izolacji od warstwy danych. Wzorzec Given-When-Then czytelnie oddziela konfigurację testu, wykonanie akcji i weryfikację wyniku.
 
 ```kotlin
 @ExtendWith(MockKExtension::class)
@@ -91,7 +91,7 @@ class TaskScreenTest {
 
 ## Testy Room
 
-Testy Room weryfikują operacje na lokalnej bazie danych bez potrzeby uruchamiania fizycznego urządzenia. Baza danych `inMemoryDatabaseBuilder()` istnieje tylko na czas trwania testu — nie zapisuje danych na dysk, co przyspiesza wykonanie i gwarantuje izolację każdego testu. To niezbędne narzędzie do sprawdzenia poprawności zapytań SQL, migracji schematu i logiki DAO.
+Testy Room weryfikują operacje na lokalnej bazie danych bez potrzeby uruchamiania fizycznego urządzenia. Baza danych `inMemoryDatabaseBuilder()` istnieje tylko na czas trwania testu - nie zapisuje danych na dysk, co przyspiesza wykonanie i gwarantuje izolację każdego testu. To niezbędne narzędzie do sprawdzenia poprawności zapytań SQL, migracji schematu i logiki DAO.
 
 ```kotlin
 @RunWith(AndroidJUnit4::class)
@@ -101,7 +101,7 @@ class TaskDaoTest {
 
     @Before
     fun setup() {
-        // In-memory database — nie zapisuje na dysk
+        // In-memory database - nie zapisuje na dysk
         db = Room.inMemoryDatabaseBuilder(
             ApplicationProvider.getApplicationContext(),
             AppDatabase::class.java
@@ -126,7 +126,7 @@ class TaskDaoTest {
 
 ## Code Coverage
 
-Pokrycie kodu (code coverage) to metryka informująca, jaki procent kodu produkcyjnego jest wykonywany podczas testów. Włączenie raportowania pokrycia wymaga konfiguracji w pliku `build.gradle.kts` — poniższy fragment włącza śledzenie zarówno dla testów jednostkowych (`enableUnitTestCoverage`), jak i instrumentalnych (`enableAndroidTestCoverage`). Wygenerowany raport HTML pozwala zidentyfikować niepokryte ścieżki kodu i zaplanować dalsze testy.
+Pokrycie kodu (code coverage) to metryka informująca, jaki procent kodu produkcyjnego jest wykonywany podczas testów. Włączenie raportowania pokrycia wymaga konfiguracji w pliku `build.gradle.kts` - poniższy fragment włącza śledzenie zarówno dla testów jednostkowych (`enableUnitTestCoverage`), jak i instrumentalnych (`enableAndroidTestCoverage`). Wygenerowany raport HTML pozwala zidentyfikować niepokryte ścieżki kodu i zaplanować dalsze testy.
 
 ```kotlin
 // build.gradle.kts
@@ -154,9 +154,9 @@ Po skonfigurowaniu ustawień pokrycia należy uruchomić dedykowane polecenie Gr
 - [Compose Testing](https://developer.android.com/compose/testing)
 - [MockK](https://mockk.io/)
 
-## Compose Testing — UI testy
+## Compose Testing - UI testy
 
-Do uruchomienia testów UI Compose wymagane są dwie zależności: `ui-test-junit4` dla środowiska testowego oraz `ui-test-manifest` (dostępna tylko w buildzie debug) zapewniająca poprawną konfigurację manifestu. Poniższy przykład pokazuje pełny zestaw testów ekranu TaskScreen obejmujący weryfikację listy zadań, interakcję z formularzem dodawania i obsługę wskaźnika ładowania — trzy najczęstsze scenariusze testowe w aplikacjach MVVM.
+Do uruchomienia testów UI Compose wymagane są dwie zależności: `ui-test-junit4` dla środowiska testowego oraz `ui-test-manifest` (dostępna tylko w buildzie debug) zapewniająca poprawną konfigurację manifestu. Poniższy przykład pokazuje pełny zestaw testów ekranu TaskScreen obejmujący weryfikację listy zadań, interakcję z formularzem dodawania i obsługę wskaźnika ładowania - trzy najczęstsze scenariusze testowe w aplikacjach MVVM.
 
 ```kotlin
 dependencies {
@@ -187,7 +187,7 @@ class TaskScreenTest {
             }
         }
 
-        // Then — wszystkie zadania widoczne
+        // Then - wszystkie zadania widoczne
         fakeTasks.forEach { task ->
             composeTestRule
                 .onNodeWithText(task.title)
@@ -202,7 +202,7 @@ class TaskScreenTest {
             AddTaskScreen(onTaskAdded = { addedTaskName = it })
         }
 
-        // When — wpisz nazwę i naciśnij przycisk
+        // When - wpisz nazwę i naciśnij przycisk
         composeTestRule
             .onNodeWithTag("task_input")
             .performTextInput("Nowe ważne zadanie")
@@ -232,9 +232,9 @@ class TaskScreenTest {
 }
 ```
 
-## Turbine — testowanie Flow
+## Turbine - testowanie Flow
 
-Turbine to biblioteka Cash App upraszczająca testowanie Kotlin Flow — pozwala „zbierać" emisje w kontrolowany sposób zamiast korzystać z trudniejszego w obsłudze `collect`. Metoda `test {}` blokuje wykonanie coroutine i umożliwia sekwencyjne pobieranie kolejnych emisji przez `awaitItem()`. Dzięki temu można precyzyjnie zweryfikować kolejność stanów: stan początkowy → ładowanie → dane załadowane.
+Turbine to biblioteka Cash App upraszczająca testowanie Kotlin Flow - pozwala „zbierać" emisje w kontrolowany sposób zamiast korzystać z trudniejszego w obsłudze `collect`. Metoda `test {}` blokuje wykonanie coroutine i umożliwia sekwencyjne pobieranie kolejnych emisji przez `awaitItem()`. Dzięki temu można precyzyjnie zweryfikować kolejność stanów: stan początkowy → ładowanie → dane załadowane.
 
 ```kotlin
 dependencies {
@@ -269,9 +269,9 @@ fun viewModel_emitsLoadingThenData() = runTest {
 }
 ```
 
-## MockK — mockowanie w testach
+## MockK - mockowanie w testach
 
-MockK to natywna biblioteka mockowania dla Kotlina, która — w odróżnieniu od Mockito — w pełni obsługuje `suspend fun` i coroutines. `coEvery` oraz `coVerify` to odpowiedniki `every`/`verify` przeznaczone dla funkcji zawieszalnych. Poniższy przykład sprawdza zarówno poprawność przekazywanych argumentów do repozytorium, jak i logikę filtrowania wyników przez use case.
+MockK to natywna biblioteka mockowania dla Kotlina, która - w odróżnieniu od Mockito - w pełni obsługuje `suspend fun` i coroutines. `coEvery` oraz `coVerify` to odpowiedniki `every`/`verify` przeznaczone dla funkcji zawieszalnych. Poniższy przykład sprawdza zarówno poprawność przekazywanych argumentów do repozytorium, jak i logikę filtrowania wyników przez use case.
 
 ```kotlin
 dependencies {
@@ -326,7 +326,7 @@ fun getFilteredTasks_returnsOnlyActive_whenFilterEnabled() = runTest {
 
 ---
 
-## Hilt — dependency injection w testach
+## Hilt - dependency injection w testach
 
 Hilt upraszcza wstrzykiwanie zależności w testach instrumentalnych: zamiast ręcznie tworzyć grafy obiektów, podmienisz konkretne implementacje za pomocą adnotacji.
 
@@ -392,11 +392,11 @@ class TaskListScreenTest {
 }
 ```
 
-`HiltAndroidRule` inicjalizuje komponent Hilt przed każdym testem. `@Inject` w ciele testu pozwala korzystać z tego samego grafu co testowana aktywność — tyle że z fałszywymi zależnościami.
+`HiltAndroidRule` inicjalizuje komponent Hilt przed każdym testem. `@Inject` w ciele testu pozwala korzystać z tego samego grafu co testowana aktywność - tyle że z fałszywymi zależnościami.
 
 ---
 
-## Robot Pattern — testy UI czytelne jak specyfikacja
+## Robot Pattern - testy UI czytelne jak specyfikacja
 
 Robot Pattern (wzorzec robotów) separuje *co* testujemy (logika testu) od *jak* wchodzimy w interakcję z ekranem (szczegóły Compose). Każdy ekran otrzymuje klasę „robota", która enkapsuluje selektory i akcje.
 
@@ -445,7 +445,7 @@ class TaskRobot(private val composeRule: ComposeContentTestRule) {
 }
 ```
 
-### Testy z użyciem robota — czytelność jak BDD
+### Testy z użyciem robota - czytelność jak BDD
 
 ```kotlin
 @HiltAndroidTest
@@ -485,11 +485,11 @@ Zalety wzorca:
 - Testy czyta się jak specyfikację funkcjonalną.
 - Płynne API (każda metoda zwraca `this`) pozwala chainować kroki bez zbędnych zmiennych.
 
-## Testy End-to-End — Maestro i UI Automator
+## Testy End-to-End - Maestro i UI Automator
 
 Testy end-to-end (E2E) weryfikują cały przepływ aplikacji od interfejsu użytkownika po bazę danych i sieć. W ekosystemie Android dostępne są dwa główne narzędzia: **UI Automator 2** (wbudowany w AndroidX) i **Maestro** (YAML-based, zero-konfiguracji).
 
-### Maestro — testy E2E w YAML
+### Maestro - testy E2E w YAML
 
 Maestro pozwala pisać scenariusze testowe w czytelnym YAML bez znajomości Kotlin/Java:
 
@@ -516,7 +516,7 @@ maestro test flows/          # wszystkie flow w katalogu
 maestro studio               # interaktywny debugger
 ```
 
-### UI Automator 2 — testy poza granicami aplikacji
+### UI Automator 2 - testy poza granicami aplikacji
 
 UI Automator pozwala testować interakcje z innymi aplikacjami i powiadomieniami systemowymi:
 

@@ -1,6 +1,6 @@
 # Jak stworzyć stronę PWA (Progressive Web App)
 
-> Przewodnik po tworzeniu aplikacji internetowych spełniających standardy Progressive Web App — instalowanych na telefonie, działających offline i wyglądających jak natywna aplikacja mobilna.
+> Przewodnik po tworzeniu aplikacji internetowych spełniających standardy Progressive Web App - instalowanych na telefonie, działających offline i wyglądających jak natywna aplikacja mobilna.
 
 ---
 
@@ -28,7 +28,7 @@ Według specyfikacji Google, strona jest traktowana jako PWA gdy spełnia trzy w
 
 ---
 
-## Krok 1 — Struktura projektu
+## Krok 1 - Struktura projektu
 
 ```
 moja-pwa/
@@ -42,7 +42,7 @@ moja-pwa/
 
 ---
 
-## Krok 2 — Web App Manifest (`manifest.json`)
+## Krok 2 - Web App Manifest (`manifest.json`)
 
 Plik JSON deklaruje jak aplikacja ma wyglądać po zainstalowaniu:
 
@@ -84,7 +84,7 @@ Plik JSON deklaruje jak aplikacja ma wyglądać po zainstalowaniu:
 
 ---
 
-## Krok 3 — Rejestracja Manifestu w HTML
+## Krok 3 - Rejestracja Manifestu w HTML
 
 W sekcji `<head>` dodaj odnośnik do pliku manifestu oraz meta tagi dla iOS (Safari nie obsługuje manifestu w pełni):
 
@@ -102,7 +102,7 @@ W sekcji `<head>` dodaj odnośnik do pliku manifestu oraz meta tagi dla iOS (Saf
   <!-- ✅ Kolor paska systemowego (Android Chrome) -->
   <meta name="theme-color" content="#5b4fcf">
 
-  <!-- ✅ iOS / Safari — pełnoekranowy tryb -->
+  <!-- ✅ iOS / Safari - pełnoekranowy tryb -->
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="apple-mobile-web-app-title" content="MojaApp">
@@ -117,7 +117,7 @@ W sekcji `<head>` dodaj odnośnik do pliku manifestu oraz meta tagi dla iOS (Saf
 
 ---
 
-## Krok 4 — Service Worker (`sw.js`)
+## Krok 4 - Service Worker (`sw.js`)
 
 Service Worker to skrypt działający poza głównym wątkiem strony. Przechwytuje żądania sieciowe i może je obsługiwać z pamięci podręcznej (cache).
 
@@ -131,7 +131,7 @@ const ASSETS = [
   '/assets/icon-512.png',
 ];
 
-// Instalacja — zapisz zasoby w cache
+// Instalacja - zapisz zasoby w cache
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME).then((cache) => cache.addAll(ASSETS))
@@ -139,7 +139,7 @@ self.addEventListener('install', (event) => {
   self.skipWaiting();
 });
 
-// Aktywacja — usuń stary cache
+// Aktywacja - usuń stary cache
 self.addEventListener('activate', (event) => {
   event.waitUntil(
     caches.keys().then((keys) =>
@@ -151,7 +151,7 @@ self.addEventListener('activate', (event) => {
   self.clients.claim();
 });
 
-// Fetch — najpierw cache, potem sieć (Cache-First strategy)
+// Fetch - najpierw cache, potem sieć (Cache-First strategy)
 self.addEventListener('fetch', (event) => {
   event.respondWith(
     caches.match(event.request).then((cached) =>
@@ -173,7 +173,7 @@ self.addEventListener('fetch', (event) => {
 
 ---
 
-## Krok 5 — Rejestracja Service Workera w JS
+## Krok 5 - Rejestracja Service Workera w JS
 
 ```javascript
 // Rejestracja musi być w głównym skrypcie strony (nie w sw.js)
@@ -189,18 +189,18 @@ if ('serviceWorker' in navigator) {
 
 ---
 
-## Krok 6 — Ikony aplikacji
+## Krok 6 - Ikony aplikacji
 
 Przygotuj ikony w dwóch rozmiarach:
 
-- **192×192 px** — ikona na ekranie głównym (Android)
-- **512×512 px** — ikona w splash screen i sklepach
+- **192×192 px** - ikona na ekranie głównym (Android)
+- **512×512 px** - ikona w splash screen i sklepach
 
 Dodaj `"purpose": "maskable"` aby ikona poprawnie wyglądała w kształtach (kwadrat, kółko) na różnych urządzeniach Android. Użyj narzędzia [maskable.app](https://maskable.app) do sprawdzenia.
 
 ---
 
-## Krok 7 — Obsługa bezpiecznych obszarów ekranu (Safe Area)
+## Krok 7 - Obsługa bezpiecznych obszarów ekranu (Safe Area)
 
 Nowsze telefony (notch, wyspy, zaokrąglone rogi) mają obszary, których nie powinno zakrywać UI:
 
@@ -222,14 +222,14 @@ Meta viewport powinien zawierać `viewport-fit=cover`:
 
 ---
 
-## Krok 8 — Testowanie PWA
+## Krok 8 - Testowanie PWA
 
 ### Narzędzia deweloperskie Chrome / Edge
 
 1. Otwórz **DevTools** (F12)
-2. Zakładka **Application → Manifest** — sprawdź czy manifest jest wykrywany
-3. Zakładka **Application → Service Workers** — sprawdź rejestrację SW
-4. Zakładka **Application → Cache Storage** — sprawdź zawartość cache
+2. Zakładka **Application → Manifest** - sprawdź czy manifest jest wykrywany
+3. Zakładka **Application → Service Workers** - sprawdź rejestrację SW
+4. Zakładka **Application → Cache Storage** - sprawdź zawartość cache
 
 ### Lighthouse (audyt PWA)
 
@@ -259,7 +259,7 @@ npx serve .
 
 ---
 
-## Krok 9 — Prompt instalacji (Add to Home Screen)
+## Krok 9 - Prompt instalacji (Add to Home Screen)
 
 Przeglądarka automatycznie wyświetla prompt instalacji gdy spełnione są kryteria PWA. Możesz też pokazać własny przycisk:
 
@@ -291,7 +291,7 @@ window.addEventListener('appinstalled', () => {
 
 ---
 
-## Krok 10 — Powiadomienia Push (opcjonalnie)
+## Krok 10 - Powiadomienia Push (opcjonalnie)
 
 PWA może wysyłać powiadomienia push nawet gdy strona jest zamknięta (wymaga HTTPS i zgody użytkownika):
 
@@ -319,7 +319,7 @@ Do obsługi VAPID można użyć bibliotek: **web-push** (Node.js), **pywebpush**
 
 ---
 
-## Podsumowanie — lista kontrolna PWA
+## Podsumowanie - lista kontrolna PWA
 
 ```
 ✅ Strona serwowana przez HTTPS (lub localhost)
@@ -367,8 +367,8 @@ wiki/            ← artykuły w formacie Markdown (.md)
 ```
 
 Kluczowe decyzje projektowe:
-- **Brak frameworka** — vanilla HTML/CSS/JS dla maksymalnej wydajności i prostoty
-- **Markdown** jako format artykułów — łatwa edycja, renderowany przez `marked.js`
-- **highlight.js** — podświetlanie składni kodu bez budowania
-- **CSS Custom Properties** — motywy kolorystyczne bez preprocesora
-- **Service Worker** — instalacja na ekranie głównym i dostęp offline
+- **Brak frameworka** - vanilla HTML/CSS/JS dla maksymalnej wydajności i prostoty
+- **Markdown** jako format artykułów - łatwa edycja, renderowany przez `marked.js`
+- **highlight.js** - podświetlanie składni kodu bez budowania
+- **CSS Custom Properties** - motywy kolorystyczne bez preprocesora
+- **Service Worker** - instalacja na ekranie głównym i dostęp offline

@@ -1,6 +1,6 @@
-# PWA — Progressive Web Apps
+# PWA - Progressive Web Apps
 
-Progressive Web App to aplikacja webowa spełniająca określone kryteria techniczne, które pozwalają na "instalację" jej na urządzeniu i korzystanie jak z natywnej aplikacji — offline, z ikonką na ekranie głównym, powiadomieniami push i dostępem do API urządzenia.
+Progressive Web App to aplikacja webowa spełniająca określone kryteria techniczne, które pozwalają na "instalację" jej na urządzeniu i korzystanie jak z natywnej aplikacji - offline, z ikonką na ekranie głównym, powiadomieniami push i dostępem do API urządzenia.
 
 ## Kryteria PWA
 
@@ -57,16 +57,16 @@ Zalecane dla dobrej instalacji:
 ```
 
 ```html
-<!-- index.html — podpięcie manifestu -->
+<!-- index.html - podpięcie manifestu -->
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#5b4fcf">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<!-- iOS nie obsługuje manifest.json w pełni — dodatkowe meta -->
+<!-- iOS nie obsługuje manifest.json w pełni - dodatkowe meta -->
 <link rel="apple-touch-icon" href="/icons/icon-192.png">
 ```
 
-## Service Worker — offline i cache
+## Service Worker - offline i cache
 
 ```typescript
 // src/service-worker.ts (Workbox)
@@ -81,12 +81,12 @@ clientsClaim();
 // Pre-cache pliki budowania (Vite/CRA generuje listę automatycznie)
 precacheAndRoute(self.__WB_MANIFEST);
 
-// App Shell — zawsze z cache (dla SPA)
+// App Shell - zawsze z cache (dla SPA)
 registerRoute(
   new NavigationRoute(createHandlerBoundToURL('/index.html'))
 );
 
-// API — Network First (świeże dane gdy jest internet, cache gdy offline)
+// API - Network First (świeże dane gdy jest internet, cache gdy offline)
 registerRoute(
   ({ url }) => url.pathname.startsWith('/api/'),
   new NetworkFirst({
@@ -101,7 +101,7 @@ registerRoute(
   })
 );
 
-// Obrazy — Cache First (rzadko się zmieniają)
+// Obrazy - Cache First (rzadko się zmieniają)
 registerRoute(
   ({ request }) => request.destination === 'image',
   new CacheFirst({
@@ -112,14 +112,14 @@ registerRoute(
   })
 );
 
-// Fonty Google — StaleWhileRevalidate
+// Fonty Google - StaleWhileRevalidate
 registerRoute(
   ({ url }) => url.origin === 'https://fonts.googleapis.com',
   new StaleWhileRevalidate({ cacheName: 'google-fonts-stylesheets' })
 );
 ```
 
-## Background Sync — operacje offline
+## Background Sync - operacje offline
 
 ```typescript
 // Rejestracja sync gdy brak połączenia
@@ -136,7 +136,7 @@ async function saveTodoOffline(todo: Todo) {
   }
 }
 
-// W Service Worker — obsługa sync eventu
+// W Service Worker - obsługa sync eventu
 self.addEventListener('sync', (event: SyncEvent) => {
   if (event.tag === 'sync-todos') {
     event.waitUntil(syncOfflineTodos());
@@ -187,7 +187,7 @@ async function subscribeToPush(): Promise<PushSubscription | null> {
   return subscription;
 }
 
-// W Service Worker — obsługa push
+// W Service Worker - obsługa push
 self.addEventListener('push', (event: PushEvent) => {
   const data = event.data?.json() ?? {};
 
@@ -213,10 +213,10 @@ self.addEventListener('notificationclick', (event: NotificationEvent) => {
 });
 ```
 
-## Instalacja — beforeinstallprompt
+## Instalacja - beforeinstallprompt
 
 ```typescript
-// React hook — kontrola promptu instalacji
+// React hook - kontrola promptu instalacji
 function useInstallPrompt() {
   const [prompt, setPrompt] = useState<BeforeInstallPromptEvent | null>(null);
   const [isInstalled, setIsInstalled] = useState(false);
@@ -224,7 +224,7 @@ function useInstallPrompt() {
   useEffect(() => {
     const handler = (e: BeforeInstallPromptEvent) => {
       e.preventDefault();
-      setPrompt(e);  // zachowaj zdarzenie — pokaż własny przycisk
+      setPrompt(e);  // zachowaj zdarzenie - pokaż własny przycisk
     };
 
     window.addEventListener('beforeinstallprompt', handler);
@@ -262,14 +262,14 @@ function InstallButton() {
 }
 ```
 
-## PWA vs Native — porównanie
+## PWA vs Native - porównanie
 
 | Funkcja | PWA | Native Android | Native iOS |
 |---------|-----|----------------|------------|
 | Powiadomienia push | ✅ (Web Push) | ✅ (FCM) | ✅ (APNs) |
 | Dostęp do kamery | ✅ (getUserMedia) | ✅ | ✅ |
 | GPS | ✅ (Geolocation API) | ✅ | ✅ |
-| Bluetooth | ⚠️ (Web Bluetooth — Chrome only) | ✅ | ✅ |
+| Bluetooth | ⚠️ (Web Bluetooth - Chrome only) | ✅ | ✅ |
 | NFC | ⚠️ (Chrome Android only) | ✅ | ✅ (od iOS 11) |
 | Kontakty | ⚠️ (Contact Picker API) | ✅ | ✅ |
 | Biometria | ⚠️ (WebAuthn) | ✅ | ✅ |
@@ -278,7 +278,7 @@ function InstallButton() {
 
 ## Linki
 
-- [web.dev — PWA](https://web.dev/progressive-web-apps/)
+- [web.dev - PWA](https://web.dev/progressive-web-apps/)
 - [Workbox](https://developer.chrome.com/docs/workbox/)
 - [Lighthouse](https://developer.chrome.com/docs/lighthouse/)
 - [What PWA Can Do Today](https://whatpwacando.today/)
@@ -310,14 +310,14 @@ Skróty aplikacji (App Shortcuts) pozwalają użytkownikowi przejść bezpośred
 }
 ```
 
-Skróty działają na Android Chrome od wersji 84 i są ignorowane przez przeglądarki, które ich nie obsługują — bez efektu ubocznego.
+Skróty działają na Android Chrome od wersji 84 i są ignorowane przez przeglądarki, które ich nie obsługują - bez efektu ubocznego.
 
-### Share Target — odbieranie treści z innych aplikacji
+### Share Target - odbieranie treści z innych aplikacji
 
-Share Target pozwala zarejestrować PWA jako cel udostępniania — użytkownik może "Udostępnić" plik, link lub tekst z dowolnej aplikacji i wybrać twoją PWA z systemowego arkusza udostępniania.
+Share Target pozwala zarejestrować PWA jako cel udostępniania - użytkownik może "Udostępnić" plik, link lub tekst z dowolnej aplikacji i wybrać twoją PWA z systemowego arkusza udostępniania.
 
 ```json
-// manifest.json — rozszerzone o share_target
+// manifest.json - rozszerzone o share_target
 {
   "share_target": {
     "action": "/app/share-receiver",
@@ -339,7 +339,7 @@ Share Target pozwala zarejestrować PWA jako cel udostępniania — użytkownik 
 ```
 
 ```typescript
-// Service Worker — przechwytywanie POST z share_target
+// Service Worker - przechwytywanie POST z share_target
 self.addEventListener('fetch', (event: FetchEvent) => {
   const url = new URL(event.request.url);
   if (url.pathname === '/app/share-receiver' && event.request.method === 'POST') {
@@ -354,7 +354,7 @@ async function handleShareTarget(request: Request): Promise<Response> {
   const url    = formData.get('url')    as string | null;
   const files  = formData.getAll('media') as File[];
 
-  // Zapisz dane w IndexedDB — będą dostępne po przekierowaniu
+  // Zapisz dane w IndexedDB - będą dostępne po przekierowaniu
   const db = await openDB('share-queue', 1, {
     upgrade(db) { db.createObjectStore('pending'); }
   });
@@ -364,7 +364,7 @@ async function handleShareTarget(request: Request): Promise<Response> {
   return Response.redirect('/app/new-task?shared=1', 303);
 }
 
-// React — odczyt udostępnionych danych po przekierowaniu
+// React - odczyt udostępnionych danych po przekierowaniu
 function NewTaskPage() {
   const [sharedData, setSharedData] = useState<SharedData | null>(null);
 
@@ -380,19 +380,19 @@ function NewTaskPage() {
     }
   }, []);
 
-  // Jeśli coś zostało udostępnione — prefilluj formularz
+  // Jeśli coś zostało udostępnione - prefilluj formularz
   return <NewTaskForm prefill={sharedData} />;
 }
 ```
 
-Share Target wymaga, by PWA była zainstalowana na urządzeniu — niezainstalowane PWA nie pojawia się w arkuszu udostępniania.
+Share Target wymaga, by PWA była zainstalowana na urządzeniu - niezainstalowane PWA nie pojawia się w arkuszu udostępniania.
 
 ## File System Access API
 
-File System Access API (wcześniej Native File System API) pozwala aplikacji webowej czytać i zapisywać pliki bezpośrednio z systemu plików użytkownika — z jego wyraźną zgodą przez okno dialogowe. Nie wymaga round-tripu przez serwer.
+File System Access API (wcześniej Native File System API) pozwala aplikacji webowej czytać i zapisywać pliki bezpośrednio z systemu plików użytkownika - z jego wyraźną zgodą przez okno dialogowe. Nie wymaga round-tripu przez serwer.
 
 ```typescript
-// Otwieranie pliku — showOpenFilePicker
+// Otwieranie pliku - showOpenFilePicker
 async function openTextFile(): Promise<{ name: string; content: string } | null> {
   try {
     const [handle] = await window.showOpenFilePicker({
@@ -412,7 +412,7 @@ async function openTextFile(): Promise<{ name: string; content: string } | null>
   }
 }
 
-// Zapis pliku — showSaveFilePicker
+// Zapis pliku - showSaveFilePicker
 async function saveTextFile(content: string, suggestedName: string): Promise<boolean> {
   try {
     const handle = await window.showSaveFilePicker({
@@ -434,12 +434,12 @@ async function saveTextFile(content: string, suggestedName: string): Promise<boo
 }
 ```
 
-### OPFS — Origin Private File System
+### OPFS - Origin Private File System
 
-OPFS (Origin Private File System) to prywatna przestrzeń plików aplikacji — niewidoczna dla użytkownika, bez okien dialogowych i ze znacznie lepszą wydajnością niż IndexedDB dla dużych plików:
+OPFS (Origin Private File System) to prywatna przestrzeń plików aplikacji - niewidoczna dla użytkownika, bez okien dialogowych i ze znacznie lepszą wydajnością niż IndexedDB dla dużych plików:
 
 ```typescript
-// OPFS — zapis i odczyt dużych danych (np. baza SQLite, pliki eksportu)
+// OPFS - zapis i odczyt dużych danych (np. baza SQLite, pliki eksportu)
 async function writeToOPFS(filename: string, data: ArrayBuffer): Promise<void> {
   const root = await navigator.storage.getDirectory();
   const fileHandle = await root.getFileHandle(filename, { create: true });
@@ -489,7 +489,7 @@ Lighthouse to narzędzie audytu PWA wbudowane w Chrome DevTools (zakładka Light
 | **INP** (Interaction to Next Paint) | Responsywność na interakcje użytkownika | ≤ 200 ms |
 
 ```bash
-# Lighthouse CLI — audyt z terminala (raport JSON + HTML)
+# Lighthouse CLI - audyt z terminala (raport JSON + HTML)
 npm install -g lighthouse
 
 lighthouse https://moja-pwa.example.com \
@@ -507,7 +507,7 @@ lighthouse http://localhost:5173 \
 ```
 
 ```typescript
-// Performance Budget — automatyczne sprawdzanie metryk w CI
+// Performance Budget - automatyczne sprawdzanie metryk w CI
 // lighthouse-budget.json
 const budget = [
   {

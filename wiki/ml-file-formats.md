@@ -17,23 +17,23 @@ W przeciwieństwie do serwerów ML, urządzenia mobilne muszą sprostać wielu o
 | Opóźnienie | 10–100 ms (sieć) | < 50 ms (lokalne) |
 
 Format modelu determinuje:
-- **Rozmiar pliku** — wpływ na rozmiar aplikacji i czas pobierania
-- **Szybkość wnioskowania** (inference) — jak szybko model zwraca wynik
-- **Wsparcie dla akceleracji sprzętowej** — Neural Engine, GPU, DSP
-- **Możliwości kwantyzacji** — redukcja precyzji wag dla mniejszego rozmiaru
+- **Rozmiar pliku** - wpływ na rozmiar aplikacji i czas pobierania
+- **Szybkość wnioskowania** (inference) - jak szybko model zwraca wynik
+- **Wsparcie dla akceleracji sprzętowej** - Neural Engine, GPU, DSP
+- **Możliwości kwantyzacji** - redukcja precyzji wag dla mniejszego rozmiaru
 
 ---
 
-## TFLite (.tflite) — TensorFlow Lite
+## TFLite (.tflite) - TensorFlow Lite
 
 TensorFlow Lite to platforma ML Google do wdrożeń na urządzenia mobilne i brzegowe.
 
 ### Kluczowe cechy
 
 - Zoptymalizowany pod kątem małego śladu pamięciowego
-- Wsparcie dla **Android Neural Networks API (NNAPI)** — deleguje obliczenia do GPU/DSP/NPU
+- Wsparcie dla **Android Neural Networks API (NNAPI)** - deleguje obliczenia do GPU/DSP/NPU
 - Kwantyzacja modeli: FP32 → INT8 (4x mniejszy model, ~2x szybszy inference)
-- Model Maker — narzędzie do fine-tuningu na własnych danych
+- Model Maker - narzędzie do fine-tuningu na własnych danych
 - Bogata biblioteka gotowych modeli (MobileNet, EfficientDet, BERT-Mobile)
 
 ### Konwersja modelu
@@ -147,7 +147,7 @@ class ImageClassifier(private val context: Context) {
 
 ---
 
-## ONNX (.onnx) — Open Neural Network Exchange
+## ONNX (.onnx) - Open Neural Network Exchange
 
 ONNX to otwarty standard wymiany modeli ML stworzony przez Microsoft i Facebook (Meta). Umożliwia trening w jednym frameworku i wdrożenie w innym.
 
@@ -225,17 +225,17 @@ class OnnxInference(context: Context) {
 
 ---
 
-## Core ML (.mlmodel / .mlpackage) — Apple
+## Core ML (.mlmodel / .mlpackage) - Apple
 
 Core ML to framework Apple do uruchamiania modeli ML na urządzeniach iOS, macOS, watchOS i tvOS.
 
 ### Kluczowe cechy
 
-- Pełne wsparcie dla **Apple Neural Engine (ANE)** — dedykowany chip ML w A-series/M-series
+- Pełne wsparcie dla **Apple Neural Engine (ANE)** - dedykowany chip ML w A-series/M-series
 - Format `.mlpackage` (nowszy, od Xcode 13) lub `.mlmodel` (starszy)
 - Automatyczny dobór backendu: ANE → GPU → CPU
 - Integracja z Xcode: podgląd modelu, automatyczne generowanie kodu Swift
-- Create ML — narzędzie GUI do treningu na macOS
+- Create ML - narzędzie GUI do treningu na macOS
 
 ### Konwersja do Core ML
 
@@ -308,7 +308,7 @@ classifier.classify(image: capturedPhoto) { label, confidence in
 
 ---
 
-## PyTorch Mobile (.ptl / .pte) — ExecuTorch
+## PyTorch Mobile (.ptl / .pte) - ExecuTorch
 
 Meta (Facebook) oferuje dwie ścieżki wdrożenia PyTorch na mobile:
 
@@ -333,12 +333,12 @@ optimized_model._save_for_lite_interpreter("model.ptl")
 
 ExecuTorch to nowa platforma Meta do wdrożeń edge AI:
 - Wsparcie dla Apple Metal, Core ML, Qualcomm AI Engine
-- Format `.pte` — skompilowany graf wykonania
+- Format `.pte` - skompilowany graf wykonania
 - Docelowy dla LLM (Llama 3) na urządzeniach mobilnych
 
 ---
 
-## safetensors — bezpieczna serializacja wag
+## safetensors - bezpieczna serializacja wag
 
 Format stworzony przez HuggingFace jako alternatywa dla pickle:
 
@@ -359,14 +359,14 @@ from safetensors.torch import save_file, load_file
 tensors = {"weight": model.weight, "bias": model.bias}
 save_file(tensors, "model.safetensors")
 
-# Odczyt — bezpieczny, bez wykonywania kodu
+# Odczyt - bezpieczny, bez wykonywania kodu
 loaded = load_file("model.safetensors")
 ```
 
 ### Zalety safetensors na mobile
 
-- Szybkie ładowanie — pamięć mapowana (mmap), zero-copy
-- Bezpieczeństwo — tylko dane, żadnego kodu
+- Szybkie ładowanie - pamięć mapowana (mmap), zero-copy
+- Bezpieczeństwo - tylko dane, żadnego kodu
 - Wsparcie: PyTorch, TensorFlow, JAX, NumPy
 - Coraz szerzej stosowany w ekosystemie HuggingFace
 
@@ -432,18 +432,18 @@ loaded = load_file("model.safetensors")
 | INT8     | 3.5 MB                   | 71.1%                      | 18 ms                    |
 | INT4     | 1.8 MB                   | 69.5%                      | 12 ms                    |
 
-Kwantyzacja INT8 to złoty środek — 4x mniejszy model, 2x szybszy inference, minimalna utrata dokładności.
+Kwantyzacja INT8 to złoty środek - 4x mniejszy model, 2x szybszy inference, minimalna utrata dokładności.
 
 ---
 
 ## Dobre praktyki
 
-- **Zacznij od TFLite** dla Androida i **Core ML** dla iOS — najlepsze wsparcie sprzętowe
-- Zawsze **waliduj model po kwantyzacji** — porównaj wyniki z modelem FP32 na zestawie testowym
-- **Nie dołączaj dużych modeli do APK** — pobieraj je dynamicznie z Firebase ML lub własnego CDN
+- **Zacznij od TFLite** dla Androida i **Core ML** dla iOS - najlepsze wsparcie sprzętowe
+- Zawsze **waliduj model po kwantyzacji** - porównaj wyniki z modelem FP32 na zestawie testowym
+- **Nie dołączaj dużych modeli do APK** - pobieraj je dynamicznie z Firebase ML lub własnego CDN
 - Stosuj **NNAPI delegate** w TFLite dla nowoczesnych urządzeń Android (API 27+)
-- Dla zadań NLP rozważ **distylowane modele** (DistilBERT, TinyBERT) — 6–10x mniejsze przy zbliżonej jakości
-- **Benchmark na rzeczywistym urządzeniu** — emulator nie odzwierciedla rzeczywistych czasów inference
+- Dla zadań NLP rozważ **distylowane modele** (DistilBERT, TinyBERT) - 6–10x mniejsze przy zbliżonej jakości
+- **Benchmark na rzeczywistym urządzeniu** - emulator nie odzwierciedla rzeczywistych czasów inference
 
 ---
 

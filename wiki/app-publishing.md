@@ -1,6 +1,6 @@
 # Publikacja i Promocja Własnej Aplikacji Mobilnej
 
-Opublikowanie aplikacji w sklepie to dopiero połowa sukcesu — równie ważna jest jej widoczność, pozyskanie pierwszych użytkowników i utrzymanie ocen na poziomie gwarantującym organiczny wzrost. Ten artykuł przeprowadza przez cały cykl: od przygotowania materiałów, przez publikację w Google Play i App Store, aż po strategie marketingowe i analitykę po wdrożeniu.
+Opublikowanie aplikacji w sklepie to dopiero połowa sukcesu - równie ważna jest jej widoczność, pozyskanie pierwszych użytkowników i utrzymanie ocen na poziomie gwarantującym organiczny wzrost. Ten artykuł przeprowadza przez cały cykl: od przygotowania materiałów, przez publikację w Google Play i App Store, aż po strategie marketingowe i analitykę po wdrożeniu.
 
 ## Przygotowanie do publikacji
 
@@ -15,7 +15,7 @@ Wymagania techniczne:
   ☑ Podpisany build (AAB dla Google Play, IPA dla App Store)
   ☑ Brak krytycznych crashów (Crashlytics < 1% sesji)
   ☑ Obsługa trybu offline lub czytelna informacja o braku połączenia
-  ☑ Permissions — tylko niezbędne, z opisem rationale
+  ☑ Permissions - tylko niezbędne, z opisem rationale
 
 Materiały marketingowe:
   ☑ Ikona 512×512 px (PNG, bez transparentności dla Play)
@@ -29,20 +29,20 @@ Prawne i RODO:
   ☑ Polityka prywatności zgodna z RODO/GDPR
   ☑ Formularz Data Safety (Google Play) / Privacy Nutrition Labels (App Store)
   ☑ Regulamin korzystania z aplikacji (jeśli zbierasz dane)
-  ☑ Wiek docelowy (COPPA — aplikacje dla dzieci wymagają dodatkowych zgód)
+  ☑ Wiek docelowy (COPPA - aplikacje dla dzieci wymagają dodatkowych zgód)
 ```
 
-### Materiały graficzne — standardy
+### Materiały graficzne - standardy
 
 | Element | Google Play | App Store |
 |---------|-------------|-----------|
 | **Ikona** | 512×512 px, PNG | 1024×1024 px, PNG |
 | **Screenshoty telefon** | min. 2, max. 8; min. 320px | min. 1, max. 10; 6.7" |
 | **Screenshoty tablet** | Opcjonalne (zalecane) | Opcjonalne (iPad) |
-| **Feature Graphic** | 1024×500 px | — |
+| **Feature Graphic** | 1024×500 px | - |
 | **Promo Video** | YouTube URL (opcjonalnie) | MP4, max 30s (opcjonalnie) |
 
-Poniższe wskazówki dotyczą tworzenia screenhotów do sklepu — to jeden z najważniejszych czynników wpływających na konwersję z wyświetlenia na instalację. Dobrze zaprojektowane screenshoty z podpisami i mockupami urządzeń mogą zwiększyć współczynnik instalacji nawet o 30%, dlatego warto poświęcić im czas.
+Poniższe wskazówki dotyczą tworzenia screenhotów do sklepu - to jeden z najważniejszych czynników wpływających na konwersję z wyświetlenia na instalację. Dobrze zaprojektowane screenshoty z podpisami i mockupami urządzeń mogą zwiększyć współczynnik instalacji nawet o 30%, dlatego warto poświęcić im czas.
 
 ```
 Wskazówki dot. screenhotów:
@@ -72,10 +72,10 @@ URL: https://play.google.com/console
 
 ### Podpisanie i przesyłanie AAB
 
-Poniższe polecenia bashowe realizują trzyetapowy proces przygotowania wersji release do Google Play. Polecenie `keytool` z flagą `-genkey` generuje nowy keystore — plik przechowujący klucz prywatny RSA 2048-bitowy, którym podpisujemy każdą wersję aplikacji. Flaga `-validity 10000` ustawia ważność certyfikatu na ok. 27 lat: Google wymaga, by certyfikat był ważny do 2033 roku dla nowych aplikacji, a standardem jest generowanie z bardzo długim czasem ważności jednorazowo na początku projektu. Polecenie `./gradlew bundleRelease` uruchamia Gradle w trybie AAB (Android App Bundle) zamiast APK — AAB to format przeznaczony wyłącznie do przesłania do Google Play, gdzie Google dynamicznie generuje zoptymalizowane APK dla każdego urządzenia osobno, zmniejszając rozmiar pobieranego przez użytkownika pakietu o 15–40%.
+Poniższe polecenia bashowe realizują trzyetapowy proces przygotowania wersji release do Google Play. Polecenie `keytool` z flagą `-genkey` generuje nowy keystore - plik przechowujący klucz prywatny RSA 2048-bitowy, którym podpisujemy każdą wersję aplikacji. Flaga `-validity 10000` ustawia ważność certyfikatu na ok. 27 lat: Google wymaga, by certyfikat był ważny do 2033 roku dla nowych aplikacji, a standardem jest generowanie z bardzo długim czasem ważności jednorazowo na początku projektu. Polecenie `./gradlew bundleRelease` uruchamia Gradle w trybie AAB (Android App Bundle) zamiast APK - AAB to format przeznaczony wyłącznie do przesłania do Google Play, gdzie Google dynamicznie generuje zoptymalizowane APK dla każdego urządzenia osobno, zmniejszając rozmiar pobieranego przez użytkownika pakietu o 15–40%.
 
 ```bash
-# 1. Generowanie keystore (zrób to raz — ZACHOWAJ NA ZAWSZE)
+# 1. Generowanie keystore (zrób to raz - ZACHOWAJ NA ZAWSZE)
 keytool -genkey -v -keystore release.jks \
   -keyalg RSA -keysize 2048 -validity 10000 \
   -alias my-app-key
@@ -90,11 +90,11 @@ keytool -genkey -v -keystore release.jks \
 # app/build/outputs/bundle/release/app-release.aab
 ```
 
-> **Uwaga:** Włącz **Play App Signing** — Google przechowuje wtedy klucz produkcyjny. Twój keystore staje się „upload key". W przypadku utraty upload key możesz poprosić Google o reset. Bez Play App Signing utrata keystore = trwała niemożność aktualizacji aplikacji.
+> **Uwaga:** Włącz **Play App Signing** - Google przechowuje wtedy klucz produkcyjny. Twój keystore staje się „upload key". W przypadku utraty upload key możesz poprosić Google o reset. Bez Play App Signing utrata keystore = trwała niemożność aktualizacji aplikacji.
 
 ### Kanały dystrybucji (Tracks)
 
-Google Play oferuje cztery kanały dystrybucji pozwalające stopniowo udostępniać aplikację coraz szerszemu gronu odbiorców. Każdy kolejny kanał wymaga przejścia przez review, a czas jego trwania rośnie — dzięki temu można znaleźć i naprawić błędy, zanim trafią do wszystkich użytkowników produkcyjnych. Poniższy schemat ilustruje typowy przepływ wdrożenia od testów wewnętrznych do pełnej produkcji.
+Google Play oferuje cztery kanały dystrybucji pozwalające stopniowo udostępniać aplikację coraz szerszemu gronu odbiorców. Każdy kolejny kanał wymaga przejścia przez review, a czas jego trwania rośnie - dzięki temu można znaleźć i naprawić błędy, zanim trafią do wszystkich użytkowników produkcyjnych. Poniższy schemat ilustruje typowy przepływ wdrożenia od testów wewnętrznych do pełnej produkcji.
 
 ```
 Internal Testing  →  Closed Testing  →  Open Testing  →  Production
@@ -102,7 +102,7 @@ Internal Testing  →  Closed Testing  →  Open Testing  →  Production
  Natychmiastowy       <24h review        <24h review      1-3 dni review
 ```
 
-**Staged rollout** — stopniowe wdrażanie do użytkowników produkcyjnych:
+**Staged rollout** - stopniowe wdrażanie do użytkowników produkcyjnych:
 
 ```
 1% → 5% → 10% → 25% → 50% → 100%
@@ -114,13 +114,13 @@ Wstrzymaj rollout jeśli:
 - ANR rate wzrośnie powyżej 0,47%
 - Ocena spadnie gwałtownie (więcej niż 0,3 gwiazdki)
 
-### Opis aplikacji — SEO w sklepie
+### Opis aplikacji - SEO w sklepie
 
-Opis aplikacji w Google Play to jeden z głównych czynników wpływających na pozycję w wynikach wyszukiwania — algorytm indeksuje tytuł, krótki opis i pełny opis pod kątem słów kluczowych. Poniższe wskazówki pokazują, jak formułować poszczególne sekcje, by były zarówno czytelne dla użytkownika, jak i zoptymalizowane pod kątem wyszukiwania. Szczególnie ważny jest tytuł (max. 30 znaków) i krótki opis — to one wyświetlają się w wynikach wyszukiwania i bezpośrednio wpływają na CTR.
+Opis aplikacji w Google Play to jeden z głównych czynników wpływających na pozycję w wynikach wyszukiwania - algorytm indeksuje tytuł, krótki opis i pełny opis pod kątem słów kluczowych. Poniższe wskazówki pokazują, jak formułować poszczególne sekcje, by były zarówno czytelne dla użytkownika, jak i zoptymalizowane pod kątem wyszukiwania. Szczególnie ważny jest tytuł (max. 30 znaków) i krótki opis - to one wyświetlają się w wynikach wyszukiwania i bezpośrednio wpływają na CTR.
 
 ```
 Tytuł (max. 30 znaków):
-  ✓ "MójBudżet — Finanse Osobiste"
+  ✓ "MójBudżet - Finanse Osobiste"
   ✗ "Super Niesamowita Aplikacja Finansowa Pro+"
 
 Krótki opis (max. 80 znaków):
@@ -149,13 +149,13 @@ Apple Developer Program:
   Prowizja: 15% (do $1M/rok) lub 30%
   Czas review: 1–3 dni (możliwa procedura odwoławcza)
 
-Enterprise Program: $299/rok — dystrybucja wewnętrzna bez App Store
+Enterprise Program: $299/rok - dystrybucja wewnętrzna bez App Store
 URL: https://appstoreconnect.apple.com
 ```
 
 ### Certyfikaty i provisioning profiles
 
-Podpisywanie aplikacji iOS opiera się na systemie certyfikatów i provisioning profiles — każdy build musi być podpisany odpowiednim certyfikatem powiązanym z App ID. Poniższy schemat pokazuje, jak Xcode automatycznie zarządza tym procesem przy włączonej opcji „Automatically manage signing". Każde uprawnienie (permission) używane w aplikacji musi być zadeklarowane w pliku `Info.plist` z opisem dla użytkownika — brak tego opisu to jedna z najczęstszych przyczyn odrzucenia przez App Review.
+Podpisywanie aplikacji iOS opiera się na systemie certyfikatów i provisioning profiles - każdy build musi być podpisany odpowiednim certyfikatem powiązanym z App ID. Poniższy schemat pokazuje, jak Xcode automatycznie zarządza tym procesem przy włączonej opcji „Automatically manage signing". Każde uprawnienie (permission) używane w aplikacji musi być zadeklarowane w pliku `Info.plist` z opisem dla użytkownika - brak tego opisu to jedna z najczęstszych przyczyn odrzucenia przez App Review.
 
 ```
 Xcode → Signing & Capabilities → Automatically manage signing
@@ -167,10 +167,10 @@ Xcode → Signing & Capabilities → Automatically manage signing
   - Provisioning Profile (łączy certyfikat + App ID + urządzenia)
 ```
 
-Wymagania dotyczące uprawnień są weryfikowane ręcznie przez App Review — każde uprawnienie zadeklarowane w `Info.plist` musi mieć klucz `NSUsageDescription` z konkretnym opisem po polsku lub angielsku, zrozumiałym dla użytkownika. Poniższy przykład pokazuje dwa najczęściej używane klucze: dostęp do aparatu i lokalizacji.
+Wymagania dotyczące uprawnień są weryfikowane ręcznie przez App Review - każde uprawnienie zadeklarowane w `Info.plist` musi mieć klucz `NSUsageDescription` z konkretnym opisem po polsku lub angielsku, zrozumiałym dla użytkownika. Poniższy przykład pokazuje dwa najczęściej używane klucze: dostęp do aparatu i lokalizacji.
 
 ```swift
-// Info.plist — opis uprawnień (wymagane przez App Review)
+// Info.plist - opis uprawnień (wymagane przez App Review)
 // Każde użyte uprawnienie musi mieć NSUsageDescription
 <key>NSCameraUsageDescription</key>
 <string>Aplikacja wymaga dostępu do aparatu, aby skanować kody QR.</string>
@@ -179,9 +179,9 @@ Wymagania dotyczące uprawnień są weryfikowane ręcznie przez App Review — k
 <string>Lokalizacja jest używana do wyświetlenia pobliskich punktów.</string>
 ```
 
-> **Wskazówka:** Brakujące klucze `NSUsageDescription` to jedna z najczęstszych przyczyn odrzucenia przez App Review. Opisy muszą być konkretne i pisane z perspektywy użytkownika — Apple odrzuca ogólnikowe komunikaty w stylu „Wymagany do działania aplikacji".
+> **Wskazówka:** Brakujące klucze `NSUsageDescription` to jedna z najczęstszych przyczyn odrzucenia przez App Review. Opisy muszą być konkretne i pisane z perspektywy użytkownika - Apple odrzuca ogólnikowe komunikaty w stylu „Wymagany do działania aplikacji".
 
-### TestFlight — testy beta
+### TestFlight - testy beta
 
 TestFlight to oficjalny system dystrybucji beta Apple, który pozwala przetestować aplikację z prawdziwymi użytkownikami przed publiczną premierą. Poniższe zestawienie porównuje dwa typy testerów: wewnętrznych (do 100 osób z zespołu, bez review) i zewnętrznych (do 10 000 osób, z krótkim przeglądem Apple). Korzystanie z TestFlight przed premierą znacznie zmniejsza ryzyko negatywnych recenzji spowodowanych błędami, które można wykryć w kontrolowanym środowisku.
 
@@ -200,7 +200,7 @@ Zewnętrzni testerzy (External):
 Czas ważności buildu: 90 dni od przesłania
 ```
 
-### App Review — częste przyczyny odrzucenia
+### App Review - częste przyczyny odrzucenia
 
 | Przyczyna | Jak uniknąć |
 |-----------|-------------|
@@ -216,20 +216,20 @@ Czas ważności buildu: 90 dni od przesłania
 
 ## App Store Optimization (ASO)
 
-ASO to SEO dla sklepów z aplikacjami — optymalizacja widoczności w wynikach wyszukiwania organicznego.
+ASO to SEO dla sklepów z aplikacjami - optymalizacja widoczności w wynikach wyszukiwania organicznego.
 
 ### Czynniki wpływające na ranking
 
-Ranking aplikacji w sklepie zależy od dwóch grup czynników: bezpośrednich (możliwych do optymalizacji przez dewelopera) i pośrednich (będących wynikiem działań użytkowników). Poniższe zestawienie pozwala zrozumieć, na co masz realny wpływ przed premierą — głównie na tytuł, opis i materiały graficzne — oraz co rośnie organicznie wraz z bazą użytkowników. Znajomość tych czynników jest punktem wyjścia do skutecznej strategii ASO.
+Ranking aplikacji w sklepie zależy od dwóch grup czynników: bezpośrednich (możliwych do optymalizacji przez dewelopera) i pośrednich (będących wynikiem działań użytkowników). Poniższe zestawienie pozwala zrozumieć, na co masz realny wpływ przed premierą - głównie na tytuł, opis i materiały graficzne - oraz co rośnie organicznie wraz z bazą użytkowników. Znajomość tych czynników jest punktem wyjścia do skutecznej strategii ASO.
 
 ```
 Czynniki bezpośrednie (możliwe do optymalizacji):
-  • Tytuł aplikacji — najważniejsze słowa kluczowe
+  • Tytuł aplikacji - najważniejsze słowa kluczowe
   • Podtytuł (App Store) / Krótki opis (Google Play)
-  • Pole Keywords (App Store, max 100 znaków — oddzielone przecinkiem)
-  • Pełny opis — naturalne użycie słów kluczowych
-  • Ikona — wpływa na CTR z wyników wyszukiwania
-  • Screenshoty i promo video — wpływają na konwersję
+  • Pole Keywords (App Store, max 100 znaków - oddzielone przecinkiem)
+  • Pełny opis - naturalne użycie słów kluczowych
+  • Ikona - wpływa na CTR z wyników wyszukiwania
+  • Screenshoty i promo video - wpływają na konwersję
 
 Czynniki pośrednie (wynik działań):
   • Średnia ocena (gwiazdki)
@@ -241,11 +241,11 @@ Czynniki pośrednie (wynik działań):
 
 ### Badanie słów kluczowych
 
-Badanie słów kluczowych to fundament skutecznej strategii ASO — pozwala odkryć frazy, których użytkownicy faktycznie szukają, zamiast opierać się na intuicji. Poniższy schemat przedstawia dostępne narzędzia oraz czteroetapowy proces: od zebrania propozycji, przez analizę konkurencji, po wybór optymalnego miksu słów z wysokim wolumenem i niską konkurencją. Iteracyjne testowanie co 4–6 tygodni jest kluczowe, bo trendy wyszukiwania zmieniają się wraz z porami roku i aktualnymi wydarzeniami.
+Badanie słów kluczowych to fundament skutecznej strategii ASO - pozwala odkryć frazy, których użytkownicy faktycznie szukają, zamiast opierać się na intuicji. Poniższy schemat przedstawia dostępne narzędzia oraz czteroetapowy proces: od zebrania propozycji, przez analizę konkurencji, po wybór optymalnego miksu słów z wysokim wolumenem i niską konkurencją. Iteracyjne testowanie co 4–6 tygodni jest kluczowe, bo trendy wyszukiwania zmieniają się wraz z porami roku i aktualnymi wydarzeniami.
 
 ```
 Narzędzia bezpłatne:
-  • App Store / Google Play — autouzupełnianie wyszukiwarki
+  • App Store / Google Play - autouzupełnianie wyszukiwarki
   • AppFollow, AppTweak (plany free z ograniczeniami)
   • Sensor Tower (ograniczone dane free)
   • MobileAction
@@ -259,7 +259,7 @@ Strategie:
 
 ### A/B testy w sklepie
 
-**Google Play — Store Listing Experiments:**
+**Google Play - Store Listing Experiments:**
 ```
 Play Console → Rozwijanie → Eksperymenty z listą w sklepie
   → Testuj: ikony, screenshoty, krótki opis, grafiki funkcji
@@ -267,7 +267,7 @@ Play Console → Rozwijanie → Eksperymenty z listą w sklepie
   → Czas trwania: 7–30 dni
 ```
 
-**App Store — Product Page Optimization:**
+**App Store - Product Page Optimization:**
 ```
 App Store Connect → Features → Product Page Optimization
   → Testuj: ikona, screenshoty, promo video (max 3 warianty)
@@ -281,7 +281,7 @@ App Store Connect → Features → Product Page Optimization
 
 ### Marketing przed premierą (pre-launch)
 
-Działania marketingowe warto rozpocząć 6–8 tygodni przed planowaną premierą, żeby zbudować bazę zainteresowanych użytkowników i zapewnić pierwszą falę instalacji w dniu publikacji. Wczesne pobrania i oceny mają szczególne znaczenie — algorytmy sklepów nagradzają aplikacje z szybkim wzrostem zaraz po premierze, co zwiększa ich organiczną widoczność. Poniższa checklista obejmuje kluczowe działania pre-launchowe z podziałem na priorytety.
+Działania marketingowe warto rozpocząć 6–8 tygodni przed planowaną premierą, żeby zbudować bazę zainteresowanych użytkowników i zapewnić pierwszą falę instalacji w dniu publikacji. Wczesne pobrania i oceny mają szczególne znaczenie - algorytmy sklepów nagradzają aplikacje z szybkim wzrostem zaraz po premierze, co zwiększa ich organiczną widoczność. Poniższa checklista obejmuje kluczowe działania pre-launchowe z podziałem na priorytety.
 
 ```
 6–8 tygodni przed publikacją:
@@ -293,7 +293,7 @@ Działania marketingowe warto rozpocząć 6–8 tygodni przed planowaną premier
   ☑ Beta testerzy przez TestFlight / Google Play Internal Track
 ```
 
-### Strona landing page — minimum viable
+### Strona landing page - minimum viable
 
 Landing page aplikacji mobilnej to pierwsza interakcja potencjalnego użytkownika z Twoim produktem, zanim jeszcze trafi do sklepu. Poniższy szablon HTML definiuje sześć kluczowych sekcji skutecznej strony: nagłówek z przyciskami pobierania, hero section z mockupem, listę funkcji, galerię screenhotów, opinie i formularz CTA. Minimum viable landing page można przygotować w ciągu jednego dnia korzystając z szablonów Carrd lub Netlify.
 
@@ -324,27 +324,27 @@ Hosting: GitHub Pages (za darmo), Netlify, Vercel
 Szablony: Carrd.co, Readymag, Webflow
 ```
 
-### Dystrybucja treści — pierwsze 30 dni po premierze
+### Dystrybucja treści - pierwsze 30 dni po premierze
 
-Pierwsze cztery tygodnie po premierze to kluczowy okres, który determinuje przyszłą widoczność organiczną aplikacji — algorytmy sklepów oceniają prędkość wzrostu instalacji i ocen w tym czasie. Poniższy plan działania porządkuje aktywności promocyjne na każdy tydzień: premiera na ProductHunt, posty w mediach społecznościowych, artykuły techniczne i outreach do twórców branżowych. Systematyczne wykonanie każdego kroku buduje wielokanałową obecność, która generuje instalacje długo po premierze.
+Pierwsze cztery tygodnie po premierze to kluczowy okres, który determinuje przyszłą widoczność organiczną aplikacji - algorytmy sklepów oceniają prędkość wzrostu instalacji i ocen w tym czasie. Poniższy plan działania porządkuje aktywności promocyjne na każdy tydzień: premiera na ProductHunt, posty w mediach społecznościowych, artykuły techniczne i outreach do twórców branżowych. Systematyczne wykonanie każdego kroku buduje wielokanałową obecność, która generuje instalacje długo po premierze.
 
 ```
-Tydzień 1 — Premiera:
-  → ProductHunt (wtorek–czwartek — najlepsze dni)
+Tydzień 1 - Premiera:
+  → ProductHunt (wtorek–czwartek - najlepsze dni)
   → Posty na LinkedIn / X (Twitter) / Instagram
   → Reddit: r/androidapps, r/iOSapps, niszowe subreddity tematyczne
-  → Hacker News: "Show HN: NazwaApki — opis w jednym zdaniu"
+  → Hacker News: "Show HN: NazwaApki - opis w jednym zdaniu"
 
-Tydzień 2–4 — Budowanie zasięgu:
+Tydzień 2–4 - Budowanie zasięgu:
   → Artykuł na Medium / Dev.to opisujący jak zbudowałeś aplikację
   → Kontakt do blogerów i twórców YouTube w niszy aplikacji
   → Grupy na Facebooku i fora tematyczne związane z kategorią
   → Press kit dla dziennikarzy tech (AppAdvice, AndroidPolice)
 ```
 
-### Press Kit — zawartość
+### Press Kit - zawartość
 
-Press kit to zestaw materiałów przygotowanych dla dziennikarzy i blogerów piszących o aplikacji — im łatwiej им pracować, tym większa szansa na wzmiankę w prasie technicznej. Poniższa struktura katalogów pokazuje minimalne wymagane elementy: logo w różnych wariantach, screenshoty, ikonę, opisy aplikacji i dane kontaktowe. Gotowy press kit skraca czas dziennikarza z godzin do minut, co bezpośrednio przekłada się na prawdopodobieństwo pojawienia się w artykule.
+Press kit to zestaw materiałów przygotowanych dla dziennikarzy i blogerów piszących o aplikacji - im łatwiej им pracować, tym większa szansa na wzmiankę w prasie technicznej. Poniższa struktura katalogów pokazuje minimalne wymagane elementy: logo w różnych wariantach, screenshoty, ikonę, opisy aplikacji i dane kontaktowe. Gotowy press kit skraca czas dziennikarza z godzin do minut, co bezpośrednio przekłada się na prawdopodobieństwo pojawienia się w artykule.
 
 ```
 press-kit/
@@ -361,12 +361,12 @@ press-kit/
 └── contact.txt               (e-mail prasowy)
 ```
 
-### Oceny i recenzje — jak je zdobywać
+### Oceny i recenzje - jak je zdobywać
 
-Prośba o ocenę w odpowiednim momencie sesji może znacząco zwiększyć liczbę pozytywnych recenzji. Poniższy kod Kotlin implementuje Google Play In-App Review API, które wyświetla natywny dialog systemu z prośbą o ocenę **bez opuszczania aplikacji**. `ReviewManagerFactory.create(context)` zwraca instancję menadżera — w środowisku produkcyjnym korzysta z prawdziwego Play Store, a w środowisku testowym z trybu testowego (można go wymusić przez `FakeReviewManager`). Dwuetapowy proces (najpierw `requestReviewFlow()`, potem `launchReviewFlow()`) jest celowy: `requestReviewFlow()` odpytuje Google o dostępność promptu i przygotowuje `ReviewInfo` z informacjami o aplikacji, a `launchReviewFlow()` właściwie go wyświetla. Google **nie gwarantuje**, że prompt zostanie pokazany — system może go zablokować, jeśli użytkownik już ocenił aplikację lub prompt był wyświetlany zbyt niedawno. Dlatego callback `addOnCompleteListener` nie informuje, czy użytkownik faktycznie coś wybrał — aplikacja musi kontynuować działanie niezależnie od wyniku.
+Prośba o ocenę w odpowiednim momencie sesji może znacząco zwiększyć liczbę pozytywnych recenzji. Poniższy kod Kotlin implementuje Google Play In-App Review API, które wyświetla natywny dialog systemu z prośbą o ocenę **bez opuszczania aplikacji**. `ReviewManagerFactory.create(context)` zwraca instancję menadżera - w środowisku produkcyjnym korzysta z prawdziwego Play Store, a w środowisku testowym z trybu testowego (można go wymusić przez `FakeReviewManager`). Dwuetapowy proces (najpierw `requestReviewFlow()`, potem `launchReviewFlow()`) jest celowy: `requestReviewFlow()` odpytuje Google o dostępność promptu i przygotowuje `ReviewInfo` z informacjami o aplikacji, a `launchReviewFlow()` właściwie go wyświetla. Google **nie gwarantuje**, że prompt zostanie pokazany - system może go zablokować, jeśli użytkownik już ocenił aplikację lub prompt był wyświetlany zbyt niedawno. Dlatego callback `addOnCompleteListener` nie informuje, czy użytkownik faktycznie coś wybrał - aplikacja musi kontynuować działanie niezależnie od wyniku.
 
 ```kotlin
-// Android — In-App Review API (Google Play)
+// Android - In-App Review API (Google Play)
 // Prośba o ocenę pojawia się wewnątrz aplikacji, bez opuszczania jej
 
 class ReviewManager(private val context: Context) {
@@ -394,10 +394,10 @@ class ReviewManager(private val context: Context) {
 // ✗ Maksymalnie raz na 30 dni (Google ogranicza częstotliwość)
 ```
 
-Poniższy kod Swift realizuje prośbę o ocenę w aplikacji iOS za pomocą `SKStoreReviewController`. W SwiftUI preferowanym sposobem jest dekorator `@Environment(\.requestReview)` — jest on wstrzykiwany przez środowisko SwiftUI i wywołuje systemowy prompt niezależnie od kontekstu, bez konieczności importowania `StoreKit` w widoku. W UIKit konieczne jest uzyskanie `UIWindowScene`, ponieważ od iPadOS 13 aplikacje mogą mieć wiele okien, a prompt musi być powiązany z konkretnym oknem. Apple, podobnie jak Google, ogranicza wyświetlanie promptu — do 3 razy w ciągu 365 dni, niezależnie od tego, ile razy wywołamy tę metodę. Dzięki temu deweloper nie może nadużywać prośby o ocenę, co chroni użytkownika przed irytującymi powiadomieniami.
+Poniższy kod Swift realizuje prośbę o ocenę w aplikacji iOS za pomocą `SKStoreReviewController`. W SwiftUI preferowanym sposobem jest dekorator `@Environment(\.requestReview)` - jest on wstrzykiwany przez środowisko SwiftUI i wywołuje systemowy prompt niezależnie od kontekstu, bez konieczności importowania `StoreKit` w widoku. W UIKit konieczne jest uzyskanie `UIWindowScene`, ponieważ od iPadOS 13 aplikacje mogą mieć wiele okien, a prompt musi być powiązany z konkretnym oknem. Apple, podobnie jak Google, ogranicza wyświetlanie promptu - do 3 razy w ciągu 365 dni, niezależnie od tego, ile razy wywołamy tę metodę. Dzięki temu deweloper nie może nadużywać prośby o ocenę, co chroni użytkownika przed irytującymi powiadomieniami.
 
 ```swift
-// iOS — SKStoreReviewController
+// iOS - SKStoreReviewController
 import StoreKit
 
 // SwiftUI
@@ -422,9 +422,9 @@ if let scene = UIApplication.shared.connectedScenes.first as? UIWindowScene {
 
 ## Analityka po Publikacji
 
-### Firebase Analytics — kluczowe metryki
+### Firebase Analytics - kluczowe metryki
 
-Firebase Analytics pozwala śledzić zachowanie użytkowników w aplikacji i podejmować decyzje oparte na danych. Poniższy kod inicjalizuje Firebase przy użyciu Bill of Materials (BOM) — platforma `firebase-bom` zarządza spójnymi wersjami wszystkich bibliotek Firebase, dzięki czemu nie trzeba ręcznie synchronizować wersji `firebase-analytics` z `firebase-crashlytics`. Klasa `AnalyticsManager` enkapsuluje logowanie zdarzeń w trzech metodach: `logScreenView()` używa predefiniowanego zdarzenia `SCREEN_VIEW` z standardowymi parametrami `SCREEN_NAME` i `SCREEN_CLASS`, co pozwala Firebase na automatyczne budowanie raportów lejka nawigacyjnego. Używanie predefiniowanych stałych (`FirebaseAnalytics.Event.*`, `FirebaseAnalytics.Param.*`) zamiast „magicznych stringów" jest preferowane, bo Firebase Analytics obsługuje te zdarzenia specjalnie w dashboardzie. Metoda `logFeatureUsed()` loguje niestandardowe zdarzenia — nazwa `feature_used` i parametr `feature_name` pozwalają śledzić, które funkcje aplikacji są faktycznie używane, co jest podstawą do priorytetyzacji dalszego rozwoju. `logPurchase()` używa standardowego zdarzenia `PURCHASE`, które Firebase automatycznie przekazuje do Google Analytics for Firebase i umożliwia śledzenie przychodów bez dodatkowej konfiguracji.
+Firebase Analytics pozwala śledzić zachowanie użytkowników w aplikacji i podejmować decyzje oparte na danych. Poniższy kod inicjalizuje Firebase przy użyciu Bill of Materials (BOM) - platforma `firebase-bom` zarządza spójnymi wersjami wszystkich bibliotek Firebase, dzięki czemu nie trzeba ręcznie synchronizować wersji `firebase-analytics` z `firebase-crashlytics`. Klasa `AnalyticsManager` enkapsuluje logowanie zdarzeń w trzech metodach: `logScreenView()` używa predefiniowanego zdarzenia `SCREEN_VIEW` z standardowymi parametrami `SCREEN_NAME` i `SCREEN_CLASS`, co pozwala Firebase na automatyczne budowanie raportów lejka nawigacyjnego. Używanie predefiniowanych stałych (`FirebaseAnalytics.Event.*`, `FirebaseAnalytics.Param.*`) zamiast „magicznych stringów" jest preferowane, bo Firebase Analytics obsługuje te zdarzenia specjalnie w dashboardzie. Metoda `logFeatureUsed()` loguje niestandardowe zdarzenia - nazwa `feature_used` i parametr `feature_name` pozwalają śledzić, które funkcje aplikacji są faktycznie używane, co jest podstawą do priorytetyzacji dalszego rozwoju. `logPurchase()` używa standardowego zdarzenia `PURCHASE`, które Firebase automatycznie przekazuje do Google Analytics for Firebase i umożliwia śledzenie przychodów bez dodatkowej konfiguracji.
 
 ```kotlin
 // Dodanie Firebase Analytics do projektu
@@ -476,9 +476,9 @@ class AnalyticsManager(private val analytics: FirebaseAnalytics) {
 | **Crash-free rate** | % sesji bez crashy | > 99% |
 | **Rating** | Średnia ocena | ≥ 4.2 dla widoczności |
 
-### Google Play Console — Android Vitals
+### Google Play Console - Android Vitals
 
-Android Vitals to dashboard w Google Play Console monitorujący kluczowe wskaźniki stabilności i wydajności aplikacji. Przekroczenie progów granicznych (tzw. „bad core vitals") ma bezpośrednie konsekwencje biznesowe: obniżoną widoczność w wynikach wyszukiwania, a nawet możliwą blokadę aktualizacji. Poniższe wartości progowe wskazują, kiedy Google uznaje aplikację za problematyczną — warto monitorować je przy każdym staged rollout.
+Android Vitals to dashboard w Google Play Console monitorujący kluczowe wskaźniki stabilności i wydajności aplikacji. Przekroczenie progów granicznych (tzw. „bad core vitals") ma bezpośrednie konsekwencje biznesowe: obniżoną widoczność w wynikach wyszukiwania, a nawet możliwą blokadę aktualizacji. Poniższe wartości progowe wskazują, kiedy Google uznaje aplikację za problematyczną - warto monitorować je przy każdym staged rollout.
 
 ```
 Play Console → Android Vitals → monitoruj:
@@ -496,21 +496,21 @@ Przekroczenie progów:
 
 ### Odpowiadanie na recenzje
 
-Aktywne odpowiadanie na recenzje, szczególnie te negatywne, ma udowodniony wpływ na poprawę średniej oceny aplikacji — użytkownicy często aktualizują ocenę po otrzymaniu pomocnej odpowiedzi. Poniższe zasady i przykład odpowiedzi pokazują, jak prowadzić dialog z recenzentami w sposób profesjonalny i skuteczny. Szczególnie ważne jest przestrzeganie zakazów: nigdy nie kłócić się publicznie i nie oferować nagród za zmianę oceny — to naruszenie polityk obu sklepów.
+Aktywne odpowiadanie na recenzje, szczególnie te negatywne, ma udowodniony wpływ na poprawę średniej oceny aplikacji - użytkownicy często aktualizują ocenę po otrzymaniu pomocnej odpowiedzi. Poniższe zasady i przykład odpowiedzi pokazują, jak prowadzić dialog z recenzentami w sposób profesjonalny i skuteczny. Szczególnie ważne jest przestrzeganie zakazów: nigdy nie kłócić się publicznie i nie oferować nagród za zmianę oceny - to naruszenie polityk obu sklepów.
 
 ```
 Zasady odpowiadania na recenzje:
   ✓ Odpowiadaj na WSZYSTKIE recenzje 1–2 gwiazdkowe w ciągu 24–48h
   ✓ Odpowiedź grzeczna, konkretna, bez defensywności
   ✓ Podziękuj za feedback, opisz co zrobisz / co zostało naprawione
-  ✓ Przy naprawieniu błędu — odpowiedz i poproś o aktualizację oceny
+  ✓ Przy naprawieniu błędu - odpowiedz i poproś o aktualizację oceny
   ✗ Nigdy nie kłóć się z recenzentem publicznie
   ✗ Nie używaj szablonowych odpowiedzi dla wszystkich
   ✗ Nie oferuj nagród w zamian za zmianę oceny (naruszenie polityki)
 
 Przykład odpowiedzi na negatywną recenzję:
   "Dziękujemy za feedback! Problem z [funkcja] został naprawiony
-   w wersji 1.2.1 — sprawdź aktualizację w sklepie.
+   w wersji 1.2.1 - sprawdź aktualizację w sklepie.
    Jeśli nadal masz problem, napisz do nas: support@aplikacja.pl"
 ```
 
@@ -520,29 +520,29 @@ Przykład odpowiedzi na negatywną recenzję:
 
 ### Semantic Versioning dla aplikacji mobilnych
 
-Semantic Versioning (SemVer) w aplikacjach mobilnych ma swoje specyfiki — obok numeru wersji widocznego dla użytkownika (`versionName` / `CFBundleShortVersionString`) sklepy wymagają też monotonicznie rosnącego numeru wewnętrznego (`versionCode` / `CFBundleVersion`). Poniższy schemat pokazuje, jak oba numery współdziałają na przykładach: hotfix zwiększa PATCH i inkrementuje versionCode, nowa funkcja — MINOR, a przepisanie UI — MAJOR. Przestrzeganie tych konwencji ułatwia zarządzanie historią wersji i automatyzację CI/CD.
+Semantic Versioning (SemVer) w aplikacjach mobilnych ma swoje specyfiki - obok numeru wersji widocznego dla użytkownika (`versionName` / `CFBundleShortVersionString`) sklepy wymagają też monotonicznie rosnącego numeru wewnętrznego (`versionCode` / `CFBundleVersion`). Poniższy schemat pokazuje, jak oba numery współdziałają na przykładach: hotfix zwiększa PATCH i inkrementuje versionCode, nowa funkcja - MINOR, a przepisanie UI - MAJOR. Przestrzeganie tych konwencji ułatwia zarządzanie historią wersji i automatyzację CI/CD.
 
 ```
 MAJOR.MINOR.PATCH (+ version code/build number)
 
 Przykłady:
-  1.0.0 (versionCode: 1)  — premiera
-  1.0.1 (versionCode: 2)  — hotfix: naprawa krasha
-  1.1.0 (versionCode: 3)  — nowa funkcja
-  2.0.0 (versionCode: 4)  — przepisanie UI / breaking change
+  1.0.0 (versionCode: 1)  - premiera
+  1.0.1 (versionCode: 2)  - hotfix: naprawa krasha
+  1.1.0 (versionCode: 3)  - nowa funkcja
+  2.0.0 (versionCode: 4)  - przepisanie UI / breaking change
 
-Android — build.gradle.kts:
+Android - build.gradle.kts:
   versionCode = 10        // int, musi rosnąć przy każdym przesłaniu
   versionName = "1.2.0"  // string wyświetlany użytkownikom
 
-iOS — Xcode / Info.plist:
+iOS - Xcode / Info.plist:
   CFBundleVersion = "10"          // build number, musi rosnąć
   CFBundleShortVersionString = "1.2.0"  // wyświetlana wersja
 ```
 
 ### Changelog dla użytkowników
 
-Changelog w sklepie to bezpośrednia komunikacja z użytkownikami przy każdej aktualizacji — dobrze napisany może zwiększyć liczbę pobrań aktualizacji i poprawić odbiór aplikacji. Poniższe zasady i przykład pokazują, jak pisać changelog językiem korzyści dla użytkownika, a nie technicznym żargonem deweloperskim. Najczęstszy błąd to ogólnikowe „Poprawki błędów i ulepszenia wydajności" — takie wpisy są bezużyteczne i obniżają zaufanie użytkowników.
+Changelog w sklepie to bezpośrednia komunikacja z użytkownikami przy każdej aktualizacji - dobrze napisany może zwiększyć liczbę pobrań aktualizacji i poprawić odbiór aplikacji. Poniższe zasady i przykład pokazują, jak pisać changelog językiem korzyści dla użytkownika, a nie technicznym żargonem deweloperskim. Najczęstszy błąd to ogólnikowe „Poprawki błędów i ulepszenia wydajności" - takie wpisy są bezużyteczne i obniżają zaufanie użytkowników.
 
 ```
 Zasady dobrego changelogu w sklepie:
@@ -553,7 +553,7 @@ Zasady dobrego changelogu w sklepie:
 
 Przykład:
   "Co nowego w wersji 2.1.0:
-   • Ciemny motyw — teraz dostępny w Ustawieniach
+   • Ciemny motyw - teraz dostępny w Ustawieniach
    • Szybsze ładowanie listy (o 40%)
    • Poprawka: aplikacja nie zawiesza się przy słabym Wi-Fi
    • Nowe powiadomienia push o zbliżających się płatnościach"
@@ -566,7 +566,7 @@ Czego unikać:
 
 ### Harmonogram wydań
 
-Regularny i przewidywalny harmonogram wydań buduje zaufanie użytkowników i pozwala sprawnie planować zasoby deweloperskie. Poniższe zalecenia określają odpowiedni cykl dla czterech typów wydań — od krytycznych hotfixów (24–48h) po duże zmiany kwartalne. Przyspieszenie hotfixów wymaga zazwyczaj automatyzacji CI/CD, która pozwala wydać poprawkę w ciągu godzin, a nie dni.
+Regularny i przewidywalny harmonogram wydań buduje zaufanie użytkowników i pozwala sprawnie planować zasoby deweloperskie. Poniższe zalecenia określają odpowiedni cykl dla czterech typów wydań - od krytycznych hotfixów (24–48h) po duże zmiany kwartalne. Przyspieszenie hotfixów wymaga zazwyczaj automatyzacji CI/CD, która pozwala wydać poprawkę w ciągu godzin, a nie dni.
 
 ```
 Zalecany cykl:
@@ -576,7 +576,7 @@ Zalecany cykl:
   Major (duże zmiany):         co kwartał lub rzadziej
 
 CI/CD dla automatycznej publikacji:
-  (patrz artykuł: Ekosystem Android — CI/CD z Fastlane)
+  (patrz artykuł: Ekosystem Android - CI/CD z Fastlane)
 ```
 
 ---
@@ -585,11 +585,11 @@ CI/CD dla automatycznej publikacji:
 
 - [Google Play Console](https://play.google.com/console)
 - [App Store Connect](https://appstoreconnect.apple.com)
-- [Google Play — Centrum zasad dla deweloperów](https://play.google.com/about/developer-content-policy/)
+- [Google Play - Centrum zasad dla deweloperów](https://play.google.com/about/developer-content-policy/)
 - [Apple App Store Review Guidelines](https://developer.apple.com/app-store/review/guidelines/)
 - [Firebase Analytics](https://firebase.google.com/docs/analytics)
 - [In-App Review API (Android)](https://developer.android.com/guide/playcore/in-app-review)
 - [SKStoreReviewController (iOS)](https://developer.apple.com/documentation/storekit/skstorereviewcontroller)
-- [App Store Optimization — AppFollow](https://appfollow.io/aso)
-- [Fastlane — automatyzacja publikacji](https://fastlane.tools)
-- [ProductHunt — platforma premierowa](https://www.producthunt.com)
+- [App Store Optimization - AppFollow](https://appfollow.io/aso)
+- [Fastlane - automatyzacja publikacji](https://fastlane.tools)
+- [ProductHunt - platforma premierowa](https://www.producthunt.com)

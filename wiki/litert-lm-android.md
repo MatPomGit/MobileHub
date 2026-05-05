@@ -1,6 +1,6 @@
 # LiteRT LLM na Androidzie
 
-LiteRT LLM (dawniej TensorFlow Lite dla LLM) pozwala uruchomić model językowy **bezpośrednio na telefonie**. W praktyce oznacza to krótszy czas odpowiedzi, działanie offline i lepszą kontrolę prywatności — szczególnie ważną w aplikacjach medycznych, edukacyjnych i enterprise.
+LiteRT LLM (dawniej TensorFlow Lite dla LLM) pozwala uruchomić model językowy **bezpośrednio na telefonie**. W praktyce oznacza to krótszy czas odpowiedzi, działanie offline i lepszą kontrolę prywatności - szczególnie ważną w aplikacjach medycznych, edukacyjnych i enterprise.
 
 ## Dlaczego on-device LLM robi różnicę
 
@@ -16,11 +16,11 @@ To podejście jest szczególnie skuteczne tam, gdzie liczy się UX „tu i teraz
 
 W projektach R&D najlepiej mierzyć nie tylko „czy działa”, ale **jak działa**:
 
-- **TTFT (Time To First Token)** — czas do pierwszego tokenu.
-- **Tokens/s** — przepustowość generacji.
-- **P95 latency** — opóźnienie dla 95% zapytań (stabilność UX).
-- **Peak RAM** — szczytowe zużycie pamięci.
-- **mWh / zapytanie** — koszt energetyczny pojedynczej odpowiedzi.
+- **TTFT (Time To First Token)** - czas do pierwszego tokenu.
+- **Tokens/s** - przepustowość generacji.
+- **P95 latency** - opóźnienie dla 95% zapytań (stabilność UX).
+- **Peak RAM** - szczytowe zużycie pamięci.
+- **mWh / zapytanie** - koszt energetyczny pojedynczej odpowiedzi.
 
 Dla praktycznych wdrożeń mobilnych sensowny punkt startowy to:
 

@@ -2,7 +2,7 @@
 
 ## Streszczenie
 
-Computer-Aided Diagnosis (CAD) to zastosowanie technik obliczeniowych — tradycyjnych metod przetwarzania obrazu, uczenia maszynowego i głębokiego uczenia — do wspomagania lekarzy w wykrywaniu i klasyfikacji chorób na podstawie obrazów medycznych. Artykuł omawia historię CAD, rodzaje systemów (CADe i CADx), modalności obrazowania, architekty sieci neuronowych, kluczowe zastosowania kliniczne, wyzwania (nierównowaga klas, interpretowalność, prywatność), aspekty regulacyjne oraz aplikacje mobilne.
+Computer-Aided Diagnosis (CAD) to zastosowanie technik obliczeniowych - tradycyjnych metod przetwarzania obrazu, uczenia maszynowego i głębokiego uczenia - do wspomagania lekarzy w wykrywaniu i klasyfikacji chorób na podstawie obrazów medycznych. Artykuł omawia historię CAD, rodzaje systemów (CADe i CADx), modalności obrazowania, architekty sieci neuronowych, kluczowe zastosowania kliniczne, wyzwania (nierównowaga klas, interpretowalność, prywatność), aspekty regulacyjne oraz aplikacje mobilne.
 
 **Słowa kluczowe:** CAD, CADe, CADx, głębokie uczenie, CNN, U-Net, ResNet, DenseNet, segmentacja, Grad-CAM, federated learning, FDA clearance, radiologia, patologia cyfrowa, retinopathy, aplikacje medyczne
 
@@ -26,14 +26,14 @@ Przełomem był rok 2012, gdy AlexNet wygrał ImageNet Challenge z błędem top-
 
 ### 1.2. Definicja i cel
 
-**CAD** (*Computer-Aided Diagnosis*) — szeroka kategoria systemów obliczeniowych wspierających decyzje diagnostyczne.
+**CAD** (*Computer-Aided Diagnosis*) - szeroka kategoria systemów obliczeniowych wspierających decyzje diagnostyczne.
 
 Dwa główne podtypy:
 
 - **CADe** (*Computer-Aided Detection*): wykrywanie i lokalizacja zmian (guzki, polipy, zwapnienia)
 - **CADx** (*Computer-Aided Diagnosis/Classification*): klasyfikacja wykrytych zmian (łagodna/złośliwa, stopień zaawansowania)
 
-Systemy CAD są zaprojektowane jako **narzędzia wspomagające** — ostateczna decyzja należy do lekarza.
+Systemy CAD są zaprojektowane jako **narzędzia wspomagające** - ostateczna decyzja należy do lekarza.
 
 ---
 
@@ -226,7 +226,7 @@ Pipeline CAD dla guzków płucnych:
 1. **Segmentacja tkanki płucnej** (U-Net lub region-growing)
 2. **Kandydaci** (*candidate detection*): wykrywanie podejrzanych obszarów
 3. **Fałszywe redukcja pozytywy** (*FP reduction*): klasyfikacja CNN
-4. **Charakteryzacja** (*nodule characterization*): CADx — złośliwy/łagodny
+4. **Charakteryzacja** (*nodule characterization*): CADx - złośliwy/łagodny
 
 ### 4.2. Retinopatia cukrzycowa (Diabetic Retinopathy, DR)
 
@@ -237,7 +237,7 @@ Retinopatia cukrzycowa jest wiodącą przyczyną ślepoty wśród dorosłych. Sk
 1: Łagodna NPDR (non-proliferative)
 2: Umiarkowana NPDR
 3: Ciężka NPDR
-4: PDR (proliferative) — zagrożenie ślepotą
+4: PDR (proliferative) - zagrożenie ślepotą
 ```
 
 ```python
@@ -328,7 +328,7 @@ class_weights = 1.0 / class_counts
 class_weights = class_weights / class_weights.sum()
 criterion = nn.CrossEntropyLoss(weight=class_weights)
 
-# 2. Focal Loss (Lin et al., 2017) — tłumi łatwe przykłady
+# 2. Focal Loss (Lin et al., 2017) - tłumi łatwe przykłady
 class FocalLoss(nn.Module):
     def __init__(self, gamma=2.0, alpha=0.25):
         super().__init__()
@@ -534,7 +534,7 @@ def iou_score(y_pred, y_true, smooth=1e-6):
     return (intersection + smooth) / (union + smooth)
 
 def hausdorff_distance_95(pred_mask, true_mask):
-    """95. percentyl odległości Hausdorffa — wrażliwy na błędy konturów."""
+    """95. percentyl odległości Hausdorffa - wrażliwy na błędy konturów."""
     from scipy.spatial.distance import directed_hausdorff
     pred_pts = np.argwhere(pred_mask)
     true_pts = np.argwhere(true_mask)

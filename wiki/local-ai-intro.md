@@ -1,6 +1,6 @@
 # Wprowadzenie do lokalnej AI na urządzeniu mobilnym
 
-Lokalna AI (*on-device AI*, *edge AI*) to paradygmat, w którym modele uczenia maszynowego wykonywane są bezpośrednio na urządzeniu końcowym — smartfonie lub tablecie — bez wysyłania danych do chmury. Podejście to zyskuje szybko na popularności i staje się standardem w nowoczesnych aplikacjach mobilnych.
+Lokalna AI (*on-device AI*, *edge AI*) to paradygmat, w którym modele uczenia maszynowego wykonywane są bezpośrednio na urządzeniu końcowym - smartfonie lub tablecie - bez wysyłania danych do chmury. Podejście to zyskuje szybko na popularności i staje się standardem w nowoczesnych aplikacjach mobilnych.
 
 ## Czym jest lokalna AI
 
@@ -21,7 +21,7 @@ Tradycyjne podejście do AI w aplikacjach mobilnych polegało na wysłaniu danyc
 
 ### Prywatność i suwerenność danych
 
-Dane użytkownika — zdjęcia, fragmenty tekstu, nagrania głosowe — nigdy nie opuszczają urządzenia. Ma to kluczowe znaczenie w zastosowaniach medycznych, finansowych i wszędzie tam, gdzie obowiązują regulacje RODO/GDPR.
+Dane użytkownika - zdjęcia, fragmenty tekstu, nagrania głosowe - nigdy nie opuszczają urządzenia. Ma to kluczowe znaczenie w zastosowaniach medycznych, finansowych i wszędzie tam, gdzie obowiązują regulacje RODO/GDPR.
 
 ### Brak opóźnień sieciowych
 
@@ -29,7 +29,7 @@ Latencja wnioskowania lokalnego to zwykle **5–30 ms**, podczas gdy wywołanie 
 
 ### Działanie offline
 
-Aplikacja działa w pełni bez dostępu do internetu — w tunelu metra, w samolocie, w obszarze z ograniczonym zasięgiem. Nie ma też ryzyka przerwy spowodowanej awarią serwisu zewnętrznego.
+Aplikacja działa w pełni bez dostępu do internetu - w tunelu metra, w samolocie, w obszarze z ograniczonym zasięgiem. Nie ma też ryzyka przerwy spowodowanej awarią serwisu zewnętrznego.
 
 ### Koszty operacyjne
 
@@ -57,12 +57,12 @@ Wdrożenie lokalnej AI wymaga współpracy kilku warstw:
 
 ### Frameworki wnioskowania (inference runtimes)
 
-- **TensorFlow Lite** — najpowszechniej stosowany na Androidzie, obsługuje też iOS; modele w formacie `.tflite`
-- **Core ML** — natywny framework Apple (iOS, macOS, watchOS); modele `.mlpackage` / `.mlmodel`
-- **ONNX Runtime Mobile** — open-source, wieloplatformowy; modele `.onnx`
-- **PyTorch Mobile / ExecuTorch** — dedykowany dla modeli trenowanych w PyTorch; modele `.pte`
-- **MediaPipe** — zestaw gotowych potoków AI od Google (twarz, dłonie, poza, tekst)
-- **Samsung One UI AI** / **Qualcomm AI Engine Direct** — SDK specyficzne dla producentów
+- **TensorFlow Lite** - najpowszechniej stosowany na Androidzie, obsługuje też iOS; modele w formacie `.tflite`
+- **Core ML** - natywny framework Apple (iOS, macOS, watchOS); modele `.mlpackage` / `.mlmodel`
+- **ONNX Runtime Mobile** - open-source, wieloplatformowy; modele `.onnx`
+- **PyTorch Mobile / ExecuTorch** - dedykowany dla modeli trenowanych w PyTorch; modele `.pte`
+- **MediaPipe** - zestaw gotowych potoków AI od Google (twarz, dłonie, poza, tekst)
+- **Samsung One UI AI** / **Qualcomm AI Engine Direct** - SDK specyficzne dla producentów
 
 ### Jednostki obliczeniowe
 
@@ -86,7 +86,7 @@ Snapdragon 8 Elite (2024):
 - Kryo CPU: 8 rdzeni (3.0 GHz)
 ```
 
-### Apple Silicon — Neural Engine (iOS)
+### Apple Silicon - Neural Engine (iOS)
 
 Apple Neural Engine (ANE) jest dostępny od iPhone XS (A12 Bionic). Najnowsze układy osiągają:
 
@@ -103,7 +103,7 @@ Układy Google Tensor zawierają dedykowany TPU oraz układ Titan M2 do bezpiecz
 
 ### MediaTek Dimensity
 
-Układy Dimensity posiadają APU (AI Processing Unit) — od APU 3.0 do APU 590 w flagowych chipach z mocą 35+ TOPS.
+Układy Dimensity posiadają APU (AI Processing Unit) - od APU 3.0 do APU 590 w flagowych chipach z mocą 35+ TOPS.
 
 ## Przegląd przypadków użycia
 
@@ -122,7 +122,7 @@ Wszystkie nowoczesne smartfony używają AI lokalnie do:
 
 ### Klawiatura i autokorekta
 
-Google Gboard oraz klawiatura Apple wykorzystują lokalne modele NLP do predykcji słów, autokorekty i adaptacji do stylu pisania użytkownika — bez wysyłania wpisywanego tekstu.
+Google Gboard oraz klawiatura Apple wykorzystują lokalne modele NLP do predykcji słów, autokorekty i adaptacji do stylu pisania użytkownika - bez wysyłania wpisywanego tekstu.
 
 ### Rozpoznawanie tekstu (OCR)
 
@@ -187,14 +187,14 @@ config.computeUnits = .cpuAndNeuralEngine   // lub .all, .cpuAndGPU
 let model = try MyModel(configuration: config)
 ```
 
-### Profilowanie — Android Studio
+### Profilowanie - Android Studio
 
 Android Studio ML Model Binding i zakładka **Energy Profiler** + **CPU Profiler** pozwalają ocenić:
 - ile czasu zajmuje wnioskowanie na każdej warstwie
 - ile energii zużywa model per wywołanie
 - jakie dele­gaty (NNAPI, GPU) są aktywnie używane
 
-### Profilowanie — Xcode
+### Profilowanie - Xcode
 
 Xcode **Core ML Performance Report** (dostępny przez `MLModel.featureDescriptions` i instrumenty) oraz **Instruments → Neural Engine** w Xcode 15+ pokazuje użycie ANE w czasie rzeczywistym.
 
@@ -211,11 +211,11 @@ Xcode **Core ML Performance Report** (dostępny przez `MLModel.featureDescriptio
 
 ## Podsumowanie
 
-Lokalna AI na urządzeniu mobilnym przestała być niszą — stała się oczekiwaną funkcją nowoczesnych aplikacji. Zrozumienie ekosystemu (frameworki, akceleratory, formaty modeli) oraz świadomość ograniczeń (pamięć, energia, cold start) to niezbędna wiedza dla dewelopera aplikacji mobilnych. Kolejne artykuły w tym rozdziale szczegółowo omawiają poszczególne frameworki, typy modeli i zagadnienia optymalizacji.
+Lokalna AI na urządzeniu mobilnym przestała być niszą - stała się oczekiwaną funkcją nowoczesnych aplikacji. Zrozumienie ekosystemu (frameworki, akceleratory, formaty modeli) oraz świadomość ograniczeń (pamięć, energia, cold start) to niezbędna wiedza dla dewelopera aplikacji mobilnych. Kolejne artykuły w tym rozdziale szczegółowo omawiają poszczególne frameworki, typy modeli i zagadnienia optymalizacji.
 
 ## Zobacz też
 
 - [Frameworki ML na urządzeniu: TFLite, Core ML, ONNX](#mobile-ml-frameworks)
 - [Kwantyzacja i optymalizacja modeli AI](#model-quantization)
-- [Wnioskowanie lokalne — architektura i wydajność](#on-device-inference)
-- [MediaPipe — kompleksowe rozwiązania AI](#mediapipe-mobile)
+- [Wnioskowanie lokalne - architektura i wydajność](#on-device-inference)
+- [MediaPipe - kompleksowe rozwiązania AI](#mediapipe-mobile)

@@ -1,4 +1,4 @@
-# Wnioskowanie lokalne — architektura i wydajność
+# Wnioskowanie lokalne - architektura i wydajność
 
 ## Streszczenie
 

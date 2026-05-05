@@ -194,7 +194,7 @@ Z punktu widzenia UX i bezpieczeństwa użytkownik powinien znać powód żądan
 
 ### Przykład – bramka uprawnień w Compose
 
-Przed uruchomieniem kamery aplikacja musi sprawdzić i ewentualnie poprosić o odpowiednie uprawnienie systemowe. Poniższy przykład pokazuje implementację composable pełniącego rolę „bramki uprawnień" — wyświetla treść kamery po udzieleniu zgody, a komunikat z prośbą o uprawnienie, jeśli zgoda nie została jeszcze nadana. Takie podejście pozwala elegancko obsłużyć oba stany bez rozpraszania logiki w głównym ekranie.
+Przed uruchomieniem kamery aplikacja musi sprawdzić i ewentualnie poprosić o odpowiednie uprawnienie systemowe. Poniższy przykład pokazuje implementację composable pełniącego rolę „bramki uprawnień" - wyświetla treść kamery po udzieleniu zgody, a komunikat z prośbą o uprawnienie, jeśli zgoda nie została jeszcze nadana. Takie podejście pozwala elegancko obsłużyć oba stany bez rozpraszania logiki w głównym ekranie.
 
 ```kotlin
 @Composable
@@ -425,7 +425,7 @@ To absolutnie krytyczne. Jeśli nie wywołasz `imageProxy.close()`, bufor nie wr
 
 ### Praktyczny przykład – analizator kodów kreskowych
 
-Poniższy przykład prezentuje implementację analizatora kodów kreskowych i QR korzystającego z ML Kit w ramach pipeline'u `ImageAnalysis`. Analizator odbiera klatki w formacie YUV, przetwarza je przez skaner kodów i zwraca wynik przez callback — krytyczne jest przy tym zawsze zamknięcie `ImageProxy` po zakończeniu analizy. Budowanie `ImageAnalysis` ze strategią `KEEP_ONLY_LATEST` zapobiega narastaniu kolejki nieprzetworzonych klatek.
+Poniższy przykład prezentuje implementację analizatora kodów kreskowych i QR korzystającego z ML Kit w ramach pipeline'u `ImageAnalysis`. Analizator odbiera klatki w formacie YUV, przetwarza je przez skaner kodów i zwraca wynik przez callback - krytyczne jest przy tym zawsze zamknięcie `ImageProxy` po zakończeniu analizy. Budowanie `ImageAnalysis` ze strategią `KEEP_ONLY_LATEST` zapobiega narastaniu kolejki nieprzetworzonych klatek.
 
 ```kotlin
 class BarcodeAnalyzer(

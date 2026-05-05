@@ -1,4 +1,4 @@
-# Kotlin Multiplatform — współdzielony kod
+# Kotlin Multiplatform - współdzielony kod
 
 Kotlin Multiplatform (KMP) to technologia JetBrains pozwalająca współdzielić logikę biznesową między Androidem, iOS, webem i desktopem, zachowując **natywny UI** na każdej platformie. W odróżnieniu od Flutter/React Native, KMP nie narzuca własnego silnika renderowania.
 
@@ -44,10 +44,10 @@ myapp/
 └── iosApp/                      ← Xcode + SwiftUI
 ```
 
-## Ktor — HTTP client dla KMP
+## Ktor - HTTP client dla KMP
 
 ```kotlin
-// commonMain — identyczny kod działa na Android i iOS
+// commonMain - identyczny kod działa na Android i iOS
 class ApiClient {
     private val httpClient = HttpClient {
         install(ContentNegotiation) {
@@ -83,7 +83,7 @@ class ApiClient {
 }
 ```
 
-## SQLDelight — baza danych KMP
+## SQLDelight - baza danych KMP
 
 ```sql
 -- shared/src/commonMain/sqldelight/com/example/Task.sq
@@ -139,10 +139,10 @@ class TaskRepository(db: AppDatabase) {
 }
 ```
 
-## Expect/Actual — platform-specific code
+## Expect/Actual - platform-specific code
 
 ```kotlin
-// commonMain — deklaracja interfejsu
+// commonMain - deklaracja interfejsu
 expect class PlatformInfo {
     val osName: String
     val osVersion: String
@@ -155,7 +155,7 @@ expect fun generateUUID(): String
 ```
 
 ```kotlin
-// androidMain — implementacja Android
+// androidMain - implementacja Android
 actual class PlatformInfo {
     actual val osName = "Android"
     actual val osVersion = Build.VERSION.RELEASE
@@ -167,7 +167,7 @@ actual fun generateUUID() = java.util.UUID.randomUUID().toString()
 ```
 
 ```kotlin
-// iosMain — implementacja iOS
+// iosMain - implementacja iOS
 actual class PlatformInfo {
     actual val osName = UIDevice.currentDevice.systemName
     actual val osVersion = UIDevice.currentDevice.systemVersion
@@ -183,7 +183,7 @@ actual fun generateUUID() = NSUUID().UUIDString
 ## Shared ViewModel z SKIE
 
 ```kotlin
-// commonMain — ViewModel współdzielony z iOS
+// commonMain - ViewModel współdzielony z iOS
 class TaskListViewModel(
     private val getAllTasks: GetAllTasksUseCase,
     private val toggleTask: ToggleTaskUseCase
@@ -216,7 +216,7 @@ data class TaskListState(
 ```
 
 ```swift
-// iOS — użycie KMP ViewModel w SwiftUI przez SKIE
+// iOS - użycie KMP ViewModel w SwiftUI przez SKIE
 import shared
 
 struct TaskListView: View {
@@ -301,15 +301,15 @@ kotlin {
 - [Kotlin Multiplatform](https://kotlinlang.org/docs/multiplatform.html)
 - [Ktor](https://ktor.io/docs/client-create-new-application.html)
 - [SQLDelight](https://sqldelight.github.io/sqldelight/)
-- [SKIE — Swift/Kotlin Interface Enhancer](https://skie.touchlab.co/)
-- [KMP Sample — TouchLab](https://github.com/touchlab/KaMPKit)
+- [SKIE - Swift/Kotlin Interface Enhancer](https://skie.touchlab.co/)
+- [KMP Sample - TouchLab](https://github.com/touchlab/KaMPKit)
 
 ## Testowanie kodu współdzielonego
 
 Jedną z największych zalet KMP jest możliwość testowania logiki biznesowej raz, w `commonTest`, i uruchamiania tych samych testów na JVM (Android) oraz natywnym kompilatorze iOS (Kotlin/Native). Testy piszemy przy użyciu biblioteki `kotlin.test`, która jest multiplatformowym odpowiednikiem JUnit.
 
 ```kotlin
-// commonTest — test repozytorium z mockiem
+// commonTest - test repozytorium z mockiem
 class TaskRepositoryTest {
 
     private lateinit var repository: TaskRepository
@@ -348,7 +348,7 @@ class TaskRepositoryTest {
 Do mockowania zależności w `commonTest` zalecana jest biblioteka **MockK for KMP** (`io.mockk:mockk-common`) lub ręczne implementacje fake'ów, jak powyższy `FakeTaskDatabase`. MockK obsługuje zarówno JVM, jak i Kotlin/Native (od wersji 1.13+):
 
 ```kotlin
-// build.gradle.kts — zależności testowe
+// build.gradle.kts - zależności testowe
 sourceSets {
     commonTest.dependencies {
         implementation(kotlin("test"))
@@ -379,9 +379,9 @@ Uruchomienie testów na obu platformach:
 
 Testy asynchroniczne używają `runTest` z `kotlinx-coroutines-test`, który automatycznie zarządza `TestCoroutineScheduler` i pozwala używać `advanceTimeBy()` do symulacji opóźnień bez czekania w czasie rzeczywistym. Dobra pokrycie testami `commonMain` gwarantuje, że logika biznesowa działa identycznie niezależnie od platformy.
 
-## Compose Multiplatform — wspólny UI
+## Compose Multiplatform - wspólny UI
 
-Compose Multiplatform (CMP), rozwijany przez JetBrains, rozszerza Jetpack Compose poza Androida — ten sam kod `@Composable` działa na **Android**, **Desktop (JVM)**, **iOS** (eksperymentalnie od 1.6) i **Web (Wasm)**. Jest to uzupełnienie KMP, gdy zależy nam na współdzieleniu nie tylko logiki, ale też interfejsu użytkownika.
+Compose Multiplatform (CMP), rozwijany przez JetBrains, rozszerza Jetpack Compose poza Androida - ten sam kod `@Composable` działa na **Android**, **Desktop (JVM)**, **iOS** (eksperymentalnie od 1.6) i **Web (Wasm)**. Jest to uzupełnienie KMP, gdy zależy nam na współdzieleniu nie tylko logiki, ale też interfejsu użytkownika.
 
 ```kotlin
 // composeApp/src/commonMain/kotlin/App.kt
@@ -455,7 +455,7 @@ compose.desktop {
 | iOS | ⚠️ Beta | UIKitView dla natywnych widgetów |
 | Web (Wasm) | ⚠️ Alpha | Wymaga przeglądarki z Wasm GC |
 
-Ekrany wspólne dla Androida i Desktopu — np. panel administracyjny aplikacji — mogą być implementowane raz w `commonMain` i uruchamiane bez modyfikacji. Dla iOS wciąż zalecane jest natywne SwiftUI połączone z KMP ViewModel przez SKIE.
+Ekrany wspólne dla Androida i Desktopu - np. panel administracyjny aplikacji - mogą być implementowane raz w `commonMain` i uruchamiane bez modyfikacji. Dla iOS wciąż zalecane jest natywne SwiftUI połączone z KMP ViewModel przez SKIE.
 
 ## Logowanie i diagnostyka
 
@@ -464,17 +464,17 @@ W projektach KMP nie można użyć `android.util.Log` ani `NSLog` bezpośrednio 
 **Napier** (lekki, zero-dependencies) to jedna z najpopularniejszych opcji:
 
 ```kotlin
-// commonMain — inicjalizacja i użycie
+// commonMain - inicjalizacja i użycie
 import io.github.aakira.napier.Napier
 import io.github.aakira.napier.DebugAntilog
 
-// Android — w Application.onCreate()
+// Android - w Application.onCreate()
 Napier.base(DebugAntilog())
 
-// iOS — w AppDelegate / @main struct
+// iOS - w AppDelegate / @main struct
 NapierProxy.shared.initLogger()  // przez SKIE lub objc bridging
 
-// Użycie w commonMain — identyczne na obu platformach
+// Użycie w commonMain - identyczne na obu platformach
 class TaskListViewModel : ViewModel() {
     init {
         Napier.i("ViewModel zainicjalizowany", tag = "TaskListVM")
@@ -544,4 +544,4 @@ commonMain.dependencies {
 | Structured logging | ❌ | ⚠️ Podstawowe |
 | Aktywne utrzymanie | ✅ | ✅ |
 
-W środowisku produkcyjnym zaleca się ustawienie minimalnego poziomu logowania na `Info` lub `Warning`, a w trybie debug — `Verbose`. Poziomy: `Verbose → Debug → Info → Warning → Error → Assert`. Crash reporting powinien przechwytywać logi poziomu `Error` i wyżej, aby każdy nieobsłużony wyjątek był automatycznie raportowany do systemu monitoringu.
+W środowisku produkcyjnym zaleca się ustawienie minimalnego poziomu logowania na `Info` lub `Warning`, a w trybie debug - `Verbose`. Poziomy: `Verbose → Debug → Info → Warning → Error → Assert`. Crash reporting powinien przechwytywać logi poziomu `Error` i wyżej, aby każdy nieobsłużony wyjątek był automatycznie raportowany do systemu monitoringu.

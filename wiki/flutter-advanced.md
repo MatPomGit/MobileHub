@@ -1,10 +1,10 @@
-# Flutter — zaawansowane techniki
+# Flutter - zaawansowane techniki
 
-Flutter umożliwia tworzenie aplikacji dla Android, iOS, Web i Desktop z jednej bazy kodu. Silnik Impeller (od Flutter 3.10) renderuje UI niezależnie od platformy z wysoką wydajnością — bez natywnych widżetów, ale z dokładnym odwzorowaniem Material i Cupertino.
+Flutter umożliwia tworzenie aplikacji dla Android, iOS, Web i Desktop z jednej bazy kodu. Silnik Impeller (od Flutter 3.10) renderuje UI niezależnie od platformy z wysoką wydajnością - bez natywnych widżetów, ale z dokładnym odwzorowaniem Material i Cupertino.
 
-## Riverpod — zarządzanie stanem
+## Riverpod - zarządzanie stanem
 
-Riverpod to ewolucja Provider — type-safe, testable, bez BuildContext w logice:
+Riverpod to ewolucja Provider - type-safe, testable, bez BuildContext w logice:
 
 ```dart
 // pubspec.yaml
@@ -16,7 +16,7 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'task_provider.g.dart';
 
-// AsyncNotifier — asynchroniczny stan z CRUD
+// AsyncNotifier - asynchroniczny stan z CRUD
 @riverpod
 class TaskList extends _$TaskList {
   @override
@@ -51,7 +51,7 @@ class TaskList extends _$TaskList {
 TaskRepository taskRepository(TaskRepositoryRef ref) =>
     TaskRepository(ref.watch(apiClientProvider));
 
-// Filtrowanie — computed provider
+// Filtrowanie - computed provider
 @riverpod
 List<Task> filteredTasks(FilteredTasksRef ref) {
   final tasks = ref.watch(taskListProvider).valueOrNull ?? [];
@@ -96,9 +96,9 @@ class TaskListScreen extends ConsumerWidget {
 }
 ```
 
-## Go Router — nawigacja
+## Go Router - nawigacja
 
-Go Router to rekomendowana przez zespół Flutter biblioteka do nawigacji opartej na URL-ach, obsługująca zagnieżdżone trasy, parametry ścieżki i globalne przekierowania (np. do ekranu logowania). Poniższy przykład demonstruje konfigurację routera z ochroną tras oraz typowe wywołania nawigacyjne — `go`, `push` i `pop`.
+Go Router to rekomendowana przez zespół Flutter biblioteka do nawigacji opartej na URL-ach, obsługująca zagnieżdżone trasy, parametry ścieżki i globalne przekierowania (np. do ekranu logowania). Poniższy przykład demonstruje konfigurację routera z ochroną tras oraz typowe wywołania nawigacyjne - `go`, `push` i `pop`.
 
 ```dart
 // pubspec.yaml: go_router: ^14.0.0
@@ -153,7 +153,7 @@ context.goNamed('task_detail', pathParameters: {'id': taskId});
 Flutter oferuje trzy poziomy animacji: deklaratywne przełączanie widoków (`AnimatedSwitcher`), animacje implicit z automatyczną interpolacją (`AnimatedContainer`) oraz animacje explicit z pełną kontrolą przez `AnimationController`. Poniższy przykład pokazuje wszystkie trzy podejścia, dzięki czemu można wybrać właściwe narzędzie do konkretnego efektu wizualnego.
 
 ```dart
-// AnimatedSwitcher — przełączanie widoków z animacją
+// AnimatedSwitcher - przełączanie widoków z animacją
 AnimatedSwitcher(
   duration: const Duration(milliseconds: 300),
   transitionBuilder: (child, animation) => FadeTransition(
@@ -169,7 +169,7 @@ AnimatedSwitcher(
       : TaskContent(key: ValueKey('content'), tasks: tasks),
 )
 
-// Implicit animations — proste przejścia
+// Implicit animations - proste przejścia
 AnimatedContainer(
   duration: const Duration(milliseconds: 200),
   curve: Curves.easeInOut,
@@ -182,7 +182,7 @@ AnimatedContainer(
   ),
 )
 
-// Explicit animations — pełna kontrola
+// Explicit animations - pełna kontrola
 class PulseWidget extends StatefulWidget {
   @override
   State<PulseWidget> createState() => _PulseWidgetState();
@@ -209,7 +209,7 @@ class _PulseWidgetState extends State<PulseWidget> with SingleTickerProviderStat
 }
 ```
 
-## Platform Channels — natywny kod
+## Platform Channels - natywny kod
 
 Platform Channels umożliwiają wywołanie kodu natywnego platformy (Android/iOS) bezpośrednio z Dart, co jest niezbędne przy dostępie do funkcji systemowych niedostępnych w samym Flutter. Poniższy przykład po stronie Dart definiuje kanał komunikacji i metodę pobierania poziomu baterii; niezależna sekcja pokazuje, jak ten sam kanał obsłużyć po stronie Androida.
 
@@ -236,10 +236,10 @@ class BatteryService {
 }
 ```
 
-Poniższy fragment to odpowiednik po stronie Androida — implementacja `MethodChannel` w `MainActivity`, która odbiera wywołanie z Dart i zwraca aktualny poziom naładowania baterii za pomocą `BatteryManager`.
+Poniższy fragment to odpowiednik po stronie Androida - implementacja `MethodChannel` w `MainActivity`, która odbiera wywołanie z Dart i zwraca aktualny poziom naładowania baterii za pomocą `BatteryManager`.
 
 ```kotlin
-// Strona Android — MainActivity.kt
+// Strona Android - MainActivity.kt
 class MainActivity : FlutterActivity() {
     private val CHANNEL = "com.example.app/battery"
 
@@ -333,7 +333,7 @@ import 'dart:io' show Platform;
 
 class PlatformInfo {
   static bool get isWeb => kIsWeb;
-  // Platform.isAndroid etc. rzuca wyjątek na webie — zawsze sprawdzaj kIsWeb wpierw
+  // Platform.isAndroid etc. rzuca wyjątek na webie - zawsze sprawdzaj kIsWeb wpierw
   static bool get isDesktop =>
       !kIsWeb && (Platform.isWindows || Platform.isMacOS || Platform.isLinux);
   static bool get isMobile =>
@@ -384,30 +384,30 @@ class AdaptiveScaffold extends StatelessWidget {
 
 | Obszar | Ograniczenie |
 |---|---|
-| **Dart:io** | Niedostępne na webie — używaj `http` lub `dio` zamiast `HttpClient` |
+| **Dart:io** | Niedostępne na webie - używaj `http` lub `dio` zamiast `HttpClient` |
 | **Pliki** | Brak bezpośredniego dostępu do systemu plików; używaj `file_picker` |
 | **Wątki** | Brak `Isolate.spawn` na webie; używaj `compute` lub web workers |
 | **Hot reload** | Działa, ale wolniej niż na urządzeniu mobilnym |
 | **SEO** | Wymaga włączenia renderowania HTML (domyślnie CanvasKit) |
 
-## Flutter DevTools — profilowanie
+## Flutter DevTools - profilowanie
 
 **Flutter DevTools** to zestaw narzędzi dostępny przez przeglądarkę, który umożliwia głębokie profilowanie aplikacji bez zewnętrznych narzędzi.
 
 ```bash
 # Uruchomienie DevTools (Flutter SDK zawiera je wbudowane)
 flutter pub global activate devtools
-flutter run --profile   # tryb profilu — zbliżony do release, z symbolami debugowania
+flutter run --profile   # tryb profilu - zbliżony do release, z symbolami debugowania
 # W logach pojawi się adres: http://127.0.0.1:9100?uri=...
 ```
 
-### Timeline — inspekcja klatek
+### Timeline - inspekcja klatek
 
 Zakładka **Performance** pokazuje oś czasu renderowania. Każda klatka powinna zmieścić się w 16 ms (60 fps). Klatki zaznaczone na czerwono przekraczają budżet. Typowe przyczyny to:
 
-- **Zbyt wiele przebudowań widżetów** — widoczne w zakładce *Widget Rebuilds*; rozwiązanie: `const` konstruktory, `RepaintBoundary`, selektywne nasłuchiwanie w Riverpod (`select`)
-- **Shader compilation jank** — pierwsze renderowanie złożonych gradientów; rozwiązanie: `flutter run --cache-sksl` i dołączenie pliku `.sksl.json` do buildu
-- **Długie operacje na głównym wątku** — przeniesienie do `Isolate` lub `compute`
+- **Zbyt wiele przebudowań widżetów** - widoczne w zakładce *Widget Rebuilds*; rozwiązanie: `const` konstruktory, `RepaintBoundary`, selektywne nasłuchiwanie w Riverpod (`select`)
+- **Shader compilation jank** - pierwsze renderowanie złożonych gradientów; rozwiązanie: `flutter run --cache-sksl` i dołączenie pliku `.sksl.json` do buildu
+- **Długie operacje na głównym wątku** - przeniesienie do `Isolate` lub `compute`
 
 ### Memory Profiler
 
@@ -423,7 +423,7 @@ void debugMemory() {
 
 W zakładce **Memory** możemy:
 1. Robić snapshoty sterty i porównywać je (delta) w poszukiwaniu wycieków
-2. Filtrować alokacje po typie (np. `Image` — częste źródło wycieków)
+2. Filtrować alokacje po typie (np. `Image` - częste źródło wycieków)
 3. Użyć *Allocation Tracing* do znalezienia miejsca tworzenia obiektów
 
 ### Network Inspector
@@ -495,7 +495,7 @@ output-localization-file: app_localizations.dart
 ### Użycie w widżetach
 
 ```dart
-// main.dart — rejestracja delegatów
+// main.dart - rejestracja delegatów
 MaterialApp(
   localizationsDelegates: AppLocalizations.localizationsDelegates,
   supportedLocales: AppLocalizations.supportedLocales,

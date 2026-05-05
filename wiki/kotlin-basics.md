@@ -1,22 +1,22 @@
-# Kotlin — podstawy języka
+# Kotlin - podstawy języka
 
 Kotlin to statycznie typowany, wieloparadygmatyczny język programowania tworzony przez JetBrains. Kompiluje się do JVM bytecode (Android), JavaScript i natywnego kodu maszynowego (KMP/iOS). Google ogłosił go oficjalnym językiem Android w 2017 roku.
 
 ## Typy, zmienne i system typów
 
-Poniższy przykład pokazuje podstawowe typy zmiennych w Kotlinie i sposoby ich deklarowania. System typów zapewnia wbudowane null-safety, które eliminuje częste błędy NullPointerException już na etapie kompilacji — każdy typ musi być jawnie oznaczony jako nullable za pomocą operatora `?`. Kompilator Kotlin potrafi automatycznie wywnioskować typ zmiennej na podstawie przypisanej wartości, a mechanizm smart cast umożliwia bezpieczne rzutowanie wewnątrz bloku `when`.
+Poniższy przykład pokazuje podstawowe typy zmiennych w Kotlinie i sposoby ich deklarowania. System typów zapewnia wbudowane null-safety, które eliminuje częste błędy NullPointerException już na etapie kompilacji - każdy typ musi być jawnie oznaczony jako nullable za pomocą operatora `?`. Kompilator Kotlin potrafi automatycznie wywnioskować typ zmiennej na podstawie przypisanej wartości, a mechanizm smart cast umożliwia bezpieczne rzutowanie wewnątrz bloku `when`.
 
 ```kotlin
-// Wnioskowanie typów — kompilator sam określa typ
-val name = "Marek"                // String (stała — val = value, immutable)
-var score = 0                     // Int (zmienna — var = variable, mutable)
+// Wnioskowanie typów - kompilator sam określa typ
+val name = "Marek"                // String (stała - val = value, immutable)
+var score = 0                     // Int (zmienna - var = variable, mutable)
 val pi: Double = 3.14159          // jawna deklaracja
 
-// Nullable types — null safety wbudowany w system typów
+// Nullable types - null safety wbudowany w system typów
 var email: String? = null         // ? = może być null
-val upper = email?.uppercase()    // safe call — zwróci null jeśli email == null
-val display = email ?: "brak"     // Elvis operator — wartość domyślna gdy null
-val forced = email!!.length       // non-null assertion — rzuci NullPointerException!
+val upper = email?.uppercase()    // safe call - zwróci null jeśli email == null
+val display = email ?: "brak"     // Elvis operator - wartość domyślna gdy null
+val forced = email!!.length       // non-null assertion - rzuci NullPointerException!
 
 // Sprawdzanie typu i smart cast
 fun describe(obj: Any) {
@@ -29,7 +29,7 @@ fun describe(obj: Any) {
 }
 ```
 
-## Data classes — klasy danych
+## Data classes - klasy danych
 
 Data class to specjalny rodzaj klasy w Kotlinie, przeznaczony wyłącznie do przechowywania danych. Kompilator automatycznie generuje metody `equals()`, `hashCode()`, `toString()` oraz `copy()`, co znacząco redukuje ilość powtarzalnego kodu szablonowego (boilerplate). Metoda `copy()` pozwala tworzyć zmodyfikowane kopie obiektu bez mutowania oryginału, co jest szczególnie przydatne w architekturach reaktywnych opartych na niezmiennych stanach (immutable state).
 
@@ -49,7 +49,7 @@ enum class UserRole { BASIC, ADMIN, MODERATOR }
 val user = User(1, "Anna Kowalska", "anna@example.com")
 println(user)  // User(id=1, name=Anna Kowalska, email=anna@example.com, ...)
 
-// copy() — tworzenie zmodyfikowanej kopii (immutable pattern)
+// copy() - tworzenie zmodyfikowanej kopii (immutable pattern)
 val admin = user.copy(role = UserRole.ADMIN, name = "Anna K.")
 // user pozostaje niezmieniony!
 
@@ -92,9 +92,9 @@ fun <T, R> transform(list: List<T>, transform: (T) -> R): List<R> =
 val names = transform(listOf(1, 2, 3)) { "item_$it" }  // ["item_1", "item_2", "item_3"]
 ```
 
-## Sealed classes — modelowanie stanów
+## Sealed classes - modelowanie stanów
 
-Sealed class definiuje zamkniętą hierarchię typów, której wszystkie podklasy muszą być zadeklarowane w tym samym pliku lub module. To idealne narzędzie do modelowania wyników operacji i stanów ekranu (np. Loading, Success, Error), ponieważ kompilator wymusza obsłużenie każdego przypadku w wyrażeniu `when` — brak gałęzi spowoduje błąd kompilacji. Taka konstrukcja eliminuje możliwość pominięcia jednego ze stanów i jest jednym z kluczowych wzorców w nowoczesnym Androidzie.
+Sealed class definiuje zamkniętą hierarchię typów, której wszystkie podklasy muszą być zadeklarowane w tym samym pliku lub module. To idealne narzędzie do modelowania wyników operacji i stanów ekranu (np. Loading, Success, Error), ponieważ kompilator wymusza obsłużenie każdego przypadku w wyrażeniu `when` - brak gałęzi spowoduje błąd kompilacji. Taka konstrukcja eliminuje możliwość pominięcia jednego ze stanów i jest jednym z kluczowych wzorców w nowoczesnym Androidzie.
 
 ```kotlin
 // Sealed class = ograniczona hierarchia typów
@@ -115,7 +115,7 @@ sealed class UiState<out T> {
     data class Error(val message: String) : UiState<Nothing>()
 }
 
-// when jest exhaustive na sealed class — kompilator wymusza wszystkie przypadki
+// when jest exhaustive na sealed class - kompilator wymusza wszystkie przypadki
 fun <T> render(state: UiState<T>) = when (state) {
     is UiState.Idle    -> showEmpty()
     is UiState.Loading -> showSpinner()
@@ -124,22 +124,22 @@ fun <T> render(state: UiState<T>) = when (state) {
 }
 ```
 
-## Coroutines — asynchroniczność
+## Coroutines - asynchroniczność
 
 Coroutines to wbudowany w Kotlin mechanizm asynchroniczności, który zastępuje tradycyjne callbacki i zarządzanie wątkami lżejszymi i bardziej czytelnymi konstrukcjami. Dzięki słowu kluczowemu `suspend` funkcja może zostać zawieszona w dowolnym momencie bez blokowania wątku, co pozwala uruchamiać setki tysięcy coroutines jednocześnie przy minimalnym narzucie na pamięć. Poniższy przykład ilustruje trzy kluczowe wzorce: sekwencyjne wywołania z `withContext`, równoległe wykonanie za pomocą `async/await` oraz reaktywny strumień danych z `Flow`.
 
 ```kotlin
-// Coroutines = "lekkie wątki" — setki tysięcy coroutines bez problemów z pamięcią
+// Coroutines = "lekkie wątki" - setki tysięcy coroutines bez problemów z pamięcią
 // Kluczowe pojęcia:
 //  - suspend fun = funkcja zawieszalna (może pauzować bez blokowania wątku)
 //  - CoroutineScope = zakres życia coroutine
 //  - Dispatcher = na którym wątku działa (IO, Main, Default)
 
 // Dispatchers:
-// Main         — wątek UI
-// IO           — I/O (sieć, baza danych, pliki) — do 64 wątki
-// Default      — CPU-intensywne obliczenia — tylu wątków ile rdzeni
-// Unconfined   — nie przełącza wątku (rzadko używany)
+// Main         - wątek UI
+// IO           - I/O (sieć, baza danych, pliki) - do 64 wątki
+// Default      - CPU-intensywne obliczenia - tylu wątków ile rdzeni
+// Unconfined   - nie przełącza wątku (rzadko używany)
 
 suspend fun fetchUserData(userId: String): UserProfile {
     // withContext przełącza na inny dispatcher bez blokowania
@@ -166,7 +166,7 @@ suspend fun fetchDashboardData(): DashboardData {
     }
 }
 
-// Flow — strumień danych asynchronicznych
+// Flow - strumień danych asynchronicznych
 fun getTemperatureStream(): Flow<Float> = flow {
     while (true) {
         emit(readTemperatureFromSensor())
@@ -174,14 +174,14 @@ fun getTemperatureStream(): Flow<Float> = flow {
     }
 }.flowOn(Dispatchers.IO)  // produkcja na IO, konsumpcja na wywołującym
 
-// viewModelScope — automatycznie anuluje coroutines gdy ViewModel jest niszczony
+// viewModelScope - automatycznie anuluje coroutines gdy ViewModel jest niszczony
 class WeatherViewModel : ViewModel() {
     val temperature = getTemperatureStream()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), 0f)
 }
 ```
 
-## Extension functions — rozszerzanie klas
+## Extension functions - rozszerzanie klas
 
 Funkcje rozszerzające pozwalają dodawać nowe metody do istniejących klas bez potrzeby ich dziedziczenia ani modyfikowania kodu źródłowego. Jest to wyjątkowo przydatna cecha w ekosystemie Android, gdzie często zachodzi potrzeba rozszerzenia klas systemowych takich jak `View`, `String` czy `Int`. Poniższy przykład pokazuje praktyczne zastosowania: konwersję tekstu do formatu slug URL, przeliczanie dp na piksele ekranu oraz uproszczenie zarządzania widocznością widoków.
 
@@ -207,17 +207,17 @@ fun View.invisible() { visibility = View.INVISIBLE }
 16.dpToPx(context)                // np. 48 px na xhdpi
 ```
 
-## Scope functions — let, run, with, apply, also
+## Scope functions - let, run, with, apply, also
 
 Scope functions to zestaw funkcji standardowej biblioteki Kotlina (`let`, `run`, `with`, `apply`, `also`), które pozwalają wykonywać operacje na obiekcie wewnątrz zwartego bloku kodu, eliminując potrzebę powtarzania nazwy zmiennej. Różnią się między sobą sposobem odwoływania się do obiektu (`this` lub `it`) oraz wartością zwracaną (sam obiekt lub wynik bloku), co decyduje o tym, kiedy każda z nich jest najwłaściwsza. Poniższy przykład ilustruje typowe przypadki użycia w projekcie Android: konfigurację dialogu (`apply`), warunkowe przetwarzanie wartości nullable (`let`) oraz rejestrowanie efektów ubocznych bez ingerencji w łańcuch wywołań (`also`).
 
 ```kotlin
-// let — transformacja obiektu, null-safety
+// let - transformacja obiektu, null-safety
 val result = possiblyNullValue?.let { value ->
     processValue(value)  // wywoływane tylko gdy nie-null
 }
 
-// apply — konfiguracja obiektu, zwraca this
+// apply - konfiguracja obiektu, zwraca this
 val dialog = AlertDialog.Builder(context).apply {
     setTitle("Potwierdź")
     setMessage("Czy chcesz usunąć ten element?")
@@ -225,12 +225,12 @@ val dialog = AlertDialog.Builder(context).apply {
     setNegativeButton("Anuluj", null)
 }.create()
 
-// run — blok obliczeń, zwraca ostatnie wyrażenie
+// run - blok obliczeń, zwraca ostatnie wyrażenie
 val formattedAddress = address.run {
     "${street.trim()}, ${city.uppercase()}, $postalCode"
 }
 
-// also — efekty uboczne, zwraca this (dobre do logowania)
+// also - efekty uboczne, zwraca this (dobre do logowania)
 val user = createUser(name, email)
     .also { Log.d("Auth", "Created user: ${it.id}") }
     .also { analytics.trackUserCreated(it.id) }
@@ -239,6 +239,6 @@ val user = createUser(name, email)
 ## Linki
 
 - [Kotlin Docs](https://kotlinlang.org/docs/home.html)
-- [Kotlin Koans — interaktywne ćwiczenia](https://kotlinlang.org/docs/koans.html)
+- [Kotlin Koans - interaktywne ćwiczenia](https://kotlinlang.org/docs/koans.html)
 - [Kotlin Playground](https://play.kotlinlang.org)
 - [Coroutines Guide](https://kotlinlang.org/docs/coroutines-guide.html)

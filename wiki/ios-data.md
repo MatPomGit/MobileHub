@@ -1,6 +1,6 @@
 # Przechowywanie danych w iOS
 
-iOS oferuje kilka mechanizmów persystencji danych — od prostych kluczy-wartości po zaawansowane bazy danych relacyjne i synchronizację z chmurą przez CloudKit.
+iOS oferuje kilka mechanizmów persystencji danych - od prostych kluczy-wartości po zaawansowane bazy danych relacyjne i synchronizację z chmurą przez CloudKit.
 
 ## Przegląd mechanizmów
 
@@ -24,7 +24,7 @@ UserDefaults.standard.set("anna@example.com", forKey: "userEmail")
 let email = UserDefaults.standard.string(forKey: "userEmail") ?? ""
 UserDefaults.standard.removeObject(forKey: "userEmail")
 
-// AppStorage w SwiftUI — reaktywny binding
+// AppStorage w SwiftUI - reaktywny binding
 struct SettingsView: View {
     @AppStorage("isDarkMode") private var isDarkMode = false
     @AppStorage("fontSize")   private var fontSize: Double = 16.0
@@ -42,7 +42,7 @@ struct SettingsView: View {
     }
 }
 
-// Własny typ — Codable w UserDefaults
+// Własny typ - Codable w UserDefaults
 extension UserDefaults {
     func setCodable<T: Codable>(_ value: T, forKey key: String) {
         let data = try? JSONEncoder().encode(value)
@@ -56,7 +56,7 @@ extension UserDefaults {
 }
 ```
 
-## Keychain — dane wrażliwe
+## Keychain - dane wrażliwe
 
 ```swift
 import Security
@@ -101,14 +101,14 @@ KeychainManager.save(key: "auth_token", data: token)
 let savedToken = KeychainManager.load(key: "auth_token")
 ```
 
-## SwiftData — nowoczesny ORM (iOS 17+)
+## SwiftData - nowoczesny ORM (iOS 17+)
 
-SwiftData to następca Core Data — używa makr Swift i integruje się z `@Observable`:
+SwiftData to następca Core Data - używa makr Swift i integruje się z `@Observable`:
 
 ```swift
 import SwiftData
 
-// Definicja modelu — tylko atrybuty
+// Definicja modelu - tylko atrybuty
 @Model
 final class Task {
     @Attribute(.unique) var id: UUID
@@ -119,7 +119,7 @@ final class Task {
     var dueDate: Date?
     var priority: TaskPriority
 
-    // Relacja — lista projektów
+    // Relacja - lista projektów
     @Relationship(deleteRule: .cascade)
     var subtasks: [Subtask] = []
 
@@ -198,12 +198,12 @@ struct TaskListView: View {
     private func addSampleTask() {
         let task = Task(title: "Nowe zadanie", priority: .normal)
         context.insert(task)
-        // context.save() jest zbędne — autosave robi to automatycznie
+        // context.save() jest zbędne - autosave robi to automatycznie
     }
 }
 ```
 
-## FileManager — pliki
+## FileManager - pliki
 
 ```swift
 class DocumentStore {
@@ -239,7 +239,7 @@ class DocumentStore {
 }
 ```
 
-## CloudKit — synchronizacja z chmurą
+## CloudKit - synchronizacja z chmurą
 
 ```swift
 import CloudKit
@@ -275,7 +275,7 @@ class CloudSyncManager {
         }
     }
 
-    // Subskrypcja zmian — push notification gdy zmiana na innym urządzeniu
+    // Subskrypcja zmian - push notification gdy zmiana na innym urządzeniu
     func subscribeToChanges() async throws {
         let predicate = NSPredicate(value: true)
         let subscription = CKQuerySubscription(
@@ -298,13 +298,13 @@ class CloudSyncManager {
 - [Keychain Services](https://developer.apple.com/documentation/security/keychain_services)
 - [SwiftData WWDC23](https://developer.apple.com/videos/play/wwdc2023/10154/)
 
-## Core Data — migracja schematu
+## Core Data - migracja schematu
 
 Wraz z rozwojem aplikacji model danych nieuchronnie się zmienia: dodajemy atrybuty, zmieniamy typy lub relacje. Core Data obsługuje dwie strategie migracji: **lekką** (automatic/lightweight) i **ręczną** z modelem mapowania.
 
 ### Migracja lekka
 
-Migracja lekka działa automatycznie, gdy zmiany są proste — dodanie opcjonalnego atrybutu, zmiana nazwy encji z użyciem `renamingIdentifier`, usunięcie relacji. Wystarczy zaznaczyć opcje przy ładowaniu store:
+Migracja lekka działa automatycznie, gdy zmiany są proste - dodanie opcjonalnego atrybutu, zmiana nazwy encji z użyciem `renamingIdentifier`, usunięcie relacji. Wystarczy zaznaczyć opcje przy ładowaniu store:
 
 ```swift
 let options: [String: Any] = [
@@ -319,11 +319,11 @@ try coordinator.addPersistentStore(
 )
 ```
 
-W Xcode tworzymy nową wersję modelu: **Editor → Add Model Version**. Aktualną wersję zaznaczamy w inspektorze pliku `.xcdatamodeld` (zielona strzałka). Stare wersje pozostają w projekcie — Core Data porównuje je automatycznie.
+W Xcode tworzymy nową wersję modelu: **Editor → Add Model Version**. Aktualną wersję zaznaczamy w inspektorze pliku `.xcdatamodeld` (zielona strzałka). Stare wersje pozostają w projekcie - Core Data porównuje je automatycznie.
 
 ### Migracja z modelem mapowania (Mapping Model)
 
-Gdy zmiana jest złożona — np. rozdzielamy `fullName` na `firstName` i `lastName` — potrzebujemy `NSMappingModel` oraz niestandardowej klasy `NSEntityMigrationPolicy`:
+Gdy zmiana jest złożona - np. rozdzielamy `fullName` na `firstName` i `lastName` - potrzebujemy `NSMappingModel` oraz niestandardowej klasy `NSEntityMigrationPolicy`:
 
 ```swift
 class PersonMigrationPolicy: NSEntityMigrationPolicy {
@@ -348,7 +348,7 @@ class PersonMigrationPolicy: NSEntityMigrationPolicy {
 
 Plik `.xcmappingmodel` łączy starą wersję modelu z nową i wskazuje klasę polityki dla encji `Person`. Migracja uruchamiana jest przez `NSMigrationManager.migrateStore(from:to:)`. Warto zawsze testować migracje na kopii produkcyjnej bazy przed wdrożeniem.
 
-## GRDB.swift — SQLite dla iOS
+## GRDB.swift - SQLite dla iOS
 
 **GRDB.swift** to nowoczesna biblioteka SQLite dla Swift, będąca alternatywą dla Core Data i SwiftData. Oferuje bezpośredni dostęp do SQL z wygodnym API wysokiego poziomu, migracjami opartymi na kodzie oraz integracją z Combine/async-await.
 
@@ -404,7 +404,7 @@ let pending = try dbQueue.read { db in
              .fetchAll(db)
 }
 
-// Combine — obserwacja zmian na żywo
+// Combine - obserwacja zmian na żywo
 let publisher = ValueObservation
     .tracking { db in try Task.fetchAll(db) }
     .publisher(in: dbQueue, scheduling: .immediate)
@@ -413,9 +413,9 @@ let publisher = ValueObservation
     })
 ```
 
-GRDB nie wymaga generatora kodu ani `.xcdatamodeld`. Migracje są czytelne i testowalne, a zapytania kompilują się do czystego SQL — łatwego do debugowania z `db.trace { print($0) }`.
+GRDB nie wymaga generatora kodu ani `.xcdatamodeld`. Migracje są czytelne i testowalne, a zapytania kompilują się do czystego SQL - łatwego do debugowania z `db.trace { print($0) }`.
 
-## Bezpieczne przechowywanie — szyfrowanie plików
+## Bezpieczne przechowywanie - szyfrowanie plików
 
 Dane wrażliwe (tokeny, dane zdrowotne, dokumenty finansowe) wymagają szyfrowania w spoczynku, niezależnie od szyfrowania na poziomie systemu.
 
@@ -442,7 +442,7 @@ let attrs = try FileManager.default.attributesOfItem(atPath: url.path)
 print(attrs[.protectionKey] ?? "brak")  // FileProtectionType.complete
 ```
 
-### SQLCipher — szyfrowanie bazy SQLite
+### SQLCipher - szyfrowanie bazy SQLite
 
 Dla aplikacji wymagających szyfrowanej bazy SQLite, SQLCipher (lub GRDB z rozszerzeniem `GRDBCipher`) szyfruje każdą stronę pliku bazy kluczem AES-256:
 
@@ -455,4 +455,4 @@ config.prepareDatabase { db in
 let dbQueue = try DatabaseQueue(path: dbPath, configuration: config)
 ```
 
-Klucz szyfrowania nigdy nie powinien być zakodowany na stałe w źródle — należy go generować losowo i przechowywać w **Keychain** z atrybutem `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`. Łącząc Data Protection z SQLCipher, uzyskujemy obronę warstwową: nawet fizyczny dostęp do pliku nie pozwoli odczytać danych bez klucza z Keychain, a klucz z Keychain jest niedostępny bez odblokowania urządzenia.
+Klucz szyfrowania nigdy nie powinien być zakodowany na stałe w źródle - należy go generować losowo i przechowywać w **Keychain** z atrybutem `kSecAttrAccessibleWhenUnlockedThisDeviceOnly`. Łącząc Data Protection z SQLCipher, uzyskujemy obronę warstwową: nawet fizyczny dostęp do pliku nie pozwoli odczytać danych bez klucza z Keychain, a klucz z Keychain jest niedostępny bez odblokowania urządzenia.

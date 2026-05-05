@@ -1,8 +1,8 @@
-# CLARION — Connectionist Learning with Adaptive Rule Induction On-line
+# CLARION - Connectionist Learning with Adaptive Rule Induction On-line
 
 ## Streszczenie
 
-CLARION (*Connectionist Learning with Adaptive Rule Induction On-line*) jest kognitywną architekturą opracowaną przez Rona Suna na Rensselaer Polytechnic Institute (RPI). Wyróżnia ją explicite dwuprocesowe podejście: jawne rozróżnienie między procesami symbolicznymi (góra — *top level*) i subsymbolicznymi (dół — *bottom level*), odpowiadające psychologicznej teorii dual-process. Architektura składa się z czterech podsystemów: Action-Centered (ACS), Non-Action-Centered (NACS), Motivational (MS) i Meta-Cognitive (MCS). Artykuł opisuje historię, podstawy teoretyczne, strukturę podsystemów, algorytm RERE, motywację, metakognicję, zastosowania i porównanie z innymi architekturami.
+CLARION (*Connectionist Learning with Adaptive Rule Induction On-line*) jest kognitywną architekturą opracowaną przez Rona Suna na Rensselaer Polytechnic Institute (RPI). Wyróżnia ją explicite dwuprocesowe podejście: jawne rozróżnienie między procesami symbolicznymi (góra - *top level*) i subsymbolicznymi (dół - *bottom level*), odpowiadające psychologicznej teorii dual-process. Architektura składa się z czterech podsystemów: Action-Centered (ACS), Non-Action-Centered (NACS), Motivational (MS) i Meta-Cognitive (MCS). Artykuł opisuje historię, podstawy teoretyczne, strukturę podsystemów, algorytm RERE, motywację, metakognicję, zastosowania i porównanie z innymi architekturami.
 
 **Słowa kluczowe:** CLARION, architektura kognitywna, dual-process theory, uczenie niejawne, reguły symboliczne, sieci neuronowe, motywacja, metakognicja
 
@@ -10,7 +10,7 @@ CLARION (*Connectionist Learning with Adaptive Rule Induction On-line*) jest kog
 
 CLARION jest jedną z niewielu architektur kognitywnych, która explicite i symetrycznie modeluje dwa typy procesów poznawczych: jawne (*explicit*), czyli kontrolowane, symboliczne, podatne na raportowanie werbalne, oraz niejawne (*implicit*), czyli automatyczne, subsymboliczne, niedostępne introspektywnie. Rozróżnienie to pochodzi z psychologicznej teorii dwóch systemów (*dual-process theory*), szeroko dyskutowanej przez Kahnemana (2011) jako System 1 i System 2.
 
-Ron Sun rozwinął CLARION z przekonania, że istniejące architektury kognitywne skupiają się albo na procesach symbolicznych (jak wczesny Soar czy ACT-R), albo na subsymbolicznych (jak sieci neuronowe), nie integrując obu poziomów w sposób, który pozwalałby modelować bogactwo ludzkich procesów poznawczych — zwłaszcza nabywanie wiedzy niejawnej i jej stopniowe werbalizowanie.
+Ron Sun rozwinął CLARION z przekonania, że istniejące architektury kognitywne skupiają się albo na procesach symbolicznych (jak wczesny Soar czy ACT-R), albo na subsymbolicznych (jak sieci neuronowe), nie integrując obu poziomów w sposób, który pozwalałby modelować bogactwo ludzkich procesów poznawczych - zwłaszcza nabywanie wiedzy niejawnej i jej stopniowe werbalizowanie.
 
 Projekt CLARION rozpoczął się na przełomie lat 80. i 90. XX wieku. Wersje implementacyjne są dostępne w Javie (CLARION Toolkit). Architektura jest stosowana przede wszystkim w badaniach nad modelowaniem poznania społecznego, uczeniem niejawnym i symulacjami społecznymi.
 
@@ -113,7 +113,7 @@ Reguły mają mierzalną pewność (*certainty*), aktualizowaną na podstawie hi
 
 ### 3.3. Non-Action-Centered Subsystem (NACS)
 
-NACS przechowuje deklaratywną wiedzę ogólną — fakty, relacje i koncepty niezwiązane bezpośrednio z działaniem. Podobnie jak ACS, NACS ma dwa poziomy:
+NACS przechowuje deklaratywną wiedzę ogólną - fakty, relacje i koncepty niezwiązane bezpośrednio z działaniem. Podobnie jak ACS, NACS ma dwa poziomy:
 - **BL-NACS**: sieć asocjacyjna (autoencoder lub sieć pamięci asocjacyjnej) dla wiedzy niejawnej,
 - **TL-NACS**: sieć semantyczna lub baza faktów w formacie jawnym.
 
@@ -227,7 +227,7 @@ class MetaCognitiveSubsystem:
         return recent_avg > 0.5  # ekstrahuj reguły, gdy wydajność jest dobra
 ```
 
-## 4. Algorytm RERE — Rule Extraction and Refinement
+## 4. Algorytm RERE - Rule Extraction and Refinement
 
 ### 4.1. Zasada działania
 
@@ -384,7 +384,7 @@ class MarketAgent:
 
 ### 7.1. Modelowanie uczenia niejawnego
 
-CLARION był z sukcesem stosowany do modelowania eksperymentów nad uczeniem niejawnym (*implicit learning*), np. zadania SRT (*Serial Reaction Time*). W tych zadaniach uczestnicy uczą się sekwencji bez świadomości jej regularności. CLARION modeluje to przez bottom-level learning (sieć neuronowa) bez aktywacji RERE w pierwszych próbach — reguły pojawiają się dopiero przy dalszej ekspozycji.
+CLARION był z sukcesem stosowany do modelowania eksperymentów nad uczeniem niejawnym (*implicit learning*), np. zadania SRT (*Serial Reaction Time*). W tych zadaniach uczestnicy uczą się sekwencji bez świadomości jej regularności. CLARION modeluje to przez bottom-level learning (sieć neuronowa) bez aktywacji RERE w pierwszych próbach - reguły pojawiają się dopiero przy dalszej ekspozycji.
 
 ### 7.2. Modelowanie teorii atrybucji
 
@@ -438,7 +438,7 @@ ACT-R integruje subsymbolikę z poziomem symbolicznym przez mechanizmy aktywacji
 
 ### 9.2. CLARION a Soar
 
-Soar realizuje uczenie przez chunking (kompilacja wyników deliberacji do reguł) — mechanizm top-down, gdzie wiedza proceduralna pochodzi z rozwiązywania problemów na wyższym poziomie. CLARION realizuje uczenie bottom-up (ekstrakcja reguł z sieci neuronowej). Soar ma mocniejszy mechanizm planowania; CLARION mocniejszy mechanizm modelowania procesów niejawnych.
+Soar realizuje uczenie przez chunking (kompilacja wyników deliberacji do reguł) - mechanizm top-down, gdzie wiedza proceduralna pochodzi z rozwiązywania problemów na wyższym poziomie. CLARION realizuje uczenie bottom-up (ekstrakcja reguł z sieci neuronowej). Soar ma mocniejszy mechanizm planowania; CLARION mocniejszy mechanizm modelowania procesów niejawnych.
 
 ### 9.3. CLARION a LIDA
 
@@ -482,7 +482,7 @@ CLARION jest architekturą kognitywną o wyjątkowym profilu: explicite modeluje
 - [Modele kognitywne](cognitive-models.md)
 - [Obliczeniowe modelowanie poznania](computational-cognition.md)
 - [ACT-R](actr-architecture.md)
-- [Soar — architektura kognitywna](soar-architecture.md)
+- [Soar - architektura kognitywna](soar-architecture.md)
 - [LIDA](lida-architecture.md)
 - [Inteligentny agent](intelligent-agent.md)
 - [Reprezentacja wiedzy](knowledge-representation.md)
