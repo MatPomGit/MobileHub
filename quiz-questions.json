@@ -1,0 +1,422 @@
+[
+  {
+    "question": "Która warstwa architektury MVVM odpowiada bezpośrednio za przygotowanie stanu dla interfejsu użytkownika?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "Repository",
+      "ViewModel",
+      "Room Database",
+      "Service"
+    ],
+    "correctIndex": 1,
+    "explanation": "ViewModel przygotowuje i udostępnia stan dla UI, oddzielając logikę prezentacji od widoku."
+  },
+  {
+    "question": "Która biblioteka jest najczęściej używana w Androidzie do lokalnego przechowywania danych w relacyjnej bazie?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "Retrofit",
+      "Room",
+      "Glide",
+      "WorkManager"
+    ],
+    "correctIndex": 1,
+    "explanation": "Room jest warstwą abstrakcji nad SQLite i służy do przechowywania danych lokalnie."
+  },
+  {
+    "question": "Jaki mechanizm w Flutterze służy do budowy interfejsu w podejściu deklaratywnym?",
+    "category": "W05: Cross-platform",
+    "answers": [
+      "Activities",
+      "Fragments",
+      "Widgets",
+      "Services"
+    ],
+    "correctIndex": 2,
+    "explanation": "Flutter buduje interfejs z widgetów opisujących wygląd i zachowanie ekranu."
+  },
+  {
+    "question": "Który protokół jest lekki i często używany w rozwiązaniach IoT do wymiany wiadomości?",
+    "category": "W07: IoT i komunikacja",
+    "answers": [
+      "FTP",
+      "MQTT",
+      "SOAP",
+      "IMAP"
+    ],
+    "correctIndex": 1,
+    "explanation": "MQTT to lekki protokół publish/subscribe popularny w IoT."
+  },
+  {
+    "question": "Który element Androida odpowiada za definicję tras i przejść między ekranami w Compose?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "NavHost",
+      "RecyclerView",
+      "ConstraintLayout",
+      "BroadcastReceiver"
+    ],
+    "correctIndex": 0,
+    "explanation": "NavHost przechowuje graf nawigacji i odpowiada za przechodzenie między ekranami."
+  },
+  {
+    "question": "Jak nazywa się test, który sprawdza pojedynczą funkcję lub klasę w izolacji?",
+    "category": "W03: UI/UX i jakość",
+    "answers": [
+      "Test jednostkowy",
+      "Test akceptacyjny",
+      "Test wydajnościowy",
+      "Test manualny"
+    ],
+    "correctIndex": 0,
+    "explanation": "Test jednostkowy weryfikuje mały fragment logiki bez zależności od całego systemu."
+  },
+  {
+    "question": "Która technologia Apple jest standardowym frameworkiem do budowy nowoczesnego UI na iOS?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "UIKit XML",
+      "SwiftUI",
+      "CoreDataUI",
+      "SpriteKit"
+    ],
+    "correctIndex": 1,
+    "explanation": "SwiftUI to deklaratywny framework Apple do tworzenia interfejsów."
+  },
+  {
+    "question": "Co oznacza skrót PWA w kontekście aplikacji mobilnych?",
+    "category": "W05: Cross-platform",
+    "answers": [
+      "Portable Web API",
+      "Progressive Web App",
+      "Programmed Widget Application",
+      "Private Web Access"
+    ],
+    "correctIndex": 1,
+    "explanation": "PWA to Progressive Web App, czyli aplikacja webowa działająca jak aplikacja mobilna."
+  },
+  {
+    "question": "Który typ sensora pozwala wykrywać położenie urządzenia względem pola grawitacyjnego Ziemi?",
+    "category": "W02: Sprzęt i sensory",
+    "answers": [
+      "Akcelerometr",
+      "Mikrofon",
+      "Czytnik linii papilarnych",
+      "Barometr"
+    ],
+    "correctIndex": 0,
+    "explanation": "Akcelerometr mierzy przyspieszenie i pomaga określić orientację urządzenia."
+  },
+  {
+    "question": "Która praktyka zwiększa bezpieczeństwo aplikacji mobilnej podczas komunikacji z API?",
+    "category": "W07: IoT i komunikacja",
+    "answers": [
+      "Przechowywanie kluczy w kodzie źródłowym",
+      "Wyłączenie HTTPS",
+      "Stosowanie cert pinning i bezpiecznej autoryzacji",
+      "Brak walidacji danych"
+    ],
+    "correctIndex": 2,
+    "explanation": "Cert pinning i bezpieczna autoryzacja utrudniają podszywanie się pod serwer."
+  },
+  {
+    "question": "Który komponent Androida najlepiej nadaje się do planowania gwarantowanej pracy w tle, nawet po restarcie aplikacji?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "WorkManager",
+      "Toast",
+      "Intent Filter",
+      "TextView"
+    ],
+    "correctIndex": 0,
+    "explanation": "WorkManager służy do niezawodnego uruchamiania odroczonych zadań w tle."
+  },
+  {
+    "question": "Które rozwiązanie w iOS służy do trwałego, bezpiecznego przechowywania tokenów i haseł?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "UserDefaults",
+      "Clipboard",
+      "Keychain",
+      "Info.plist"
+    ],
+    "correctIndex": 2,
+    "explanation": "Keychain jest przeznaczony do przechowywania danych wrażliwych."
+  },
+  {
+    "question": "W Compose i SwiftUI stan interfejsu powinien być najczęściej traktowany jako:",
+    "category": "W03: UI/UX i jakość",
+    "answers": [
+      "Dane niemutowalne obserwowane przez widok",
+      "Stały plik konfiguracyjny",
+      "Zmienna globalna współdzielona przez cały system",
+      "Element zależny wyłącznie od XML"
+    ],
+    "correctIndex": 0,
+    "explanation": "Nowoczesne frameworki UI promują jednokierunkowy przepływ danych i obserwowalny stan."
+  },
+  {
+    "question": "Który format jest najczęściej używany do lekkiej komunikacji REST API z aplikacją mobilną?",
+    "category": "W07: IoT i komunikacja",
+    "answers": [
+      "JSON",
+      "BMP",
+      "AVI",
+      "PSD"
+    ],
+    "correctIndex": 0,
+    "explanation": "JSON jest lekki, czytelny i powszechnie stosowany w komunikacji klient-serwer."
+  },
+  {
+    "question": "Po co stosuje się cache lokalny w aplikacji mobilnej?",
+    "category": "W10: Gry i wydajność",
+    "answers": [
+      "Aby spowolnić uruchamianie aplikacji",
+      "Aby zmniejszyć liczbę renderowanych ekranów",
+      "Aby przyspieszyć dostęp do danych i wspierać tryb offline",
+      "Aby zastąpić system logowania"
+    ],
+    "correctIndex": 2,
+    "explanation": "Cache lokalny poprawia szybkość działania i umożliwia częściową pracę offline."
+  },
+  {
+    "question": "Która praktyka poprawia dostępność aplikacji mobilnej?",
+    "category": "W03: UI/UX i jakość",
+    "answers": [
+      "Ukrywanie etykiet pól formularza",
+      "Dodawanie opisów dla czytników ekranu i odpowiedniego kontrastu",
+      "Używanie wyłącznie koloru do przekazywania informacji",
+      "Blokowanie skalowania tekstu"
+    ],
+    "correctIndex": 1,
+    "explanation": "Opisy semantyczne i właściwy kontrast wspierają technologie asystujące."
+  },
+  {
+    "question": "Który wzorzec w Androidzie najlepiej wspiera reaktywne aktualizacje UI przy zmianie danych?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "LiveData lub StateFlow obserwowane przez UI",
+      "Ręczne odświeżanie całego ekranu timerem",
+      "Stałe zapisywanie stanu do pliku tekstowego",
+      "Wysyłanie SMS po każdej zmianie"
+    ],
+    "correctIndex": 0,
+    "explanation": "LiveData i StateFlow przekazują zmiany stanu do widoku w sposób reaktywny."
+  },
+  {
+    "question": "Które podejście najlepiej ogranicza zużycie baterii podczas pobierania lokalizacji?",
+    "category": "W02: Sprzęt i sensory",
+    "answers": [
+      "Ciągłe GPS z najwyższą dokładnością w tle",
+      "Dopasowanie częstotliwości i dokładności do scenariusza",
+      "Wyłączenie wszystkich sensorów poza GPS",
+      "Wymuszenie aktualizacji co 100 ms"
+    ],
+    "correctIndex": 1,
+    "explanation": "Dobór interwałów i priorytetu lokalizacji do potrzeb funkcji zmniejsza koszt energetyczny."
+  },
+  {
+    "question": "Który mechanizm HTTP służy do bezpiecznego odświeżania sesji bez ponownego logowania użytkownika?",
+    "category": "W07: IoT i komunikacja",
+    "answers": [
+      "Refresh token",
+      "Publiczny klucz API w kodzie",
+      "Brak wygasania sesji",
+      "Cookie bez flag Secure i HttpOnly"
+    ],
+    "correctIndex": 0,
+    "explanation": "Refresh token pozwala odnowić access token bez podawania hasła przy każdej operacji."
+  },
+  {
+    "question": "Które narzędzie jest standardowo używane w Flutterze do zarządzania zależnościami pakietów?",
+    "category": "W05: Cross-platform",
+    "answers": [
+      "npm",
+      "pubspec.yaml i pub",
+      "CocoaPods",
+      "Gradle Kotlin DSL"
+    ],
+    "correctIndex": 1,
+    "explanation": "Flutter korzysta z systemu pakietów pub i konfiguracji w pliku pubspec.yaml."
+  },
+  {
+    "question": "Który typ testu najlepiej sprawdza współpracę kilku modułów i warstw aplikacji?",
+    "category": "W03: UI/UX i jakość",
+    "answers": [
+      "Test integracyjny",
+      "Test jednostkowy",
+      "Test snapshot ikony",
+      "Test statyczny README"
+    ],
+    "correctIndex": 0,
+    "explanation": "Test integracyjny weryfikuje działanie komponentów razem, a nie w izolacji."
+  },
+  {
+    "question": "W którym miejscu aplikacji mobilnej najbezpieczniej trzymać klucze prywatne użytkownika?",
+    "category": "W07: IoT i komunikacja",
+    "answers": [
+      "W pamięci lokalnej bez szyfrowania",
+      "W keychain/keystore z ochroną systemową",
+      "W zasobach aplikacji jako plain text",
+      "W logach diagnostycznych"
+    ],
+    "correctIndex": 1,
+    "explanation": "Systemowe magazyny sekretów (Keychain/Keystore) oferują izolację i kontrolę dostępu."
+  },
+  {
+    "question": "Który element Compose odpowiada za przewijalną listę zoptymalizowaną pod duże zbiory danych?",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "LazyColumn",
+      "Column",
+      "Box",
+      "Canvas"
+    ],
+    "correctIndex": 0,
+    "explanation": "LazyColumn renderuje elementy leniwie, co poprawia wydajność przy długich listach."
+  },
+  {
+    "question": "Dlaczego w aplikacjach mobilnych stosuje się paginację wyników z API?",
+    "category": "W10: Gry i wydajność",
+    "answers": [
+      "Aby pobierać tylko część danych i ograniczać transfer",
+      "Aby zawsze zwiększyć opóźnienia",
+      "Aby wyłączyć cache",
+      "Aby ominąć autoryzację"
+    ],
+    "correctIndex": 0,
+    "explanation": "Paginacja zmniejsza ilość danych na żądanie i poprawia responsywność interfejsu."
+  },
+  {
+    "question": "Który zapis najlepiej opisuje aplikację mobilną typu native?",
+    "category": "W01: Wprowadzenie do mobile",
+    "answers": [
+      "Jedna baza kodu JS uruchamiana w przeglądarce",
+      "Kod kompilowany pod konkretny system operacyjny",
+      "Wyłącznie aplikacja działająca offline",
+      "Program uruchamiany tylko na emulatorze"
+    ],
+    "correctIndex": 1,
+    "explanation": "Aplikacja native jest budowana pod konkretną platformę, np. Android lub iOS."
+  },
+  {
+    "question": "Który komponent smartfona odpowiada bezpośrednio za pomiar prędkości obrotowej urządzenia?",
+    "category": "W02: Sprzęt i sensory",
+    "answers": [
+      "Żyroskop",
+      "Czujnik zbliżeniowy",
+      "Mikrofon",
+      "NFC"
+    ],
+    "correctIndex": 0,
+    "explanation": "Żyroskop mierzy prędkość kątową i wspiera śledzenie orientacji."
+  },
+  {
+    "question": "Która zasada UI najtrafniej wspiera czytelność na małych ekranach?",
+    "category": "W03: UI/UX i jakość",
+    "answers": [
+      "Maksymalizacja liczby elementów na ekranie",
+      "Wyraźna hierarchia wizualna i odpowiednie odstępy",
+      "Stałe używanie rozmiaru czcionki 10px",
+      "Ukrywanie nagłówków sekcji"
+    ],
+    "correctIndex": 1,
+    "explanation": "Hierarchia wizualna i spacing poprawiają skanowanie treści i ergonomię."
+  },
+  {
+    "question": "W Androidzie za cykl życia ekranu i interakcję z użytkownikiem najczęściej odpowiada:",
+    "category": "W04: Aplikacje natywne i architektura",
+    "answers": [
+      "Activity",
+      "Gradle Wrapper",
+      "Manifest merger",
+      "ADB daemon"
+    ],
+    "correctIndex": 0,
+    "explanation": "Activity jest podstawowym komponentem reprezentującym ekran aplikacji."
+  },
+  {
+    "question": "Która zaleta podejścia cross-platform jest najczęściej wskazywana w projektach MVP?",
+    "category": "W05: Cross-platform",
+    "answers": [
+      "Brak potrzeby testowania na urządzeniach",
+      "Szybsze dostarczenie wersji na Android i iOS",
+      "Automatycznie wyższa wydajność niż native",
+      "Pełny dostęp do wszystkich API bez integracji"
+    ],
+    "correctIndex": 1,
+    "explanation": "Wspólna baza kodu zwykle przyspiesza start produktu na obu platformach."
+  },
+  {
+    "question": "Który typ sensora najczęściej zasila funkcję krokomierza?",
+    "category": "W06: Sensory i kontekst",
+    "answers": [
+      "Akcelerometr",
+      "Barometr",
+      "Czytnik linii papilarnych",
+      "Magnetometr"
+    ],
+    "correctIndex": 0,
+    "explanation": "Krokomierze analizują wzorce ruchu rejestrowane przez akcelerometr."
+  },
+  {
+    "question": "W modelu publish/subscribe klient MQTT, który odbiera wiadomości z tematu, to:",
+    "category": "W07: IoT i komunikacja",
+    "answers": [
+      "Subscriber",
+      "Broker",
+      "Publisher",
+      "Gateway"
+    ],
+    "correctIndex": 0,
+    "explanation": "Subscriber subskrybuje temat i odbiera publikowane komunikaty."
+  },
+  {
+    "question": "Które zastosowanie najlepiej pasuje do informatyki afektywnej w mobile?",
+    "category": "W08: Informatyka afektywna",
+    "answers": [
+      "Szyfrowanie lokalnej bazy SQLite",
+      "Detekcja emocji użytkownika na podstawie sygnałów",
+      "Kompresja tekstur 3D",
+      "Zarządzanie uprawnieniami Bluetooth"
+    ],
+    "correctIndex": 1,
+    "explanation": "Informatyka afektywna analizuje sygnały w celu rozpoznawania stanów emocjonalnych."
+  },
+  {
+    "question": "Która technologia mobilna służy do nakładania obiektów cyfrowych na obraz z kamery?",
+    "category": "W09: XR i AR",
+    "answers": [
+      "ARCore/ARKit",
+      "SQLite",
+      "WorkManager",
+      "OpenAPI"
+    ],
+    "correctIndex": 0,
+    "explanation": "ARCore i ARKit dostarczają funkcje śledzenia i renderingu w rozszerzonej rzeczywistości."
+  },
+  {
+    "question": "W grach mobilnych ograniczenie liczby draw calli wpływa głównie na:",
+    "category": "W10: Gry i wydajność",
+    "answers": [
+      "Zmniejszenie obciążenia CPU/GPU i stabilniejszy FPS",
+      "Zwiększenie rozmiaru APK",
+      "Większą liczbę powiadomień push",
+      "Skrócenie czasu kompilacji backendu"
+    ],
+    "correctIndex": 0,
+    "explanation": "Mniejsza liczba draw calli poprawia płynność renderingu na urządzeniach mobilnych."
+  },
+  {
+    "question": "W robotyce mobilnej interfejs w aplikacji najczęściej wysyła do robota:",
+    "category": "W11: Robotyka mobilna",
+    "answers": [
+      "Komendy sterujące i parametry ruchu",
+      "Wyłącznie obrazy tła",
+      "Pliki instalacyjne APK",
+      "Hasła użytkownika w postaci jawnej"
+    ],
+    "correctIndex": 0,
+    "explanation": "Aplikacja sterująca przekazuje komendy ruchu i konfigurację działania robota."
+  }
+]
