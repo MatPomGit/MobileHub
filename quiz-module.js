@@ -8,13 +8,37 @@ const QUIZ_MODE_SIZES = {
     normal: 50
 };
 
+const QUIZ_MODE_TIME_LIMITS = {
+    // Limity czasu w sekundach zależne od trybu testu.
+    short: 20 * 60,
+    normal: 40 * 60
+};
+
+const CATEGORY_LABELS = {
+    // Mapowanie numerów kategorii na nazwy tematów z sekcji „Tematy egzaminacyjne”.
+    1: 'Systemy operacyjne i ekosystemy mobilne',
+    2: 'Projektowanie interfejsu użytkownika',
+    3: 'Architektura aplikacji mobilnych',
+    4: 'Programowanie Android (Kotlin / Jetpack)',
+    5: 'Programowanie iOS (Swift / SwiftUI)',
+    6: 'Cross-Platform i PWA',
+    7: 'Hardware i obsługa sensorów',
+    8: 'Sieć i komunikacja',
+    9: 'Bezpieczeństwo aplikacji mobilnych',
+    10: 'Testowanie i wydajność',
+    11: 'Robotyka mobilna i sterowanie',
+    12: 'Publikacja, utrzymanie i analityka aplikacji'
+};
+
 const state = {
     allQuestions: [],
     questions: [],
     currentIndex: 0,
     selectedAnswers: [],
     mode: 'short',
-    isReady: false
+    isReady: false,
+    timeLeft: 0,
+    timerId: null
 };
 
 // Inicjalizacja modułu testowego po załadowaniu drzewa DOM.
@@ -149,6 +173,58 @@ function shuffle(items) {
 }
 
 
+
+// Czyści aktywny licznik czasu, aby nie tworzyć równoległych interwałów.
+function stopTimer() {
+    if (state.timerId !== null) {
+        clearInterval(state.timerId);
+        state.timerId = null;
+    }
+}
+
+// Formatuje czas w sekundach do czytelnego zapisu mm:ss.
+function formatTime(seconds) {
+    const safeSeconds = Math.max(0, seconds);
+    const minutes = Math.floor(safeSeconds / 60);
+    const remainingSeconds = safeSeconds % 60;
+    return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+}
+
+// Zwraca limit czasu dla podanego trybu testu.
+function getTimeLimitForMode(mode) {
+    return QUIZ_MODE_TIME_LIMITS[mode] ?? QUIZ_MODE_TIME_LIMITS.short;
+}
+
+// Aktualizuje etykietę licznika czasu w interfejsie.
+function updateTimerDisplay() {
+    state.timerLabelElement = state.timerLabelElement || document.getElementById('timerLabel');
+    if (state.timerLabelElement) {
+        state.timerLabelElement.textContent = `Pozostały czas: ${formatTime(state.timeLeft)}`;
+    }
+}
+
+// Uruchamia odliczanie czasu i kończy test po wyzerowaniu licznika.
+function startTimer() {
+    stopTimer();
+    updateTimerDisplay();
+
+    state.timerId = window.setInterval(() => {
+        state.timeLeft -= 1;
+        updateTimerDisplay();
+
+        if (state.timeLeft <= 0) {
+            stopTimer();
+            showResults();
+        }
+    }, 1000);
+}
+
+// Buduje etykietę kategorii na bazie numeru i mapy tematów egzaminacyjnych.
+function getCategoryLabel(categoryNumber) {
+    const categoryName = CATEGORY_LABELS[categoryNumber] || 'Nieznana kategoria';
+    return `${categoryNumber}. ${categoryName}`;
+}
+
 // Odczytuje aktualnie wybrany tryb testu z kontrolek formularza.
 function getSelectedMode() {
     const checked = document.querySelector('input[name="quizMode"]:checked')?.value;
@@ -181,7 +257,7 @@ function updateModePreview() {
     updateQuestionTotal(plannedCount);
 
     const summary = document.getElementById('selectedModeSummary');
-    if (summary) summary.textContent = `${plannedCount} pytań`;
+    if (summary) summary.textContent = `${plannedCount} pytań · ${formatTime(getTimeLimitForMode(state.mode))}`;
 }
 
 function updateQuestionTotal(count = state.questions.length) {
@@ -195,6 +271,7 @@ function startQuiz() {
     state.mode = getSelectedMode();
     state.questions = buildBalancedQuestionSet(state.allQuestions, getTargetSizeForMode(state.mode));
     resetSessionState();
+    state.timeLeft = getTimeLimitForMode(state.mode);
 
     document.getElementById('configCard').hidden = true;
     document.getElementById('quizCard').hidden = false;
@@ -202,6 +279,7 @@ function startQuiz() {
     updateQuestionTotal(state.questions.length);
     updateProgress();
     renderQuestion();
+    startTimer();
     window.scrollTo({ top: document.getElementById('quizCard').offsetTop - 16, behavior: 'smooth' });
 }
 
@@ -215,7 +293,7 @@ function renderQuestion() {
 
     document.getElementById('questionCount').textContent = `Pytanie ${state.currentIndex + 1} z ${state.questions.length}`;
     document.getElementById('questionText').textContent = question.question;
-    document.getElementById('questionCategory').textContent = `Kategoria: ${question.category}`;
+    document.getElementById('questionCategory').textContent = `Kategoria: ${getCategoryLabel(question.category)}`;
     answersContainer.innerHTML = '';
 
     question.answers.forEach((answer, index) => {
@@ -282,6 +360,7 @@ function showConfigPanel(options = {}) {
     document.getElementById('configCard').hidden = false;
     document.getElementById('quizCard').hidden = true;
     document.getElementById('resultCard').classList.remove('visible');
+    stopTimer();
     updateModePreview();
 
     if (options.scroll !== false) {
@@ -304,6 +383,7 @@ function showResults() {
     scoreElement.textContent = `${score}%`;
     scoreElement.classList.toggle('good', score >= 60);
     scoreElement.classList.toggle('bad', score < 60);
+    stopTimer();
     document.getElementById('resultSummary').textContent = `Poprawne odpowiedzi: ${correctAnswers} z ${state.questions.length}`;
 
     renderResultDetails();
@@ -323,7 +403,7 @@ function renderResultDetails() {
         detail.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
         detail.innerHTML = `
             <h3>${index + 1}. ${question.question}</h3>
-            <p><strong>Kategoria:</strong> ${question.category}</p>
+            <p><strong>Kategoria:</strong> ${getCategoryLabel(question.category)}</p>
             <p><strong>Twoja odpowiedź:</strong> ${formatAnswer(userAnswerIndex, question.answers)}</p>
             <p><strong>Poprawna odpowiedź:</strong> ${formatAnswer(question.correctIndex, question.answers)}</p>
             <p class="muted">${question.explanation}</p>
@@ -342,7 +422,7 @@ function renderRecommendation() {
         return;
     }
 
-    recommendation.textContent = `Najwięcej błędów masz w kategorii: ${weakestCategory}. Warto powtórzyć ten obszar.`;
+    recommendation.textContent = `Najwięcej błędów masz w kategorii: ${getCategoryLabel(weakestCategory)}. Warto powtórzyć ten obszar.`;
 }
 
 function getWeakestCategory() {
