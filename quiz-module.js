@@ -277,7 +277,7 @@ function renderResultDetails() {
 }
 
 function renderRecommendation() {
-    const recommendation = document.getElementById('resultRecommendation');
+    const recommendation = document.getElementById('weakAreas');
     const weakestCategory = getWeakestCategory();
 
     if (!weakestCategory) {
