@@ -1254,7 +1254,7 @@ header {
 }
 
 #wikiArticle h1 {
-    font-size: clamp(calc(2.05em * var(--wiki-font-scale)), 3.8vw, calc(2.55em * var(--wiki-font-scale)));
+    font-size: clamp(calc(1.025em * var(--wiki-font-scale)), 1.9vw, calc(1.275em * var(--wiki-font-scale)));
     font-weight: 800;
     line-height: 1.0;
     margin-bottom: 16px;
@@ -1485,7 +1485,7 @@ header {
 }
 
 .article-toc h3 {
-    font-size: calc(0.96em * var(--wiki-font-scale));
+    font-size: calc(0.48em * var(--wiki-font-scale));
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 1px;
@@ -1506,7 +1506,7 @@ header {
 }
 
 .article-toc a {
-    font-size: calc(0.94em * var(--wiki-font-scale));
+    font-size: calc(0.47em * var(--wiki-font-scale));
     color: var(--text-muted);
     transition: color var(--transition);
 }
@@ -3381,12 +3381,12 @@ footer strong {
     }
 
     .article-toc a {
-        font-size: calc(12px * var(--wiki-font-scale));
+        font-size: calc(6px * var(--wiki-font-scale));
         line-height: 1.6;
     }
 
     .article-toc h3 {
-        font-size: calc(11px * var(--wiki-font-scale));
+        font-size: calc(5.5px * var(--wiki-font-scale));
         margin-bottom: 8px;
     }
 

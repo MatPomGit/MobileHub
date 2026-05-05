@@ -2368,14 +2368,51 @@
             function addLiftHover(selector, yAmt, scaleAmt) {
                 document.querySelectorAll(selector).forEach(el => {
                     el.addEventListener('mouseenter', () =>
-                        gsap.to(el, { y: -yAmt, scale: scaleAmt, duration: 0.2, ease: 'power2.out' }));
+                        gsap.to(el, { y: -yAmt, scale: scaleAmt, duration: 0.1, ease: 'power2.out' }));
                     el.addEventListener('mouseleave', () =>
-                        gsap.to(el, { y: 0, scale: 1, duration: 0.2, ease: 'power2.out' }));
+                        gsap.to(el, { y: 0, scale: 1, rotation: 0, x: 0, duration: 0.1, ease: 'power2.out' }));
                 });
             }
 
-            addLiftHover('.quick-link-card', 4, 1.015);
-            addLiftHover('.info-card', 5, 1.018);
+            // Dodatkowe wychylenia kafelków podczas hovera (w losowych kierunkach)
+            function addTileSwayHover(selector, yAmt, scaleAmt) {
+                document.querySelectorAll(selector).forEach(el => {
+                    el.addEventListener('mouseenter', () => {
+                        const rotDir = Math.random() > 0.5 ? 1 : -1;
+                        const xDir = Math.random() > 0.5 ? 1 : -1;
+                        gsap.killTweensOf(el);
+                        gsap.timeline()
+                            .to(el, {
+                                y: -yAmt,
+                                scale: scaleAmt,
+                                x: 3 * xDir,
+                                rotation: 2.8 * rotDir,
+                                duration: 0.1,
+                                ease: 'power2.out'
+                            })
+                            .to(el, {
+                                x: -2 * xDir,
+                                rotation: -1.8 * rotDir,
+                                duration: 0.12,
+                                ease: 'sine.inOut'
+                            })
+                            .to(el, {
+                                x: 0,
+                                rotation: 0.9 * rotDir,
+                                duration: 0.08,
+                                ease: 'sine.out'
+                            });
+                    });
+
+                    el.addEventListener('mouseleave', () => {
+                        gsap.killTweensOf(el);
+                        gsap.to(el, { y: 0, scale: 1, x: 0, rotation: 0, duration: 0.1, ease: 'power2.out' });
+                    });
+                });
+            }
+
+            addTileSwayHover('.quick-link-card', 4, 1.015);
+            addTileSwayHover('.info-card', 5, 1.018);
             addLiftHover('.exam-stat', 4, 1.04);
             addLiftHover('.startup-feature', 5, 1.02);
             addLiftHover('.startup-stat', 5, 1.02);
@@ -2395,6 +2432,16 @@
                     gsap.from(backToTopBtn, { scale: 0.75, duration: 0.3, ease: 'back.out(3)' });
                 });
             }
+
+            // Szybsze przewijanie kółkiem myszy (2x)
+            window.addEventListener('wheel', (event) => {
+                if (event.ctrlKey || event.metaKey) return;
+                const tag = event.target && event.target.tagName;
+                if (tag && /^(INPUT|TEXTAREA|SELECT)$/i.test(tag)) return;
+                event.preventDefault();
+                window.scrollBy({ top: event.deltaY * 2, behavior: 'auto' });
+            }, { passive: false });
+
 
         }());
     </script>
