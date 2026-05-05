@@ -721,10 +721,13 @@
                 </div>
             </div>
             <!-- Skrót na początku zakładki zapewnia szybki dostęp do modułu testu wiedzy ABCD. -->
+            <p>Zacznij od modułu testu wiedzy ABCD, aby sprawdzić przygotowanie do egzaminu.</p>
+            <!-- Wyraźny przycisk prowadzi bezpośrednio do testu ABCD. -->
             <p>
-                Zacznij od
-                <a href="test.html" aria-label="Przejdź do modułu testu wiedzy ABCD">modułu testu wiedzy ABCD</a>,
-                aby sprawdzić przygotowanie do egzaminu.
+                <a class="exam-quiz-button" href="test.html" aria-label="Przejdź do modułu testu wiedzy ABCD">
+                    <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
+                    <span>Przejdź do testu ABCD</span>
+                </a>
             </p>
 
             <h3 class="section-title">Informacje o egzaminie</h3>
@@ -993,10 +996,12 @@
                     <i class="fa-solid fa-book-open-reader"></i>
                     <strong>Artykuł „Egzamin teoretyczny” w wiki</strong>
                 </div>
-                <p style="margin:0;">
-                  Szczegółowe kompendium znajdziesz w artykule wiki: 
-                  <a href="wiki/egzamin-teoretyczny.md" target="_blank" rel="noopener" style="font-weight:600; color:#2a5ad7; text-decoration:underline;">Przejdź do „Egzamin teoretyczny”</a>.
-                </p>
+                <p style="margin:0 0 12px 0;">Szczegółowe kompendium znajdziesz w artykule wiki.</p>
+                <!-- Przycisk kieruje do sekcji egzaminu teoretycznego w opublikowanej wersji serwisu. -->
+                <a class="exam-quiz-button" href="https://matpomgit.github.io/MobileHub/#egzamin-teoretyczny" target="_blank" rel="noopener" aria-label="Przejdź do sekcji Egzamin teoretyczny">
+                  <i class="fa-solid fa-book-open" aria-hidden="true"></i>
+                  <span>Przejdź do „Egzamin teoretyczny”</span>
+                </a>
             </div>
         </div>
     </div><!-- /panel-egzamin -->

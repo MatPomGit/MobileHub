@@ -1,6 +1,8 @@
 # Zaliczenie wykładów — Programowanie Aplikacji Mobilnych
 
-Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** sprawdza znajomość zagadnień omawianych na wykładach i laboratoriach. 
+Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** sprawdza znajomość zagadnień omawianych na wykładach i laboratoriach.
+
+> **Aktualna forma zaliczenia:** 50 pytań testowych **ABCD**. Bez zadań opisowych.
 
 
 ## Format egzaminu
@@ -8,18 +10,19 @@ Egzamin teoretyczny z przedmiotu **Programowanie Aplikacji Mobilnych (PAM)** spr
 | Element           | Szczegóły                                          |
 |-------------------|----------------------------------------------------|
 | Czas trwania      | 60 minut                                           |
-| Forma             | Test wielokrotnego wyboru                          |
-| Liczba pytań      | 50 pytań testowych                                 |
+| Forma             | Test ABCD (jedna poprawna odpowiedź)               |
+| Liczba pytań      | 50 pytań testowych ABCD                             |
 | Próg zaliczenia   | 51% punktów (26/50)                                |
 
 ### Struktura punktowa
 
 ```
-Pytania testowe:  40 × 0,5 pkt = 20 pkt
-Pytania opisowe:   3 × 10 pkt = 30 pkt
-─────────────────────────────────────────
-Łącznie:                       50 pkt
+Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
+───────────────────────────────────────
+Łącznie:                     50 pkt
 ```
+
+> Egzamin zawiera wyłącznie pytania testowe typu **ABCD** (jedna poprawna odpowiedź).
 
 ## Tematy egzaminacyjne
 
@@ -182,16 +185,7 @@ Pytania opisowe:   3 × 10 pkt = 30 pkt
 - ☑ DTO / Entity Mapper
 - ☑ API Service Interface
 
-### Pytania opisowe — przykłady
-
-**Pytanie opisowe 1:**
-> Opisz architekturę MVVM w kontekście aplikacji Android z Jetpack Compose. Jakie klasy/komponenty tworzą każdą warstwę? Jak dane przepływają od bazy danych do ekranu użytkownika? Podaj przykład z kodem dla warstwy ViewModel.
-
-**Pytanie opisowe 2:**
-> Wyjaśnij różnicę między `suspend fun` a `Flow` w Kotlinie. Kiedy należy użyć każdego z nich? Podaj przykład zastosowania w kontekście komunikacji z REST API oraz nasłuchiwania zmian w lokalnej bazie danych Room.
-
-**Pytanie opisowe 3:**
-> Co to jest OWASP Mobile Top 10? Opisz trzy wybrane zagrożenia i przedstaw metody ich mitygacji w aplikacji Android lub iOS.
+<!-- Sekcję pytań opisowych usunięto, bo egzamin ma formę wyłącznie testową ABCD. -->
 
 ## Wskazówki do nauki
 
