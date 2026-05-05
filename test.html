@@ -38,7 +38,7 @@
             margin: 0 auto;
             padding: 32px 0 48px;
         }
-        .hero, .quiz-card, .result-card {
+        .hero, .config-card, .quiz-card, .result-card {
             background: var(--surface);
             border: 1px solid var(--border);
             border-radius: var(--radius);
@@ -77,8 +77,37 @@
             border-radius: 14px;
             font-weight: 600;
         }
-        .quiz-card {
+        .config-card, .quiz-card {
             padding: 28px;
+        }
+        .config-card {
+            margin-bottom: 24px;
+        }
+        .config-grid {
+            display: grid;
+            gap: 14px;
+            margin: 18px 0 22px;
+        }
+        .mode-option {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            gap: 14px;
+            align-items: start;
+            padding: 16px 18px;
+            border: 1px solid var(--border);
+            border-radius: 18px;
+            background: #fff;
+            cursor: pointer;
+        }
+        .mode-option strong {
+            display: block;
+            margin-bottom: 4px;
+        }
+        .mode-option span {
+            color: var(--text-muted);
+        }
+        .mode-option input {
+            margin-top: 4px;
         }
         .quiz-meta {
             display: flex;
@@ -231,7 +260,7 @@
         .muted { color: var(--text-muted); }
         @media (max-width: 640px) {
             .page { width: min(100% - 20px, 920px); padding-top: 20px; }
-            .hero, .quiz-card, .result-card { padding: 20px; }
+            .hero, .config-card, .quiz-card, .result-card { padding: 20px; }
             .question-text { font-size: 1.2rem; }
             .actions, .actions-group { flex-direction: column; }
             .actions button, .actions-group button { width: 100%; }
@@ -248,28 +277,47 @@
             <h1>Test wiedzy ABCD</h1>
             <p>Odpowiedz na pytania związane z programowaniem aplikacji mobilnych. Każde pytanie ma jedną poprawną odpowiedź.</p>
             <div class="stats">
-                <div class="stat" id="questionTotal">25 pytań</div>
-            <div class="quiz-meta" style="margin-top:12px;">
-                <div class="question-category">Tryb testu:</div>
-                <div style="display:flex; gap:10px; flex-wrap:wrap;">
-                    <label><input type="radio" name="quizMode" value="short" checked> Krótki (25 pytań)</label>
-                    <label><input type="radio" name="quizMode" value="normal"> Normalny (50 pytań)</label>
-                </div>
-            </div>
-
+                <div class="stat" id="questionTotal">25 pytań w wybranym trybie</div>
                 <div class="stat">4 odpowiedzi do wyboru</div>
                 <div class="stat">Podsumowanie z kategoriami po zakończeniu</div>
             </div>
         </section>
 
-        <section class="quiz-card" id="quizCard">
+        <section class="config-card" id="configCard">
+            <div class="quiz-meta">
+                <div>
+                    <div class="question-count">Parametry testu</div>
+                    <p class="muted" id="questionsLoadStatus">Ładowanie bazy pytań...</p>
+                </div>
+                <div class="question-category" id="selectedModeSummary">25 pytań</div>
+            </div>
+            <div class="config-grid" aria-label="Tryb testu">
+                <label class="mode-option">
+                    <input type="radio" name="quizMode" value="short" checked>
+                    <span>
+                        <strong>Krótki</strong>
+                        25 pytań losowanych z dostępnych kategorii
+                    </span>
+                </label>
+                <label class="mode-option">
+                    <input type="radio" name="quizMode" value="normal">
+                    <span>
+                        <strong>Normalny</strong>
+                        50 pytań losowanych z dostępnych kategorii
+                    </span>
+                </label>
+            </div>
+            <button class="primary-btn" id="startQuizBtn" type="button" disabled>Rozpocznij test</button>
+        </section>
+
+        <section class="quiz-card" id="quizCard" hidden>
             <div class="quiz-meta">
                 <div class="question-count" id="questionCount"></div>
                 <div class="question-category" id="questionCategory"></div>
             </div>
             <div class="progress-wrap">
                 <div class="progress-label">
-                    <span id="progressLabel">Postęp: 0/20 odpowiedzi</span>
+                    <span id="progressLabel">Postęp: 0/0 odpowiedzi</span>
                     <span>Możesz wracać do wcześniejszych pytań</span>
                 </div>
                 <div class="progress-track" role="progressbar" aria-label="Postęp testu" aria-valuemin="0" aria-valuemax="100">
@@ -279,7 +327,7 @@
             <div class="question-text" id="questionText"></div>
             <div class="answers" id="answers"></div>
             <div class="actions">
-                <button class="secondary-btn" id="restartBtn" type="button">Rozpocznij od nowa</button>
+                <button class="secondary-btn" id="restartBtn" type="button">Zmień parametry</button>
                 <div class="actions-group">
                     <button class="secondary-btn" id="prevBtn" type="button">Wstecz</button>
                     <button class="primary-btn" id="nextBtn" type="button" disabled>Dalej</button>
@@ -292,6 +340,9 @@
             <div class="score" id="resultScore"></div>
             <p class="summary" id="resultSummary"></p>
             <div class="weak-areas" id="resultRecommendation"></div>
+            <div class="actions">
+                <button class="primary-btn" id="resultRestartBtn" type="button">Wybierz parametry i rozpocznij ponownie</button>
+            </div>
             <div class="review-list" id="resultDetails"></div>
         </section>
     </main>

@@ -13,7 +13,8 @@ const state = {
     questions: [],
     currentIndex: 0,
     selectedAnswers: [],
-    mode: 'short'
+    mode: 'short',
+    isReady: false
 };
 
 // Inicjalizacja modułu testowego po załadowaniu drzewa DOM.
@@ -24,23 +25,33 @@ document.addEventListener('DOMContentLoaded', async () => {
 
 // Podpinanie zdarzeń przycisków sterujących testem.
 function bindEvents() {
+    document.getElementById('startQuizBtn')?.addEventListener('click', startQuiz);
     document.getElementById('nextBtn')?.addEventListener('click', handleNext);
     document.getElementById('prevBtn')?.addEventListener('click', handlePrevious);
-    document.getElementById('restartBtn')?.addEventListener('click', restartQuiz);
+    document.getElementById('restartBtn')?.addEventListener('click', showConfigPanel);
+    document.getElementById('resultRestartBtn')?.addEventListener('click', showConfigPanel);
+    document.querySelectorAll('input[name="quizMode"]').forEach((input) => {
+        input.addEventListener('change', updateModePreview);
+    });
 }
 
-// Wczytanie pytań, losowanie zbalansowanego zestawu i przygotowanie stanu quizu.
+// Wczytanie pytań przygotowuje konfigurację, ale nie uruchamia jeszcze testu.
 async function initializeQuiz() {
     try {
         const loadedQuestions = await loadQuestions();
         state.allQuestions = loadedQuestions;
+        state.isReady = true;
         state.mode = getSelectedMode();
-        state.questions = buildBalancedQuestionSet(state.allQuestions, getTargetSizeForMode(state.mode));
-        resetSessionState();
 
-        updateQuestionTotal();
-        updateProgress();
-        renderQuestion();
+        const status = document.getElementById('questionsLoadStatus');
+        if (status) {
+            const categoryCount = groupQuestionsByCategory(state.allQuestions).size;
+            status.textContent = `Dostępne pytania: ${state.allQuestions.length}, kategorie: ${categoryCount}.`;
+        }
+
+        document.getElementById('startQuizBtn')?.removeAttribute('disabled');
+        updateModePreview();
+        showConfigPanel({ scroll: false });
     } catch (error) {
         renderLoadError(error);
     }
@@ -159,9 +170,39 @@ function getTargetSizeForMode(mode) {
     return QUIZ_MODE_SIZES[mode] ?? QUIZ_MODE_SIZES.short;
 }
 
-function updateQuestionTotal() {
+function getPlannedQuestionCount(mode = getSelectedMode()) {
+    const targetSize = getTargetSizeForMode(mode);
+    return state.allQuestions.length > 0 ? Math.min(targetSize, state.allQuestions.length) : targetSize;
+}
+
+function updateModePreview() {
+    state.mode = getSelectedMode();
+    const plannedCount = getPlannedQuestionCount(state.mode);
+    updateQuestionTotal(plannedCount);
+
+    const summary = document.getElementById('selectedModeSummary');
+    if (summary) summary.textContent = `${plannedCount} pytań`;
+}
+
+function updateQuestionTotal(count = state.questions.length) {
     const total = document.getElementById('questionTotal');
-    if (total) total.textContent = `${state.questions.length} pytań`;
+    if (total) total.textContent = `${count} pytań w wybranym trybie`;
+}
+
+function startQuiz() {
+    if (!state.isReady || state.allQuestions.length === 0) return;
+
+    state.mode = getSelectedMode();
+    state.questions = buildBalancedQuestionSet(state.allQuestions, getTargetSizeForMode(state.mode));
+    resetSessionState();
+
+    document.getElementById('configCard').hidden = true;
+    document.getElementById('quizCard').hidden = false;
+    document.getElementById('resultCard').classList.remove('visible');
+    updateQuestionTotal(state.questions.length);
+    updateProgress();
+    renderQuestion();
+    window.scrollTo({ top: document.getElementById('quizCard').offsetTop - 16, behavior: 'smooth' });
 }
 
 function renderQuestion() {
@@ -215,7 +256,7 @@ function updateProgress() {
 
     document.getElementById('progressLabel').textContent = `Postęp: ${answeredCount}/${state.questions.length} odpowiedzi`;
     document.getElementById('progressBar').style.width = `${progress}%`;
-    document.getElementById('progressBar').setAttribute('aria-valuenow', String(progress));
+    document.querySelector('.progress-track')?.setAttribute('aria-valuenow', String(progress));
 }
 
 function handleNext() {
@@ -236,37 +277,42 @@ function handlePrevious() {
     renderQuestion();
 }
 
-// Resetuje test i losuje nową, zbalansowaną sesję pytań dla kolejnego podejścia.
-function restartQuiz() {
-    state.mode = getSelectedMode();
-    state.questions = buildBalancedQuestionSet(state.allQuestions, getTargetSizeForMode(state.mode));
-    resetSessionState();
-    document.getElementById('quizCard').style.display = 'block';
+// Wraca do konfiguracji bez automatycznego losowania kolejnej sesji.
+function showConfigPanel(options = {}) {
+    document.getElementById('configCard').hidden = false;
+    document.getElementById('quizCard').hidden = true;
     document.getElementById('resultCard').classList.remove('visible');
-    updateQuestionTotal();
-    updateProgress();
-    renderQuestion();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    updateModePreview();
+
+    if (options.scroll !== false) {
+        window.scrollTo({ top: document.getElementById('configCard').offsetTop - 16, behavior: 'smooth' });
+    }
 }
 
 function showResults() {
+    if (state.questions.length === 0) return;
+
     const correctAnswers = state.questions.reduce((sum, question, index) => {
         return sum + Number(state.selectedAnswers[index] === question.correctIndex);
     }, 0);
 
     const score = Math.round((correctAnswers / state.questions.length) * 100);
+    const scoreElement = document.getElementById('resultScore');
 
-    document.getElementById('quizCard').style.display = 'none';
+    document.getElementById('quizCard').hidden = true;
     document.getElementById('resultCard').classList.add('visible');
-    document.getElementById('score').textContent = `${score}%`;
-    document.getElementById('summary').textContent = `Poprawne odpowiedzi: ${correctAnswers} z ${state.questions.length}`;
+    scoreElement.textContent = `${score}%`;
+    scoreElement.classList.toggle('good', score >= 60);
+    scoreElement.classList.toggle('bad', score < 60);
+    document.getElementById('resultSummary').textContent = `Poprawne odpowiedzi: ${correctAnswers} z ${state.questions.length}`;
 
     renderResultDetails();
     renderRecommendation();
+    window.scrollTo({ top: document.getElementById('resultCard').offsetTop - 16, behavior: 'smooth' });
 }
 
 function renderResultDetails() {
-    const detailsContainer = document.getElementById('reviewList');
+    const detailsContainer = document.getElementById('resultDetails');
     detailsContainer.innerHTML = '';
 
     state.questions.forEach((question, index) => {
@@ -274,7 +320,7 @@ function renderResultDetails() {
         const isCorrect = userAnswerIndex === question.correctIndex;
 
         const detail = document.createElement('article');
-        detail.className = `result-detail ${isCorrect ? 'correct' : 'incorrect'}`;
+        detail.className = `review-item ${isCorrect ? 'correct' : 'incorrect'}`;
         detail.innerHTML = `
             <h3>${index + 1}. ${question.question}</h3>
             <p><strong>Kategoria:</strong> ${question.category}</p>
@@ -288,7 +334,7 @@ function renderResultDetails() {
 }
 
 function renderRecommendation() {
-    const recommendation = document.getElementById('weakAreas');
+    const recommendation = document.getElementById('resultRecommendation');
     const weakestCategory = getWeakestCategory();
 
     if (!weakestCategory) {
@@ -319,10 +365,11 @@ function formatAnswer(index, answers) {
 
 // Informuje użytkownika o problemie z danymi zamiast pozostawiać pusty ekran.
 function renderLoadError(error) {
-    const questionText = document.getElementById('questionText');
-    if (questionText) {
-        questionText.textContent = `Błąd ładowania pytań: ${error.message}`;
+    const status = document.getElementById('questionsLoadStatus');
+    if (status) {
+        status.textContent = `Błąd ładowania pytań: ${error.message}`;
     }
+    document.getElementById('startQuizBtn')?.setAttribute('disabled', 'true');
     document.getElementById('nextBtn')?.setAttribute('disabled', 'true');
     document.getElementById('prevBtn')?.setAttribute('disabled', 'true');
 }
