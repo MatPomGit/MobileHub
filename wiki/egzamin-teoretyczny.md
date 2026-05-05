@@ -120,9 +120,9 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 ## Przykładowe pytania testowe
 
-### Pytania jednokrotnego wyboru
+> Każde pytanie ma **jedną poprawną odpowiedź**. Treść pytań została doprecyzowana tak, aby jasno określała kontekst i oczekiwany zakres odpowiedzi.
 
-**1.** Który komponent Android odpowiada za komunikację między warstwą UI a warstwą danych, przeżywając rotację ekranu?
+**1.** W aplikacji Android z architekturą MVVM lista produktów jest prezentowana w `Composable`, a dane pochodzą z repozytorium. Która warstwa powinna przygotować stan widoku (np. ładowanie, dane, błąd) odporny na zmianę konfiguracji, taką jak obrót ekranu?
 
 - a) Activity
 - b) Fragment
@@ -131,61 +131,39 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 ---
 
-**2.** Jaką zasadę MVVM łamie bezpośrednie wywoływanie repozytoriów z kodu Composable?
+**2.** Programista umieszcza bezpośrednie wywołanie repozytorium w funkcji `Composable`, zamiast pobierać dane przez `ViewModel`. Którą zasadę projektowania narusza przede wszystkim takie rozwiązanie?
 
-- a) Single Responsibility
-- b) **Separation of Concerns** ✓
-- c) Open/Closed
-- d) Interface Segregation
+- a) Pojedyncza odpowiedzialność
+- b) **Rozdział odpowiedzialności (Separation of Concerns)** ✓
+- c) Otwarte-zamknięte
+- d) Segregacja interfejsów
 
 ---
 
-**3.** Które z poniższych zdań opisuje POPRAWNIE właściwość `StateFlow` w Kotlinie?
+**3.** Zespół używa `StateFlow` do publikowania stanu ekranu. Które stwierdzenie poprawnie opisuje zachowanie `StateFlow` wobec nowego obserwatora?
 
 - a) Nie przechowuje ostatniej wartości
-- b) **Jest hot flow - zawsze emituje ostatnią wartość nowym subskrybentom** ✓
-- c) Może emitować `null` jako wartość początkową bez określenia domyślnej
-- d) Automatycznie anuluje się po rotacji ekranu
+- b) **Jest hot flow i udostępnia ostatnią wartość nowemu obserwatorowi** ✓
+- c) Nie wymaga wartości początkowej
+- d) Automatycznie zatrzymuje emisję po obrocie ekranu
 
 ---
 
-**4.** Co oznacza poziom QoS 2 w protokole MQTT?
+**4.** Aplikacja IoT przesyła komunikaty MQTT z wymaganiem, że wiadomość ma dotrzeć do odbiorcy **dokładnie raz**, bez duplikatów. Który poziom QoS należy wybrać?
 
-- a) Wiadomość może nie dotrzeć
-- b) Wiadomość dotrze co najmniej raz (możliwe duplikaty)
-- c) **Wiadomość dotrze dokładnie raz** ✓
-- d) Wiadomość jest szyfrowana end-to-end
+- a) QoS 0
+- b) QoS 1
+- c) **QoS 2** ✓
+- d) QoS 3
 
 ---
 
-**5.** W Flutter, który widget jest bezstanowy (stateless)?
+**5.** W projekcie Flutter trzeba wybrać widżet, który sam nie przechowuje własnego, modyfikowalnego stanu interfejsu. Który przykład najlepiej spełnia ten warunek?
 
 - a) Checkbox
 - b) TextField
 - c) **Icon** ✓
 - d) AnimatedContainer
-
-### Pytania wielokrotnego wyboru
-
-**6.** Które z poniższych są poprawne architektury stosowane w aplikacjach mobilnych? (zaznacz wszystkie właściwe)
-
-- ☑ MVVM
-- ☑ Clean Architecture
-- ☑ MVI
-- ☐ REST (to styl komunikacji, nie architektura aplikacji)
-- ☑ MVP
-
----
-
-**7.** Które elementy wchodzą w skład warstwy **data layer** w Clean Architecture?
-
-- ☑ Repository Implementation
-- ☑ Data Source (Remote / Local)
-- ☐ ViewModel (to warstwa presentation)
-- ☑ DTO / Entity Mapper
-- ☑ API Service Interface
-
-<!-- Sekcję pytań opisowych usunięto, bo egzamin ma formę wyłącznie testową ABCD. -->
 
 ## Wskazówki do nauki
 
