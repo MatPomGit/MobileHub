@@ -119,6 +119,9 @@ const ARTICLES = {
     'mediapipe-mobile':      'wiki/mediapipe-mobile.md',
     'ai-mobile-ux':          'wiki/ai-mobile-ux.md',
     'edge-ai-future':        'wiki/edge-ai-future.md',
+    'litert-lm-android':      'wiki/litert-lm-android.md',
+    'litert-lm-npu':          'wiki/litert-lm-npu.md',
+    'google-maven':           'wiki/google-maven.md',
     'file-formats-intro':    'wiki/file-formats-intro.md',
     'json-xml-formats':      'wiki/json-xml-formats.md',
     'csv-yaml-toml':         'wiki/csv-yaml-toml.md',
@@ -265,7 +268,7 @@ const CATEGORIES = [
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','social-media-integration','mobile-performance','app-publishing','app-distribution','app-updates'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
-    { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','termux','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','android-lint','agp-upgrade-assistant','file-storage-mobile'] },
+    { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','termux','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','android-lint','agp-upgrade-assistant','file-storage-mobile','google-maven'] },
     { id: 'cat-ios',      name: 'Programowanie natywne iOS',      icon: 'fa-brands fa-apple',               articles: ['xcode-ios','swift-basics','swiftui-advanced','ios-networking','ios-data','ios-notifications'] },
     { id: 'cat-cross',    name: 'Cross-platform i PWA',           icon: 'fa-solid fa-layer-group',          articles: ['cross-platform','flutter-advanced','react-native','pwa-advanced','jak-stworzyc-pwa','kmp-multiplatform','buildozer','mobile-docker'] },
     { id: 'cat-sensors',  name: 'Obsługa sensorów',               icon: 'fa-solid fa-compass',              articles: ['sensors','camera-api','location-maps','audio-microphone','biometrics'] },
@@ -274,7 +277,7 @@ const CATEGORIES = [
     { id: 'cat-xr',       name: 'XR i rozszerzona rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
     { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','lua-mobile-games','unity-advanced','game-physics','game-monetization','gamedev-market','small-engine-games','frotz-zmachine','serious-games','neurogaming'] },
     { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui','visual-odometry','fuzja-modalnosci-kalman'] },
-    { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','ai-legal-aspects','mediapipe-mobile','ai-mobile-ux','edge-ai-future'] },
+    { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','ai-legal-aspects','mediapipe-mobile','ai-mobile-ux','edge-ai-future','litert-lm-android','litert-lm-npu'] },
     { id: 'cat-file-formats', name: 'Formaty plików i przechowywanie danych', icon: 'fa-solid fa-folder-open',        articles: ['file-formats-intro','json-xml-formats','csv-yaml-toml','image-formats-mobile','audio-video-formats','3d-model-formats','ml-file-formats','binary-serialization','compression-mobile','document-formats','database-file-formats','data-storage-best-practices'] },
 ];
 
