@@ -223,6 +223,7 @@ const METADATA = {
     'computer-vision-mobile':{ category: 'Robotyka autonomiczna',         title: 'Computer Vision w robotyce mobilnej',      icon: 'fa-solid fa-eye' },
     'visual-odometry':       { category: 'Robotyka autonomiczna',         title: 'Odometria wizyjna i Egomotion',             icon: 'fa-solid fa-route' },
     'fuzja-modalnosci-kalman': { category: 'Robotyka autonomiczna',       title: 'Fuzja modalności: filtr Kalmana, GP i SYAC', icon: 'fa-solid fa-circle-nodes' },
+    'robohub-external':     { category: 'Robotyka autonomiczna',          title: 'RoboHub - materiały dodatkowe',             icon: 'fa-solid fa-up-right-from-square' },
     'projekt-zaliczeniowy':  { category: 'Zaliczenie',                    title: 'Projekt aplikacji',                        icon: 'fa-solid fa-laptop-code' },
     'egzamin-teoretyczny':   { category: 'Zaliczenie',                    title: 'Egzamin teoretyczny - przygotowanie',      icon: 'fa-solid fa-graduation-cap' },
     'app-publishing':        { category: 'Projektowanie i OS',            title: 'Publikacja i promocja własnej aplikacji',  icon: 'fa-solid fa-rocket' },
@@ -279,7 +280,7 @@ const CATEGORIES = [
     { id: 'cat-affective',name: 'Informatyka afektywna',          icon: 'fa-solid fa-face-smile',           articles: ['affective-computing','emotion-recognition','voice-analysis','mental-health-apps','cognitive-robotics','computational-cognition','software-agent','intelligent-agent','knowledge-representation','cognitive-models','cognitive-perception','lida-architecture','soar-architecture','clarion-architecture','actr-architecture','opencog-architecture','computer-aided-diagnosis','active-vision','foveated-vision'] },
     { id: 'cat-xr',       name: 'XR i rozszerzona rzeczywistość', icon: 'fa-solid fa-vr-cardboard',         articles: ['xr-mobile','arcore-advanced','vr-mobile'] },
     { id: 'cat-games',    name: 'Gry mobilne',                    icon: 'fa-solid fa-gamepad',              articles: ['mobile-games','lua-mobile-games','unity-advanced','game-physics','game-monetization','gamedev-market','small-engine-games','frotz-zmachine','serious-games','neurogaming'] },
-    { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui','visual-odometry','fuzja-modalnosci-kalman'] },
+    { id: 'cat-robots',   name: 'Robotyka autonomiczna',          icon: 'fa-solid fa-robot',                articles: ['robotics-mobile','ros2-mobile','computer-vision-mobile','robot-control-ui','visual-odometry','fuzja-modalnosci-kalman',{ id: 'robohub-external', href: 'https://matpomgit.github.io/RoboHub/' }] },
     { id: 'cat-local-ai', name: 'Lokalna AI na urządzeniu',      icon: 'fa-solid fa-microchip',            articles: ['local-ai-intro','mobile-ml-frameworks','neural-networks-mobile','llm-on-device','model-quantization','on-device-inference','ai-image-processing','ai-speech-nlp','ai-privacy-security','ai-legal-aspects','mediapipe-mobile','ai-mobile-ux','edge-ai-future','litert-lm-android','litert-lm-npu'] },
     { id: 'cat-file-formats', name: 'Formaty plików i przechowywanie danych', icon: 'fa-solid fa-folder-open',        articles: ['file-formats-intro','json-xml-formats','csv-yaml-toml','image-formats-mobile','audio-video-formats','3d-model-formats','ml-file-formats','binary-serialization','compression-mobile','document-formats','database-file-formats','data-storage-best-practices'] },
 ];
@@ -396,9 +397,13 @@ function buildSidebar() {
                 <i class="fa-solid fa-chevron-down toggle-icon"></i>
             </h4>
             <ul class="cat-list ${isDefaultExpanded ? '' : 'collapsed'}" id="${cat.id}">
-                ${cat.articles.map(id => {
+                ${cat.articles.map(article => {
+                    const id = typeof article === 'string' ? article : article.id;
+                    const href = typeof article === 'string' ? `#${id}` : article.href;
+                    const target = typeof article === 'string' ? '' : ' target="_blank" rel="noopener noreferrer"';
+                    const dataArticle = typeof article === 'string' ? ` data-article="${id}"` : '';
                     const m = METADATA[id] || {};
-                    return `<li><a href="#${id}" data-article="${id}"><i class="${m.icon || 'fa-solid fa-file'} article-icon"></i>${m.title || id}</a></li>`;
+                    return `<li><a href="${href}"${dataArticle}${target}><i class="${m.icon || 'fa-solid fa-file'} article-icon"></i>${m.title || id}</a></li>`;
                 }).join('')}
             </ul>`;
         nav.appendChild(sec);
