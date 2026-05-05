@@ -247,8 +247,8 @@ function showResults() {
 
     document.getElementById('quizCard').style.display = 'none';
     document.getElementById('resultCard').classList.add('visible');
-    document.getElementById('resultScore').textContent = `${score}%`;
-    document.getElementById('resultSummary').textContent = `Poprawne odpowiedzi: ${correctAnswers} z ${state.questions.length}`;
+    document.getElementById('score').textContent = `${score}%`;
+    document.getElementById('summary').textContent = `Poprawne odpowiedzi: ${correctAnswers} z ${state.questions.length}`;
 
     renderResultDetails();
     renderRecommendation();
