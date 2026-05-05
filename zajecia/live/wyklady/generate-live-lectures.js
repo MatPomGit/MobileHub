@@ -84,10 +84,12 @@ function renderLecture(lecture) {
       if (!pdfjsModule) {
         const fallbackMessage = lastImportError?.message || 'Nie udało się pobrać modułu PDF.js.';
         if (loadingSlide) {
-          loadingSlide.innerHTML = '<h2>Brak dostępu do silnika PDF</h2>'
-            + '<p>' + fallbackMessage + '</p>'
-            + '<p>Użyj przycisku „Otwórz PDF” lub sprawdź połączenie z internetem.</p>'
-            + '<p><a href="' + pdfSrc + '" target="_blank" rel="noopener">Otwórz PDF</a></p>';
+          loadingSlide.innerHTML = '<h2>Brak dostępu do silnika PDF</h2>' 
+            + '<p class="pdf-error-msg"></p>' 
+            + '<p>Użyj przycisku „Otwórz PDF” lub sprawdź połączenie z internetem.</p>' 
+            + '<p><a class="pdf-fallback-link" target="_blank" rel="noopener">Otwórz PDF</a></p>';
+          loadingSlide.querySelector('.pdf-error-msg').textContent = fallbackMessage;
+          loadingSlide.querySelector('.pdf-fallback-link').href = pdfSrc;
         }
         return;
       }
