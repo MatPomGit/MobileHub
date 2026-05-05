@@ -1,4 +1,5 @@
-const CACHE_NAME = 'pam-wiki-v3';
+// Zmiana nazwy cache wymusza pobranie odświeżonych styli mobilnych po aktualizacji PWA.
+const CACHE_NAME = 'pam-wiki-v4';
 const ASSETS_TO_CACHE = [
     './',
     './index.html',

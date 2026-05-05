@@ -2888,6 +2888,153 @@ footer strong {
         font-size: 18px;
     }
 
+    /* Nowe komponenty z interfejsu webowego dostają mobilne odstępy i układ przyjazny dla kciuka. */
+    .section-title {
+        align-items: flex-start;
+        font-size: 15px;
+        line-height: 1.25;
+        margin: 24px 0 12px;
+    }
+
+    .milestone-item {
+        gap: 12px;
+        padding: 14px 0;
+    }
+
+    .milestone-dot {
+        width: 32px;
+        height: 32px;
+    }
+
+    .tool-card {
+        border-width: 1px;
+        border-radius: 16px;
+        padding: 20px 18px;
+        font-size: 1em;
+    }
+
+    .tool-card .info-card-header {
+        align-items: flex-start;
+    }
+
+    .tool-card-btn {
+        width: 100%;
+        justify-content: center;
+        margin-top: 14px;
+        padding: 12px 14px;
+        font-size: 0.95em;
+    }
+
+    .grading-shortcut-card,
+    .lecturer-grading-card {
+        border-radius: 14px;
+        padding: 16px;
+        margin-bottom: 22px;
+    }
+
+    .lecturer-grading-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .grading-reset-btn,
+    .grading-copy-btn {
+        width: 100%;
+        min-height: 44px;
+    }
+
+    .grading-row {
+        gap: 8px;
+        padding: 12px;
+    }
+
+    .grading-range {
+        min-height: 32px;
+    }
+
+    .grading-number {
+        min-height: 44px;
+        font-size: 16px;
+    }
+
+    .grading-feedback {
+        min-height: 120px;
+        font-size: 13px;
+    }
+
+    /* Tabele z nowych kart webowych przewijają się poziomo zamiast rozszerzać viewport telefonu. */
+    .score-table,
+    #projektMergedWikiCard table,
+    #egzaminMergedWikiCard table {
+        display: block;
+        width: 100%;
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .score-table th,
+    .score-table td {
+        white-space: nowrap;
+        padding: 9px 12px;
+    }
+
+    #projektMergedWikiCard,
+    #egzaminMergedWikiCard {
+        overflow: hidden;
+    }
+
+    #projektMergedWikiCard .markdown-body,
+    #projektMergedWikiContent,
+    #egzaminMergedWikiCard .markdown-body,
+    #egzaminMergedWikiContent {
+        font-size: 1em;
+        line-height: 1.6;
+    }
+
+    #projektMergedWikiCard ul,
+    #projektMergedWikiCard ol,
+    #egzaminMergedWikiCard ul,
+    #egzaminMergedWikiCard ol {
+        margin-left: 1.4em;
+    }
+
+    .materials-layout {
+        gap: 16px;
+    }
+
+    .materials-card {
+        padding: 16px;
+    }
+
+    .presentation-controls {
+        gap: 8px;
+        overflow-x: auto;
+        padding-bottom: 4px;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    .presentation-btn {
+        flex: 0 0 auto;
+        min-height: 40px;
+        padding: 8px 12px;
+    }
+
+    #presentation-preview {
+        min-height: 260px;
+        max-height: 62vh;
+        border-radius: 10px;
+    }
+
+    .file-item {
+        min-height: 64px;
+        padding: 12px 14px;
+    }
+
+    .file-meta strong {
+        white-space: normal;
+        line-height: 1.25;
+    }
+
     /* wiki sidebar in mobile adjustments */
     .wiki-sidebar {
         top: var(--header-h);
