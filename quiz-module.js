@@ -148,8 +148,7 @@ function getSelectedMode() {
 
     if (checked && /^\d+$/.test(checked)) {
         const targetSize = Number.parseInt(checked, 10);
-        const matchedMode = Object.entries(QUIZ_MODE_SIZES).find(([, size]) => size === targetSize)?.[0];
-        return matchedMode ?? 'short';
+        return Object.keys(QUIZ_MODE_SIZES).find(key => QUIZ_MODE_SIZES[key] === targetSize) || 'short';
     }
 
     return 'short';
