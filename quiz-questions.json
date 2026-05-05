@@ -1,422 +1,1802 @@
 [
   {
-    "question": "Która warstwa architektury MVVM odpowiada bezpośrednio za przygotowanie stanu dla interfejsu użytkownika?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "W aplikacji Android stosującej MVVM ekran powinien wyświetlać listę produktów z informacją o ładowaniu i błędach. Która warstwa powinna przygotować taki obserwowalny stan UI na podstawie danych z repozytorium?",
+    "category": 4,
     "answers": [
-      "Repository",
+      "Activity/Composable",
       "ViewModel",
-      "Room Database",
-      "Service"
+      "Repository",
+      "Room DAO"
     ],
     "correctIndex": 1,
-    "explanation": "ViewModel przygotowuje i udostępnia stan dla UI, oddzielając logikę prezentacji od widoku."
+    "explanation": "ViewModel agreguje dane z warstwy domenowej lub repozytorium i wystawia stan dla widoku, np. przez StateFlow/LiveData. Repository odpowiada głównie za dostęp do danych, a widok powinien jedynie renderować stan."
   },
   {
-    "question": "Która biblioteka jest najczęściej używana w Androidzie do lokalnego przechowywania danych w relacyjnej bazie?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "Aplikacja Android ma przechowywać lokalnie encje użytkowników i umożliwiać zapytania SQL bez pisania dużej ilości kodu niskopoziomowego. Które rozwiązanie najlepiej pasuje do tego przypadku?",
+    "category": 4,
     "answers": [
-      "Retrofit",
       "Room",
-      "Glide",
-      "WorkManager"
+      "DataStore Preferences",
+      "EncryptedSharedPreferences",
+      "Retrofit z konwerterem JSON"
     ],
-    "correctIndex": 1,
-    "explanation": "Room jest warstwą abstrakcji nad SQLite i służy do przechowywania danych lokalnie."
+    "correctIndex": 0,
+    "explanation": "Room jest biblioteką ORM/warstwą abstrakcji nad SQLite, przeznaczoną do relacyjnego przechowywania danych lokalnych. DataStore i SharedPreferences nadają się raczej do prostych ustawień, a Retrofit obsługuje komunikację sieciową."
   },
   {
-    "question": "Jaki mechanizm w Flutterze służy do budowy interfejsu w podejściu deklaratywnym?",
-    "category": "W05: Cross-platform",
+    "question": "Student analizuje różnicę między deklaratywnym i imperatywnym UI. W aplikacji Flutter ekran powinien być opisany jako wynik aktualnego stanu, a framework ma zająć się przebudową widoku po zmianie danych. Który opis najlepiej oddaje ten sposób pracy?",
+    "category": 5,
     "answers": [
-      "Activities",
-      "Fragments",
-      "Widgets",
-      "Services"
+      "Imperatywne aktualizowanie istniejących widoków po zmianie danych",
+      "Tworzenie drzewa widgetów jako funkcji aktualnego stanu",
+      "Mapowanie komponentów UI na gotowe szablony platformy przed uruchomieniem aplikacji",
+      "Aktualizowanie hierarchii widoków przez bezpośrednie operacje na kontrolkach"
+    ],
+    "correctIndex": 1,
+    "explanation": "Flutter opisuje interfejs jako drzewo widgetów wynikające ze stanu aplikacji. Po zmianie stanu framework przebudowuje odpowiednie fragmenty drzewa."
+  },
+  {
+    "question": "Projektujesz komunikację dla czujnika IoT, który co kilka sekund wysyła krótką telemetrię do wielu niezależnych odbiorców, a sieć bywa niestabilna. Które rozwiązanie najlepiej pasuje do takiego ograniczonego środowiska i modelu dystrybucji danych?",
+    "category": 7,
+    "answers": [
+      "FTP w modelu klient-serwer",
+      "SMTP z załącznikami MIME",
+      "SOAP z ciężkimi komunikatami XML",
+      "MQTT w modelu publish/subscribe"
+    ],
+    "correctIndex": 3,
+    "explanation": "MQTT jest lekkim protokołem publish/subscribe, często stosowanym w IoT do przesyłania telemetrii przez brokera."
+  },
+  {
+    "question": "W aplikacji Jetpack Compose użytkownik przechodzi z listy produktów do szczegółów produktu, a trasa musi przenieść identyfikator elementu. Który element architektury nawigacji powinien utrzymywać graf tras i wskazywać, jaki ekran jest aktualnie wyświetlany?",
+    "category": 4,
+    "answers": [
+      "LaunchedEffect",
+      "Modifier.navigationBarsPadding()",
+      "NavHost",
+      "Scaffold"
     ],
     "correctIndex": 2,
-    "explanation": "Flutter buduje interfejs z widgetów opisujących wygląd i zachowanie ekranu."
+    "explanation": "NavHost wiąże NavController z grafem nawigacji i określa, które composable są dostępne pod konkretnymi trasami."
   },
   {
-    "question": "Który protokół jest lekki i często używany w rozwiązaniach IoT do wymiany wiadomości?",
-    "category": "W07: IoT i komunikacja",
-    "answers": [
-      "FTP",
-      "MQTT",
-      "SOAP",
-      "IMAP"
-    ],
-    "correctIndex": 1,
-    "explanation": "MQTT to lekki protokół publish/subscribe popularny w IoT."
-  },
-  {
-    "question": "Który element Androida odpowiada za definicję tras i przejść między ekranami w Compose?",
-    "category": "W04: Aplikacje natywne i architektura",
-    "answers": [
-      "NavHost",
-      "RecyclerView",
-      "ConstraintLayout",
-      "BroadcastReceiver"
-    ],
-    "correctIndex": 0,
-    "explanation": "NavHost przechowuje graf nawigacji i odpowiada za przechodzenie między ekranami."
-  },
-  {
-    "question": "Jak nazywa się test, który sprawdza pojedynczą funkcję lub klasę w izolacji?",
-    "category": "W03: UI/UX i jakość",
+    "question": "Test sprawdza metodę obliczającą rabat bez uruchamiania emulatora, bazy danych i API. Zależności są zastąpione atrapami. Jaki to typ testu?",
+    "category": 3,
     "answers": [
       "Test jednostkowy",
-      "Test akceptacyjny",
-      "Test wydajnościowy",
-      "Test manualny"
+      "Test end-to-end",
+      "Test eksploracyjny",
+      "Test akceptacyjny użytkownika"
     ],
     "correctIndex": 0,
-    "explanation": "Test jednostkowy weryfikuje mały fragment logiki bez zależności od całego systemu."
+    "explanation": "Test jednostkowy weryfikuje mały fragment logiki w izolacji od reszty systemu. Atrapy/moki pozwalają odciąć zależności zewnętrzne."
   },
   {
-    "question": "Która technologia Apple jest standardowym frameworkiem do budowy nowoczesnego UI na iOS?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "Zespół iOS chce budować ekran jako deklarację zależną od stanu, korzystać z podglądów oraz ograniczyć ręczne aktualizowanie kontrolek. Który framework najlepiej odpowiada takiemu modelowi pracy?",
+    "category": 4,
     "answers": [
-      "UIKit XML",
       "SwiftUI",
-      "CoreDataUI",
-      "SpriteKit"
+      "SpriteKit",
+      "Core Animation",
+      "UIKit ze storyboardami"
     ],
-    "correctIndex": 1,
-    "explanation": "SwiftUI to deklaratywny framework Apple do tworzenia interfejsów."
+    "correctIndex": 0,
+    "explanation": "SwiftUI jest deklaratywnym frameworkiem Apple do budowy UI. UIKit nadal jest używany, ale nie jest deklaratywnym standardem opartym na składni SwiftUI."
   },
   {
-    "question": "Co oznacza skrót PWA w kontekście aplikacji mobilnych?",
-    "category": "W05: Cross-platform",
+    "question": "Aplikacja webowa ma być instalowalna na telefonie, działać częściowo offline i wykorzystywać mechanizmy przeglądarki zbliżające ją do aplikacji mobilnej. Który opis najpełniej wyjaśnia, czym jest PWA w takim scenariuszu?",
+    "category": 5,
     "answers": [
-      "Portable Web API",
-      "Progressive Web App",
-      "Programmed Widget Application",
-      "Private Web Access"
+      "Aplikacja instalowana przez sklep, tworzona w całości jako projekt natywny iOS",
+      "Aplikacja webowa korzystająca z mechanizmów takich jak manifest, service worker i instalowalność",
+      "Format paczki Android App Bundle publikowany w sklepie",
+      "Biblioteka do mostkowania kodu Kotlin z kodem Swift"
     ],
     "correctIndex": 1,
-    "explanation": "PWA to Progressive Web App, czyli aplikacja webowa działająca jak aplikacja mobilna."
+    "explanation": "PWA to Progressive Web App: aplikacja webowa, która może oferować cechy aplikacji mobilnej, np. instalowalność, cache i częściową pracę offline."
   },
   {
-    "question": "Który typ sensora pozwala wykrywać położenie urządzenia względem pola grawitacyjnego Ziemi?",
-    "category": "W02: Sprzęt i sensory",
+    "question": "Telefon ma automatycznie zmienić układ ekranu po obróceniu urządzenia z pionu do poziomu. Potrzebny jest pomiar przyspieszenia względem osi urządzenia i pola grawitacji. Które źródło danych najlepiej dostarcza takiej informacji?",
+    "category": 2,
     "answers": [
       "Akcelerometr",
-      "Mikrofon",
-      "Czytnik linii papilarnych",
+      "Żyroskop",
+      "Magnetometr",
       "Barometr"
     ],
     "correctIndex": 0,
-    "explanation": "Akcelerometr mierzy przyspieszenie i pomaga określić orientację urządzenia."
+    "explanation": "Akcelerometr mierzy przyspieszenia, w tym składową wynikającą z grawitacji, dlatego pomaga określać orientację urządzenia. Żyroskop mierzy prędkość kątową, a magnetometr kierunek pola magnetycznego."
   },
   {
-    "question": "Która praktyka zwiększa bezpieczeństwo aplikacji mobilnej podczas komunikacji z API?",
-    "category": "W07: IoT i komunikacja",
+    "question": "Aplikacja mobilna komunikuje się z API finansowym. Który zestaw praktyk najlepiej ogranicza ryzyko podszycia się pod serwer i przejęcia sesji?",
+    "category": 7,
     "answers": [
-      "Przechowywanie kluczy w kodzie źródłowym",
-      "Wyłączenie HTTPS",
-      "Stosowanie cert pinning i bezpiecznej autoryzacji",
-      "Brak walidacji danych"
+      "Wyłączenie walidacji certyfikatu w buildzie produkcyjnym",
+      "Cert pinning, TLS i bezpieczny mechanizm autoryzacji tokenami",
+      "Publiczny klucz API zapisany na stałe w kodzie i brak rotacji",
+      "HTTP bez TLS oraz token bez daty ważności"
     ],
-    "correctIndex": 2,
-    "explanation": "Cert pinning i bezpieczna autoryzacja utrudniają podszywanie się pod serwer."
+    "correctIndex": 1,
+    "explanation": "TLS, poprawna autoryzacja i cert pinning zmniejszają ryzyko ataków typu man-in-the-middle. Wyłączanie walidacji certyfikatów lub brak wygasania tokenów zwiększa ryzyko."
   },
   {
-    "question": "Który komponent Androida najlepiej nadaje się do planowania gwarantowanej pracy w tle, nawet po restarcie aplikacji?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "Aplikacja Android ma zsynchronizować dane po spełnieniu warunków systemowych, np. dostępnej sieci, także po zamknięciu ekranu przez użytkownika. Który komponent najlepiej wspiera takie odroczone, niezawodne zadania w tle?",
+    "category": 4,
     "answers": [
-      "WorkManager",
+      "CoroutineScope utworzony w Activity",
       "Toast",
-      "Intent Filter",
-      "TextView"
+      "BroadcastReceiver bez harmonogramu",
+      "WorkManager"
     ],
-    "correctIndex": 0,
-    "explanation": "WorkManager służy do niezawodnego uruchamiania odroczonych zadań w tle."
+    "correctIndex": 3,
+    "explanation": "WorkManager jest przeznaczony do odroczonej, gwarantowanej pracy w tle z uwzględnieniem ograniczeń systemowych, np. sieci lub ładowania."
   },
   {
-    "question": "Które rozwiązanie w iOS służy do trwałego, bezpiecznego przechowywania tokenów i haseł?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "Aplikacja iOS musi przechować token odświeżający tak, aby nie był zwykłą wartością w preferencjach użytkownika. Gdzie powinien trafić taki sekret?",
+    "category": 4,
     "answers": [
-      "UserDefaults",
-      "Clipboard",
       "Keychain",
-      "Info.plist"
-    ],
-    "correctIndex": 2,
-    "explanation": "Keychain jest przeznaczony do przechowywania danych wrażliwych."
-  },
-  {
-    "question": "W Compose i SwiftUI stan interfejsu powinien być najczęściej traktowany jako:",
-    "category": "W03: UI/UX i jakość",
-    "answers": [
-      "Dane niemutowalne obserwowane przez widok",
-      "Stały plik konfiguracyjny",
-      "Zmienna globalna współdzielona przez cały system",
-      "Element zależny wyłącznie od XML"
+      "Info.plist",
+      "Cache URLSession",
+      "UserDefaults"
     ],
     "correctIndex": 0,
-    "explanation": "Nowoczesne frameworki UI promują jednokierunkowy przepływ danych i obserwowalny stan."
+    "explanation": "Keychain służy do bezpiecznego przechowywania sekretów, takich jak hasła, tokeny i klucze. UserDefaults i Info.plist nie są właściwym miejscem dla wrażliwych danych."
   },
   {
-    "question": "Który format jest najczęściej używany do lekkiej komunikacji REST API z aplikacją mobilną?",
-    "category": "W07: IoT i komunikacja",
+    "question": "Dlaczego w Compose i SwiftUI zaleca się traktowanie stanu UI jako obserwowalnych danych, a nie ręczne manipulowanie każdym elementem widoku?",
+    "category": 3,
     "answers": [
-      "JSON",
-      "BMP",
-      "AVI",
-      "PSD"
-    ],
-    "correctIndex": 0,
-    "explanation": "JSON jest lekki, czytelny i powszechnie stosowany w komunikacji klient-serwer."
-  },
-  {
-    "question": "Po co stosuje się cache lokalny w aplikacji mobilnej?",
-    "category": "W10: Gry i wydajność",
-    "answers": [
-      "Aby spowolnić uruchamianie aplikacji",
-      "Aby zmniejszyć liczbę renderowanych ekranów",
-      "Aby przyspieszyć dostęp do danych i wspierać tryb offline",
-      "Aby zastąpić system logowania"
-    ],
-    "correctIndex": 2,
-    "explanation": "Cache lokalny poprawia szybkość działania i umożliwia częściową pracę offline."
-  },
-  {
-    "question": "Która praktyka poprawia dostępność aplikacji mobilnej?",
-    "category": "W03: UI/UX i jakość",
-    "answers": [
-      "Ukrywanie etykiet pól formularza",
-      "Dodawanie opisów dla czytników ekranu i odpowiedniego kontrastu",
-      "Używanie wyłącznie koloru do przekazywania informacji",
-      "Blokowanie skalowania tekstu"
+      "Bo widok może łatwiej reagować na spójny model stanu zamiast koordynować źródła danych",
+      "Bo widok może zostać odtworzony jako funkcja stanu, co ułatwia spójność i testowanie",
+      "Bo frameworki te nie obsługują żadnych zdarzeń użytkownika",
+      "Bo definicja widoku powinna wynikać z deklaracji layoutu utrzymywanej poza logiką aplikacji"
     ],
     "correctIndex": 1,
-    "explanation": "Opisy semantyczne i właściwy kontrast wspierają technologie asystujące."
+    "explanation": "Deklaratywne frameworki UI promują przepływ: stan → renderowanie. Dzięki temu widok jest odzwierciedleniem danych, a nie zbiorem ręcznych operacji na elementach ekranu."
   },
   {
-    "question": "Który wzorzec w Androidzie najlepiej wspiera reaktywne aktualizacje UI przy zmianie danych?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "Klient mobilny pobiera z REST API profil użytkownika, listę zamówień oraz komunikaty błędów. Dane mają być tekstowe, lekkie i łatwe do mapowania na obiekty w aplikacji. Który format najtrafniej spełnia te wymagania?",
+    "category": 7,
     "answers": [
-      "LiveData lub StateFlow obserwowane przez UI",
-      "Ręczne odświeżanie całego ekranu timerem",
-      "Stałe zapisywanie stanu do pliku tekstowego",
-      "Wysyłanie SMS po każdej zmianie"
+      "Protocol Buffers",
+      "YAML",
+      "CSV",
+      "JSON"
     ],
-    "correctIndex": 0,
-    "explanation": "LiveData i StateFlow przekazują zmiany stanu do widoku w sposób reaktywny."
+    "correctIndex": 3,
+    "explanation": "JSON jest najczęściej stosowany w REST API ze względu na czytelność, szerokie wsparcie bibliotek i prostą reprezentację obiektów. Protocol Buffers bywa wydajniejszy, ale jest mniej typowy dla klasycznych REST API."
   },
   {
-    "question": "Które podejście najlepiej ogranicza zużycie baterii podczas pobierania lokalizacji?",
-    "category": "W02: Sprzęt i sensory",
+    "question": "Aplikacja newsowa przechowuje ostatnio pobrane artykuły w pamięci lokalnej urządzenia. Jakie wymaganie użytkowe i wydajnościowe najlepiej uzasadnia zastosowanie takiego cache’u?",
+    "category": 10,
     "answers": [
-      "Ciągłe GPS z najwyższą dokładnością w tle",
-      "Dopasowanie częstotliwości i dokładności do scenariusza",
-      "Wyłączenie wszystkich sensorów poza GPS",
-      "Wymuszenie aktualizacji co 100 ms"
+      "Uniemożliwienie paginacji wyników",
+      "Zastąpienie mechanizmu autoryzacji użytkownika",
+      "Użycie cache jako miejsca do przechowywania logiki autoryzacji użytkownika",
+      "Skrócenie czasu dostępu do danych i możliwość pokazania treści przy słabym połączeniu"
+    ],
+    "correctIndex": 3,
+    "explanation": "Cache lokalny poprawia responsywność i może wspierać tryb offline lub poor-connectivity. Nie zastępuje logowania ani kontroli dostępu."
+  },
+  {
+    "question": "Projektujesz formularz logowania używany także przez osoby korzystające z technologii asystujących. Który zestaw decyzji najlepiej ogranicza bariery dostępności przy etykietach, kontraście, błędach i rozmiarze tekstu?",
+    "category": 3,
+    "answers": [
+      "Zablokowanie orientacji i zmniejszenie tekstu poniżej zaleceń systemowych",
+      "Łączenie koloru z komunikatem tekstowym i semantyką błędu",
+      "Opisane pola dla czytników ekranu, wystarczający kontrast i obsługa skalowania tekstu",
+      "Zastąpienie stałych etykiet placeholderami uzupełnionymi komunikatem po błędzie"
+    ],
+    "correctIndex": 2,
+    "explanation": "Dostępność wymaga m.in. semantycznych opisów, kontrastu, czytelnych komunikatów błędów i poszanowania ustawień użytkownika, takich jak większy tekst."
+  },
+  {
+    "question": "Repozytorium emituje zmiany profilu użytkownika po aktualizacji w bazie. Jak ViewModel powinien najczęściej przekazać te zmiany do UI w Androidzie?",
+    "category": 4,
+    "answers": [
+      "Utrzymywać stan pośredni w warstwie widoku i okresowo odpytywać repozytorium",
+      "Wystawić LiveData lub StateFlow obserwowane przez UI",
+      "Uruchamiać timer i co sekundę odświeżać cały ekran",
+      "Przekazywać zmiany przez lokalny mechanizm zdarzeń bez modelu obserwowalnego stanu"
     ],
     "correctIndex": 1,
-    "explanation": "Dobór interwałów i priorytetu lokalizacji do potrzeb funkcji zmniejsza koszt energetyczny."
+    "explanation": "LiveData i StateFlow umożliwiają reaktywne przekazywanie zmian stanu do UI bez ręcznego odpytywania danych timerem."
   },
   {
-    "question": "Który mechanizm HTTP służy do bezpiecznego odświeżania sesji bez ponownego logowania użytkownika?",
-    "category": "W07: IoT i komunikacja",
+    "question": "Aplikacja fitness śledzi trasę użytkownika przez godzinę. Która strategia najlepiej równoważy dokładność lokalizacji i zużycie baterii?",
+    "category": 2,
+    "answers": [
+      "Dobór priorytetu, interwału i trybu pracy do scenariusza użycia",
+      "Stałe utrzymywanie wysokiej dokładności bez uwzględnienia kontekstu ruchu",
+      "Całkowite wyłączenie lokalizacji po pierwszym odczycie",
+      "Stały GPS z najwyższą dokładnością i aktualizacją co 100 ms"
+    ],
+    "correctIndex": 0,
+    "explanation": "Energooszczędne śledzenie lokalizacji wymaga dopasowania dokładności i częstotliwości aktualizacji do rzeczywistej potrzeby funkcji."
+  },
+  {
+    "question": "Access token wygasa po krótkim czasie, ale aplikacja nie powinna prosić użytkownika o hasło przy każdym odnowieniu sesji. Który mechanizm pozwala wykonać kontrolowane odświeżenie sesji?",
+    "category": 7,
     "answers": [
       "Refresh token",
-      "Publiczny klucz API w kodzie",
-      "Brak wygasania sesji",
-      "Cookie bez flag Secure i HttpOnly"
+      "Token sesji bez terminu ważności",
+      "Basic Auth z hasłem zapisanym w kodzie",
+      "Nagłówek User-Agent"
     ],
     "correctIndex": 0,
-    "explanation": "Refresh token pozwala odnowić access token bez podawania hasła przy każdej operacji."
+    "explanation": "Refresh token służy do odnowienia access tokena bez ponownego logowania hasłem. Powinien być przechowywany bezpiecznie i mieć odpowiednią politykę rotacji/wygasania."
   },
   {
-    "question": "Które narzędzie jest standardowo używane w Flutterze do zarządzania zależnościami pakietów?",
-    "category": "W05: Cross-platform",
+    "question": "Do projektu Flutter trzeba dodać bibliotekę z konkretną wersją, tak aby narzędzia frameworka mogły ją pobrać i uwzględnić w buildzie. Gdzie należy opisać taką zależność?",
+    "category": 5,
     "answers": [
-      "npm",
-      "pubspec.yaml i pub",
-      "CocoaPods",
-      "Gradle Kotlin DSL"
+      "W AndroidManifest.xml jako permission",
+      "W Podfile bez udziału konfiguracji Fluttera",
+      "W pliku pubspec.yaml obsługiwanym przez pub",
+      "W build.gradle.kts jako zależność Android-only"
     ],
-    "correctIndex": 1,
-    "explanation": "Flutter korzysta z systemu pakietów pub i konfiguracji w pliku pubspec.yaml."
+    "correctIndex": 2,
+    "explanation": "Flutter używa pliku pubspec.yaml i menedżera pakietów pub do deklarowania zależności Dart/Flutter."
   },
   {
-    "question": "Który typ testu najlepiej sprawdza współpracę kilku modułów i warstw aplikacji?",
-    "category": "W03: UI/UX i jakość",
+    "question": "Zespół sprawdza, czy moduł logowania poprawnie współpracuje z repozytorium i warstwą API, zamiast testować pojedynczą funkcję w izolacji. Jak należy zaklasyfikować taki test?",
+    "category": 3,
     "answers": [
+      "Test statyczny dokumentacji",
+      "Test snapshot pojedynczej ikony",
       "Test integracyjny",
-      "Test jednostkowy",
-      "Test snapshot ikony",
-      "Test statyczny README"
+      "Test jednostkowy"
     ],
-    "correctIndex": 0,
-    "explanation": "Test integracyjny weryfikuje działanie komponentów razem, a nie w izolacji."
+    "correctIndex": 2,
+    "explanation": "Test integracyjny sprawdza współpracę kilku komponentów lub warstw. Nie jest tak izolowany jak test jednostkowy."
   },
   {
-    "question": "W którym miejscu aplikacji mobilnej najbezpieczniej trzymać klucze prywatne użytkownika?",
-    "category": "W07: IoT i komunikacja",
+    "question": "Aplikacja generuje prywatny klucz użytkownika do podpisywania operacji. Które miejsce przechowywania jest najbezpieczniejsze na urządzeniu mobilnym?",
+    "category": 7,
     "answers": [
-      "W pamięci lokalnej bez szyfrowania",
-      "W keychain/keystore z ochroną systemową",
-      "W zasobach aplikacji jako plain text",
-      "W logach diagnostycznych"
+      "Zwykły plik JSON w katalogu cache",
+      "Logcat lub pliki diagnostyczne",
+      "Systemowy Keychain/Keystore, najlepiej z ochroną sprzętową, jeśli dostępna",
+      "Zasoby aplikacji spakowane w APK/IPA"
     ],
-    "correctIndex": 1,
-    "explanation": "Systemowe magazyny sekretów (Keychain/Keystore) oferują izolację i kontrolę dostępu."
+    "correctIndex": 2,
+    "explanation": "Keychain/Keystore są przeznaczone do ochrony sekretów i mogą korzystać z mechanizmów izolacji systemowej lub sprzętowej. Zasoby, cache i logi nie są bezpiecznym magazynem kluczy."
   },
   {
-    "question": "Który element Compose odpowiada za przewijalną listę zoptymalizowaną pod duże zbiory danych?",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "Lista w Compose może zawierać tysiące rekordów, ale na ekranie widoczna jest tylko niewielka część. Który komponent ogranicza koszt renderowania przez tworzenie elementów listy w sposób leniwy?",
+    "category": 4,
     "answers": [
-      "LazyColumn",
-      "Column",
-      "Box",
-      "Canvas"
+      "Column z verticalScroll",
+      "Canvas rysujący tekst bez semantyki",
+      "Box z ręcznie ustawianymi pozycjami",
+      "LazyColumn"
     ],
-    "correctIndex": 0,
-    "explanation": "LazyColumn renderuje elementy leniwie, co poprawia wydajność przy długich listach."
+    "correctIndex": 3,
+    "explanation": "LazyColumn tworzy i renderuje głównie widoczne elementy listy, dlatego lepiej skaluje się dla dużych zbiorów niż zwykły Column z pełnym zestawem dzieci."
   },
   {
-    "question": "Dlaczego w aplikacjach mobilnych stosuje się paginację wyników z API?",
-    "category": "W10: Gry i wydajność",
+    "question": "Lista produktów ma 50 000 rekordów po stronie serwera. Dlaczego aplikacja mobilna powinna pobierać je stronicami zamiast jednym żądaniem?",
+    "category": 10,
     "answers": [
-      "Aby pobierać tylko część danych i ograniczać transfer",
-      "Aby zawsze zwiększyć opóźnienia",
-      "Aby wyłączyć cache",
-      "Aby ominąć autoryzację"
+      "Aby całkowicie zrezygnować z cache'u i sortowania",
+      "Aby uprościć implementację klienta kosztem dłuższego czasu pierwszej odpowiedzi",
+      "Aby ominąć autoryzację na kolejnych stronach",
+      "Aby ograniczyć transfer, zużycie pamięci i czas oczekiwania na pierwsze wyniki"
     ],
-    "correctIndex": 0,
-    "explanation": "Paginacja zmniejsza ilość danych na żądanie i poprawia responsywność interfejsu."
+    "correctIndex": 3,
+    "explanation": "Paginacja zmniejsza rozmiar pojedynczej odpowiedzi, poprawia czas pierwszego renderowania i ogranicza zużycie pamięci oraz transferu."
   },
   {
-    "question": "Który zapis najlepiej opisuje aplikację mobilną typu native?",
-    "category": "W01: Wprowadzenie do mobile",
+    "question": "Zespół porównuje aplikację natywną, webową i hybrydową. W której odpowiedzi najlepiej wskazano, czym wyróżnia się aplikacja natywna pod względem technologii budowy i dostępu do platformy?",
+    "category": 1,
     "answers": [
-      "Jedna baza kodu JS uruchamiana w przeglądarce",
-      "Kod kompilowany pod konkretny system operacyjny",
-      "Wyłącznie aplikacja działająca offline",
-      "Program uruchamiany tylko na emulatorze"
+      "Jest uruchamiana głównie w warstwie webowej osadzonej w kontenerze aplikacji",
+      "Opiera się głównie na technologiach webowych i warstwie uruchomieniowej aplikacji",
+      "Nie wymaga testów na fizycznych urządzeniach",
+      "Jest tworzona i kompilowana z użyciem technologii właściwych dla danej platformy, np. Kotlin/Android lub Swift/iOS"
     ],
-    "correctIndex": 1,
-    "explanation": "Aplikacja native jest budowana pod konkretną platformę, np. Android lub iOS."
+    "correctIndex": 3,
+    "explanation": "Aplikacja natywna jest budowana pod konkretny system operacyjny i korzysta z jego SDK oraz komponentów platformowych."
   },
   {
-    "question": "Który komponent smartfona odpowiada bezpośrednio za pomiar prędkości obrotowej urządzenia?",
-    "category": "W02: Sprzęt i sensory",
+    "question": "Aplikacja AR ma stabilnie reagować na szybkie obroty telefonu podczas celowania kamerą. Potrzebny jest pomiar prędkości kątowej, a nie samego przyspieszenia liniowego. Który sensor odpowiada temu wymaganiu?",
+    "category": 2,
     "answers": [
       "Żyroskop",
+      "Magnetometr",
       "Czujnik zbliżeniowy",
-      "Mikrofon",
+      "Akcelerometr"
+    ],
+    "correctIndex": 0,
+    "explanation": "Żyroskop mierzy prędkość kątową, dlatego wspiera śledzenie rotacji. Akcelerometr mierzy przyspieszenie, a magnetometr pole magnetyczne."
+  },
+  {
+    "question": "Projektujesz ekran z dużą ilością informacji na telefonie. Która decyzja najczęściej poprawia skanowanie treści i zmniejsza obciążenie poznawcze?",
+    "category": 3,
+    "answers": [
+      "Spłaszczenie hierarchii typograficznej i ograniczenie wyróżnień sekcji",
+      "Umieszczenie maksymalnej liczby akcji w jednym pasku bez etykiet",
+      "Ukrycie nagłówków, aby zaoszczędzić kilka pikseli",
+      "Wyraźna hierarchia typograficzna, grupowanie treści i konsekwentne odstępy"
+    ],
+    "correctIndex": 3,
+    "explanation": "Hierarchia wizualna, grupowanie i spacing pomagają użytkownikowi szybko zrozumieć strukturę informacji na małym ekranie."
+  },
+  {
+    "question": "Użytkownik otwiera w klasycznej aplikacji Android ekran logowania z własnym cyklem życia, obsługą zdarzeń i powiązaniem z systemem. Który komponent najczęściej reprezentuje taki ekran?",
+    "category": 4,
+    "answers": [
+      "ApplicationId",
+      "Gradle Wrapper",
+      "Activity",
+      "ADB server"
+    ],
+    "correctIndex": 2,
+    "explanation": "Activity jest komponentem aplikacji Android powiązanym z ekranem i cyklem życia interakcji użytkownika. W nowoczesnych aplikacjach ekran może być też fragmentem lub composable hostowanym przez Activity."
+  },
+  {
+    "question": "Startup buduje MVP i chce możliwie szybko dostarczyć podobną funkcjonalność na Androida i iOS przy ograniczonym zespole. Jaka jest typowa zaleta podejścia cross-platform?",
+    "category": 5,
+    "answers": [
+      "Wspólna baza kodu może skrócić czas dostarczenia wersji na obie platformy",
+      "Brak konieczności testowania na urządzeniach docelowych",
+      "Możliwość ograniczenia części kosztów, ale przy ryzyku dodatkowych prac integracyjnych",
+      "Jedna baza kodu usuwa część duplikacji, lecz nie eliminuje potrzeby walidacji platformowej"
+    ],
+    "correctIndex": 0,
+    "explanation": "Cross-platform często przyspiesza start produktu dzięki współdzieleniu dużej części kodu. Nadal wymaga testowania, integracji natywnych i świadomego zarządzania wydajnością."
+  },
+  {
+    "question": "Krokomierz w telefonie analizuje powtarzalne wzorce ruchu podczas chodzenia. Dane z którego sensora są zwykle podstawą takiej detekcji?",
+    "category": 6,
+    "answers": [
+      "Barometr",
+      "Akcelerometr",
+      "Czujnik światła",
       "NFC"
     ],
-    "correctIndex": 0,
-    "explanation": "Żyroskop mierzy prędkość kątową i wspiera śledzenie orientacji."
-  },
-  {
-    "question": "Która zasada UI najtrafniej wspiera czytelność na małych ekranach?",
-    "category": "W03: UI/UX i jakość",
-    "answers": [
-      "Maksymalizacja liczby elementów na ekranie",
-      "Wyraźna hierarchia wizualna i odpowiednie odstępy",
-      "Stałe używanie rozmiaru czcionki 10px",
-      "Ukrywanie nagłówków sekcji"
-    ],
     "correctIndex": 1,
-    "explanation": "Hierarchia wizualna i spacing poprawiają skanowanie treści i ergonomię."
+    "explanation": "Akcelerometr rejestruje zmiany przyspieszenia typowe dla kroków. Inne sensory mogą uzupełniać kontekst, ale nie są podstawowym źródłem detekcji kroków."
   },
   {
-    "question": "W Androidzie za cykl życia ekranu i interakcję z użytkownikiem najczęściej odpowiada:",
-    "category": "W04: Aplikacje natywne i architektura",
+    "question": "W MQTT urządzenie nasłuchuje tematu sensors/temperature i odbiera komunikaty publikowane przez inne klienty. Jaką rolę pełni to urządzenie względem tego tematu?",
+    "category": 7,
     "answers": [
-      "Activity",
-      "Gradle Wrapper",
-      "Manifest merger",
-      "ADB daemon"
-    ],
-    "correctIndex": 0,
-    "explanation": "Activity jest podstawowym komponentem reprezentującym ekran aplikacji."
-  },
-  {
-    "question": "Która zaleta podejścia cross-platform jest najczęściej wskazywana w projektach MVP?",
-    "category": "W05: Cross-platform",
-    "answers": [
-      "Brak potrzeby testowania na urządzeniach",
-      "Szybsze dostarczenie wersji na Android i iOS",
-      "Automatycznie wyższa wydajność niż native",
-      "Pełny dostęp do wszystkich API bez integracji"
-    ],
-    "correctIndex": 1,
-    "explanation": "Wspólna baza kodu zwykle przyspiesza start produktu na obu platformach."
-  },
-  {
-    "question": "Który typ sensora najczęściej zasila funkcję krokomierza?",
-    "category": "W06: Sensory i kontekst",
-    "answers": [
-      "Akcelerometr",
-      "Barometr",
-      "Czytnik linii papilarnych",
-      "Magnetometr"
-    ],
-    "correctIndex": 0,
-    "explanation": "Krokomierze analizują wzorce ruchu rejestrowane przez akcelerometr."
-  },
-  {
-    "question": "W modelu publish/subscribe klient MQTT, który odbiera wiadomości z tematu, to:",
-    "category": "W07: IoT i komunikacja",
-    "answers": [
-      "Subscriber",
-      "Broker",
+      "Retained message",
       "Publisher",
-      "Gateway"
+      "Subscriber",
+      "Broker"
     ],
-    "correctIndex": 0,
-    "explanation": "Subscriber subskrybuje temat i odbiera publikowane komunikaty."
+    "correctIndex": 2,
+    "explanation": "Subscriber subskrybuje temat i odbiera wiadomości. Broker pośredniczy w komunikacji, a publisher publikuje komunikaty."
   },
   {
-    "question": "Które zastosowanie najlepiej pasuje do informatyki afektywnej w mobile?",
-    "category": "W08: Informatyka afektywna",
+    "question": "Aplikacja mobilna ma reagować na stan emocjonalny użytkownika na podstawie sygnałów, takich jak głos, interakcje lub dane biometryczne. Który przykład najlepiej pokazuje zakres informatyki afektywnej?",
+    "category": 8,
     "answers": [
-      "Szyfrowanie lokalnej bazy SQLite",
-      "Detekcja emocji użytkownika na podstawie sygnałów",
-      "Kompresja tekstur 3D",
-      "Zarządzanie uprawnieniami Bluetooth"
+      "Parowanie urządzenia przez Bluetooth bez analizy stanu użytkownika",
+      "Szacowanie poziomu stresu użytkownika na podstawie sygnałów behawioralnych lub fizjologicznych",
+      "Minimalizacja liczby draw calli w grze 3D",
+      "Normalizacja tabel w lokalnej bazie SQLite"
     ],
     "correctIndex": 1,
-    "explanation": "Informatyka afektywna analizuje sygnały w celu rozpoznawania stanów emocjonalnych."
+    "explanation": "Informatyka afektywna zajmuje się rozpoznawaniem, interpretacją lub reagowaniem na stany emocjonalne użytkownika na podstawie sygnałów."
   },
   {
-    "question": "Która technologia mobilna służy do nakładania obiektów cyfrowych na obraz z kamery?",
-    "category": "W09: XR i AR",
+    "question": "Aplikacja ma wykrywać płaszczyzny, śledzić ruch telefonu i umieszczać model 3D na obrazie z kamery. Które technologie platformowe są do tego typowe?",
+    "category": 9,
     "answers": [
-      "ARCore/ARKit",
-      "SQLite",
-      "WorkManager",
-      "OpenAPI"
+      "OpenAPI/Swagger",
+      "WorkManager/BGTaskScheduler",
+      "Room/Core Data",
+      "ARCore/ARKit"
     ],
-    "correctIndex": 0,
-    "explanation": "ARCore i ARKit dostarczają funkcje śledzenia i renderingu w rozszerzonej rzeczywistości."
+    "correctIndex": 3,
+    "explanation": "ARCore i ARKit dostarczają funkcje potrzebne w AR, takie jak śledzenie ruchu, rozpoznawanie płaszczyzn i kotwiczenie obiektów w scenie."
   },
   {
-    "question": "W grach mobilnych ograniczenie liczby draw calli wpływa głównie na:",
-    "category": "W10: Gry i wydajność",
+    "question": "W scenie gry mobilnej wiele obiektów używa różnych materiałów i tekstur, co powoduje dużą liczbę draw calli. Jaki efekt zwykle daje ich ograniczenie, np. przez batching lub atlasy tekstur?",
+    "category": 10,
     "answers": [
-      "Zmniejszenie obciążenia CPU/GPU i stabilniejszy FPS",
-      "Zwiększenie rozmiaru APK",
-      "Większą liczbę powiadomień push",
-      "Skrócenie czasu kompilacji backendu"
+      "Ograniczenie narzutu sterownika graficznego i liczby przełączeń stanu renderingu",
+      "Skrócenie czasu odpowiedzi backendowego API",
+      "Mniejsze obciążenie CPU/GPU i stabilniejszy FPS",
+      "Większą liczbę powiadomień push"
     ],
-    "correctIndex": 0,
-    "explanation": "Mniejsza liczba draw calli poprawia płynność renderingu na urządzeniach mobilnych."
+    "correctIndex": 2,
+    "explanation": "Draw calle generują koszt po stronie CPU/GPU. Ich ograniczenie może poprawić płynność renderingu, szczególnie na urządzeniach mobilnych."
   },
   {
-    "question": "W robotyce mobilnej interfejs w aplikacji najczęściej wysyła do robota:",
-    "category": "W11: Robotyka mobilna",
+    "question": "Panel mobilny pozwala operatorowi kierować robotem przez sieć lokalną. Jakiego rodzaju informacje powinien przede wszystkim wysyłać interfejs użytkownika do warstwy sterowania, aby robot mógł wykonać ruch?",
+    "category": 11,
     "answers": [
-      "Komendy sterujące i parametry ruchu",
-      "Wyłącznie obrazy tła",
-      "Pliki instalacyjne APK",
-      "Hasła użytkownika w postaci jawnej"
+      "Identyfikatory sesji lub tokeny sterowania przesyłane bez właściwej ochrony kanału",
+      "Pliki instalacyjne APK przeznaczone dla telefonu",
+      "Komendy sterujące, parametry ruchu i ewentualnie tryby pracy",
+      "Dane konfiguracyjne interfejsu, które nie wpływają bezpośrednio na ruch robota"
+    ],
+    "correctIndex": 2,
+    "explanation": "Aplikacja sterująca zwykle wysyła polecenia ruchu, parametry trajektorii lub tryby pracy. Dane wrażliwe nie powinny być przesyłane jawnie w komendach."
+  },
+  {
+    "question": "Zespół tworzy aplikację do rezerwacji wizyt, która ma działać zarówno na Androidzie, jak i iOS, ale wymaga częstego dostępu do aparatu, powiadomień i płatności. Które ryzyko należy szczególnie uwzględnić przy wyborze podejścia cross-platform?",
+    "category": 5,
+    "answers": [
+      "Brak możliwości publikacji aplikacji cross-platform w sklepach",
+      "Konieczność sprawdzania jakości i dostępności wtyczek natywnych dla obu platform",
+      "Konieczność sprawdzenia jakości i dostępności pluginów dla funkcji zależnych od platformy",
+      "Wymóg napisania całego backendu w tym samym języku co aplikacja"
+    ],
+    "correctIndex": 1,
+    "explanation": "Framework cross-platform może przyspieszyć rozwój, ale integracje z API platformy często zależą od jakości pluginów, bridge'y lub kodu natywnego. Pozostałe odpowiedzi są zbyt kategoryczne albo nie dotyczą decyzji mobilnej."
+  },
+  {
+    "question": "Aplikacja ma działać w pociągu przy niestabilnym internecie i pozwalać użytkownikowi przeglądać wcześniej pobrane dane. Które założenie architektoniczne najlepiej wspiera taki scenariusz?",
+    "category": 4,
+    "answers": [
+      "Offline-first z lokalnym źródłem danych i synchronizacją po odzyskaniu sieci",
+      "Wyłączenie lokalnej bazy, aby uniknąć konfliktów synchronizacji",
+      "Cache w pamięci procesu bez strategii odtwarzania po zamknięciu aplikacji",
+      "Widok inicjuje pobranie danych przy wejściu na ekran, a cache pełni rolę pomocniczą"
     ],
     "correctIndex": 0,
-    "explanation": "Aplikacja sterująca przekazuje komendy ruchu i konfigurację działania robota."
+    "explanation": "Offline-first zakłada lokalne dane jako podstawowe źródło dla UI oraz późniejszą synchronizację. Same żądania sieciowe lub cache w RAM nie zapewnią trwałej pracy po utracie internetu albo ubiciu procesu."
+  },
+  {
+    "question": "Projektant zauważa, że użytkownicy często przypadkowo naciskają sąsiednie ikony na ekranie. Która zmiana najtrafniej rozwiązuje problem użyteczności na urządzeniu dotykowym?",
+    "category": 3,
+    "answers": [
+      "Zastąpienie ikon skrótami klawiaturowymi",
+      "Ukrycie rzadziej używanych przycisków bez komunikatu",
+      "Zwiększenie obszarów dotykowych i odstępów między elementami interaktywnymi",
+      "Zmniejszenie kontrastu, żeby interfejs wyglądał lżej"
+    ],
+    "correctIndex": 2,
+    "explanation": "Na ekranach dotykowych ważne są odpowiednie touch targety i spacing. Zmniejszanie kontrastu lub ukrywanie elementów może pogorszyć dostępność i zrozumiałość interfejsu."
+  },
+  {
+    "question": "Aplikacja fitness wykrywa kroki, ale ma ograniczać zużycie energii. Które podejście jest najbardziej racjonalne?",
+    "category": 6,
+    "answers": [
+      "Analiza surowych próbek bez redukcji szumu i agregacji czasowej",
+      "Łączenie kroku z odczytem lokalizacji zamiast analizować wzorce przyspieszeń",
+      "Korzystanie z systemowego sensora kroków lub przetwarzania wsadowego, gdy jest dostępne",
+      "Ciągłe próbkowanie akcelerometru z maksymalną częstotliwością przez całą dobę"
+    ],
+    "correctIndex": 2,
+    "explanation": "Systemowe sensory kroków i batching ograniczają koszt energetyczny, bo część pracy wykonuje platforma lub koprocesor. Maksymalne próbkowanie i GPS są zwykle nadmiarowe dla krokomierza."
+  },
+  {
+    "question": "Podczas rozmowy telefon wygasza ekran przy uchu, a po odsunięciu urządzenia ekran wraca do aktywności. Który czujnik dostarcza sygnału potrzebnego do takiej reakcji systemu?",
+    "category": 2,
+    "answers": [
+      "Czujnik zbliżeniowy",
+      "Czujnik światła RGB aparatu",
+      "Magnetometr",
+      "Barometr"
+    ],
+    "correctIndex": 0,
+    "explanation": "Czujnik zbliżeniowy wykrywa obecność obiektu blisko ekranu, np. twarzy podczas rozmowy. Magnetometr dotyczy pola magnetycznego, a barometr ciśnienia atmosferycznego."
+  },
+  {
+    "question": "Backend zwraca kod 401, ponieważ access token wygasł, ale refresh token jest nadal ważny. Jak powinna zachować się aplikacja mobilna?",
+    "category": 7,
+    "answers": [
+      "Wysłać ponownie żądanie po odnowieniu tokenu z zachowaniem tego samego kanału bezpieczeństwa",
+      "Przechować dane uwierzytelniające poza systemowym magazynem i używać ich do odnowienia sesji",
+      "Ignorować błąd 401, jeśli odpowiedź zawiera częściowe dane",
+      "Wykonać kontrolowane odświeżenie tokenu i ponowić żądanie, unikając pętli retry"
+    ],
+    "correctIndex": 3,
+    "explanation": "Poprawny klient obsługuje wygaśnięcie access tokenu przez bezpieczny refresh i kontrolowane ponowienie żądania. Ważne jest też zabezpieczenie przed nieskończoną pętlą odświeżania."
+  },
+  {
+    "question": "Aplikacja korzysta z Compose i pobiera listę z sieci. Po obrocie ekranu nie powinna tracić już załadowanego stanu. Gdzie najlepiej utrzymywać stan ekranu powiązany z logiką pobierania danych?",
+    "category": 4,
+    "answers": [
+      "W zasobach drawable aplikacji",
+      "W ViewModelu, który przeżywa zmianę konfiguracji",
+      "W stanie lokalnym kompozycji, z odtworzeniem przez ponowne uruchomienie zapytania",
+      "Bezpośrednio w lokalnej zmiennej funkcji Composable"
+    ],
+    "correctIndex": 1,
+    "explanation": "ViewModel jest właściwym miejscem na stan ekranu i logikę prezentacji, bo przeżywa typowe zmiany konfiguracji. Lokalna zmienna Composable może zostać odtworzona przy rekompozycji lub rekreacji ekranu."
+  },
+  {
+    "question": "W aplikacji mobilnej wdrożono ekran logowania. Który zestaw działań najlepiej ogranicza ryzyko wycieku danych uwierzytelniających?",
+    "category": 7,
+    "answers": [
+      "Długi czas życia sesji, publiczny token w aplikacji i logowanie całych nagłówków",
+      "Przechowywanie hasła w UserDefaults/SharedPreferences dla wygody użytkownika",
+      "Ochrona części danych logowania, przy pozostawieniu tokenu w mniej chronionej pamięci aplikacji",
+      "HTTPS, krótko żyjące access tokeny, bezpieczny storage i brak sekretów w repozytorium"
+    ],
+    "correctIndex": 3,
+    "explanation": "Bezpieczna komunikacja, ograniczony czas życia tokenów i systemowe magazyny sekretów są standardowymi praktykami. Przechowywanie haseł lub sekretów aplikacji po stronie klienta znacząco zwiększa ryzyko."
+  },
+  {
+    "question": "Nowy proces zakupowy wygląda poprawnie w projekcie, ale zespół chce sprawdzić, czy realni użytkownicy rozumieją kolejne kroki i potrafią ukończyć zadanie. Który typ badania najlepiej odpowiada temu celowi?",
+    "category": 3,
+    "answers": [
+      "Test użyteczności z reprezentatywnymi zadaniami i obserwacją zachowań",
+      "Test jednostkowy klasy formatującej ceny",
+      "Snapshot test samego koloru przycisku",
+      "Pomiar liczby linii kodu w module zakupów"
+    ],
+    "correctIndex": 0,
+    "explanation": "Zrozumiałość procesu zakupowego najlepiej weryfikuje się przez zadania wykonywane przez użytkowników i obserwację problemów. Testy kodu są potrzebne, ale nie odpowiadają bezpośrednio na pytanie o użyteczność."
+  },
+  {
+    "question": "Aplikacja AR traci stabilność obiektów, gdy użytkownik porusza telefonem po słabo oświetlonym pokoju. Który problem jest najbardziej prawdopodobny?",
+    "category": 9,
+    "answers": [
+      "Śledzenie pozycji i punktów charakterystycznych kamery ma za mało informacji wizualnej",
+      "Paginacja API zmienia ogniskową obiektywu",
+      "MQTT blokuje działanie akcelerometru",
+      "Baza SQLite nie obsługuje renderowania tekstur 3D"
+    ],
+    "correctIndex": 0,
+    "explanation": "ARCore/ARKit potrzebują informacji z kamery i sensorów do śledzenia pozycji. Słabe światło i mała liczba cech obrazu utrudniają stabilne zakotwiczenie obiektów."
+  },
+  {
+    "question": "Gra mobilna działa płynnie w menu, ale podczas walki FPS spada, gdy na ekranie pojawia się wiele efektów cząsteczkowych. Która optymalizacja jest najbardziej związana z renderowaniem?",
+    "category": 10,
+    "answers": [
+      "Wymuszenie większej liczby powiadomień push",
+      "Zwiększenie liczby zapytań REST na sekundę",
+      "Ograniczenie overdraw, liczby draw calli i złożoności efektów graficznych",
+      "Przeniesienie pliku README do innego katalogu"
+    ],
+    "correctIndex": 2,
+    "explanation": "Spadki FPS przy wielu efektach zwykle wynikają z kosztu GPU/CPU związanego z renderowaniem. Overdraw, draw calle i złożone shadery lub cząsteczki są typowymi obszarami optymalizacji."
+  },
+  {
+    "question": "W aplikacji sterującej robotem mobilnym użytkownik widzi opóźnioną reakcję na joystick. Co należy analizować w pierwszej kolejności?",
+    "category": 11,
+    "answers": [
+      "Opóźnienie komunikacji, częstotliwość wysyłania komend i mechanizm zatrzymania awaryjnego",
+      "Nazwę pakietu aplikacji w Gradle",
+      "Liczbę pól w formularzu rejestracji",
+      "Rozmiar ikon w sklepie z aplikacjami"
+    ],
+    "correctIndex": 0,
+    "explanation": "Sterowanie robotem jest wrażliwe na latencję i bezpieczeństwo. Trzeba sprawdzić tempo komend, opóźnienia sieci oraz zachowanie robota po utracie lub zatrzymaniu sygnału."
+  },
+  {
+    "question": "Aplikacja mobilna ma obsługiwać płatności, Bluetooth i widgety systemowe. Kiedy podejście native może być lepszym wyborem niż PWA?",
+    "category": 1,
+    "answers": [
+      "Gdy wymagany jest głęboki dostęp do API platformy i integracja ze sklepem aplikacji",
+      "Gdy celem jest całkowite uniknięcie aktualizacji aplikacji",
+      "Gdy projekt ma niskie wymagania sprzętowe i może działać w ograniczeniach przeglądarki",
+      "Gdy nie trzeba testować działania na urządzeniu fizycznym"
+    ],
+    "correctIndex": 0,
+    "explanation": "Aplikacje native zwykle oferują pełniejszy dostęp do API systemu, płatności i dystrybucji sklepowej. PWA może być dobre dla prostszych scenariuszy webowych, ale nie zawsze pokrywa głębokie integracje platformowe."
+  },
+  {
+    "question": "W aplikacji Flutter ekran często przebudowuje duże fragmenty drzewa UI po małej zmianie formularza. Które działanie najlepiej ogranicza koszt przebudowy?",
+    "category": 5,
+    "answers": [
+      "Wyłączenie obsługi hot reload w projekcie",
+      "Rozdzielenie stanu i mniejszych widgetów tak, aby przebudowy obejmowały ograniczony fragment drzewa",
+      "Przeniesienie logiki formularza do zasobów statycznych zamiast wydzielenia stanu",
+      "Dodanie większej liczby globalnych zmiennych mutowalnych"
+    ],
+    "correctIndex": 1,
+    "explanation": "W deklaratywnym UI należy zawężać zakres zmian i odpowiednio lokalizować stan. Globalny stan bez kontroli może zwiększyć liczbę niepotrzebnych przebudów i utrudnić testowanie."
+  },
+  {
+    "question": "Urządzenie IoT publikuje telemetrię, a różne aplikacje mają odbierać tylko interesujące je tematy. Który model komunikacji najlepiej rozdziela nadawcę od wielu odbiorców?",
+    "category": 7,
+    "answers": [
+      "Bezpośrednie zapytanie SQL z aplikacji mobilnej do sensora",
+      "Publish/subscribe z brokerem pośredniczącym",
+      "Model żądanie-odpowiedź oparty na okresowym odpytywaniu serwera plików",
+      "Bezpośrednia dystrybucja komunikatów do odbiorców bez brokera i tematów"
+    ],
+    "correctIndex": 1,
+    "explanation": "Model publish/subscribe oddziela nadawcę od odbiorców i pozwala subskrybować tematy. Jest to naturalny model dla MQTT i telemetrii IoT."
+  },
+  {
+    "question": "W projekcie z Room trzeba wydzielić miejsce, w którym opisuje się operacje na encjach: zapytania, inserty, aktualizacje i usunięcia. Który element bazy pełni tę rolę?",
+    "category": 4,
+    "answers": [
+      "Definiuje operacje dostępu do danych, np. zapytania i inserty dla encji",
+      "Przechowuje zasoby graficzne aplikacji",
+      "Renderuje listę elementów w Compose",
+      "Zastępuje certyfikat TLS w komunikacji z API"
+    ],
+    "correctIndex": 0,
+    "explanation": "DAO opisuje interfejs dostępu do danych w Room, czyli zapytania, aktualizacje i usuwanie encji. Renderowanie UI i bezpieczeństwo TLS należą do innych warstw."
+  },
+  {
+    "question": "Aplikacja iOS zapisuje preferencję motywu jasny/ciemny oraz token odświeżania sesji. Które rozdzielenie storage jest poprawne?",
+    "category": 4,
+    "answers": [
+      "Oba elementy należy zapisać w schowku systemowym",
+      "Oba elementy trzeba zakodować w nazwie pliku Info.plist",
+      "Preferencję można zapisać w UserDefaults, a token w Keychain",
+      "Token powinien trafić do UserDefaults, a motyw do Keychain"
+    ],
+    "correctIndex": 2,
+    "explanation": "UserDefaults nadaje się do niewrażliwych preferencji, a Keychain do sekretów. Token odświeżania jest danymi wrażliwymi i nie powinien być traktowany jak zwykła konfiguracja UI."
+  },
+  {
+    "question": "Aplikacja prosi o dostęp do lokalizacji już na ekranie startowym, mimo że funkcja mapy jest używana dopiero później. Która praktyka jest lepsza z perspektywy UX i prywatności?",
+    "category": 3,
+    "answers": [
+      "Poprosić o szeroki pakiet uprawnień na starcie, aby uniknąć dodatkowych dialogów później",
+      "Ukryć prośbę o uprawnienie pod niejasnym komunikatem marketingowym",
+      "Blokować całą aplikację, nawet jeśli lokalizacja jest funkcją opcjonalną",
+      "Poprosić o uprawnienie kontekstowo, gdy użytkownik uruchamia funkcję wymagającą lokalizacji"
+    ],
+    "correctIndex": 3,
+    "explanation": "Uprawnienia powinny być proszone w kontekście funkcji, aby użytkownik rozumiał cel. Nadmiarowe lub przedwczesne prośby obniżają zaufanie i konwersję."
+  },
+  {
+    "question": "W aplikacji wykorzystującej akcelerometr pojawiają się fałszywe wykrycia gestów przy drobnych drganiach telefonu. Co najtrafniej poprawi jakość detekcji?",
+    "category": 2,
+    "answers": [
+      "Podniesienie progu czułości bez analizy częstotliwości i charakterystyki ruchu",
+      "Zmiana formatu odpowiedzi API z JSON na XML",
+      "Oparcie detekcji na pojedynczej wartości progowej dobranej ręcznie",
+      "Filtrowanie sygnału i dobranie progów detekcji do rzeczywistych danych"
+    ],
+    "correctIndex": 3,
+    "explanation": "Sygnały sensorów są zaszumione, dlatego potrzebne są filtry, progi, okna czasowe lub klasyfikacja. Same zmiany w UI lub API nie rozwiązują problemu fałszywych gestów."
+  },
+  {
+    "question": "Aplikacja mobilna ma analizować nastrój użytkownika na podstawie tonu głosu i wzorców interakcji. Jakie ryzyko projektowe jest szczególnie istotne?",
+    "category": 8,
+    "answers": [
+      "Niemożność uruchomienia takiej aplikacji na ekranie dotykowym",
+      "Dobór lokalnej bazy danych jako głównego problemu projektowego modelu afektywnego",
+      "Ograniczenie walidacji do scenariuszy demonstracyjnych na urządzeniu testowym",
+      "Prywatność, zgoda użytkownika i możliwość błędnej interpretacji sygnałów emocjonalnych"
+    ],
+    "correctIndex": 3,
+    "explanation": "Informatyka afektywna operuje na wrażliwych sygnałach i nie daje nieomylnej diagnozy emocji. Wymaga świadomej zgody, ostrożnej interpretacji i ochrony danych."
+  },
+  {
+    "question": "Aplikacja pobiera listę wiadomości z API i zapisuje ją lokalnie. Który wzorzec najlepiej opisuje pojedyncze źródło prawdy dla UI?",
+    "category": 4,
+    "answers": [
+      "Widok może czytać dane z cache lub sieci zależnie od dostępności połączenia",
+      "Warstwy utrzymują lokalne kopie, a odświeżanie odbywa się przez ustalone zdarzenia synchronizacji",
+      "Widok samodzielnie wykonuje zapytania SQL i HTTP w obsłudze kliknięcia",
+      "UI obserwuje lokalną bazę/cache, a synchronizacja sieciowa aktualizuje to źródło"
+    ],
+    "correctIndex": 3,
+    "explanation": "Single source of truth zmniejsza niespójności: widok obserwuje jedno źródło stanu, a warstwa synchronizacji je aktualizuje. Mieszanie źródeł bez zasad prowadzi do konfliktów i trudnych błędów."
+  },
+  {
+    "question": "W teście jednostkowym ViewModelu repozytorium pobiera dane z sieci. Co najlepiej zrobić, aby test był szybki i deterministyczny?",
+    "category": 3,
+    "answers": [
+      "Użyć środowiska testowego API lub atrap repozytorium zależnie od zakresu testu",
+      "Usunąć asercje, jeżeli odpowiedź API bywa zmienna",
+      "Dodać losowe opóźnienia, aby zasymulować użytkownika",
+      "Zastąpić repozytorium testowym fake/mockiem zwracającym kontrolowane dane"
+    ],
+    "correctIndex": 3,
+    "explanation": "Test jednostkowy powinien izolować logikę i kontrolować zależności. Prawdziwa sieć zwiększa niestabilność, czas wykonania i zależność od środowiska zewnętrznego."
+  },
+  {
+    "question": "Aplikacja ma cyklicznie synchronizować dane, ale system może ograniczać pracę w tle. Który opis najlepiej odpowiada poprawnemu projektowi na Androidzie?",
+    "category": 4,
+    "answers": [
+      "Uruchomienie nieskończonej pętli w Activity po zamknięciu ekranu",
+      "Utrzymywanie planu synchronizacji w stanie UI bez powiązania z systemowym schedulerem",
+      "Użycie WorkManagera z warunkami, np. dostępnością sieci lub ładowaniem urządzenia",
+      "Wysyłanie lokalnego powiadomienia zamiast wykonywania synchronizacji"
+    ],
+    "correctIndex": 2,
+    "explanation": "WorkManager jest przeznaczony do odroczonej i gwarantowanej pracy w tle zgodnej z ograniczeniami systemu. Pętla w Activity jest nietrwała i nie respektuje cyklu życia ani polityki baterii."
+  },
+  {
+    "question": "Zespół chce zmniejszyć transfer danych w aplikacji z długą listą produktów i obrazów. Które rozwiązanie jest najbardziej kompletne?",
+    "category": 10,
+    "answers": [
+      "Zwiększenie rozmiaru odpowiedzi, aby ograniczyć liczbę wywołań API",
+      "Paginacja danych, cache odpowiedzi i ładowanie obrazów w odpowiednich rozmiarach",
+      "Pobieranie szerokiego zakresu danych z cache obrazów obsługiwanym po stronie UI",
+      "Wyłączenie kompresji obrazów, aby uniknąć przeskalowania"
+    ],
+    "correctIndex": 1,
+    "explanation": "Transfer ograniczają paginacja, cache i właściwe rozmiary zasobów graficznych. Pobieranie pełnych zbiorów i dużych obrazów pogarsza czas ładowania oraz zużycie pamięci."
+  },
+  {
+    "question": "W komunikacji REST aplikacja otrzymuje błąd 429 po wielu szybkich żądaniach. Jakie zachowanie klienta jest najbardziej właściwe?",
+    "category": 7,
+    "answers": [
+      "Traktować 429 jako sukces i zapisać pusty wynik w bazie",
+      "Przełączyć komunikację na FTP bez autoryzacji",
+      "Natychmiast wysyłać jeszcze więcej żądań, aby szybciej uzyskać odpowiedź",
+      "Zastosować backoff, respektować limity API i ograniczyć równoległe ponawianie żądań"
+    ],
+    "correctIndex": 3,
+    "explanation": "HTTP 429 oznacza przekroczenie limitu żądań. Klient powinien spowolnić, użyć backoffu i unikać retry storm, zamiast eskalować problem kolejnymi żądaniami."
+  },
+  {
+    "question": "Aplikacja Compose zawiera listę z elementami, które mają stabilne identyfikatory. Dlaczego warto przekazać klucze elementów w LazyColumn?",
+    "category": 4,
+    "answers": [
+      "Aby pomóc Compose zachować stan i efekty elementów przy zmianach kolejności listy",
+      "Aby wymusić komunikację MQTT zamiast HTTP",
+      "Aby sortowanie listy wykonywało się po stronie bazy danych zamiast w UI",
+      "Aby zastąpić ViewModel w architekturze MVVM"
+    ],
+    "correctIndex": 0,
+    "explanation": "Stabilne klucze pozwalają frameworkowi lepiej powiązać stan z konkretnym elementem danych. Jest to szczególnie ważne przy dodawaniu, usuwaniu lub sortowaniu pozycji listy."
+  },
+  {
+    "question": "W projekcie iOS programista miesza logikę pobierania danych, formatowania i kod widoku w jednym dużym View. Jaka zmiana najlepiej poprawi separację odpowiedzialności?",
+    "category": 4,
+    "answers": [
+      "Przeniesienie tokenów API do stałych w widoku",
+      "Wydzielenie modelu stanu i warstwy ViewModel/serwisu, a widok pozostawienie do renderowania",
+      "Przeniesienie części logiki do kontrolerów widoku bez wyodrębnienia modelu prezentacji",
+      "Dodanie większej liczby komentarzy bez zmiany struktury kodu"
+    ],
+    "correctIndex": 1,
+    "explanation": "Separacja odpowiedzialności ogranicza złożoność widoku i ułatwia testy. Widok powinien renderować stan, a pobieranie i przygotowanie danych powinno być poza nim."
+  },
+  {
+    "question": "Użytkownicy zgłaszają, że komunikat błędu formularza jest widoczny tylko jako czerwone obramowanie pola. Co należy poprawić z punktu widzenia dostępności?",
+    "category": 3,
+    "answers": [
+      "Prezentować błąd w sposób zależny od koloru oraz krótkiej animacji pola",
+      "Dodać tekstowy opis błędu i semantykę czytelną dla czytników ekranu",
+      "Zmniejszyć kontrast obramowania, aby ekran był spokojniejszy",
+      "Zostawić sam kolor, bo jest krótszy niż tekst"
+    ],
+    "correctIndex": 1,
+    "explanation": "Informacja nie powinna być przekazywana wyłącznie kolorem. Tekst błędu i semantyka dostępności pomagają użytkownikom z wadami wzroku i osobom korzystającym z czytników ekranu."
+  },
+  {
+    "question": "PWA ma otwierać wcześniej odwiedzone ekrany mimo słabego połączenia i zarządzać pobieraniem zasobów w tle przeglądarki. Który mechanizm webowy jest kluczowy dla takiego zachowania?",
+    "category": 5,
+    "answers": [
+      "Service worker z odpowiednią strategią cache",
+      "Statyczny screenshot aplikacji zapisany jako ikona",
+      "Manifest aplikacji uzupełniony cache’owaniem zasobów wykonywanym przez skrypty strony",
+      "Zewnętrzny emulator Androida uruchamiany w przeglądarce"
+    ],
+    "correctIndex": 0,
+    "explanation": "Service worker może przechwytywać żądania i obsługiwać cache, co pozwala na tryb offline lub szybkie ładowanie. Sam manifest opisuje aplikację, ale nie wystarcza do obsługi offline."
+  },
+  {
+    "question": "Aplikacja wykorzystuje Bluetooth Low Energy do odczytu danych z opaski. Która cecha BLE jest szczególnie istotna dla urządzeń noszonych?",
+    "category": 7,
+    "answers": [
+      "Duża przepustowość porównywalna z transmisją Wi‑Fi przy ciągłym strumieniu danych",
+      "Niskie zużycie energii przy krótkich transmisjach danych",
+      "Wymóg stałego połączenia kablowego USB",
+      "Gwarancja dużej przepustowości jak w sieci światłowodowej"
+    ],
+    "correctIndex": 1,
+    "explanation": "BLE jest projektowane pod energooszczędną komunikację krótkiego zasięgu, typową dla sensorów i wearables. Nie eliminuje zagadnień uprawnień, parowania ani ograniczeń przepustowości."
+  },
+  {
+    "question": "W aplikacji mobilnej dane z magnetometru są używane do kompasu, ale wskazania są niestabilne w pobliżu metalowych obiektów. Co najlepiej wyjaśnia problem?",
+    "category": 2,
+    "answers": [
+      "Wskazania kompasu zależą od pola magnetycznego i mogą wymagać kalibracji",
+      "Metalowe obiekty zmieniają format JSON odpowiedzi aplikacji",
+      "Magnetometr jest podatny na zakłócenia pola magnetycznego i wymaga kalibracji/fuzji sensorów",
+      "Niestabilność wynika z braku paginacji listy"
+    ],
+    "correctIndex": 2,
+    "explanation": "Magnetometr mierzy pole magnetyczne, więc otoczenie może zakłócać odczyty. W praktyce stosuje się kalibrację oraz łączenie danych z innymi sensorami, np. żyroskopem i akcelerometrem."
+  },
+  {
+    "question": "Aplikacja AR ma postawić wirtualny mebel na realnej podłodze tak, aby pozostawał w tym samym miejscu podczas ruchu telefonu. Który aspekt działania AR jest tu decydujący?",
+    "category": 9,
+    "answers": [
+      "Obsługa migracji schematu Room",
+      "Wykrywanie płaszczyzn i zakotwiczenie obiektu w przestrzeni",
+      "Szyfrowanie haseł w Keychain",
+      "Subskrypcja tematu MQTT przez brokera"
+    ],
+    "correctIndex": 1,
+    "explanation": "Umieszczanie obiektów na podłodze wymaga rozpoznania płaszczyzny oraz utrzymania kotwicy w przestrzeni. Pozostałe opcje są ważne w innych domenach, ale nie opisują mechaniki AR."
+  },
+  {
+    "question": "W grze mobilnej tekstury wyglądają dobrze, ale aplikacja zużywa zbyt dużo pamięci i często jest ubijana przez system. Co jest najbardziej prawdopodobną przyczyną?",
+    "category": 10,
+    "answers": [
+      "Zbyt mała liczba ekranów logowania",
+      "Zbyt duże lub nieskompresowane zasoby graficzne ładowane jednocześnie do pamięci",
+      "Nadmiar opisów dla czytników ekranu",
+      "Użycie refresh tokenu zamiast hasła użytkownika"
+    ],
+    "correctIndex": 1,
+    "explanation": "Na urządzeniach mobilnych pamięć jest ograniczona, a duże tekstury szybko zwiększają zużycie RAM/VRAM. Pomagają kompresja, skalowanie i zarządzanie cyklem życia zasobów."
+  },
+  {
+    "question": "Aplikacja steruje robotem przez sieć Wi-Fi. Co powinno się wydarzyć, gdy aplikacja traci połączenie z robotem podczas jazdy?",
+    "category": 11,
+    "answers": [
+      "Aplikacja powinna ukryć informację o utracie połączenia",
+      "Robot powinien kontynuować ostatnią komendę bez limitu czasu",
+      "Robot powinien przejść w bezpieczny stan, np. zatrzymanie po timeoutcie komend",
+      "System powinien zapisać hasło Wi-Fi w logach diagnostycznych"
+    ],
+    "correctIndex": 2,
+    "explanation": "W robotyce mobilnej utrata komunikacji musi być obsłużona bezpiecznie. Timeout komend lub tryb awaryjny zmniejsza ryzyko niekontrolowanego ruchu."
+  },
+  {
+    "question": "W projekcie aplikacji mobilnej zespół wybiera między aplikacją webową, PWA, cross-platform i native. Które kryterium jest najbardziej sensowne przy tej decyzji?",
+    "category": 1,
+    "answers": [
+      "Liczba slajdów w prezentacji projektowej",
+      "Koszt przygotowania makiet ekranów bez analizy wymagań platformowych",
+      "Wymagania dotyczące API urządzenia, wydajności, dystrybucji, kosztu utrzymania i zespołu",
+      "To, czy backend używa dokładnie tego samego frameworka UI"
+    ],
+    "correctIndex": 2,
+    "explanation": "Wybór technologii mobilnej powinien wynikać z wymagań produktu i ograniczeń zespołu. Estetyka logo lub technologia backendu nie są same w sobie wystarczającymi kryteriami."
+  },
+  {
+    "question": "Zespół planuje aplikację dla jednej platformy, wymagającą bardzo niskich opóźnień, ścisłej integracji z kamerą i pełnego dostępu do funkcji systemowych. Które podejście architektoniczno-technologiczne jest najbardziej uzasadnione?",
+    "category": 1,
+    "answers": [
+      "Aplikacja natywna przygotowana osobno dla docelowego systemu",
+      "Jedna responsywna strona HTML bez dostępu do API urządzenia",
+      "Aplikacja serwerowa renderująca cały interfejs po stronie backendu",
+      "Aplikacja webowa z ograniczoną integracją z funkcjami sprzętowymi urządzenia"
+    ],
+    "correctIndex": 0,
+    "explanation": "Podejście natywne najlepiej sprawdza się przy wymaganiach dotyczących wydajności i głębokiej integracji z API urządzenia. PWA lub zwykła aplikacja webowa mogą ograniczać dostęp do części funkcji systemowych."
+  },
+  {
+    "question": "Produkt ma szybko zweryfikować hipotezę rynkową na Androidzie i iOS, a wymagania sprzętowe są umiarkowane. Który argument najmocniej przemawia za podejściem cross-platform?",
+    "category": 1,
+    "answers": [
+      "Możliwość współdzielenia dużej części kodu i skrócenia czasu dostarczenia MVP",
+      "Wybór dwóch osobnych aplikacji natywnych, aby uniknąć współdzielenia logiki",
+      "Oparcie MVP na jednej platformie, mimo potrzeby sprawdzenia produktu na dwóch systemach",
+      "Całkowity brak konieczności testów na fizycznych urządzeniach"
+    ],
+    "correctIndex": 0,
+    "explanation": "Cross-platform zwykle przyspiesza dostarczenie MVP dzięki współdzielonej bazie kodu. Nie usuwa jednak potrzeby testowania ani uwzględniania różnic platformowych."
+  },
+  {
+    "question": "Aplikacja mobilna ma działać częściowo offline, synchronizować dane po odzyskaniu sieci i rozwiązywać konflikty. Które wymaganie należy uwzględnić już na etapie projektu?",
+    "category": 1,
+    "answers": [
+      "Rezygnację z modelu danych po stronie klienta",
+      "Prezentowanie komunikatu o błędzie sieci bez lokalnego modelu danych",
+      "Strategię lokalnego przechowywania, kolejkowania zmian i synchronizacji z backendem",
+      "Opieranie synchronizacji na zdarzeniach serwera bez lokalnego modelu konfliktów"
+    ],
+    "correctIndex": 2,
+    "explanation": "Tryb offline wymaga lokalnego modelu danych, mechanizmu zapisu zmian i reguł synchronizacji. Sama zmiana zasobów procesu lub użycie push nie rozwiązuje problemu spójności danych."
+  },
+  {
+    "question": "Aplikacja fitness ma rozpoznać wchodzenie po schodach, ale zespół chce ograniczyć korzystanie z energochłonnego GPS. Który sensor może dostarczyć pomocniczej informacji o zmianie wysokości?",
+    "category": 2,
+    "answers": [
+      "Czujnik zbliżeniowy",
+      "NFC",
+      "Czytnik linii papilarnych",
+      "Barometr"
+    ],
+    "correctIndex": 3,
+    "explanation": "Barometr mierzy ciśnienie atmosferyczne, które może służyć do szacowania zmian wysokości. Czujnik zbliżeniowy, NFC i czytnik linii papilarnych nie mierzą tego typu ruchu."
+  },
+  {
+    "question": "Aplikacja kompasu ma wskazywać kierunek względem północy magnetycznej. Który sensor dostarcza podstawowego sygnału o kierunku pola magnetycznego?",
+    "category": 2,
+    "answers": [
+      "Barometr",
+      "Czujnik światła",
+      "Magnetometr",
+      "Mikrofon kierunkowy"
+    ],
+    "correctIndex": 2,
+    "explanation": "Magnetometr mierzy pole magnetyczne i pozwala określić kierunek. W praktyce często łączy się go z akcelerometrem i żyroskopem, ale sam barometr czy czujnik światła nie wyznaczają kierunku magnetycznego."
+  },
+  {
+    "question": "Podczas rozmowy system ma rozpoznać, że telefon znajduje się blisko ucha, i wygasić ekran, aby uniknąć przypadkowych dotknięć. Który komponent odpowiada za taką detekcję bliskości?",
+    "category": 2,
+    "answers": [
+      "Czujnik zbliżeniowy",
+      "Moduł GPS",
+      "Żyroskop",
+      "Akcelerator graficzny GPU"
+    ],
+    "correctIndex": 0,
+    "explanation": "Czujnik zbliżeniowy wykrywa obecność obiektu blisko ekranu. Żyroskop mierzy obrót, GPS pozycję, a GPU odpowiada za renderowanie."
+  },
+  {
+    "question": "Aplikacja AR potrzebuje stabilnego śledzenia orientacji telefonu między kolejnymi klatkami obrazu. Które podejście jest najwłaściwsze?",
+    "category": 2,
+    "answers": [
+      "Łączenie danych z akcelerometru i żyroskopu z filtracją sygnału",
+      "Stałe blokowanie orientacji ekranu w systemie",
+      "Okresowe odczyty clipboardu i jasności ekranu",
+      "Fuzja danych z kamery, akcelerometru i żyroskopu"
+    ],
+    "correctIndex": 3,
+    "explanation": "Stabilne śledzenie pozycji i orientacji w AR zwykle korzysta z fuzji sensorów oraz analizy obrazu. Pojedynczy sygnał lub ustawienie UI nie wystarcza do precyzyjnego śledzenia."
+  },
+  {
+    "question": "Podczas testów dostępności użytkownicy z czytnikiem ekranu słyszą tylko „przycisk, przycisk, przycisk”. Co należy poprawić w pierwszej kolejności?",
+    "category": 3,
+    "answers": [
+      "Ukryć przyciski przed technologiami asystującymi",
+      "Zwiększyć kontrast wizualny bez uzupełnienia etykiet dostępności",
+      "Zmniejszyć liczbę testów manualnych w scenariuszu",
+      "Dodać precyzyjne etykiety semantyczne opisujące akcje przycisków"
+    ],
+    "correctIndex": 3,
+    "explanation": "Czytniki ekranu potrzebują poprawnych nazw dostępnościowych. Sam kolor nie przekazuje znaczenia osobom niewidomym, a ukrywanie kontrolek uniemożliwia obsługę."
+  },
+  {
+    "question": "Zespół projektuje formularz rejestracji na małym ekranie. Które rozwiązanie najtrafniej zmniejsza obciążenie poznawcze użytkownika?",
+    "category": 3,
+    "answers": [
+      "Wymaganie przewijania poziomego dla długich pól",
+      "Usunięcie etykiet i pozostawienie samych placeholderów",
+      "Rejestrowanie błędów diagnostycznych bez przekazywania użytkownikowi instrukcji naprawy",
+      "Grupowanie pól, jasne etykiety i walidacja pokazująca błąd blisko problematycznego pola"
+    ],
+    "correctIndex": 3,
+    "explanation": "Czytelne etykiety, grupowanie i lokalne komunikaty błędów wspierają zrozumienie formularza. Placeholdery nie zastępują etykiet, a przewijanie poziome pogarsza użyteczność."
+  },
+  {
+    "question": "Zespół chce zweryfikować kompletny przepływ płatności: od koszyka, przez interfejs i backend, po potwierdzenie transakcji. Jaki typ testu najlepiej odpowiada takiemu zakresowi?",
+    "category": 3,
+    "answers": [
+      "Analiza statyczna pliku README",
+      "Test jednostkowy samej funkcji formatowania ceny",
+      "Test snapshot pojedynczej ikony koszyka",
+      "Test end-to-end obejmujący interfejs, backend i odpowiedzi systemów zależnych"
+    ],
+    "correctIndex": 3,
+    "explanation": "Test end-to-end weryfikuje cały przepływ użytkownika i integrację wielu komponentów. Test jednostkowy jest ważny, ale nie potwierdza działania kompletnej ścieżki płatności."
+  },
+  {
+    "question": "Po wdrożeniu nowego ekranu metryki pokazują częste porzucanie procesu na drugim kroku. Która metoda najlepiej pomoże zrozumieć przyczynę problemu UX?",
+    "category": 3,
+    "answers": [
+      "Zwiększenie częstotliwości odświeżania danych w tle",
+      "Analiza lejka, nagrań sesji lub testów użyteczności dla konkretnego kroku",
+      "Dodanie kolejnej warstwy cache bez analizy interakcji",
+      "Zmiana nazwy pakietu aplikacji"
+    ],
+    "correctIndex": 1,
+    "explanation": "Problem porzucania procesu wymaga analizy zachowania użytkowników i testów użyteczności. Optymalizacje techniczne bez diagnozy interakcji mogą nie dotyczyć właściwej przyczyny."
+  },
+  {
+    "question": "Ekran Compose wykonuje zapytanie sieciowe bezpośrednio w funkcji Composable przy każdej rekompozycji. Jaki problem projektowy występuje tutaj najprawdopodobniej?",
+    "category": 4,
+    "answers": [
+      "Efekt uboczny został powiązany z renderowaniem UI zamiast z kontrolowanym stanem lub warstwą ViewModel",
+      "Problem dotyczy głównie nazewnictwa funkcji, a nie przepływu danych i efektów ubocznych",
+      "Graf nawigacji powinien być oddzielony od funkcji Composable i utrzymywany w zasobach",
+      "Room może być użyty jako cache, ale nie zastępuje warstwy komunikacji sieciowej"
+    ],
+    "correctIndex": 0,
+    "explanation": "Composable powinien przede wszystkim opisywać UI na podstawie stanu. Operacje sieciowe powinny być kontrolowane przez ViewModel, efekty Compose lub warstwę danych, aby nie uruchamiały się przypadkowo przy rekompozycjach."
+  },
+  {
+    "question": "Repozytorium w aplikacji MVVM zwraca dane z API i lokalnej bazy. Jaka jest jego główna rola?",
+    "category": 4,
+    "answers": [
+      "Bezpośrednie renderowanie kontrolek interfejsu użytkownika",
+      "Przechowywanie referencji do Activity w celu aktualizacji widoku",
+      "Ukrycie źródeł danych i udostępnienie spójnego interfejsu dla warstwy domenowej lub ViewModelu",
+      "Przeniesienie mapowania danych do layoutów, aby uprościć warstwę domenową"
+    ],
+    "correctIndex": 2,
+    "explanation": "Repository separuje logikę dostępu do danych od logiki prezentacji. Nie powinno renderować UI ani trzymać referencji do ekranów."
+  },
+  {
+    "question": "W aplikacji Android dane muszą być synchronizowane okresowo, ale system może opóźnić zadanie ze względu na baterię i sieć. Która właściwość WorkManagera jest tu istotna?",
+    "category": 4,
+    "answers": [
+      "Uruchamianie pętli synchronizacji w procesie aplikacji bez zlecania zadania systemowi",
+      "Możliwość deklarowania ograniczeń wykonania, np. wymaganej sieci lub ładowania",
+      "Stałe utrzymywanie procesu aplikacji w pamięci",
+      "Gwarancja wykonania dokładnie co do milisekundy niezależnie od trybu oszczędzania energii"
+    ],
+    "correctIndex": 1,
+    "explanation": "WorkManager służy do odroczonej, niezawodnej pracy z ograniczeniami, ale nie gwarantuje precyzyjnego czasu wykonania. System może planować zadania zgodnie z polityką baterii."
+  },
+  {
+    "question": "W aplikacji Android encje są przechowywane w Room, a kod musi wykonywać zapytania i modyfikacje tabel. Który element zwykle definiuje ten interfejs dostępu do danych?",
+    "category": 4,
+    "answers": [
+      "NavController",
+      "DAO",
+      "Composable Preview",
+      "Manifest permission"
+    ],
+    "correctIndex": 1,
+    "explanation": "DAO definiuje metody dostępu do danych w Room, takie jak zapytania, inserty i aktualizacje. NavController odpowiada za nawigację, a manifest za deklaracje aplikacji."
+  },
+  {
+    "question": "W Compose lista elementów traci stan przewinięcia po zmianie konfiguracji. Jakie rozwiązanie najtrafniej ogranicza ten problem na poziomie UI?",
+    "category": 4,
+    "answers": [
+      "Zastąpienie LazyColumn zwykłym Canvas bez modelu danych",
+      "Ograniczenie zakresu obserwowanego stanu i stabilizacja parametrów przekazywanych do Composable",
+      "Przechowywanie stanu listy przez rememberSaveable lub przeniesienie istotnego stanu do ViewModelu",
+      "Dodanie większej liczby elementów Spacer między wierszami"
+    ],
+    "correctIndex": 2,
+    "explanation": "Stan, który ma przetrwać zmianę konfiguracji, powinien być zapisywalny albo zarządzany przez ViewModel. Same zmiany layoutu nie rozwiązują problemu utraty stanu."
+  },
+  {
+    "question": "W React Native aplikacja potrzebuje funkcji dostępnej tylko przez natywne SDK producenta urządzenia. Który krok jest najbardziej prawdopodobny?",
+    "category": 5,
+    "answers": [
+      "Deklarowanie zależności i metadanych aplikacji w konfiguracji projektu Flutter",
+      "Zarządzanie pakietami przez ekosystem właściwy dla frameworka, a nie przez narzędzia webowe",
+      "Utworzenie lub użycie natywnego modułu/bridge do wywołania kodu platformowego",
+      "Zastąpienie SDK zapytaniem GraphQL bez integracji z urządzeniem"
+    ],
+    "correctIndex": 2,
+    "explanation": "Gdy framework cross-platform nie udostępnia gotowego API, zwykle tworzy się natywny moduł lub korzysta z pluginu. Sam CSS lub GraphQL nie zapewnia dostępu do natywnego SDK."
+  },
+  {
+    "question": "W Flutterze część interfejsu przebudowuje się zbyt często po zmianie małego fragmentu stanu. Które działanie jest najbardziej sensowne?",
+    "category": 5,
+    "answers": [
+      "Umieścić cały stan w zmiennej globalnej bez powiadomień",
+      "Przepisać cały projekt na plik XML z layoutem",
+      "Ograniczyć zakres przebudowy, wydzielając mniejsze widgety i precyzyjniej zarządzając stanem",
+      "Zwiększyć liczbę globalnych obiektów stanu, aby łatwiej wymuszać odświeżenie całego ekranu"
+    ],
+    "correctIndex": 2,
+    "explanation": "W Flutterze optymalizacja często polega na ograniczeniu zakresu rebuildów i lepszym podziale widgetów. Globalny stan lub restart aplikacji pogarszają kontrolę nad UI."
+  },
+  {
+    "question": "Zespół porównuje Flutter i PWA dla aplikacji z obsługą offline i powiadomieniami. Które stwierdzenie jest najbardziej trafne?",
+    "category": 5,
+    "answers": [
+      "Service worker służy głównie do kompilacji kodu Dart",
+      "Flutter renderuje własne widgety i zwykle wymaga mostków do specyficznych funkcji platformy",
+      "PWA może działać offline przez service workery, ale dostęp do niektórych funkcji urządzenia zależy od platformy i przeglądarki",
+      "PWA ma identyczny dostęp do API urządzenia jak aplikacja natywna na każdej platformie"
+    ],
+    "correctIndex": 2,
+    "explanation": "PWA może oferować cache i tryb offline, ale dostępność funkcji mobilnych zależy od przeglądarki i systemu. Flutter kompiluje aplikację do natywnego środowiska uruchomieniowego, a nie tylko do klasycznej strony HTML."
+  },
+  {
+    "question": "Aplikacja cross-platform wygląda poprawnie na Androidzie, ale łamie konwencje na iOS. Co powinno być elementem przeglądu jakości?",
+    "category": 5,
+    "answers": [
+      "Sprawdzenie zgodności kolorów bez analizy gestów i wzorców interakcji",
+      "Usunięcie testów na iOS, aby zachować jeden wynik walidacji",
+      "Wymuszenie gestów Androida jako jedynego wzorca interakcji",
+      "Sprawdzenie zgodności z wytycznymi platformowymi i dostosowanie komponentów tam, gdzie użytkownik oczekuje natywnego zachowania"
+    ],
+    "correctIndex": 3,
+    "explanation": "Cross-platform nie zwalnia z uwzględniania konwencji platformowych. Dobre aplikacje zachowują spójność produktu, ale respektują oczekiwania użytkowników danego systemu."
+  },
+  {
+    "question": "Aplikacja kontekstowa ma wykrywać, czy użytkownik prawdopodobnie jedzie samochodem, idzie pieszo czy stoi. Które podejście jest najbardziej właściwe?",
+    "category": 6,
+    "answers": [
+      "Klasyfikacja aktywności na podstawie wzorców z sensorów i ewentualnie usług systemowych",
+      "Rozpoznawanie aktywności na podstawie samego poziomu baterii i godziny dnia",
+      "Pomiar poziomu baterii jako jedynego sygnału aktywności",
+      "Stałe pytanie użytkownika co sekundę o aktualny tryb ruchu"
+    ],
+    "correctIndex": 0,
+    "explanation": "Rozpoznawanie aktywności wykorzystuje wzorce ruchu z sensorów, często wspierane przez usługi systemowe. Wersja systemu czy poziom baterii nie opisują bezpośrednio aktywności użytkownika."
+  },
+  {
+    "question": "Aplikacja ma wykonać akcję po wejściu użytkownika do określonej strefy, ale bez ciągłego odpytywania GPS z najwyższą dokładnością. Jaki mechanizm lokalizacyjny najlepiej pasuje do tego wymagania?",
+    "category": 6,
+    "answers": [
+      "Texture atlas",
+      "Continuous integration",
+      "Key rotation",
+      "Geofencing"
+    ],
+    "correctIndex": 3,
+    "explanation": "Geofencing pozwala reagować na wejście lub wyjście z obszaru geograficznego. Jest bardziej adekwatny niż ciągłe ręczne próbkowanie lokalizacji w wielu scenariuszach kontekstowych."
+  },
+  {
+    "question": "W aplikacji wykorzystującej sensory pojawiają się pojedyncze, skrajne odczyty zakłócające wynik. Co zwykle warto zastosować?",
+    "category": 6,
+    "answers": [
+      "Filtrowanie lub wygładzanie sygnału przed interpretacją danych",
+      "Podejmowanie decyzji bez filtracji szumu i bez okna czasowego pomiarów",
+      "Walidacja w emulatorze mimo zależności od jakości fizycznych sensorów urządzenia",
+      "Zapisywanie błędnych odczytów jako haseł użytkownika"
+    ],
+    "correctIndex": 0,
+    "explanation": "Dane sensoryczne bywają zaszumione, dlatego często wymagają filtracji, wygładzania lub agregacji. Pojedynczy odczyt nie powinien automatycznie determinować krytycznej decyzji."
+  },
+  {
+    "question": "Aplikacja korzysta z danych lokalizacji i aktywności użytkownika. Który aspekt projektowy jest szczególnie ważny poza samą poprawnością techniczną?",
+    "category": 6,
+    "answers": [
+      "Ukrycie komunikatu o uprawnieniach pod ekranem ładowania",
+      "Minimalizacja zakresu danych, jasna zgoda użytkownika i uzasadnienie celu przetwarzania",
+      "Zbieranie szerokiego zakresu danych na przyszłość, bez jasnego powiązania z funkcją",
+      "Przechowywanie historii lokalizacji bez limitu czasu jako ustawienie domyślne"
+    ],
+    "correctIndex": 1,
+    "explanation": "Dane kontekstowe mogą być wrażliwe, więc należy ograniczać zakres, wyjaśniać cel i respektować zgodę. Nadmierne lub ukryte zbieranie danych pogarsza prywatność i zaufanie."
+  },
+  {
+    "question": "Aplikacja mobilna łączy się z API przez HTTPS, ale atakujący instaluje zaufany certyfikat na urządzeniu testowym. Jaki mechanizm może dodatkowo ograniczyć ryzyko MITM?",
+    "category": 7,
+    "answers": [
+      "Użycie HTTP zamiast HTTPS dla szybszego debugowania",
+      "Wyłączenie weryfikacji certyfikatu w kliencie HTTP",
+      "Certificate pinning dla certyfikatu lub klucza publicznego serwera",
+      "Przechowywanie access tokenu w logach diagnostycznych"
+    ],
+    "correctIndex": 2,
+    "explanation": "Certificate pinning ogranicza akceptowane certyfikaty do oczekiwanych wartości. Wyłączanie weryfikacji TLS lub logowanie tokenów znacząco obniża bezpieczeństwo."
+  },
+  {
+    "question": "Urządzenie IoT wysyła pomiary temperatury do tematu, a wiele aplikacji subskrybuje te dane niezależnie. Który opis najlepiej odpowiada modelowi komunikacji MQTT?",
+    "category": 7,
+    "answers": [
+      "Publikowanie komunikatów na temat, z którego subskrybenci odbierają dane przez brokera",
+      "Okresowe odpytywanie serwera wiadomości przez klientów bez mechanizmu tematów",
+      "Dystrybucja paczek danych do odbiorców bez brokera pośredniczącego",
+      "Renderowanie odpowiedzi SOAP jako lokalnego widoku UI"
+    ],
+    "correctIndex": 0,
+    "explanation": "MQTT opiera się na modelu publish/subscribe z brokerem i tematami. Dzięki temu wielu odbiorców może subskrybować te same dane bez bezpośredniego powiązania z nadawcą."
+  },
+  {
+    "question": "Token dostępu w aplikacji mobilnej ma krótki czas życia. Jak należy typowo obsłużyć jego wygaśnięcie bez ponownego wpisywania hasła?",
+    "category": 7,
+    "answers": [
+      "Dodać token do nazwy pakietu aplikacji",
+      "Użyć refresh tokenu przechowywanego w bezpiecznym magazynie i wymienić go na nowy access token",
+      "Przechowywać access token jako stałą wartość konfiguracyjną aplikacji",
+      "Ustawić access token jako niewygasający i publiczny"
+    ],
+    "correctIndex": 1,
+    "explanation": "Refresh token pozwala odnawiać krótkotrwałe tokeny dostępu. Powinien być chroniony w systemowym magazynie sekretów, a nie zastępowany hasłem w plain text."
+  },
+  {
+    "question": "Aplikacja mobilna musi pobrać profil użytkownika i listę ostatnich zamówień. Kiedy GraphQL może być korzystny względem wielu sztywnych endpointów REST?",
+    "category": 7,
+    "answers": [
+      "Gdy klient chce precyzyjnie określić kształt danych i ograniczyć nadmiarowe pola",
+      "Gdy serwer nie ma żadnego modelu danych ani schematu",
+      "Gdy trzeba całkowicie zrezygnować z autoryzacji żądań",
+      "Gdy klient chce pobierać stały, szeroki zestaw pól niezależnie od potrzeb ekranu"
+    ],
+    "correctIndex": 0,
+    "explanation": "GraphQL pozwala klientowi opisać potrzebne pola, co może ograniczyć overfetching lub underfetching. Nie zastępuje mechanizmów autoryzacji ani modelu danych."
+  },
+  {
+    "question": "W aplikacji mobilnej powtarzające się żądanie HTTP może zostać wysłane kilka razy z powodu niestabilnej sieci. Która cecha API zmniejsza ryzyko niepożądanych skutków ubocznych?",
+    "category": 7,
+    "answers": [
+      "Idempotencja operacji lub użycie klucza idempotencyjnego dla żądań modyfikujących stan",
+      "Zwiększanie rozmiaru ikon w interfejsie",
+      "Ukrywanie kodów błędów HTTP przed klientem",
+      "Losowe ponawianie żądań modyfikujących stan bez rozpoznawania duplikatów"
+    ],
+    "correctIndex": 0,
+    "explanation": "Idempotencja lub klucze idempotencyjne pomagają bezpiecznie powtarzać operacje, np. płatności lub zamówienia. Losowa zmiana endpointów i ukrywanie błędów nie rozwiązują problemu duplikacji."
+  },
+  {
+    "question": "Aplikacja wellbeing próbuje wnioskować o stresie użytkownika na podstawie tętna i sposobu interakcji. Które ograniczenie należy jasno uwzględnić?",
+    "category": 8,
+    "answers": [
+      "Traktowanie wyniku modelu jako jednoznacznej diagnozy stanu psychicznego użytkownika",
+      "Modele afektywne nie wymagają zgody ani informacji dla użytkownika",
+      "Wnioskowanie afektywne powinno uwzględniać niepewność, kontekst i możliwość błędnej klasyfikacji",
+      "Wnioski afektywne są probabilistyczne i mogą wymagać kontekstu oraz walidacji, a nie traktowania jako pewna diagnoza"
+    ],
+    "correctIndex": 3,
+    "explanation": "Informatyka afektywna operuje na niepewnych sygnałach i wymaga ostrożnej interpretacji. Dane emocjonalne są wrażliwe i powinny być przetwarzane z poszanowaniem prywatności."
+  },
+  {
+    "question": "Model rozpoznawania emocji działa dobrze w laboratorium, ale słabo w realnym użyciu aplikacji. Jaka jest prawdopodobna przyczyna?",
+    "category": 8,
+    "answers": [
+      "Różnica między kontrolowanym zbiorem treningowym a zmiennym kontekstem rzeczywistym użytkowników",
+      "Ocenianie modelu przez liczbę ekranów aplikacji i szybkość builda zamiast przez trafność w realnym kontekście",
+      "Fakt, że emocje nie mogą być reprezentowane jako żadne dane",
+      "Zbyt duża liczba ikon w pliku manifestu"
+    ],
+    "correctIndex": 0,
+    "explanation": "Modele afektywne często cierpią na problem generalizacji. Warunki realne różnią się od laboratoryjnych, dlatego potrzebna jest walidacja na reprezentatywnych danych."
+  },
+  {
+    "question": "Aplikacja adaptuje interfejs do wykrytego nastroju użytkownika. Która zasada projektowa jest najbezpieczniejsza?",
+    "category": 8,
+    "answers": [
+      "Ukrywać fakt personalizacji, aby użytkownik nie zmienił zachowania",
+      "Pozostawić użytkownikowi kontrolę, wyjaśnić adaptację i umożliwić jej wyłączenie",
+      "Automatyczna adaptacja bez informacji dla użytkownika, jeśli metryki retencji rosną",
+      "Podejmować nieodwracalne decyzje finansowe na podstawie emocji"
+    ],
+    "correctIndex": 1,
+    "explanation": "Adaptacja afektywna powinna być przejrzysta, odwracalna i kontrolowana przez użytkownika. Automatyczne, nieodwracalne działania na podstawie niepewnego modelu są ryzykowne."
+  },
+  {
+    "question": "Aplikacja AR umieszcza wirtualny obiekt na stole, ale obiekt „pływa” po scenie. Który problem jest najbardziej prawdopodobny?",
+    "category": 9,
+    "answers": [
+      "Niepoprawne użycie refresh tokenu OAuth",
+      "Brak indeksu w tabeli użytkowników",
+      "Niestabilne śledzenie płaszczyzn, pozycji kamery lub punktów charakterystycznych sceny",
+      "Zbyt mała liczba endpointów REST w backendzie"
+    ],
+    "correctIndex": 2,
+    "explanation": "Stabilność obiektu AR zależy od śledzenia sceny, pozycji urządzenia i wykrywania powierzchni. Problemy backendowe zwykle nie powodują bezpośrednio pływania obiektu w przestrzeni."
+  },
+  {
+    "question": "W aplikacji VR użytkownicy zgłaszają chorobę symulatorową. Który czynnik techniczny najczęściej nasila ten problem?",
+    "category": 9,
+    "answers": [
+      "Zbyt mały rozmiar pliku README",
+      "Użycie paginacji w API profilu",
+      "Zbyt wiele etykiet dostępności w formularzu",
+      "Wysokie opóźnienie i niestabilna liczba klatek względem ruchu głowy"
+    ],
+    "correctIndex": 3,
+    "explanation": "W VR opóźnienie i niestabilny FPS mogą powodować konflikt sensoryczny i dyskomfort. Dokumentacja czy paginacja backendu nie są bezpośrednimi przyczynami choroby symulatorowej."
+  },
+  {
+    "question": "Aplikacja AR ma działać w słabo oświetlonym pomieszczeniu. Jakie ograniczenie techniczne trzeba uwzględnić, skoro śledzenie sceny zależy od obrazu z kamery?",
+    "category": 9,
+    "answers": [
+      "Brak wpływu oświetlenia na algorytmy wykorzystujące kamerę",
+      "Pełne zastąpienie kamery przez plik konfiguracyjny",
+      "Gorszą jakość śledzenia obrazu i wykrywania cech sceny",
+      "Brak potrzeby testowania śledzenia, ponieważ AR działa niezależnie od jakości obrazu"
+    ],
+    "correctIndex": 2,
+    "explanation": "Algorytmy AR korzystające z kamery potrzebują odpowiednich cech wizualnych i oświetlenia. Słabe warunki mogą pogorszyć tracking i stabilność obiektów."
+  },
+  {
+    "question": "Projektant porównuje aplikację AR i VR dla scenariusza mobilnego. Która odpowiedź najlepiej opisuje różnicę w sposobie prezentowania świata rzeczywistego i cyfrowego?",
+    "category": 9,
+    "answers": [
+      "AR łączy obraz świata rzeczywistego z obiektami cyfrowymi, a VR zastępuje otoczenie środowiskiem wirtualnym",
+      "AR zastępuje otoczenie sceną wirtualną, a VR nakłada etykiety na obraz z kamery",
+      "AR zwykle korzysta ze śledzenia otoczenia, a VR koncentruje użytkownika w scenie wirtualnej",
+      "AR oznacza szyfrowanie tokenów, a VR walidację formularzy"
+    ],
+    "correctIndex": 0,
+    "explanation": "AR nakłada elementy cyfrowe na rzeczywisty obraz lub przestrzeń, natomiast VR zanurza użytkownika w środowisku syntetycznym. To różnica fundamentalna dla projektowania interakcji."
+  },
+  {
+    "question": "Gra mobilna ma niestabilny FPS, a profiler pokazuje częste alokacje pamięci w pętli renderowania. Które działanie jest najbardziej adekwatne?",
+    "category": 10,
+    "answers": [
+      "Przechowywanie tekstur jako nieskompresowanych zrzutów ekranu w logach",
+      "Dodanie nowych alokacji pomocniczych w każdej klatce w celu uproszczenia kodu",
+      "Wyłączenie profilera, aby nie widzieć spadków FPS",
+      "Ograniczenie alokacji w klatce, reuse obiektów i analiza garbage collection"
+    ],
+    "correctIndex": 3,
+    "explanation": "Alokacje w pętli renderowania mogą powodować GC i spadki płynności. Optymalizacja pamięci oraz ponowne użycie obiektów są typowymi działaniami naprawczymi."
+  },
+  {
+    "question": "Aplikacja pobiera duże obrazy na liście produktów i zużywa dużo pamięci. Co jest najbardziej właściwą optymalizacją?",
+    "category": 10,
+    "answers": [
+      "Pobieranie pełnych obrazów i skalowanie ich dopiero po wyświetleniu w miniaturze",
+      "Cache obrazów z limitem pamięci oraz zwalnianie zasobów poza widocznym zakresem listy",
+      "Ładowanie obrazów w rozmiarze dopasowanym do widoku, cache i anulowanie niepotrzebnych żądań",
+      "Zastąpienie cache mechanizmem logowania użytkownika"
+    ],
+    "correctIndex": 2,
+    "explanation": "Obrazy powinny być dekodowane i cache’owane w rozmiarze adekwatnym do UI. Pełna rozdzielczość i brak zwalniania zasobów prowadzą do nadmiernego zużycia pamięci."
+  },
+  {
+    "question": "W grze 2D wiele małych tekstur powoduje częste przełączanie zasobów GPU i wzrost liczby operacji renderowania. Która technika najtrafniej ogranicza ten koszt?",
+    "category": 10,
+    "answers": [
+      "Atlas tekstur i batchowanie renderowania",
+      "Zwiększenie liczby osobnych materiałów i draw calli dla każdego sprite’a",
+      "Wyłączenie kompresji i zwiększenie liczby draw calli",
+      "Przechowywanie metadanych sprite’ów w bazie bez zmiany sposobu renderingu tekstur"
+    ],
+    "correctIndex": 0,
+    "explanation": "Atlas tekstur pozwala grupować zasoby i ograniczać przełączanie stanu GPU, a batchowanie zmniejsza liczbę draw calli. To typowe optymalizacje renderingu 2D."
+  },
+  {
+    "question": "Aplikacja mobilna wykonuje ciężkie parsowanie JSON na głównym wątku, przez co UI się zacina. Co należy zmienić?",
+    "category": 10,
+    "answers": [
+      "Zapisać cały JSON w tytule Activity",
+      "Blokować ekran pętlą oczekiwania aż parsowanie się skończy",
+      "Przenieść ciężką pracę poza wątek UI i przekazać do niego przygotowany stan do renderowania",
+      "Zwiększyć liczbę animacji w tym samym momencie"
+    ],
+    "correctIndex": 2,
+    "explanation": "Ciężkie operacje powinny działać poza wątkiem głównym, aby interfejs pozostał responsywny. Wątek UI powinien renderować gotowy stan, nie wykonywać kosztownego przetwarzania."
+  },
+  {
+    "question": "Aplikacja steruje robotem przez sieć, ale opóźnienia są zmienne. Która praktyka zwiększa bezpieczeństwo sterowania?",
+    "category": 11,
+    "answers": [
+      "Usunięcie potwierdzeń i telemetrii, aby uprościć debugowanie",
+      "Projektowanie komend z limitami, timeoutami i bezpiecznym stanem awaryjnym po utracie łączności",
+      "Uproszczenie komunikacji przez usunięcie informacji o utracie pakietów i opóźnieniach",
+      "Ignorowanie timeoutów, jeśli ostatnia komenda została wysłana poprawnie"
+    ],
+    "correctIndex": 1,
+    "explanation": "Robot sterowany z aplikacji powinien obsługiwać opóźnienia, utratę łączności i niepewność dostarczenia komend. Limity oraz stan awaryjny zmniejszają ryzyko niekontrolowanego ruchu."
+  },
+  {
+    "question": "Panel operatora pokazuje stan robota: pozycję, prędkość, poziom baterii i błędy sensorów. Która odpowiedź najlepiej wyjaśnia, co w takim systemie oznacza telemetria?",
+    "category": 11,
+    "answers": [
+      "Hasło administratora zapisane w widoku",
+      "Dane zwrotne o stanie robota, np. pozycja, prędkość, bateria i błędy",
+      "Plik instalacyjny aplikacji użytkownika",
+      "Dane wizualne panelu, które nie opisują stanu robota ani środowiska"
+    ],
+    "correctIndex": 1,
+    "explanation": "Telemetria to dane zwrotne opisujące stan urządzenia lub robota. Panel sterowania powinien je wykorzystywać do informowania operatora i podejmowania decyzji."
+  },
+  {
+    "question": "Robot powinien wykonywać komendy ruchu jedynie od uprawnionego operatora, a kanał komunikacji nie może pozwalać na podszycie się pod aplikację. Który mechanizm bezpieczeństwa jest tu najbardziej adekwatny?",
+    "category": 11,
+    "answers": [
+      "Publiczny endpoint sterowania bez kontroli dostępu",
+      "Uwierzytelnianie, autoryzacja ról i podpisywanie lub zabezpieczenie kanału komunikacji",
+      "Przesyłanie komend jako nieopisanych ciągów znaków bez walidacji",
+      "Ukrycie przycisku sterowania bez zabezpieczeń po stronie robota"
+    ],
+    "correctIndex": 1,
+    "explanation": "Sterowanie robotem wymaga kontroli tożsamości, uprawnień i integralności komunikacji. Samo ukrycie przycisku w UI nie chroni przed nieautoryzowanymi komendami."
+  },
+  {
+    "question": "Aplikacja operatora pokazuje komendę ruchu i opóźniony obraz z kamery robota. Co należy uwzględnić w projekcie interfejsu?",
+    "category": 11,
+    "answers": [
+      "Usunięcie informacji o baterii jako danych nieistotnych dla operatora",
+      "Czytelne oznaczenie stanu połączenia, opóźnień i aktualności danych telemetrycznych",
+      "Zakładanie, że operator sam odróżni stare dane od aktualnych bez oznaczeń w UI",
+      "Ukrywanie informacji o opóźnieniu, aby panel wyglądał prościej"
+    ],
+    "correctIndex": 1,
+    "explanation": "Operator musi wiedzieć, czy dane są aktualne i jakie jest opóźnienie. Ukrywanie takich informacji może prowadzić do błędnych decyzji sterowania."
+  },
+  {
+    "question": "Aplikacja ma trafić do sklepu Google Play i App Store. Co należy przygotować poza samym plikiem binarnym?",
+    "category": 12,
+    "answers": [
+      "Sam plik binarny aplikacji bez konfiguracji podpisu, metadanych i informacji o prywatności",
+      "Dokumentacja projektu bez kompletnego pakietu wymaganych materiałów dystrybucyjnych",
+      "Metadane sklepu, politykę prywatności, zrzuty ekranu, konfigurację wersji i spełnienie wymagań przeglądu",
+      "Jedną ikonę roboczą bez informacji o danych użytkownika"
+    ],
+    "correctIndex": 2,
+    "explanation": "Publikacja aplikacji wymaga materiałów sklepowych, informacji o prywatności, wersjonowania i zgodności z zasadami platform. Sam binarny plik aplikacji nie wystarcza."
+  },
+  {
+    "question": "Zespół chce wdrażać aplikację mobilną częściej i ograniczyć błędy ręcznego podpisywania. Które rozwiązanie jest najbardziej właściwe?",
+    "category": 12,
+    "answers": [
+      "Przechowywanie certyfikatów produkcyjnych w publicznym kanale czatu",
+      "Pipeline CI/CD z buildem, testami i kontrolowanym podpisywaniem artefaktów",
+      "Skrócenie ścieżki release przez pominięcie części kontroli jakości",
+      "Ręczne budowanie na przypadkowym komputerze bez historii wersji"
+    ],
+    "correctIndex": 1,
+    "explanation": "CI/CD zwiększa powtarzalność procesu wydania i umożliwia automatyczne testy oraz kontrolowane zarządzanie artefaktami. Publiczne lub ręczne obchodzenie się z certyfikatami jest ryzykowne."
+  },
+  {
+    "question": "Po wydaniu nowej wersji rośnie liczba crashy tylko na wybranym modelu urządzenia. Co powinno być pierwszym źródłem diagnozy?",
+    "category": 12,
+    "answers": [
+      "Kolor ikony aplikacji w sklepie",
+      "Ręczne zgadywanie bez danych diagnostycznych",
+      "Liczba polubień wpisu promocyjnego w mediach społecznościowych",
+      "Raporty crashlytics/monitoringu z wersją aplikacji, modelem urządzenia, systemem i stack trace"
+    ],
+    "correctIndex": 3,
+    "explanation": "Diagnostyka awarii wymaga danych z monitoringu: stack trace, wersji, urządzenia i systemu. Pozwala to odtworzyć problem i ustalić zakres wpływu."
+  },
+  {
+    "question": "Aplikacja zbiera analitykę zachowania użytkowników. Która praktyka jest najbardziej zgodna z odpowiedzialnym projektowaniem?",
+    "category": 12,
+    "answers": [
+      "Ukrywanie informacji o śledzeniu w nieczytelnym obrazie",
+      "Zbieranie rozbudowanych logów diagnostycznych bez jasnej separacji od analityki produktu",
+      "Rejestrowanie pełnych danych formularzy, w tym haseł, jako eventów analitycznych",
+      "Minimalizacja zakresu zdarzeń, anonimizacja lub pseudonimizacja oraz jasna informacja dla użytkownika"
+    ],
+    "correctIndex": 3,
+    "explanation": "Analityka powinna być celowa, minimalna i transparentna. Dane wrażliwe, hasła i nieprzefiltrowane logi nie powinny trafiać do systemów analitycznych."
+  },
+  {
+    "question": "Zespół udostępnia nową funkcję tylko 10% użytkowników, obserwując metryki jakości. Jak nazywa się takie podejście?",
+    "category": 12,
+    "answers": [
+      "Ręczne czyszczenie cache na urządzeniu dewelopera",
+      "Pełna migracja bez możliwości wyłączenia funkcji",
+      "Snapshot test ikony aplikacji",
+      "Stopniowe wdrożenie lub feature rollout kontrolowany flagą funkcji"
+    ],
+    "correctIndex": 3,
+    "explanation": "Stopniowy rollout i flagi funkcji pozwalają ograniczyć ryzyko wydania oraz szybko wyłączyć problematyczną zmianę. To praktyka release managementu."
+  },
+  {
+    "question": "Aplikacja po aktualizacji musi zmienić schemat lokalnej bazy danych użytkownika. Co jest konieczne, aby nie utracić danych?",
+    "category": 12,
+    "answers": [
+      "Usunięcie lokalnej bazy i utworzenie pustej wersji przy pierwszym uruchomieniu po aktualizacji",
+      "Zaplanowana migracja schematu bazy między wersjami aplikacji",
+      "Odtwarzanie bazy z serwera bez lokalnej migracji danych użytkownika",
+      "Zmiana nazwy przycisku w interfejsie ustawień"
+    ],
+    "correctIndex": 1,
+    "explanation": "Zmiana schematu lokalnej bazy wymaga migracji, która przekształci istniejące dane do nowej struktury. Usuwanie bazy niszczy dane użytkownika."
+  },
+  {
+    "question": "Zespół porównuje aplikację webową, hybrydową i natywną dla funkcji wymagającej bardzo niskich opóźnień sensorów. Który argument najtrafniej przemawia za podejściem natywnym?",
+    "category": 1,
+    "answers": [
+      "Bezpośredniejszy dostęp do API platformy i lepsza kontrola nad wydajnością krytycznych ścieżek",
+      "Wspólna warstwa webowa z uproszczonym dostępem do sensorów i ograniczoną kontrolą opóźnień",
+      "Wspólna implementacja interfejsu kosztem dostosowania do konwencji platformy",
+      "Oparcie działania o warstwę webową z ograniczoną integracją sprzętową"
+    ],
+    "correctIndex": 0,
+    "explanation": "Aplikacje natywne zwykle dają najlepszy dostęp do funkcji systemu i sprzętu oraz większą kontrolę nad opóźnieniami. Pozostałe odpowiedzi opisują cechy web/cross-platform albo są nieprawdziwe."
+  },
+  {
+    "question": "Projekt MVP ma szybko sprawdzić hipotezę biznesową na Androidzie i iOS, ale zawiera niewiele funkcji zależnych od specyficznych API systemowych. Które podejście jest najbardziej uzasadnione?",
+    "category": 1,
+    "answers": [
+      "Dwie niezależne aplikacje natywne bez współdzielenia logiki",
+      "Cross-platform z jedną bazą kodu i testami na obu platformach",
+      "Rozwiązanie natywne dla jednej klasy urządzeń mimo potrzeby weryfikacji na dwóch platformach",
+      "Backend generujący statyczne zrzuty ekranu zamiast interaktywnego UI"
+    ],
+    "correctIndex": 1,
+    "explanation": "Przy MVP i ograniczonej zależności od natywnych API wspólna baza kodu może skrócić czas dostarczenia. Nadal trzeba testować zachowanie na realnych urządzeniach obu platform."
+  },
+  {
+    "question": "Aplikacja mobilna ma działać stabilnie przy słabym zasięgu i chwilowej utracie internetu. Która decyzja architektoniczna najlepiej wspiera ten wymóg?",
+    "category": 1,
+    "answers": [
+      "Obsługa degradacji funkcji przy słabym połączeniu i lokalne kolejki operacji",
+      "Pokazywanie błędu połączenia bez lokalnych danych i bez kolejki operacji",
+      "Projektowanie offline-first z lokalnym stanem i późniejszą synchronizacją",
+      "Usunięcie obsługi błędów sieciowych, aby uprościć kod"
+    ],
+    "correctIndex": 2,
+    "explanation": "Offline-first zakłada lokalną dostępność danych i synchronizację po odzyskaniu sieci. Dzięki temu aplikacja pozostaje użyteczna mimo typowych ograniczeń środowiska mobilnego."
+  },
+  {
+    "question": "Projektując aplikację mobilną, trzeba uwzględnić warunki pracy inne niż w typowej aplikacji desktopowej: dotyk, baterię, mały ekran i zmienną sieć. Który opis najlepiej ujmuje ten kompromis?",
+    "category": 1,
+    "answers": [
+      "Nieograniczona energia i stały dostęp do sieci przewodowej",
+      "Założenie stałego zasilania i przewidywalnej sieci, jak w środowisku biurkowym",
+      "Konieczność ignorowania rozmiaru ekranu, bo system sam rozwiązuje układ",
+      "Ograniczone zasoby, zmienny kontekst użycia i większe znaczenie energooszczędności"
+    ],
+    "correctIndex": 3,
+    "explanation": "Mobile wymaga projektowania pod baterię, niestabilną sieć, dotyk, mały ekran i zmienny kontekst. Te ograniczenia silnie wpływają na architekturę i UX."
+  },
+  {
+    "question": "Aplikacja fitness chce odróżnić chodzenie po schodach od chodzenia po płaskim terenie. Które połączenie sensorów jest najbardziej pomocne?",
+    "category": 2,
+    "answers": [
+      "Akcelerometr do wykrywania kroków oraz barometr do zmian wysokości",
+      "Sam mikrofon, ponieważ mierzy ciśnienie atmosferyczne",
+      "Sam barometr bez analizy wzorca ruchu, ponieważ zmiana wysokości wystarcza do wykrycia kroku",
+      "NFC, ponieważ określa pionowy ruch telefonu"
+    ],
+    "correctIndex": 0,
+    "explanation": "Akcelerometr może wykrywać wzorce ruchu, a barometr pomaga oszacować zmianę wysokości. Razem lepiej rozróżniają schody od ruchu po płaskiej powierzchni."
+  },
+  {
+    "question": "Kompas w telefonie zaczyna wskazywać błędny kierunek w pobliżu metalowych elementów i magnesów. Który sensor jest najbardziej podatny na takie zakłócenia pola?",
+    "category": 2,
+    "answers": [
+      "Akcelerometr liniowy",
+      "Magnetometr",
+      "Czujnik zbliżeniowy",
+      "Moduł wibracji haptycznej"
+    ],
+    "correctIndex": 1,
+    "explanation": "Magnetometr mierzy pole magnetyczne i może być zakłócany przez metal oraz źródła elektromagnetyczne. Dlatego aplikacje kompasu często wymagają kalibracji."
+  },
+  {
+    "question": "Telefon ma wygasić ekran podczas rozmowy, gdy użytkownik przykłada urządzenie do ucha, a następnie odblokować ekran po odsunięciu telefonu. Który sensor obsługuje ten przypadek?",
+    "category": 2,
+    "answers": [
+      "Barometr",
+      "Żyroskop",
+      "Czujnik zbliżeniowy",
+      "GPS o wysokiej dokładności"
+    ],
+    "correctIndex": 2,
+    "explanation": "Czujnik zbliżeniowy wykrywa obecność obiektu blisko ekranu. Jest standardowo używany do wyłączania dotyku i podświetlenia podczas rozmowy."
+  },
+  {
+    "question": "Aplikacja AR stabilizuje obiekt podczas szybkich ruchów telefonu i potrzebuje bezpośredniego pomiaru prędkości kątowej urządzenia. Który sensor dostarcza takiego sygnału?",
+    "category": 2,
+    "answers": [
+      "Barometr",
+      "Czujnik światła",
+      "NFC",
+      "Żyroskop"
+    ],
+    "correctIndex": 3,
+    "explanation": "Żyroskop mierzy prędkość obrotową, czyli zmianę orientacji w czasie. W połączeniu z akcelerometrem i kamerą wspiera stabilne śledzenie ruchu."
+  },
+  {
+    "question": "Formularz rejestracji ma pole wymagane, które użytkownicy często pomijają. Które rozwiązanie UX najlepiej pomaga bez pogarszania dostępności?",
+    "category": 3,
+    "answers": [
+      "Czytelna etykieta, komunikat błędu przy polu i informacja dostępna także dla czytnika ekranu",
+      "Oznaczenie błędu samym kolorem bez opisu czytelnego dla technologii asystujących",
+      "Ukrycie etykiety, aby interfejs wyglądał czyściej",
+      "Wyczyszczenie całego formularza po pierwszym błędzie"
+    ],
+    "correctIndex": 0,
+    "explanation": "Dobry formularz jasno wskazuje problem tekstowo, kontekstowo i semantycznie. Sam kolor nie wystarcza, a ukrywanie etykiet utrudnia zrozumienie pola."
+  },
+  {
+    "question": "Testy pokazują, że użytkownicy nie zauważają głównej akcji na ekranie. Która zmiana najtrafniej adresuje problem hierarchii wizualnej?",
+    "category": 3,
+    "answers": [
+      "Dodanie większej liczby elementów o takim samym priorytecie",
+      "Wyróżnienie głównej akcji przez pozycję, rozmiar, kontrast i redukcję konkurujących elementów",
+      "Zwiększenie kontrastu wszystkich elementów równocześnie, aby każdy wyglądał jak akcja główna",
+      "Przeniesienie najważniejszej akcji do nieopisanej ikony w menu"
+    ],
+    "correctIndex": 1,
+    "explanation": "Hierarchia wizualna kieruje uwagę przez kontrast, skalę, położenie i przestrzeń. Zwiększanie liczby konkurujących elementów pogłębia problem."
+  },
+  {
+    "question": "Zespół chce sprawdzić, czy użytkownicy rozumieją nowy proces zakupu przed implementacją backendu. Jaka metoda jest najbardziej adekwatna?",
+    "category": 3,
+    "answers": [
+      "Test obciążeniowy bazy produkcyjnej",
+      "Statyczna analiza importów w kodzie",
+      "Test użyteczności na prototypie klikalnym",
+      "Pomiar liczby draw calli w silniku gry"
+    ],
+    "correctIndex": 2,
+    "explanation": "Klikalny prototyp pozwala szybko zweryfikować zrozumienie przepływu i problemy UX bez kosztownej implementacji pełnego systemu."
+  },
+  {
+    "question": "Aplikacja ma wspierać użytkowników z większym rozmiarem tekstu ustawionym w systemie. Która praktyka jest właściwa?",
+    "category": 3,
+    "answers": [
+      "Blokowanie skalowania, aby zachować identyczny layout",
+      "Zapisywanie rozmiaru fontu na sztywno w pikselach",
+      "Ukrywanie dłuższych etykiet bez alternatywy",
+      "Projektowanie elastycznych układów i respektowanie systemowych ustawień tekstu"
+    ],
+    "correctIndex": 3,
+    "explanation": "Dostępny interfejs powinien reagować na preferencje systemowe użytkownika. Sztywne rozmiary i blokowanie skalowania pogarszają czytelność."
+  },
+  {
+    "question": "W aplikacji Android ekran pobiera dane z API i zapisuje je lokalnie. Gdzie w MVVM najlepiej umieścić logikę wyboru źródła danych: cache albo sieć?",
+    "category": 4,
+    "answers": [
+      "W repozytorium ukrywającym szczegóły źródeł danych przed ViewModel",
+      "Bezpośrednio w Composable, aby UI decydował o bazie i API",
+      "W pliku zasobów strings.xml",
+      "W klasie Activity jako zmienne statyczne"
+    ],
+    "correctIndex": 0,
+    "explanation": "Repository koordynuje źródła danych i udostępnia spójny interfejs warstwie ViewModel. UI nie powinien znać szczegółów cache, DAO i API."
+  },
+  {
+    "question": "Composable wywołuje zapytanie sieciowe przy każdej rekompozycji. Jaki problem architektoniczny to sugeruje?",
+    "category": 4,
+    "answers": [
+      "Zbyt małą liczbę kolorów w motywie aplikacji",
+      "Efekt uboczny umieszczony w warstwie UI bez kontroli cyklu życia i stanu",
+      "Użycie zbyt krótkiej nazwy funkcji Kotlin",
+      "Brak pliku README w repozytorium"
+    ],
+    "correctIndex": 1,
+    "explanation": "Rekompozycje mogą zachodzić często, dlatego operacje sieciowe powinny być sterowane stanem i cyklem życia, zwykle przez ViewModel oraz kontrolowane efekty."
+  },
+  {
+    "question": "Aplikacja Android musi przechować prostą preferencję użytkownika, np. wybór motywu. Które rozwiązanie jest bardziej adekwatne niż relacyjna baza Room?",
+    "category": 4,
+    "answers": [
+      "Retrofit interceptor",
+      "NavController",
+      "DataStore lub SharedPreferences dla prostych ustawień",
+      "RecyclerView Adapter jako magazyn konfiguracji"
+    ],
+    "correctIndex": 2,
+    "explanation": "Proste preferencje klucz-wartość nie wymagają bazy relacyjnej. DataStore jest nowocześniejszym rozwiązaniem do ustawień aplikacji."
+  },
+  {
+    "question": "Widok SwiftUI ma automatycznie reagować na zmianę wartości w modelu, zamiast ręcznie odświeżać kontrolki. Który mechanizm najlepiej pasuje do obserwowalnego stanu w tym wzorcu?",
+    "category": 4,
+    "answers": [
+      "Ręczne odświeżanie widoku po każdej zmianie przez timer w warstwie UI",
+      "Plik Info.plist jako źródło dynamicznego stanu",
+      "Timer odświeżający ekran co sekundę niezależnie od zmian",
+      "Obserwowalny stan, np. ObservableObject/StateObject albo mechanizmy Observation"
+    ],
+    "correctIndex": 3,
+    "explanation": "SwiftUI opiera się na deklaratywnym UI zależnym od stanu. Obserwowalne modele pozwalają aktualizować widok wtedy, gdy zmieniają się dane."
+  },
+  {
+    "question": "Aplikacja Flutter ma złożony stan koszyka zakupowego używany na wielu ekranach. Które podejście jest najbardziej skalowalne?",
+    "category": 5,
+    "answers": [
+      "Wydzielenie stanu do rozwiązania zarządzania stanem, np. Provider, Bloc lub Riverpod",
+      "Przekazywanie całego koszyka przez parametry każdej trasy i modyfikowanie go lokalnie w ekranach",
+      "Duplikowanie stanu koszyka w wielu widokach, a następnie scalanie zmian przy zamknięciu aplikacji",
+      "Kodowanie koszyka jako obraz PNG w zasobach aplikacji"
+    ],
+    "correctIndex": 0,
+    "explanation": "Przy stanie współdzielonym między ekranami warto użyć jawnego mechanizmu zarządzania stanem. Globalne zmienne utrudniają testowanie i kontrolę przepływu danych."
+  },
+  {
+    "question": "Zespół wybiera React Native dla aplikacji z nietypowym modułem Bluetooth wymagającym specyficznych funkcji platformy. Co należy uwzględnić w planie technicznym?",
+    "category": 5,
+    "answers": [
+      "Założenie, że JavaScript bez mostka uzyska pełny dostęp do każdego API producenta",
+      "Możliwość napisania lub użycia natywnego modułu pomostowego dla Androida i iOS",
+      "Rezygnację z testów na urządzeniach fizycznych, bo emulator wystarczy",
+      "Przechowywanie danych Bluetooth w pliku CSS"
+    ],
+    "correctIndex": 1,
+    "explanation": "Cross-platform często wymaga natywnych modułów dla funkcji sprzętowych lub specyficznych API. To trzeba zaplanować, przetestować i utrzymywać osobno dla platform."
+  },
+  {
+    "question": "Aplikacja cross-platform ma identyczny kod biznesowy, ale różne konwencje nawigacji i uprawnień na Androidzie oraz iOS. Jaka decyzja jest najrozsądniejsza?",
+    "category": 5,
+    "answers": [
+      "Wymusić dokładnie ten sam wygląd i zachowanie, ignorując wytyczne platform",
+      "Usunąć obsługę uprawnień, aby zachować wspólny kod",
+      "Uwzględnić adaptacje platformowe w miejscach, gdzie wpływają na UX i zgodność z systemem",
+      "Zastąpić nawigację komunikatami push"
+    ],
+    "correctIndex": 2,
+    "explanation": "Wspólna baza kodu nie oznacza ignorowania różnic platform. Dobre aplikacje cross-platform zachowują wspólną logikę, ale adaptują elementy istotne dla UX i systemu."
+  },
+  {
+    "question": "PWA ma szybko startować po ponownym uruchomieniu i działać częściowo offline dzięki kontrolowanemu cache’owaniu zasobów. Który element architektury webowej jest w tym najważniejszy?",
+    "category": 5,
+    "answers": [
+      "Wymuszenie instalacji przez sklep z aplikacjami",
+      "Sam manifest bez strategii cache i bez obsługi żądań przez service workera",
+      "Zapisanie całej aplikacji jako jeden zrzut ekranu",
+      "Service Worker obsługujący cache i strategie pobierania zasobów"
+    ],
+    "correctIndex": 3,
+    "explanation": "Service Worker umożliwia przechwytywanie żądań, cache zasobów i działanie offline w PWA. Bez niego PWA traci wiele cech aplikacyjnych."
+  },
+  {
+    "question": "Aplikacja ma wykrywać, czy użytkownik znajduje się w pobliżu sklepu, ale bez ciągłego śledzenia GPS. Które rozwiązanie jest bardziej energooszczędne?",
+    "category": 6,
+    "answers": [
+      "Geofencing z rozsądnymi promieniami i systemową obsługą zdarzeń wejścia/wyjścia",
+      "Pobieranie lokalizacji GPS co 100 ms przez całą dobę",
+      "Nagrywanie dźwięku otoczenia w celu odgadnięcia adresu",
+      "Wymuszenie maksymalnej jasności ekranu, aby zwiększyć dokładność lokalizacji"
+    ],
+    "correctIndex": 0,
+    "explanation": "Geofencing pozwala systemowi efektywniej monitorować obszary zainteresowania. Częste aktywne odpytywanie GPS znacząco zwiększa zużycie baterii."
+  },
+  {
+    "question": "Urządzenie IoT wysyła małe komunikaty telemetryczne do wielu subskrybentów przez broker. Która cecha MQTT jest tu najważniejsza?",
+    "category": 7,
+    "answers": [
+      "Wymaganie ręcznego pobierania plików przez FTP",
+      "Brak możliwości pracy w sieciach o ograniczonej przepustowości",
+      "Model publish/subscribe z tematami i brokerem pośredniczącym",
+      "Bezpośrednie połączenia peer-to-peer między wszystkimi klientami bez tematów i brokera"
+    ],
+    "correctIndex": 2,
+    "explanation": "MQTT wykorzystuje brokera i tematy, oddzielając nadawców od odbiorców. To pasuje do lekkiej telemetrii i komunikacji wielu klientów."
+  },
+  {
+    "question": "Aplikacja mobilna komunikuje się z API przez HTTPS, ale zespół obawia się podstawienia fałszywego certyfikatu przez zaufany w systemie urządzenia urząd CA. Która technika ogranicza to ryzyko?",
+    "category": 7,
+    "answers": [
+      "Przesłanie tokenu w adresie URL dla łatwiejszego debugowania",
+      "Wyłączenie walidacji certyfikatu w kliencie HTTP",
+      "Przechowywanie hasła użytkownika w SharedPreferences jako tekst jawny",
+      "Certificate pinning dla certyfikatu lub klucza publicznego serwera"
+    ],
+    "correctIndex": 3,
+    "explanation": "Certificate pinning zawęża zaufanie klienta do oczekiwanego certyfikatu lub klucza, zmniejszając ryzyko MITM mimo błędnie zaufanych CA."
+  },
+  {
+    "question": "Aplikacja odnawia access token bez ponownego pytania o hasło. Który warunek projektowy najlepiej ogranicza ryzyko przejęcia długotrwałego sekretu używanego do odnowienia sesji?",
+    "category": 7,
+    "answers": [
+      "Bezpieczne przechowywanie refresh tokenu i możliwość jego unieważnienia po stronie serwera",
+      "Brak daty wygaśnięcia access tokenu, aby uprościć logikę",
+      "Logowanie tokenów w konsoli, aby łatwiej diagnozować błędy",
+      "Używanie refresh tokenu bez rotacji i bez możliwości unieważnienia po stronie serwera"
+    ],
+    "correctIndex": 0,
+    "explanation": "Refresh token powinien być chroniony, mieć kontrolowany cykl życia i możliwość unieważnienia. Tokeny nie powinny trafiać do logów ani parametrów URL."
+  },
+  {
+    "question": "System informatyki afektywnej klasyfikuje stres użytkownika na podstawie danych z kamery i mikrofonu. Co jest najważniejszym ograniczeniem interpretacyjnym?",
+    "category": 8,
+    "answers": [
+      "Traktowanie klasyfikacji jako pewnej etykiety, niezależnej od kontekstu i jakości danych",
+      "Wynik modelu jest estymacją zależną od kontekstu, danych treningowych i zgody użytkownika",
+      "Modele afektywne nie wymagają walidacji, jeśli działają na telefonie",
+      "Wystarczy przechowywać nagrania bez informowania użytkownika"
+    ],
+    "correctIndex": 1,
+    "explanation": "Rozpoznawanie emocji jest probabilistyczne i silnie zależne od kontekstu oraz jakości danych. Dodatkowo dotyczy danych wrażliwych, więc wymaga transparentności i zgody."
+  },
+  {
+    "question": "Aplikacja wellbeing sugeruje przerwę, gdy wykrywa przeciążenie użytkownika. Która praktyka projektowa jest najbardziej odpowiedzialna?",
+    "category": 8,
+    "answers": [
+      "Ukrycie algorytmu i brak możliwości wyłączenia sugestii",
+      "Wysyłanie surowych danych biometrycznych do reklamodawców",
+      "Traktowanie sugestii jako wsparcia, z jasnym wyjaśnieniem i kontrolą użytkownika",
+      "Udostępnianie wniosków afektywnych bez wyraźnej kontroli i zrozumiałej zgody użytkownika"
+    ],
+    "correctIndex": 2,
+    "explanation": "Aplikacje dotyczące stanu emocjonalnego powinny dawać użytkownikowi kontrolę, wyjaśniać działanie i unikać nadużyć danych. Sugestia nie powinna zastępować profesjonalnej diagnozy."
+  },
+  {
+    "question": "Aplikacja mobilna wykonuje kosztowne przetwarzanie obrazu na głównym wątku i interfejs przestaje reagować. Co należy zrobić?",
+    "category": 10,
+    "answers": [
+      "Przenieść ciężkie obliczenia poza główny wątek i raportować wynik do UI",
+      "Zwiększyć liczbę animacji na ekranie ładowania",
+      "Wykonywanie obliczeń na głównym wątku, ale z dodaniem dłuższej animacji ładowania",
+      "Zmiana formatu ikon aplikacji bez przeniesienia kosztownych operacji poza UI"
+    ],
+    "correctIndex": 0,
+    "explanation": "Główny wątek powinien obsługiwać UI. Ciężkie zadania należy wykonywać asynchronicznie lub w tle, aby uniknąć zacięć i ANR."
+  },
+  {
+    "question": "Aplikacja steruje robotem przez sieć bezprzewodową. Które zabezpieczenie jest szczególnie istotne dla komend ruchu?",
+    "category": 11,
+    "answers": [
+      "Wysyłanie komend bez uwierzytelnienia, aby zmniejszyć opóźnienie",
+      "Uwierzytelnianie, autoryzacja komend i mechanizm awaryjnego zatrzymania",
+      "Walidacja wyglądu przycisku sterowania bez kontroli źródła komendy",
+      "Kodowanie komend ruchem animacji w ekranie powitalnym"
+    ],
+    "correctIndex": 1,
+    "explanation": "Komendy ruchu mają wpływ na fizyczne zachowanie robota, dlatego wymagają kontroli dostępu i bezpiecznego trybu zatrzymania. Niskie opóźnienie nie uzasadnia braku zabezpieczeń."
+  },
+  {
+    "question": "Robot mobilny traci połączenie z aplikacją sterującą podczas ruchu. Jaka reakcja systemu najlepiej ogranicza ryzyko niekontrolowanego działania robota?",
+    "category": 11,
+    "answers": [
+      "Kontynuowanie ostatniej komendy bez limitu czasu",
+      "Przyspieszenie, aby szybciej opuścić obszar bez sieci",
+      "Oczekiwanie na powrót sieci bez zmiany zachowania robota podczas utraty kontroli",
+      "Przejście w zdefiniowany stan bezpieczny, np. zatrzymanie lub ograniczenie ruchu"
+    ],
+    "correctIndex": 3,
+    "explanation": "Utrata łączności powinna prowadzić do fail-safe, np. zatrzymania lub ograniczenia ruchu. Kontynuacja ostatniej komendy może być niebezpieczna."
+  },
+  {
+    "question": "Aplikacja zbiera crash reporty z urządzeń użytkowników. Która praktyka najlepiej łączy użyteczność diagnostyczną z ochroną prywatności?",
+    "category": 12,
+    "answers": [
+      "Dołączanie pełnej zawartości ekranu i formularzy niezależnie od danych wrażliwych",
+      "Zbieranie stosu błędu, wersji aplikacji i kontekstu technicznego przy minimalizacji danych osobowych",
+      "Wysyłanie haseł użytkownika, aby łatwiej odtworzyć sesję",
+      "Publikowanie raportów crashy publicznie bez anonimizacji"
+    ],
+    "correctIndex": 1,
+    "explanation": "Crash reporting powinien dostarczać danych technicznych potrzebnych do diagnozy, ale minimalizować dane osobowe i wrażliwe. Hasła i pełne treści formularzy są niedopuszczalne."
   }
 ]

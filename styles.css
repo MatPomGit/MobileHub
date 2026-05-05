@@ -319,6 +319,13 @@ a:hover {
     box-shadow: var(--shadow-lg);
 }
 
+/* Ustawia przyciski kompendium obok siebie i zawija je na mniejszych ekranach. */
+.exam-links-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
 .grading-shortcut-card {
     margin: 16px 0 22px;
     padding: 14px 16px;
