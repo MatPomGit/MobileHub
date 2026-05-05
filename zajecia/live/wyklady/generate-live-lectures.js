@@ -84,8 +84,11 @@ function renderLecture(lecture) {
         section.className = 'slide-block pdf-slide';
         section.dataset.section = 'pdf-page';
 
-        const title = document.createElement('h2');
-        title.textContent = 'Slajd ' + pageNumber;
+        const section = document.createElement('section');
+        section.className = 'slide-block pdf-slide';
+        section.dataset.section = 'pdf-page';
+
+        const notes = document.createElement('aside');
 
         const notes = document.createElement('aside');
         notes.className = 'notes';
