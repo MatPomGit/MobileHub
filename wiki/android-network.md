@@ -42,7 +42,7 @@ Podział odpowiedzialności:
 - **Remote data source** zna szczegóły HTTP i mapowanie odpowiedzi.
 - **OkHttp** zarządza połączeniami, timeoutami, interceptorami, cache i TLS.
 
-## Retrofit — klient HTTP oparty o interfejsy
+## Retrofit - klient HTTP oparty o interfejsy
 
 Retrofit upraszcza definiowanie endpointów HTTP. Zamiast ręcznie budować żądania, opisujemy API jako interfejs Kotlin.
 
@@ -191,7 +191,7 @@ Typowe kategorie błędów:
 
 ### Przykład typu wyniku
 
-Zamiast rzucać wyjątkami, warto modelować wszystkie możliwe wyniki żądania HTTP jako zapieczętowaną hierarchię typów. Poniższa implementacja `NetworkResult` i funkcja `safeApiCall` umożliwiają obsługę każdego przypadku — sukcesu, błędu HTTP, błędu sieci i nieoczekiwanego wyjątku — w sposób bezpieczny i czytelny dla kompilatora.
+Zamiast rzucać wyjątkami, warto modelować wszystkie możliwe wyniki żądania HTTP jako zapieczętowaną hierarchię typów. Poniższa implementacja `NetworkResult` i funkcja `safeApiCall` umożliwiają obsługę każdego przypadku - sukcesu, błędu HTTP, błędu sieci i nieoczekiwanego wyjątku - w sposób bezpieczny i czytelny dla kompilatora.
 
 ```kotlin
 sealed interface NetworkResult<out T> {
@@ -400,13 +400,13 @@ Dobre praktyki:
 - sprawdzaj rozmiar i typ MIME,
 - nie wysyłaj pełnych plików w głównym wątku.
 
-## Paging 3 — stronicowanie danych
+## Paging 3 - stronicowanie danych
 
 Paging 3 jest oficjalnym rozwiązaniem Jetpack do stopniowego ładowania dużych zbiorów danych. Dokumentacja Android Developers rekomenduje je do scenariuszy, w których pełna lista jest zbyt duża dla pojedynczego pobrania, a także opisuje `RemoteMediator` jako rozwiązanie dla połączenia sieci i bazy lokalnej. citeturn1search1turn1search17
 
 ### Przykład `PagingSource`
 
-`PagingSource` jest kluczowym elementem biblioteki Paging 3 — odpowiada za pobieranie jednej strony danych i informowanie systemu o kluczach poprzedniej oraz następnej strony. Poprawna implementacja metody `getRefreshKey()` zapewnia, że po odświeżeniu lub zmianie konfiguracji lista zostaje wznowiona od właściwej pozycji.
+`PagingSource` jest kluczowym elementem biblioteki Paging 3 - odpowiada za pobieranie jednej strony danych i informowanie systemu o kluczach poprzedniej oraz następnej strony. Poprawna implementacja metody `getRefreshKey()` zapewnia, że po odświeżeniu lub zmianie konfiguracji lista zostaje wznowiona od właściwej pozycji.
 
 ```kotlin
 class PokemonPagingSource(
@@ -445,7 +445,7 @@ class PokemonPagingSource(
 
 ### Konfiguracja pagera
 
-Obiekt `Pager` łączy `PagingSource` z konfiguracją stronicowania i udostępnia strumień `Flow<PagingData>`. Parametry `pageSize` i `prefetchDistance` wpływają na płynność przewijania listy — zbyt mała wartość powoduje opóźnienia widoczne dla użytkownika, a zbyt duża niepotrzebnie obciąża sieć i pamięć.
+Obiekt `Pager` łączy `PagingSource` z konfiguracją stronicowania i udostępnia strumień `Flow<PagingData>`. Parametry `pageSize` i `prefetchDistance` wpływają na płynność przewijania listy - zbyt mała wartość powoduje opóźnienia widoczne dla użytkownika, a zbyt duża niepotrzebnie obciąża sieć i pamięć.
 
 ```kotlin
 class PokemonRepository(
@@ -609,7 +609,7 @@ To dobra technika do sprawdzania:
 
 ## Ćwiczenia
 
-### Ćwiczenie 1 — podstawowy klient REST
+### Ćwiczenie 1 - podstawowy klient REST
 
 Zaimplementuj ekran wyszukujący Pokémona po nazwie. Aplikacja ma:
 - pobrać dane z API,
@@ -617,7 +617,7 @@ Zaimplementuj ekran wyszukujący Pokémona po nazwie. Aplikacja ma:
 - wyświetlić komunikat błędu przy braku internetu,
 - po sukcesie pokazać nazwę, identyfikator i obrazek.
 
-### Ćwiczenie 2 — refaktoryzacja architektury
+### Ćwiczenie 2 - refaktoryzacja architektury
 
 Masz kod, w którym `Activity` bezpośrednio wywołuje Retrofit. Przepisz go tak, aby:
 - dodać `Repository`,
@@ -625,7 +625,7 @@ Masz kod, w którym `Activity` bezpośrednio wywołuje Retrofit. Przepisz go tak
 - wprowadzić `UiState`,
 - odseparować DTO od modelu UI.
 
-### Ćwiczenie 3 — uwierzytelnianie
+### Ćwiczenie 3 - uwierzytelnianie
 
 Dodaj do aplikacji:
 - `AuthInterceptor`,
@@ -633,14 +633,14 @@ Dodaj do aplikacji:
 - przechowywanie tokenu w bezpieczny sposób,
 - blokadę logowania tokenu w buildzie release.
 
-### Ćwiczenie 4 — paginacja
+### Ćwiczenie 4 - paginacja
 
 Zaimplementuj listę elementów z Paging 3. Wersja minimalna ma:
 - pobierać dane stronicowane,
 - reagować na `LoadState.Loading`, `LoadState.Error`, `LoadState.NotLoading`,
 - pozwalać użytkownikowi na ponowienie żądania.
 
-### Ćwiczenie 5 — testy
+### Ćwiczenie 5 - testy
 
 Napisz:
 - test mapowania DTO,

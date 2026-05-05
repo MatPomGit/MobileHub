@@ -1,6 +1,6 @@
 # Programowanie cross-platformowe i PWA
 
-Programowanie cross-platformowe pozwala stworzyć jedną aplikację działającą zarówno na Android, jak i iOS (a często też web i desktop). Zamiast utrzymywać dwa oddzielne kody źródłowe, piszesz jeden — i kompilujesz/uruchamiasz na wielu platformach.
+Programowanie cross-platformowe pozwala stworzyć jedną aplikację działającą zarówno na Android, jak i iOS (a często też web i desktop). Zamiast utrzymywać dwa oddzielne kody źródłowe, piszesz jeden - i kompilujesz/uruchamiasz na wielu platformach.
 
 ## Porównanie podejść
 
@@ -10,16 +10,16 @@ Programowanie cross-platformowe pozwala stworzyć jedną aplikację działając�
 | **React Native** | JavaScript/TypeScript | Natywne komponenty | Wysoka | Meta |
 | **Kotlin Multiplatform** | Kotlin | Współdzielona logika, natywny UI | Najwyższa | JetBrains |
 | **Xamarin/.NET MAUI** | C# | Natywne komponenty | Wysoka | Microsoft |
-| **PWA** | HTML/CSS/JS | Przeglądarka | Średnia | — |
+| **PWA** | HTML/CSS/JS | Przeglądarka | Średnia | - |
 | **Ionic** | HTML/CSS/JS + Capacitor | WebView | Średnia | Ionic |
 
 ## Flutter
 
-Flutter to framework od Google, który renderuje UI samodzielnie przez własny silnik Skia/Impeller — omijając natywne komponenty platformy. Skutkuje to perfekcyjną spójnością wizualną na wszystkich platformach.
+Flutter to framework od Google, który renderuje UI samodzielnie przez własny silnik Skia/Impeller - omijając natywne komponenty platformy. Skutkuje to perfekcyjną spójnością wizualną na wszystkich platformach.
 
 ### Podstawy Dart i Flutter
 
-Dart to silnie typowany język kompilowany AOT, którego składnia jest bliska Javie i Kotlinowi, co ułatwia naukę programistom mobilnym. W Flutterze każdy element interfejsu to widget — niezmienne drzewa opisu UI, które Flutter renderuje samodzielnie na canvasie. Poniższy przykład pokazuje dwa fundamentalne typy widgetów: `StatelessWidget` (bez wewnętrznego stanu) oraz `StatefulWidget` (ze stanem zarządzanym przez `setState`).
+Dart to silnie typowany język kompilowany AOT, którego składnia jest bliska Javie i Kotlinowi, co ułatwia naukę programistom mobilnym. W Flutterze każdy element interfejsu to widget - niezmienne drzewa opisu UI, które Flutter renderuje samodzielnie na canvasie. Poniższy przykład pokazuje dwa fundamentalne typy widgetów: `StatelessWidget` (bez wewnętrznego stanu) oraz `StatefulWidget` (ze stanem zarządzanym przez `setState`).
 
 ```dart
 // Widget statyczny
@@ -74,7 +74,7 @@ class _CounterState extends State<Counter> {
 }
 ```
 
-### State management w Flutter — Riverpod
+### State management w Flutter - Riverpod
 
 Riverpod to nowoczesne podejście do zarządzania stanem w Flutterze, które rozwiązuje ograniczenia oryginalnego Provider'a poprzez pełne oddzielenie stanu od drzewa widgetów. Providerzy są globalne, type-safe i testowalne bez kontekstu Buildera. Poniższy przykład demonstruje definicję `StateNotifierProvider` z prostym licznikiem oraz jego obserwację w widgecie `ConsumerWidget`.
 
@@ -174,7 +174,7 @@ PWA to aplikacja webowa z możliwościami podobnymi do natywnych: instalacja na 
 Service Worker to skrypt działający w tle przeglądarki, niezależnie od strony, który przechwytuje żądania sieciowe i zarządza lokalnym cache. Rejestrowanie zasobów podczas instalacji (`install` event) umożliwia aplikacji działanie całkowicie offline po pierwszym odwiedzeniu. Poniższy przykład implementuje strategię „cache-first": odpowiedź pobierana jest najpierw z cache, a sieć jest odwiedzana tylko gdy zasobu nie ma lokalnie.
 
 ```javascript
-// sw.js — Service Worker
+// sw.js - Service Worker
 const CACHE_NAME = 'app-v1';
 const URLS_TO_CACHE = ['/', '/index.html', '/app.js', '/styles.css'];
 
@@ -195,7 +195,7 @@ self.addEventListener('fetch', event => {
 
 ### Web App Manifest
 
-Plik `manifest.json` informuje przeglądarkę, jak wyświetlać aplikację po zainstalowaniu na ekranie głównym — nadaje jej nazwę, ikony, kolor paska systemowego i tryb wyświetlania `standalone` (bez paska przeglądarki). Jest to kluczowy plik każdej PWA, bez którego przeglądarka nie zaproponuje użytkownikowi instalacji aplikacji. Poniższy przykład przedstawia kompletną konfigurację manifestu z dwoma rozmiarami ikon wymaganymi przez standard PWA.
+Plik `manifest.json` informuje przeglądarkę, jak wyświetlać aplikację po zainstalowaniu na ekranie głównym - nadaje jej nazwę, ikony, kolor paska systemowego i tryb wyświetlania `standalone` (bez paska przeglądarki). Jest to kluczowy plik każdej PWA, bez którego przeglądarka nie zaproponuje użytkownikowi instalacji aplikacji. Poniższy przykład przedstawia kompletną konfigurację manifestu z dwoma rozmiarami ikon wymaganymi przez standard PWA.
 
 ```json
 {
@@ -214,7 +214,7 @@ Plik `manifest.json` informuje przeglądarkę, jak wyświetlać aplikację po za
 
 ### Rejestracja SW w HTML
 
-Service Worker musi zostać zarejestrowany przez główny skrypt aplikacji — przeglądarka pobiera plik SW i instaluje go, jeśli jeszcze nie jest aktywny lub zmieniła się jego treść. Rejestracja jest asynchroniczna, a wynik informuje o zasięgu (`scope`) kontrolowanym przez Service Workera. Poniższy fragment to minimalna, poprawna rejestracja, którą należy umieścić w głównym pliku HTML lub skrypcie inicjalizującym aplikację.
+Service Worker musi zostać zarejestrowany przez główny skrypt aplikacji - przeglądarka pobiera plik SW i instaluje go, jeśli jeszcze nie jest aktywny lub zmieniła się jego treść. Rejestracja jest asynchroniczna, a wynik informuje o zasięgu (`scope`) kontrolowanym przez Service Workera. Poniższy fragment to minimalna, poprawna rejestracja, którą należy umieścić w głównym pliku HTML lub skrypcie inicjalizującym aplikację.
 
 ```javascript
 if ('serviceWorker' in navigator) {
@@ -234,9 +234,9 @@ if ('serviceWorker' in navigator) {
 | Ścisła integracja ze sprzętem | Natywny (Android Studio / Xcode) |
 | Deweloper webowy chce mobile | React Native lub PWA |
 
-## Ionic + Capacitor — web-first mobile
+## Ionic + Capacitor - web-first mobile
 
-Ionic to framework UI oparty na Web Components, który renderuje aplikację w natywnym `WebView`. Capacitor (następca Cordovy) zapewnia most do natywnych API — aparat, system plików, powiadomienia — przez jednolite TypeScript API niezależne od platformy.
+Ionic to framework UI oparty na Web Components, który renderuje aplikację w natywnym `WebView`. Capacitor (następca Cordovy) zapewnia most do natywnych API - aparat, system plików, powiadomienia - przez jednolite TypeScript API niezależne od platformy.
 
 ```bash
 # Nowy projekt Ionic + React + Capacitor
@@ -278,7 +278,7 @@ async function takePhotoAndSave(): Promise<string> {
 ```
 
 ```typescript
-// Komponent Ionic React — lista z pull-to-refresh
+// Komponent Ionic React - lista z pull-to-refresh
 import { IonContent, IonList, IonItem, IonRefresher, IonRefresherContent } from '@ionic/react';
 
 function ProductListPage() {
@@ -318,7 +318,7 @@ Każda z platform cross-platform ma własne podejście do nawigacji. Dobór odpo
 | Ionic/PWA | React Router / Angular Router | Klient-side routing w SPA |
 
 ```dart
-// Flutter — GoRouter (zalecane od Flutter 3.7)
+// Flutter - GoRouter (zalecane od Flutter 3.7)
 final router = GoRouter(
   initialLocation: '/home',
   routes: [
@@ -343,7 +343,7 @@ final router = GoRouter(
 
 {% raw %}
 ```typescript
-// React Navigation — Native Stack + Bottom Tabs
+// React Navigation - Native Stack + Bottom Tabs
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 
@@ -377,7 +377,7 @@ GoRouter i React Navigation stosują podobną filozofię deklaratywną. KMP Voya
 Każda platforma cross-platform ma własne narzędzia testowe, ale zasady pozostają te same: testy jednostkowe logiki, testy widgetów/komponentów, testy integracyjne i E2E.
 
 ```dart
-// Flutter — test widgetu (widget test)
+// Flutter - test widgetu (widget test)
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
@@ -403,7 +403,7 @@ void main() {
 
 {% raw %}
 ```typescript
-// React Native Testing Library — test komponentu
+// React Native Testing Library - test komponentu
 import { render, fireEvent, screen } from '@testing-library/react-native';
 import { CartItem } from '../components/CartItem';
 
@@ -418,7 +418,7 @@ test('usuwa pozycję po naciśnięciu przycisku usuń', () => {
 {% endraw %}
 
 ```kotlin
-// KMP — commonTest (testy logiki biznesowej współdzielone między platformami)
+// KMP - commonTest (testy logiki biznesowej współdzielone między platformami)
 class CartViewModelTest {
     private val viewModel = CartViewModel(FakeCartRepository())
 
@@ -431,10 +431,10 @@ class CartViewModelTest {
 ```
 
 ```bash
-# Playwright — testy E2E dla PWA
+# Playwright - testy E2E dla PWA
 npx playwright test --project=chromium
 
-# playwright.config.ts — konfiguracja dla mobile viewport
+# playwright.config.ts - konfiguracja dla mobile viewport
 use: {
   viewport: { width: 390, height: 844 },  // iPhone 14
   userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 16_0 ...)',
@@ -448,4 +448,4 @@ Uruchamianie wszystkich testów: `flutter test` (Flutter), `npx jest` (React Nat
 - [Flutter.dev](https://flutter.dev)
 - [React Native](https://reactnative.dev)
 - [Kotlin Multiplatform](https://www.jetbrains.com/kotlin-multiplatform/)
-- [web.dev — PWA](https://web.dev/progressive-web-apps/)
+- [web.dev - PWA](https://web.dev/progressive-web-apps/)

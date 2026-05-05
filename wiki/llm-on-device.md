@@ -22,10 +22,10 @@ Artykuł omawia wdrażanie dużych i małych modeli językowych (LLM / sLLM) bez
 
 ### 1.1 Kiedy używać on-device LLM?
 
-- **Aplikacje zdrowotne** — dane medyczne nie mogą opuszczać urządzenia
-- **Asystenci offline** — działanie w trybie samolotowym
-- **Personalizacja** — model adaptuje się do użytkownika bez wysyłania historii
-- **Redukcja kosztów** — brak płatności za API przy intensywnym użyciu
+- **Aplikacje zdrowotne** - dane medyczne nie mogą opuszczać urządzenia
+- **Asystenci offline** - działanie w trybie samolotowym
+- **Personalizacja** - model adaptuje się do użytkownika bez wysyłania historii
+- **Redukcja kosztów** - brak płatności za API przy intensywnym użyciu
 
 ---
 
@@ -33,37 +33,37 @@ Artykuł omawia wdrażanie dużych i małych modeli językowych (LLM / sLLM) bez
 
 ### 2.1 Gemma 2 (Google DeepMind, 2024)
 
-- **Gemma 2 2B**: 2,6B params — optymalny dla mobile, ~1,5 GB (INT4)
-- **Gemma 2 9B**: 9B params — wymaga flagowego urządzenia lub desktop
+- **Gemma 2 2B**: 2,6B params - optymalny dla mobile, ~1,5 GB (INT4)
+- **Gemma 2 9B**: 9B params - wymaga flagowego urządzenia lub desktop
 - Trenowany z distillacją od większych modeli Gemma
 - Natywna obsługa przez MediaPipe LLM Inference API
 - Licencja: Google Gemma Terms of Use (bezpłatna do komercyjnych zastosowań)
 
 ### 2.2 Llama 3.2 (Meta AI, 2024)
 
-- **Llama 3.2 1B**: 1B params — bardzo szybki, ~700 MB (INT4)
-- **Llama 3.2 3B**: 3B params — dobry balans jakości i szybkości, ~2 GB (INT4)
+- **Llama 3.2 1B**: 1B params - bardzo szybki, ~700 MB (INT4)
+- **Llama 3.2 3B**: 3B params - dobry balans jakości i szybkości, ~2 GB (INT4)
 - Obsługuje: tekst, reasoning, summarization
 - Dostępny przez ExecuTorch (Meta) i llama.cpp
 - Licencja: Llama 3.2 Community License (bezpłatna przy <700M MAU)
 
 ### 2.3 Phi-3 Mini (Microsoft, 2024)
 
-- **Phi-3 Mini 3.8B** (128K context): 3,8B params — wyjątkowe reasoning na małą skalę
+- **Phi-3 Mini 3.8B** (128K context): 3,8B params - wyjątkowe reasoning na małą skalę
 - Trenowany na starannie wyselekcjonowanych danych (synthetic + web)
 - Dostępny w formacie GGUF i ONNX Runtime
 - Wersja 4K i 128K context window
 
 ### 2.4 Mistral 7B
 
-- 7B params — wymaga mocnego urządzenia lub desktop GPU
+- 7B params - wymaga mocnego urządzenia lub desktop GPU
 - Sliding window attention (SWA) dla efektywnego context handling
 - Dostępny w formatach GGUF (llama.cpp), Ollama
-- Mistral-7B-Instruct-v0.3 — wersja do konwersacji
+- Mistral-7B-Instruct-v0.3 - wersja do konwersacji
 
 ### 2.5 Falcon RW
 
-- Falcon RW 1B — bardzo mały, przeznaczony do edge
+- Falcon RW 1B - bardzo mały, przeznaczony do edge
 - Trenowany na RefinedWeb dataset
 - Ograniczone możliwości dialogowe
 
@@ -84,14 +84,14 @@ Artykuł omawia wdrażanie dużych i małych modeli językowych (LLM / sLLM) bez
 Format stworzony przez projekt llama.cpp:
 - Samodzielny plik zawierający wagi + metadata + tokenizer
 - Obsługa wielu poziomów kwantyzacji: Q4_K_M, Q5_K_M, Q8_0, F16
-- Powszechny ekosystem — tysiące modeli na Hugging Face
+- Powszechny ekosystem - tysiące modeli na Hugging Face
 - Efektywne ładowanie przez mmap (memory-mapped files)
 
 Nazewnictwo kwantyzacji GGUF:
 ```
-Q4_K_M — 4-bit, K-quants, Medium (zalecany dla mobile)
-Q5_K_M — 5-bit, K-quants, Medium (wyższa jakość, więcej RAM)
-Q8_0   — 8-bit, szybki na GPU, większy rozmiar
+Q4_K_M - 4-bit, K-quants, Medium (zalecany dla mobile)
+Q5_K_M - 5-bit, K-quants, Medium (wyższa jakość, więcej RAM)
+Q8_0   - 8-bit, szybki na GPU, większy rozmiar
 ```
 
 ### 3.2 ExecuTorch (.pte)
@@ -111,7 +111,7 @@ Format Google dla MediaPipe LLM Inference API:
 
 ---
 
-## 4. llama.cpp — architektura i Android
+## 4. llama.cpp - architektura i Android
 
 ### 4.1 Czym jest llama.cpp?
 
@@ -218,7 +218,7 @@ class LlamaViewModel(application: Application) : AndroidViewModel(application) {
 
 ---
 
-## 5. MLC LLM — kompilacja dla mobilnych GPU
+## 5. MLC LLM - kompilacja dla mobilnych GPU
 
 ### 5.1 Czym jest MLC LLM?
 
@@ -342,7 +342,7 @@ class GemmaInference(private val context: Context) {
 
 ## 7. Apple Intelligence i on-device LLM w iOS 18+
 
-iOS 18 wprowadza Apple Intelligence — framework on-device AI:
+iOS 18 wprowadza Apple Intelligence - framework on-device AI:
 - Modele uruchamiane na Apple Neural Engine (ANE)
 - 3B parametrów on-device + większe modele w Private Cloud Compute
 - API dostępne przez Foundation Models framework (iOS 18.1+)
@@ -543,7 +543,7 @@ struct ChatView: View {
 
 ---
 
-## 10. Analiza pamięci — footprint modelu
+## 10. Analiza pamięci - footprint modelu
 
 ### 10.1 Rozmiar modelu w pamięci RAM
 
@@ -572,12 +572,12 @@ RAZEM: ~1.16 GB
 
 ## 11. Dobre praktyki
 
-1. **Wybieraj najmniejszy model** spełniający wymagania jakościowe — Llama 3.2 1B jest zaskakująco zdolny
-2. **Streaming jest konieczny** — czas pierwszego tokena < 500 ms daje wrażenie szybkości
-3. **Zarządzaj KV cache** — ogranicz context window do rzeczywistych potrzeb aplikacji
-4. **Graceful degradation** — gdy brakuje RAM, zaoferuj model cloud jako fallback
-5. **Pobieraj modele leniwie** — nie bundluj 1 GB+ modelu w APK, pobieraj on-demand
-6. **Monitoruj temperature** — długie generowanie może powodować throttling
+1. **Wybieraj najmniejszy model** spełniający wymagania jakościowe - Llama 3.2 1B jest zaskakująco zdolny
+2. **Streaming jest konieczny** - czas pierwszego tokena < 500 ms daje wrażenie szybkości
+3. **Zarządzaj KV cache** - ogranicz context window do rzeczywistych potrzeb aplikacji
+4. **Graceful degradation** - gdy brakuje RAM, zaoferuj model cloud jako fallback
+5. **Pobieraj modele leniwie** - nie bundluj 1 GB+ modelu w APK, pobieraj on-demand
+6. **Monitoruj temperature** - długie generowanie może powodować throttling
 
 ---
 
@@ -586,6 +586,6 @@ RAZEM: ~1.16 GB
 - [Wprowadzenie do lokalnego AI na mobile](local-ai-intro.md)
 - [Kwantyzacja i optymalizacja modeli AI](model-quantization.md)
 - [Frameworki ML na mobile](mobile-ml-frameworks.md)
-- [Wnioskowanie lokalne — architektura i wydajność](on-device-inference.md)
+- [Wnioskowanie lokalne - architektura i wydajność](on-device-inference.md)
 - [AI mowy i NLP na mobile](ai-speech-nlp.md)
 - [MediaPipe na mobile](mediapipe-mobile.md)

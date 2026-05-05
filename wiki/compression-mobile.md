@@ -1,15 +1,15 @@
 # Kompresja danych w aplikacjach mobilnych
 
-Kompresja danych odgrywa kluczową rolę w tworzeniu wydajnych aplikacji mobilnych. Ograniczone zasoby urządzeń — pamięć masowa, przepustowość sieci i bateria — sprawiają, że odpowiedni dobór algorytmu kompresji może znacząco poprawić odczucia użytkownika. W tym artykule omówiono najważniejsze algorytmy stosowane w środowisku Android i iOS oraz pokazano, kiedy i jak je stosować.
+Kompresja danych odgrywa kluczową rolę w tworzeniu wydajnych aplikacji mobilnych. Ograniczone zasoby urządzeń - pamięć masowa, przepustowość sieci i bateria - sprawiają, że odpowiedni dobór algorytmu kompresji może znacząco poprawić odczucia użytkownika. W tym artykule omówiono najważniejsze algorytmy stosowane w środowisku Android i iOS oraz pokazano, kiedy i jak je stosować.
 
 ## Dlaczego kompresja ma znaczenie na urządzeniach mobilnych
 
 Telefony i tablety pracują w warunkach, które nie są typowe dla serwerów czy komputerów stacjonarnych:
 
-- **Pamięć masowa** — użytkownicy często mają urządzenia z 32–128 GB, a aplikacje rywalizują o każdy megabajt. Duże pliki danych, obrazy i zasoby gier mogą szybko wyczerpać dostępne miejsce.
-- **Transfer danych** — plany mobilne mają limity danych. Mniejszy rozmiar pliku oznacza krótszy czas pobierania i niższe koszty dla użytkownika.
-- **Bateria** — kompresja zmniejsza ilość danych przesyłanych przez radio (Wi-Fi/LTE), co jest energochłonną operacją. Mniejszy transfer = dłuższy czas pracy na baterii.
-- **Pamięć operacyjna** — dane przechowywane w pamięci podręcznej zajmują mniej miejsca w RAM, gdy są skompresowane.
+- **Pamięć masowa** - użytkownicy często mają urządzenia z 32–128 GB, a aplikacje rywalizują o każdy megabajt. Duże pliki danych, obrazy i zasoby gier mogą szybko wyczerpać dostępne miejsce.
+- **Transfer danych** - plany mobilne mają limity danych. Mniejszy rozmiar pliku oznacza krótszy czas pobierania i niższe koszty dla użytkownika.
+- **Bateria** - kompresja zmniejsza ilość danych przesyłanych przez radio (Wi-Fi/LTE), co jest energochłonną operacją. Mniejszy transfer = dłuższy czas pracy na baterii.
+- **Pamięć operacyjna** - dane przechowywane w pamięci podręcznej zajmują mniej miejsca w RAM, gdy są skompresowane.
 
 ## Kompresja stratna a bezstratna
 
@@ -20,7 +20,7 @@ Telefony i tablety pracują w warunkach, które nie są typowe dla serwerów czy
 
 W kontekście plików aplikacji, konfiguracji, danych użytkownika i zasobów strukturalnych **zawsze** stosuje się kompresję bezstratną. Stratna jest domeną multimediów.
 
-## Algorytmy bezstratne — przegląd
+## Algorytmy bezstratne - przegląd
 
 ### ZIP / DEFLATE
 
@@ -114,9 +114,9 @@ fun decompressFileWithZstd(source: File, dest: File) {
 
 LZ4 jest zoptymalizowany pod kątem **ekstremalnej prędkości dekompresji** kosztem nieco gorszego współczynnika kompresji. Idealny w sytuacjach, gdy szybkość jest ważniejsza niż rozmiar:
 
-- **Gry mobilne** — ładowanie assetów z pamięci lub sieci
-- **Pamięć podręczna** — kompresja cache w RAM (np. oktetów obrazów)
-- **Logi aplikacji** — szybkie buforowanie logów przed wysłaniem
+- **Gry mobilne** - ładowanie assetów z pamięci lub sieci
+- **Pamięć podręczna** - kompresja cache w RAM (np. oktetów obrazów)
+- **Logi aplikacji** - szybkie buforowanie logów przed wysłaniem
 
 ```kotlin
 // build.gradle.kts
@@ -160,7 +160,7 @@ import java.io.ByteArrayInputStream
 
 fun decompressBrotli(compressed: ByteArray): ByteArray {
     return if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
-        // Android 12+ — natywna obsługa przez android.util.apk.ApkSignatureSchemeV2Verifier
+        // Android 12+ - natywna obsługa przez android.util.apk.ApkSignatureSchemeV2Verifier
         // lub przez OkHttp automatycznie przy Content-Encoding: br
         BrotliInputStream(ByteArrayInputStream(compressed)).use { it.readBytes() }
     } else {
@@ -174,7 +174,7 @@ fun decompressBrotli(compressed: ByteArray): ByteArray {
 LZMA (Lempel–Ziv–Markov chain Algorithm) osiąga **najwyższy stopień kompresji** wśród popularnych algorytmów, ale kosztem wysokiego zużycia CPU i RAM oraz wolnej kompresji. Format XZ to kontener używający LZMA2.
 
 **Kiedy stosować:**
-- Pakiety instalacyjne (`.apk`, `.ipa`) — kompresja jednorazowa, dekompresja rzadko
+- Pakiety instalacyjne (`.apk`, `.ipa`) - kompresja jednorazowa, dekompresja rzadko
 - Duże pliki zasobów pobieranych jednorazowo przy pierwszym uruchomieniu
 - Archiwa z dokumentacją lub bazami wiedzy
 
@@ -224,19 +224,19 @@ fun decompressXZ(source: File, dest: File) {
 - Użyj ZSTD lub LZMA w zależności od wymaganej szybkości dostępu
 
 **Kompresja w tranzycie** (sieć):
-- Negocjuj `Accept-Encoding: br, gzip` z serwerem — zostaw to bibliotece (OkHttp robi to automatycznie)
-- Nigdy nie kompresuj ręcznie przed wysłaniem przez HTTPS — TLS ma własną kompresję (choć jej stosowanie jest rzadsze ze względu na CRIME/BREACH)
+- Negocjuj `Accept-Encoding: br, gzip` z serwerem - zostaw to bibliotece (OkHttp robi to automatycznie)
+- Nigdy nie kompresuj ręcznie przed wysłaniem przez HTTPS - TLS ma własną kompresję (choć jej stosowanie jest rzadsze ze względu na CRIME/BREACH)
 
 ### Unikanie podwójnej kompresji
 
 Kompresowanie już skompresowanych danych jest bezcelowe i kosztowne:
 
 ```kotlin
-// ŹLE — próba kompresji ZIP w ZSTD
+// ŹLE - próba kompresji ZIP w ZSTD
 val zipData = readZipFile()
 val doubleCompressed = Zstd.compress(zipData) // prawie brak zysku, strata czasu CPU
 
-// DOBRZE — bezpośrednia kompresja surowych danych
+// DOBRZE - bezpośrednia kompresja surowych danych
 val rawData = readRawData()
 val compressed = Zstd.compress(rawData)
 ```
@@ -298,8 +298,8 @@ Unity (na Androidzie) i Unreal Engine używają własnych formatów asset bundle
 
 ```kotlin
 // Przykład wyboru kompresji w Unity build settings
-// Chunk-based LZ4 — szybkie ładowanie z dysku
-// LZMA — mniejszy rozmiar do pobrania, dekompresja przy pierwszym uruchomieniu
+// Chunk-based LZ4 - szybkie ładowanie z dysku
+// LZMA - mniejszy rozmiar do pobrania, dekompresja przy pierwszym uruchomieniu
 
 // W kodzie Androida: własny asset bundle z LZ4
 fun loadCompressedAsset(context: Context, assetName: String): ByteArray {

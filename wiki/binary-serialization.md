@@ -32,11 +32,11 @@ Ten sam obiekt w różnych formatach:
 
 ### Kiedy binarna serializacja ma sens?
 
-- **IPC** (Inter-Process Communication) — komunikacja między procesami/serwisami
-- **Cache danych** — szybki odczyt z dysku, np. odpowiedzi API
-- **Protokoły sieciowe** — API z dużym ruchem (gRPC używa protobuf)
-- **Bazy danych** — serializacja złożonych obiektów do SQLite
-- **Strumieniowanie danych** — Kafka, protokoły IoT
+- **IPC** (Inter-Process Communication) - komunikacja między procesami/serwisami
+- **Cache danych** - szybki odczyt z dysku, np. odpowiedzi API
+- **Protokoły sieciowe** - API z dużym ruchem (gRPC używa protobuf)
+- **Bazy danych** - serializacja złożonych obiektów do SQLite
+- **Strumieniowanie danych** - Kafka, protokoły IoT
 
 ---
 
@@ -173,12 +173,12 @@ message Product {
   float price = 3;
 }
 
-// Wersja 2 — dodano pole, stare klienty go ignorują
+// Wersja 2 - dodano pole, stare klienty go ignorują
 message Product {
   int32 id = 1;
   string name = 2;
   float price = 3;
-  string currency = 4;     // NOWE — bezpieczne dodanie
+  string currency = 4;     // NOWE - bezpieczne dodanie
   // NIE zmieniaj numerów pól i typów istniejących pól!
 }
 ```
@@ -187,11 +187,11 @@ message Product {
 
 ## FlatBuffers
 
-FlatBuffers to format stworzony przez Google, zoptymalizowany pod kątem **zero-copy access** — brak parsowania, bezpośredni dostęp do danych w buforze pamięci.
+FlatBuffers to format stworzony przez Google, zoptymalizowany pod kątem **zero-copy access** - brak parsowania, bezpośredni dostęp do danych w buforze pamięci.
 
 ### Kluczowe cechy
 
-- Dostęp do pól bez deserializacji — odczyt bezpośrednio z bajtów
+- Dostęp do pól bez deserializacji - odczyt bezpośrednio z bajtów
 - Idealny dla danych odczytywanych częściowo (np. tylko kilka pól z dużego obiektu)
 - Stosowany w: TensorFlow Lite, gier (Cocos2d), systemach IoT
 
@@ -271,7 +271,7 @@ fun readUserBuffer(bytes: ByteArray): User {
     return User.getRootAsUser(buffer) // Zero-copy! Bez alokacji
 }
 
-// Użycie — dostęp do pól bezpośrednio z bufora
+// Użycie - dostęp do pól bezpośrednio z bufora
 val bytes = createUserBuffer()
 val user = readUserBuffer(bytes)
 println("Imię: ${user.name}")         // Brak parsowania całego obiektu
@@ -282,11 +282,11 @@ println("Miasto: ${user.address?.city}")
 
 ## MessagePack
 
-MessagePack to „JSON w formacie binarnym" — nie wymaga schematu, obsługuje te same typy co JSON.
+MessagePack to „JSON w formacie binarnym" - nie wymaga schematu, obsługuje te same typy co JSON.
 
 ### Kluczowe cechy
 
-- Brak schematu — serializacja dowolnych obiektów
+- Brak schematu - serializacja dowolnych obiektów
 - Format zgodny z JSON semantycznie
 - Proste wdrożenie, biblioteki dla 50+ języków
 - Rozmiar ~2x mniejszy niż JSON
@@ -387,7 +387,7 @@ CBOR to standard IETF (RFC 8949), semantycznie zbliżony do MessagePack, ale z b
 
 ### Kluczowe cechy
 
-- Otwarty standard IETF — gwarancja długoterminowego wsparcia
+- Otwarty standard IETF - gwarancja długoterminowego wsparcia
 - Typy: mapy, tablice, liczby całkowite, zmiennoprzecinkowe, teksty, dane binarne, znaczniki czasu, tagi
 - Stosowany w: IoT (COSE/CBOR), WebAuthn/FIDO2, Apple Wallet passes
 - Obsługa `undefined` (brak w JSON), dat, bignum
@@ -437,7 +437,7 @@ Avro to format serializacji z ekosystemu Apache Hadoop, zaprojektowany z myślą
 
 ### Kluczowe cechy
 
-- Schemat zapisany bezpośrednio w pliku (samoopisy) — brak potrzeby dystrybucji schematu
+- Schemat zapisany bezpośrednio w pliku (samoopisy) - brak potrzeby dystrybucji schematu
 - Silna ewolucja schematu: dodawanie/usuwanie pól, aliasy
 - Stosowany w: Apache Kafka, Hadoop, Spark
 - Na mobile: rzadziej bezpośrednio, częściej przy integracji z backendem Big Data
@@ -474,7 +474,7 @@ Avro to format serializacji z ekosystemu Apache Hadoop, zaprojektowany z myślą
 
 ## Kiedy używać binarnej serializacji na mobile?
 
-### IPC — komunikacja między serwisami
+### IPC - komunikacja między serwisami
 
 ```kotlin
 // Przykład: Kotlin Serialization z protobuf do komunikacji z WorkManager
@@ -516,7 +516,7 @@ WorkManager.getInstance(context).enqueue(workRequest)
 ```kotlin
 class ApiCache(private val context: Context) {
 
-    // Cache z protobuf zamiast JSON — szybszy odczyt, mniejszy rozmiar
+    // Cache z protobuf zamiast JSON - szybszy odczyt, mniejszy rozmiar
     fun <T : com.google.protobuf.MessageLite> save(key: String, message: T) {
         val file = File(context.cacheDir, "$key.pb")
         file.writeBytes(message.toByteArray())
@@ -548,16 +548,16 @@ protoscope user.pb
 ### 2. Ewolucja schematu w protobuf
 
 ```protobuf
-// ❌ BŁĄD — zmiana numeru pola łamie kompatybilność
+// ❌ BŁĄD - zmiana numeru pola łamie kompatybilność
 message User {
   string email = 3;  // Było: int32 age = 3;
 }
 
-// ✅ POPRAWNIE — zachowaj stare numery, dodaj nowe
+// ✅ POPRAWNIE - zachowaj stare numery, dodaj nowe
 message User {
   int32 id = 1;
   string name = 2;
-  // int32 age = 3;  // Usunięte — zarezerwuj numer!
+  // int32 age = 3;  // Usunięte - zarezerwuj numer!
   reserved 3;        // Zabezpieczenie przed ponownym użyciem
   reserved "age";
 
@@ -571,21 +571,21 @@ FlatBuffers dla małych obiektów może być *większy* niż JSON ze względu na
 
 ### 4. Brak natywnego wsparcia w przeglądarkach
 
-Dla aplikacji hybrydowych (React Native, Flutter Web) JSON jest często lepszym wyborem — brak potrzeby dodatkowych bibliotek.
+Dla aplikacji hybrydowych (React Native, Flutter Web) JSON jest często lepszym wyborem - brak potrzeby dodatkowych bibliotek.
 
 ---
 
 ## Dobre praktyki
 
-- **Protobuf**: zachowaj plik `.proto` w repozytorium obok kodu — to dokumentacja protokołu
-- **Nigdy nie zmieniaj numeru pola** w schemie protobuf — zawsze dodawaj nowe numery
+- **Protobuf**: zachowaj plik `.proto` w repozytorium obok kodu - to dokumentacja protokołu
+- **Nigdy nie zmieniaj numeru pola** w schemie protobuf - zawsze dodawaj nowe numery
 - **Testuj kompatybilność wsteczną**: stary klient powinien działać z nowym serwerem i odwrotnie
 - **MessagePack** jest dobrym wyborem gdy masz istniejący kod JSON i chcesz szybkiej optymalizacji
-- **Dokumentuj format** — brak czytelności binarnej to wada; dodaj komentarze do pliku `.proto`
+- **Dokumentuj format** - brak czytelności binarnej to wada; dodaj komentarze do pliku `.proto`
 - Dla **REST API** rozważ content negotiation: `Accept: application/x-protobuf` lub `application/json`
 
 ---
 
 ## Podsumowanie
 
-Binarne formaty serializacji oferują znaczące korzyści w zakresie wydajności i rozmiaru danych w porównaniu do JSON i XML. **Protocol Buffers** to de facto standard dla nowych projektów wymagających efektywnej komunikacji — szczególnie przy użyciu gRPC. **MessagePack** jest doskonałym wyborem gdy potrzebujemy szybkiej optymalizacji bez zmian architektury. **FlatBuffers** sprawdza się w scenariuszach wymagających ultra-szybkiego dostępu do danych tylko do odczytu. Wybór formatu powinien być podyktowany konkretnymi wymaganiami: czy ważniejsza jest prostota wdrożenia (MessagePack), wydajność (FlatBuffers), czy integracja z backendowym API (Protocol Buffers/gRPC).
+Binarne formaty serializacji oferują znaczące korzyści w zakresie wydajności i rozmiaru danych w porównaniu do JSON i XML. **Protocol Buffers** to de facto standard dla nowych projektów wymagających efektywnej komunikacji - szczególnie przy użyciu gRPC. **MessagePack** jest doskonałym wyborem gdy potrzebujemy szybkiej optymalizacji bez zmian architektury. **FlatBuffers** sprawdza się w scenariuszach wymagających ultra-szybkiego dostępu do danych tylko do odczytu. Wybór formatu powinien być podyktowany konkretnymi wymaganiami: czy ważniejsza jest prostota wdrożenia (MessagePack), wydajność (FlatBuffers), czy integracja z backendowym API (Protocol Buffers/gRPC).

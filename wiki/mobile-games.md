@@ -1,6 +1,6 @@
 # Programowanie gier mobilnych
 
-Gry mobilne to największy rynek w branży gier — generują ponad 50% globalnych przychodów z gier. Tworzenie gier mobilnych różni się od desktopowych: ograniczone sesje użytkownika, ekran dotykowy, premium vs free-to-play, specyficzne silniki.
+Gry mobilne to największy rynek w branży gier - generują ponad 50% globalnych przychodów z gier. Tworzenie gier mobilnych różni się od desktopowych: ograniczone sesje użytkownika, ekran dotykowy, premium vs free-to-play, specyficzne silniki.
 
 ## Architektura pętli gry
 
@@ -15,7 +15,7 @@ Każda gra działa w oparciu o pętlę:
 └─────────────────────────────────────────┘
 ```
 
-## Unity — najpopularniejszy silnik gier mobilnych
+## Unity - najpopularniejszy silnik gier mobilnych
 
 Unity to najpowszechniej używany silnik gier mobilnych. Obsługuje Android, iOS, WebGL i ponad 20 innych platform. Językiem skryptowania jest **C#**.
 
@@ -37,7 +37,7 @@ Assets/
 ```csharp
 using UnityEngine;
 
-// Komponent gracza — plik PlayerController.cs
+// Komponent gracza - plik PlayerController.cs
 public class PlayerController : MonoBehaviour
 {
     [SerializeField] private float moveSpeed = 5f;
@@ -56,9 +56,9 @@ public class PlayerController : MonoBehaviour
         HandleInput();
     }
     
-    void FixedUpdate()  // Fizyka w FixedUpdate — stały krok czasowy
+    void FixedUpdate()  // Fizyka w FixedUpdate - stały krok czasowy
     {
-        // Nic tu — ruch w Update dla odpowiedzi na input
+        // Nic tu - ruch w Update dla odpowiedzi na input
     }
     
     private void HandleInput()
@@ -97,7 +97,7 @@ public class PlayerController : MonoBehaviour
 ### System zdarzeń (Event System)
 
 ```csharp
-// GameEvents.cs — centralne zdarzenia gry
+// GameEvents.cs - centralne zdarzenia gry
 public static class GameEvents
 {
     public static event Action<int> OnScoreChanged;
@@ -110,10 +110,10 @@ public static class GameEvents
         OnPlayerDied?.Invoke();
 }
 
-// Użycie — dodaj punkty
+// Użycie - dodaj punkty
 GameEvents.TriggerScoreChanged(score + 10);
 
-// Subskrypcja — UI score
+// Subskrypcja - UI score
 void OnEnable() => GameEvents.OnScoreChanged += UpdateScoreUI;
 void OnDisable() => GameEvents.OnScoreChanged -= UpdateScoreUI;
 ```
@@ -159,7 +159,7 @@ public class GameManager : MonoBehaviour
 }
 ```
 
-## Godot — open-source alternatywa
+## Godot - open-source alternatywa
 
 Godot to darmowy silnik open-source z własnym językiem **GDScript** (podobny do Pythona):
 
@@ -205,7 +205,7 @@ Razem:         ~16ms
 
 ### Techniki optymalizacji
 
-**Object Pooling** — zamiast tworzyć/niszczyć obiekty, recycluj je:
+**Object Pooling** - zamiast tworzyć/niszczyć obiekty, recycluj je:
 
 ```csharp
 public class BulletPool : MonoBehaviour
@@ -232,7 +232,7 @@ public class BulletPool : MonoBehaviour
 }
 ```
 
-**Sprite Atlasing** — grupuj wiele grafik w jeden atlas (1 draw call zamiast N):
+**Sprite Atlasing** - grupuj wiele grafik w jeden atlas (1 draw call zamiast N):
 ```
 Bez atlasu: 100 sprite'ów = 100 draw calls
 Z atlasem:  100 sprite'ów = 1 draw call
@@ -282,7 +282,7 @@ Projektując grę mobilną, zacznij od **Aesthetics** (co chcesz, żeby gracz cz
 Krzywa trudności powinna być stopniowa. Zbyt trudna gra od razu zniechęca, zbyt łatwa nudzi:
 
 ```csharp
-// DifficultyManager.cs — dynamiczne skalowanie trudności
+// DifficultyManager.cs - dynamiczne skalowanie trudności
 public class DifficultyManager : MonoBehaviour
 {
     [SerializeField] private float baseEnemySpeed = 3f;
@@ -315,12 +315,12 @@ public class DifficultyManager : MonoBehaviour
 
 Dźwięk to 50% doświadczenia gry. Odpowiednio dobrane efekty dźwiękowe i muzyka budują immersję i wzmacniają informację zwrotną dla gracza.
 
-### Unity — AudioSource i AudioClip
+### Unity - AudioSource i AudioClip
 
 W Unity każdy obiekt grający dźwięk potrzebuje komponentu `AudioSource`:
 
 ```csharp
-// AudioManager.cs — singleton do zarządzania dźwiękiem
+// AudioManager.cs - singleton do zarządzania dźwiękiem
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager Instance { get; private set; }
@@ -333,8 +333,8 @@ public class AudioManager : MonoBehaviour
     [Header("Muzyka")]
     [SerializeField] private AudioClip backgroundMusic;
 
-    private AudioSource sfxSource;   // do efektów — krótkie dźwięki
-    private AudioSource musicSource; // do muzyki — pętla w tle
+    private AudioSource sfxSource;   // do efektów - krótkie dźwięki
+    private AudioSource musicSource; // do muzyki - pętla w tle
 
     void Awake()
     {
@@ -342,7 +342,7 @@ public class AudioManager : MonoBehaviour
         Instance = this;
         DontDestroyOnLoad(gameObject);
 
-        // Dwa oddzielne AudioSource — SFX i muzyka
+        // Dwa oddzielne AudioSource - SFX i muzyka
         sfxSource = gameObject.AddComponent<AudioSource>();
         musicSource = gameObject.AddComponent<AudioSource>();
         musicSource.loop = true;
@@ -352,7 +352,7 @@ public class AudioManager : MonoBehaviour
     void Start() => PlayMusic(backgroundMusic);
 
     public void PlaySFX(AudioClip clip, float volume = 1f) =>
-        sfxSource.PlayOneShot(clip, volume);  // PlayOneShot — nakłada dźwięki
+        sfxSource.PlayOneShot(clip, volume);  // PlayOneShot - nakłada dźwięki
 
     public void PlayJump()   => PlaySFX(jumpSound);
     public void PlayCoin()   => PlaySFX(coinPickupSound, 0.8f);
@@ -370,7 +370,7 @@ public class AudioManager : MonoBehaviour
 }
 ```
 
-### Android natywny — SoundPool vs MediaPlayer
+### Android natywny - SoundPool vs MediaPlayer
 
 W natywnym Androidzie (Kotlin) wybór klasy do odtwarzania dźwięku zależy od zastosowania:
 
@@ -381,10 +381,10 @@ W natywnym Androidzie (Kotlin) wybór klasy do odtwarzania dźwięku zależy od 
 | **AudioClip** (Jetpack) | Proste odtwarzanie | Średnia |
 
 ```kotlin
-// SoundManager.kt — zarządzanie dźwiękiem w Android
+// SoundManager.kt - zarządzanie dźwiękiem w Android
 class SoundManager(private val context: Context) {
 
-    // SoundPool — pula dla efektów dźwiękowych
+    // SoundPool - pula dla efektów dźwiękowych
     private val soundPool = SoundPool.Builder()
         .setMaxStreams(10)  // maks. 10 jednoczesnych dźwięków
         .setAudioAttributes(
@@ -434,7 +434,7 @@ class SoundManager(private val context: Context) {
 
 ## 3. Zapisywanie stanu gry
 
-### PlayerPrefs — proste dane lokalne
+### PlayerPrefs - proste dane lokalne
 
 `PlayerPrefs` to najprostszy sposób na zapis małych wartości (wyniki, ustawienia):
 
@@ -469,9 +469,9 @@ public static class SaveManager
 }
 ```
 
-> **Ograniczenia PlayerPrefs:** przechowuje tylko `int`, `float`, `string`. Nie szyfruje danych — nie używaj do przechowywania wrażliwych informacji.
+> **Ograniczenia PlayerPrefs:** przechowuje tylko `int`, `float`, `string`. Nie szyfruje danych - nie używaj do przechowywania wrażliwych informacji.
 
-### Room Database — złożone zapisy (Android)
+### Room Database - złożone zapisy (Android)
 
 Dla bardziej rozbudowanych gier (wiele postaci, inwentarz, historia) użyj Room:
 
@@ -591,7 +591,7 @@ public class TouchInputHandler : MonoBehaviour
             }
         }
 
-        // Pinch-to-zoom — dwa palce
+        // Pinch-to-zoom - dwa palce
         if (Input.touchCount == 2)
             HandlePinchZoom();
     }
@@ -618,7 +618,7 @@ public class TouchInputHandler : MonoBehaviour
 }
 ```
 
-### Rozpoznawanie gestów — swipe
+### Rozpoznawanie gestów - swipe
 
 ```csharp
 // SwipeDetector.cs
@@ -843,7 +843,7 @@ class MainActivity : AppCompatActivity() {
         gamesSignInClient.isAuthenticated.addOnCompleteListener { task ->
             val isAuthenticated = task.isSuccessful && task.result.isAuthenticated
             if (isAuthenticated) {
-                // Gracz zalogowany — pobierz ID gracza
+                // Gracz zalogowany - pobierz ID gracza
                 PlayGames.getPlayersClient(this).currentPlayer
                     .addOnSuccessListener { player ->
                         val playerId = player.playerId
@@ -868,20 +868,20 @@ Rynek Android to tysiące urządzeń o różnych rozdzielczościach, gęstościa
 ### Rozdzielczości i gęstości pikseli (Android)
 
 ```
-ldpi:   ~120 dpi  (0.75×)   — stare urządzenia
-mdpi:   ~160 dpi  (1.0×)    — baza
-hdpi:   ~240 dpi  (1.5×)    — typowe telefony
-xhdpi:  ~320 dpi  (2.0×)    — większość nowoczesnych
-xxhdpi: ~480 dpi  (3.0×)    — flagowce
-xxxhdpi:~640 dpi  (4.0×)    — tablety premium
+ldpi:   ~120 dpi  (0.75×)   - stare urządzenia
+mdpi:   ~160 dpi  (1.0×)    - baza
+hdpi:   ~240 dpi  (1.5×)    - typowe telefony
+xhdpi:  ~320 dpi  (2.0×)    - większość nowoczesnych
+xxhdpi: ~480 dpi  (3.0×)    - flagowce
+xxxhdpi:~640 dpi  (4.0×)    - tablety premium
 ```
 
 Grafiki trzymaj w katalogach `drawable-mdpi/`, `drawable-xhdpi/` itd. System automatycznie dobierze odpowiedni zasób.
 
-### Unity — Camera i Canvas Scaler
+### Unity - Camera i Canvas Scaler
 
 ```csharp
-// CameraSetup.cs — stały obszar widzenia niezależnie od rozdzielczości
+// CameraSetup.cs - stały obszar widzenia niezależnie od rozdzielczości
 public class CameraSetup : MonoBehaviour
 {
     [SerializeField] private float targetAspect = 9f / 16f; // portret 9:16
@@ -895,7 +895,7 @@ public class CameraSetup : MonoBehaviour
 
         if (scaleHeight < 1.0f)
         {
-            // Ekran szerszy niż docelowy — pillarbox (czarne pasy po bokach)
+            // Ekran szerszy niż docelowy - pillarbox (czarne pasy po bokach)
             Rect rect = cam.rect;
             rect.width  = scaleHeight;
             rect.x      = (1f - scaleHeight) / 2f;
@@ -905,7 +905,7 @@ public class CameraSetup : MonoBehaviour
         }
         else
         {
-            // Ekran węższy — letterbox (czarne pasy góra/dół)
+            // Ekran węższy - letterbox (czarne pasy góra/dół)
             float scaleWidth = 1f / scaleHeight;
             Rect rect = cam.rect;
             rect.x      = 0;
@@ -960,7 +960,7 @@ object DeviceCapabilityDetector {
 }
 ```
 
-### Proporcje ekranu — pułapki
+### Proporcje ekranu - pułapki
 
 Popularne proporcje na rynku Android (2024):
 
@@ -971,7 +971,7 @@ Popularne proporcje na rynku Android (2024):
 | 16:9      | ~20%          | Starsze urządzenia |
 | 4:3       | ~10%          | Tablety |
 
-Testuj grę na **minimum 3 proporcjach** — użyj AVD Manager w Android Studio i Unity Device Simulator.
+Testuj grę na **minimum 3 proporcjach** - użyj AVD Manager w Android Studio i Unity Device Simulator.
 
 ---
 
@@ -983,4 +983,4 @@ Testuj grę na **minimum 3 proporcjach** — użyj AVD Manager w Android Studio 
 - [Google Play Games Services](https://developer.android.com/games/pgs)
 - [Android SoundPool docs](https://developer.android.com/reference/android/media/SoundPool)
 - [Android Supporting Multiple Screens](https://developer.android.com/guide/practices/screens_support)
-- [MDA Framework — Hunicke, LeBlanc, Zubek](https://users.cs.northwestern.edu/~hunicke/MDA.pdf)
+- [MDA Framework - Hunicke, LeBlanc, Zubek](https://users.cs.northwestern.edu/~hunicke/MDA.pdf)

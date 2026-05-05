@@ -1,4 +1,4 @@
-# Asystent uaktualniania wtyczki Androida Gradle (AGP) — podejście zaawansowane
+# Asystent uaktualniania wtyczki Androida Gradle (AGP) - podejście zaawansowane
 
 Asystent uaktualniania AGP (Android Gradle Plugin Upgrade Assistant) w Android Studio to narzędzie, które automatyzuje dużą część migracji projektu między wersjami AGP. W wersji podstawowej „podnosi numer wersji i poprawia kilka plików”, ale w praktyce może być centralnym elementem **kontrolowanego procesu modernizacji build systemu**: AGP + Gradle + JDK + pluginy + CI.
 
@@ -82,8 +82,8 @@ android {
 
 Uwaga: `namespace` i `applicationId` to nie to samo:
 
-- `namespace` — przestrzeń klas R/BuildConfig i pakiet kodu,
-- `applicationId` — identyfikator aplikacji publikowany w sklepie.
+- `namespace` - przestrzeń klas R/BuildConfig i pakiet kodu,
+- `applicationId` - identyfikator aplikacji publikowany w sklepie.
 
 ## 4.2 BuildConfig / resValues / buildFeatures
 
@@ -177,7 +177,7 @@ Korzyść: kolejne podbicie AGP to zwykle jedna zmiana wersji + poprawki wskazan
 
 ---
 
-## 7) CI/CD po migracji — twarde zabezpieczenia
+## 7) CI/CD po migracji - twarde zabezpieczenia
 
 Po przejściu przez Upgrade Assistant dodaj do pipeline etap „upgrade guard”:
 
@@ -195,7 +195,7 @@ Przykładowe komendy CI:
 ./gradlew --no-daemon :app:bundleRelease
 ```
 
-Jeśli korzystasz z remote cache, porównaj hit rate przed i po migracji — regresja często oznacza nieoptymalne task inputs/outputs albo zmianę fingerprintu środowiska.
+Jeśli korzystasz z remote cache, porównaj hit rate przed i po migracji - regresja często oznacza nieoptymalne task inputs/outputs albo zmianę fingerprintu środowiska.
 
 ---
 
@@ -249,13 +249,13 @@ W praktyce oznacza to szybsze aktualizacje, mniej awarii builda i łatwiejsze ut
 
 ## Dalsza lektura
 
-- Android Developers — Android Gradle Plugin: https://developer.android.com/build
-- Android Developers — Migrate to new AGP versions: https://developer.android.com/build/releases/gradle-plugin
-- Gradle Docs — Build performance i configuration cache: https://docs.gradle.org/
+- Android Developers - Android Gradle Plugin: https://developer.android.com/build
+- Android Developers - Migrate to new AGP versions: https://developer.android.com/build/releases/gradle-plugin
+- Gradle Docs - Build performance i configuration cache: https://docs.gradle.org/
 
 ---
 
-## Configuration Cache — korzyści i pułapki po migracji AGP
+## Configuration Cache - korzyści i pułapki po migracji AGP
 
 Configuration Cache (CC) to mechanizm Gradle serializujący wynik fazy konfiguracji do pliku binarnego. Przy kolejnym wywołaniu z identycznym zestawem wejść Gradle pomija tę fazę całkowicie, skracając czas „first build" nawet o 40–60% w dużych projektach.
 
@@ -281,7 +281,7 @@ Po pierwszym udanym buildzie w katalogu projektu pojawia się `.gradle/configura
 ### Debugowanie
 
 ```bash
-# Tryb ostrzeżeń — build nie przerywa przy problemach
+# Tryb ostrzeżeń - build nie przerywa przy problemach
 ./gradlew assembleDebug --configuration-cache-problems=warn 2>&1 | grep -i "cache problem"
 
 # Pełny raport HTML zapisywany w build/reports/configuration-cache/
@@ -301,11 +301,11 @@ Po pierwszym udanym buildzie w katalogu projektu pojawia się `.gradle/configura
       grep "Reusing configuration cache" || exit 1
 ```
 
-Drugi krok upewnia się, że żaden commit nie „zepsuł" cache — regresja natychmiast widoczna w CI.
+Drugi krok upewnia się, że żaden commit nie „zepsuł" cache - regresja natychmiast widoczna w CI.
 
 ---
 
-## Isolation Projects — nowy tryb Gradle
+## Isolation Projects - nowy tryb Gradle
 
 Project Isolation (Izolacja projektów) to eksperymentalna funkcja Gradle, która idzie krok dalej niż Configuration Cache: wymusza, by każdy projekt konfigurował się **niezależnie**, bez dostępu do modelu innych projektów. Umożliwia to w pełni równoległą konfigurację.
 
@@ -332,7 +332,7 @@ allprojects {
     repositories { google() }
 }
 
-// ✅ Poprawny zamiennik — convention plugin w build-logic/
+// ✅ Poprawny zamiennik - convention plugin w build-logic/
 // build-logic/src/main/kotlin/android-library-convention.gradle.kts
 plugins {
     id("com.android.library")
@@ -350,13 +350,13 @@ Bloki `subprojects {}` i `allprojects {}` w pliku root `build.gradle.kts` muszą
 | Aspekt | Stan (Gradle 8.x) |
 |--------|-------------------|
 | Stabilność | Eksperymentalna (`unsafe` w nazwie flagi) |
-| Wsparcie AGP | Częściowe — AGP 8.3+ ma wstępną kompatybilność |
+| Wsparcie AGP | Częściowe - AGP 8.3+ ma wstępną kompatybilność |
 | Zysk wydajnościowy | 20–50% szybsza konfiguracja w projektach > 50 modułów |
 | Blokery | Wiele pluginów third-party jeszcze niezgodnych |
 
 Rekomendacja: włącz Isolated Projects na gałęzi `experiment/`, uruchom build, przejrzyj raport CC i eliminuj niezgodności stopniowo. Nie włączaj na `main` do czasu stabilizacji w Gradle 9.x.
 
-## Lint po migracji AGP — nowe reguły i baseline
+## Lint po migracji AGP - nowe reguły i baseline
 
 Nowe wersje AGP często dodają reguły Lint, które wykrywają problemy niewidoczne w poprzednich wersjach. Po migracji warto uruchomić analizę i zaktualizować baseline.
 
@@ -377,7 +377,7 @@ android {
     lint {
         // Traktuj błędy Lint jako błędy buildu (zalecane w CI)
         abortOnError = true
-        // Plik baseline — ignoruj pre-istniejące problemy
+        // Plik baseline - ignoruj pre-istniejące problemy
         baseline = file("lint-baseline.xml")
         // Wyłącz reguły generujące fałszywe pozytywy po AGP upgrade
         disable += "GradleDependency"

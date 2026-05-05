@@ -1,12 +1,12 @@
-# CSV, YAML i TOML — lekkie formaty danych i konfiguracji
+# CSV, YAML i TOML - lekkie formaty danych i konfiguracji
 
 Nie każdy problem wymaga rozbudowanego formatu. CSV sprawdza się doskonale przy eksporcie danych tabelarycznych, YAML jest czytelny jako konfiguracja CI/CD, a TOML zyskał popularność jako plik konfiguracyjny narzędzi deweloperskich. Wszystkie trzy formaty są lżejsze koncepcyjnie od XML i często czytelniejsze od JSON w kontekście konfiguracji. Każdy ma jednak swoje pułapki, które w środowisku mobilnym mogą kosztować wiele godzin debugowania.
 
-## CSV — Comma-Separated Values
+## CSV - Comma-Separated Values
 
 ### Struktura i składnia
 
-CSV to jeden z najstarszych formatów danych — opisany formalnie w [RFC 4180](https://datatracker.ietf.org/doc/html/rfc4180). Plik składa się z wierszy, a każdy wiersz z pól oddzielonych przecinkiem (lub innym separatorem). Pierwszy wiersz opcjonalnie zawiera nagłówki.
+CSV to jeden z najstarszych formatów danych - opisany formalnie w [RFC 4180](https://datatracker.ietf.org/doc/html/rfc4180). Plik składa się z wierszy, a każdy wiersz z pól oddzielonych przecinkiem (lub innym separatorem). Pierwszy wiersz opcjonalnie zawiera nagłówki.
 
 ```
 id,imię,miasto,wiek,aktywny
@@ -22,10 +22,10 @@ Kluczowe zasady RFC 4180:
 
 ### Przypadki użycia CSV w mobile
 
-- **Eksport/import danych** — raporty finansowe, listy kontaktów, wyniki pomiarów,
-- **Seedowanie danych testowych** — wczytanie dużego zestawu danych do lokalnej bazy podczas developmentu,
-- **Wymiana z arkuszami kalkulacyjnymi** — Excel i Google Sheets natywnie obsługują CSV,
-- **Logi i telemetria** — prosty format do zbierania danych diagnostycznych.
+- **Eksport/import danych** - raporty finansowe, listy kontaktów, wyniki pomiarów,
+- **Seedowanie danych testowych** - wczytanie dużego zestawu danych do lokalnej bazy podczas developmentu,
+- **Wymiana z arkuszami kalkulacyjnymi** - Excel i Google Sheets natywnie obsługują CSV,
+- **Logi i telemetria** - prosty format do zbierania danych diagnostycznych.
 
 ### Parsowanie CSV w Kotlinie
 
@@ -148,16 +148,16 @@ func parseCSVRow(_ row: String) -> [String] {
 
 ### Pułapki CSV
 
-**Kodowanie znaków** — Excel na Windows domyślnie zapisuje CSV w Windows-1250. Polskie znaki wczytane jako UTF-8 dadzą "krzaki". Zawsze jawnie deklaruj kodowanie:
+**Kodowanie znaków** - Excel na Windows domyślnie zapisuje CSV w Windows-1250. Polskie znaki wczytane jako UTF-8 dadzą "krzaki". Zawsze jawnie deklaruj kodowanie:
 
 ```kotlin
 val reader = InputStreamReader(inputStream, Charsets.UTF_8)
 // Nie: InputStreamReader(inputStream)  ← kodowanie zależne od systemu
 ```
 
-**Separator** — w niektórych krajach (Polska, Niemcy) Excel używa `;` zamiast `,` jako separatora. Warto to obsłużyć lub jawnie dokumentować format.
+**Separator** - w niektórych krajach (Polska, Niemcy) Excel używa `;` zamiast `,` jako separatora. Warto to obsłużyć lub jawnie dokumentować format.
 
-**Duże pliki** — nigdy nie wczytuj całego pliku CSV do pamięci, jeśli ma tysiące wierszy. Parsuj strumieniowo wiersz po wierszu i przenoś do bazy danych:
+**Duże pliki** - nigdy nie wczytuj całego pliku CSV do pamięci, jeśli ma tysiące wierszy. Parsuj strumieniowo wiersz po wierszu i przenoś do bazy danych:
 
 ```kotlin
 fun importLargeCsv(inputStream: InputStream, db: AppDatabase) {
@@ -174,7 +174,7 @@ fun importLargeCsv(inputStream: InputStream, db: AppDatabase) {
 
 ---
 
-## YAML — YAML Ain't Markup Language
+## YAML - YAML Ain't Markup Language
 
 ### Struktura i składnia
 
@@ -213,10 +213,10 @@ database:
 
 ### Przypadki użycia YAML w mobile dev
 
-- **Konfiguracja CI/CD** — `bitrise.yml`, pliki GitHub Actions (`.github/workflows/`),
-- **Konfiguracja narzędzi** — `detekt.yml` (linter Kotlin), `danger.yml`,
-- **Pliki konfiguracyjne aplikacji** — gdy JSON jest zbyt mało czytelny,
-- **Dane testowe** — fixtures dla testów jednostkowych.
+- **Konfiguracja CI/CD** - `bitrise.yml`, pliki GitHub Actions (`.github/workflows/`),
+- **Konfiguracja narzędzi** - `detekt.yml` (linter Kotlin), `danger.yml`,
+- **Pliki konfiguracyjne aplikacji** - gdy JSON jest zbyt mało czytelny,
+- **Dane testowe** - fixtures dla testów jednostkowych.
 
 Przykład pipeline CI na GitHub Actions:
 
@@ -257,7 +257,7 @@ jobs:
 
 ### Parsowanie YAML w Kotlinie
 
-Android nie obsługuje YAML natywnie. W aplikacji mobilnej YAML jest rzadko parsowany w runtime — częściej jest to format konfiguracji narzędzi deweloperskich lub CI. Jeśli jednak potrzebujesz parsować YAML w aplikacji, możesz użyć biblioteki `snakeyaml`:
+Android nie obsługuje YAML natywnie. W aplikacji mobilnej YAML jest rzadko parsowany w runtime - częściej jest to format konfiguracji narzędzi deweloperskich lub CI. Jeśli jednak potrzebujesz parsować YAML w aplikacji, możesz użyć biblioteki `snakeyaml`:
 
 ```kotlin
 dependencies {
@@ -301,11 +301,11 @@ fun Map<String, Any>.getNestedString(vararg keys: String): String? {
 // val baseUrl = config.getNestedString("server", "baseUrl")
 ```
 
-### Gotchas YAML — najczęstsze pułapki
+### Gotchas YAML - najczęstsze pułapki
 
-**Wcięcia** — jedyne dozwolone wcięcie to spacje (NIE tabulatory). Mieszanie spacją/tabulatorem powoduje błąd parsowania.
+**Wcięcia** - jedyne dozwolone wcięcie to spacje (NIE tabulatory). Mieszanie spacją/tabulatorem powoduje błąd parsowania.
 
-**Koercja typów** — YAML agresywnie interpretuje wartości bez cudzysłowów:
+**Koercja typów** - YAML agresywnie interpretuje wartości bez cudzysłowów:
 
 ```yaml
 # PUŁAPKI typów w YAML:
@@ -323,11 +323,11 @@ value: "0755"
 date: "2024-03-15"
 ```
 
-**Wiele dokumentów** — YAML pozwala na wiele dokumentów w jednym pliku (oddzielonych `---`), co bywa zaskakujące.
+**Wiele dokumentów** - YAML pozwala na wiele dokumentów w jednym pliku (oddzielonych `---`), co bywa zaskakujące.
 
 ---
 
-## TOML — Tom's Obvious, Minimal Language
+## TOML - Tom's Obvious, Minimal Language
 
 ### Struktura i składnia
 
@@ -340,7 +340,7 @@ TOML został stworzony przez Toma Preston-Wernera (współzałożyciela GitHub) 
 name = "MojaAplikacja"
 version = "2.1.0"
 debug = false
-buildDate = 2024-03-15  # Data — natywny typ TOML
+buildDate = 2024-03-15  # Data - natywny typ TOML
 
 [server]
 baseUrl = "https://api.example.com"
@@ -371,10 +371,10 @@ analytics = false
 ### Dlaczego TOML zyskał popularność?
 
 TOML jest domyślnym formatem konfiguracyjnym dla:
-- **Rust** — `Cargo.toml` (manifest pakietu),
-- **Python** — `pyproject.toml` (PEP 518),
+- **Rust** - `Cargo.toml` (manifest pakietu),
+- **Python** - `pyproject.toml` (PEP 518),
 - **Hugo** (generator stron), **pip**, **poetry**, **ruff**,
-- **Gradle Version Catalogs** — `libs.versions.toml` w Androidzie.
+- **Gradle Version Catalogs** - `libs.versions.toml` w Androidzie.
 
 W kontekście Androida TOML jest szczególnie istotny jako format **Gradle Version Catalog**:
 
@@ -464,7 +464,7 @@ fun loadConfigFromAssets(context: android.content.Context): AppConfig {
 }
 ```
 
-### TOML vs YAML — kluczowe różnice
+### TOML vs YAML - kluczowe różnice
 
 | Cecha | TOML | YAML |
 |-------|------|------|
@@ -561,4 +561,4 @@ class ConfigRepository(private val context: Context) {
 
 ## Podsumowanie
 
-CSV, YAML i TOML to lekkie formaty, które mają swoje wyraźne miejsca w ekosystemie mobilnym. CSV sprawdza się jako format eksportu i importu danych tabelarycznych. YAML jest niezbędny w konfiguracji CI/CD. TOML stał się standardem dla `libs.versions.toml` w projektach Android. Żaden z nich nie zastępuje JSON w komunikacji z API ani XML w zasobach Androida — ale każdy jest niezastąpiony w swoim zastosowaniu.
+CSV, YAML i TOML to lekkie formaty, które mają swoje wyraźne miejsca w ekosystemie mobilnym. CSV sprawdza się jako format eksportu i importu danych tabelarycznych. YAML jest niezbędny w konfiguracji CI/CD. TOML stał się standardem dla `libs.versions.toml` w projektach Android. Żaden z nich nie zastępuje JSON w komunikacji z API ani XML w zasobach Androida - ale każdy jest niezastąpiony w swoim zastosowaniu.

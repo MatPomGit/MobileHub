@@ -1,6 +1,6 @@
 # Dobre praktyki przechowywania danych w aplikacjach mobilnych
 
-Przechowywanie danych to jedno z kluczowych wyzwań w tworzeniu aplikacji mobilnych. Zły dobór mechanizmu storage, brak szyfrowania, nadmierne gromadzenie danych lub ignorowanie praw użytkownika do usunięcia danych może prowadzić do poważnych konsekwencji — od słabej wydajności po naruszenia RODO. Ten artykuł zbiera najważniejsze dobre praktyki, które powinien znać każdy mobilny developer.
+Przechowywanie danych to jedno z kluczowych wyzwań w tworzeniu aplikacji mobilnych. Zły dobór mechanizmu storage, brak szyfrowania, nadmierne gromadzenie danych lub ignorowanie praw użytkownika do usunięcia danych może prowadzić do poważnych konsekwencji - od słabej wydajności po naruszenia RODO. Ten artykuł zbiera najważniejsze dobre praktyki, które powinien znać każdy mobilny developer.
 
 ## Klasyfikacja danych
 
@@ -23,7 +23,7 @@ Gromadź **tylko to, co jest absolutnie niezbędne** do działania funkcji. Prze
 - Jak długo musi być przechowywana?
 - Co się stanie, jeśli wycieknie?
 
-## Drzewo decyzyjne — wybór mechanizmu storage
+## Drzewo decyzyjne - wybór mechanizmu storage
 
 ```
 Dane do przechowania
@@ -46,7 +46,7 @@ Dane do przechowania
     └─ iOS → Secure Enclave + Keychain
 ```
 
-## Bezpieczeństwo — szyfrowanie danych w spoczynku
+## Bezpieczeństwo - szyfrowanie danych w spoczynku
 
 ### Android Keystore i EncryptedSharedPreferences
 
@@ -83,7 +83,7 @@ class SecurePreferences(context: Context) {
 }
 ```
 
-### Szyfrowanie pliku bazy danych — SQLCipher
+### Szyfrowanie pliku bazy danych - SQLCipher
 
 SQLCipher to fork SQLite dodający transparentne szyfrowanie AES-256 dla całego pliku bazy danych:
 
@@ -112,11 +112,11 @@ fun getDatabasePassphrase(context: Context): ByteArray {
     // Wygeneruj lub pobierz klucz z Android Keystore
     val keyStore = java.security.KeyStore.getInstance("AndroidKeyStore").apply { load(null) }
     // ... logika zarządzania kluczem
-    return ByteArray(32) // placeholder — użyj prawdziwego klucza
+    return ByteArray(32) // placeholder - użyj prawdziwego klucza
 }
 ```
 
-### iOS — Secure Enclave i Keychain
+### iOS - Secure Enclave i Keychain
 
 ```swift
 import Security
@@ -178,7 +178,7 @@ class KeychainManager {
 - ❌ Dane biometryczne
 - ❌ Sekretne klucze szyfrowania w kodzie źródłowym
 
-## Zarządzanie rozmiarem — polityka wygasania cache
+## Zarządzanie rozmiarem - polityka wygasania cache
 
 ```kotlin
 import android.content.Context
@@ -232,7 +232,7 @@ Użytkownik → Repository → Local DB (natychmiastowa odpowiedź)
 
 ### Strategie synchronizacji
 
-**Last-Write-Wins (LWW)** — najprostsza, wystarczająca dla większości przypadków:
+**Last-Write-Wins (LWW)** - najprostsza, wystarczająca dla większości przypadków:
 
 ```kotlin
 data class SyncableNote(
@@ -247,7 +247,7 @@ fun mergeConflict(local: SyncableNote, remote: SyncableNote): SyncableNote {
 }
 ```
 
-**CRDT (Conflict-free Replicated Data Types)** — dla równoczesnej edycji bez konfliktów:
+**CRDT (Conflict-free Replicated Data Types)** - dla równoczesnej edycji bez konfliktów:
 
 ```kotlin
 // Przykład prostego G-Counter CRDT
@@ -271,7 +271,7 @@ class GCounter(private val nodeId: String) {
 }
 ```
 
-## Wydajność — unikanie operacji I/O na głównym wątku
+## Wydajność - unikanie operacji I/O na głównym wątku
 
 ### Coroutines i Dispatchers.IO
 
@@ -284,23 +284,23 @@ class NoteRepository(
     private val apiService: ApiService,
     private val ioDispatcher: CoroutineDispatcher = Dispatchers.IO
 ) {
-    // Flow z Room — automatycznie na wątku IO
+    // Flow z Room - automatycznie na wątku IO
     fun observeNotes(): Flow<List<Note>> = noteDao.getAllNotes()
 
-    // Operacje zapisu — zawsze na Dispatchers.IO
+    // Operacje zapisu - zawsze na Dispatchers.IO
     suspend fun saveNote(note: Note) = withContext(ioDispatcher) {
         noteDao.insertNote(note)
         try {
             apiService.uploadNote(note) // opcjonalna synchronizacja
         } catch (e: Exception) {
-            // Dodaj do kolejki synchronizacji — nie blokuj zapisu lokalnego
+            // Dodaj do kolejki synchronizacji - nie blokuj zapisu lokalnego
             enqueueSyncJob(note.id)
         }
     }
 
-    // Wsadowy zapis — w jednej transakcji
+    // Wsadowy zapis - w jednej transakcji
     suspend fun importNotes(notes: List<Note>) = withContext(ioDispatcher) {
-        noteDao.insertAll(notes) // @Insert z listą — jedna transakcja
+        noteDao.insertAll(notes) // @Insert z listą - jedna transakcja
     }
 }
 ```
@@ -308,21 +308,21 @@ class NoteRepository(
 ### Wsadowe zapisy zamiast pętli
 
 ```kotlin
-// ŹLE — N transakcji
+// ŹLE - N transakcji
 suspend fun insertNotesBad(notes: List<Note>) {
     notes.forEach { note ->
         noteDao.insertNote(note) // każdy insert = osobna transakcja
     }
 }
 
-// DOBRZE — jedna transakcja
+// DOBRZE - jedna transakcja
 @Dao
 interface NoteDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAll(notes: List<Note>) // Room automatycznie owija w transakcję
 }
 
-// ALTERNATYWNIE — ręczna transakcja
+// ALTERNATYWNIE - ręczna transakcja
 suspend fun insertNotesManual(notes: List<Note>, db: AppDatabase) {
     db.withTransaction {
         notes.forEach { note ->
@@ -336,10 +336,10 @@ suspend fun insertNotesManual(notes: List<Note>, db: AppDatabase) {
 
 ### Zasady bezpiecznej migracji
 
-1. **Nigdy nie usuwaj migracji** — ktoś może aktualizować ze starej wersji
-2. **Testuj migracje** — Room oferuje `MigrationTestHelper`
-3. **Zachowuj dane** — migracja powinna przenieść istniejące dane, nie usunąć
-4. **Eksportuj schemat** — Room może zapisywać schemat do JSON dla śledzenia zmian
+1. **Nigdy nie usuwaj migracji** - ktoś może aktualizować ze starej wersji
+2. **Testuj migracje** - Room oferuje `MigrationTestHelper`
+3. **Zachowuj dane** - migracja powinna przenieść istniejące dane, nie usunąć
+4. **Eksportuj schemat** - Room może zapisywać schemat do JSON dla śledzenia zmian
 
 ```kotlin
 // Test migracji z Room
@@ -448,7 +448,7 @@ class UserSettingsViewModelTest {
 }
 ```
 
-## RODO — zgodność z regulacjami
+## RODO - zgodność z regulacjami
 
 ### Prawo do usunięcia danych
 
@@ -485,7 +485,7 @@ class GdprDataManager(
 
 ### Co NIE powinno być przechowywane
 
-- ❌ Dokładna lokalizacja GPS — jeśli nie jest to core funkcja aplikacji
+- ❌ Dokładna lokalizacja GPS - jeśli nie jest to core funkcja aplikacji
 - ❌ Unikalne identyfikatory urządzenia (`ANDROID_ID`) bez zgody
 - ❌ Lista zainstalowanych aplikacji (od Androida 11 wymaga uprawnienia)
 - ❌ Historia przeglądania poza aplikacją
@@ -495,7 +495,7 @@ class GdprDataManager(
 ### Minimalizacja metadanych
 
 ```kotlin
-// ŹLE — zbieramy za dużo
+// ŹLE - zbieramy za dużo
 data class UserEvent(
     val userId: String,
     val eventType: String,
@@ -506,7 +506,7 @@ data class UserEvent(
     val allInstalledApps: List<String>  // niedopuszczalne!
 )
 
-// DOBRZE — minimalne dane
+// DOBRZE - minimalne dane
 data class UserEvent(
     val anonymousId: String,      // zahashowany, nie bezpośrednio userId
     val eventType: String,
@@ -515,7 +515,7 @@ data class UserEvent(
 )
 ```
 
-## Kompletny wzorzec Repository — Offline-First
+## Kompletny wzorzec Repository - Offline-First
 
 Poniższy przykład pokazuje kompletną implementację repozytorium z obsługą offline, synchronizacją i obsługą błędów:
 
@@ -541,7 +541,7 @@ class OfflineFirstNoteRepository(
     private val _syncStatus = MutableStateFlow<SyncStatus>(SyncStatus.Idle)
     val syncStatus: StateFlow<SyncStatus> = _syncStatus.asStateFlow()
 
-    // Obserwuj notatki z lokalnej bazy — zawsze aktualne
+    // Obserwuj notatki z lokalnej bazy - zawsze aktualne
     fun observeNotes(): Flow<List<Note>> = noteDao.getAllNotes()
 
     // Zapis lokalny + kolejkowanie synchronizacji
@@ -617,7 +617,7 @@ class OfflineFirstNoteRepository(
 }
 ```
 
-## Tabela decyzyjna — podsumowanie
+## Tabela decyzyjna - podsumowanie
 
 | Typ danych | Rozmiar | Szyfrowanie | Zalecany mechanizm |
 |------------|---------|-------------|-------------------|
@@ -635,11 +635,11 @@ class OfflineFirstNoteRepository(
 Dobre praktyki przechowywania danych sprowadzają się do kilku kluczowych zasad:
 
 1. **Klasyfikuj dane** przed wybraniem mechanizmu storage
-2. **Szyfruj to, co wrażliwe** — zawsze używaj Keystore/Secure Enclave
-3. **Nie przechowuj więcej niż potrzebujesz** — minimalizacja danych to nie tylko RODO, ale też bezpieczeństwo
-4. **I/O poza głównym wątkiem** — zawsze `Dispatchers.IO` lub `async`
-5. **Planuj migracje** od pierwszej wersji — nie na ostatnią chwilę
-6. **Testuj persistence** — Room InMemory DB i mockowanie DataStore to minimum
-7. **Implementuj prawo do usunięcia** — nie opcja, a wymóg prawny w UE
+2. **Szyfruj to, co wrażliwe** - zawsze używaj Keystore/Secure Enclave
+3. **Nie przechowuj więcej niż potrzebujesz** - minimalizacja danych to nie tylko RODO, ale też bezpieczeństwo
+4. **I/O poza głównym wątkiem** - zawsze `Dispatchers.IO` lub `async`
+5. **Planuj migracje** od pierwszej wersji - nie na ostatnią chwilę
+6. **Testuj persistence** - Room InMemory DB i mockowanie DataStore to minimum
+7. **Implementuj prawo do usunięcia** - nie opcja, a wymóg prawny w UE
 
 Architektura offline-first z lokalną bazą jako source of truth i asynchroniczną synchronizacją to aktualnie najlepszy wzorzec dla aplikacji mobilnych wymagających niezawodności w niestabilnych warunkach sieciowych.

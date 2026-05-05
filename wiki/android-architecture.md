@@ -1,4 +1,4 @@
-# Architektura aplikacji Android — MVVM, warstwy aplikacji i praktyczne zasady projektowe
+# Architektura aplikacji Android - MVVM, warstwy aplikacji i praktyczne zasady projektowe
 
 ## Wprowadzenie
 
@@ -6,9 +6,9 @@ Ten materiał jest skierowany do studentów projektujących nowoczesne aplikacje
 
 W ekosystemie Android najczęściej pracuje się dziś z architekturą warstwową, w której wyróżnia się:
 
-- **UI layer** — warstwę interfejsu użytkownika,
-- **data layer** — warstwę danych,
-- **domain layer** — warstwę domenową, stosowaną opcjonalnie.
+- **UI layer** - warstwę interfejsu użytkownika,
+- **data layer** - warstwę danych,
+- **domain layer** - warstwę domenową, stosowaną opcjonalnie.
 
 MVVM jest w praktyce jednym ze sposobów organizacji warstwy UI, najczęściej z użyciem `ViewModel`. Nie należy jednak utożsamiać całej architektury aplikacji wyłącznie z MVVM. W rzeczywistych projektach ważniejsze od samej nazwy wzorca są: właściwy przepływ danych, jasne granice odpowiedzialności oraz spójne modele danych.
 
@@ -45,11 +45,11 @@ Ponieważ w inżynierii oprogramowania ważne są nie tylko właściwości końc
 
 Dobra architektura powinna zapewniać:
 
-- **czytelność** — wiadomo, gdzie szukać konkretnej logiki,
-- **separację odpowiedzialności** — warstwy nie mieszają swoich ról,
-- **testowalność** — reguły biznesowe można weryfikować niezależnie od UI,
-- **skalowalność** — łatwiej dodawać nowe funkcje,
-- **odporność na zmiany** — zmiana jednego szczegółu nie destabilizuje całego systemu.
+- **czytelność** - wiadomo, gdzie szukać konkretnej logiki,
+- **separację odpowiedzialności** - warstwy nie mieszają swoich ról,
+- **testowalność** - reguły biznesowe można weryfikować niezależnie od UI,
+- **skalowalność** - łatwiej dodawać nowe funkcje,
+- **odporność na zmiany** - zmiana jednego szczegółu nie destabilizuje całego systemu.
 
 To właśnie dlatego architektura nie jest dodatkiem estetycznym, lecz mechanizmem redukującym złożoność systemu.
 
@@ -57,7 +57,7 @@ To właśnie dlatego architektura nie jest dodatkiem estetycznym, lecz mechanizm
 
 ## 2. Architektura warstwowa w Androidzie
 
-Najczęściej stosowany podział wygląda następująco. Poniższy diagram wizualizuje trzy główne warstwy aplikacji Android i ich zawartość. Zrozumienie granic między warstwami jest kluczowe — każda warstwa powinna komunikować się wyłącznie z warstwą bezpośrednio pod nią, co ogranicza sprzężenie i ułatwia testowanie poszczególnych części systemu w izolacji.
+Najczęściej stosowany podział wygląda następująco. Poniższy diagram wizualizuje trzy główne warstwy aplikacji Android i ich zawartość. Zrozumienie granic między warstwami jest kluczowe - każda warstwa powinna komunikować się wyłącznie z warstwą bezpośrednio pod nią, co ogranicza sprzężenie i ułatwia testowanie poszczególnych części systemu w izolacji.
 
 ```text
 ┌─────────────────────────────────────────────┐
@@ -116,9 +116,9 @@ Ponieważ ogranicza sprzężenie. UI nie musi wiedzieć, czy dane pochodzą z Ro
 
 W projektach Androidowych MVVM najczęściej oznacza:
 
-- **View** — Compose UI, Fragment lub Activity,
-- **ViewModel** — stan ekranu i logika biznesowa związana z ekranem,
-- **Model** — dane i operacje pochodzące z warstwy domenowej lub danych.
+- **View** - Compose UI, Fragment lub Activity,
+- **ViewModel** - stan ekranu i logika biznesowa związana z ekranem,
+- **Model** - dane i operacje pochodzące z warstwy domenowej lub danych.
 
 W środowisku Compose szczególnie ważne jest to, że UI ma charakter **deklaratywny**. Oznacza to, że interfejs nie powinien ręcznie synchronizować wielu pól widoku, lecz renderować się na podstawie bieżącego stanu.
 
@@ -134,21 +134,21 @@ W praktyce oznacza to, że:
 
 ---
 
-## 4. UI layer — stan, logika UI i logika biznesowa
+## 4. UI layer - stan, logika UI i logika biznesowa
 
 W warstwie UI warto rozróżnić trzy pojęcia:
 
-1. **UI state** — dane potrzebne do narysowania ekranu,
-2. **business logic** — decyzje wynikające z reguł aplikacji,
-3. **UI behavior logic** — zachowania typowo interfejsowe, np. przewijanie listy, pokazanie Snackbara czy uruchomienie nawigacji.
+1. **UI state** - dane potrzebne do narysowania ekranu,
+2. **business logic** - decyzje wynikające z reguł aplikacji,
+3. **UI behavior logic** - zachowania typowo interfejsowe, np. przewijanie listy, pokazanie Snackbara czy uruchomienie nawigacji.
 
 To rozróżnienie jest ważne, ponieważ częstym błędem jest umieszczanie wszystkiego w `ViewModel`. W efekcie `ViewModel` staje się klasą, która próbuje kontrolować całe UI, zamiast być stanowym pośrednikiem między ekranem a logiką aplikacji.
 
 ### Przykład sensownego podziału odpowiedzialności
 
-- kliknięcie przycisku „Zapisz” uruchamia walidację i zapis danych — **ViewModel / use case**,
-- pokazanie Snackbara po sukcesie — zależnie od projektu: **UI logic** albo jednorazowy efekt z `ViewModel`,
-- przewinięcie listy do błędnego pola formularza — zwykle **logika UI**, bo zależy od detali interfejsu.
+- kliknięcie przycisku „Zapisz” uruchamia walidację i zapis danych - **ViewModel / use case**,
+- pokazanie Snackbara po sukcesie - zależnie od projektu: **UI logic** albo jednorazowy efekt z `ViewModel`,
+- przewinięcie listy do błędnego pola formularza - zwykle **logika UI**, bo zależy od detali interfejsu.
 
 ### Dlaczego nie wszystko powinno trafiać do `ViewModel`?
 
@@ -156,7 +156,7 @@ Ponieważ część zachowań jest ściśle zależna od konkretnego sposobu rende
 
 ---
 
-## 5. ViewModel — rola, zalety i ograniczenia
+## 5. ViewModel - rola, zalety i ograniczenia
 
 `ViewModel` pełni kilka ważnych funkcji:
 
@@ -177,7 +177,7 @@ Ponieważ część zachowań jest ściśle zależna od konkretnego sposobu rende
 
 ### Przykład `ViewModel`
 
-Poniższy przykład przedstawia kompletny `ViewModel` wstrzyknięty przez Hilt, który zarządza stanem ekranu listy zadań. Klasa wystawia stan ekranu jako `StateFlow` — publiczny, ale niemutowalny strumień — i reaguje na akcje użytkownika przez dedykowane metody. Taki wzorzec umożliwia warstwie UI odczytywanie stanu bez możliwości jego bezpośredniej modyfikacji, co jest kluczową zasadą jednokierunkowego przepływu danych.
+Poniższy przykład przedstawia kompletny `ViewModel` wstrzyknięty przez Hilt, który zarządza stanem ekranu listy zadań. Klasa wystawia stan ekranu jako `StateFlow` - publiczny, ale niemutowalny strumień - i reaguje na akcje użytkownika przez dedykowane metody. Taki wzorzec umożliwia warstwie UI odczytywanie stanu bez możliwości jego bezpośredniej modyfikacji, co jest kluczową zasadą jednokierunkowego przepływu danych.
 
 ```kotlin
 @HiltViewModel
@@ -250,7 +250,7 @@ Ponieważ pokazuje kilka ważnych zasad jednocześnie:
 
 ---
 
-## 6. UDF — Unidirectional Data Flow
+## 6. UDF - Unidirectional Data Flow
 
 UDF, czyli **Unidirectional Data Flow**, oznacza jednokierunkowy przepływ danych. Poniższy diagram ilustruje cykl: akcja użytkownika trafia do `ViewModel`, który aktualizuje stan, a zmodyfikowany stan jest renderowany przez UI. Dzięki temu przepływ zawsze przebiega w jednym kierunku, co eliminuje trudne do wykrycia błędy wynikające z rozproszonych, nieskoordynowanych zmian stanu.
 
@@ -271,7 +271,7 @@ UDF daje następujące korzyści:
 
 ### Minimalistyczny ekran zgodny z UDF
 
-Poniższy Composable demonstruje wzorcowy punkt wejścia warstwy UI w architekturze opartej na UDF. Funkcja przyjmuje gotowy stan ekranu i zestaw callbacków reprezentujących akcje użytkownika — nie zawiera żadnej logiki biznesowej ani bezpośrednich odwołań do danych. Taki podział sprawia, że Composable jest łatwy do testowania i podglądu w narzędziu Preview bez konieczności uruchamiania całej aplikacji.
+Poniższy Composable demonstruje wzorcowy punkt wejścia warstwy UI w architekturze opartej na UDF. Funkcja przyjmuje gotowy stan ekranu i zestaw callbacków reprezentujących akcje użytkownika - nie zawiera żadnej logiki biznesowej ani bezpośrednich odwołań do danych. Taki podział sprawia, że Composable jest łatwy do testowania i podglądu w narzędziu Preview bez konieczności uruchamiania całej aplikacji.
 
 ```kotlin
 @Composable
@@ -288,7 +288,7 @@ Ten Composable nie przechowuje reguł biznesowych. Odbiera stan i emituje akcje.
 
 ---
 
-## 7. Data layer — repozytoria i źródła danych
+## 7. Data layer - repozytoria i źródła danych
 
 Warstwa danych jest odpowiedzialna za to, aby reszta systemu mogła pracować na sensownych abstrakcjach zamiast na szczegółach implementacyjnych.
 
@@ -371,7 +371,7 @@ Bez odpowiedzi na to pytanie repozytorium bardzo szybko staje się zbiorem metod
 
 ---
 
-## 8. Domain layer — kiedy jest potrzebna
+## 8. Domain layer - kiedy jest potrzebna
 
 Warstwa domenowa bywa źle rozumiana. Jedni studenci próbują dodawać ją do każdej aplikacji, inni uznają ją za zbędną komplikację. Prawda jest bardziej praktyczna: warstwa domenowa jest przydatna wtedy, gdy rozwiązuje realny problem.
 
@@ -392,7 +392,7 @@ Warstwa domenowa bywa źle rozumiana. Jedni studenci próbują dodawać ją do k
 
 ### Przykład sensownego use case
 
-Poniższy use case nie jest tylko pustym opakowaniem repozytorium — dodaje realną regułę biznesową: filtruje zarchiwizowane zadania i ustala porządek sortowania. Dzięki umieszczeniu tej logiki w osobnej klasie można ją przetestować niezależnie od `ViewModel` i warstwy danych. Operator `invoke` z modyfikatorem `operator` pozwala wywoływać use case jak zwykłą funkcję, co poprawia czytelność kodu w miejscu wywołania.
+Poniższy use case nie jest tylko pustym opakowaniem repozytorium - dodaje realną regułę biznesową: filtruje zarchiwizowane zadania i ustala porządek sortowania. Dzięki umieszczeniu tej logiki w osobnej klasie można ją przetestować niezależnie od `ViewModel` i warstwy danych. Operator `invoke` z modyfikatorem `operator` pozwala wywoływać use case jak zwykłą funkcję, co poprawia czytelność kodu w miejscu wywołania.
 
 ```kotlin
 class GetActiveTasksUseCase @Inject constructor(
@@ -441,10 +441,10 @@ Jednym z podstawowych tematów architektonicznych jest świadome rozdzielenie mo
 
 ### Typowy podział modeli
 
-- **DTO** — model komunikacji z API,
-- **Entity** — model przechowywany lokalnie,
-- **Domain model** — model logiki biznesowej,
-- **UI model** — model przygotowany do renderowania.
+- **DTO** - model komunikacji z API,
+- **Entity** - model przechowywany lokalnie,
+- **Domain model** - model logiki biznesowej,
+- **UI model** - model przygotowany do renderowania.
 
 ### Dlaczego nie warto używać jednego modelu wszędzie?
 
@@ -500,7 +500,7 @@ data class TaskUiModel(
 
 ### Przykład mapowania modelu domenowego do UI
 
-Poniższa funkcja rozszerzająca pokazuje, jak przetransformować model domenowy `Task` na model UI `TaskUiModel` gotowy do wyświetlenia. Mapowanie generuje czytelny dla użytkownika opis daty (np. „Dziś", „Jutro") i oblicza flagę `isOverdue` — logika typowo prezentacyjna, która nie powinna znajdować się ani w modelu domenowym, ani w Composable. Umieszczenie mapowania poza warstwą UI jako osobna funkcja ułatwia testowanie jednostkowe bez uruchamiania frameworka Android.
+Poniższa funkcja rozszerzająca pokazuje, jak przetransformować model domenowy `Task` na model UI `TaskUiModel` gotowy do wyświetlenia. Mapowanie generuje czytelny dla użytkownika opis daty (np. „Dziś", „Jutro") i oblicza flagę `isOverdue` - logika typowo prezentacyjna, która nie powinna znajdować się ani w modelu domenowym, ani w Composable. Umieszczenie mapowania poza warstwą UI jako osobna funkcja ułatwia testowanie jednostkowe bez uruchamiania frameworka Android.
 
 ```kotlin
 fun Task.toUiModel(now: LocalDate = LocalDate.now()): TaskUiModel {
@@ -562,7 +562,7 @@ Jeżeli błąd ma być widoczny na ekranie aż do momentu poprawy danych, jest t
 
 ### Przykład wyszukiwarki
 
-Poniższy `SearchViewModel` demonstruje reaktywne wyszukiwanie z użyciem `StateFlow` i operatorów `debounce` oraz `flatMapLatest`. Operator `debounce(300)` opóźnia wyszukiwanie o 300 ms po ostatnim znaku, co eliminuje zbędne zapytania sieciowe przy każdym naciśnięciu klawisza. Całe przekształcenie zapytania na stan UI opisane jest deklaratywnie jako ciąg operatorów — taki kod jest łatwy do czytania i testowania.
+Poniższy `SearchViewModel` demonstruje reaktywne wyszukiwanie z użyciem `StateFlow` i operatorów `debounce` oraz `flatMapLatest`. Operator `debounce(300)` opóźnia wyszukiwanie o 300 ms po ostatnim znaku, co eliminuje zbędne zapytania sieciowe przy każdym naciśnięciu klawisza. Całe przekształcenie zapytania na stan UI opisane jest deklaratywnie jako ciąg operatorów - taki kod jest łatwy do czytania i testowania.
 
 ```kotlin
 @HiltViewModel
@@ -721,7 +721,7 @@ Ponieważ dzięki temu łatwiej testować kod asynchroniczny. W testach możesz 
 
 - nie oznaczaj wszystkiego jako `Singleton`,
 - nie buduj przesadnie rozbudowanej konfiguracji DI w bardzo małych projektach,
-- nie traktuj Hilt jako substytutu dobrej architektury — DI porządkuje zależności, ale nie naprawi złego podziału odpowiedzialności.
+- nie traktuj Hilt jako substytutu dobrej architektury - DI porządkuje zależności, ale nie naprawi złego podziału odpowiedzialności.
 
 ---
 
@@ -731,7 +731,7 @@ To zagadnienie ma duże znaczenie praktyczne, bo wpływa na codzienną pracę z 
 
 ### Podejście 1: package by layer
 
-Poniższy diagram przedstawia organizację pakietów według warstw aplikacji — najprostszy sposób podziału kodu. Struktura ta dobrze sprawdza się w małych projektach edukacyjnych, ponieważ jest intuicyjna i odzwierciedla trzy warstwy omówione w tym materiale. Wadą jest to, że wraz z rozrostem aplikacji klasy powiązane z jedną funkcją biznesową są rozsiane między kilkoma katalogami.
+Poniższy diagram przedstawia organizację pakietów według warstw aplikacji - najprostszy sposób podziału kodu. Struktura ta dobrze sprawdza się w małych projektach edukacyjnych, ponieważ jest intuicyjna i odzwierciedla trzy warstwy omówione w tym materiale. Wadą jest to, że wraz z rozrostem aplikacji klasy powiązane z jedną funkcją biznesową są rozsiane między kilkoma katalogami.
 
 ```text
 ui/
@@ -753,7 +753,7 @@ Wady:
 
 ### Podejście 2: package by feature
 
-Poniższy diagram przedstawia organizację pakietów według funkcji aplikacji, gdzie każda funkcja (tasks, search, settings) zawiera wewnętrznie własne podkatalogi warstw. Takie podejście sprawia, że kod dotyczący jednej funkcji jest skupiony w jednym miejscu, co ułatwia rozwijanie i usuwanie funkcji jako całości. W dużych projektach często łączy się oba podejścia: główny podział według funkcji, a wewnątrz każdej funkcji — podział według warstw.
+Poniższy diagram przedstawia organizację pakietów według funkcji aplikacji, gdzie każda funkcja (tasks, search, settings) zawiera wewnętrznie własne podkatalogi warstw. Takie podejście sprawia, że kod dotyczący jednej funkcji jest skupiony w jednym miejscu, co ułatwia rozwijanie i usuwanie funkcji jako całości. W dużych projektach często łączy się oba podejścia: główny podział według funkcji, a wewnątrz każdej funkcji - podział według warstw.
 
 ```text
 tasks/
@@ -775,7 +775,7 @@ Zalety:
 - łatwiej rozwijać większe aplikacje,
 - lepiej wspiera pracę zespołową i modularność.
 
-W praktyce często łączy się oba podejścia: główny podział według funkcji, a wewnątrz funkcji — według warstw.
+W praktyce często łączy się oba podejścia: główny podział według funkcji, a wewnątrz funkcji - według warstw.
 
 ### Dlaczego nie ma jednego „jedynego słusznego” układu?
 
@@ -783,7 +783,7 @@ Ponieważ architektura ma służyć projektowi. Inaczej organizuje się małą a
 
 ---
 
-## 14. Granice odpowiedzialności — praktyczna ściąga
+## 14. Granice odpowiedzialności - praktyczna ściąga
 
 ### Composable / Fragment / Activity
 
@@ -848,16 +848,16 @@ Nie powinien:
 
 ## 15. Typowe błędy architektoniczne w projektach studenckich
 
-1. **Nadarchitektura** — bardzo dużo klas i folderów bez realnej potrzeby.
-2. **Repozytorium jako cienki wrapper** — klasa istnieje, ale nie dodaje żadnej wartości.
-3. **Use case dla każdej operacji CRUD** — mimo że logika biznesowa praktycznie nie istnieje.
-4. **DTO używane bezpośrednio w UI** — przeciekanie warstw.
-5. **Composable zawierający logikę biznesową** — ekran przestaje być czytelny i testowalny.
-6. **Publiczny `MutableStateFlow`** — brak kontroli nad modyfikacją stanu.
-7. **Niepoprawne modelowanie zdarzeń i stanu** — np. błąd walidacji jako event jednorazowy.
-8. **Brak strategii cache i odświeżania** — aplikacja działa, ale nie ma spójnej polityki danych.
-9. **Jeden ogromny `MainViewModel`** — klasa staje się centrum wszystkiego.
-10. **Silne zależności od Android framework w logice biznesowej** — utrudnione testowanie i refaktoryzacja.
+1. **Nadarchitektura** - bardzo dużo klas i folderów bez realnej potrzeby.
+2. **Repozytorium jako cienki wrapper** - klasa istnieje, ale nie dodaje żadnej wartości.
+3. **Use case dla każdej operacji CRUD** - mimo że logika biznesowa praktycznie nie istnieje.
+4. **DTO używane bezpośrednio w UI** - przeciekanie warstw.
+5. **Composable zawierający logikę biznesową** - ekran przestaje być czytelny i testowalny.
+6. **Publiczny `MutableStateFlow`** - brak kontroli nad modyfikacją stanu.
+7. **Niepoprawne modelowanie zdarzeń i stanu** - np. błąd walidacji jako event jednorazowy.
+8. **Brak strategii cache i odświeżania** - aplikacja działa, ale nie ma spójnej polityki danych.
+9. **Jeden ogromny `MainViewModel`** - klasa staje się centrum wszystkiego.
+10. **Silne zależności od Android framework w logice biznesowej** - utrudnione testowanie i refaktoryzacja.
 
 ### Ciekawostka praktyczna
 
@@ -865,7 +865,7 @@ W wielu projektach początkujących problemem nie jest zbyt mała liczba warstw,
 
 ---
 
-## 16. Ćwiczenie praktyczne — analiza architektury listy zadań
+## 16. Ćwiczenie praktyczne - analiza architektury listy zadań
 
 ### Polecenie
 
@@ -895,11 +895,11 @@ Masz ekran listy zadań z funkcjami:
 
 ---
 
-## 17. Ćwiczenie praktyczne — wykryj naruszenie warstw
+## 17. Ćwiczenie praktyczne - wykryj naruszenie warstw
 
 ### Kod
 
-Poniższy fragment kodu zawiera celowo zaprojektowane naruszenia zasad architektury — jest materiałem do analizy, a nie wzorcem do naśladowania. `ViewModel` bezpośrednio wstrzykuje `NavController`, `Context` oraz obiekt API, co oznacza, że łączy odpowiedzialności warstwy UI, nawigacji i danych w jednej klasie. Zadaniem studenta jest zidentyfikowanie tych naruszeń i zaproponowanie prawidłowego podziału odpowiedzialności.
+Poniższy fragment kodu zawiera celowo zaprojektowane naruszenia zasad architektury - jest materiałem do analizy, a nie wzorcem do naśladowania. `ViewModel` bezpośrednio wstrzykuje `NavController`, `Context` oraz obiekt API, co oznacza, że łączy odpowiedzialności warstwy UI, nawigacji i danych w jednej klasie. Zadaniem studenta jest zidentyfikowanie tych naruszeń i zaproponowanie prawidłowego podziału odpowiedzialności.
 
 ```kotlin
 class ProfileViewModel(
@@ -935,7 +935,7 @@ To sygnał, że odpowiedzialności zostały zmieszane.
 
 ---
 
-## 18. Ćwiczenie praktyczne — zaprojektuj stan ekranu logowania
+## 18. Ćwiczenie praktyczne - zaprojektuj stan ekranu logowania
 
 ### Polecenie
 
@@ -950,7 +950,7 @@ Zaprojektuj `UiState` dla ekranu logowania. Ekran ma zawierać:
 
 ### Przykładowe rozwiązanie
 
-Poniższa klasa `LoginUiState` demonstruje wzorcowe podejście do modelowania stanu ekranu logowania jako jednego spójnego obiektu. Wszystkie pola tworzą kompletny opis tego, co powinno zostać wyrenderowane — flagi błędów pól, stan ładowania i komunikat ogólny. Dzięki modelowaniu stanu jako immutable data class każda zmiana prowadzi do nowego obiektu stanu, co jest zgodne z zasadami UDF i ułatwia debugowanie przez porównywanie kolejnych stanów.
+Poniższa klasa `LoginUiState` demonstruje wzorcowe podejście do modelowania stanu ekranu logowania jako jednego spójnego obiektu. Wszystkie pola tworzą kompletny opis tego, co powinno zostać wyrenderowane - flagi błędów pól, stan ładowania i komunikat ogólny. Dzięki modelowaniu stanu jako immutable data class każda zmiana prowadzi do nowego obiektu stanu, co jest zgodne z zasadami UDF i ułatwia debugowanie przez porównywanie kolejnych stanów.
 
 ```kotlin
 data class LoginUiState(
@@ -972,7 +972,7 @@ To zależy od konkretnej architektury ekranu. Sam fakt poprawnego zalogowania mo
 
 ---
 
-## 19. Ćwiczenie praktyczne — refaktoryzacja repozytorium
+## 19. Ćwiczenie praktyczne - refaktoryzacja repozytorium
 
 ### Polecenie
 
@@ -1024,13 +1024,13 @@ Masz dojść do projektu, w którym:
 
 ## 22. Literatura i linki do dalszej nauki
 
-- Android Developers — Guide to app architecture: https://developer.android.com/topic/architecture
-- Android Developers — Recommendations for Android architecture: https://developer.android.com/topic/architecture/recommendations
-- Android Developers — Domain layer: https://developer.android.com/topic/architecture/domain-layer
-- Android Developers — Data layer: https://developer.android.com/topic/architecture/data-layer
-- Android Developers — ViewModel overview: https://developer.android.com/topic/libraries/architecture/viewmodel
-- Android Developers — UI events: https://developer.android.com/topic/architecture/ui-layer/events
-- Android Developers — State holders and UI state: https://developer.android.com/topic/architecture/ui-layer/stateholders
-- Android Developers — StateFlow and SharedFlow: https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
-- Android Developers — Saved State module for ViewModel: https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate
-- Android Developers — Save UI state in Compose: https://developer.android.com/develop/ui/compose/state-saving
+- Android Developers - Guide to app architecture: https://developer.android.com/topic/architecture
+- Android Developers - Recommendations for Android architecture: https://developer.android.com/topic/architecture/recommendations
+- Android Developers - Domain layer: https://developer.android.com/topic/architecture/domain-layer
+- Android Developers - Data layer: https://developer.android.com/topic/architecture/data-layer
+- Android Developers - ViewModel overview: https://developer.android.com/topic/libraries/architecture/viewmodel
+- Android Developers - UI events: https://developer.android.com/topic/architecture/ui-layer/events
+- Android Developers - State holders and UI state: https://developer.android.com/topic/architecture/ui-layer/stateholders
+- Android Developers - StateFlow and SharedFlow: https://developer.android.com/kotlin/flow/stateflow-and-sharedflow
+- Android Developers - Saved State module for ViewModel: https://developer.android.com/topic/libraries/architecture/viewmodel/viewmodel-savedstate
+- Android Developers - Save UI state in Compose: https://developer.android.com/develop/ui/compose/state-saving

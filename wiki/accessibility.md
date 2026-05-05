@@ -1,6 +1,6 @@
 # Dostępność aplikacji mobilnych
 
-Dostępność (accessibility, a11y) to projektowanie i implementacja aplikacji w taki sposób, aby mogły z nich korzystać osoby z różnymi potrzebami: niewidome i słabowidzące, głuche i słabosłyszące, z ograniczeniami motorycznymi, poznawczymi, językowymi lub z czasowymi ograniczeniami sprawności. W praktyce nie jest to „dodatek na końcu projektu”, ale część jakości produktu — podobnie jak bezpieczeństwo, wydajność i testowalność.
+Dostępność (accessibility, a11y) to projektowanie i implementacja aplikacji w taki sposób, aby mogły z nich korzystać osoby z różnymi potrzebami: niewidome i słabowidzące, głuche i słabosłyszące, z ograniczeniami motorycznymi, poznawczymi, językowymi lub z czasowymi ograniczeniami sprawności. W praktyce nie jest to „dodatek na końcu projektu”, ale część jakości produktu - podobnie jak bezpieczeństwo, wydajność i testowalność.
 
 Dobrze zaprojektowana dostępność poprawia UX także dla osób bez formalnie rozpoznanej niepełnosprawności: użytkowników starszych, zestresowanych, zmęczonych, korzystających z telefonu jedną ręką, w ostrym słońcu, w hałasie, z pękniętym ekranem albo z chwilowo ograniczoną sprawnością po urazie.
 
@@ -187,7 +187,7 @@ Button(onClick = { submit() }) {
 
 ### Opis stanu
 
-Elementy przełączające — takie jak `Switch` — powinny komunikować swój aktualny stan w sposób zrozumiały dla technologii asystujących. Właściwość `stateDescription` pozwala określić, co zostanie odczytane użytkownikowi, gdy fokus dotknie tego elementu. Poniższy przykład ilustruje, jak dostosować opis stanu przełącznika do kontekstu aplikacji.
+Elementy przełączające - takie jak `Switch` - powinny komunikować swój aktualny stan w sposób zrozumiały dla technologii asystujących. Właściwość `stateDescription` pozwala określić, co zostanie odczytane użytkownikowi, gdy fokus dotknie tego elementu. Poniższy przykład ilustruje, jak dostosować opis stanu przełącznika do kontekstu aplikacji.
 
 ```kotlin
 Switch(
@@ -244,7 +244,7 @@ Przykłady miejsc, gdzie nagłówki mają sens:
 
 ## Komunikaty dynamiczne i `liveRegion`
 
-Gdy zawartość zmienia się dynamicznie — np. pojawia się błąd, toast, komunikat statusu lub wynik walidacji — użytkownik technologii asystujących powinien zostać o tym poinformowany.
+Gdy zawartość zmienia się dynamicznie - np. pojawia się błąd, toast, komunikat statusu lub wynik walidacji - użytkownik technologii asystujących powinien zostać o tym poinformowany.
 
 ```kotlin
 Text(
@@ -255,8 +255,8 @@ Text(
 )
 ```
 
-- `Polite` — komunikat zostanie odczytany, gdy będzie to bezpieczne dla bieżącego przepływu.
-- `Assertive` — stosować ostrożnie, wyłącznie dla informacji krytycznych.
+- `Polite` - komunikat zostanie odczytany, gdy będzie to bezpieczne dla bieżącego przepływu.
+- `Assertive` - stosować ostrożnie, wyłącznie dla informacji krytycznych.
 
 Przykłady dobrych zastosowań:
 - „Zapisano zmiany”,

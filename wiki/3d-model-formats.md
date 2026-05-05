@@ -1,6 +1,6 @@
 # Formaty modeli 3D w aplikacjach mobilnych
 
-Modele 3D odgrywają coraz ważniejszą rolę w aplikacjach mobilnych — od rozszerzonej rzeczywistości (AR), przez gry, po wizualizację produktów w e-commerce. Wybór odpowiedniego formatu wpływa na czas ładowania, jakość renderowania, obsługę animacji oraz kompatybilność z frameworkami mobilnymi. W tym artykule omówimy kluczowe formaty 3D i ich zastosowania na platformach Android i iOS.
+Modele 3D odgrywają coraz ważniejszą rolę w aplikacjach mobilnych - od rozszerzonej rzeczywistości (AR), przez gry, po wizualizację produktów w e-commerce. Wybór odpowiedniego formatu wpływa na czas ładowania, jakość renderowania, obsługę animacji oraz kompatybilność z frameworkami mobilnymi. W tym artykule omówimy kluczowe formaty 3D i ich zastosowania na platformach Android i iOS.
 
 ---
 
@@ -20,7 +20,7 @@ Dlatego modele 3D na mobile muszą być:
 
 ---
 
-## glTF 2.0 — „JPEG świata 3D"
+## glTF 2.0 - „JPEG świata 3D"
 
 **glTF** (GL Transmission Format) to otwarty standard opracowany przez Khronos Group (twórców OpenGL i Vulkan). Bywa nazywany „JPEG-em 3D" ze względu na swoją rolę jako formatu wymiany modeli 3D w internecie.
 
@@ -33,19 +33,19 @@ Dlatego modele 3D na mobile muszą być:
 
 ### Kluczowe cechy glTF 2.0
 
-- Obsługa **PBR** (Physically Based Rendering) — realistyczne materiały
+- Obsługa **PBR** (Physically Based Rendering) - realistyczne materiały
 - Animacje szkieletowe (skinning) i morfing
 - Sceny hierarchiczne (węzły, transformacje)
 - Rozszerzenia: `KHR_draco_mesh_compression`, `KHR_texture_transform`
-- Kompresja Draco — zmniejsza rozmiar geometrii o 90%
+- Kompresja Draco - zmniejsza rozmiar geometrii o 90%
 
 ### Dlaczego `.glb` na mobile?
 
-Wariant GLB łączy wszystkie zasoby (geometria, tekstury, materiały) w jeden plik binarny — jedno żądanie sieciowe, szybsze ładowanie.
+Wariant GLB łączy wszystkie zasoby (geometria, tekstury, materiały) w jeden plik binarny - jedno żądanie sieciowe, szybsze ładowanie.
 
 ---
 
-## OBJ — klasyczny format tekstowy
+## OBJ - klasyczny format tekstowy
 
 Format OBJ pochodzi z lat 80. i jest jednym z najszerzej obsługiwanych formatów 3D:
 
@@ -75,12 +75,12 @@ f 1/1/1 2/2/1 3/3/1
 **Wady:**
 - Brak obsługi animacji
 - Towarzyszący plik `.mtl` dla materiałów
-- Duże pliki — format tekstowy
+- Duże pliki - format tekstowy
 - Przestarzały, zastępowany przez glTF
 
 ---
 
-## FBX — format Autodesk
+## FBX - format Autodesk
 
 FBX (Filmbox) to własnościowy format Autodesk, szeroko stosowany w produkcji gier:
 
@@ -89,11 +89,11 @@ FBX (Filmbox) to własnościowy format Autodesk, szeroko stosowany w produkcji g
 - Format binarny lub ASCII
 - Wymaga licencji Autodesk SDK do pełnej obsługi
 
-**Zastosowanie na mobile**: głównie jako format pośredni — eksport z Blendera do silnika gier, który konwertuje model do formatu runtime (np. wewnętrzny format Unity lub glTF).
+**Zastosowanie na mobile**: głównie jako format pośredni - eksport z Blendera do silnika gier, który konwertuje model do formatu runtime (np. wewnętrzny format Unity lub glTF).
 
 ---
 
-## USDZ — format Apple dla AR
+## USDZ - format Apple dla AR
 
 **USDZ** to format stworzony przez Apple we współpracy z Pixar, oparty na USD (Universal Scene Description):
 
@@ -111,13 +111,13 @@ FBX (Filmbox) to własnościowy format Autodesk, szeroko stosowany w produkcji g
 
 ---
 
-## STL — format dla druku 3D
+## STL - format dla druku 3D
 
 STL (Stereolithography) to binarny lub ASCII format opisujący geometrię trójkątami:
 
 - Stosowany głównie do **druku 3D**
 - Brak informacji o kolorach, teksturach, materiałach
-- Prosta struktura — lista trójkątów z normalnymi
+- Prosta struktura - lista trójkątów z normalnymi
 - Zastosowanie w mobile: aplikacje do wizualizacji wydruków 3D, skanery 3D
 
 ---
@@ -195,7 +195,7 @@ class ArPlacementActivity : AppCompatActivity() {
 
         arSceneView = findViewById(R.id.ar_scene_view)
 
-        // Po wykryciu płaszczyzny i tapnięciu — umieść model
+        // Po wykryciu płaszczyzny i tapnięciu - umieść model
         arSceneView.onTapPlane = { hitResult, _ ->
             lifecycleScope.launch {
                 val anchor = hitResult.createAnchor()
@@ -240,7 +240,7 @@ class ARViewController: UIViewController {
     }
 
     func setupAR() {
-        // Konfiguracja ARKit — wykrywanie płaszczyzn poziomych
+        // Konfiguracja ARKit - wykrywanie płaszczyzn poziomych
         let config = ARWorldTrackingConfiguration()
         config.planeDetection = [.horizontal]
         arView.session.run(config)
@@ -307,7 +307,7 @@ Reality Composer Pro (Xcode) pozwala na:
 
 ### Liczba poligonów (LOD)
 
-**LOD** (Level of Detail) — różne wersje modelu dla różnych odległości:
+**LOD** (Level of Detail) - różne wersje modelu dla różnych odległości:
 
 | Odległość od kamery | Zalecana liczba trójkątów |
 |--------------------|--------------------------|
@@ -317,7 +317,7 @@ Reality Composer Pro (Xcode) pozwala na:
 
 ### Atlasy tekstur
 
-Zamiast wielu małych tekstur — jedna duża tekstura (atlas):
+Zamiast wielu małych tekstur - jedna duża tekstura (atlas):
 - Mniej przełączeń GPU (draw calls)
 - Lepsza wydajność renderowania
 - Standardowy rozmiar: 1024×1024, 2048×2048 (unikaj 4K na mobile)
@@ -340,10 +340,10 @@ val supportsASTC = extensions?.contains("GL_KHR_texture_compression_astc_ldr") =
 
 ## Narzędzia do pracy z formatami 3D
 
-### Blender — eksport glTF/USDZ
+### Blender - eksport glTF/USDZ
 
 ```
-# Blender Python API — eksport do GLB
+# Blender Python API - eksport do GLB
 import bpy
 
 bpy.ops.export_scene.gltf(
@@ -356,7 +356,7 @@ bpy.ops.export_scene.gltf(
 )
 ```
 
-### gltf-transform — optymalizacja glTF
+### gltf-transform - optymalizacja glTF
 
 ```bash
 # Instalacja
@@ -375,7 +375,7 @@ gltf-transform resize --width 1024 --height 1024 input.glb output.glb
 gltf-transform optimize input.glb output.glb --compress draco
 ```
 
-### Reality Converter — konwersja do USDZ
+### Reality Converter - konwersja do USDZ
 
 Narzędzie Apple (macOS) do konwersji OBJ, FBX, glTF → USDZ:
 
@@ -394,7 +394,7 @@ xcrun usdz_converter model.obj model.usdz \
 - Używaj **USDZ** dla natywnych aplikacji iOS AR
 - Zawsze kompresuj tekstury odpowiednim formatem GPU (ASTC to najlepszy wybór gdy obsługiwany)
 - Stosuj LOD dla modeli wyświetlanych w różnych odległościach
-- Kompresja **Draco** redukuje rozmiar geometrii o ~80–95% — używaj zawsze gdy możliwe
+- Kompresja **Draco** redukuje rozmiar geometrii o ~80–95% - używaj zawsze gdy możliwe
 - Testuj wydajność renderowania na urządzeniu docelowym, nie tylko w emulatorze
 
 ---

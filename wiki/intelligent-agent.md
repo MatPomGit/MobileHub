@@ -48,7 +48,7 @@ Reaguje wyłącznie na bieżącą percepcję, ignorując historię:
 
 ```python
 class SimpleReflexAgent:
-    """Agent odruchowy prosty — tylko bieżąca percepcja."""
+    """Agent odruchowy prosty - tylko bieżąca percepcja."""
 
     RULES = {
         'obstacle_ahead': 'turn_right',
@@ -150,7 +150,7 @@ class GoalBasedAgent:
 
 ### 4. Agent użytecznościowy (Utility-Based Agent)
 
-Zamiast binarnego celu — maksymalizuje funkcję użyteczności:
+Zamiast binarnego celu - maksymalizuje funkcję użyteczności:
 
 ```python
 import math
@@ -178,7 +178,7 @@ class UtilityBasedAgent:
 
 ### 5. Agent uczący się (Learning Agent)
 
-Najogólniejsza forma — poprawia swoją funkcję decyzyjną na podstawie doświadczenia:
+Najogólniejsza forma - poprawia swoją funkcję decyzyjną na podstawie doświadczenia:
 
 ```
 ┌────────────────────────────────────────────┐
@@ -235,7 +235,7 @@ Racjonalność agenta zależy od czterech czynników:
 3. Dostępnych akcji
 4. Historii percepcji do bieżącej chwili
 
-> **Ważne rozróżnienie:** Racjonalność ≠ wszechwiedza. Racjonalny agent maksymalizuje *oczekiwaną* wydajność — może mylić się z powodu niepewności co do środowiska.
+> **Ważne rozróżnienie:** Racjonalność ≠ wszechwiedza. Racjonalny agent maksymalizuje *oczekiwaną* wydajność - może mylić się z powodu niepewności co do środowiska.
 
 ## Własności środowiska a wybór architektury
 
@@ -349,14 +349,14 @@ class SmartHomeAgent:
 - [Robotyka poznawcza](#wiki-cognitive-robotics)
 - [Computational cognition](#wiki-computational-cognition)
 - [ACT-R](#wiki-actr-architecture)
-- [Soar — architektura kognitywna](#wiki-soar-architecture)
+- [Soar - architektura kognitywna](#wiki-soar-architecture)
 - [LIDA](#wiki-lida-architecture)
 - [CLARION](#wiki-clarion-architecture)
 
 ## Linki zewnętrzne
 
-- [Russell & Norvig: AIMA — rozdział o agentach](https://aima.cs.berkeley.edu/)
+- [Russell & Norvig: AIMA - rozdział o agentach](https://aima.cs.berkeley.edu/)
 - [Wooldridge: An Introduction to MultiAgent Systems](https://www.cs.ox.ac.uk/people/michael.wooldridge/pubs/imas/IMAS2e.html)
-- [OpenAI Gym — środowiska dla agentów uczących się](https://gymnasium.farama.org/)
-- [JADE — Java Agent Development Framework](https://jade.tilab.com/)
-- [AgentPy — Python library for agent-based modeling](https://agentpy.readthedocs.io/)
+- [OpenAI Gym - środowiska dla agentów uczących się](https://gymnasium.farama.org/)
+- [JADE - Java Agent Development Framework](https://jade.tilab.com/)
+- [AgentPy - Python library for agent-based modeling](https://agentpy.readthedocs.io/)

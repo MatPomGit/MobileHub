@@ -1,4 +1,4 @@
-# ACT-R — Adaptive Control of Thought Rational
+# ACT-R - Adaptive Control of Thought Rational
 
 ## Streszczenie
 
@@ -28,13 +28,13 @@ Kolejne dekady przyniosły kolejne rozszerzenia: ACT-R/PM (*Perceptual-Motor*, 1
 
 Jednym z filozoficznie najciekawszych aspektów ACT-R jest próba powiązania obliczeniowego modelu umysłu z ograniczeniami biologicznymi. Anderson argumentuje, że ewolucja i uczenie się ukształtowały mechanizmy poznawcze tak, aby były optymalne w danych warunkach środowiskowych. Dlatego architektura nie jest arbitralnym zbiorem reguł, lecz obliczeniową realizacją strategii adaptacyjnych.
 
-Równocześnie architektura jest zakorzeniona w neuronauce. Wyniki badań fMRI pokazują, że bufor celu odpowiada aktywności kory przedczołowej, moduł pamięci deklaratywnej — hipokampowi i korze skroniowej, moduł wzrokowy — korze wzrokowej, a producent reguł — jądrom podstawy mózgu. Ta korespondencja między modelem obliczeniowym a strukturami mózgu nadaje ACT-R wiarygodność naukową i odróżnia go od wielu czysto inżynierskich podejść.
+Równocześnie architektura jest zakorzeniona w neuronauce. Wyniki badań fMRI pokazują, że bufor celu odpowiada aktywności kory przedczołowej, moduł pamięci deklaratywnej - hipokampowi i korze skroniowej, moduł wzrokowy - korze wzrokowej, a producent reguł - jądrom podstawy mózgu. Ta korespondencja między modelem obliczeniowym a strukturami mózgu nadaje ACT-R wiarygodność naukową i odróżnia go od wielu czysto inżynierskich podejść.
 
 ## 3. Architektura modułowa
 
 ### 3.1. Przegląd modułów
 
-ACT-R jest architekturą modułową, co oznacza, że różne aspekty przetwarzania są realizowane przez wyspecjalizowane, niezależne moduły. Każdy moduł komunikuje się z centralnym modułem proceduralnym przez wyznaczony bufor. Bufor przechowuje w danym momencie co najwyżej jeden chunk — jednostkę informacji. To właśnie bufory tworzą przestrzeń roboczą widoczną dla reguł produkcyjnych.
+ACT-R jest architekturą modułową, co oznacza, że różne aspekty przetwarzania są realizowane przez wyspecjalizowane, niezależne moduły. Każdy moduł komunikuje się z centralnym modułem proceduralnym przez wyznaczony bufor. Bufor przechowuje w danym momencie co najwyżej jeden chunk - jednostkę informacji. To właśnie bufory tworzą przestrzeń roboczą widoczną dla reguł produkcyjnych.
 
 Główne moduły architektury ACT-R:
 
@@ -70,7 +70,7 @@ Wydobycie chunku z pamięci deklaratywnej jest procesem probabilistycznym i czas
 T = F / A_i
 ```
 
-gdzie `F` jest stałą skali, a `A_i` jest aktywacją chunku `i`. Aktywacja nie jest stała — zależy od historii użycia.
+gdzie `F` jest stałą skali, a `A_i` jest aktywacją chunku `i`. Aktywacja nie jest stała - zależy od historii użycia.
 
 ### 3.3. Pamięć proceduralna i reguły produkcyjne
 
@@ -90,15 +90,15 @@ Pamięć proceduralna składa się z reguł produkcyjnych (*production rules*). 
 )
 ```
 
-W każdym cyklu proceduralnym (trwającym ok. 50 ms) system wybiera dokładnie jedną regułę do wykonania. Wybór jest deterministyczny w wersji symbolicznej lub probabilistyczny z szumem w wersji subsymbolicznej. Równoległe działanie modułów jest możliwe — moduły wzrokowy, motoryczny i deklaratywny mogą pracować jednocześnie, ale każdy z nich obsługuje w danym momencie tylko jedno żądanie.
+W każdym cyklu proceduralnym (trwającym ok. 50 ms) system wybiera dokładnie jedną regułę do wykonania. Wybór jest deterministyczny w wersji symbolicznej lub probabilistyczny z szumem w wersji subsymbolicznej. Równoległe działanie modułów jest możliwe - moduły wzrokowy, motoryczny i deklaratywny mogą pracować jednocześnie, ale każdy z nich obsługuje w danym momencie tylko jedno żądanie.
 
 ### 3.4. Moduł celu (Goal Module)
 
-Moduł celu przechowuje aktualny cel agenta — opis stanu, do którego system dąży. Cel może być modyfikowany przez reguły produkcyjne. W złożonych zadaniach możliwe jest utrzymywanie stosu celów przez przechowywanie niekompletnych celów w pamięci deklaratywnej i przywracanie ich w odpowiednim momencie.
+Moduł celu przechowuje aktualny cel agenta - opis stanu, do którego system dąży. Cel może być modyfikowany przez reguły produkcyjne. W złożonych zadaniach możliwe jest utrzymywanie stosu celów przez przechowywanie niekompletnych celów w pamięci deklaratywnej i przywracanie ich w odpowiednim momencie.
 
 ### 3.5. Moduły percepcyjno-motoryczne: ACT-R/PM
 
-Rozszerzenie ACT-R/PM, opracowane przez Byrne'a i Andersona (1998), dodało pełne moduły percepcyjne i motoryczne. Moduł wzrokowy odpowiada za sterowanie uwagą wzrokową — agent musi najpierw przesunąć uwagę na interesujący obiekt (`move-attention`), zanim zdoła uzyskać szczegółowe informacje o jego własnościach. Moduł motoryczny steruje ruchami kursora myszy i klawiatury. Oba moduły mają własne czasy opóźnień i wzajemnie niezależne przetwarzanie.
+Rozszerzenie ACT-R/PM, opracowane przez Byrne'a i Andersona (1998), dodało pełne moduły percepcyjne i motoryczne. Moduł wzrokowy odpowiada za sterowanie uwagą wzrokową - agent musi najpierw przesunąć uwagę na interesujący obiekt (`move-attention`), zanim zdoła uzyskać szczegółowe informacje o jego własnościach. Moduł motoryczny steruje ruchami kursora myszy i klawiatury. Oba moduły mają własne czasy opóźnień i wzajemnie niezależne przetwarzanie.
 
 ```python
 # Pseudo-kod symulujący ACT-R/PM w środowisku Python
@@ -108,7 +108,7 @@ class VisualModule:
         self.buffer = None
 
     def move_attention(self, location):
-        """Przesunięcie uwagi wzrokowej — ok. 85 ms"""
+        """Przesunięcie uwagi wzrokowej - ok. 85 ms"""
         self.attention = location
         self.buffer = self._encode_object(location)
 
@@ -118,7 +118,7 @@ class VisualModule:
 
 class MotorModule:
     def click_mouse(self, location):
-        """Kliknięcie myszą — ok. 150 ms"""
+        """Kliknięcie myszą - ok. 150 ms"""
         pass  # tutaj sterowanie fizycznym/wirtualnym wskaźnikiem
 ```
 
@@ -133,9 +133,9 @@ A_i = B_i + ΣW_j · S_ji + ε
 ```
 
 gdzie:
-- `B_i` — poziom bazowy (*base-level activation*), zależny od historii użycia,
-- `W_j · S_ji` — aktywacja asocjacyjna, zależna od związków z elementami w aktualnym celu,
-- `ε` — szum gaussowski.
+- `B_i` - poziom bazowy (*base-level activation*), zależny od historii użycia,
+- `W_j · S_ji` - aktywacja asocjacyjna, zależna od związków z elementami w aktualnym celu,
+- `ε` - szum gaussowski.
 
 ### 4.2. Base-level learning (BLL)
 
@@ -145,7 +145,7 @@ Poziom bazowy chunku obliczany jest przez formułę:
 B_i = ln(Σ_{k=1}^{n} t_k^{-d})
 ```
 
-gdzie `t_k` oznacza czas, jaki upłynął od `k`-tego użycia chunku, a `d` jest parametrem zaniku (typowo `d ≈ 0.5`). Formuła ta naśladuje empiryczne prawo zaniku pamięci — rzadko używane informacje stają się trudniej dostępne, ale nigdy nie znikają całkowicie.
+gdzie `t_k` oznacza czas, jaki upłynął od `k`-tego użycia chunku, a `d` jest parametrem zaniku (typowo `d ≈ 0.5`). Formuła ta naśladuje empiryczne prawo zaniku pamięci - rzadko używane informacje stają się trudniej dostępne, ale nigdy nie znikają całkowicie.
 
 W praktyce BLL pozwala modelować:
 - efekt częstości (*frequency effect*): często używane chunki są szybciej wydobywane,
@@ -186,7 +186,7 @@ gdzie `S` jest parametrem maksymalnej siły asocjacyjnej, a `P(i|j)` jest prawdo
 
 ### 4.4. Utility learning: uczenie użyteczności reguł
 
-Reguły produkcyjne również mają wartości numeryczne — ich użyteczność (`utility`). W przypadku konfliktu między regułami pasującymi jednocześnie do stanu buforów system wybiera tę o najwyższej użyteczności (z szumem):
+Reguły produkcyjne również mają wartości numeryczne - ich użyteczność (`utility`). W przypadku konfliktu między regułami pasującymi jednocześnie do stanu buforów system wybiera tę o najwyższej użyteczności (z szumem):
 
 ```
 U_i = P_i · G - C_i + ε
@@ -200,7 +200,7 @@ U_i ← U_i + α(R - U_i)
 
 ## 5. Rozszerzenia architektury
 
-### 5.1. ACT-R/E — rozszerzenie enaktywne
+### 5.1. ACT-R/E - rozszerzenie enaktywne
 
 ACT-R/E (*Embodied*) rozbudowuje architekturę o bardziej szczegółowe modelowanie procesów ucieleśnionych. W tej wersji moduły motoryczne uwzględniają biomechaniczne ograniczenia ruchów ciała, czas inicjacji ruchu, koszt energetyczny i interferencję między równoległymi ruchami. Stanowi to znaczące ulepszenie w modelowaniu zadań fizycznych, np. obsługi urządzeń dotykowych.
 
@@ -246,7 +246,7 @@ sim.run(1.0)
 
 ### 6.1. Model GOMS i jego relacja do ACT-R
 
-Badania interakcji człowiek-komputer (*Human-Computer Interaction*, HCI) skorzystały z ACT-R w istotny sposób. Klasyczny model GOMS (*Goals, Operators, Methods, Selection rules*) daje uproszczone przewidywania czasowe bez mechanizmów pamięciowych. ACT-R pozwala na bogatsze modelowanie — uwzględnia uczenie się interfejsu, zapominanie, efekty obciążenia poznawczego i koszty przełączania uwagi.
+Badania interakcji człowiek-komputer (*Human-Computer Interaction*, HCI) skorzystały z ACT-R w istotny sposób. Klasyczny model GOMS (*Goals, Operators, Methods, Selection rules*) daje uproszczone przewidywania czasowe bez mechanizmów pamięciowych. ACT-R pozwala na bogatsze modelowanie - uwzględnia uczenie się interfejsu, zapominanie, efekty obciążenia poznawczego i koszty przełączania uwagi.
 
 ### 6.2. Modelowanie czasu zadań
 
@@ -345,7 +345,7 @@ print(f"Wydobyto: {result}")
 
 ### 8.1. ACT-R a Soar
 
-Soar i ACT-R są obydwoma architekturami produkcyjnymi, ale różnią się akcentami teoretycznymi. Soar kładzie nacisk na planowanie w przestrzeni problemów i rozwiązywanie impasów przez *chunking*; ACT-R skupia się na ilościowym modelowaniu pamięci i zgodności z danymi empirycznymi z psychologii. Soar jest bardziej ogólnym narzędziem inżynierskim, ACT-R — bardziej precyzyjnym modelem psychologicznym.
+Soar i ACT-R są obydwoma architekturami produkcyjnymi, ale różnią się akcentami teoretycznymi. Soar kładzie nacisk na planowanie w przestrzeni problemów i rozwiązywanie impasów przez *chunking*; ACT-R skupia się na ilościowym modelowaniu pamięci i zgodności z danymi empirycznymi z psychologii. Soar jest bardziej ogólnym narzędziem inżynierskim, ACT-R - bardziej precyzyjnym modelem psychologicznym.
 
 ### 8.2. ACT-R a CLARION
 
@@ -395,7 +395,7 @@ ACT-R jest architekturą kognitywną o wyjątkowej głębokości teoretycznej i 
 
 - [Modele kognitywne](cognitive-models.md)
 - [Obliczeniowe modelowanie poznania](computational-cognition.md)
-- [Soar — architektura kognitywna](soar-architecture.md)
+- [Soar - architektura kognitywna](soar-architecture.md)
 - [CLARION](clarion-architecture.md)
 - [LIDA](lida-architecture.md)
 - [Inteligentny agent](intelligent-agent.md)

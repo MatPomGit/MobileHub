@@ -1,6 +1,6 @@
 # Powiadomienia Push w iOS
 
-Powiadomienia to jeden z najpotężniejszych mechanizmów angażowania użytkowników. iOS rozróżnia powiadomienia **lokalne** (bez serwera, generowane przez aplikację) i **zdalne** (push notifications przez Apple Push Notification service — APNs).
+Powiadomienia to jeden z najpotężniejszych mechanizmów angażowania użytkowników. iOS rozróżnia powiadomienia **lokalne** (bez serwera, generowane przez aplikację) i **zdalne** (push notifications przez Apple Push Notification service - APNs).
 
 ## Lokalne powiadomienia
 
@@ -11,7 +11,7 @@ class NotificationManager {
     static let shared = NotificationManager()
     private let center = UNUserNotificationCenter.current()
 
-    // 1. Poproś o uprawnienia (TYLKO RAZ — wyjaśnij kontekst przed pytaniem!)
+    // 1. Poproś o uprawnienia (TYLKO RAZ - wyjaśnij kontekst przed pytaniem!)
     func requestAuthorization() async -> Bool {
         do {
             return try await center.requestAuthorization(
@@ -23,14 +23,14 @@ class NotificationManager {
         }
     }
 
-    // 2. Zaplanuj powiadomienie — trigger czasowy
+    // 2. Zaplanuj powiadomienie - trigger czasowy
     func scheduleReminder(title: String, body: String, inSeconds delay: TimeInterval) {
         let content = UNMutableNotificationContent()
         content.title = title
         content.body = body
         content.sound = .default
         content.badge = 1
-        // Customowe dane — dostępne gdy użytkownik tapnie
+        // Customowe dane - dostępne gdy użytkownik tapnie
         content.userInfo = ["action": "open_reminder", "screen": "home"]
         // Załącznik (obrazek, audio max 10MB)
         // content.attachments = [try! UNNotificationAttachment(...)]
@@ -46,7 +46,7 @@ class NotificationManager {
         }
     }
 
-    // 3. Trigger kalendarzowy — codziennie o 9:00
+    // 3. Trigger kalendarzowy - codziennie o 9:00
     func scheduleDailyReminder(hour: Int, minute: Int) {
         let content = UNMutableNotificationContent()
         content.title = "Twoje zadania na dziś"
@@ -62,7 +62,7 @@ class NotificationManager {
         center.add(request)
     }
 
-    // 4. Trigger lokalizacyjny — geofence
+    // 4. Trigger lokalizacyjny - geofence
     func scheduleLocationNotification(lat: Double, lng: Double, radius: CLLocationDistance = 100) {
         let content = UNMutableNotificationContent()
         content.title = "Jesteś blisko!"
@@ -88,7 +88,7 @@ class NotificationManager {
 }
 ```
 
-## Obsługa tapnięcia — UNUserNotificationCenterDelegate
+## Obsługa tapnięcia - UNUserNotificationCenterDelegate
 
 ```swift
 extension AppDelegate: UNUserNotificationCenterDelegate {
@@ -127,7 +127,7 @@ extension AppDelegate: UNUserNotificationCenterDelegate {
 }
 ```
 
-## Akcje w powiadomieniach — przyciski
+## Akcje w powiadomieniach - przyciski
 
 ```swift
 // Zdefiniuj kategorię z akcjami (tylko raz przy starcie aplikacji)
@@ -161,7 +161,7 @@ func registerNotificationCategories() {
 content.categoryIdentifier = "TASK_CATEGORY"
 ```
 
-## Remote Push — APNs
+## Remote Push - APNs
 
 Przepływ zdalnych powiadomień:
 
@@ -184,7 +184,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return true
     }
 
-    // Otrzymano device token — wyślij na własny serwer
+    // Otrzymano device token - wyślij na własny serwer
     func application(_ app: UIApplication,
                      didRegisterForRemoteNotificationsWithDeviceToken deviceToken: Data) {
         let token = deviceToken.map { String(format: "%02.2hhx", $0) }.joined()
@@ -196,7 +196,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func application(_ app: UIApplication,
                      didFailToRegisterForRemoteNotificationsWithError error: Error) {
         print("APNs rejestracja nieudana: \(error)")
-        // Na symulatorze zawsze kończy się błędem — testuj na fizycznym urządzeniu!
+        // Na symulatorze zawsze kończy się błędem - testuj na fizycznym urządzeniu!
     }
 }
 ```
@@ -227,11 +227,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 | Pole | Opis |
 |------|------|
 | `mutable-content: 1` | Włącza Notification Service Extension (modyfikacja przed wyświetleniem) |
-| `content-available: 1` | Silent push — budzi aplikację w tle bez wyświetlenia banera |
+| `content-available: 1` | Silent push - budzi aplikację w tle bez wyświetlenia banera |
 | `interruption-level` | `passive`, `active` (default), `time-sensitive`, `critical` |
 | `thread-id` | Grupuje powiązane powiadomienia |
 
-## Notification Service Extension — modyfikacja payload
+## Notification Service Extension - modyfikacja payload
 
 ```swift
 // Target: NotificationServiceExtension
@@ -261,7 +261,7 @@ class NotificationService: UNNotificationServiceExtension {
 }
 ```
 
-## Live Activities — dynamiczne powiadomienia (iOS 16.2+)
+## Live Activities - dynamiczne powiadomienia (iOS 16.2+)
 
 ```swift
 // Live Activity w Dynamic Island i na ekranie blokady
@@ -299,7 +299,7 @@ func startDeliveryActivity(orderId: String, itemName: String, etaMinutes: Int) {
 
 ## Focus Modes i powiadomienia (iOS 15+)
 
-Tryby skupienia (Focus Modes) — Nie przeszkadzać, Praca, Sen, Gry — pozwalają użytkownikowi blokować większość powiadomień. Domyślnie aplikacja **nie wie**, że Focus jest aktywny, a jej powiadomienia są po prostu wyciszane. iOS 15 wprowadził jednak mechanizm, który pozwala krytycznym powiadomieniom komunikacyjnym ominąć filtr Focus.
+Tryby skupienia (Focus Modes) - Nie przeszkadzać, Praca, Sen, Gry - pozwalają użytkownikowi blokować większość powiadomień. Domyślnie aplikacja **nie wie**, że Focus jest aktywny, a jej powiadomienia są po prostu wyciszane. iOS 15 wprowadził jednak mechanizm, który pozwala krytycznym powiadomieniom komunikacyjnym ominąć filtr Focus.
 
 ### Sprawdzanie stanu Focus
 
@@ -325,9 +325,9 @@ func checkNotificationStatus() async {
 }
 ```
 
-### Communication Notifications — omijanie Focus
+### Communication Notifications - omijanie Focus
 
-Powiadomienia **komunikacyjne** (rozmowy, wiadomości) mogą być skonfigurowane, by omijały Focus Mode — ale wymagają specjalnej integracji z SiriKit Intent i oznaczenia nadawcy jako osoby z kontaktów.
+Powiadomienia **komunikacyjne** (rozmowy, wiadomości) mogą być skonfigurowane, by omijały Focus Mode - ale wymagają specjalnej integracji z SiriKit Intent i oznaczenia nadawcy jako osoby z kontaktów.
 
 ```swift
 import Intents
@@ -340,7 +340,7 @@ func buildCommunicationContent(
     conversationId: String
 ) -> UNMutableNotificationContent {
     
-    // Tożsamość osoby — używana przez iOS do matchowania z kontaktami
+    // Tożsamość osoby - używana przez iOS do matchowania z kontaktami
     let handle = INPersonHandle(value: sender, type: .unknown)
     let avatar: INImage?
     if let url = senderAvatarURL,
@@ -369,7 +369,7 @@ func buildCommunicationContent(
         sender: person,
         attachments: nil
     )
-    // Przekaż intent bezpośrednio jako interakcję — iOS uczy się priorytetyzacji
+    // Przekaż intent bezpośrednio jako interakcję - iOS uczy się priorytetyzacji
     let interaction = INInteraction(intent: intent, response: nil)
     interaction.direction = .incoming
     interaction.donate(completion: nil)
@@ -411,7 +411,7 @@ func registerCommunicationCategory() {
 
 Kluczowe wymaganie: aplikacja musi mieć włączone `NSUserActivityTypes` z `INSendMessageIntentIdentifier` w `Info.plist` oraz uprawnienie `com.apple.developer.usernotifications.communication` w entitlements (wymaga specjalnego profilu prowizji).
 
-Poziom przerywania `interruption-level: time-sensitive` jest osobnym mechanizmem — nie omija Focus automatycznie, ale iOS może wyświetlić go z opóźnieniem zamiast całkowicie zablokować, jeśli użytkownik zezwolił na "Time Sensitive" dla danej aplikacji w ustawieniach Focus.
+Poziom przerywania `interruption-level: time-sensitive` jest osobnym mechanizmem - nie omija Focus automatycznie, ale iOS może wyświetlić go z opóźnieniem zamiast całkowicie zablokować, jeśli użytkownik zezwolił na "Time Sensitive" dla danej aplikacji w ustawieniach Focus.
 
 ## Grupowanie powiadomień i threadIdentifier
 
@@ -433,10 +433,10 @@ func scheduleGroupedNotification(
     // Powiadomienia z tym samym threadIdentifier zostaną zgrupowane
     content.threadIdentifier = "conversation_\(conversationId)"
 
-    // summaryArgument — tekst wyświetlany gdy grupa jest zwinięta:
+    // summaryArgument - tekst wyświetlany gdy grupa jest zwinięta:
     // np. "3 wiadomości od Anna Kowalska"
     content.summaryArgument = sender
-    // summaryArgumentCount — waga tego powiadomienia w liczniku grupy
+    // summaryArgumentCount - waga tego powiadomienia w liczniku grupy
     content.summaryArgumentCount = 1
 
     let trigger = UNTimeIntervalNotificationTrigger(timeInterval: 0.1, repeats: false)
@@ -448,7 +448,7 @@ func scheduleGroupedNotification(
     UNUserNotificationCenter.current().add(request)
 }
 
-// Zarządzanie badge — licznik na ikonie aplikacji
+// Zarządzanie badge - licznik na ikonie aplikacji
 class BadgeManager {
     // Ustaw konkretną wartość
     static func setBadge(_ count: Int) {
@@ -501,4 +501,4 @@ func updateOrCollapseThread(conversationId: String, latestMessage: String, total
 }
 ```
 
-Grupowanie działa niezależnie od Focus Modes i jest czysto wizualnym mechanizmem centrum powiadomień. Na iPadOS grupy są wyświetlane inaczej niż na iPhonie — warto testować oba formaty. Od iOS 15 można też ustawić `interruptionLevel = .passive`, by powiadomienie trafiło **tylko** do centrum powiadomień bez banera i dźwięku — idealne dla powiadomień informacyjnych, które nie wymagają natychmiastowej reakcji.
+Grupowanie działa niezależnie od Focus Modes i jest czysto wizualnym mechanizmem centrum powiadomień. Na iPadOS grupy są wyświetlane inaczej niż na iPhonie - warto testować oba formaty. Od iOS 15 można też ustawić `interruptionLevel = .passive`, by powiadomienie trafiło **tylko** do centrum powiadomień bez banera i dźwięku - idealne dla powiadomień informacyjnych, które nie wymagają natychmiastowej reakcji.

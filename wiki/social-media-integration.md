@@ -6,11 +6,11 @@ Integracja mediów społecznościowych to jeden z najpopularniejszych sposobów 
 
 Twórcy aplikacji sięgają po SDK platform społecznościowych z kilku kluczowych powodów:
 
-- **Szybka rejestracja i logowanie** — użytkownik nie musi tworzyć nowego konta; wystarczy jedno kliknięcie.
-- **Mniejsza liczba porzuceń formularzy** — krótszy onboarding poprawia konwersję nawet o 50 %.
-- **Dostęp do danych profilowych** — imię, zdjęcie, adres e-mail i lista znajomych mogą wzbogacić UX.
-- **Mechanizmy udostępniania** — użytkownicy promują aplikację w swoich sieciach (viral growth).
-- **Powiadomienia i głęboka integracja** — Messenger, Stories, Feed Sharing.
+- **Szybka rejestracja i logowanie** - użytkownik nie musi tworzyć nowego konta; wystarczy jedno kliknięcie.
+- **Mniejsza liczba porzuceń formularzy** - krótszy onboarding poprawia konwersję nawet o 50 %.
+- **Dostęp do danych profilowych** - imię, zdjęcie, adres e-mail i lista znajomych mogą wzbogacić UX.
+- **Mechanizmy udostępniania** - użytkownicy promują aplikację w swoich sieciach (viral growth).
+- **Powiadomienia i głęboka integracja** - Messenger, Stories, Feed Sharing.
 
 ## Logowanie przez media społecznościowe (SSO)
 
@@ -32,7 +32,7 @@ Aplikacja → Żądanie autoryzacji → Serwer OAuth dostawcy
 | Refresh Token | Odświeżenie Access Tokenu | Długi (dni/miesiące) |
 | ID Token (JWT) | Dane tożsamości (OIDC) | Jednorazowy |
 
-### Implementacja — Sign in with Google (Android)
+### Implementacja - Sign in with Google (Android)
 
 ```kotlin
 // build.gradle.kts
@@ -69,7 +69,7 @@ override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) 
 
 > **Uwaga:** Nigdy nie ufaj danym z ID Tokenu bez weryfikacji podpisu po stronie serwera. Używaj biblioteki Google Auth Library lub odpowiednika w swoim backendzie.
 
-### Implementacja — Sign in with Apple (iOS / obowiązkowe w App Store)
+### Implementacja - Sign in with Apple (iOS / obowiązkowe w App Store)
 
 Od 2020 r. Apple **wymaga** dodania „Sign in with Apple" do każdej aplikacji, która oferuje logowanie przez inne platformy społecznościowe.
 
@@ -96,7 +96,7 @@ class LoginViewController: UIViewController, ASAuthorizationControllerDelegate {
             as? ASAuthorizationAppleIDCredential else { return }
 
         let userID   = credential.user          // stabilny, unikalny identyfikator
-        let idToken  = credential.identityToken // JWT — weryfikuj po stronie serwera
+        let idToken  = credential.identityToken // JWT - weryfikuj po stronie serwera
         let email    = credential.email         // dostępny tylko przy pierwszym logowaniu!
         // Wyślij idToken do backendu
     }
@@ -180,19 +180,19 @@ SDK mediów społecznościowych często domyślnie żądają dostępu do znaczni
 Access Token to klucz do konta użytkownika. Jego utrata oznacza pełny dostęp do danych i akcji w imieniu użytkownika.
 
 Popularne miejsca wycieków:
-- **Logowanie debug** — `Log.d("TOKEN", accessToken)` widoczne w logcat
-- **URL query string** — token w adresie URL trafia do historii przeglądarki i serwerów proxy
-- **Clipboard** — wklejenie tokenu do schowka i utrata kontroli
-- **Intent sniffing** — przechwycenie powrotnego Intent z tokenem przez złośliwą aplikację
+- **Logowanie debug** - `Log.d("TOKEN", accessToken)` widoczne w logcat
+- **URL query string** - token w adresie URL trafia do historii przeglądarki i serwerów proxy
+- **Clipboard** - wklejenie tokenu do schowka i utrata kontroli
+- **Intent sniffing** - przechwycenie powrotnego Intent z tokenem przez złośliwą aplikację
 
 ```kotlin
-// ŹLE — token w logach
+// ŹLE - token w logach
 Log.d("DEBUG", "Access token: $accessToken")
 
-// DOBRZE — maskowanie w logach
+// DOBRZE - maskowanie w logach
 Log.d("DEBUG", "Access token: ${accessToken.take(8)}...")
 
-// DOBRZE — przechowywanie tokenu w Android Keystore (EncryptedSharedPreferences)
+// DOBRZE - przechowywanie tokenu w Android Keystore (EncryptedSharedPreferences)
 securePrefs.edit { putString("social_token", accessToken) }
 ```
 
@@ -203,7 +203,7 @@ SDK Facebooka, Twittera i innych platform zawierają kod śledzący, który:
 - Rejestruje zdarzenia (ekrany, kliknięcia, zakupy) nawet gdy użytkownik **nie jest zalogowany**
 - Przekazuje dane do serwerów platformy w tle
 
-Od iOS 14.5 wymagana jest zgoda użytkownika (ATT — App Tracking Transparency):
+Od iOS 14.5 wymagana jest zgoda użytkownika (ATT - App Tracking Transparency):
 
 ```swift
 import AppTrackingTransparency
@@ -211,10 +211,10 @@ import AppTrackingTransparency
 ATTrackingManager.requestTrackingAuthorization { status in
     switch status {
     case .authorized:
-        // Użytkownik wyraził zgodę — można aktywować śledzenie
+        // Użytkownik wyraził zgodę - można aktywować śledzenie
         Analytics.shared.enable()
     default:
-        // Brak zgody — wyłącz śledzenie
+        // Brak zgody - wyłącz śledzenie
         Analytics.shared.disable()
     }
 }
@@ -226,10 +226,10 @@ Przekazanie danych użytkownika do platformy społecznościowej może naruszać:
 
 | Wymóg RODO | Konsekwencja naruszenia |
 |-----------|------------------------|
-| Art. 6 — podstawa prawna przetwarzania | Kara do 4 % globalnych obrotów lub 20 mln EUR |
-| Art. 13/14 — obowiązek informacyjny | Niezgodność z prawem w UE |
-| Art. 17 — prawo do usunięcia danych | Trudność usunięcia danych z serwera platformy |
-| Art. 44-49 — transfer danych poza EOG | Ryzyko przy przekazaniu do USA bez odpowiednich gwarancji |
+| Art. 6 - podstawa prawna przetwarzania | Kara do 4 % globalnych obrotów lub 20 mln EUR |
+| Art. 13/14 - obowiązek informacyjny | Niezgodność z prawem w UE |
+| Art. 17 - prawo do usunięcia danych | Trudność usunięcia danych z serwera platformy |
+| Art. 44-49 - transfer danych poza EOG | Ryzyko przy przekazaniu do USA bez odpowiednich gwarancji |
 
 **Obowiązki dewelopera:**
 1. Poinformuj użytkownika, jakie dane trafiają do platform społecznościowych
@@ -245,9 +245,9 @@ SDK platform społecznościowych to zewnętrzny kod binarny wykonywany z pełnym
 
 **Dobre praktyki:**
 ```kotlin
-// build.gradle.kts — przypinanie wersji SDK
+// build.gradle.kts - przypinanie wersji SDK
 implementation("com.facebook.android:facebook-android-sdk:16.3.0")
-// Nie używaj dynamic wersji: "16.+" — brak kontroli nad aktualizacjami
+// Nie używaj dynamic wersji: "16.+" - brak kontroli nad aktualizacjami
 
 // Weryfikacja sumy kontrolnej (checksum pinning) przez Gradle Verification
 ```
@@ -258,10 +258,10 @@ Używaj narzędzia Dependency Guard lub OWASP Dependency-Check w pipeline CI/CD.
 
 Błędna implementacja logowania społecznościowego może pozwolić na przejęcie konta:
 
-- **Brak weryfikacji `state` param** — podatność na CSRF w OAuth
-- **Brak weryfikacji `nonce`** — możliwość replay ataku na ID Token
-- **Brak weryfikacji `aud` (audience)** — token innej aplikacji może zalogować do twojej
-- **Brak weryfikacji podpisu JWT** — akceptowanie fałszywych tokenów
+- **Brak weryfikacji `state` param** - podatność na CSRF w OAuth
+- **Brak weryfikacji `nonce`** - możliwość replay ataku na ID Token
+- **Brak weryfikacji `aud` (audience)** - token innej aplikacji może zalogować do twojej
+- **Brak weryfikacji podpisu JWT** - akceptowanie fałszywych tokenów
 
 ```kotlin
 // ZAWSZE weryfikuj token po stronie serwera, nigdy tylko po stronie klienta
@@ -300,24 +300,24 @@ fun verifyGoogleIdToken(idTokenString: String): GoogleIdTokenVerifier {
 [ Aplikacja mobilna ]
 ```
 
-Taka architektura oddziela tożsamość platformy od identyfikatora użytkownika w aplikacji — zmiana dostawcy logowania (lub jego odpięcie) nie wymaga modyfikacji wszystkich powiązanych danych.
+Taka architektura oddziela tożsamość platformy od identyfikatora użytkownika w aplikacji - zmiana dostawcy logowania (lub jego odpięcie) nie wymaga modyfikacji wszystkich powiązanych danych.
 
 ## Porównanie popularnych dostawców SSO
 
 | Dostawca | SDK Android | SDK iOS | Wymagany | Zakres danych |
 |----------|------------|---------|----------|---------------|
 | Google | `play-services-auth` | `GoogleSignIn` | Nie | E-mail, profil |
-| Apple | — | `AuthenticationServices` | Tak (jeśli inne SSO) | E-mail (ukrywalny), imię |
+| Apple | - | `AuthenticationServices` | Tak (jeśli inne SSO) | E-mail (ukrywalny), imię |
 | Facebook | `facebook-android-sdk` | `facebook-ios-sdk` | Nie | Profil, znajomi, posty |
 | GitHub | Własne OAuth | Własne OAuth | Nie | Publiczny profil, e-mail |
 
 ## Linki
 
-- [OAuth 2.0 — RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
+- [OAuth 2.0 - RFC 6749](https://datatracker.ietf.org/doc/html/rfc6749)
 - [OpenID Connect Core 1.0](https://openid.net/specs/openid-connect-core-1_0.html)
-- [Sign in with Google — Android](https://developers.google.com/identity/sign-in/android/start-integrating)
-- [Sign in with Apple — Apple Developer](https://developer.apple.com/sign-in-with-apple/)
+- [Sign in with Google - Android](https://developers.google.com/identity/sign-in/android/start-integrating)
+- [Sign in with Apple - Apple Developer](https://developer.apple.com/sign-in-with-apple/)
 - [Meta Platform Policy](https://developers.facebook.com/policy/)
-- [RODO — pełny tekst rozporządzenia](https://eur-lex.europa.eu/legal-content/PL/TXT/?uri=CELEX%3A32016R0679)
+- [RODO - pełny tekst rozporządzenia](https://eur-lex.europa.eu/legal-content/PL/TXT/?uri=CELEX%3A32016R0679)
 - [OWASP Mobile Top 10](https://owasp.org/www-project-mobile-top-10/)
-- [App Tracking Transparency — Apple](https://developer.apple.com/documentation/apptrackingtransparency)
+- [App Tracking Transparency - Apple](https://developer.apple.com/documentation/apptrackingtransparency)

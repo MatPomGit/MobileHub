@@ -1,6 +1,6 @@
 # Konteneryzacja i Docker w projektach mobilnych
 
-Konteneryzacja to technika izolowania środowiska uruchomieniowego aplikacji w lekkim, przenośnym kontenerze. Docker jest najszerzej stosowanym narzędziem konteneryzacji — pozwala spakować kod, zależności i konfigurację środowiska w jeden obraz, który działa identycznie na laptopie dewelopera, serwerze CI/CD i w chmurze.
+Konteneryzacja to technika izolowania środowiska uruchomieniowego aplikacji w lekkim, przenośnym kontenerze. Docker jest najszerzej stosowanym narzędziem konteneryzacji - pozwala spakować kod, zależności i konfigurację środowiska w jeden obraz, który działa identycznie na laptopie dewelopera, serwerze CI/CD i w chmurze.
 
 ## Dlaczego konteneryzacja jest ważna w mobile?
 
@@ -18,8 +18,8 @@ Choć aplikacje mobilne działają natywnie na Android i iOS (nie w kontenerze),
 
 ### Obraz i kontener
 
-- **Obraz (image)** — niezmienne, warstwowe archiwum zawierające system plików i metadane.
-- **Kontener** — uruchomiona instancja obrazu; izolowany od hosta przez Linux namespaces i cgroups.
+- **Obraz (image)** - niezmienne, warstwowe archiwum zawierające system plików i metadane.
+- **Kontener** - uruchomiona instancja obrazu; izolowany od hosta przez Linux namespaces i cgroups.
 
 ```bash
 # pobranie obrazu z Docker Hub
@@ -36,7 +36,7 @@ docker stop <id>
 docker rm <id>
 ```
 
-### Dockerfile — opis obrazu
+### Dockerfile - opis obrazu
 
 ```dockerfile
 # Bazowy obraz z OpenJDK 21 + Android command-line tools
@@ -129,7 +129,7 @@ docker run --rm \
 
 ---
 
-## Docker Compose — wielousługowe środowisko projektowe
+## Docker Compose - wielousługowe środowisko projektowe
 
 `docker-compose.yml` pozwala opisać i uruchomić wiele kontenerów jedną komendą:
 
@@ -196,7 +196,7 @@ docker compose logs -f api
 
 ## CI/CD dla projektów mobilnych z Dockerem
 
-### GitHub Actions — Android build
+### GitHub Actions - Android build
 
 ```yaml
 # .github/workflows/android.yml
@@ -238,7 +238,7 @@ jobs:
           path: app/build/outputs/apk/release/*.apk
 ```
 
-### GitLab CI/CD — Flutter
+### GitLab CI/CD - Flutter
 
 ```yaml
 # .gitlab-ci.yml
@@ -271,7 +271,7 @@ flutter_build_android:
 
 ## Docker na samym urządzeniu mobilnym
 
-### Termux + Docker (Android — eksperymentalnie)
+### Termux + Docker (Android - eksperymentalnie)
 
 Na urządzeniach z rooted Androidem lub używając [Termux](https://termux.dev/) z proot-distro można uruchomić środowisko Linux i instalować Docker-like narzędzia:
 
@@ -287,9 +287,9 @@ proot-distro login ubuntu
 apt update && apt install -y docker.io
 ```
 
-> **Uwaga:** Docker w proot nie oferuje pełnej izolacji — brak wsparcia dla Linux namespaces w zakresie sieci i procesów. To środowisko deweloperskie/edukacyjne, nie produkcyjne.
+> **Uwaga:** Docker w proot nie oferuje pełnej izolacji - brak wsparcia dla Linux namespaces w zakresie sieci i procesów. To środowisko deweloperskie/edukacyjne, nie produkcyjne.
 
-### UserLAnd — Linux na Androidzie bez roota
+### UserLAnd - Linux na Androidzie bez roota
 
 [UserLAnd](https://userland.tech/) pozwala uruchomić dystrybucję Linux (Ubuntu, Debian, Alpine) bez roota. Można instalować `podman` zamiast Docker, który nie wymaga daemona z uprawnieniami root.
 
@@ -303,7 +303,7 @@ podman run -d -p 8080:80 nginx:alpine
 podman ps
 ```
 
-### iSH — Linux shell na iOS
+### iSH - Linux shell na iOS
 
 [iSH](https://ish.app/) emuluje środowisko Alpine Linux na iPhone/iPad. Możliwe jest uruchomienie prostych kontenerów Alpine-based przy użyciu `docker` CLI z ograniczeniami emulacji (x86 emulacja na ARM).
 
@@ -344,7 +344,7 @@ docker run --rm \
 
 > **Wymóg KVM:** akceleracja sprzętowa wymaga uruchomienia Docker z dostępem do `/dev/kvm` (dostępne na większości środowisk CI Linux).
 
-### Appium + Docker Compose — testy automatyczne
+### Appium + Docker Compose - testy automatyczne
 
 ```yaml
 # docker-compose.test.yml
@@ -395,7 +395,7 @@ CMD ["ls", "/output"]
 |----------|------|
 | `.dockerignore` | Wyklucz `build/`, `.gradle/`, `.git/`, `node_modules/` |
 | Kolejność warstw | Najpierw zależności (rzadziej zmienne), potem kod źródłowy |
-| Jeden proces per kontener | Backend, DB, builder — osobne kontenery |
+| Jeden proces per kontener | Backend, DB, builder - osobne kontenery |
 | Minimalne obrazy | Używaj `alpine` lub `slim` zamiast `latest` |
 | Non-root user | Uruchamiaj procesy jako niepriwilejowany użytkownik |
 | Skanowanie podatności | `docker scout`, `trivy` lub `snyk` |
@@ -448,9 +448,9 @@ USER appuser
 
 Docker i konteneryzacja są dziś standardem w środowiskach CI/CD dla projektów mobilnych. Kluczowe korzyści:
 
-- **Powtarzalność** — identyczne środowisko budowania dla całego zespołu,
-- **Izolacja** — brak konfliktów między wersjami SDK i zależności,
-- **Automatyzacja** — łatwa integracja z GitHub Actions, GitLab CI, Bitrise,
-- **Skalowalność** — buildy można uruchamiać równolegle na wielu agentach.
+- **Powtarzalność** - identyczne środowisko budowania dla całego zespołu,
+- **Izolacja** - brak konfliktów między wersjami SDK i zależności,
+- **Automatyzacja** - łatwa integracja z GitHub Actions, GitLab CI, Bitrise,
+- **Skalowalność** - buildy można uruchamiać równolegle na wielu agentach.
 
 Uruchomienie pełnego Dockera na samym urządzeniu mobilnym jest możliwe eksperymentalnie (Termux + proot, UserLAnd + Podman, iSH), ale główne zastosowanie konteneryzacji w mobile to narzędzia deweloperskie i pipelines CI/CD.

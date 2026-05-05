@@ -1,6 +1,6 @@
 # VR Mobilne i Cardboard SDK
 
-Wirtualna rzeczywistość mobilna (Mobile VR) to najtańsza forma VR — wystarczy smartfon i gogle. Obraz jest podzielony na dwa widoki (jeden na każde oko), a optyczne soczewki w goglach tworzą wrażenie trójwymiarowej sceny.
+Wirtualna rzeczywistość mobilna (Mobile VR) to najtańsza forma VR - wystarczy smartfon i gogle. Obraz jest podzielony na dwa widoki (jeden na każde oko), a optyczne soczewki w goglach tworzą wrażenie trójwymiarowej sceny.
 
 ## Zasada działania stereo VR
 
@@ -19,7 +19,7 @@ Wirtualna rzeczywistość mobilna (Mobile VR) to najtańsza forma VR — wystarc
 
 **IPD** (Interpupillary Distance) = odległość między źrenicami, ~63mm. Prawidłowa konfiguracja IPD jest kluczowa dla komfortu.
 
-**Barrel Distortion** — zniekształcenie beczki: obraz jest celowo zakrzywiony, soczewki odwracają efekt, dając prostoliniowy wynik.
+**Barrel Distortion** - zniekształcenie beczki: obraz jest celowo zakrzywiony, soczewki odwracają efekt, dając prostoliniowy wynik.
 
 ## Google Cardboard SDK
 
@@ -93,7 +93,7 @@ class VrActivity : GvrActivity(), CardboardView.StereoRenderer {
     }
 }
 
-// Detekcja "spojrzenia" na obiekt — Reticle (celownik)
+// Detekcja "spojrzenia" na obiekt - Reticle (celownik)
 class ReticleRenderer {
     private var gazeTarget: SceneObject? = null
     private var gazeTimer = 0f
@@ -118,10 +118,10 @@ class ReticleRenderer {
 }
 ```
 
-## Spatial Audio — dźwięk przestrzenny
+## Spatial Audio - dźwięk przestrzenny
 
 ```kotlin
-// GVR Audio API — dźwięk 3D zmieniający się z obrotem głowy
+// GVR Audio API - dźwięk 3D zmieniający się z obrotem głowy
 class VrAudioManager(context: Context) {
     private val gvrAudio = GvrAudio(context, GvrAudio.RenderingMode.BINAURAL_HIGH_QUALITY)
 
@@ -159,10 +159,10 @@ class VrAudioManager(context: Context) {
 }
 ```
 
-## 360° Video Player — VR wideo
+## 360° Video Player - VR wideo
 
 ```kotlin
-// GVR VideoPlayer — odtwarzanie sferycznych filmów
+// GVR VideoPlayer - odtwarzanie sferycznych filmów
 class VrVideoActivity : VrVideoActivity() {
     private lateinit var videoView: VrVideoView
     private var isPaused = false
@@ -248,7 +248,7 @@ public class VRCardboardManager : MonoBehaviour
 }
 ```
 
-### XR Interaction Toolkit — Ray Interactor
+### XR Interaction Toolkit - Ray Interactor
 
 ```csharp
 using UnityEngine;
@@ -303,7 +303,7 @@ Zamiast dwóch osobnych drawcall-i na oko, GPU rysuje oba widoki w jednym przebi
 
 ```csharp
 // Unity: włącz w Player Settings → XR Settings → Stereo Rendering Mode
-// "Single Pass Instanced" — najlepsza opcja dla nowoczesnych GPU
+// "Single Pass Instanced" - najlepsza opcja dla nowoczesnych GPU
 
 // W shaderze GLSL/HLSL konieczne jest użycie wbudowanych makr Unity:
 // UNITY_SETUP_STEREO_EYE_INDEX_POST_VERTEX(input)
@@ -340,7 +340,7 @@ Shader "Custom/VR_Unlit"
 
 ### Foveated Rendering
 
-Urządzenia z eye-trackingiem (np. Meta Quest Pro) lub bez (Fixed Foveated Rendering — FFR) renderują centrum ekranu w pełnej rozdzielczości, a peryferia w niższej — zgodnie z tym, że obwód pola widzenia jest mało wrażliwy na szczegóły.
+Urządzenia z eye-trackingiem (np. Meta Quest Pro) lub bez (Fixed Foveated Rendering - FFR) renderują centrum ekranu w pełnej rozdzielczości, a peryferia w niższej - zgodnie z tym, że obwód pola widzenia jest mało wrażliwy na szczegóły.
 
 ```csharp
 using Unity.XR.Oculus; // lub odpowiedni plugin producenta
@@ -371,11 +371,11 @@ public class VRLodConfigurator : MonoBehaviour
         if (lodGroup == null) return;
 
         LOD[] lods = new LOD[3];
-        // LOD0 — pełna jakość, widoczna do ~15m
+        // LOD0 - pełna jakość, widoczna do ~15m
         lods[0] = new LOD(0.6f, GetRenderers("LOD0"));
-        // LOD1 — zredukowana geometria, 15–40m
+        // LOD1 - zredukowana geometria, 15–40m
         lods[1] = new LOD(0.2f, GetRenderers("LOD1"));
-        // LOD2 — billboardy lub bardzo prosta siatka, >40m
+        // LOD2 - billboardy lub bardzo prosta siatka, >40m
         lods[2] = new LOD(0.05f, GetRenderers("LOD2"));
 
         lodGroup.SetLODs(lods);
@@ -392,18 +392,18 @@ public class VRLodConfigurator : MonoBehaviour
 
 **Dodatkowe zalecenia:**
 - Ogranicz liczbę dynamicznych świateł do **max 1** (preferuj baked lighting).
-- Używaj **Occlusion Culling** — nie renderuj obiektów schowanych za innymi.
+- Używaj **Occlusion Culling** - nie renderuj obiektów schowanych za innymi.
 - Ogranicz liczbę draw call-i do <100 na klatkę (batching, GPU Instancing).
 - Tekstury: format **ASTC** (Android) lub **PVRTC** (iOS), mipmapy zawsze włączone.
 
 ---
 
-## 9. Tryb kinowy — odtwarzacz VR wideo
+## 9. Tryb kinowy - odtwarzacz VR wideo
 
 Tryb kinowy (Cinema Mode) symuluje duży ekran kina wewnątrz wirtualnej przestrzeni. Film równirectangularny (equirectangular, format sferyczny 2:1) jest nakładany na wewnętrzną powierzchnię sfery, a kamera umieszczona w jej centrum.
 
 ```kotlin
-// Android / OpenGL ES — renderowanie wideo 360° na sferze
+// Android / OpenGL ES - renderowanie wideo 360° na sferze
 class CinemaVrRenderer(private val context: Context) : GvrView.StereoRenderer {
 
     private var sphereVbo = 0
@@ -458,7 +458,7 @@ class CinemaVrRenderer(private val context: Context) : GvrView.StereoRenderer {
         GLES20.glUseProgram(program)
 
         val mvp = FloatArray(16)
-        // Użyj tylko rotacji (brak translacji — kamera zawsze w centrum sfery)
+        // Użyj tylko rotacji (brak translacji - kamera zawsze w centrum sfery)
         val view = FloatArray(16)
         eye.getEyeView(view, 0)
         Matrix.multiplyMM(mvp, 0, eye.getPerspective(0.1f, 200f), 0, view, 0)
@@ -497,7 +497,7 @@ Dolna połowa → prawe oko
 
 ## 10. Projektowanie UI w VR
 
-Tradycyjne UI (nakładka 2D na ekran) nie działa w VR — elementy przyczepione do kamery powodują dyskomfort i chorobę symulacyjną. Całe UI musi być umieszczone w **przestrzeni świata** (World Space).
+Tradycyjne UI (nakładka 2D na ekran) nie działa w VR - elementy przyczepione do kamery powodują dyskomfort i chorobę symulacyjną. Całe UI musi być umieszczone w **przestrzeni świata** (World Space).
 
 ### World-Space Canvas w Unity
 
@@ -524,7 +524,7 @@ public class VRWorldSpaceUI : MonoBehaviour
         canvas = GetComponent<Canvas>();
         canvas.renderMode = RenderMode.WorldSpace;
 
-        // Skonfiguruj rozmiar — 1 unit Canvas = 1 mm ekranu (przelicz na metry)
+        // Skonfiguruj rozmiar - 1 unit Canvas = 1 mm ekranu (przelicz na metry)
         var rt = canvas.GetComponent<RectTransform>();
         rt.sizeDelta = new Vector2(panelWidth * 1000f, panelHeight * 1000f);
         rt.localScale  = Vector3.one * 0.001f;  // 1 px = 1 mm = 0.001 m
@@ -548,7 +548,7 @@ public class VRWorldSpaceUI : MonoBehaviour
 }
 ```
 
-### Gaze-Based UI — wskaźnik wzroku (reticle)
+### Gaze-Based UI - wskaźnik wzroku (reticle)
 
 ```csharp
 using UnityEngine;
@@ -622,11 +622,11 @@ public interface IGazeTarget
 | Czcionka | Bezszeryfowa, ≥ 36 sp ekwiwalentne |
 | Feedback | Zawsze wizualny + opcjonalnie wibracja |
 
-**Wskazówka:** Nigdy nie umieszczaj ważnych informacji bezpośrednio na górze lub dole ekranu — użytkownik może nie pochylać głowy podczas sesji VR.
+**Wskazówka:** Nigdy nie umieszczaj ważnych informacji bezpośrednio na górze lub dole ekranu - użytkownik może nie pochylać głowy podczas sesji VR.
 
 ---
 
-## Alternatywy — Unity i Godot
+## Alternatywy - Unity i Godot
 
 Dla poważnych gier VR na mobile lepszym wyborem jest silnik gier:
 
@@ -638,13 +638,13 @@ Unity + Google VR SDK
 └── Visual Scripting: gry bez znajomości C#
 
 Godot 4 + OpenXR
-├── Open source — brak opłat licencyjnych
+├── Open source - brak opłat licencyjnych
 ├── GDScript (Python-podobny) lub C#
 ├── Mniejszy ślad pamięciowy niż Unity
 └── Wsparcie dla WebXR (VR w przeglądarce)
 ```
 
-## Chorobliwość VR — aspekty techniczne
+## Chorobliwość VR - aspekty techniczne
 
 VR sickness (choroba symulacyjna) wynika z konfliktu między wzrokiem a układem przedsionkowym:
 
@@ -661,4 +661,4 @@ VR sickness (choroba symulacyjna) wynika z konfliktu między wzrokiem a układem
 - [Google Cardboard SDK](https://developers.google.com/cardboard)
 - [GVR Android](https://github.com/googlevr/gvr-android-sdk)
 - [VR Best Practices](https://developers.google.com/vr/discover/playercomfort)
-- [WebXR — VR w przeglądarce](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API)
+- [WebXR - VR w przeglądarce](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API)

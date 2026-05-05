@@ -1,4 +1,4 @@
-# Buildozer — pakowanie aplikacji Python/Kivy na Android i iOS
+# Buildozer - pakowanie aplikacji Python/Kivy na Android i iOS
 
 Buildozer to narzędzie wiersza poleceń, które automatyzuje proces budowania i pakowania aplikacji napisanych w Pythonie (głównie z frameworkiem Kivy) na platformy mobilne: Android i iOS. Pod spodem Buildozer korzysta z **python-for-android** (p4a) do kompilacji na Android oraz **kivy-ios** do kompilacji na iOS.
 
@@ -88,7 +88,7 @@ title = Moja Aplikacja
 # Nazwa pakietu (bez spacji i polskich znaków)
 package.name = mojaplikacja
 
-# Identyfikator pakietu — unikalny (jak w Google Play)
+# Identyfikator pakietu - unikalny (jak w Google Play)
 package.domain = org.example
 
 # Główny plik Pythona
@@ -129,7 +129,7 @@ android.build_tools_version = 34.0.0
 # Poziom logowania: 0 (cichy), 1 (normalny), 2 (szczegółowy)
 log_level = 2
 
-# Ostrzeżenie: warn=1 — wymagany ręczny Android SDK
+# Ostrzeżenie: warn=1 - wymagany ręczny Android SDK
 warn_on_root = 1
 ```
 
@@ -156,7 +156,7 @@ warn_on_root = 1
 buildozer android debug
 ```
 
-Pierwsze uruchomienie pobiera Android SDK/NDK i kompiluje wszystkie zależności — może trwać **20–60 minut**. Kolejne budowania są znacznie szybsze dzięki cache.
+Pierwsze uruchomienie pobiera Android SDK/NDK i kompiluje wszystkie zależności - może trwać **20–60 minut**. Kolejne budowania są znacznie szybsze dzięki cache.
 
 Wynikowy plik APK znajdziesz w:
 ```
@@ -242,7 +242,7 @@ buildozer distclean
 | `buildozer android logcat` | Pokaż logi z urządzenia |
 | `buildozer android clean` | Wyczyść cache budowania |
 | `buildozer distclean` | Usuń wszystkie pliki tymczasowe |
-| `buildozer -v android debug` | Verbose mode — szczegółowe logi |
+| `buildozer -v android debug` | Verbose mode - szczegółowe logi |
 
 ## Struktura projektu
 
@@ -262,7 +262,7 @@ moj_projekt/
         └── app/         ← pliki tymczasowe budowania
 ```
 
-> **Ważne:** Dodaj `.buildozer/` do `.gitignore` — katalog ten może zajmować kilka GB.
+> **Ważne:** Dodaj `.buildozer/` do `.gitignore` - katalog ten może zajmować kilka GB.
 
 ```gitignore
 .buildozer/
@@ -312,7 +312,7 @@ if __name__ == '__main__':
 
 ### Przepisy (recipes) python-for-android
 
-Nie każda biblioteka Pythona działa od razu na Androidzie — musi być dostępny **przepis** (recipe) w python-for-android. Lista dostępnych przepisów:
+Nie każda biblioteka Pythona działa od razu na Androidzie - musi być dostępny **przepis** (recipe) w python-for-android. Lista dostępnych przepisów:
 
 ```bash
 # Sprawdź dostępne przepisy
@@ -320,13 +320,13 @@ python -m pythonforandroid.toolchain recipes
 ```
 
 Popularne przepisy:
-- `kivy`, `kivymd` — framework UI
-- `numpy`, `scipy` — obliczenia naukowe
-- `pillow` — przetwarzanie obrazów
-- `requests`, `urllib3` — HTTP
-- `sqlite3` — baza danych
-- `openssl` — szyfrowanie
-- `pyjnius` — wywołania Java z Pythona
+- `kivy`, `kivymd` - framework UI
+- `numpy`, `scipy` - obliczenia naukowe
+- `pillow` - przetwarzanie obrazów
+- `requests`, `urllib3` - HTTP
+- `sqlite3` - baza danych
+- `openssl` - szyfrowanie
+- `pyjnius` - wywołania Java z Pythona
 
 ### Własny przepis
 
@@ -403,7 +403,7 @@ def zainicjalizuj_kamere():
 
 def callback_po_przyznaniu(permissions, grants):
     if all(grants):
-        # Uprawnienia przyznane — uruchom kamerę
+        # Uprawnienia przyznane - uruchom kamerę
         uruchom_kamere()
     else:
         print("Brak uprawnień do kamery!")
@@ -491,7 +491,7 @@ Rozwiązanie:
 pip install cython
 ```
 
-**2. Błąd NDK — nieobsługiwana architektura**
+**2. Błąd NDK - nieobsługiwana architektura**
 ```
 ERROR: No toolchain found for arch armeabi
 ```
@@ -530,7 +530,7 @@ buildozer -v android debug 2>&1 | tee buildozer.log
 ### Sprawdzenie środowiska
 
 ```bash
-# Diagnostyka — czy wszystkie narzędzia są zainstalowane
+# Diagnostyka - czy wszystkie narzędzia są zainstalowane
 buildozer android doctor
 ```
 
@@ -561,7 +561,7 @@ buildozer android release
 ### Podpisywanie z keystore
 
 ```bash
-# Wygeneruj keystore (tylko raz — przechowuj bezpiecznie!)
+# Wygeneruj keystore (tylko raz - przechowuj bezpiecznie!)
 keytool -genkey -v \
     -keystore moja-aplikacja.keystore \
     -alias moja_aplikacja \
@@ -581,14 +581,14 @@ jarsigner -verbose \
 
 ## Dobre praktyki
 
-1. **Używaj środowisk wirtualnych** — izolacja zależności buildozera od reszty systemu.
-2. **Dodaj `.buildozer/` do `.gitignore`** — katalog może ważyć kilka GB.
-3. **Ustal konkretne wersje zależności** — `requirements = python3==3.11.0,kivy==2.3.0`.
-4. **Testuj na wielu urządzeniach** — różne wersje Androida i architektury (arm64, armeabi-v7a).
-5. **Używaj `buildozer android doctor`** — przed pierwszym budowaniem, aby wykryć brakujące narzędzia.
-6. **Automatyzuj przez CI/CD** — GitHub Actions + Docker = powtarzalne budowania.
-7. **Przechowuj keystore bezpiecznie** — użyj menedżera sekretów (GitHub Secrets, HashiCorp Vault).
-8. **Buduj wersję release osobno** — nigdy nie wysyłaj pliku debug do sklepu.
+1. **Używaj środowisk wirtualnych** - izolacja zależności buildozera od reszty systemu.
+2. **Dodaj `.buildozer/` do `.gitignore`** - katalog może ważyć kilka GB.
+3. **Ustal konkretne wersje zależności** - `requirements = python3==3.11.0,kivy==2.3.0`.
+4. **Testuj na wielu urządzeniach** - różne wersje Androida i architektury (arm64, armeabi-v7a).
+5. **Używaj `buildozer android doctor`** - przed pierwszym budowaniem, aby wykryć brakujące narzędzia.
+6. **Automatyzuj przez CI/CD** - GitHub Actions + Docker = powtarzalne budowania.
+7. **Przechowuj keystore bezpiecznie** - użyj menedżera sekretów (GitHub Secrets, HashiCorp Vault).
+8. **Buduj wersję release osobno** - nigdy nie wysyłaj pliku debug do sklepu.
 
 ## Automatyzacja CI/CD z GitHub Actions
 
@@ -652,18 +652,18 @@ jobs:
 
 ## Ćwiczenia praktyczne
 
-1. **Inicjalizacja projektu** — zainstaluj Buildozer, utwórz projekt Kivy z `main.py` i wygeneruj `buildozer.spec` poleceniem `buildozer init`.
-2. **Konfiguracja spec** — ustaw nazwę pakietu, wersję, ikony i dodaj uprawnienie `INTERNET`.
-3. **Pierwsze budowanie** — zbuduj APK debug i zainstaluj na emulatorze lub urządzeniu.
-4. **Debugowanie logów** — użyj `buildozer android logcat` do znalezienia błędu w swojej aplikacji.
-5. **Własna zależność** — dodaj bibliotekę `requests` do `requirements` i sprawdź, czy HTTP GET działa na urządzeniu.
-6. **Integracja z Javą** — użyj PyJNIus do wyświetlenia natywnego `Toast` Androidowego.
-7. **Pipeline CI/CD** — skonfiguruj GitHub Actions do automatycznego budowania APK przy każdym push na `main`.
+1. **Inicjalizacja projektu** - zainstaluj Buildozer, utwórz projekt Kivy z `main.py` i wygeneruj `buildozer.spec` poleceniem `buildozer init`.
+2. **Konfiguracja spec** - ustaw nazwę pakietu, wersję, ikony i dodaj uprawnienie `INTERNET`.
+3. **Pierwsze budowanie** - zbuduj APK debug i zainstaluj na emulatorze lub urządzeniu.
+4. **Debugowanie logów** - użyj `buildozer android logcat` do znalezienia błędu w swojej aplikacji.
+5. **Własna zależność** - dodaj bibliotekę `requests` do `requirements` i sprawdź, czy HTTP GET działa na urządzeniu.
+6. **Integracja z Javą** - użyj PyJNIus do wyświetlenia natywnego `Toast` Androidowego.
+7. **Pipeline CI/CD** - skonfiguruj GitHub Actions do automatycznego budowania APK przy każdym push na `main`.
 
 ## Powiązane artykuły
 
 - [Programowanie cross-platformowe](#wiki-cross-platform)
-- [Flutter — zaawansowane techniki](#wiki-flutter-advanced)
+- [Flutter - zaawansowane techniki](#wiki-flutter-advanced)
 - [React Native](#wiki-react-native)
 - [Progressive Web Apps](#wiki-pwa-advanced)
 - [Kotlin Multiplatform](#wiki-kmp-multiplatform)

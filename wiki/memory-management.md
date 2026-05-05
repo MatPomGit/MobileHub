@@ -29,7 +29,7 @@ Gdy system potrzebuje pamięci, zabija aplikacje od najniższego priorytetu.
 | **Stack** | Lokalne zmienne, ramki wywołań |
 | **Code** | Dex bytecode, biblioteki .so |
 
-## Memory Profiler — Android Studio
+## Memory Profiler - Android Studio
 
 ```bash
 # Zrzut sterty (heap dump) przez ADB
@@ -39,16 +39,16 @@ adb pull /sdcard/heap.hprof
 ```
 
 Kluczowe metryki w Memory Profiler:
-- **Java/Kotlin Objects** — liczba instancji i retainowany heap
-- **Shallow Size** — pamięć samego obiektu
-- **Retained Size** — pamięć obiektu + wszystkich obiektów do których wskazuje
+- **Java/Kotlin Objects** - liczba instancji i retainowany heap
+- **Shallow Size** - pamięć samego obiektu
+- **Retained Size** - pamięć obiektu + wszystkich obiektów do których wskazuje
 
 ## Typowe wycieki pamięci
 
 ```kotlin
 // 1. WYCIEK: Context trzymany statycznie
 object MySingleton {
-    var context: Context? = null  // BŁĄD — trzyma Activity!
+    var context: Context? = null  // BŁĄD - trzyma Activity!
 }
 
 // POPRAWNIE: używaj applicationContext
@@ -79,13 +79,13 @@ class MyActivity : AppCompatActivity() {
 // 3. WYCIEK: Coroutine bez zakresu
 class BadViewModel : ViewModel() {
     fun loadData() {
-        GlobalScope.launch {  // BŁĄD — nie związany z ViewModel
+        GlobalScope.launch {  // BŁĄD - nie związany z ViewModel
             fetchData()
         }
     }
 
     fun goodLoadData() {
-        viewModelScope.launch {  // OK — anuluje się z ViewModel
+        viewModelScope.launch {  // OK - anuluje się z ViewModel
             fetchData()
         }
     }
@@ -95,10 +95,10 @@ class BadViewModel : ViewModel() {
 ## Bitmap i pamięć graficzna
 
 ```kotlin
-// Błąd — ładowanie pełnej rozdzielczości zdjęcia
+// Błąd - ładowanie pełnej rozdzielczości zdjęcia
 val bitmap = BitmapFactory.decodeFile(path)  // 12MP = ~48MB RAM!
 
-// POPRAWNIE — skaluj do potrzebnego rozmiaru
+// POPRAWNIE - skaluj do potrzebnego rozmiaru
 fun decodeSampledBitmap(path: String, reqWidth: Int, reqHeight: Int): Bitmap {
     val options = BitmapFactory.Options().apply {
         inJustDecodeBounds = true
@@ -136,11 +136,11 @@ class MyApplication : Application() {
         super.onTrimMemory(level)
         when (level) {
             TRIM_MEMORY_UI_HIDDEN -> {
-                // Aplikacja w tle — zwolnij zasoby UI
+                // Aplikacja w tle - zwolnij zasoby UI
                 clearImageCache()
             }
             TRIM_MEMORY_RUNNING_CRITICAL, TRIM_MEMORY_COMPLETE -> {
-                // Krytyczny brak pamięci — zwolnij wszystko co możliwe
+                // Krytyczny brak pamięci - zwolnij wszystko co możliwe
                 clearAllCaches()
             }
         }
@@ -154,7 +154,7 @@ class MyApplication : Application() {
 - [Memory Profiler](https://developer.android.com/studio/profile/memory-profiler)
 - [LeakCanary](https://square.github.io/leakcanary/)
 
-## Coil — efektywne ładowanie obrazów
+## Coil - efektywne ładowanie obrazów
 
 ```kotlin
 dependencies {
@@ -167,7 +167,7 @@ fun OptimizedProductImage(imageUrl: String, modifier: Modifier = Modifier) {
         model = ImageRequest.Builder(LocalContext.current)
             .data(imageUrl)
             .crossfade(300)
-            // Automatycznie skaluje do rozmiaru komponentu — oszczędza RAM
+            // Automatycznie skaluje do rozmiaru komponentu - oszczędza RAM
             .size(Size.ORIGINAL)
             // Używaj pliku cache na dysku
             .diskCachePolicy(CachePolicy.ENABLED)
@@ -203,14 +203,14 @@ class MyApplication : Application() {
 }
 ```
 
-## Profil памяти — Room i duże dane
+## Profil памяти - Room i duże dane
 
 ```kotlin
-// BŁĄD — ładowanie całej tabeli do RAM
+// BŁĄD - ładowanie całej tabeli do RAM
 @Query("SELECT * FROM tasks")
 suspend fun getAllTasks(): List<Task>  // Może być miliony rekordów!
 
-// POPRAWNIE — Paging 3 dla dużych zbiorów
+// POPRAWNIE - Paging 3 dla dużych zbiorów
 @Query("SELECT * FROM tasks ORDER BY created_at DESC")
 fun getTasksPaged(): PagingSource<Int, Task>
 
@@ -245,10 +245,10 @@ fun TaskListScreen(viewModel: TaskViewModel) {
 }
 ```
 
-## Native Memory — NDK i JNI
+## Native Memory - NDK i JNI
 
 ```kotlin
-// JNI — wywołanie kodu C++ z Kotlina
+// JNI - wywołanie kodu C++ z Kotlina
 // Użyj gdy: DSP audio, kompresja obrazu, kryptografia, silniki fizyki
 
 class NativeProcessor {
@@ -278,7 +278,7 @@ Java_com_example_NativeProcessor_processAudioBuffer(
     jsize length = env->GetArrayLength(buffer);
     jfloat* data = env->GetFloatArrayElements(buffer, nullptr);
 
-    // Przetwarzanie sygnału audio w C++ — brak GC pauz
+    // Przetwarzanie sygnału audio w C++ - brak GC pauz
     for (int i = 0; i < length; i++) {
         data[i] = apply_filter(data[i], sampleRate);
     }
@@ -296,26 +296,26 @@ Java_com_example_NativeProcessor_processAudioBuffer(
 - [Paging 3](https://developer.android.com/topic/libraries/architecture/paging/v3-overview)
 - [Android NDK](https://developer.android.com/ndk/guides)
 
-## Zarządzanie pamięcią w iOS — ARC
+## Zarządzanie pamięcią w iOS - ARC
 
-iOS i macOS używają **Automatic Reference Counting (ARC)** — mechanizmu zarządzania pamięcią opartego na zliczaniu referencji, wbudowanego bezpośrednio w kompilator Swift/Objective-C. W przeciwieństwie do Garbage Collectora (Android), ARC **nie pauzuje aplikacji** — zwalnianie pamięci następuje deterministycznie w momencie, gdy licznik referencji obiektu spada do zera.
+iOS i macOS używają **Automatic Reference Counting (ARC)** - mechanizmu zarządzania pamięcią opartego na zliczaniu referencji, wbudowanego bezpośrednio w kompilator Swift/Objective-C. W przeciwieństwie do Garbage Collectora (Android), ARC **nie pauzuje aplikacji** - zwalnianie pamięci następuje deterministycznie w momencie, gdy licznik referencji obiektu spada do zera.
 
 ```swift
-// ARC w praktyce — silne vs słabe referencje
+// ARC w praktyce - silne vs słabe referencje
 class NetworkManager {
-    // strong (domyślne) — zwiększa licznik referencji
+    // strong (domyślne) - zwiększa licznik referencji
     var delegate: TaskDelegate?      // UWAGA: może prowadzić do retain cycle!
 
-    // weak — nie zwiększa licznika, automatycznie nil gdy obiekt dealokowany
+    // weak - nie zwiększa licznika, automatycznie nil gdy obiekt dealokowany
     weak var weakDelegate: TaskDelegate?
 
-    // unowned — jak weak, ale zakłada że obiekt ZAWSZE istnieje (crash jeśli nie)
+    // unowned - jak weak, ale zakłada że obiekt ZAWSZE istnieje (crash jeśli nie)
     unowned var owner: AppController
     
     init(owner: AppController) { self.owner = owner }
 }
 
-// Retain cycle — klasyczna pułapka ARC
+// Retain cycle - klasyczna pułapka ARC
 class TaskViewModel {
     var onTasksLoaded: (() -> Void)?    // closure trzyma silną referencję
 
@@ -329,7 +329,7 @@ class TaskViewModel {
     }
 }
 
-// Retain cycle między dwoma obiektami — rozwiązanie z weak/unowned
+// Retain cycle między dwoma obiektami - rozwiązanie z weak/unowned
 class Parent {
     var child: Child?
     deinit { print("Parent deallocated") }
@@ -345,14 +345,14 @@ class TimerController {
     var count = 0
 
     func startTimer() {
-        // [weak self] — bezpieczne gdy controller może być dealokowany podczas działania timera
+        // [weak self] - bezpieczne gdy controller może być dealokowany podczas działania timera
         Timer.scheduledTimer(withTimeInterval: 1.0, repeats: true) { [weak self] _ in
             guard let self else { return }
             self.count += 1
             print("Tick: \(self.count)")
         }
 
-        // [unowned self] — gdy mamy pewność, że controller przeżyje timer
+        // [unowned self] - gdy mamy pewność, że controller przeżyje timer
         // np. gdy timer jest własnością controller-a i zostanie unieważniony w deinit
         Timer.scheduledTimer(withTimeInterval: 2.0, repeats: false) { [unowned self] _ in
             self.finish()
@@ -368,18 +368,18 @@ class TimerController {
 
 Regułą generalną: **closures = `[weak self]`**, chyba że masz pewność co do czasu życia obiektu. Właściwości delegatów (delegate pattern) powinny być zawsze `weak`.
 
-## Narzędzia diagnostyczne iOS — Instruments
+## Narzędzia diagnostyczne iOS - Instruments
 
-Xcode dołącza aplikację **Instruments** — zaawansowane narzędzie profilowania, które umożliwia śledzenie allocacji pamięci, wykrywanie wycieków i analizę zużycia CPU w czasie rzeczywistym.
+Xcode dołącza aplikację **Instruments** - zaawansowane narzędzie profilowania, które umożliwia śledzenie allocacji pamięci, wykrywanie wycieków i analizę zużycia CPU w czasie rzeczywistym.
 
 Dwa najważniejsze instrumenty przy diagnozowaniu pamięci:
 
-**Allocations** — pokazuje historię alokacji obiektów: ile ich jest, ile RAM zajmują, jakie stosy wywołań je utworzyły. Kluczowy widok to "Heap Shot" — migawka sterty przed i po operacji (np. przejście do ekranu i powrót). Jeśli po powrocie heap rośnie — mamy wyciek.
+**Allocations** - pokazuje historię alokacji obiektów: ile ich jest, ile RAM zajmują, jakie stosy wywołań je utworzyły. Kluczowy widok to "Heap Shot" - migawka sterty przed i po operacji (np. przejście do ekranu i powrót). Jeśli po powrocie heap rośnie - mamy wyciek.
 
-**Leaks** — aktywnie wykrywa obiekty, do których nie ma żadnych silnych referencji z korzenia grafu obiektów (root set), ale które nadal zajmują pamięć (klasyczny symptom retain cycle). Instrument zaznacza wycieki czerwoną kropką na osi czasu.
+**Leaks** - aktywnie wykrywa obiekty, do których nie ma żadnych silnych referencji z korzenia grafu obiektów (root set), ale które nadal zajmują pamięć (klasyczny symptom retain cycle). Instrument zaznacza wycieki czerwoną kropką na osi czasu.
 
 ```swift
-// Typowy scenariusz wycieku — ViewController niezwolniony po dismiss
+// Typowy scenariusz wycieku - ViewController niezwolniony po dismiss
 class ListViewController: UIViewController {
     // BŁĄD: silna referencja do self w closure NotificationCenter
     override func viewDidLoad() {
@@ -389,7 +389,7 @@ class ListViewController: UIViewController {
             object: nil,
             queue: .main
         ) { _ in
-            self.reload()       // WYCIEK — VC żyje wiecznie dzięki NC
+            self.reload()       // WYCIEK - VC żyje wiecznie dzięki NC
         }
     }
     // POPRAWKA:
@@ -425,28 +425,28 @@ extension UIViewController {
 #endif
 ```
 
-Uruchamiaj Instruments na fizycznym urządzeniu (nie symulatorze) — symulator nie oddaje rzeczywistego zużycia pamięci ani zachowania ARC pod presją systemu.
+Uruchamiaj Instruments na fizycznym urządzeniu (nie symulatorze) - symulator nie oddaje rzeczywistego zużycia pamięci ani zachowania ARC pod presją systemu.
 
-## Porównanie — Android GC vs iOS ARC
+## Porównanie - Android GC vs iOS ARC
 
 Dwa dominujące podejścia do automatycznego zarządzania pamięcią w mobile mają fundamentalnie różne charakterystyki wydajnościowe i wzorce błędów.
 
-| Cecha | Android — GC (Garbage Collector) | iOS — ARC |
+| Cecha | Android - GC (Garbage Collector) | iOS - ARC |
 |-------|----------------------------------|-----------|
 | **Mechanizm** | Śledzenie grafu obiektów, sweep & compact | Zliczanie referencji w czasie kompilacji |
-| **Czas zwalniania** | Niedeterministyczny — GC decyduje kiedy | Deterministyczny — natychmiast gdy RC=0 |
-| **Pauzy aplikacji** | Tak — GC Stop-the-World (zwykle < 1 ms w ART) | Brak pauz GC |
+| **Czas zwalniania** | Niedeterministyczny - GC decyduje kiedy | Deterministyczny - natychmiast gdy RC=0 |
+| **Pauzy aplikacji** | Tak - GC Stop-the-World (zwykle < 1 ms w ART) | Brak pauz GC |
 | **Overhead CPU** | Cykliczny (GC runs) | Rozłożony (inc/dec RC przy każdym przypisaniu) |
-| **Cykle referencji** | GC je wykrywa i zbiera | Prowadzą do wycieku — developer musi im zapobiegać |
+| **Cykle referencji** | GC je wykrywa i zbiera | Prowadzą do wycieku - developer musi im zapobiegać |
 | **Typowy wyciek** | Trzymanie kontekstu Activity statycznie | Retain cycle (strong ↔ strong) |
 | **Narzędzia debug** | Memory Profiler (Android Studio), LeakCanary | Instruments (Allocations, Leaks), Xcode Memory Graph |
-| **Alokacja na stosie** | Tylko wartości prymitywne | Struktury (struct) zawsze na stosie — zero overhead RC |
-| **Fragmentacja** | GC compact scala heap | Brak kompaktowania — potencjalna fragmentacja |
+| **Alokacja na stosie** | Tylko wartości prymitywne | Struktury (struct) zawsze na stosie - zero overhead RC |
+| **Fragmentacja** | GC compact scala heap | Brak kompaktowania - potencjalna fragmentacja |
 
 **Praktyczne implikacje dla programisty:**
 
 W Androidzie głównym zagrożeniem jest **trzymanie referencji do kontekstu** (Activity/Fragment) w obiektach o dłuższym czasie życia (singleton, ViewModel, coroutines bez zakresu). GC nigdy nie zwolni obiektu, dopóki istnieje do niego choćby jedna silna referencja.
 
-W iOS głównym zagrożeniem są **retain cycles** — dwa obiekty trzymające się nawzajem silnymi referencjami. ARC nie potrafi ich wykryć — RC nigdy nie spada do zera. Rozwiązanie: jeden z powiązań zawsze `weak` lub `unowned`.
+W iOS głównym zagrożeniem są **retain cycles** - dwa obiekty trzymające się nawzajem silnymi referencjami. ARC nie potrafi ich wykryć - RC nigdy nie spada do zera. Rozwiązanie: jeden z powiązań zawsze `weak` lub `unowned`.
 
-W Flutter (Dart) działa GC wzorowany na V8 — podobny do Android ART, lecz optymalizowany pod krótko-żyjące obiekty widgetów. Dart kompiluje do kodu natywnego, więc pauzy GC są rzadkie i krótkie.
+W Flutter (Dart) działa GC wzorowany na V8 - podobny do Android ART, lecz optymalizowany pod krótko-żyjące obiekty widgetów. Dart kompiluje do kodu natywnego, więc pauzy GC są rzadkie i krótkie.

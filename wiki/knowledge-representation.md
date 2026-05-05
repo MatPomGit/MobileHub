@@ -14,9 +14,9 @@ Jednym z fundamentalnych pytań sztucznej inteligencji jest to, jak sprawić, ż
 
 Reprezentacja wiedzy pełni trzy podstawowe funkcje:
 
-1. **Surrogat** (*surrogate*) — jest zastępnikiem rzeczywistości, pozwalającym rozumować bez bezpośredniej obserwacji świata.
-2. **Zbiór ontologicznych zobowiązań** (*ontological commitments*) — definiuje, jakie obiekty i relacje istnieją w modelowanym świecie.
-3. **Fragmentaryczna teoria wnioskowania** — określa, jakie wnioski można i należy wyciągać z danego zbioru faktów.
+1. **Surrogat** (*surrogate*) - jest zastępnikiem rzeczywistości, pozwalającym rozumować bez bezpośredniej obserwacji świata.
+2. **Zbiór ontologicznych zobowiązań** (*ontological commitments*) - definiuje, jakie obiekty i relacje istnieją w modelowanym świecie.
+3. **Fragmentaryczna teoria wnioskowania** - określa, jakie wnioski można i należy wyciągać z danego zbioru faktów.
 
 Kluczowe pytania w projektowaniu systemu KR:
 
@@ -30,21 +30,21 @@ Kluczowe pytania w projektowaniu systemu KR:
 
 ### 2.1. Wiedza deklaratywna (*Declarative Knowledge*)
 
-Wiedza deklaratywna opisuje **co jest prawdą** — fakty, właściwości obiektów i relacje między nimi. Jest to wiedza niezależna od metody jej użycia.
+Wiedza deklaratywna opisuje **co jest prawdą** - fakty, właściwości obiektów i relacje między nimi. Jest to wiedza niezależna od metody jej użycia.
 
 ```prolog
 % Przykład wiedzy deklaratywnej w Prologu
 ptak(orzeł).
 ptak(pingwin).
 lata(orzeł).
-% pingwin nie lata — brak faktu lub negacja przez niepowodzenie
+% pingwin nie lata - brak faktu lub negacja przez niepowodzenie
 ```
 
 Przykłady: bazy wiedzy ontologicznych, encyklopedie, bazy danych semantycznych.
 
 ### 2.2. Wiedza proceduralna (*Procedural Knowledge*)
 
-Wiedza proceduralna opisuje **jak coś robić** — algorytmy, procedury, sekwencje działań.
+Wiedza proceduralna opisuje **jak coś robić** - algorytmy, procedury, sekwencje działań.
 
 ```python
 # Wiedza proceduralna: jak sortować listę
@@ -72,13 +72,13 @@ TO rozważ hospitalizację (pewność: 0.85)
 
 ### 2.4. Wiedza meta-poziomowa (*Meta-Knowledge*)
 
-Wiedza o samej wiedzy — co system wie, czego nie wie, jak pewne są poszczególne fakty.
+Wiedza o samej wiedzy - co system wie, czego nie wie, jak pewne są poszczególne fakty.
 
 ---
 
 ## 3. Sieci semantyczne (*Semantic Networks*)
 
-Sieci semantyczne są grafowymi reprezentacjami wiedzy, w których węzły odpowiadają pojęciom lub obiektom, a krawędzie — relacjom między nimi.
+Sieci semantyczne są grafowymi reprezentacjami wiedzy, w których węzły odpowiadają pojęciom lub obiektom, a krawędzie - relacjom między nimi.
 
 ```
         ┌─────────┐
@@ -95,9 +95,9 @@ Sieci semantyczne są grafowymi reprezentacjami wiedzy, w których węzły odpow
 ```
 
 Kluczowe relacje w sieciach semantycznych:
-- **IS-A** — przynależność do klasy (dziedziczenie cech)
-- **HAS-A / HAS-PART** — kompozycja
-- **INSTANCE-OF** — przynależność obiektu do klasy
+- **IS-A** - przynależność do klasy (dziedziczenie cech)
+- **HAS-A / HAS-PART** - kompozycja
+- **INSTANCE-OF** - przynależność obiektu do klasy
 
 **Dziedziczenie właściwości** (*property inheritance*) umożliwia wnioskowanie: skoro orzeł IS-A ptak, orzeł dziedziczy właściwości ptaka bez ich jawnego wymieniania.
 
@@ -177,10 +177,10 @@ ptak(pingwin).
 
 Ontologia w AI (Gruber, 1993): „formalna, explicite specyfikacja wspólnej konceptualizacji". Ontologia definiuje:
 
-- **Klasy** (*concepts*) — zbiory obiektów
-- **Własności** (*properties/roles*) — relacje między obiektami
-- **Indywidua** (*individuals*) — konkretne obiekty
-- **Aksjomaty** (*axioms*) — warunki konieczne i wystarczające dla klas
+- **Klasy** (*concepts*) - zbiory obiektów
+- **Własności** (*properties/roles*) - relacje między obiektami
+- **Indywidua** (*individuals*) - konkretne obiekty
+- **Aksjomaty** (*axioms*) - warunki konieczne i wystarczające dla klas
 
 ### 6.2. Logika opisowa (*Description Logics*, DL)
 
@@ -236,9 +236,9 @@ ex:Orzeł ex:imię "Bielik" .
 
 OWL jest bogatszym językiem ontologii, opartym na DL. Wersje:
 
-- **OWL Lite** — proste hierarchie, ograniczenia
-- **OWL DL** — pełna logika opisowa, decidable
-- **OWL Full** — pełna moc RDF, undecidable
+- **OWL Lite** - proste hierarchie, ograniczenia
+- **OWL DL** - pełna logika opisowa, decidable
+- **OWL Full** - pełna moc RDF, undecidable
 
 ```xml
 <!-- Fragment ontologii OWL/XML -->
@@ -391,9 +391,9 @@ Największe grafy wiedzy:
 
 Wnioskowanie w grafach wiedzy może być realizowane przez:
 
-1. **Wnioskowanie symboliczne** — reguły logiczne, OWL reasoner
-2. **Uzupełnianie grafów** (*link prediction*) — modele osadzające encje (TransE, RotatE, BERT-KGE)
-3. **Wnioskowanie po ścieżkach** — algorytmy Path Ranking
+1. **Wnioskowanie symboliczne** - reguły logiczne, OWL reasoner
+2. **Uzupełnianie grafów** (*link prediction*) - modele osadzające encje (TransE, RotatE, BERT-KGE)
+3. **Wnioskowanie po ścieżkach** - algorytmy Path Ranking
 
 ```python
 # Przykład prostego osadzenia grafów wiedzy (TransE - koncepcja)
@@ -501,7 +501,7 @@ Kombinacja Dempstera: m₁⊕m₂ uwzględnia konflikty hipotez
 
 ## 11. Common Sense Reasoning i projekt CYC
 
-Zdrowy rozsądek (*common sense*) to wiedza, którą ludzie uznają za oczywistą — i która jest niezwykle trudna do sformalizowania.
+Zdrowy rozsądek (*common sense*) to wiedza, którą ludzie uznają za oczywistą - i która jest niezwykle trudna do sformalizowania.
 
 Projekt **CYC** (Lenat, 1984-) to wielodekadowy wysiłek zakodowania zdroworozsądkowej wiedzy o świecie. Zawiera ponad 25 milionów aksjomatów w języku CycL, obejmujących:
 
@@ -585,11 +585,11 @@ engine = HealthRuleEngine()
 
 @engine.rule(lambda d: d.get("steps_today", 0) < 5000)
 def low_activity_alert(data):
-    return "Zwiększ aktywność fizyczną — cel: 10 000 kroków dziennie"
+    return "Zwiększ aktywność fizyczną - cel: 10 000 kroków dziennie"
 
 @engine.rule(lambda d: d.get("heart_rate", 0) > 100 and d.get("resting", True))
 def elevated_hr_alert(data):
-    return "Podwyższone tętno spoczynkowe — skonsultuj się z lekarzem"
+    return "Podwyższone tętno spoczynkowe - skonsultuj się z lekarzem"
 
 user_data = {"steps_today": 3200, "heart_rate": 105, "resting": True}
 print(engine.evaluate(user_data))

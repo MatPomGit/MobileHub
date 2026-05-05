@@ -1,6 +1,6 @@
 # Programowanie aplikacji mobilnych IoT
 
-Internet of Things (IoT) to ekosystem fizycznych urządzeń wymieniających dane przez sieć. Smartfon jest idealnym centrum sterowania IoT — posiada Bluetooth, Wi-Fi, NFC, ekran i obliczeniową moc do koordynowania dziesiątek urządzeń.
+Internet of Things (IoT) to ekosystem fizycznych urządzeń wymieniających dane przez sieć. Smartfon jest idealnym centrum sterowania IoT - posiada Bluetooth, Wi-Fi, NFC, ekran i obliczeniową moc do koordynowania dziesiątek urządzeń.
 
 ## Architektury IoT z mobilnym centrum
 
@@ -28,10 +28,10 @@ BLE to protokół komunikacji bezprzewodowej zoptymalizowany pod kątem małego 
 
 ### Kluczowe koncepty BLE
 
-- **GATT** (Generic Attribute Profile) — protokół wymiany danych
-- **Service** — grupuje powiązane charakterystyki (np. Heart Rate Service)
-- **Characteristic** — pojedyncza wartość (np. aktualna tętno)
-- **UUID** — unikalny identyfikator service/characteristic
+- **GATT** (Generic Attribute Profile) - protokół wymiany danych
+- **Service** - grupuje powiązane charakterystyki (np. Heart Rate Service)
+- **Characteristic** - pojedyncza wartość (np. aktualna tętno)
+- **UUID** - unikalny identyfikator service/characteristic
 
 ```kotlin
 // Skanowanie urządzeń BLE (Android)
@@ -100,7 +100,7 @@ class BleGattCallback(
 }
 ```
 
-## MQTT — protokół komunikacji IoT
+## MQTT - protokół komunikacji IoT
 
 MQTT to lekki protokół publish/subscribe idealny dla IoT. Działający na TCP, minimalne zużycie przepustowości.
 
@@ -156,9 +156,9 @@ home/door/lock/command          → "lock" / "unlock"
 home/door/lock/state            → "locked" / "unlocked"
 ```
 
-## Wi-Fi Direct — komunikacja peer-to-peer
+## Wi-Fi Direct - komunikacja peer-to-peer
 
-Wi-Fi Direct pozwala na bezpośrednią komunikację między urządzeniami bez routera — użyteczne np. do połączenia z kamerą IP czy drukarką.
+Wi-Fi Direct pozwala na bezpośrednią komunikację między urządzeniami bez routera - użyteczne np. do połączenia z kamerą IP czy drukarką.
 
 ```kotlin
 val manager = getSystemService(Context.WIFI_P2P_SERVICE) as WifiP2pManager
@@ -171,7 +171,7 @@ manager.discoverPeers(channel, object : WifiP2pManager.ActionListener {
 })
 ```
 
-## NFC — komunikacja krótkiego zasięgu
+## NFC - komunikacja krótkiego zasięgu
 
 NFC pozwala odczytywać tagi RFID, płacić zbliżeniowo i parować urządzenia.
 
@@ -235,13 +235,13 @@ fun SensorCard(reading: SensorReading) {
 }
 ```
 
-## Thread i Zigbee — sieci mesh dla smart home
+## Thread i Zigbee - sieci mesh dla smart home
 
 Thread i Zigbee to protokoły sieciowe warstwy 2/3 przeznaczone do budowy sieci mesh o niskim zużyciu energii. W odróżnieniu od BLE, gdzie smartfon łączy się bezpośrednio z każdym urządzeniem, w sieci mesh urządzenia mogą przekazywać komunikaty do siebie nawzajem, tworząc samonaprawiającą się sieć o dużym zasięgu.
 
 ### Zigbee
 
-Zigbee (standard IEEE 802.15.4) działa na częstotliwości 2,4 GHz i jest szeroko stosowany w urządzeniach smart home (żarówki Philips Hue, czujniki IKEA TRÅDFRI). Do komunikacji z siecią Zigbee z poziomu Androida potrzebny jest koordynator — dedykowany most (np. Philips Hue Bridge) lub klucz USB (np. ConBee II), do którego aplikacja łączy się przez HTTP/WebSocket.
+Zigbee (standard IEEE 802.15.4) działa na częstotliwości 2,4 GHz i jest szeroko stosowany w urządzeniach smart home (żarówki Philips Hue, czujniki IKEA TRÅDFRI). Do komunikacji z siecią Zigbee z poziomu Androida potrzebny jest koordynator - dedykowany most (np. Philips Hue Bridge) lub klucz USB (np. ConBee II), do którego aplikacja łączy się przez HTTP/WebSocket.
 
 ```
 Smartfon ←──── HTTP/REST ────→ Zigbee Gateway ←── Zigbee ──→ Czujniki/Aktuatory
@@ -277,7 +277,7 @@ class HueBridgeClient(private val bridgeIp: String, private val apiKey: String) 
 
 ### Thread i Matter
 
-Thread (oparty na IPv6 i standardzie IEEE 802.15.4) to nowszy protokół mesh wspierany przez Google, Apple i Amazon. Protokół **Matter** (dawniej Project CHIP) działa na warstwie aplikacji i unifikuje różnych producentów — jedno urządzenie Matter może być obsługiwane przez Asystenta Google, Siri czy Amazon Alexa. Android 12+ posiada wbudowane wsparcie dla Thread Border Router przez Android Thread Network API.
+Thread (oparty na IPv6 i standardzie IEEE 802.15.4) to nowszy protokół mesh wspierany przez Google, Apple i Amazon. Protokół **Matter** (dawniej Project CHIP) działa na warstwie aplikacji i unifikuje różnych producentów - jedno urządzenie Matter może być obsługiwane przez Asystenta Google, Siri czy Amazon Alexa. Android 12+ posiada wbudowane wsparcie dla Thread Border Router przez Android Thread Network API.
 
 ```kotlin
 // Dołączanie urządzenia Thread przez Android Thread Network API
@@ -298,7 +298,7 @@ class ThreadNetworkManager(private val context: Context) {
         onSuccess: () -> Unit,
         onFailure: (Exception) -> Unit
     ) {
-        // Logika komisjonowania przez BLE — specyficzna dla producenta urządzenia
+        // Logika komisjonowania przez BLE - specyficzna dla producenta urządzenia
         val networkKey = credentials.networkKey
         val channel = credentials.channel
         // Wyślij przez BLE do urządzenia...
@@ -318,26 +318,26 @@ class ThreadNetworkManager(private val context: Context) {
 
 ---
 
-## REST API vs MQTT — kiedy stosować każdy protokół
+## REST API vs MQTT - kiedy stosować każdy protokół
 
 Wybór między REST a MQTT zależy od charakterystyki danych, wymagań czasowych i architektury systemu.
 
-### REST API — żądanie/odpowiedź
+### REST API - żądanie/odpowiedź
 
 REST sprawdza się, gdy aplikacja inicjuje komunikację i oczekuje pojedynczej odpowiedzi. Typowe przypadki użycia:
 
-- **Konfiguracja urządzenia** — zmiana ustawień (np. czas wybudzenia sensora)
-- **Jednorazowe odczyty** — pobranie bieżącego stanu na żądanie
-- **Integracja z chmurą** — rejestracja urządzenia, autentykacja, pobieranie historii
+- **Konfiguracja urządzenia** - zmiana ustawień (np. czas wybudzenia sensora)
+- **Jednorazowe odczyty** - pobranie bieżącego stanu na żądanie
+- **Integracja z chmurą** - rejestracja urządzenia, autentykacja, pobieranie historii
 
 ```kotlin
-// REST — pobranie aktualnego stanu urządzenia
+// REST - pobranie aktualnego stanu urządzenia
 suspend fun fetchDeviceStatus(deviceId: String): DeviceStatus {
     val response = httpClient.get("$baseUrl/devices/$deviceId/status")
     return response.body<DeviceStatus>()
 }
 
-// REST — wysłanie komendy do urządzenia
+// REST - wysłanie komendy do urządzenia
 suspend fun sendCommand(deviceId: String, command: DeviceCommand): Result<Unit> {
     return runCatching {
         httpClient.post("$baseUrl/devices/$deviceId/commands") {
@@ -348,7 +348,7 @@ suspend fun sendCommand(deviceId: String, command: DeviceCommand): Result<Unit> 
 }
 ```
 
-### MQTT — publish/subscribe
+### MQTT - publish/subscribe
 
 MQTT jest lepszym wyborem gdy:
 
@@ -374,9 +374,9 @@ MQTT definiuje trzy poziomy jakości usług:
 
 | QoS | Znaczenie | Użycie |
 |---|---|---|
-| 0 | at most once — brak potwierdzenia | dane pogodowe, gdzie utrata jednego odczytu jest akceptowalna |
-| 1 | at least once — potwierdzenie, możliwe duplikaty | pomiary wymagające pewności dostarczenia |
-| 2 | exactly once — handshake 4-etapowy | komendy krytyczne (zamek, alarm) |
+| 0 | at most once - brak potwierdzenia | dane pogodowe, gdzie utrata jednego odczytu jest akceptowalna |
+| 1 | at least once - potwierdzenie, możliwe duplikaty | pomiary wymagające pewności dostarczenia |
+| 2 | exactly once - handshake 4-etapowy | komendy krytyczne (zamek, alarm) |
 
 ---
 
@@ -443,7 +443,7 @@ abstract class IotDatabase : RoomDatabase() {
 }
 ```
 
-### Strategia synchronizacji — outbox pattern
+### Strategia synchronizacji - outbox pattern
 
 ```kotlin
 class SensorRepository(
@@ -467,7 +467,7 @@ class SensorRepository(
             }
             dao.markSynced(pending.map { it.id })
         } catch (e: Exception) {
-            // Brak połączenia — dane pozostają jako niezsynchonizowane
+            // Brak połączenia - dane pozostają jako niezsynchonizowane
         }
     }
 
@@ -479,7 +479,7 @@ class SensorRepository(
 }
 ```
 
-### Agregacja na poziomie bazy — statystyki godzinowe
+### Agregacja na poziomie bazy - statystyki godzinowe
 
 ```kotlin
 @Query("""
@@ -502,9 +502,9 @@ fun getHourlyStats(sensorId: String, since: Long): Flow<List<HourlyStatEntity>>
 
 ## Powiadomienia i alerty
 
-Gdy czujnik przekroczy krytyczny próg (np. temperatura > 35°C, wykrycie dymu), aplikacja musi natychmiast powiadomić użytkownika — nawet gdy działa w tle.
+Gdy czujnik przekroczy krytyczny próg (np. temperatura > 35°C, wykrycie dymu), aplikacja musi natychmiast powiadomić użytkownika - nawet gdy działa w tle.
 
-### WorkManager — monitorowanie progów w tle
+### WorkManager - monitorowanie progów w tle
 
 ```kotlin
 class ThresholdCheckWorker(
@@ -678,7 +678,7 @@ class SecureMqttManager(
 }
 ```
 
-### Wzajemne TLS (mTLS) — autentykacja klienta
+### Wzajemne TLS (mTLS) - autentykacja klienta
 
 W mTLS zarówno serwer, jak i klient prezentują certyfikat. Broker akceptuje tylko połączenia od znanych urządzeń z prawidłowym certyfikatem:
 
@@ -718,7 +718,7 @@ fun buildMtlsOptions(context: Context): MqttConnectOptions {
 }
 ```
 
-### Przechowywanie kluczy — Android Keystore
+### Przechowywanie kluczy - Android Keystore
 
 Prywatne klucze urządzenia powinny być przechowywane w sprzętowym Android Keystore, a nie jako pliki w assets:
 
@@ -760,7 +760,7 @@ object DeviceKeyManager {
 | Transport | Zawsze TLS 1.2+ (port 8883 dla MQTT, HTTPS dla REST) |
 | Autentykacja | mTLS lub tokeny JWT z krótkim TTL |
 | Przechowywanie kluczy | Android Keystore (nie SharedPreferences, nie assets) |
-| Uprawnienia MQTT | ACL — każde urządzenie subskrybuje tylko swoje tematy |
+| Uprawnienia MQTT | ACL - każde urządzenie subskrybuje tylko swoje tematy |
 | Aktualizacje firmware | OTA z weryfikacją podpisu kryptograficznego |
 | Dane wrażliwe | Szyfruj dane lokalne (SQLCipher dla Room) |
 | Sieć | Izolacja urządzeń IoT w osobnym VLAN/sieci Wi-Fi |

@@ -26,14 +26,14 @@ Aplikacje zdrowia psychicznego można umieścić na przecięciu kilku obszarów:
 3. **inżynierii oprogramowania mobilnego**, która odpowiada za architekturę, bezpieczeństwo i użyteczność,
 4. **uczenia maszynowego**, które wspiera modelowanie wzorców i predykcję ryzyka.
 
-To połączenie sprawia, że projektowanie takich systemów jest trudniejsze niż budowa zwykłej aplikacji produktywności. Programista nie pracuje tu wyłącznie z interfejsem i bazą danych. Musi rozumieć, że każda decyzja projektowa — od częstotliwości powiadomień po dobór skali nastroju — wpływa na komfort, zaufanie i bezpieczeństwo użytkownika.
+To połączenie sprawia, że projektowanie takich systemów jest trudniejsze niż budowa zwykłej aplikacji produktywności. Programista nie pracuje tu wyłącznie z interfejsem i bazą danych. Musi rozumieć, że każda decyzja projektowa - od częstotliwości powiadomień po dobór skali nastroju - wpływa na komfort, zaufanie i bezpieczeństwo użytkownika.
 
 ### Dlaczego aplikacje mobilne są tak atrakcyjne badawczo?
 
 Ponieważ pozwalają prowadzić pomiar **w środowisku naturalnym**, a nie wyłącznie w gabinecie lub laboratorium. To bardzo istotne. Tradycyjne kwestionariusze psychologiczne są niezwykle cenne, ale często opisują stan pacjenta na podstawie retrospekcji: „jak czułeś się w ostatnim tygodniu?”. Takie podejście obarczone jest błędem pamięci i uśrednianiem doświadczeń. Aplikacje mobilne umożliwiają natomiast stosowanie:
 
-- **EMA** (*Ecological Momentary Assessment*) — krótkich pomiarów samoopisowych wykonywanych wielokrotnie w ciągu dnia,
-- **pasywnego monitorowania** — zbierania sygnałów behawioralnych bez konieczności ciągłego angażowania użytkownika.
+- **EMA** (*Ecological Momentary Assessment*) - krótkich pomiarów samoopisowych wykonywanych wielokrotnie w ciągu dnia,
+- **pasywnego monitorowania** - zbierania sygnałów behawioralnych bez konieczności ciągłego angażowania użytkownika.
 
 Połączenie EMA i pasywnego sensing'u jest tak popularne dlatego, że każde z tych podejść kompensuje słabości drugiego. Samoopis daje semantyczny wgląd w to, co użytkownik czuje, ale wymaga wysiłku i regularności. Dane pasywne są mniej obciążające, ale same z siebie nie wyjaśniają znaczenia psychologicznego. Spadek aktywności może oznaczać pogorszenie nastroju, ale równie dobrze chorobę somatyczną, sesję egzaminacyjną, urlop albo zwykłe zmęczenie.
 
@@ -112,10 +112,10 @@ To, że coś koreluje ze stanem psychicznym, nie oznacza jeszcze, że jest jego 
 
 Najczęstsze źródła błędnej interpretacji to:
 
-- **konfuzja kontekstowa** — mała liczba kroków może wynikać z pracy zdalnej lub kontuzji,
-- **braki danych** — czujnik może być wyłączony albo telefon pozostawiony w domu,
-- **sezonowość i rytm tygodnia** — zachowanie w weekend różni się od zachowania w dni robocze,
-- **zróżnicowanie indywidualne** — dla jednej osoby 6000 kroków to bardzo mało, dla innej norma.
+- **konfuzja kontekstowa** - mała liczba kroków może wynikać z pracy zdalnej lub kontuzji,
+- **braki danych** - czujnik może być wyłączony albo telefon pozostawiony w domu,
+- **sezonowość i rytm tygodnia** - zachowanie w weekend różni się od zachowania w dni robocze,
+- **zróżnicowanie indywidualne** - dla jednej osoby 6000 kroków to bardzo mało, dla innej norma.
 
 Dlatego w analizie preferuje się nie tyle surowe poziomy, ile **zmianę względem własnej normy bazowej użytkownika**.
 
@@ -156,12 +156,12 @@ Wiele badań pokazuje, że nie tylko długość snu, ale również **regularnoś
 
 W dobrze zaprojektowanym systemie warto rozdzielić kilka warstw odpowiedzialności.
 
-1. **Warstwa prezentacji** — interfejs użytkownika, formularze, wykresy, powiadomienia.
-2. **Warstwa domenowa** — reguły biznesowe, obliczanie trendu, logika interwencji.
-3. **Warstwa danych** — lokalna baza danych, synchronizacja, repozytoria.
-4. **Warstwa sensing'u** — pobieranie danych z API systemowych i sensorów.
-5. **Warstwa analityczna** — ekstrakcja cech, modele predykcyjne, walidacja.
-6. **Warstwa prywatności i bezpieczeństwa** — zgody, uprawnienia, minimalizacja danych.
+1. **Warstwa prezentacji** - interfejs użytkownika, formularze, wykresy, powiadomienia.
+2. **Warstwa domenowa** - reguły biznesowe, obliczanie trendu, logika interwencji.
+3. **Warstwa danych** - lokalna baza danych, synchronizacja, repozytoria.
+4. **Warstwa sensing'u** - pobieranie danych z API systemowych i sensorów.
+5. **Warstwa analityczna** - ekstrakcja cech, modele predykcyjne, walidacja.
+6. **Warstwa prywatności i bezpieczeństwa** - zgody, uprawnienia, minimalizacja danych.
 
 ### Dlaczego taki podział jest zalecany?
 
@@ -665,7 +665,7 @@ W literaturze często używa się pojęcia **JITAI** (*Just-In-Time Adaptive Int
 
 ### Dlaczego moment interwencji ma znaczenie?
 
-Ta sama sugestia — np. „zrób 3 minuty ćwiczenia oddechowego” — może być pomocna wieczorem po stresującym dniu, ale irytująca podczas zajęć, rozmowy lub snu. Dlatego silnik interwencji powinien uwzględniać:
+Ta sama sugestia - np. „zrób 3 minuty ćwiczenia oddechowego” - może być pomocna wieczorem po stresującym dniu, ale irytująca podczas zajęć, rozmowy lub snu. Dlatego silnik interwencji powinien uwzględniać:
 
 - porę dnia,
 - historię reakcji użytkownika,
@@ -872,8 +872,8 @@ Brak danych sam w sobie może być znaczący, ale równie dobrze może oznaczać
 
 W zdrowiu psychicznym szczególnie istotne są dwa rodzaje błędów:
 
-- **fałszywie dodatnie** — system sygnalizuje problem, choć go nie ma,
-- **fałszywie ujemne** — system nie sygnalizuje problemu, choć użytkownik realnie potrzebuje wsparcia.
+- **fałszywie dodatnie** - system sygnalizuje problem, choć go nie ma,
+- **fałszywie ujemne** - system nie sygnalizuje problemu, choć użytkownik realnie potrzebuje wsparcia.
 
 #### Dlaczego nie można po prostu maksymalizować dokładności?
 
@@ -971,7 +971,7 @@ Mimo to przykład pokazuje podstawową ideę architektoniczną: **zebrane dane -
 
 ---
 
-## 19. Android i iOS — podobieństwa i różnice
+## 19. Android i iOS - podobieństwa i różnice
 
 Choć ogólna logika aplikacji zdrowia psychicznego jest wspólna dla obu platform, istnieją różnice implementacyjne.
 

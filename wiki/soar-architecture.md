@@ -1,4 +1,4 @@
-# Soar — architektura kognitywna
+# Soar - architektura kognitywna
 
 ## Streszczenie
 
@@ -14,13 +14,13 @@ Soar jest zarówno teorią naukową, jak i systemem informatycznym. Jako teoria 
 
 ## 2. Historia i kontekst
 
-### 2.1. Newell, Laird, Rosenbloom — geneza projektu
+### 2.1. Newell, Laird, Rosenbloom - geneza projektu
 
 Projekt Soar zaczął się około 1983 roku w Carnegie Mellon University, gdy John Laird i Paul Rosenbloom dołączyli do zespołu Allena Newella. Pierwsza publiczna wersja Soar pojawiła się w 1987 roku. Wczesne prace koncentrowały się na wykazaniu, że jeden ogólny mechanizm (reguły w przestrzeni problemów) może realizować różnorodne zadania poznawcze: gry logiczne, rozwiązywanie zagadek, planowanie i uczenie się.
 
-Przełomową publikacją był artykuł Laird, Newell i Rosenbloom (1987) w *Artificial Intelligence*, opisujący Soar jako architekturę zdolną do *chunking* — kompilowania nabytego doświadczenia do nowych reguł produkcyjnych. Newell zawarł dojrzałą teorię w monografii *Unified Theories of Cognition* (1990), która stała się kanonicznym tekstem dziedziny.
+Przełomową publikacją był artykuł Laird, Newell i Rosenbloom (1987) w *Artificial Intelligence*, opisujący Soar jako architekturę zdolną do *chunking* - kompilowania nabytego doświadczenia do nowych reguł produkcyjnych. Newell zawarł dojrzałą teorię w monografii *Unified Theories of Cognition* (1990), która stała się kanonicznym tekstem dziedziny.
 
-Po śmierci Newella w 1992 roku Laird przeniósł się na Uniwersytet Michigan i przez kolejne dekady rozwijał architekturę, dodając pamięć semantyczną (ok. 2006), pamięć epizodyczną (2010), uczenie przez wzmocnienie (2010) oraz rozszerzenia dla robotyki (SVS — Spatial/Visual System).
+Po śmierci Newella w 1992 roku Laird przeniósł się na Uniwersytet Michigan i przez kolejne dekady rozwijał architekturę, dodając pamięć semantyczną (ok. 2006), pamięć epizodyczną (2010), uczenie przez wzmocnienie (2010) oraz rozszerzenia dla robotyki (SVS - Spatial/Visual System).
 
 ### 2.2. Soar jako teoria kognitywnistyczna
 
@@ -52,7 +52,7 @@ Zawartość WM jest modyfikowana przez reguły produkcyjne (usuwanie lub dodawan
 Pamięć produkcyjna przechowuje reguły postaci IF-THEN. Warunek (IF) opisuje wymagany stan WM; akcja (THEN) wprowadza zmiany do WM lub wysyła polecenia do modułów. Reguły są dopasowywane do aktualnego stanu WM za pomocą algorytmu Rete, co umożliwia efektywne przetwarzanie dużych baz reguł.
 
 ```
-# Przykład reguły Soar (składnia SP — Soar Productions)
+# Przykład reguły Soar (składnia SP - Soar Productions)
 sp {robot*propose*move-north
     (state <s>
            ^name robot-task
@@ -76,10 +76,10 @@ sp {robot*apply*move-forward
 ### 3.3. Cykl decyzyjny (*Decision Cycle*)
 
 Każdy cykl Soar przebiega w następujących fazach:
-1. **Elaboration phase** — wszystkie pasujące reguły uruchamiają się i dodają preferencje do WM.
-2. **Decision procedure** — na podstawie preferencji system wybiera jeden operator do wykonania.
-3. **Apply phase** — reguły zastosowania wybranego operatora modyfikują WM.
-4. **Output phase** — zmiany w WM są wysyłane do efektorów (silniki, API).
+1. **Elaboration phase** - wszystkie pasujące reguły uruchamiają się i dodają preferencje do WM.
+2. **Decision procedure** - na podstawie preferencji system wybiera jeden operator do wykonania.
+3. **Apply phase** - reguły zastosowania wybranego operatora modyfikują WM.
+4. **Output phase** - zmiany w WM są wysyłane do efektorów (silniki, API).
 
 Cykl trwa typowo 50–200 ms i odpowiada granicy *cognitive band* Newella.
 
@@ -99,7 +99,7 @@ W odpowiedzi na impas Soar automatycznie tworzy podstan (*substate*) i nowy cel:
 
 Mechanizm subgoalingu jest implicite mechanizmem planowania: agent może rozważać hipotetyczne sekwencje operatorów w podsytuacjach bez rzeczywistego ich wykonywania. Wyniki takich analiz mogą być przeniesione do stanu wyższego poziomu jako wiedza o preferencjach. Dzięki temu Soar realizuje planowanie bez oddzielnej architektury planisty.
 
-## 5. Chunking — uczenie proceduralne
+## 5. Chunking - uczenie proceduralne
 
 ### 5.1. Zasada działania
 
@@ -153,7 +153,7 @@ agent = kernel.CreateAgent("my-agent")
 Pamięć epizodyczna automatycznie rejestruje migawki (*snapshots*) pamięci roboczej w wybranych momentach. Zapytanie do EpMem polega na podaniu fragmentu stanu (*cue*) i odnalezieniu najbardziej pasującego epizodu. Mechanizm ten pozwala agentowi przywoływać wcześniejsze doświadczenia i uczyć się na podstawie historii.
 
 ```
-# Zapytanie epizodyczne — wyszukaj stan, gdy robot był przy ładowarce
+# Zapytanie epizodyczne - wyszukaj stan, gdy robot był przy ładowarce
 sp {recall-charging-state
     (state <s>
            ^epmem.command <cmd>
@@ -177,9 +177,9 @@ Aktualizacja Q-value:
 Q(s, a) ← Q(s, a) + α [r + γ · max_a' Q(s', a') - Q(s, a)]
 
 Parametry:
-  α — współczynnik uczenia (learning rate)
-  γ — współczynnik dyskontowania (discount factor)
-  r — nagroda otrzymana po wykonaniu akcji a w stanie s
+  α - współczynnik uczenia (learning rate)
+  γ - współczynnik dyskontowania (discount factor)
+  r - nagroda otrzymana po wykonaniu akcji a w stanie s
 ```
 
 W praktyce reguły Soar RL mają specjalną składnię:
@@ -197,7 +197,7 @@ sp {robot*rl*prefer-safe-route
 
 Nagroda jest definiowana przez specjalne reguły modyfikujące atrybut `^reward-link`.
 
-## 8. SVS — Spatial/Visual System
+## 8. SVS - Spatial/Visual System
 
 ### 8.1. Rola SVS w Soar
 
@@ -222,7 +222,7 @@ sp {robot*check-obstacle-ahead
            ^b obstacle
            ^result <r>)
 }
-# Wynik: <r> ^distance <d>  — odległość w metrach
+# Wynik: <r> ^distance <d>  - odległość w metrach
 ```
 
 ## 9. Zastosowania

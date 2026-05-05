@@ -1,6 +1,6 @@
-# Neurogaming — gry sterowane mózgiem
+# Neurogaming - gry sterowane mózgiem
 
-Neurogaming (*brain-computer game interface*) to dziedzina łącząca neurotechnologię z projektowaniem gier — gracz steruje rozgrywką lub wpływa na nią poprzez sygnały elektryczne mózgu, rejestrowane przez interfejs mózg-komputer (*Brain-Computer Interface*, BCI). Zamiast touchpada czy przycisków, medium sterowania staje się ludzki umysł.
+Neurogaming (*brain-computer game interface*) to dziedzina łącząca neurotechnologię z projektowaniem gier - gracz steruje rozgrywką lub wpływa na nią poprzez sygnały elektryczne mózgu, rejestrowane przez interfejs mózg-komputer (*Brain-Computer Interface*, BCI). Zamiast touchpada czy przycisków, medium sterowania staje się ludzki umysł.
 
 ---
 
@@ -12,12 +12,12 @@ Neurogaming (*brain-computer game interface*) to dziedzina łącząca neurotechn
 |-----|-----------|
 | 1924 | Hans Berger rejestruje pierwsze EEG u człowieka |
 | 1973 | Jacques Vidal definiuje pojęcie BCI w kontekście sterowania komputerem |
-| 2002 | BrainGate — pierwsze wszczepiane BCI do sterowania kursorem myszy |
-| 2009 | Neurosky MindSet — pierwsze konsumenckie EEG w formie słuchawek |
-| 2012 | „NeuroRacer" — gra EEG trenująca uwagę u seniorów (UCSF) |
-| 2014 | Emotiv EPOC — 14-kanałowe EEG dla graczy |
-| 2020 | Neuralink — demonstracja wszczepialnego BCI o wysokiej rozdzielczości |
-| 2023 | OpenBCI Galea — zintegrowany headset BCI + VR (Eye, EMG, EEG, PPG) |
+| 2002 | BrainGate - pierwsze wszczepiane BCI do sterowania kursorem myszy |
+| 2009 | Neurosky MindSet - pierwsze konsumenckie EEG w formie słuchawek |
+| 2012 | „NeuroRacer" - gra EEG trenująca uwagę u seniorów (UCSF) |
+| 2014 | Emotiv EPOC - 14-kanałowe EEG dla graczy |
+| 2020 | Neuralink - demonstracja wszczepialnego BCI o wysokiej rozdzielczości |
+| 2023 | OpenBCI Galea - zintegrowany headset BCI + VR (Eye, EMG, EEG, PPG) |
 | 2025 | Masowy rynek mobilnych aplikacji BCI na Android i iOS |
 
 Pierwsze gry komercyjne bazujące na EEG pojawiły się ok. 2009 r. razem z tańszymi urządzeniami dla konsumentów. Dziś mobilne aplikacje do neurofeedbacku i lekkie zestawy EEG (waga <100 g) pozwalają na neurogaming poza laboratorium.
@@ -44,19 +44,19 @@ Mózg → Elektrody EEG → Wzmacniacz → ADC → Filtracja → Ekstrakcja cech
 
 ### Kluczowe wzorce dla neurogamingu
 
-**SSVEP** (*Steady-State Visual Evoked Potential*) — wzrokowe potencjały wywołane:
+**SSVEP** (*Steady-State Visual Evoked Potential*) - wzrokowe potencjały wywołane:
 ```
 Gracz patrzy na migający element UI (np. 15 Hz) → mózg synchronizuje się → 
 detekcja EEG → wybór opcji menu bez dotyku ekranu
 ```
 
-**P300** — potencjał związany ze zdarzeniem:
+**P300** - potencjał związany ze zdarzeniem:
 ```
 Niespodziewany bodziec (np. podświetlenie ikony) → 300 ms po bodźcu pojawia się 
 charakterystyczna fala w EEG → identyfikacja, na co gracz zwrócił uwagę
 ```
 
-**ERD/ERS** (*Event-Related Desynchronization/Synchronization*) — wyobraźnia motoryczna:
+**ERD/ERS** (*Event-Related Desynchronization/Synchronization*) - wyobraźnia motoryczna:
 ```
 Gracz wyobraża sobie ruch lewą ręką → ERD w obszarze C3 EEG → 
 interpretacja jako "skręć w lewo" w grze wyścigowej
@@ -96,7 +96,7 @@ interpretacja jako "skręć w lewo" w grze wyścigowej
 
 ## Implementacja na urządzeniach mobilnych
 
-### Android — połączenie z EEG przez Bluetooth
+### Android - połączenie z EEG przez Bluetooth
 
 ```kotlin
 import android.bluetooth.BluetoothAdapter
@@ -160,7 +160,7 @@ object EEGProcessor {
 
     private const val SAMPLE_RATE = 256  // Hz
 
-    // Prosty filtr pasmowy (Butterworth 2. rzędu) — implementacja cyfrowa
+    // Prosty filtr pasmowy (Butterworth 2. rzędu) - implementacja cyfrowa
     class BandpassFilter(private val lowCut: Double, private val highCut: Double) {
         private var x1 = 0.0; private var x2 = 0.0
         private var y1 = 0.0; private var y2 = 0.0
@@ -206,7 +206,7 @@ object EEGProcessor {
 }
 ```
 
-### iOS — CoreBluetooth + przetwarzanie EEG w Swift
+### iOS - CoreBluetooth + przetwarzanie EEG w Swift
 
 ```swift
 import CoreBluetooth
@@ -294,9 +294,9 @@ class EEGDeviceManager: NSObject, ObservableObject {
 Cel: gracz celowo reguluje własny stan neurologiczny, aby postępować w grze.
 
 **Przykłady:**
-- **NeuroRacer** (UCSF, 2013) — gra wyścigowa trenująca multitasking u seniorów; zmniejsza deficyty uwagi
-- **Muse Calm** — utrzymanie fal alfa/theta przesuwa elementy ekranu, nagradzając relaks
-- **BrainDriver** — sterowanie samochodem wyłącznie przez skupienie (wskaźnik beta EEG)
+- **NeuroRacer** (UCSF, 2013) - gra wyścigowa trenująca multitasking u seniorów; zmniejsza deficyty uwagi
+- **Muse Calm** - utrzymanie fal alfa/theta przesuwa elementy ekranu, nagradzając relaks
+- **BrainDriver** - sterowanie samochodem wyłącznie przez skupienie (wskaźnik beta EEG)
 
 ```
 Stan skupienia gracza
@@ -380,9 +380,9 @@ Neuroplastyczność: nowe połączenia neuronalne
 ```
 
 **Przykładowe systemy:**
-- **NeuroTracker** — trening uwagi i przetwarzania wzrokowego
-- **Mindmaze** — VR + EEG dla rehabilitacji po udarze
-- **BrainFingers** — sterowanie kursorem dla osób z ALS/tetraplegią
+- **NeuroTracker** - trening uwagi i przetwarzania wzrokowego
+- **Mindmaze** - VR + EEG dla rehabilitacji po udarze
+- **BrainFingers** - sterowanie kursorem dla osób z ALS/tetraplegią
 
 ### ADHD i zaburzenia uwagi
 
@@ -411,24 +411,24 @@ Artefakty sygnału EEG:
 Przetwarzanie w czasie rzeczywistym:
 ├── Opóźnienie (latency) musi być < 300ms dla płynnej rozgrywki
 ├── Klasyfikatory ML wymagają kalibracji per-użytkownik (10-30 min)
-└── Niestacjonarność sygnału EEG — model traci dokładność w czasie
+└── Niestacjonarność sygnału EEG - model traci dokładność w czasie
 ```
 
 ### Wyzwania UX/ergonomiczne
 
-- **Czas zakładania headsetów** — mokre elektrody do 15 min vs. suche 1–2 min
-- **Komfort noszenia** — akceptowalność w długich sesjach gamingowych
-- **Efekt nowości** — gracze wyłączają neurokontrole po pierwszej godzinie zabawy
-- **Krzywa uczenia się** — sterowanie przez myśl wymaga tygodni treningu
+- **Czas zakładania headsetów** - mokre elektrody do 15 min vs. suche 1–2 min
+- **Komfort noszenia** - akceptowalność w długich sesjach gamingowych
+- **Efekt nowości** - gracze wyłączają neurokontrole po pierwszej godzinie zabawy
+- **Krzywa uczenia się** - sterowanie przez myśl wymaga tygodni treningu
 
 ### Kwestie etyczne i prywatności
 
-> Dane EEG są jedną z najbardziej wrażliwych kategorii danych biometrycznych — mogą ujawniać predyspozycje neurologiczne, stany emocjonalne i potencjalnie diagnostyczne cechy chorób mózgu.
+> Dane EEG są jedną z najbardziej wrażliwych kategorii danych biometrycznych - mogą ujawniać predyspozycje neurologiczne, stany emocjonalne i potencjalnie diagnostyczne cechy chorób mózgu.
 
 **Ochrona danych neuro:**
 - RODO traktuje dane neurologiczne jako dane szczególnej kategorii (art. 9)
 - Neurorights Foundation lobbuje za ustawowym prawem do „prywatności umysłu"
-- Chile (2021) — pierwsze państwo z konstytucyjną ochroną danych neurologicznych
+- Chile (2021) - pierwsze państwo z konstytucyjną ochroną danych neurologicznych
 
 ---
 
@@ -566,20 +566,20 @@ Neurogaming łączy neuronaukę, inżynierię sygnałów, sztuczną inteligencj�
 
 Kluczowe obszary do opanowania dla dewelopera neurogamingu:
 
-1. **Przetwarzanie sygnałów** — filtracja, FFT, ekstrakcja cech czasowo-częstotliwościowych
-2. **Uczenie maszynowe** — klasyfikacja EEG (EEGNet, ShallowConvNet, FBCSP)
-3. **Protokoły BCI** — SSVEP, P300, Motor Imagery
-4. **Android/iOS BLE** — niskolatencyjny odbiór danych z headsetów EEG
-5. **UX w grach z BCI** — projektowanie z uwzględnieniem opóźnień i zmienności sygnału
+1. **Przetwarzanie sygnałów** - filtracja, FFT, ekstrakcja cech czasowo-częstotliwościowych
+2. **Uczenie maszynowe** - klasyfikacja EEG (EEGNet, ShallowConvNet, FBCSP)
+3. **Protokoły BCI** - SSVEP, P300, Motor Imagery
+4. **Android/iOS BLE** - niskolatencyjny odbiór danych z headsetów EEG
+5. **UX w grach z BCI** - projektowanie z uwzględnieniem opóźnień i zmienności sygnału
 
 ---
 
 ## Linki
 
-- [BrainFlow — Open-source BCI SDK](https://brainflow.org)
-- [OpenBCI — sprzęt open source](https://openbci.com)
-- [MNE-Python — analiza EEG](https://mne.tools)
-- [EEGNet — kompaktowa CNN dla EEG](https://arxiv.org/abs/1611.08024)
+- [BrainFlow - Open-source BCI SDK](https://brainflow.org)
+- [OpenBCI - sprzęt open source](https://openbci.com)
+- [MNE-Python - analiza EEG](https://mne.tools)
+- [EEGNet - kompaktowa CNN dla EEG](https://arxiv.org/abs/1611.08024)
 - [Neurorights Foundation](https://neurorightsfoundation.org)
 - [Unity NeuroSky Integration](https://store.neurosky.com/pages/unity)
 - [IEEE BCI Society](https://bcisociety.org)

@@ -2,12 +2,12 @@
 
 Aplikacje IoT często komunikują się z urządzeniami w tej samej sieci lokalnej Wi-Fi, bez pośrednictwa chmury. Android i iOS udostępniają API do odkrywania urządzeń (mDNS/Bonjour), komunikacji TCP/UDP i tworzenia hotspotów.
 
-## Network Service Discovery — mDNS/Bonjour
+## Network Service Discovery - mDNS/Bonjour
 
 mDNS (Multicast DNS) pozwala urządzeniom odkrywać siebie nawzajem po nazwie w sieci lokalnej bez centralnego serwera DNS. Apple nazywa tę technologię Bonjour.
 
 ```kotlin
-// Android — NsdManager: odkrywanie usług mDNS
+// Android - NsdManager: odkrywanie usług mDNS
 class MdnsDiscovery(private val context: Context) {
     private val nsdManager = context.getSystemService(Context.NSD_SERVICE) as NsdManager
     private var discoveryListener: NsdManager.DiscoveryListener? = null
@@ -68,7 +68,7 @@ class MdnsDiscovery(private val context: Context) {
 }
 ```
 
-## Socket TCP — komunikacja z urządzeniem IoT
+## Socket TCP - komunikacja z urządzeniem IoT
 
 ```kotlin
 class TcpDeviceClient(private val host: String, private val port: Int) {
@@ -115,7 +115,7 @@ class TcpDeviceClient(private val host: String, private val port: Int) {
     val isConnected: Boolean get() = socket?.isConnected == true && socket?.isClosed == false
 }
 
-// Przykład — sterowanie lampą ESP8266 przez TCP
+// Przykład - sterowanie lampą ESP8266 przez TCP
 class SmartLampController(host: String) {
     private val client = TcpDeviceClient(host, 23)  // port Telnet
 
@@ -127,7 +127,7 @@ class SmartLampController(host: String) {
 }
 ```
 
-## UDP — protokół dla telemetrii
+## UDP - protokół dla telemetrii
 
 UDP jest lżejszy niż TCP (bez nawiązywania połączenia), idealny dla danych telemetrycznych:
 
@@ -179,7 +179,7 @@ class UdpReceiver(private val port: Int) {
 Wiele urządzeń IoT udostępnia własne REST API dostępne w sieci lokalnej:
 
 ```kotlin
-// Philips Hue Bridge — pełne API sterowania żarówkami
+// Philips Hue Bridge - pełne API sterowania żarówkami
 interface HueBridgeApi {
     @GET("api/{user}/lights")
     suspend fun getLights(@Path("user") username: String): Map<String, HueLight>
@@ -212,7 +212,7 @@ data class HueLightState(
 )
 ```
 
-## Wi-Fi Direct — komunikacja P2P
+## Wi-Fi Direct - komunikacja P2P
 
 Wi-Fi Direct umożliwia połączenie dwóch urządzeń bez routera:
 
@@ -264,10 +264,10 @@ class WifiDirectManager(private val context: Context) {
 
 WebSocket to protokół dwukierunkowej komunikacji w czasie rzeczywistym działający nad TCP. W projektach IoT serwer WebSocket często działa bezpośrednio na mikrokontrolerze (ESP32) lub Raspberry Pi, a aplikacja Android łączy się z nim przez lokalną sieć Wi-Fi. Główna zaleta nad HTTP polling: serwer może samodzielnie _push_-ować dane (np. odczyty czujnika) bez cyklicznych zapytań klienta.
 
-Na ESP32 popularną biblioteką jest `ArduinoWebsockets`. Po stronie Androida najwygodniejszą implementacją jest `OkHttp WebSocket` — ta sama biblioteka, z której korzysta Retrofit.
+Na ESP32 popularną biblioteką jest `ArduinoWebsockets`. Po stronie Androida najwygodniejszą implementacją jest `OkHttp WebSocket` - ta sama biblioteka, z której korzysta Retrofit.
 
 ```kotlin
-// build.gradle.kts — OkHttp jest najczęściej już zależnością pośrednią Retrofit
+// build.gradle.kts - OkHttp jest najczęściej już zależnością pośrednią Retrofit
 implementation("com.squareup.okhttp3:okhttp:4.12.0")
 
 class LocalWebSocketClient(
@@ -341,7 +341,7 @@ Po stronie ESP32 wystarczy kilka linii w Arduino IDE, by wystawić serwer na por
 
 ## Skaner sieci lokalnej
 
-Odkrycie urządzeń IoT w sieci domowej jest pierwszym krokiem przed nawiązaniem połączenia. Kiedy mDNS nie jest dostępny (starsze firmware), można wykonać proste skanowanie — ping sweep zakresu adresów IP i sprawdzenie otwartych portów — korzystając z klasy `InetAddress` i `Socket` ze standardowej biblioteki Java.
+Odkrycie urządzeń IoT w sieci domowej jest pierwszym krokiem przed nawiązaniem połączenia. Kiedy mDNS nie jest dostępny (starsze firmware), można wykonać proste skanowanie - ping sweep zakresu adresów IP i sprawdzenie otwartych portów - korzystając z klasy `InetAddress` i `Socket` ze standardowej biblioteki Java.
 
 Skanowanie musi odbywać się na wątku IO, a w Compose wyniki aktualizujemy przez `StateFlow`. Skan 254 adresów klasy C trwa ~10–30 sekund przy timeoucie 300 ms na hosta, dlatego warto prowadzić go współbieżnie.
 
@@ -434,9 +434,9 @@ Skan wymaga uprawnień `CHANGE_NETWORK_STATE` i `ACCESS_WIFI_STATE` w manifeści
 
 ## HTTPS dla lokalnych API
 
-Lokalne urządzenia IoT coraz częściej wymagają HTTPS — szczególnie gdy przesyłamy dane uwierzytelniające lub wrażliwe pomiary. Problem polega na tym, że urządzenie ma certyfikat **self-signed** (podpisany samo-przez siebie), który domyślnie jest odrzucany przez Android.
+Lokalne urządzenia IoT coraz częściej wymagają HTTPS - szczególnie gdy przesyłamy dane uwierzytelniające lub wrażliwe pomiary. Problem polega na tym, że urządzenie ma certyfikat **self-signed** (podpisany samo-przez siebie), który domyślnie jest odrzucany przez Android.
 
-Prawidłowe podejście — **nie** wyłączamy weryfikacji TLS globalnie, lecz dodajemy konkretny certyfikat urządzenia do niestandardowego `TrustManager`. Dla znanych urządzeń IoT możemy stosować **certificate pinning** (weryfikację odcisku palca certyfikatu).
+Prawidłowe podejście - **nie** wyłączamy weryfikacji TLS globalnie, lecz dodajemy konkretny certyfikat urządzenia do niestandardowego `TrustManager`. Dla znanych urządzeń IoT możemy stosować **certificate pinning** (weryfikację odcisku palca certyfikatu).
 
 ```kotlin
 // Wczytaj certyfikat PEM ze storage lub assets
@@ -466,7 +466,7 @@ fun buildIotHttpClient(context: Context): OkHttpClient {
 
     return OkHttpClient.Builder()
         .sslSocketFactory(sslContext.socketFactory, trustManagers[0] as X509TrustManager)
-        // Certificate pinning — dodatkowe zabezpieczenie dla znanych urządzeń
+        // Certificate pinning - dodatkowe zabezpieczenie dla znanych urządzeń
         .certificatePinner(
             CertificatePinner.Builder()
                 .add(
@@ -486,11 +486,11 @@ fun buildIotHttpClient(context: Context): OkHttpClient {
 //   | openssl dgst -sha256 -binary | base64
 ```
 
-Dla urządzeń z dynamicznym IP warto stosować mDNS zamiast twardego adresu IP w piningu — lub przechowywać hash certyfikatu w konfiguracji pobieranej przy pierwszym połączeniu (Trust On First Use, TOFU), podobnie jak SSH.
+Dla urządzeń z dynamicznym IP warto stosować mDNS zamiast twardego adresu IP w piningu - lub przechowywać hash certyfikatu w konfiguracji pobieranej przy pierwszym połączeniu (Trust On First Use, TOFU), podobnie jak SSH.
 
 | Podejście | Bezpieczeństwo | Wygoda | Zastosowanie |
 |-----------|---------------|--------|-------------|
 | Brak TLS (HTTP) | ❌ | ✅ | Tylko prototypy, LAN zamknięty |
-| TLS + self-signed w TrustManager | ✅ | ✅ | Produkcja IoT — znane urządzenia |
+| TLS + self-signed w TrustManager | ✅ | ✅ | Produkcja IoT - znane urządzenia |
 | Certificate Pinning | ✅✅ | ⚠️ | Urządzenia ze stałym certyfikatem |
 | Let's Encrypt (lokalny CA) | ✅✅ | ⚠️ | Raspberry Pi z domeną lokalną |

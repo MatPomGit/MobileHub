@@ -1,8 +1,8 @@
 # Formaty plików baz danych w aplikacjach mobilnych
 
-Aplikacje mobilne niemal zawsze wymagają trwałego przechowywania danych strukturalnych — historii użytkownika, cache, ustawień, danych offline. Wybór odpowiedniej bazy danych i zrozumienie jej wewnętrznego formatu pliku ma bezpośredni wpływ na wydajność, niezawodność i przenośność aplikacji. W tym artykule omówiono najważniejsze systemy baz danych stosowane w środowiskach mobilnych.
+Aplikacje mobilne niemal zawsze wymagają trwałego przechowywania danych strukturalnych - historii użytkownika, cache, ustawień, danych offline. Wybór odpowiedniej bazy danych i zrozumienie jej wewnętrznego formatu pliku ma bezpośredni wpływ na wydajność, niezawodność i przenośność aplikacji. W tym artykule omówiono najważniejsze systemy baz danych stosowane w środowiskach mobilnych.
 
-## SQLite — fundament przechowywania danych mobilnych
+## SQLite - fundament przechowywania danych mobilnych
 
 ### Struktura pliku .db
 
@@ -19,9 +19,9 @@ Dane organizowane są w **stronicach (pages)** o stałym rozmiarze. B-tree stron
 
 Domyślny tryb `journal_mode=DELETE` zastępuje Journal plik WAL (`-wal`). WAL oferuje:
 
-- **Lepszą współbieżność** — czytelnicy nie blokują pisarzy
-- **Szybsze zapisy** — sekwencyjne dopisywanie do pliku WAL
-- **Spójność** — po awarii baza wraca do ostatniego spójnego punktu
+- **Lepszą współbieżność** - czytelnicy nie blokują pisarzy
+- **Szybsze zapisy** - sekwencyjne dopisywanie do pliku WAL
+- **Spójność** - po awarii baza wraca do ostatniego spójnego punktu
 
 ```sql
 -- Włączenie WAL w SQLite
@@ -105,7 +105,7 @@ abstract class AppDatabase : RoomDatabase() {
 }
 ```
 
-### SQLite na iOS — SQLite.swift
+### SQLite na iOS - SQLite.swift
 
 ```swift
 // Package.swift: .package(url: "https://github.com/stephencelis/SQLite.swift", from: "0.14.0")
@@ -154,7 +154,7 @@ class DatabaseManager {
 }
 ```
 
-## Realm — obiektowa baza danych
+## Realm - obiektowa baza danych
 
 ### Format pliku .realm
 
@@ -162,12 +162,12 @@ Realm przechowuje dane w **binarnym pliku `.realm`** używając własnego silnik
 
 - Własnego drzewa B+ zoptymalizowanego pod kątem transakcji MVCC (Multi-Version Concurrency Control)
 - Memory-mapped I/O dla bezpośredniego dostępu bez kopiowania danych
-- Zero-copy architecture — obiekty w pamięci są bezpośrednio mapowane z pliku
+- Zero-copy architecture - obiekty w pamięci są bezpośrednio mapowane z pliku
 
 Dodatkowe pliki tworzone przez Realm:
-- `.realm.lock` — plik blokady dla współbieżnego dostępu
-- `.realm.management/` — pliki koordynacji między procesami
-- `.realm.note` — powiadomienia o zmianach
+- `.realm.lock` - plik blokady dla współbieżnego dostępu
+- `.realm.management/` - pliki koordynacji między procesami
+- `.realm.note` - powiadomienia o zmianach
 
 ### Realm na Androidzie
 
@@ -230,26 +230,26 @@ class RealmNoteRepository {
 }
 ```
 
-## LevelDB — klucz-wartość od Google
+## LevelDB - klucz-wartość od Google
 
 ### Struktura LSM Tree
 
 LevelDB (Google, 2011) to baza klucz-wartość używająca struktury **Log-Structured Merge Tree (LSM)**:
 
-1. **MemTable** — zapisy trafiają najpierw do pamięci (sorted skip list)
-2. **WAL (Write-Ahead Log)** — zapis do pliku logu przed MemTable, dla trwałości
-3. **SSTable (Sorted String Table)** — MemTable jest zrzucany do pliku SSTable na dysku
-4. **Compaction** — SSTables są periodycznie scalane i sortowane w "poziomach" (L0-L6)
+1. **MemTable** - zapisy trafiają najpierw do pamięci (sorted skip list)
+2. **WAL (Write-Ahead Log)** - zapis do pliku logu przed MemTable, dla trwałości
+3. **SSTable (Sorted String Table)** - MemTable jest zrzucany do pliku SSTable na dysku
+4. **Compaction** - SSTables są periodycznie scalane i sortowane w "poziomach" (L0-L6)
 
 Pliki LevelDB:
-- `MANIFEST` — opis aktualnego stanu poziomów
-- `CURRENT` — wskazuje na aktualny MANIFEST
-- `*.ldb` lub `*.sst` — pliki SSTable
-- `*.log` — plik WAL
+- `MANIFEST` - opis aktualnego stanu poziomów
+- `CURRENT` - wskazuje na aktualny MANIFEST
+- `*.ldb` lub `*.sst` - pliki SSTable
+- `*.log` - plik WAL
 
 LevelDB jest używany wewnętrznie przez:
-- **Android** — jako format pamięci podręcznej IndexedDB w WebView/Chrome
-- **Chrome** — localStorage i IndexedDB
+- **Android** - jako format pamięci podręcznej IndexedDB w WebView/Chrome
+- **Chrome** - localStorage i IndexedDB
 
 ```kotlin
 // LevelDB w Androidzie (przez JNI wrapper)
@@ -265,7 +265,7 @@ fun useLevelDB(dbPath: String) {
     db.put("user:1:name".toByteArray(), "Jan Kowalski".toByteArray())
     db.put("user:1:email".toByteArray(), "jan@example.com".toByteArray())
 
-    // Batch write — atomowy
+    // Batch write - atomowy
     val batch = WriteBatch()
     batch.put("cache:article:42", "{ ... }".toByteArray())
     batch.delete("cache:article:41".toByteArray())
@@ -287,21 +287,21 @@ fun useLevelDB(dbPath: String) {
 }
 ```
 
-## RocksDB — mobilny fork od Facebook
+## RocksDB - mobilny fork od Facebook
 
 RocksDB to fork LevelDB stworzony przez Meta (Facebook) z licznymi ulepszeniami dla środowisk mobilnych i serwerowych:
 
-- **Column Families** — logiczne przestrzenie nazw w tej samej bazie
-- **Bloom Filters** — szybkie sprawdzanie istnienia klucza bez odczytu dysku
-- **Kompresja per poziom** — różne algorytmy na każdym poziomie (LZ4 dla L0, ZSTD dla L6)
-- **Rate limiting** — kontrola I/O na mobilnych SSD
+- **Column Families** - logiczne przestrzenie nazw w tej samej bazie
+- **Bloom Filters** - szybkie sprawdzanie istnienia klucza bez odczytu dysku
+- **Kompresja per poziom** - różne algorytmy na każdym poziomie (LZ4 dla L0, ZSTD dla L6)
+- **Rate limiting** - kontrola I/O na mobilnych SSD
 
 **Znane zastosowania:**
-- **WhatsApp** — przechowywanie wiadomości na urządzeniu
-- **Instagram** — lokalny cache mediów
-- **MySQL MyRocks** — silnik storage w MySQL Facebooka
+- **WhatsApp** - przechowywanie wiadomości na urządzeniu
+- **Instagram** - lokalny cache mediów
+- **MySQL MyRocks** - silnik storage w MySQL Facebooka
 
-## Firebase Firestore — lokalny cache offline
+## Firebase Firestore - lokalny cache offline
 
 Firestore przechowuje lokalny cache offline w formacie **SQLite** (na Androidzie i iOS), ale struktura schematu jest wewnętrzna i **nie jest przeznaczona do bezpośredniego dostępu**:
 
@@ -325,7 +325,7 @@ Cache Firestore jest przechowywany w:
 - Android: `databases/firestore.{project_id}.{database_id}/main`
 - iOS: `Library/Application Support/Google/Firestore/`
 
-## MMKV — WeChat Key-Value Store
+## MMKV - WeChat Key-Value Store
 
 ### Zasada działania
 
@@ -333,7 +333,7 @@ MMKV (WeChat/Tencent, open source) to biblioteka klucz-wartość używająca **m
 
 - Dane zapisywane są bezpośrednio do pliku mapowanego do pamięci
 - System operacyjny zarządza synchronizacją RAM ↔ dysk
-- **Brak operacji write()** — zapis jest natychmiastowy z perspektywy aplikacji
+- **Brak operacji write()** - zapis jest natychmiastowy z perspektywy aplikacji
 - Format: protobuf (Protocol Buffers) do serializacji wartości
 
 Przewaga nad `SharedPreferences` (Android) i `NSUserDefaults` (iOS):
@@ -425,7 +425,7 @@ class SettingsRepository {
 
 ## Strategie migracji bazy danych
 
-### Room — automatyczne i ręczne migracje
+### Room - automatyczne i ręczne migracje
 
 ```kotlin
 // Migracja z wersji 2 na 3: dodanie nowej tabeli
@@ -449,14 +449,14 @@ val MIGRATION_2_3 = object : Migration(2, 3) {
     }
 }
 
-// Destruktywna migracja — tylko w fazie developerskiej!
+// Destruktywna migracja - tylko w fazie developerskiej!
 Room.databaseBuilder(context, AppDatabase::class.java, "app.db")
     .fallbackToDestructiveMigrationFrom(1) // usuń bazę z v1, zbuduj od nowa
     .addMigrations(MIGRATION_2_3)
     .build()
 ```
 
-### Realm — automatyczna migracja schematu
+### Realm - automatyczna migracja schematu
 
 ```kotlin
 val config = RealmConfiguration.Builder(schema = setOf(Note::class))
@@ -529,10 +529,10 @@ fun exportNotesToCsv(notes: List<Note>): String {
 
 Wybór bazy danych dla aplikacji mobilnej zależy od charakteru przechowywanych danych:
 
-- **SQLite/Room** — dane relacyjne, złożone zapytania, potrzeba przenośności
-- **Realm** — szybki development, obiekty reaktywne, brak SQL
-- **MMKV** — prosta konfiguracja i ustawienia, wydajność krytyczna
-- **LevelDB/RocksDB** — ogromne wolumeny danych klucz-wartość, cache
-- **Firestore offline** — synchronizacja z chmurą, praca offline
+- **SQLite/Room** - dane relacyjne, złożone zapytania, potrzeba przenośności
+- **Realm** - szybki development, obiekty reaktywne, brak SQL
+- **MMKV** - prosta konfiguracja i ustawienia, wydajność krytyczna
+- **LevelDB/RocksDB** - ogromne wolumeny danych klucz-wartość, cache
+- **Firestore offline** - synchronizacja z chmurą, praca offline
 
-Niezależnie od wyboru — zawsze planuj migracje z wyprzedzeniem i regularnie testuj backup/restore swojej bazy danych.
+Niezależnie od wyboru - zawsze planuj migracje z wyprzedzeniem i regularnie testuj backup/restore swojej bazy danych.

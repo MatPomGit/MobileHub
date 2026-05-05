@@ -11,9 +11,9 @@ Ekosystem Smart Home obejmuje dziesiątki protokołów i standardów. Aplikacja 
 | **Thread/Matter** | ~10-30m | 250 kbps | Niskie | IPv6 Mesh | Standard przyszłości |
 | **Wi-Fi** | ~30m | Duża | Wysokie | Direct | Kamery, głośniki |
 | **Bluetooth LE** | ~10m | 1-2 Mbps | Niskie | Star | Blokady, skale |
-| **Infrared** | ~5m (LoS) | — | Minimalne | Point | Piloty TV/AC |
+| **Infrared** | ~5m (LoS) | - | Minimalne | Point | Piloty TV/AC |
 
-## Matter — nowy standard (2022+)
+## Matter - nowy standard (2022+)
 
 Matter to otwarty protokół IP wspierany przez Apple, Google, Amazon i Samsung. Jeden ekosystem zamiast fragmentacji:
 
@@ -44,7 +44,7 @@ class MatterDeviceManager(private val context: Context) {
     fun getDevices(): Flow<List<HomeDevice>> =
         homeClient.devices().map { it.filter { device -> device.isConnected } }
 
-    // Sterowanie urządzeniem — włącz/wyłącz
+    // Sterowanie urządzeniem - włącz/wyłącz
     suspend fun toggleLight(deviceId: String, on: Boolean) {
         val device = homeClient.devices().first()
             .firstOrNull { it.id.id == deviceId } ?: return
@@ -67,7 +67,7 @@ class MatterDeviceManager(private val context: Context) {
 }
 ```
 
-## Home Assistant — lokalna automatyka
+## Home Assistant - lokalna automatyka
 
 Home Assistant to najpopularniejsza platforma open-source do automatyki domowej. REST API i WebSocket API umożliwiają pełną kontrolę:
 
@@ -139,7 +139,7 @@ data class HaState(
 )
 ```
 
-## WebSocket — aktualizacje w czasie rzeczywistym
+## WebSocket - aktualizacje w czasie rzeczywistym
 
 ```kotlin
 class HomeAssistantWebSocket(
@@ -262,12 +262,12 @@ fun DeviceCard(device: Device, onToggle: () -> Unit, onBrightnessChange: (Float)
 - [Zigbee2MQTT](https://www.zigbee2mqtt.io/)
 - [ESPHome](https://esphome.io/)
 
-## Monitoring energii — pomiar zużycia
+## Monitoring energii - pomiar zużycia
 
 Inteligentne gniazdka takie jak **Shelly Plug S** czy **TP-Link Kasa EP25** udostępniają dane o bieżącym poborze mocy przez lokalne REST API lub MQTT. Integracja tych danych pozwala budować w aplikacji mobilnej dashboard zużycia energii z wykresami i alertami przekroczenia progów.
 
 ```kotlin
-// Shelly Plug S — lokalne REST API
+// Shelly Plug S - lokalne REST API
 class ShellyEnergyClient(private val deviceIp: String) {
     private val client = OkHttpClient()
 
@@ -338,9 +338,9 @@ fun EnergyBarChart(hourlyKwh: List<Float>) {
 }
 ```
 
-Alertem o przekroczeniu progu mocy można powiadamiać użytkownika przez `NotificationManager` — np. gdy lodówka pobiera powyżej 500W przez ponad 10 minut, co może sygnalizować usterkę sprężarki.
+Alertem o przekroczeniu progu mocy można powiadamiać użytkownika przez `NotificationManager` - np. gdy lodówka pobiera powyżej 500W przez ponad 10 minut, co może sygnalizować usterkę sprężarki.
 
-## Automatyzacje — reguły i scenariusze
+## Automatyzacje - reguły i scenariusze
 
 System reguł automatyzacji w stylu IFTTT pozwala użytkownikowi definiować warunki (If) i akcje (Then) bez pisania kodu. Implementacja po stronie aplikacji mobilnej obejmuje edytor reguł i silnik ewaluacji.
 
@@ -450,7 +450,7 @@ class SecureTokenStore(context: Context) {
 }
 ```
 
-**mTLS (mutual TLS)** dla krytycznych integracji lokalnych — zarówno serwer, jak i klient uwierzytelniają się certyfikatem:
+**mTLS (mutual TLS)** dla krytycznych integracji lokalnych - zarówno serwer, jak i klient uwierzytelniają się certyfikatem:
 
 ```kotlin
 fun createMtlsClient(clientCert: X509Certificate, privateKey: PrivateKey,

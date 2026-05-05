@@ -44,8 +44,8 @@ Prosty cel operacyjny: redukcja błędów rozwiązywania zależności do poziomu
 
 ## Najczęstsze problemy i szybka diagnoza
 
-1. **Nieprawidłowa wersja biblioteki** — artefakt nie istnieje w tej wersji.
-2. **Repozytoria w złym miejscu** — deklaracja tylko w module zamiast globalnie.
+1. **Nieprawidłowa wersja biblioteki** - artefakt nie istnieje w tej wersji.
+2. **Repozytoria w złym miejscu** - deklaracja tylko w module zamiast globalnie.
 3. **Niespójne ustawienia** między lokalnym buildem a CI.
 4. **Blokady sieciowe/proxy** w środowiskach firmowych.
 

@@ -1,4 +1,4 @@
-# ARCore — Zaawansowane techniki
+# ARCore - Zaawansowane techniki
 
 ARCore (Android) umożliwia tworzenie rozbudowanych aplikacji AR: rozpoznawanie płaszczyzn, śledzenie obiektów 3D, efekty oświetlenia i interaktywne nakładki. Biblioteka Sceneform i nowszy SceneView upraszczają renderowanie 3D w Compose.
 
@@ -25,7 +25,7 @@ ARCore opiera się na kilku wzajemnie powiązanych modułach, które razem tworz
 └─────────────────────────────────────────────────────────┘
 ```
 
-## SceneView + Compose — ARScene
+## SceneView + Compose - ARScene
 
 Biblioteka SceneView integruje ARCore bezpośrednio z Jetpack Compose, eliminując potrzebę ręcznego zarządzania sesją ARCore i cyklem życia widoku. Poniższy przykład pokazuje kompletny ekran AR z obsługą gestów dotykowych, umieszczaniem modeli 3D na wykrytych płaszczyznach oraz wyświetlaniem komunikatów o problemach z śledzeniem. Jest to punkt wyjścia dla większości aplikacji AR opartych na Compose.
 
@@ -67,7 +67,7 @@ fun ARSceneScreen() {
         onGestureListener = rememberOnGestureListener(
             onSingleTapConfirmed = { motionEvent, node ->
                 if (node == null) {
-                    // Trafiono w płaszczyznę — umieść model
+                    // Trafiono w płaszczyznę - umieść model
                     val hitTestResult = frame?.hitTest(motionEvent)
                     hitTestResult?.firstOrNull()?.let { hit ->
                         val anchor = hit.createAnchor()
@@ -105,15 +105,15 @@ fun ARSceneScreen() {
 fun reasonToMessage(reason: TrackingFailureReason) = when (reason) {
     TrackingFailureReason.NONE                    -> ""
     TrackingFailureReason.BAD_STATE               -> "Wewnętrzny błąd ARCore"
-    TrackingFailureReason.INSUFFICIENT_LIGHT      -> "Za mało światła — rozjaśnij otoczenie"
-    TrackingFailureReason.EXCESSIVE_MOTION        -> "Zbyt szybki ruch — zwolnij"
-    TrackingFailureReason.INSUFFICIENT_FEATURES   -> "Za mało szczegółów — skieruj na bardziej zróżnicowaną powierzchnię"
+    TrackingFailureReason.INSUFFICIENT_LIGHT      -> "Za mało światła - rozjaśnij otoczenie"
+    TrackingFailureReason.EXCESSIVE_MOTION        -> "Zbyt szybki ruch - zwolnij"
+    TrackingFailureReason.INSUFFICIENT_FEATURES   -> "Za mało szczegółów - skieruj na bardziej zróżnicowaną powierzchnię"
     TrackingFailureReason.CAMERA_UNAVAILABLE      -> "Kamera niedostępna"
     else                                           -> "Nieznany błąd śledzenia"
 }
 ```
 
-## Augmented Images — śledzenie obrazów-markerów
+## Augmented Images - śledzenie obrazów-markerów
 
 Augmented Images pozwala aplikacji rozpoznawać wcześniej zdefiniowane obrazy (plakaty, okładki, etykiety) w widoku kamery i nakładać na nie treści AR. Każdy obraz należy zarejestrować w bazie danych razem z jego rzeczywistą szerokością, co umożliwia precyzyjne określenie skali i pozycji. Poniższy kod pokazuje konfigurację bazy obrazów oraz obsługę różnych stanów śledzenia podczas działania aplikacji.
 
@@ -122,7 +122,7 @@ Augmented Images pozwala aplikacji rozpoznawać wcześniej zdefiniowane obrazy (
 fun setupAugmentedImageDatabase(session: Session, context: Context): Boolean {
     val database = AugmentedImageDatabase(session)
 
-    // Dodaj obrazy z assets — każdy musi mieć znany rozmiar fizyczny
+    // Dodaj obrazy z assets - każdy musi mieć znany rozmiar fizyczny
     val images = listOf(
         "poster_front.jpg" to 0.20f,   // plakat 20cm szerokości
         "business_card.jpg" to 0.085f, // wizytówka 8.5cm
@@ -149,12 +149,12 @@ fun onSessionUpdated(session: Session, frame: Frame) {
             TrackingState.TRACKING -> {
                 when (image.trackingMethod) {
                     AugmentedImage.TrackingMethod.FULL_TRACKING -> {
-                        // Pełne śledzenie — anchor na centrum obrazu
+                        // Pełne śledzenie - anchor na centrum obrazu
                         val anchor = image.createAnchor(image.centerPose)
                         placeInfoPanel(anchor, image.name)
                     }
                     AugmentedImage.TrackingMethod.LAST_KNOWN_POSE -> {
-                        // Obraz poza kadrem — kontynuuj z ostatnią pozycją
+                        // Obraz poza kadrem - kontynuuj z ostatnią pozycją
                     }
                     else -> {}
                 }
@@ -166,7 +166,7 @@ fun onSessionUpdated(session: Session, frame: Frame) {
 }
 ```
 
-## Depth API — głębia sceny
+## Depth API - głębia sceny
 
 Depth API dostarcza informacje o odległości obiektów od kamery jako obraz 16-bitowy (wartości w milimetrach), co umożliwia realistyczne zasłanianie obiektów wirtualnych przez rzeczywiste przeszkody. Nie wszystkie urządzenia obsługują dedykowany czujnik głębi, dlatego przed użyciem należy sprawdzić dostępność tej funkcji. Poniższy kod prezentuje weryfikację wsparcia oraz odczyt głębokości z centrum kadru.
 
@@ -197,7 +197,7 @@ fun processDepthFrame(frame: Frame) {
 }
 ```
 
-## Light Estimation — realistyczne oświetlenie
+## Light Estimation - realistyczne oświetlenie
 
 Jednym z największych wyzwań w AR jest naturalne wkomponowanie obiektów wirtualnych w oświetlenie rzeczywistego środowiska. ARCore szacuje warunki oświetleniowe na podstawie obrazu z kamery i dostarcza dane HDR (główny kierunek światła, sferyczne harmoniki otoczenia oraz mapę środowiska), które można zastosować do modeli 3D. Dzięki temu wirtualne obiekty rzucają cienie i reagują na światło identycznie jak prawdziwe przedmioty.
 
@@ -212,7 +212,7 @@ fun applyLightEstimation(frame: Frame, modelNode: ModelNode) {
     val environmentalHdrAmbientSphericalHarmonics = lightEstimate.environmentalHdrAmbientSphericalHarmonics
     val environmentalHdrCubemap = lightEstimate.acquireEnvironmentalHdrCubeMap()
 
-    // Zastosuj do sceny — SceneView robi to automatycznie gdy environmentalHdrReflections = true
+    // Zastosuj do sceny - SceneView robi to automatycznie gdy environmentalHdrReflections = true
     modelNode.setShadowReceiver(true)
     modelNode.setShadowCaster(true)
 
@@ -220,9 +220,9 @@ fun applyLightEstimation(frame: Frame, modelNode: ModelNode) {
 }
 ```
 
-## Cloud Anchors — wspólne AR między urządzeniami
+## Cloud Anchors - wspólne AR między urządzeniami
 
-Cloud Anchors umożliwiają współdzielenie punktów zakotwiczenia AR między wieloma urządzeniami — jeden użytkownik hostuje kotwicę w chmurze Google, a inni mogą ją odtworzyć za pomocą unikalnego identyfikatora (np. przekazanego przez QR kod). Jest to podstawa wieloosobowych doświadczeń AR, takich jak wspólne gry czy współpraca w wizualizacjach przestrzennych. Poniższy kod pokazuje zarówno hosting nowej kotwicy, jak i jej odtworzenie na innym urządzeniu.
+Cloud Anchors umożliwiają współdzielenie punktów zakotwiczenia AR między wieloma urządzeniami - jeden użytkownik hostuje kotwicę w chmurze Google, a inni mogą ją odtworzyć za pomocą unikalnego identyfikatora (np. przekazanego przez QR kod). Jest to podstawa wieloosobowych doświadczeń AR, takich jak wspólne gry czy współpraca w wizualizacjach przestrzennych. Poniższy kod pokazuje zarówno hosting nowej kotwicy, jak i jej odtworzenie na innym urządzeniu.
 
 ```kotlin
 // Resolve istniejącego Cloud Anchor (np. z QR kodu)
@@ -251,16 +251,16 @@ fun hostCloudAnchor(session: Session, anchor: Anchor,
 }
 ```
 
-## Nagrywanie sesji AR — ARCore Recording & Playback API
+## Nagrywanie sesji AR - ARCore Recording & Playback API
 
 ARCore Recording & Playback API umożliwia nagrywanie pełnej sesji AR do pliku MP4 i późniejsze odtwarzanie jej jakby była rzeczywistą kamerą. To potężne narzędzie dla deweloperów: zamiast szukać specyficznego oświetlenia lub powierzchni podczas debugowania, możesz nagrać problematyczną sesję i odtwarzać ją wielokrotnie.
 
 ### Zastosowania
 
-- **Raportowanie błędów** — deweloper nagrywa sesję pokazującą błąd i dołącza plik do zgłoszenia
-- **Testy CI** — automatyczne testy AR uruchamiane na nagraniach zamiast na fizycznym urządzeniu
-- **Demonstracje** — prezentacja AR bez konieczności fizycznego bycia w konkretnym miejscu
-- **Benchmarking** — pomiar wydajności na identycznej sekwencji klatek
+- **Raportowanie błędów** - deweloper nagrywa sesję pokazującą błąd i dołącza plik do zgłoszenia
+- **Testy CI** - automatyczne testy AR uruchamiane na nagraniach zamiast na fizycznym urządzeniu
+- **Demonstracje** - prezentacja AR bez konieczności fizycznego bycia w konkretnym miejscu
+- **Benchmarking** - pomiar wydajności na identycznej sekwencji klatek
 
 ### Nagrywanie sesji
 
@@ -288,8 +288,8 @@ class ARSessionRecorder(private val session: Session) {
     fun stopRecording(): RecordingStatus {
         session.stopRecording()
         return session.recordingStatus
-        // RecordingStatus.OK — nagranie zapisane
-        // RecordingStatus.IO_ERROR — błąd zapisu
+        // RecordingStatus.OK - nagranie zapisane
+        // RecordingStatus.IO_ERROR - błąd zapisu
     }
 
     fun isRecording(): Boolean =
@@ -314,17 +314,17 @@ class ARSessionPlayback(private val session: Session) {
     }
 
     fun getPlaybackStatus(): PlaybackStatus = session.playbackStatus
-    // PlaybackStatus.OK — odtwarzanie aktywne
-    // PlaybackStatus.FINISHED — sekwencja zakończona
-    // PlaybackStatus.NONE — brak aktywnego playbacku
+    // PlaybackStatus.OK - odtwarzanie aktywne
+    // PlaybackStatus.FINISHED - sekwencja zakończona
+    // PlaybackStatus.NONE - brak aktywnego playbacku
 }
 ```
 
-> **Ważne:** podczas odtwarzania ARCore ignoruje fizyczną kamerę — widok pochodzi z nagrania. Gesty i interakcja użytkownika działają normalnie, ale śledzenie jest oparte na danych z pliku MP4.
+> **Ważne:** podczas odtwarzania ARCore ignoruje fizyczną kamerę - widok pochodzi z nagrania. Gesty i interakcja użytkownika działają normalnie, ale śledzenie jest oparte na danych z pliku MP4.
 
 ---
 
-## Raw Depth a Smoothed Depth — różnice i zastosowania
+## Raw Depth a Smoothed Depth - różnice i zastosowania
 
 ARCore Depth API dostarcza dwa typy obrazów głębi, każdy zoptymalizowany pod inne zastosowania. Wybór właściwego bezpośrednio wpływa na jakość efektów AR i wydajność aplikacji.
 
@@ -334,7 +334,7 @@ ARCore Depth API dostarcza dwa typy obrazów głębi, każdy zoptymalizowany pod
 |---|---|---|
 | **Opóźnienie** | Niższe (~1 klatka) | Wyższe (akumulacja wielu klatek) |
 | **Szum** | Wyższy (wartości skaczą) | Niższy (wygładzony temporalnie) |
-| **Kompletność** | Niepełna — wiele pikseli = 0 | Pełniejsza — luki wypełnione |
+| **Kompletność** | Niepełna - wiele pikseli = 0 | Pełniejsza - luki wypełnione |
 | **Accuracy** | ±5–10 cm | ±2–5 cm |
 | **Zastosowanie** | Okludowanie, real-time effects | Pomiary, skanowanie 3D |
 
@@ -345,7 +345,7 @@ Raw Depth jest lepszy gdy **ważna jest latencja** i dopuszczamy pewien szum:
 ```kotlin
 fun processRawDepth(frame: Frame) {
     try {
-        // Raw depth — szybszy, bardziej aktualny, ale z lukami (wartość 0 = nieznana)
+        // Raw depth - szybszy, bardziej aktualny, ale z lukami (wartość 0 = nieznana)
         val rawDepthImage = frame.acquireRawDepthImage16Bits()
         val confidenceImage = frame.acquireRawDepthConfidenceImage()
 
@@ -355,7 +355,7 @@ fun processRawDepth(frame: Frame) {
         val width = rawDepthImage.width
         val height = rawDepthImage.height
 
-        // Okludowanie obiektów wirtualnych — porównuj z głębią wirtualną
+        // Okludowanie obiektów wirtualnych - porównuj z głębią wirtualną
         for (y in 0 until height) {
             for (x in 0 until width) {
                 val depthMm = depthBuffer.get(y * width + x).toInt() and 0xFFFF
@@ -381,7 +381,7 @@ Smoothed Depth jest lepszy gdy **potrzebna jest dokładność** i możemy zaakce
 ```kotlin
 fun measureDistance(frame: Frame, screenX: Float, screenY: Float): Float? {
     return try {
-        // Smoothed depth — dokładniejszy, spójny temporalnie
+        // Smoothed depth - dokładniejszy, spójny temporalnie
         val depthImage = frame.acquireDepthImage16Bits()
         val width = depthImage.width
         val height = depthImage.height

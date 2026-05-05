@@ -17,8 +17,8 @@ Sam fakt zbierania metadanych nie jest jeszcze niczym złym ani wyjątkowym. Klu
 ## Czym metadane różnią się od treści danych
 
 Dobrą intuicją jest rozróżnienie:
-- **dane główne** — to, co użytkownik świadomie tworzy lub konsumuje,
-- **metadane** — opis okoliczności, parametrów technicznych i relacji związanych z tymi danymi.
+- **dane główne** - to, co użytkownik świadomie tworzy lub konsumuje,
+- **metadane** - opis okoliczności, parametrów technicznych i relacji związanych z tymi danymi.
 
 ### Przykład
 
@@ -239,7 +239,7 @@ Metadane same w sobie bywają bardzo wartościowe biznesowo i technicznie. Najcz
 - workflow zależny od czasu, miejsca lub urządzenia,
 - inteligentne zarządzanie synchronizacją i cache.
 
-## Minimalizacja danych — najważniejsza zasada projektowa
+## Minimalizacja danych - najważniejsza zasada projektowa
 
 To, że aplikacja **może** zbierać metadane, nie oznacza, że **powinna** zbierać wszystko. Dobra praktyka projektowa polega na minimalizacji danych.
 

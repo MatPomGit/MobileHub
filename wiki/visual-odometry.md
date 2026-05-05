@@ -1,6 +1,6 @@
 # Odometria wizyjna i Egomotion
 
-Odometria wizyjna (ang. *Visual Odometry*, VO) to technika szacowania ruchu kamery lub robota na podstawie sekwencji obrazów, bez użycia kół napędowych ani zewnętrznych sygnałów GPS. Egomotion to pokrewne pojęcie oznaczające estymację własnego ruchu systemu wizyjnego w 3D. Obie metody są fundamentem nowoczesnej nawigacji autonomicznej — od dronów i pojazdów autonomicznych, po aplikacje mobilne AR.
+Odometria wizyjna (ang. *Visual Odometry*, VO) to technika szacowania ruchu kamery lub robota na podstawie sekwencji obrazów, bez użycia kół napędowych ani zewnętrznych sygnałów GPS. Egomotion to pokrewne pojęcie oznaczające estymację własnego ruchu systemu wizyjnego w 3D. Obie metody są fundamentem nowoczesnej nawigacji autonomicznej - od dronów i pojazdów autonomicznych, po aplikacje mobilne AR.
 
 ## Kluczowe pojęcia
 
@@ -10,21 +10,21 @@ Odometria wizyjna (ang. *Visual Odometry*, VO) to technika szacowania ruchu kame
 |---------|-----------|--------------|
 | **Odometria wizyjna** | Estymacja przyrostowej pozycji i orientacji kamery na podstawie sekwencji klatek | Robotyka, pojazdy, drony |
 | **Egomotion** | Obliczanie 6-DOF ruchu kamery (3 translacje + 3 rotacje) z przepływu optycznego | AR, nawigacja, SLAM |
-| **SLAM** | Simultaneous Localization and Mapping — budowanie mapy i lokalizacja jednocześnie | Roboty autonomiczne |
+| **SLAM** | Simultaneous Localization and Mapping - budowanie mapy i lokalizacja jednocześnie | Roboty autonomiczne |
 | **Przepływ optyczny** | Wzorzec pozornego ruchu pikseli między klatkami | Podstawa VO i Egomotion |
 
-Kluczowa różnica: odometria wizyjna skupia się na kumulatywnej trajektorii (podobnie jak odometria kołowa), natomiast Egomotion — na chwilowym wektorze prędkości kamery w przestrzeni 3D.
+Kluczowa różnica: odometria wizyjna skupia się na kumulatywnej trajektorii (podobnie jak odometria kołowa), natomiast Egomotion - na chwilowym wektorze prędkości kamery w przestrzeni 3D.
 
 ### Stopnie swobody (6-DOF)
 
 Ruch kamery opisuje się sześcioma parametrami: trzema translacjami (X, Y, Z) i trzema rotacjami (Roll, Pitch, Yaw). Macierz transformacji homogenicznej łączy je w jeden operator:
 
 ```
-T = | R  t |   gdzie: R — macierz rotacji 3×3
-    | 0  1 |          t — wektor translacji 3×1
+T = | R  t |   gdzie: R - macierz rotacji 3×3
+    | 0  1 |          t - wektor translacji 3×1
 ```
 
-## Przetwarzanie potoku VO — architektura
+## Przetwarzanie potoku VO - architektura
 
 Klasyczny potok odometrii wizyjnej składa się z pięciu etapów:
 
@@ -36,7 +36,7 @@ Obraz(t)   ──► cech (t,t-1)    punktów        pozy (6-DOF)
                               outlierów
 ```
 
-### Etap 1 — Detekcja punktów charakterystycznych
+### Etap 1 - Detekcja punktów charakterystycznych
 
 Cechy wizualne muszą być powtarzalne i wyróżnialne. Najpopularniejsze deskryptory to:
 
@@ -49,7 +49,7 @@ Cechy wizualne muszą być powtarzalne i wyróżnialne. Najpopularniejsze deskry
 | **SuperPoint** | DNN | średni (GPU) | doskonała | autonomiczne pojazdy |
 
 ```kotlin
-// Android — detekcja ORB i dopasowanie metodą BFMatcher (OpenCV for Android)
+// Android - detekcja ORB i dopasowanie metodą BFMatcher (OpenCV for Android)
 import org.opencv.features2d.*
 import org.opencv.core.*
 
@@ -94,7 +94,7 @@ class VisualOdometry {
 }
 ```
 
-### Etap 2 — Śledzenie optyczne (Lucas-Kanade)
+### Etap 2 - Śledzenie optyczne (Lucas-Kanade)
 
 Dla wideo o wysokiej liczbie klatek wydajniejsze jest śledzenie punktów piramidą Lucas-Kanade niż powtarzalna detekcja:
 
@@ -133,7 +133,7 @@ fun estimatePose(
     K: Mat          // macierz kalibracji kamery
 ): Pair<Mat, Mat> {  // (R, t)
 
-    // Macierz zasadnicza (Essential Matrix) — dla par skalibrowanych kamer
+    // Macierz zasadnicza (Essential Matrix) - dla par skalibrowanych kamer
     val mask = Mat()
     val E = Calib3d.findEssentialMat(
         prevPts, currPts,
@@ -147,7 +147,7 @@ fun estimatePose(
     val R = Mat()
     val t = Mat()
 
-    // Rozkładamy E na R i t (do 4 możliwych rozwiązań — wybieramy prawidłowe)
+    // Rozkładamy E na R i t (do 4 możliwych rozwiązań - wybieramy prawidłowe)
     val inlierCount = Calib3d.recoverPose(E, prevPts, currPts, K, R, t, mask)
 
     Log.d("VO", "Inlierów: $inlierCount / ${prevPts.rows()}")
@@ -164,7 +164,7 @@ fun updatePose(currentR: Mat, currentT: Mat, R: Mat, t: Mat): Pair<Mat, Mat> {
 }
 ```
 
-### RANSAC — odrzucanie outlierów
+### RANSAC - odrzucanie outlierów
 
 Dopasowania zawierają błędne odpowiedniki (*outliers*). RANSAC wielokrotnie losuje minimalny zestaw punktów, dopasowuje model i wybiera rozwiązanie z największą liczbą inlierów:
 
@@ -181,10 +181,10 @@ Iteracja RANSAC:
 
 Przepływ optyczny (ang. *optical flow*) opisuje pole prędkości pozornego ruchu pikseli. Z globalnego pola przepływu można wyodrębnić wektor egomotion kamery.
 
-### Gęsty przepływ optyczny — Farnebäck
+### Gęsty przepływ optyczny - Farnebäck
 
 ```kotlin
-// Gęsty przepływ optyczny (Farnebäck) — pole przemieszczeń pikseli
+// Gęsty przepływ optyczny (Farnebäck) - pole przemieszczeń pikseli
 fun computeDenseFlow(prev: Mat, curr: Mat): Mat {
     val flow = Mat()
     Video.calcOpticalFlowFarneback(
@@ -197,7 +197,7 @@ fun computeDenseFlow(prev: Mat, curr: Mat): Mat {
         1.2,   // odchylenie Gaussa
         0      // flagi
     )
-    return flow  // flow[y,x] = Vec2f(dx, dy) — przesunięcie piksela
+    return flow  // flow[y,x] = Vec2f(dx, dy) - przesunięcie piksela
 }
 
 // Estymacja składowych ruchu (translacja, rotacja) z pola przepływu
@@ -219,7 +219,7 @@ fun estimateEgomotion(flow: Mat, K: Mat): EgomotionResult {
         }
     }
 
-    // Focus of Expansion (FOE) — punkt zbiegu przy translacji w przód
+    // Focus of Expansion (FOE) - punkt zbiegu przy translacji w przód
     val foe = estimateFOE(points, flows)
 
     return EgomotionResult(
@@ -236,7 +236,7 @@ data class EgomotionResult(
 
 ### Focus of Expansion (FOE)
 
-Podczas ruchu kamery do przodu przepływ optyczny rozbieżnie rozchodzi się z jednego punktu — Focus of Expansion (FOE). Jego pozycja w obrazie wskazuje kierunek translacji:
+Podczas ruchu kamery do przodu przepływ optyczny rozbieżnie rozchodzi się z jednego punktu - Focus of Expansion (FOE). Jego pozycja w obrazie wskazuje kierunek translacji:
 
 ```
 Ruch do przodu:        Obrót wokół osi Y:
@@ -248,7 +248,7 @@ Ruch do przodu:        Obrót wokół osi Y:
 
 ## Stereo Visual Odometry
 
-Kamera stereo eliminuje problem skali bezwzględnej — znana linia bazowa między obiektywami pozwala obliczyć prawdziwą odległość punktów 3D:
+Kamera stereo eliminuje problem skali bezwzględnej - znana linia bazowa między obiektywami pozwala obliczyć prawdziwą odległość punktów 3D:
 
 ```kotlin
 // Triangulacja punktów 3D z pary stereo
@@ -292,7 +292,7 @@ class StereoVO(private val K: Mat, private val baseline: Double) {
 
 ## Odometria wizyjna na urządzeniu mobilnym
 
-### ARCore — Egomotion w praktyce
+### ARCore - Egomotion w praktyce
 
 Google ARCore realizuje wewnętrznie odometrię wizyjno-inercyjną (VIO). Udostępnia pozę kamery poprzez API `Frame.getCameraFrame()`:
 
@@ -328,7 +328,7 @@ class ARCoreEgomotion : AppCompatActivity() {
             Log.d("Egomotion", "Rotacja (quat): (%.3f, %.3f, %.3f, %.3f)".format(qx, qy, qz, qw))
 
             // Prędkość liniowa (różniczka pozy)
-            // ARCore nie udostępnia wprost prędkości — obliczamy ją ręcznie
+            // ARCore nie udostępnia wprost prędkości - obliczamy ją ręcznie
         }
     }
 }
@@ -339,7 +339,7 @@ class ARCoreEgomotion : AppCompatActivity() {
 Połączenie kamery z IMU (żyroskop + akcelerometr) znacząco zwiększa dokładność i odporność na blur:
 
 ```kotlin
-// Fusion IMU + Visual Odometry — Filtr Kalmana Extended (EKF)
+// Fusion IMU + Visual Odometry - Filtr Kalmana Extended (EKF)
 class VIOFusion {
     // Stan: [pozycja(3), prędkość(3), orientacja-kwaternion(4), bias_acc(3), bias_gyro(3)]
     private var state = DoubleArray(16)
@@ -350,7 +350,7 @@ class VIOFusion {
     private val Q_gyro  = 0.001  // szum żyroskopu
     private val R_vision = 0.1   // szum obserwacji wizyjnej
 
-    // Krok predykcji (IMU — wysoka częstotliwość, ~200 Hz)
+    // Krok predykcji (IMU - wysoka częstotliwość, ~200 Hz)
     fun predictIMU(acc: FloatArray, gyro: FloatArray, dt: Float) {
         // Całkowanie kinematyczne (pre-integration)
         val ax = acc[0] - state[9]   // korekcja biasu
@@ -365,7 +365,7 @@ class VIOFusion {
         // Propagacja macierzy kowariancji (uproszczona)
     }
 
-    // Krok korekcji (wizja — niska częstotliwość, ~30 Hz)
+    // Krok korekcji (wizja - niska częstotliwość, ~30 Hz)
     fun updateVision(R_cam: Mat, t_cam: Mat) {
         // Innowacja: różnica między przewidywaną a obserwowaną pozą
         // Oblicz wzmocnienie Kalmana K = P*H^T * (H*P*H^T + R)^{-1}
@@ -396,9 +396,9 @@ Technika kluczowych klatek (*keyframes*) ogranicza liczbę stanów, nad którymi
 Minimalizuj: Σ_i Σ_j ρ( || π(R_i, t_i, X_j) − x_ij ||² )
 
 gdzie:
-  π(R, t, X)  — projekcja punktu 3D X na obraz
-  x_ij        — obserwowany punkt j w klatce i
-  ρ(·)        — funkcja kosztu Hubera (odporna na outlierów)
+  π(R, t, X)  - projekcja punktu 3D X na obraz
+  x_ij        - obserwowany punkt j w klatce i
+  ρ(·)        - funkcja kosztu Hubera (odporna na outlierów)
 ```
 
 ## Ocena jakości i metryki
@@ -428,7 +428,7 @@ fun computeATE(groundTruth: List<FloatArray>, estimated: List<FloatArray>): Doub
 }
 ```
 
-## Implementacja na urządzeniu mobilnym — stack technologiczny
+## Implementacja na urządzeniu mobilnym - stack technologiczny
 
 ### Podejścia i narzędzia
 
@@ -446,15 +446,15 @@ fun computeATE(groundTruth: List<FloatArray>, estimated: List<FloatArray>): Doub
 // Konfiguracja OpenCV dla real-time na mobile
 class MobileVOConfig {
     companion object {
-        // Skalowanie rozdzielczości — kluczowe dla wydajności!
+        // Skalowanie rozdzielczości - kluczowe dla wydajności!
         const val PROCESSING_WIDTH  = 640
         const val PROCESSING_HEIGHT = 480
 
         // Dostrojone dla flagship Android (2024)
         val ORB_OPTIONS = ORB.create(
-            300,    // maxFeatures — mniej = szybciej
+            300,    // maxFeatures - mniej = szybciej
             1.2f,   // scaleFactor
-            6,      // nlevels — piramida 6-poziomowa
+            6,      // nlevels - piramida 6-poziomowa
             31,     // edgeThreshold
             0,      // firstLevel
             2,      // WTA_K
@@ -464,11 +464,11 @@ class MobileVOConfig {
         )
 
         // Dla urządzeń z NPU/GPU (Tensor G4, Snapdragon 8 Gen 3):
-        // użyj SuperPoint (DNN) zamiast ORB — 2x dokładniejszy
+        // użyj SuperPoint (DNN) zamiast ORB - 2x dokładniejszy
     }
 }
 
-// Preprocessing — konwersja i skalowanie w jednym kroku
+// Preprocessing - konwersja i skalowanie w jednym kroku
 fun preprocessFrame(bitmap: Bitmap): Mat {
     val mat = Mat()
     Utils.bitmapToMat(bitmap, mat)
@@ -484,7 +484,7 @@ fun preprocessFrame(bitmap: Bitmap): Mat {
 }
 ```
 
-## Podsumowanie — kiedy stosować VO / Egomotion
+## Podsumowanie - kiedy stosować VO / Egomotion
 
 ```
 Pytanie                           → Zalecenie
@@ -503,7 +503,7 @@ Odometria wizyjna jest dziś kluczowym komponentem każdego systemu autonomiczne
 
 - [KITTI Vision Benchmark Suite](http://www.cvlibs.net/datasets/kitti/)
 - [ORB-SLAM3](https://github.com/UZ-SLAMLab/ORB_SLAM3)
-- [ARCore — Motion Tracking](https://developers.google.com/ar/develop/concepts)
-- [OpenCV — Optical Flow](https://docs.opencv.org/4.x/d4/dee/tutorial_optical_flow.html)
+- [ARCore - Motion Tracking](https://developers.google.com/ar/develop/concepts)
+- [OpenCV - Optical Flow](https://docs.opencv.org/4.x/d4/dee/tutorial_optical_flow.html)
 - [TUM Visual-Inertial Dataset](https://vision.in.tum.de/data/datasets/visual-inertial-dataset)
-- [David Nistér — An Efficient Solution to the Five-Point Relative Pose Problem](https://ieeexplore.ieee.org/document/1288525)
+- [David Nistér - An Efficient Solution to the Five-Point Relative Pose Problem](https://ieeexplore.ieee.org/document/1288525)

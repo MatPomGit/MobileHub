@@ -1,10 +1,10 @@
 # GPU i renderowanie grafiki
 
-GPU (Graphics Processing Unit) w urządzeniach mobilnych odpowiada nie tylko za gry — renderuje każdą klatkę interfejsu użytkownika. Zrozumienie potoku renderowania pozwala eliminować przyczyny „jank" (zacinania) w aplikacjach.
+GPU (Graphics Processing Unit) w urządzeniach mobilnych odpowiada nie tylko za gry - renderuje każdą klatkę interfejsu użytkownika. Zrozumienie potoku renderowania pozwala eliminować przyczyny „jank" (zacinania) w aplikacjach.
 
 ## Potok renderowania GPU
 
-Poniższy diagram ilustruje kolejne etapy, przez które przechodzi klatka animacji — od kodu aplikacji aż do fizycznego wyświetlacza. Każdy etap angażuje inne zasoby sprzętowe, dlatego znajomość tego potoku pozwala precyzyjnie lokalizować i eliminować wąskie gardła wydajnościowe.
+Poniższy diagram ilustruje kolejne etapy, przez które przechodzi klatka animacji - od kodu aplikacji aż do fizycznego wyświetlacza. Każdy etap angażuje inne zasoby sprzętowe, dlatego znajomość tego potoku pozwala precyzyjnie lokalizować i eliminować wąskie gardła wydajnościowe.
 
 ```
 Aplikacja (CPU)
@@ -27,7 +27,7 @@ Display (VSYNC @ 60/90/120Hz)
 
 ## VSync i Frame Budget
 
-Przy 60 Hz ekran odświeża się co **16.67 ms** — tyle czasu masz na przygotowanie każdej klatki.  
+Przy 60 Hz ekran odświeża się co **16.67 ms** - tyle czasu masz na przygotowanie każdej klatki.
 Przy 120 Hz (LTPO) budżet to **8.33 ms**.
 
 ```
@@ -45,14 +45,14 @@ Przekroczenie budżetu = klatka zostaje pominięta = widoczne „szarpanie".
 Overdraw to wielokrotne rysowanie tego samego piksela. Każda warstwa (background → card → text) maluje ten sam obszar:
 
 ```kotlin
-// PROBLEM — zbędne tło na każdej warstwie
+// PROBLEM - zbędne tło na każdej warstwie
 Column(modifier = Modifier.background(Color.White)) {
     Card(modifier = Modifier.background(Color.White)) {  // nadmiarowe!
         Text("Hello", modifier = Modifier.background(Color.White))  // nadmiarowe!
     }
 }
 
-// ROZWIĄZANIE — tło tylko tam gdzie potrzeba
+// ROZWIĄZANIE - tło tylko tam gdzie potrzeba
 Column {
     Card {
         Text("Hello")
@@ -76,13 +76,13 @@ Column {
 Android domyślnie używa akceleracji sprzętowej dla wszystkich widoków od API 14, jednak w szczególnych przypadkach warto świadomie kontrolować typ warstwy renderowania. Użycie `LAYER_TYPE_HARDWARE` umożliwia buforowanie widoku jako tekstury GPU, co drastycznie przyspiesza animacje na statycznych elementach. W Jetpack Compose odpowiednikiem jest modyfikator `graphicsLayer`, który deleguje transformacje bezpośrednio do GPU bez ponownej kompozycji.
 
 ```kotlin
-// Wymuszenie software renderingu (rzadko potrzebne — tylko do debugowania)
+// Wymuszenie software renderingu (rzadko potrzebne - tylko do debugowania)
 view.setLayerType(View.LAYER_TYPE_SOFTWARE, null)
 
-// Hardware layer — cache bitmapy na GPU (dla animacji statycznych widoków)
+// Hardware layer - cache bitmapy na GPU (dla animacji statycznych widoków)
 view.setLayerType(View.LAYER_TYPE_HARDWARE, null)
 
-// W Compose — graphicsLayer dla transformacji bez rekomposycji
+// W Compose - graphicsLayer dla transformacji bez rekomposycji
 Box(
     modifier = Modifier.graphicsLayer {
         alpha = animatedAlpha
@@ -92,7 +92,7 @@ Box(
 )
 ```
 
-## GPU Profiling — Perfetto / GPU Counters
+## GPU Profiling - Perfetto / GPU Counters
 
 Perfetto to zaawansowane narzędzie do profilowania dostępne w systemie Android, umożliwiające zbieranie szczegółowych danych o pracy GPU bezpośrednio na urządzeniu. Poniższe polecenia uruchamiają nagrywanie śladu z licznikami GPU, a wynikowy plik można następnie przeanalizować w przeglądarce `ui.perfetto.dev`.
 
@@ -106,23 +106,23 @@ adb shell perfetto -c /data/misc/perfetto-traces/config.pbtx \
 ```
 
 Kluczowe metryki GPU do śledzenia:
-- **GPU Active** — % czasu gdy GPU przetwarza
-- **Fragment ALU Instructions** — liczba operacji na piksel
-- **Texture Cache Misses** — pudła w cache tekstur
-- **Render Target Switches** — kosztowne przełączenia buforów
+- **GPU Active** - % czasu gdy GPU przetwarza
+- **Fragment ALU Instructions** - liczba operacji na piksel
+- **Texture Cache Misses** - pudła w cache tekstur
+- **Render Target Switches** - kosztowne przełączenia buforów
 
 ## Shader Compilation Jank (Android 12+)
 
 Kompilacja shaderów w trakcie pierwszego uruchomienia aplikacji powoduje zauważalne zacinanie, ponieważ procesor musi natychmiast przetworzyć kod GLSL/SPIR-V. Android 12 wprowadził mechanizm automatycznego buforowania skompilowanych shaderów, a Baseline Profile pozwala wyeliminować podobne opóźnienia związane z kompilacją JIT. Poniższa konfiguracja Gradle pokazuje, jak włączyć te optymalizacje w projekcie.
 
 ```kotlin
-// build.gradle.kts — włącz profile guided optimization
+// build.gradle.kts - włącz profile guided optimization
 android {
     defaultConfig {
         // Kompilacja shaderów przed pierwszym uruchomieniem
         // Android 12+ buforuje shadery automatycznie
     }
-    // Baseline Profile — eliminuje JIT compilation lag
+    // Baseline Profile - eliminuje JIT compilation lag
     dependencies {
         implementation("androidx.profileinstaller:profileinstaller:1.3.1")
     }
@@ -151,14 +151,14 @@ Kluczowa zasada: **minimalizuj fazy przejścia wyżej** w potoku.
 Poniższy przykład pokazuje krytyczną różnicę między modyfikatorem `offset` a `graphicsLayer`. Użycie `offset` wyzwala pełny pass layoutu przy każdej zmianie wartości, natomiast `graphicsLayer` przesuwa gotową warstwę GPU bez angażowania CPU do ponownych pomiarów i rysowania potomków. Prawidłowe korzystanie z tych modyfikatorów jest jedną z najważniejszych technik optymalizacji płynności animacji w Compose.
 
 ```kotlin
-// BŁĄD — offset zmienia Layout → przebudowuje wszystko
+// BŁĄD - offset zmienia Layout → przebudowuje wszystko
 var offset by remember { mutableStateOf(0f) }
 Box(modifier = Modifier.offset { IntOffset(offset.toInt(), 0) })
 // Każda zmiana offset uruchamia Layout pass
 
-// POPRAWNIE — graphicsLayer zmienia tylko Draw pass
+// POPRAWNIE - graphicsLayer zmienia tylko Draw pass
 Box(modifier = Modifier.graphicsLayer { translationX = offset })
-// Zmiana nie rerenderuje potomków — tylko przesuwa warstwę GPU
+// Zmiana nie rerenderuje potomków - tylko przesuwa warstwę GPU
 
 // Animacje bez rekomposycji
 val offsetAnim = remember { Animatable(0f) }
@@ -171,12 +171,12 @@ LaunchedEffect(isVisible) {
 Box(modifier = Modifier.graphicsLayer { translationY = offsetAnim.value })
 ```
 
-## Kanały renderowania — RenderEffect
+## Kanały renderowania - RenderEffect
 
-`RenderEffect` to API dostępne od Androida 12 (API 31), które pozwala nakładać efekty graficzne — takie jak rozmycie czy filtry kolorów — bezpośrednio na poziomie GPU, bez konieczności ręcznego przetwarzania pikseli na CPU. Efekty można łączyć w łańcuchy, tworząc złożone filtry wizualne przy minimalnym koszcie obliczeniowym. Poniższy przykład demonstruje rozmycie tła oraz desaturację za pomocą łańcucha efektów.
+`RenderEffect` to API dostępne od Androida 12 (API 31), które pozwala nakładać efekty graficzne - takie jak rozmycie czy filtry kolorów - bezpośrednio na poziomie GPU, bez konieczności ręcznego przetwarzania pikseli na CPU. Efekty można łączyć w łańcuchy, tworząc złożone filtry wizualne przy minimalnym koszcie obliczeniowym. Poniższy przykład demonstruje rozmycie tła oraz desaturację za pomocą łańcucha efektów.
 
 ```kotlin
-// RenderEffect — efekty graficzne na poziomie GPU (API 31+)
+// RenderEffect - efekty graficzne na poziomie GPU (API 31+)
 @Composable
 fun BlurredBackground(content: @Composable () -> Unit) {
     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S) {
@@ -201,7 +201,7 @@ val combinedEffect = BlurEffect(10f, 10f)
     })))
 ```
 
-## Canvas — rysowanie własne
+## Canvas - rysowanie własne
 
 Komponent `Canvas` w Jetpack Compose umożliwia rysowanie dowolnych kształtów, ścieżek i tekstów bezpośrednio na płótnie GPU, co jest niezbędne przy tworzeniu niestandardowych wykresów i wizualizacji. Poniższy przykład implementuje wykres pierścieniowy (donut chart), gdzie każdy wycinek odpowiada proporcjonalnej wartości z listy danych. Technika ta jest bardziej wydajna niż kompozycja wielu nakładających się widoków, ponieważ redukuje liczbę węzłów w drzewie kompozycji.
 
@@ -248,12 +248,12 @@ fun DonutChart(
 }
 ```
 
-## Benchmark — pomiar wydajności renderowania
+## Benchmark - pomiar wydajności renderowania
 
 Biblioteka Macrobenchmark pozwala mierzyć rzeczywistą wydajność renderowania na fizycznym urządzeniu lub emulatorze, rejestrując metryki takie jak czas trwania klatek (`FrameTimingMetric`). Jest to preferowana metoda weryfikacji optymalizacji, ponieważ wyniki odzwierciedlają warunki produkcyjne znacznie wierniej niż testy jednostkowe. Poniższy przykład mierzy płynność przewijania listy i może być uruchomiony jako część automatycznego pipeline CI/CD.
 
 ```kotlin
-// build.gradle.kts — moduł benchmarkowy
+// build.gradle.kts - moduł benchmarkowy
 plugins {
     id("com.android.library")
     id("androidx.benchmark")

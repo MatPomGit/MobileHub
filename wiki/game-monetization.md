@@ -13,9 +13,9 @@ Gry mobilne generują większość przychodów z App Store i Google Play. Wybór
 | **Battle Pass** | Sezonowy pass | Fortnite, Brawl Stars | Retencja + zaangażowanie |
 | **Hybrid** | Kilka modeli naraz | Większość mid-core | Maksymalne przychody |
 
-## In-App Purchases (IAP) — Google Play Billing
+## In-App Purchases (IAP) - Google Play Billing
 
-Zakupy w aplikacji (IAP) to jeden z najważniejszych źródeł przychodów gier mobilnych — od jednorazowych pakietów monet po odblokowanie pełnej wersji. Poniższy przykład demonstruje kompletną konfigurację `BillingClient`, w tym nawiązanie połączenia, odpytanie o dostępne produkty, uruchomienie ekranu zakupu oraz obsługę i weryfikację zrealizowanej transakcji.
+Zakupy w aplikacji (IAP) to jeden z najważniejszych źródeł przychodów gier mobilnych - od jednorazowych pakietów monet po odblokowanie pełnej wersji. Poniższy przykład demonstruje kompletną konfigurację `BillingClient`, w tym nawiązanie połączenia, odpytanie o dostępne produkty, uruchomienie ekranu zakupu oraz obsługę i weryfikację zrealizowanej transakcji.
 
 ```kotlin
 class BillingManager(private val context: Context) {
@@ -83,12 +83,12 @@ class BillingManager(private val context: Context) {
 }
 ```
 
-## Reklamy — Unity Ads + AdMob
+## Reklamy - Unity Ads + AdMob
 
 Reklamy pełnoekranowe (interstitial) są naturalnym miejscem przerwy między poziomami gry, dzięki czemu zaburzają rozgrywkę w minimalnym stopniu przy jednoczesnym generowaniu przychodu. Poniższy przykład pokazuje, jak załadować i wyświetlić interstitial za pomocą Google AdMob oraz automatycznie wczytać kolejną reklamę po jej zamknięciu.
 
 ```kotlin
-// Google AdMob — Interstitial (pełnoekranowa)
+// Google AdMob - Interstitial (pełnoekranowa)
 class AdManager(private val activity: Activity) {
     private var interstitialAd: InterstitialAd? = null
 
@@ -117,7 +117,7 @@ class AdManager(private val activity: Activity) {
 
     fun showInterstitialBetweenLevels() {
         interstitialAd?.show(activity) ?: run {
-            // Reklama nie gotowa — kontynuuj bez niej
+            // Reklama nie gotowa - kontynuuj bez niej
             proceedToNextLevel()
         }
     }
@@ -144,7 +144,7 @@ Branża gier mobilnych zmaga się z problemem nieetycznych mechanik:
 - [AdMob](https://admob.google.com)
 - [IAP Best Practices](https://developer.android.com/google/play/billing/best-practices)
 
-## Subskrypcje — Google Play Billing
+## Subskrypcje - Google Play Billing
 
 Subskrypcje różnią się od jednorazowych zakupów tym, że produkt musi być zdefiniowany jako `BillingClient.ProductType.SUBS` i wymaga wyboru konkretnej oferty (np. planu miesięcznego lub rocznego) za pomocą `offerToken`. Poniższy przykład pokazuje, jak odpytać Google Play o dostępne plany subskrypcyjne i uruchomić ekran zakupu z właściwym tokenem oferty.
 
@@ -185,12 +185,12 @@ fun launchSubscriptionPurchase(activity: Activity, product: ProductDetails) {
 }
 ```
 
-## Analytics — mierzenie KPI monetyzacji
+## Analytics - mierzenie KPI monetyzacji
 
 Śledzenie zdarzeń analitycznych pozwala zrozumieć, gdzie gracze rezygnują z zakupu, które punkty w rozgrywce generują największe przychody i jak reklamy wpływają na retencję. Poniższa klasa demonstruje logowanie kluczowych eventów Firebase Analytics dla gry mobilnej: zakupu, otwarcia sklepu, nieudanego poziomu i obejrzanej reklamy.
 
 ```kotlin
-// Firebase Analytics — kluczowe eventy dla gier
+// Firebase Analytics - kluczowe eventy dla gier
 class GameAnalytics(private val firebaseAnalytics: FirebaseAnalytics) {
 
     // Zakup w grze
@@ -209,7 +209,7 @@ class GameAnalytics(private val firebaseAnalytics: FirebaseAnalytics) {
         }
     }
 
-    // Utknięcie na poziomie — okazja do monetyzacji
+    // Utknięcie na poziomie - okazja do monetyzacji
     fun logLevelFailed(level: Int, attemptsCount: Int) {
         firebaseAnalytics.logEvent("level_failed") {
             param("level", level.toLong())
@@ -227,12 +227,12 @@ class GameAnalytics(private val firebaseAnalytics: FirebaseAnalytics) {
 }
 ```
 
-## A/B Testing cen — Remote Config
+## A/B Testing cen - Remote Config
 
 Firebase Remote Config umożliwia dynamiczną zmianę parametrów aplikacji (np. cen, wariantów interfejsu) bez konieczności aktualizacji w sklepie, co jest podstawą testów A/B. Poniższy przykład pokazuje, jak pobrać aktualną cenę paczki startowej z Remote Config, co pozwala w Firebase Console przypisać różne wartości różnym grupom użytkowników i zmierzyć, która cena przynosi wyższy wskaźnik konwersji.
 
 ```kotlin
-// Firebase Remote Config — testuj różne strategie cen
+// Firebase Remote Config - testuj różne strategie cen
 class PricingExperiment {
     private val remoteConfig = Firebase.remoteConfig
 
@@ -246,7 +246,7 @@ class PricingExperiment {
     fun getShowBonusChest(): Boolean =
         remoteConfig.getBoolean("show_bonus_chest_offer")
 
-    // Grupy użytkowników widzą różne ceny — mierzysz CVR (conversion rate)
+    // Grupy użytkowników widzą różne ceny - mierzysz CVR (conversion rate)
 }
 ```
 
@@ -258,7 +258,7 @@ class PricingExperiment {
 | **ARPU** | Średni przychód na użytkownika | Zależy od gatunku |
 | **ARPPU** | Średni przychód na płacącego | 3-10× ARPU |
 | **Conversion Rate** | % graczy dokonujących zakupu | 2-5% F2P |
-| **LTV** | Lifetime Value — całkowity przychód z gracza | >CAC |
+| **LTV** | Lifetime Value - całkowity przychód z gracza | >CAC |
 | **Churn Rate** | % graczy odchodzących | <5%/miesiąc |
 | **Session Length** | Średnia długość sesji | >8 min |
 | **Retention D1/D7/D30** | Powrót po 1/7/30 dniach | >40%/20%/10% |
@@ -267,7 +267,7 @@ class PricingExperiment {
 
 - [Firebase Analytics](https://firebase.google.com/docs/analytics)
 - [Firebase Remote Config](https://firebase.google.com/docs/remote-config)
-- [App Store Connect — Revenue Reports](https://developer.apple.com/app-store-connect/)
+- [App Store Connect - Revenue Reports](https://developer.apple.com/app-store-connect/)
 
 ## Reklamy nagradzane (Rewarded Ads)
 
@@ -276,10 +276,10 @@ Reklamy nagradzane różnią się fundamentalnie od interstitiali: to **gracz de
 ### Kiedy pokazywać reklamy nagradzane?
 
 Najlepsze miejsca na rewarded ad:
-- **Bezpośrednio po przegranym poziomie** — „Obejrzyj reklamę, aby kontynuować od tego miejsca"
-- **Przed dostępem do bonusowej zawartości** — dodatkowe skrzynie, premium zawartość
-- **Uzupełnienie waluty** — „Obejrzyj, żeby otrzymać 50 monet"
-- **Przyspieszenie produkcji** — zamiast czekać godzinę, obejrzyj 30-sekundową reklamę
+- **Bezpośrednio po przegranym poziomie** - „Obejrzyj reklamę, aby kontynuować od tego miejsca"
+- **Przed dostępem do bonusowej zawartości** - dodatkowe skrzynie, premium zawartość
+- **Uzupełnienie waluty** - „Obejrzyj, żeby otrzymać 50 monet"
+- **Przyspieszenie produkcji** - zamiast czekać godzinę, obejrzyj 30-sekundową reklamę
 
 ### Implementacja AdMob RewardedAd
 
@@ -335,11 +335,11 @@ class RewardedAdManager(private val activity: Activity) {
 | **Ryzyko odejścia** | Niskie | Umiarkowane |
 | **Najlepsza konfiguracja** | Po przegranym poziomie | Między poziomami |
 
-> **Zasada dobrego UX:** zawsze pokaż graczowi nagrodę *przed* wyświetleniem reklamy — „Obejrzyj 30-sekundową reklamę, aby otrzymać ×2 monety." Nigdy nie ukrywaj wartości nagrody.
+> **Zasada dobrego UX:** zawsze pokaż graczowi nagrodę *przed* wyświetleniem reklamy - „Obejrzyj 30-sekundową reklamę, aby otrzymać ×2 monety." Nigdy nie ukrywaj wartości nagrody.
 
 ---
 
-## Battle Pass — implementacja sezonowa
+## Battle Pass - implementacja sezonowa
 
 Battle Pass (popularyzowany przez Fortnite) to sezonowy model postępu z dwoma ścieżkami nagród: **darmową** (dostępną dla wszystkich graczy) i **premium** (dla płacących). Zamiast jednorazowego zakupu, gracz kupuje dostęp do sezonu trwającego zwykle 6–10 tygodni.
 
@@ -349,7 +349,7 @@ Battle Pass (popularyzowany przez Fortnite) to sezonowy model postępu z dwoma �
 - Gracz zdobywa XP przez granie, kończenie wyzwań, logowanie się codziennie
 - Każde N punktów XP awansuje gracza o jeden tier
 - Tier odblokowuje nagrody z puli darmowej lub premium (jeśli gracz zapłacił)
-- Po zakończeniu sezonu nagrody są **nieodwracalnie niedostępne** — FOMO motywuje do grania
+- Po zakończeniu sezonu nagrody są **nieodwracalnie niedostępne** - FOMO motywuje do grania
 
 ### Kluczowe dane klasy BattlePass w Kotlinie
 

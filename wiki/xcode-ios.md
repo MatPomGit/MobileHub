@@ -1,11 +1,11 @@
-# Programowanie natywne iOS — Xcode i Swift
+# Programowanie natywne iOS - Xcode i Swift
 
-Xcode to oficjalne IDE Apple dla systemów iOS, iPadOS, macOS, watchOS i tvOS. Wymaga komputera Mac. Językiem programowania jest **Swift** — bezpieczny, szybki i nowoczesny język stworzony przez Apple w 2014 roku.
+Xcode to oficjalne IDE Apple dla systemów iOS, iPadOS, macOS, watchOS i tvOS. Wymaga komputera Mac. Językiem programowania jest **Swift** - bezpieczny, szybki i nowoczesny język stworzony przez Apple w 2014 roku.
 
 ## Wymagania środowiska
 
 - macOS Ventura lub nowszy
-- Xcode 16+ (pobranie z Mac App Store — uwaga: ~12 GB)
+- Xcode 16+ (pobranie z Mac App Store - uwaga: ~12 GB)
 - Apple Developer Account (bezpłatne do testów na symulatorze, $99/rok do dystrybucji)
 
 ## Struktura projektu iOS
@@ -26,16 +26,16 @@ MojaAplikacja/
 └── MojaAplikacja.xcodeproj
 ```
 
-## Swift — podstawy języka
+## Swift - podstawy języka
 
 ```swift
 // Stałe i zmienne
-let name = "Anna"          // stała — nie można zmienić
+let name = "Anna"          // stała - nie można zmienić
 var age = 25               // zmienna
 
-// Opcjonale — kluczowa cecha Swift
+// Opcjonale - kluczowa cecha Swift
 var email: String? = nil   // może być nil
-let safeEmail = email ?? "brak@email.com"  // operator ?? — wartość domyślna
+let safeEmail = email ?? "brak@email.com"  // operator ?? - wartość domyślna
 
 // Rozpakowywanie bezpieczne (guard let)
 func greetUser(email: String?) {
@@ -61,9 +61,9 @@ func fetchData() async throws -> [User] {
 }
 ```
 
-## SwiftUI — deklaratywny UI
+## SwiftUI - deklaratywny UI
 
-SwiftUI używa tego samego koncepcyjnego podejścia co Jetpack Compose — opisujesz **co** ma być wyświetlone.
+SwiftUI używa tego samego koncepcyjnego podejścia co Jetpack Compose - opisujesz **co** ma być wyświetlone.
 
 ```swift
 // Prosty ekran listy
@@ -141,9 +141,9 @@ class TaskViewModel: ObservableObject {
 }
 ```
 
-## SwiftData — persystencja (iOS 17+)
+## SwiftData - persystencja (iOS 17+)
 
-SwiftData to nowoczesny, deklaratywny ORM — następca Core Data.
+SwiftData to nowoczesny, deklaratywny ORM - następca Core Data.
 
 ```swift
 import SwiftData
@@ -182,7 +182,7 @@ struct TaskListView: View {
 }
 ```
 
-## URLSession — sieć
+## URLSession - sieć
 
 ```swift
 // Asynchroniczne pobieranie danych
@@ -201,7 +201,7 @@ struct PokemonService {
 }
 ```
 
-## Info.plist — uprawnienia iOS
+## Info.plist - uprawnienia iOS
 
 W iOS każde wrażliwe uprawnienie wymaga opisu (NSUsageDescription):
 
@@ -216,7 +216,7 @@ W iOS każde wrażliwe uprawnienie wymaga opisu (NSUsageDescription):
 <string>Aplikacja zapisuje zdjęcia do Twojej biblioteki.</string>
 ```
 
-## 1. Xcode IDE — narzędzia i funkcje
+## 1. Xcode IDE - narzędzia i funkcje
 
 Xcode to zintegrowane środowisko programistyczne dostarczające kompletny zestaw narzędzi do tworzenia, testowania i profilowania aplikacji.
 
@@ -224,9 +224,9 @@ Xcode to zintegrowane środowisko programistyczne dostarczające kompletny zesta
 
 Xcode używa systemu budowania opartego na **llbuild** (Apple's low-level build system). Kluczowe ustawienia projektu dostępne w *Build Settings*:
 
-- **SWIFT_OPTIMIZATION_LEVEL** — poziom optymalizacji: `-Onone` (debug), `-O` (release)
-- **PRODUCT_BUNDLE_IDENTIFIER** — unikalny identyfikator aplikacji (np. `pl.edu.uczelnia.MojaAplikacja`)
-- **IPHONEOS_DEPLOYMENT_TARGET** — minimalna wersja iOS
+- **SWIFT_OPTIMIZATION_LEVEL** - poziom optymalizacji: `-Onone` (debug), `-O` (release)
+- **PRODUCT_BUNDLE_IDENTIFIER** - unikalny identyfikator aplikacji (np. `pl.edu.uczelnia.MojaAplikacja`)
+- **IPHONEOS_DEPLOYMENT_TARGET** - minimalna wersja iOS
 
 Skróty klawiszowe przyspieszające pracę:
 | Skrót | Akcja |
@@ -241,10 +241,10 @@ Skróty klawiszowe przyspieszające pracę:
 ### Symulator iOS
 
 Symulator pozwala testować aplikację bez fizycznego urządzenia. Dostępne akcje:
-- **Device → Rotate** — symulacja obrotu urządzenia
-- **Features → Location** — symulacja GPS (własne współrzędne lub trasy)
-- **Features → Face ID / Touch ID** — testowanie biometrii
-- **Debug → Slow Animations** — zwolnienie animacji (pomocne przy debugowaniu)
+- **Device → Rotate** - symulacja obrotu urządzenia
+- **Features → Location** - symulacja GPS (własne współrzędne lub trasy)
+- **Features → Face ID / Touch ID** - testowanie biometrii
+- **Debug → Slow Animations** - zwolnienie animacji (pomocne przy debugowaniu)
 
 ```bash
 # Uruchamianie symulatora z wiersza poleceń
@@ -265,18 +265,18 @@ Xcode korzysta z debuggera **LLDB**. Punkty przerwania (*breakpoints*) ustawia s
 ```
 
 Przydatne typy breakpointów:
-- **Symbolic Breakpoint** — zatrzymaj przy każdym wywołaniu metody (np. `-[UIViewController viewDidLoad]`)
-- **Exception Breakpoint** — zatrzymaj przy każdym wyjątku (dodawany przez `+` w panelu Breakpoints)
-- **Runtime Issue Breakpoint** — wykrywa wycieki pamięci i problemy współbieżności
+- **Symbolic Breakpoint** - zatrzymaj przy każdym wywołaniu metody (np. `-[UIViewController viewDidLoad]`)
+- **Exception Breakpoint** - zatrzymaj przy każdym wyjątku (dodawany przez `+` w panelu Breakpoints)
+- **Runtime Issue Breakpoint** - wykrywa wycieki pamięci i problemy współbieżności
 
-### Instruments — profilowanie
+### Instruments - profilowanie
 
 Instruments to aplikacja do profilowania wydajności uruchamiana przez `⌘I` lub `Product → Profile`. Najważniejsze szablony:
-- **Time Profiler** — która funkcja zajmuje najwięcej czasu CPU
-- **Allocations** — zużycie pamięci, wykrywanie wycieków
-- **Leaks** — wyszukiwanie wycieków pamięci
-- **Energy Log** — zużycie baterii (GPS, sieć, CPU)
-- **Network** — inspekcja ruchu sieciowego
+- **Time Profiler** - która funkcja zajmuje najwięcej czasu CPU
+- **Allocations** - zużycie pamięci, wykrywanie wycieków
+- **Leaks** - wyszukiwanie wycieków pamięci
+- **Energy Log** - zużycie baterii (GPS, sieć, CPU)
+- **Network** - inspekcja ruchu sieciowego
 
 ### Podgląd na żywo (Canvas / Previews)
 
@@ -302,7 +302,7 @@ SwiftUI Previews umożliwiają podgląd widoku bez uruchamiania symulatora:
 
 ## 2. Protokoły i rozszerzenia w Swift
 
-**Protokoły** (odpowiednik interfejsów w Javie/Kotlinie) definiują kontrakt — zestaw właściwości i metod, które typ musi zaimplementować.
+**Protokoły** (odpowiednik interfejsów w Javie/Kotlinie) definiują kontrakt - zestaw właściwości i metod, które typ musi zaimplementować.
 
 ```swift
 // Definicja protokołu
@@ -323,7 +323,7 @@ struct Task: Describable, Identifiable {
     var isCompleted: Bool = false
 
     var description: String {
-        "\(name) — \(isCompleted ? "ukończone" : "w toku")"
+        "\(name) - \(isCompleted ? "ukończone" : "w toku")"
     }
 
     func summarize() -> String {
@@ -334,7 +334,7 @@ struct Task: Describable, Identifiable {
 
 ### Rozszerzenia (Extensions)
 
-Rozszerzenia pozwalają dodawać funkcjonalność do istniejących typów — nawet tych z bibliotek standardowych:
+Rozszerzenia pozwalają dodawać funkcjonalność do istniejących typów - nawet tych z bibliotek standardowych:
 
 ```swift
 // Rozszerzenie wbudowanego typu
@@ -371,7 +371,7 @@ func printAll<T: Describable>(_ items: [T]) {
     items.forEach { print($0.description) }
 }
 
-// some View — opaque return type (ukryty typ konkretny)
+// some View - opaque return type (ukryty typ konkretny)
 var body: some View {
     Text("Hej")  // konkretny typ znany kompilatorowi, ukryty przed wywołującym
 }
@@ -379,7 +379,7 @@ var body: some View {
 
 ---
 
-## 3. Obsługa błędów — do/try/catch
+## 3. Obsługa błędów - do/try/catch
 
 Swift wymaga jawnej obsługi błędów za pomocą mechanizmu `throws` / `do-try-catch`.
 
@@ -431,28 +431,28 @@ func loadUser() async {
     } catch let NetworkError.invalidResponse(code) {
         print("Serwer zwrócił błąd \(code).")
     } catch {
-        // catch-all — przechwytuje pozostałe błędy
+        // catch-all - przechwytuje pozostałe błędy
         print("Nieoczekiwany błąd: \(error.localizedDescription)")
     }
 }
 
-// try? — zamienia błąd na nil (opcjonal)
-let user = try? await fetchUser(id: 1)  // User? — może być nil
+// try? - zamienia błąd na nil (opcjonal)
+let user = try? await fetchUser(id: 1)  // User? - może być nil
 
-// try! — rozbija opcjonal, crash jeśli błąd (tylko gdy pewni sukcesu)
+// try! - rozbija opcjonal, crash jeśli błąd (tylko gdy pewni sukcesu)
 let config = try! JSONDecoder().decode(AppConfig.self, from: bundleData)
 ```
 
 ---
 
-## 4. Współbieżność — async/await i aktory
+## 4. Współbieżność - async/await i aktory
 
 Swift Concurrency (Swift 5.5+) to nowoczesny model programowania asynchronicznego zastępujący callback i DispatchQueue.
 
 ### Zadania (Task)
 
 ```swift
-// Task — tworzy nowy kontekst asynchroniczny
+// Task - tworzy nowy kontekst asynchroniczny
 func onAppear() {
     Task {
         await loadData()
@@ -481,11 +481,11 @@ task.cancel()
 ### Równoległa egzekucja (async let)
 
 ```swift
-// Sekwencyjnie (wolno) — czeka na każde z osobna
+// Sekwencyjnie (wolno) - czeka na każde z osobna
 let users = try await fetchUsers()
 let posts = try await fetchPosts()
 
-// Równolegle (szybko) — oba żądania startują jednocześnie
+// Równolegle (szybko) - oba żądania startują jednocześnie
 async let users = fetchUsers()
 async let posts = fetchPosts()
 let (u, p) = try await (users, posts)
@@ -524,8 +524,8 @@ class ViewModel: ObservableObject {
     @Published var items: [Item] = []
 
     func load() async {
-        let data = await fetchFromNetwork()  // sieć — inny wątek
-        items = data  // bezpieczna aktualizacja UI — MainActor
+        let data = await fetchFromNetwork()  // sieć - inny wątek
+        items = data  // bezpieczna aktualizacja UI - MainActor
     }
 }
 
@@ -537,7 +537,7 @@ await MainActor.run {
 
 ---
 
-## 5. Testy jednostkowe — XCTest
+## 5. Testy jednostkowe - XCTest
 
 Xcode generuje cel testowy automatycznie. Testy umieszcza się w folderze `MojaAplikacjaTests/`.
 
@@ -611,7 +611,7 @@ final class TaskViewModelTests: XCTestCase {
 ### Mockowanie zależności
 
 ```swift
-// Protokół serwisu — umożliwia podmianę implementacji
+// Protokół serwisu - umożliwia podmianę implementacji
 protocol TaskServiceProtocol {
     func fetchTasks() async throws -> [Task]
 }
@@ -663,7 +663,7 @@ struct MojaAplikacjaApp: App {
 }
 ```
 
-### ScenePhase — zmiany stanu aplikacji
+### ScenePhase - zmiany stanu aplikacji
 
 ```swift
 struct ContentView: View {
@@ -674,11 +674,11 @@ struct ContentView: View {
             .onChange(of: scenePhase) { _, newPhase in
                 switch newPhase {
                 case .active:
-                    print("Aplikacja aktywna — odśwież dane")
+                    print("Aplikacja aktywna - odśwież dane")
                 case .inactive:
-                    print("Aplikacja nieaktywna — zapisz stan")
+                    print("Aplikacja nieaktywna - zapisz stan")
                 case .background:
-                    print("Aplikacja w tle — zatrzymaj zadania")
+                    print("Aplikacja w tle - zatrzymaj zadania")
                 @unknown default:
                     break
                 }
@@ -694,7 +694,7 @@ Dla zaawansowanych scenariuszy (powiadomienia push, deep links, integracje z UIK
 ```swift
 class AppDelegate: NSObject, UIApplicationDelegate {
 
-    // Aplikacja gotowa — konfiguracja zewnętrznych SDK
+    // Aplikacja gotowa - konfiguracja zewnętrznych SDK
     func application(
         _ application: UIApplication,
         didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -731,11 +731,11 @@ struct ExampleView: View {
     var body: some View {
         Text("Przykład")
             .onAppear {
-                // Widok pojawił się na ekranie — załaduj dane
+                // Widok pojawił się na ekranie - załaduj dane
                 print("onAppear")
             }
             .onDisappear {
-                // Widok zniknął — anuluj subskrypcje
+                // Widok zniknął - anuluj subskrypcje
                 print("onDisappear")
             }
             .task {
@@ -752,8 +752,8 @@ struct ExampleView: View {
 ## Linki
 
 - [Swift.org](https://swift.org)
-- [Apple Developer — SwiftUI](https://developer.apple.com/xcode/swiftui/)
+- [Apple Developer - SwiftUI](https://developer.apple.com/xcode/swiftui/)
 - [SwiftData Documentation](https://developer.apple.com/documentation/swiftdata)
-- [Swift Concurrency — Apple Docs](https://developer.apple.com/documentation/swift/concurrency)
+- [Swift Concurrency - Apple Docs](https://developer.apple.com/documentation/swift/concurrency)
 - [XCTest Documentation](https://developer.apple.com/documentation/xctest)
 - [100 Days of SwiftUI (Hacking with Swift)](https://www.hackingwithswift.com/100/swiftui)

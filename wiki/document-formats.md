@@ -1,21 +1,21 @@
 # Formaty dokumentów w aplikacjach mobilnych
 
-Aplikacje mobilne coraz częściej muszą nie tylko wyświetlać, ale też generować, edytować i eksportować dokumenty w różnych formatach. Zrozumienie struktury popularnych formatów — PDF, EPUB, DOCX, Markdown i innych — pozwala wybrać właściwe narzędzie do konkretnego zadania oraz uniknąć typowych pułapek związanych z kompatybilnością i prywatnością.
+Aplikacje mobilne coraz częściej muszą nie tylko wyświetlać, ale też generować, edytować i eksportować dokumenty w różnych formatach. Zrozumienie struktury popularnych formatów - PDF, EPUB, DOCX, Markdown i innych - pozwala wybrać właściwe narzędzie do konkretnego zadania oraz uniknąć typowych pułapek związanych z kompatybilnością i prywatnością.
 
-## PDF — Portable Document Format
+## PDF - Portable Document Format
 
 ### Struktura pliku PDF
 
 PDF to format stworzony przez Adobe, którego specyfikacja jest teraz otwartym standardem ISO 32000. Plik PDF składa się z:
 
-- **Nagłówka** (`%PDF-1.x` lub `%PDF-2.0`) — wersja formatu
-- **Ciała** — obiektów (słowniki, strumienie, tablice) opisujących treść
-- **Tabeli odwołań (xref table)** — mapa offsetów obiektów umożliwiająca losowy dostęp
-- **Stopki (trailer)** — wskaźnik na tabelę xref i katalog dokumentu
+- **Nagłówka** (`%PDF-1.x` lub `%PDF-2.0`) - wersja formatu
+- **Ciała** - obiektów (słowniki, strumienie, tablice) opisujących treść
+- **Tabeli odwołań (xref table)** - mapa offsetów obiektów umożliwiająca losowy dostęp
+- **Stopki (trailer)** - wskaźnik na tabelę xref i katalog dokumentu
 
-**PDF/A** to podzbiór PDF przeznaczony do archiwizacji (ISO 19005). Wymaga m.in. osadzenia wszystkich czcionek i zakazuje szyfrowania — gwarantuje długotrwałą czytelność bez zewnętrznych zależności.
+**PDF/A** to podzbiór PDF przeznaczony do archiwizacji (ISO 19005). Wymaga m.in. osadzenia wszystkich czcionek i zakazuje szyfrowania - gwarantuje długotrwałą czytelność bez zewnętrznych zależności.
 
-### Generowanie PDF w Androidzie — PdfDocument API
+### Generowanie PDF w Androidzie - PdfDocument API
 
 Android udostępnia klasę `android.graphics.pdf.PdfDocument` do tworzenia prostych dokumentów PDF bez zewnętrznych bibliotek:
 
@@ -81,7 +81,7 @@ fun generateSimpleReport(
 
 Dla bardziej zaawansowanych potrzeb (tabele, obrazy, czcionki TrueType) warto sięgnąć po bibliotekę **iText7** lub **Apache PDFBox**.
 
-### Wyświetlanie PDF — PdfRenderer
+### Wyświetlanie PDF - PdfRenderer
 
 Od API 21 Android oferuje `PdfRenderer` do renderowania stron PDF na bitmapy:
 
@@ -113,7 +113,7 @@ fun renderPdfPage(pdfFile: File, pageIndex: Int, imageView: ImageView) {
 }
 ```
 
-## EPUB — Electronic Publication
+## EPUB - Electronic Publication
 
 ### Struktura formatu EPUB
 
@@ -135,7 +135,7 @@ book.epub (ZIP)
         └── cover.jpg
 ```
 
-Plik `content.opf` jest kluczowy — zawiera metadane Dublin Core (`dc:title`, `dc:creator`) oraz manifest wszystkich plików i ich kolejność odczytu (spine).
+Plik `content.opf` jest kluczowy - zawiera metadane Dublin Core (`dc:title`, `dc:creator`) oraz manifest wszystkich plików i ich kolejność odczytu (spine).
 
 ### Czytanie EPUB na Androidzie
 
@@ -160,7 +160,7 @@ fun getChapterText(book: Book, chapterIndex: Int): String {
 }
 ```
 
-## DOCX / XLSX — Office Open XML
+## DOCX / XLSX - Office Open XML
 
 ### Struktura formatu
 
@@ -238,7 +238,7 @@ fun readXlsxSheet(file: File, sheetIndex: Int = 0): List<List<String>> {
 }
 ```
 
-## RTF — Rich Text Format
+## RTF - Rich Text Format
 
 RTF to starszy format Microsoftu (1987), bazujący na czystym tekście z sekwencjami sterującymi `\rtf1`, `\b`, `\i` itp. Mimo wieku pozostaje powszechny w:
 
@@ -297,7 +297,7 @@ struct MarkdownView: View {
 
 ## HTML jako format dokumentu
 
-HTML może pełnić rolę przenośnego formatu dokumentów — szczególnie gdy docelowym "czytnikiem" jest WebView lub drukarka:
+HTML może pełnić rolę przenośnego formatu dokumentów - szczególnie gdy docelowym "czytnikiem" jest WebView lub drukarka:
 
 ```kotlin
 import android.print.PrintAttributes
@@ -345,7 +345,7 @@ Przy projektowaniu funkcji eksportu dokumentu warto zadać następujące pytania
 4. **Czy to treść do wyświetlenia w przeglądarce/WebView?** → HTML
 5. **Czy to notatki/dokumentacja developerska?** → Markdown
 
-## Prywatność — metadane w dokumentach
+## Prywatność - metadane w dokumentach
 
 Pliki PDF i Office mogą zawierać ukryte metadane, które mogą ujawnić wrażliwe informacje:
 
@@ -397,9 +397,9 @@ fun stripDocxMetadata(inputFile: File, outputFile: File) {
 
 - Przed udostępnieniem dokumentu zawsze sprawdź i wyczyść metadane
 - Rozważ wyświetlenie użytkownikowi ostrzeżenia: "Ten plik zawiera metadane: autor, data utworzenia..."
-- Przy generowaniu PDF raportów — nie dodawaj zbędnych metadanych
+- Przy generowaniu PDF raportów - nie dodawaj zbędnych metadanych
 - Dla najwyższej prywatności: eksportuj do PDF bez metadanych lub konwertuj do zwykłego tekstu
 
 ## Podsumowanie
 
-Wybór formatu dokumentu w aplikacji mobilnej to kompromis między możliwościami edycji, wiernością wizualną, rozmiarem pliku i prywatnością. PDF dominuje w scenariuszach "tylko do odczytu" i archiwizacji, DOCX/XLSX gdy wymagana jest edycja, a Markdown i HTML sprawdzają się w treściach dynamicznych. Zawsze pamiętaj o metadanych — mogą nieświadomie ujawnić więcej, niż zamierzasz.
+Wybór formatu dokumentu w aplikacji mobilnej to kompromis między możliwościami edycji, wiernością wizualną, rozmiarem pliku i prywatnością. PDF dominuje w scenariuszach "tylko do odczytu" i archiwizacji, DOCX/XLSX gdy wymagana jest edycja, a Markdown i HTML sprawdzają się w treściach dynamicznych. Zawsze pamiętaj o metadanych - mogą nieświadomie ujawnić więcej, niż zamierzasz.

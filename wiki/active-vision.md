@@ -1,10 +1,10 @@
-# Active Vision — Aktywna Wizja
+# Active Vision - Aktywna Wizja
 
-Active Vision (aktywna wizja) to paradygmat systemów widzenia komputerowego, w którym sensor wizyjny (kamera, oko) jest aktywnie sterowany — obraca się, przybliża, oddala lub przesuwa — po to, aby dynamicznie zbierać informacje potrzebne do realizacji bieżącego zadania. W odróżnieniu od pasywnych systemów analizy statycznych obrazów, aktywna wizja zakłada sprzężenie między percepcją a działaniem: to, co system „chce zobaczyć", wyznacza, jak przesuwa swoją uwagę wzrokową.
+Active Vision (aktywna wizja) to paradygmat systemów widzenia komputerowego, w którym sensor wizyjny (kamera, oko) jest aktywnie sterowany - obraca się, przybliża, oddala lub przesuwa - po to, aby dynamicznie zbierać informacje potrzebne do realizacji bieżącego zadania. W odróżnieniu od pasywnych systemów analizy statycznych obrazów, aktywna wizja zakłada sprzężenie między percepcją a działaniem: to, co system „chce zobaczyć", wyznacza, jak przesuwa swoją uwagę wzrokową.
 
 ## Geneza i motywacja
 
-Termin *active vision* spopularyzowali Bajcsy (1988) oraz Ballard (1991). Ich obserwacja była prosta: biologiczne systemy wzrokowe nigdy nie są pasywne. Ludzkie oko wykonuje kilka sakad na sekundę, głowa obraca się, żeby śledzić obiekt, a cały organizm dostosowuje pozycję, by uzyskać lepszy widok. Takie zachowanie jest celowe — zbieramy tyle informacji, ile potrzebujemy do danego zadania, zamiast przetwarzać pełne obrazy wysokiej rozdzielczości z każdego możliwego kąta.
+Termin *active vision* spopularyzowali Bajcsy (1988) oraz Ballard (1991). Ich obserwacja była prosta: biologiczne systemy wzrokowe nigdy nie są pasywne. Ludzkie oko wykonuje kilka sakad na sekundę, głowa obraca się, żeby śledzić obiekt, a cały organizm dostosowuje pozycję, by uzyskać lepszy widok. Takie zachowanie jest celowe - zbieramy tyle informacji, ile potrzebujemy do danego zadania, zamiast przetwarzać pełne obrazy wysokiej rozdzielczości z każdego możliwego kąta.
 
 ### Różnica wobec wizji pasywnej
 
@@ -45,10 +45,10 @@ Kluczowa różnica: w aktywnej wizji decyzja o tym, *co* obserwować, jest równ
 ### Sterowanie spojrzeniem (gaze control)
 
 W robotyce aktywna wizja jest realizowana przez mechanizmy **sterowania spojrzeniem**:
-- **Platformy pan-tilt** — obrót kamery w poziomie (pan) i w pionie (tilt)
-- **Aktywne stereowidenie** — niezależne sterowanie dwoma kamerami naśladującymi oczy
-- **Zoom adaptacyjny** — dynamiczne przybliżanie regionu zainteresowania
-- **Ruchome głowice robotów** — np. iCub, KASPAR, Pepper
+- **Platformy pan-tilt** - obrót kamery w poziomie (pan) i w pionie (tilt)
+- **Aktywne stereowidenie** - niezależne sterowanie dwoma kamerami naśladującymi oczy
+- **Zoom adaptacyjny** - dynamiczne przybliżanie regionu zainteresowania
+- **Ruchome głowice robotów** - np. iCub, KASPAR, Pepper
 
 ## Modele aktywnej wizji
 
@@ -136,7 +136,7 @@ class ActiveTrackerAnalyzer(
         val errX = (cx - imgW / 2f) / imgW   // zakres -0.5 .. 0.5
         val errY = (cy - imgH / 2f) / imgH
 
-        // Proporcjonalny regulator — sterowanie pan/tilt
+        // Proporcjonalny regulator - sterowanie pan/tilt
         val gain = 0.3f
         panTiltController.adjustPan(-errX * gain)   // ujemne = w lewo
         panTiltController.adjustTilt(-errY * gain)
@@ -248,9 +248,9 @@ class ActiveVisionNode(Node):
 ## Aktywna wizja a uczenie się przez demonstrację (LfD)
 
 W uczeniu ze wzmocnieniem i uczeniu przez imitację aktywna wizja odgrywa rolę:
-- **zbierania danych treningowych** — agent uczy się, co obserwować, a nie tylko jak działać
-- **attention bottleneck** — polityka oparta na punktach fiksacji jest bardziej odporna na zmianę tła
-- **gaze-conditioned imitation** — naśladowanie guru, który fiksuje to samo co robot powinien obserwować
+- **zbierania danych treningowych** - agent uczy się, co obserwować, a nie tylko jak działać
+- **attention bottleneck** - polityka oparta na punktach fiksacji jest bardziej odporna na zmianę tła
+- **gaze-conditioned imitation** - naśladowanie guru, który fiksuje to samo co robot powinien obserwować
 
 ## Zastosowania w aplikacjach mobilnych
 
@@ -265,17 +265,17 @@ W uczeniu ze wzmocnieniem i uczeniu przez imitację aktywna wizja odgrywa rolę:
 
 ## Ograniczenia i wyzwania
 
-- **Opóźnienie mechaniczne** — platformy pan-tilt mają inercję; latencja > 50 ms degraduje jakość śledzenia
-- **Kalibracja** — modelowanie relacji kamera–scena po każdym ruchu
-- **Zakłócenia dynamiczne** — sceny z wieloma ruchomymi obiektami powodują „konkurencję" o uwagę
-- **Interpretacja intencji** — skąd wiadomo, *na co* patrzeć? Wymaga wiedzy o zadaniu wysokiego poziomu
-- **Prywatność** — dane śledzenia wzroku mogą ujawniać informacje o użytkowniku
+- **Opóźnienie mechaniczne** - platformy pan-tilt mają inercję; latencja > 50 ms degraduje jakość śledzenia
+- **Kalibracja** - modelowanie relacji kamera–scena po każdym ruchu
+- **Zakłócenia dynamiczne** - sceny z wieloma ruchomymi obiektami powodują „konkurencję" o uwagę
+- **Interpretacja intencji** - skąd wiadomo, *na co* patrzeć? Wymaga wiedzy o zadaniu wysokiego poziomu
+- **Prywatność** - dane śledzenia wzroku mogą ujawniać informacje o użytkowniku
 
 ## Powiązane artykuły
 
-- [Foveated Vision — widzenie fowealne](#wiki-foveated-vision)
+- [Foveated Vision - widzenie fowealne](#wiki-foveated-vision)
 - [Modelowanie kognitywne ludzkiej percepcji](#wiki-cognitive-perception)
 - [Computer Vision w robotyce mobilnej](#wiki-computer-vision-mobile)
 - [Robotyka poznawcza](#wiki-cognitive-robotics)
-- [MediaPipe — kompleksowe rozwiązania AI](#wiki-mediapipe-mobile)
+- [MediaPipe - kompleksowe rozwiązania AI](#wiki-mediapipe-mobile)
 - [Sensory ruchu i środowiskowe](#wiki-sensors)

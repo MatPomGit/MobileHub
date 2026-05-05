@@ -1,8 +1,8 @@
-# Material Design 3 — system projektowania google
+# Material Design 3 - system projektowania google
 
 Material Design 3 (Material You) to trzecia generacja systemu projektowania Google, wprowadzona wraz z Androidem 12. Definiuje dynamiczne kolory dopasowujące się do tapety, nowy system typografii i zaktualizowane komponenty.
 
-## Dynamic Color — personalizacja systemu
+## Dynamic Color - personalizacja systemu
 
 Flagowa nowość MD3: paleta kolorów generowana dynamicznie z tapety urządzenia:
 
@@ -50,7 +50,7 @@ val AppLightColorScheme = lightColorScheme(
 )
 ```
 
-## Tokeny kolorów — Roles
+## Tokeny kolorów - Roles
 
 MD3 definiuje **role** kolorów, nie nazwy. Każda rola ma swoje "on-" odpowiedniki:
 
@@ -87,29 +87,29 @@ Card(
 }
 ```
 
-## Komponenty MD3 — przegląd i użycie
+## Komponenty MD3 - przegląd i użycie
 
 ### Przyciski
 
 ```kotlin
-// MD3 ma 5 wariantów przycisków — wybieraj przez hierarchię ważności
+// MD3 ma 5 wariantów przycisków - wybieraj przez hierarchię ważności
 Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
-    // Filled — główna akcja ekranu (jeden na ekran)
+    // Filled - główna akcja ekranu (jeden na ekran)
     Button(onClick = { submit() }) { Text("Zapisz") }
 
-    // Filled Tonal — drugorzędna ważna akcja
+    // Filled Tonal - drugorzędna ważna akcja
     FilledTonalButton(onClick = { draft() }) { Text("Zapisz szkic") }
 
-    // Outlined — działanie alternatywne
+    // Outlined - działanie alternatywne
     OutlinedButton(onClick = { cancel() }) { Text("Anuluj") }
 
-    // Text — najmniej ważne działanie
+    // Text - najmniej ważne działanie
     TextButton(onClick = { learnMore() }) { Text("Dowiedz się więcej") }
 
-    // Elevated — action buttons pływające nad treścią
+    // Elevated - action buttons pływające nad treścią
     ElevatedButton(onClick = { filter() }) { Text("Filtry") }
 
-    // FAB — Floating Action Button — główna akcja całego ekranu
+    // FAB - Floating Action Button - główna akcja całego ekranu
     FloatingActionButton(
         onClick = { createNew() },
         containerColor = MaterialTheme.colorScheme.primaryContainer
@@ -122,7 +122,7 @@ Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
 ### Navigation Bar i Navigation Rail
 
 ```kotlin
-// Navigation Bar — telefony (bottom)
+// Navigation Bar - telefony (bottom)
 NavigationBar {
     navItems.forEach { item ->
         val selected = currentRoute == item.route
@@ -143,7 +143,7 @@ NavigationBar {
     }
 }
 
-// Navigation Rail — tablety i foldables (side)
+// Navigation Rail - tablety i foldables (side)
 NavigationRail(
     header = {
         FloatingActionButton(onClick = { createNew() }) {
@@ -165,16 +165,16 @@ NavigationRail(
 ### Cards
 
 ```kotlin
-// Filled Card — najmocniejszy akcent
+// Filled Card - najmocniejszy akcent
 Card(
     modifier = Modifier.fillMaxWidth(),
     colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surfaceVariant)
 ) { content() }
 
-// Outlined Card — delikatne obramowanie
+// Outlined Card - delikatne obramowanie
 OutlinedCard(modifier = Modifier.fillMaxWidth()) { content() }
 
-// Elevated Card — cień zamiast koloru
+// Elevated Card - cień zamiast koloru
 ElevatedCard(
     modifier = Modifier.fillMaxWidth(),
     elevation = CardDefaults.elevatedCardElevation(defaultElevation = 6.dp)
@@ -184,7 +184,7 @@ ElevatedCard(
 ### Text Fields
 
 ```kotlin
-// Filled TextField — standardowy wybór
+// Filled TextField - standardowy wybór
 var text by remember { mutableStateOf("") }
 var isError by remember { mutableStateOf(false) }
 
@@ -214,7 +214,7 @@ OutlinedTextField(
 ### Dialogs i Bottom Sheets
 
 ```kotlin
-// AlertDialog — potwierdzenia, proste wybory
+// AlertDialog - potwierdzenia, proste wybory
 if (showDeleteDialog) {
     AlertDialog(
         onDismissRequest = { showDeleteDialog = false },
@@ -233,7 +233,7 @@ if (showDeleteDialog) {
     )
 }
 
-// ModalBottomSheet — rozbudowane opcje, pick-ery
+// ModalBottomSheet - rozbudowane opcje, pick-ery
 val sheetState = rememberModalBottomSheetState(skipPartiallyExpanded = true)
 if (showSheet) {
     ModalBottomSheet(
@@ -294,7 +294,7 @@ Material Design 3 definiuje precyzyjną **skalę typograficzną** (Type Scale) z
 Aby użyć własnego fontu z Google Fonts (np. **Nunito**) z funkcją _Downloadable Fonts_ (Android pobiera font przy pierwszym użyciu, bez bundlowania w APK):
 
 ```kotlin
-// res/font/nunito.xml — deskryptor downloadable font
+// res/font/nunito.xml - deskryptor downloadable font
 <?xml version="1.0" encoding="utf-8"?>
 <font-family xmlns:app="http://schemas.android.com/apk/res-auto"
     app:fontProviderAuthority="com.google.android.gms.fonts"
@@ -302,7 +302,7 @@ Aby użyć własnego fontu z Google Fonts (np. **Nunito**) z funkcją _Downloada
     app:fontProviderQuery="Nunito"
     app:fontProviderCerts="@array/com_google_android_gms_fonts_certs" />
 
-// W Compose — załaduj font i zbuduj Typography
+// W Compose - załaduj font i zbuduj Typography
 val nunitoFamily = FontFamily(
     Font(R.font.nunito, weight = FontWeight.Normal),
     Font(R.font.nunito_medium, weight = FontWeight.Medium),
@@ -332,7 +332,7 @@ Ważna kwestia dostępności: **nie blokuj skalowania fontów**. Użytkownicy ze
 fun ItemCardPreview() { ItemCard(title = "Przykładowy tytuł zadania") }
 ```
 
-## Adaptacyjne layouty — ekrany i foldables
+## Adaptacyjne layouty - ekrany i foldables
 
 Telefony składane (foldables) i tablety wymagają innego układu nawigacji niż smartfon. MD3 dostarcza klasę `WindowSizeClass` i komponent `NavigationSuiteScaffold`, które automatycznie dobierają właściwy wzorzec nawigacji do rozmiaru okna.
 
@@ -341,7 +341,7 @@ Telefony składane (foldables) i tablety wymagają innego układu nawigacji niż
 implementation("androidx.compose.material3:material3-adaptive-navigation-suite:1.3.0")
 implementation("androidx.compose.material3:material3-adaptive:1.0.0")
 
-// Główny ekran — adaptive navigation
+// Główny ekran - adaptive navigation
 @OptIn(ExperimentalMaterial3AdaptiveNavigationSuiteApi::class)
 @Composable
 fun AdaptiveApp() {
@@ -349,8 +349,8 @@ fun AdaptiveApp() {
     val currentRoute by navController.currentBackStackEntryAsState()
 
     // NavigationSuiteScaffold automatycznie wybiera:
-    // - NavigationBar   (telefon — portrait)
-    // - NavigationRail  (telefon — landscape / mały tablet)
+    // - NavigationBar   (telefon - portrait)
+    // - NavigationRail  (telefon - landscape / mały tablet)
     // - NavigationDrawer (duży tablet / desktop)
     NavigationSuiteScaffold(
         navigationSuiteItems = {
@@ -405,9 +405,9 @@ fun AdaptiveListDetail() {
 }
 ```
 
-Na urządzeniach składanych `WindowSizeClass` zmienia się dynamicznie podczas rozkładania telefonu — Compose automatycznie przebudowuje UI, przełączając np. z jednej kolumny na dwie.
+Na urządzeniach składanych `WindowSizeClass` zmienia się dynamicznie podczas rozkładania telefonu - Compose automatycznie przebudowuje UI, przełączając np. z jednej kolumny na dwie.
 
-## Motion i przejścia — Motion System MD3
+## Motion i przejścia - Motion System MD3
 
 Material Design 3 definiuje cztery główne wzorce animacji przejść między ekranami, opisane w specyfikacji **Motion System**. W Compose Navigation animacje konfiguruje się parametrami `enterTransition`, `exitTransition` etc.
 
@@ -415,7 +415,7 @@ Material Design 3 definiuje cztery główne wzorce animacji przejść między ek
 // build.gradle.kts
 implementation("androidx.compose.animation:animation:1.7.0")
 
-// Shared Axis — poruszanie się wzdłuż osi X/Y/Z (hierarchia ekranów)
+// Shared Axis - poruszanie się wzdłuż osi X/Y/Z (hierarchia ekranów)
 fun NavGraphBuilder.sharedAxisComposable(
     route: String,
     content: @Composable AnimatedVisibilityScope.(NavBackStackEntry) -> Unit
@@ -450,12 +450,12 @@ fun NavGraphBuilder.sharedAxisComposable(
     )
 }
 
-// Fade Through — przełączanie niezwiązanych widoków (np. zakładki nav bar)
+// Fade Through - przełączanie niezwiązanych widoków (np. zakładki nav bar)
 val fadeThroughEnter = fadeIn(tween(210, delayMillis = 90)) +
     scaleIn(initialScale = 0.92f, animationSpec = tween(210, delayMillis = 90))
 val fadeThroughExit = fadeOut(tween(90))
 
-// Container Transform — element listy → szczegóły (Shared Element)
+// Container Transform - element listy → szczegóły (Shared Element)
 // Wymaga Compose 1.7+ i Material3 1.3+
 @Composable
 fun TaskCard(task: Task, onOpen: () -> Unit) {
@@ -473,4 +473,4 @@ fun TaskCard(task: Task, onOpen: () -> Unit) {
 }
 ```
 
-Animacje w MD3 korzystają z krzywej `Emphasized` (niestandardowy cubic-bezier), która daje fizycznie realistyczne, szybko startujące i płynnie zwalniające ruchy. Unikaj `LinearEasing` — sprawia wrażenie mechanicznego i niezgodnego z systemem.
+Animacje w MD3 korzystają z krzywej `Emphasized` (niestandardowy cubic-bezier), która daje fizycznie realistyczne, szybko startujące i płynnie zwalniające ruchy. Unikaj `LinearEasing` - sprawia wrażenie mechanicznego i niezgodnego z systemem.

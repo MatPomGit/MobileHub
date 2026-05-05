@@ -1,8 +1,8 @@
 # Audio i mikrofon
 
-Aplikacje mobilne coraz częściej korzystają z mikrofonu — do rozpoznawania mowy, analizy dźwięku, nagrywania i komunikacji głosowej. Android i iOS udostępniają niskopoziomowe API do nagrywania PCM oraz wysokopoziomowe narzędzia Speech Recognition.
+Aplikacje mobilne coraz częściej korzystają z mikrofonu - do rozpoznawania mowy, analizy dźwięku, nagrywania i komunikacji głosowej. Android i iOS udostępniają niskopoziomowe API do nagrywania PCM oraz wysokopoziomowe narzędzia Speech Recognition.
 
-## Nagrywanie audio — AudioRecord (Android)
+## Nagrywanie audio - AudioRecord (Android)
 
 Niskopoziomowe nagrywanie audio przez `AudioRecord` daje pełną kontrolę nad strumieniem PCM, co jest niezbędne w aplikacjach wymagających analizy lub przetwarzania dźwięku w czasie rzeczywistym. Poniższy przykład implementuje klasę nagrywającą, która dostarcza kolejne fragmenty bufora dźwiękowego przez callback, z wbudowaną prostą detekcją aktywności głosowej (VAD). Nagrywanie odbywa się na osobnym wątku (Dispatchers.IO), aby nie blokować interfejsu użytkownika.
 
@@ -33,7 +33,7 @@ class AudioRecorder(
             while (_isRecording.value) {
                 val read = recorder!!.read(buffer, 0, buffer.size)
                 if (read > 0) {
-                    // Sprawdź głośność — VAD (Voice Activity Detection)
+                    // Sprawdź głośność - VAD (Voice Activity Detection)
                     val rms = sqrt(buffer.take(read).map { it.toDouble().pow(2) }.average())
                     if (rms > SILENCE_THRESHOLD) onAudioData(buffer.copyOf(read))
                 }
@@ -97,9 +97,9 @@ object WavWriter {
 }
 ```
 
-## MediaRecorder — prostsze nagrywanie
+## MediaRecorder - prostsze nagrywanie
 
-Dla prostszych scenariuszy nagrywania — gdzie nie jest wymagany dostęp do surowych danych PCM — klasa `MediaRecorder` oferuje wygodny interfejs wysokiego poziomu. Poniższy przykład implementuje klasę nagrywającą, która zapisuje audio do pliku M4A w formacie AAC z próbkowaniem 44 100 Hz. Metoda `amplitude` umożliwia odczyt aktualnej amplitudy dźwięku, co można wykorzystać do wizualizacji waveformy w interfejsie.
+Dla prostszych scenariuszy nagrywania - gdzie nie jest wymagany dostęp do surowych danych PCM - klasa `MediaRecorder` oferuje wygodny interfejs wysokiego poziomu. Poniższy przykład implementuje klasę nagrywającą, która zapisuje audio do pliku M4A w formacie AAC z próbkowaniem 44 100 Hz. Metoda `amplitude` umożliwia odczyt aktualnej amplitudy dźwięku, co można wykorzystać do wizualizacji waveformy w interfejsie.
 
 ```kotlin
 class SimpleRecorder(private val context: Context) {
@@ -136,7 +136,7 @@ class SimpleRecorder(private val context: Context) {
 }
 ```
 
-## Speech Recognition — rozpoznawanie mowy
+## Speech Recognition - rozpoznawanie mowy
 
 Rozpoznawanie mowy na Androidzie jest realizowane przez `SpeechRecognizer`, który może dostarczać zarówno wyniki końcowe, jak i częściowe w trakcie słuchania. Poniższy przykład opakowuje `SpeechRecognizer` w klasę menedżera, obsługując wyniki, błędy i zdarzenia cyklu życia sesji rozpoznawania. Właściwa obsługa kodów błędów pozwala wyświetlić użytkownikowi zrozumiały komunikat zamiast technicznego numeru błędu.
 
@@ -171,7 +171,7 @@ class SpeechRecognitionManager(
                 // Pozostałe callbacki muszą być, nawet puste
                 override fun onReadyForSpeech(p: Bundle?) = Unit
                 override fun onBeginningOfSpeech() = Unit
-                override fun onRmsChanged(rms: Float) = Unit    // głośność w dB — do wizualizacji
+                override fun onRmsChanged(rms: Float) = Unit    // głośność w dB - do wizualizacji
                 override fun onBufferReceived(b: ByteArray?) = Unit
                 override fun onEndOfSpeech() = Unit
                 override fun onEvent(t: Int, b: Bundle?) = Unit
@@ -199,7 +199,7 @@ class SpeechRecognitionManager(
         SpeechRecognizer.ERROR_AUDIO                  -> "Błąd nagrywania"
         SpeechRecognizer.ERROR_SERVER                 -> "Błąd serwera"
         SpeechRecognizer.ERROR_NO_MATCH               -> "Nie rozpoznano mowy"
-        SpeechRecognizer.ERROR_SPEECH_TIMEOUT         -> "Timeout mowy — za cicho?"
+        SpeechRecognizer.ERROR_SPEECH_TIMEOUT         -> "Timeout mowy - za cicho?"
         SpeechRecognizer.ERROR_RECOGNIZER_BUSY        -> "Rozpoznawanie zajęte"
         SpeechRecognizer.ERROR_INSUFFICIENT_PERMISSIONS -> "Brak uprawnień mikrofonu"
         else                                          -> "Nieznany błąd ($code)"

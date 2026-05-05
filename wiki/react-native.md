@@ -1,8 +1,8 @@
-# React Native — JavaScript dla Mobile
+# React Native - JavaScript dla Mobile
 
-React Native (RN) pozwala budować natywne aplikacje mobilne w JavaScript/TypeScript przy użyciu komponentów React. W odróżnieniu od Flutter, RN renderuje przez **natywne widżety platformy** — na Android to Views, na iOS to UIKit.
+React Native (RN) pozwala budować natywne aplikacje mobilne w JavaScript/TypeScript przy użyciu komponentów React. W odróżnieniu od Flutter, RN renderuje przez **natywne widżety platformy** - na Android to Views, na iOS to UIKit.
 
-## Architektura — stara vs nowa
+## Architektura - stara vs nowa
 
 ### Stara architektura (do RN 0.70)
 ```
@@ -14,12 +14,12 @@ JavaScript Thread
       ▼
 Native Thread (UI, Modules)
 ```
-Problem: bridge jest wąskim gardłem — każde przesłanie danych to serializacja/deserializacja JSON.
+Problem: bridge jest wąskim gardłem - każde przesłanie danych to serializacja/deserializacja JSON.
 
-### Nowa architektura — JSI + Fabric (RN 0.71+)
+### Nowa architektura - JSI + Fabric (RN 0.71+)
 ```
 JavaScript (Hermes engine)
-      │  (bezpośrednie wywołania przez JSI — C++)
+      │  (bezpośrednie wywołania przez JSI - C++)
       ▼
 JSI (JavaScript Interface)
       │
@@ -29,7 +29,7 @@ Fabric (UI)    TurboModules (Native)
 (synchroniczne)  (lazy loading)
 ```
 
-JSI eliminuje bridge — JavaScript bezpośrednio wywołuje kod natywny przez C++ interface.
+JSI eliminuje bridge - JavaScript bezpośrednio wywołuje kod natywny przez C++ interface.
 
 ## Podstawowe komponenty
 
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
 export default ProductScreen;
 ```
 
-## Nawigacja — React Navigation
+## Nawigacja - React Navigation
 
 ```bash
 npm install @react-navigation/native @react-navigation/native-stack
@@ -186,10 +186,10 @@ export default function App() {
 {% endraw %}
 
 
-## State Management — Zustand
+## State Management - Zustand
 
 ```typescript
-// Lekki, prosty state manager — alternatywa dla Redux
+// Lekki, prosty state manager - alternatywa dla Redux
 import { create } from 'zustand';
 import { persist, createJSONStorage } from 'zustand/middleware';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -243,7 +243,7 @@ function CartButton({ product }: { product: Product }) {
 }
 ```
 
-## Native Modules — dostęp do natywnego kodu
+## Native Modules - dostęp do natywnego kodu
 
 ```typescript
 // Wywołanie natywnego modułu przez TurboModules
@@ -257,7 +257,7 @@ console.log(`Bateria: ${level}%`);
 ```
 
 ```kotlin
-// Android — TurboModule implementation
+// Android - TurboModule implementation
 @ReactModule(name = BatteryModule.NAME)
 class BatteryModule(reactContext: ReactApplicationContext) :
     NativeBatteryModuleSpec(reactContext) {
@@ -271,33 +271,33 @@ class BatteryModule(reactContext: ReactApplicationContext) :
 }
 ```
 
-## Expo — szybki start
+## Expo - szybki start
 
 ```bash
 # Expo = zero konfiguracji natywnej
 npx create-expo-app MyApp --template blank-typescript
 cd MyApp && npx expo start
 
-# Skanuj QR kod Expo Go na telefonie — natychmiastowe przeładowanie
+# Skanuj QR kod Expo Go na telefonie - natychmiastowe przeładowanie
 
-# EAS Build — kompilacja w chmurze (nie potrzebujesz Maca dla iOS!)
+# EAS Build - kompilacja w chmurze (nie potrzebujesz Maca dla iOS!)
 npm install -g eas-cli && eas login
 eas build --platform ios     # Wymaga Apple Developer Account
 eas build --platform android
 eas submit --platform ios    # Bezpośredni upload do App Store Connect
 ```
 
-## RN vs Flutter — kiedy co wybrać?
+## RN vs Flutter - kiedy co wybrać?
 
 | Kryterium | React Native | Flutter |
 |-----------|-------------|---------|
 | Zespół zna JS/TS | ✅ Idealny | ❌ Trzeba uczyć Dart |
 | Natywny wygląd (szczególnie iOS) | ✅ Lepszy | ⚠️ Własny silnik |
 | Wydajność animacji | ⚠️ Wymaga optymalizacji | ✅ Lepsza (Impeller) |
-| Ekosystem bibliotek | ✅ npm — ogromny | ⚠️ pub.dev — rośnie |
+| Ekosystem bibliotek | ✅ npm - ogromny | ⚠️ pub.dev - rośnie |
 | Web/Desktop | ⚠️ Eksperymentalny | ✅ Stabilny |
 
-## Animacje — React Native Animated i Reanimated 3
+## Animacje - React Native Animated i Reanimated 3
 
 React Native Reanimated 3 to biblioteka animacji działająca na wątku UI (*UI thread*), dzięki czemu animacje osiągają stałe 60–120 fps nawet gdy JS thread jest zajęty. Kluczowe API to `useSharedValue`, `useAnimatedStyle`, `withSpring` i `withTiming`.
 
@@ -337,7 +337,7 @@ function AnimatedCard({ title }: { title: string }) {
 ```
 
 ```typescript
-// Animacja naciśnięcia przycisku — scale bounce
+// Animacja naciśnięcia przycisku - scale bounce
 function AnimatedButton({ onPress, label }: { onPress: () => void; label: string }) {
   const scale = useSharedValue(1);
 
@@ -361,9 +361,9 @@ function AnimatedButton({ onPress, label }: { onPress: () => void; label: string
 
 Reanimated 3 integruje się z React Native Gesture Handler przez `useAnimatedGestureHandler` (lub nowe `Gesture` API), umożliwiając budowę swipe-to-dismiss, karuzeli i innych złożonych interakcji bez żadnej komunikacji przez most JS.
 
-## Testowanie — Jest + React Native Testing Library
+## Testowanie - Jest + React Native Testing Library
 
-React Native Testing Library (`@testing-library/react-native`) pozwala testować komponenty z perspektywy użytkownika — znajdując elementy po roli, tekście i etykiecie, a nie po strukturze DOM.
+React Native Testing Library (`@testing-library/react-native`) pozwala testować komponenty z perspektywy użytkownika - znajdując elementy po roli, tekście i etykiecie, a nie po strukturze DOM.
 
 ```typescript
 // __tests__/LoginForm.test.tsx
@@ -404,7 +404,7 @@ jest.mock('@react-navigation/native', () => ({
   useRoute: () => ({ params: { id: '42' } }),
 }));
 
-// Test async — zmiana stanu po fetch
+// Test async - zmiana stanu po fetch
 it('wyświetla listę produktów po załadowaniu', async () => {
   jest.spyOn(global, 'fetch').mockResolvedValue({
     json: async () => [{ id: 1, name: 'Produkt A' }],
@@ -421,9 +421,9 @@ it('wyświetla listę produktów po załadowaniu', async () => {
 
 Uruchamianie testów: `npx jest --watchAll`. Konfiguracja w `jest.config.js` powinna zawierać `preset: 'react-native'` oraz transformIgnorePatterns dla bibliotek ES module.
 
-## Performance — Hermes i optymalizacje
+## Performance - Hermes i optymalizacje
 
-**Hermes** to silnik JS zoptymalizowany przez Meta dla React Native — kompiluje JavaScript do bytecode podczas budowania, co skraca czas uruchomienia aplikacji nawet o 40%. Jest domyślnie włączony od RN 0.70.
+**Hermes** to silnik JS zoptymalizowany przez Meta dla React Native - kompiluje JavaScript do bytecode podczas budowania, co skraca czas uruchomienia aplikacji nawet o 40%. Jest domyślnie włączony od RN 0.70.
 
 Kluczowe zasady optymalizacji wydajności:
 
@@ -436,7 +436,7 @@ Kluczowe zasady optymalizacji wydajności:
 | Wiele obliczeń w JS | Worklets Reanimated lub JSI |
 
 ```typescript
-// FlashList (Shopify) — 10x szybszy od FlatList dla dużych list
+// FlashList (Shopify) - 10x szybszy od FlatList dla dużych list
 import { FlashList } from '@shopify/flash-list';
 
 function ProductList({ products }: { products: Product[] }) {
@@ -463,7 +463,7 @@ const ProductCard = React.memo(({ product }: { product: Product }) => (
 ));
 ```
 
-Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevTools standalone) — zakładka *Profiler* pokazuje czas renderowania każdego komponentu. Zwróć uwagę na komponenty renderujące się częściej niż kilkanaście razy na sekundę bez wyraźnego powodu (np. przy braku zmian danych wejściowych) — to sygnał zbędnych re-renderów.
+Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevTools standalone) - zakładka *Profiler* pokazuje czas renderowania każdego komponentu. Zwróć uwagę na komponenty renderujące się częściej niż kilkanaście razy na sekundę bez wyraźnego powodu (np. przy braku zmian danych wejściowych) - to sygnał zbędnych re-renderów.
 
 ## Linki
 
@@ -473,7 +473,7 @@ Aby sprawdzić wydajność, użyj React Native DevTools (Flipper lub nowego DevT
 - [Zustand](https://github.com/pmndrs/zustand)
 - [New Architecture](https://reactnative.dev/docs/new-architecture-intro)
 
-## Push Notifications — Expo Notifications i Firebase
+## Push Notifications - Expo Notifications i Firebase
 
 Powiadomienia push to kluczowy kanał angażowania użytkowników. W React Native najwygodniejsze jest użycie `expo-notifications` (Universal Push Notifications z Expo) lub `@react-native-firebase/messaging` (FCM).
 
@@ -504,7 +504,7 @@ async function registerForPushNotifications(): Promise<string | null> {
     
     if (finalStatus !== 'granted') return null;
     
-    // Expo Push Token — działa na Android i iOS
+    // Expo Push Token - działa na Android i iOS
     const token = await Notifications.getExpoPushTokenAsync({
         projectId: 'YOUR_EXPO_PROJECT_ID',
     });

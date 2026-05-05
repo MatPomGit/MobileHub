@@ -15,8 +15,8 @@ Paul Ekman wyróżnił 6 emocji uniwersalnych kulturowo:
 
 ### Model wymiarowy (Valence-Arousal)
 Alternatywnie, emocje można opisać w przestrzeni 2D:
-- **Valence** (ładunek) — oś pozytywny/negatywny
-- **Arousal** (pobudzenie) — oś spokojny/podniecony
+- **Valence** (ładunek) - oś pozytywny/negatywny
+- **Arousal** (pobudzenie) - oś spokojny/podniecony
 
 ```
   HIGH AROUSAL
@@ -30,7 +30,7 @@ Smutek │ Relaks
 
 ## Rozpoznawanie emocji z kamery
 
-### MediaPipe Face Mesh — Android
+### MediaPipe Face Mesh - Android
 
 MediaPipe udostępnia gotowe rozwiązania do analizy twarzy, działające on-device:
 
@@ -77,7 +77,7 @@ class FaceAnalyzer(context: Context) {
 }
 ```
 
-### Action Units (AU) — FACS
+### Action Units (AU) - FACS
 
 Facial Action Coding System (FACS) Ekmana i Friesena opisuje ruchy twarzy przez jednostki akcji:
 
@@ -102,14 +102,14 @@ def extract_voice_features(audio_path: str) -> dict:
     
     # Podstawowe cechy
     features = {
-        # Pitch (F0) — wysokość głosu
+        # Pitch (F0) - wysokość głosu
         'pitch_mean': np.mean(librosa.yin(y, fmin=50, fmax=400)),
         'pitch_std': np.std(librosa.yin(y, fmin=50, fmax=400)),
         
-        # Energia — głośność
+        # Energia - głośność
         'energy_mean': np.mean(librosa.feature.rms(y=y)),
         
-        # MFCC — charakterystyka spektralna
+        # MFCC - charakterystyka spektralna
         'mfcc': librosa.feature.mfcc(y=y, sr=sr, n_mfcc=13).mean(axis=1).tolist(),
         
         # Tempo mowy
@@ -205,7 +205,7 @@ fun MoodJournalScreen(viewModel: MoodViewModel) {
 ```
 
 ### 2. Adaptacyjny interfejs
-Aplikacja może automatycznie dostosowywać treść do emocji użytkownika — np. muzyka na podstawie nastroju, lub powiadomienia wstrzymywane gdy użytkownik jest sfrustrowany.
+Aplikacja może automatycznie dostosowywać treść do emocji użytkownika - np. muzyka na podstawie nastroju, lub powiadomienia wstrzymywane gdy użytkownik jest sfrustrowany.
 
 ### 3. Wsparcie dla osób z ASD
 Aplikacje pomagające osobom z zaburzeniami ze spektrum autyzmu w rozpoznawaniu emocji innych ludzi.
@@ -214,15 +214,15 @@ Aplikacje pomagające osobom z zaburzeniami ze spektrum autyzmu w rozpoznawaniu 
 
 > **Ważne:** Przetwarzanie danych biometrycznych i emocjonalnych podlega surowym regulacjom prawnym.
 
-- **RODO** (GDPR) — dane biometryczne to dane wrażliwe kategorii specjalnej (art. 9)
+- **RODO** (GDPR) - dane biometryczne to dane wrażliwe kategorii specjalnej (art. 9)
 - Wymagana **explicita zgoda** użytkownika
-- Przetwarzanie on-device zamiast w chmurze — chroni prywatność
+- Przetwarzanie on-device zamiast w chmurze - chroni prywatność
 - Prawo do informacji o profilowaniu emocjonalnym
 - Unikaj manipulacyjnych zastosowań (np. targetowanie reklam na podstawie emocji)
 
 ## Zbieranie danych afektywnych na urządzeniu mobilnym
 
-### Multimodalność — wiele źródeł jednocześnie
+### Multimodalność - wiele źródeł jednocześnie
 
 Nowoczesne podejście do informatyki afektywnej łączy kilka kanałów danych jednocześnie (podejście **multimodalne**), ponieważ żaden pojedynczy sygnał nie jest w pełni wiarygodny:
 
@@ -231,7 +231,7 @@ Nowoczesne podejście do informatyki afektywnej łączy kilka kanałów danych j
 | Kamera frontalna | Wyraz twarzy, mruganie, kierunek wzroku | Wysoka przy dobrym oświetleniu |
 | Mikrofon | Ton głosu, tempo mowy, pauzy | Średnia (wrażliwa na hałas) |
 | Akcelerometr/Żyroskop | Agitacja, drżenie rąk, pozycja ciała | Niska (pomocnicza) |
-| Sensor tętna (Wear OS) | HR, HRV — stres fizjologiczny | Wysoka przy kontakcie ze skórą |
+| Sensor tętna (Wear OS) | HR, HRV - stres fizjologiczny | Wysoka przy kontakcie ze skórą |
 | Ekran dotykowy | Prędkość pisania, siła nacisku, błędy | Średnia |
 
 ### Przykład: Fusion danych z akcelerometru i kamery
@@ -263,16 +263,16 @@ class AffectiveDataFusion(
 
 Zbieranie danych afektywnych wiąże się z poważnymi obowiązkami:
 
-- **Przetwarzanie on-device** — modele ML działające lokalnie (MediaPipe, TFLite) nie wysyłają obrazów do chmury
-- **Nie przechowuj surowych danych biometrycznych** — zamiast obrazu twarzy zapisuj tylko wynikowy wektor emocji
-- **Granularność zgody** — użytkownik powinien móc wyłączyć każdy kanał osobno (kamera, mikrofon)
-- **Prawo do usunięcia** — historia emocji musi być możliwa do usunięcia na żądanie (RODO art. 17)
+- **Przetwarzanie on-device** - modele ML działające lokalnie (MediaPipe, TFLite) nie wysyłają obrazów do chmury
+- **Nie przechowuj surowych danych biometrycznych** - zamiast obrazu twarzy zapisuj tylko wynikowy wektor emocji
+- **Granularność zgody** - użytkownik powinien móc wyłączyć każdy kanał osobno (kamera, mikrofon)
+- **Prawo do usunięcia** - historia emocji musi być możliwa do usunięcia na żądanie (RODO art. 17)
 
 ---
 
 ## Implementacja rozpoznawania wyrazu twarzy
 
-### ML Kit Face Detection — szybkie wykrywanie
+### ML Kit Face Detection - szybkie wykrywanie
 
 Google ML Kit oferuje lekkie API do wykrywania twarzy i podstawowych landmarków, dostępne offline:
 
@@ -330,7 +330,7 @@ class MlKitFaceEmotionDetector(private val context: Context) {
 }
 ```
 
-### MediaPipe FaceLandmarker — zaawansowana analiza blendshapes
+### MediaPipe FaceLandmarker - zaawansowana analiza blendshapes
 
 Kiedy potrzebujemy dokładniejszej analizy AU (Action Units), MediaPipe FaceLandmarker zwraca 52 współczynniki blendshapes. Oto kompletna integracja z CameraX:
 
@@ -415,10 +415,10 @@ class FaceLandmarkerAnalyzer(
 | **ML Kit Face Detection** | Google | On-device | ❌ (tylko uśmiech/oczy) | ~5 MB | Apache 2.0 |
 | **MediaPipe FaceLandmarker** | Google | On-device | ✅ 52 AU | ~4 MB | Apache 2.0 |
 | **TFLite + własny model** | Własny / Kaggle | On-device | Zależne od modelu | 1–20 MB | Zależy |
-| **Microsoft Azure Face API** | Microsoft | Chmura | ✅ | — | Płatne |
-| **AWS Rekognition** | Amazon | Chmura | ✅ | — | Płatne |
+| **Microsoft Azure Face API** | Microsoft | Chmura | ✅ | - | Płatne |
+| **AWS Rekognition** | Amazon | Chmura | ✅ | - | Płatne |
 
-### TensorFlow Lite — własny model klasyfikacji emocji
+### TensorFlow Lite - własny model klasyfikacji emocji
 
 Gdy gotowe rozwiązania są niewystarczające, można wdrożyć własny model TFLite wytrenowany na zbiorze np. FER-2013:
 
@@ -470,9 +470,9 @@ class TfLiteEmotionClassifier(context: Context) {
 
 Przykładowe aplikacje takie jak **Wysa**, **Woebot** czy **Youper** stosują analizę tekstu i głosu do monitorowania nastroju. Kluczowe wzorce implementacyjne:
 
-- **Dziennik nastroju** — użytkownik ocenia samopoczucie, a aplikacja uzupełnia wpis analizą mimiki z kamery
-- **Wykrywanie kryzysu** — algorytm alarmuje, gdy analiza sentymentu wskazuje na epizody depresyjne przez kilka dni z rzędu
-- **Adaptacja treści CBT** — ćwiczenia terapii poznawczo-behawioralnej dobierane na podstawie wykrytej emocji
+- **Dziennik nastroju** - użytkownik ocenia samopoczucie, a aplikacja uzupełnia wpis analizą mimiki z kamery
+- **Wykrywanie kryzysu** - algorytm alarmuje, gdy analiza sentymentu wskazuje na epizody depresyjne przez kilka dni z rzędu
+- **Adaptacja treści CBT** - ćwiczenia terapii poznawczo-behawioralnej dobierane na podstawie wykrytej emocji
 
 ```kotlin
 // Przykład: zapis wpisu nastroju ze zdjęciem
@@ -492,21 +492,21 @@ class MoodRepository(private val dao: MoodDao) {
 }
 ```
 
-### Edukacja — adaptacyjne systemy nauczania
+### Edukacja - adaptacyjne systemy nauczania
 
 Systemy e-learningowe na urządzeniach mobilnych mogą reagować na stan emocjonalny ucznia:
 
-- **Wykrywanie znudzenia** — gdy wskaźnik zaangażowania spada (mruganie, brak ruchu oczu), materiał jest upraszczany lub dodawana jest interaktywna przerwa
-- **Wykrywanie frustracji** — kiedy uczeń popełnia wiele błędów, a analiza twarzy wskazuje na napięcie, system oferuje dodatkowe wyjaśnienie
-- **Raport dla nauczyciela** — anonimowe statystyki emocji klasy pomagają nauczycielowi zrozumieć trudne partie materiału
+- **Wykrywanie znudzenia** - gdy wskaźnik zaangażowania spada (mruganie, brak ruchu oczu), materiał jest upraszczany lub dodawana jest interaktywna przerwa
+- **Wykrywanie frustracji** - kiedy uczeń popełnia wiele błędów, a analiza twarzy wskazuje na napięcie, system oferuje dodatkowe wyjaśnienie
+- **Raport dla nauczyciela** - anonimowe statystyki emocji klasy pomagają nauczycielowi zrozumieć trudne partie materiału
 
 ### Fitness i wellbeing
 
 Aplikacje sportowe mogą korelować nastrój z wynikami treningu:
 
-- Przed treningiem — analiza gotowości (HRV + wyraz twarzy)
-- W trakcie — wykrywanie przemęczenia na podstawie kamery/akcelerometru
-- Po treningu — porównanie nastroju przed i po aktywności fizycznej (dokumentowanie efektu endorfin)
+- Przed treningiem - analiza gotowości (HRV + wyraz twarzy)
+- W trakcie - wykrywanie przemęczenia na podstawie kamery/akcelerometru
+- Po treningu - porównanie nastroju przed i po aktywności fizycznej (dokumentowanie efektu endorfin)
 
 ---
 
@@ -516,9 +516,9 @@ Aplikacje sportowe mogą korelować nastrój z wynikami treningu:
 
 Modele trenowane głównie na danych z Zachodu wykazują znaczące różnice dokładności:
 
-- **Rasowy bias** — wiele klasycznych zbiorów (np. JAFFE, Cohn-Kanade) jest zdominowanych przez określone grupy etniczne, co prowadzi do wyższego błędu dla osób o ciemniejszej karnacji
-- **Płciowy bias** — modele częściej klasyfikują kobiety jako „zadowolone", a mężczyzn jako „gniewnych", powielając stereotypy społeczne
-- **Wiekowy bias** — niska dokładność dla seniorów i dzieci, dla których wzorce mimiki różnią się od dorosłych
+- **Rasowy bias** - wiele klasycznych zbiorów (np. JAFFE, Cohn-Kanade) jest zdominowanych przez określone grupy etniczne, co prowadzi do wyższego błędu dla osób o ciemniejszej karnacji
+- **Płciowy bias** - modele częściej klasyfikują kobiety jako „zadowolone", a mężczyzn jako „gniewnych", powielając stereotypy społeczne
+- **Wiekowy bias** - niska dokładność dla seniorów i dzieci, dla których wzorce mimiki różnią się od dorosłych
 
 > **Zalecenie**: Przed wdrożeniem modelu przeprowadź audyt bias na reprezentatywnej próbie użytkowników docelowych.
 
@@ -527,30 +527,30 @@ Modele trenowane głównie na danych z Zachodu wykazują znaczące różnice dok
 Wbrew teorii Ekmana, badania pokazują, że ekspresja emocji ma istotny komponent kulturowy:
 
 - W kulturach wschodnioazjatyckich tłumienie ekspresji zewnętrznej jest normą społeczną, co obniża skuteczność modeli zachodnich
-- Uśmiech uprzejmości (social smile) jest w Japonii powszechny w sytuacjach stresu — model może błędnie klasyfikować go jako radość
+- Uśmiech uprzejmości (social smile) jest w Japonii powszechny w sytuacjach stresu - model może błędnie klasyfikować go jako radość
 - Kontakt wzrokowy jako sygnał emocjonalny różni się między kulturami
 
 ### Zgoda i transparentność
 
-- **Informed consent** — użytkownik musi rozumieć, że aplikacja analizuje jego emocje, a nie tylko „twarz"
-- **Prawo do odmowy** — podstawowa funkcjonalność aplikacji nie może być uzależniona od zgody na analizę emocji
-- **Wyjaśnialność** — użytkownik powinien mieć wgląd w to, jakie emocje zostały wykryte i jak wpłynęły na zachowanie aplikacji
-- **Zakaz manipulacji** — dane emocjonalne nie mogą być używane do wyświetlania reklam w momentach podatności emocjonalnej (np. smutku)
+- **Informed consent** - użytkownik musi rozumieć, że aplikacja analizuje jego emocje, a nie tylko „twarz"
+- **Prawo do odmowy** - podstawowa funkcjonalność aplikacji nie może być uzależniona od zgody na analizę emocji
+- **Wyjaśnialność** - użytkownik powinien mieć wgląd w to, jakie emocje zostały wykryte i jak wpłynęły na zachowanie aplikacji
+- **Zakaz manipulacji** - dane emocjonalne nie mogą być używane do wyświetlania reklam w momentach podatności emocjonalnej (np. smutku)
 
 ### Regulacje prawne
 
-- **RODO art. 9** — dane biometryczne i zdrowotne jako dane wrażliwe kategorii specjalnej; przetwarzanie wymaga wyraźnej zgody lub innej szczególnej podstawy prawnej
-- **AI Act (UE)** — systemy rozpoznawania emocji w miejscach publicznych są objęte wysokimi wymogami przejrzystości; niektóre zastosowania są całkowicie zakazane (np. analiza emocji pracowników w celu oceny wydajności)
-- **CCPA (Kalifornia)** — prawo do opt-out z profilowania na podstawie danych biometrycznych
+- **RODO art. 9** - dane biometryczne i zdrowotne jako dane wrażliwe kategorii specjalnej; przetwarzanie wymaga wyraźnej zgody lub innej szczególnej podstawy prawnej
+- **AI Act (UE)** - systemy rozpoznawania emocji w miejscach publicznych są objęte wysokimi wymogami przejrzystości; niektóre zastosowania są całkowicie zakazane (np. analiza emocji pracowników w celu oceny wydajności)
+- **CCPA (Kalifornia)** - prawo do opt-out z profilowania na podstawie danych biometrycznych
 
 ---
 
 ## Linki
 
 - [MediaPipe Face Landmarker](https://ai.google.dev/edge/mediapipe/solutions/vision/face_landmarker)
-- [FACS — Facial Action Coding System](https://www.paulekman.com/facial-action-coding-system/)
+- [FACS - Facial Action Coding System](https://www.paulekman.com/facial-action-coding-system/)
 - [MIT Affective Computing Group](https://affect.media.mit.edu/)
-- [Android ML Kit — Face Detection](https://developers.google.com/ml-kit/vision/face-detection)
-- [TensorFlow Lite — klasyfikacja emocji](https://www.tensorflow.org/lite/examples)
-- [FER-2013 — zbiór danych do trenowania modeli emocji](https://www.kaggle.com/datasets/msambare/fer2013)
-- [EU AI Act — tekst rozporządzenia](https://artificialintelligenceact.eu/)
+- [Android ML Kit - Face Detection](https://developers.google.com/ml-kit/vision/face-detection)
+- [TensorFlow Lite - klasyfikacja emocji](https://www.tensorflow.org/lite/examples)
+- [FER-2013 - zbiór danych do trenowania modeli emocji](https://www.kaggle.com/datasets/msambare/fer2013)
+- [EU AI Act - tekst rozporządzenia](https://artificialintelligenceact.eu/)

@@ -2,7 +2,7 @@
 
 ## Streszczenie
 
-Projektowanie doświadczeń użytkownika (UX) dla aplikacji mobilnych z lokalną AI wymaga odmiennego podejścia niż klasyczne aplikacje. Użytkownik musi rozumieć, co model robi, jak pewny jest swoich wyników i dlaczego czasem się myli — a wszystko to bez dostępu do internetu, z ograniczonymi zasobami urządzenia. Artykuł omawia wzorce UX specyficzne dla lokalnej AI: komunikowanie wnioskowania w toku, wskaźniki pewności, onboarding pobierania modelu, projektowanie offline-first, wyjaśnialność decyzji (XAI), dostępność, prywatność oraz testowanie użyteczności funkcji AI. Każde zagadnienie zilustrowane jest przykładami kodu w Jetpack Compose (Android) i SwiftUI (iOS).
+Projektowanie doświadczeń użytkownika (UX) dla aplikacji mobilnych z lokalną AI wymaga odmiennego podejścia niż klasyczne aplikacje. Użytkownik musi rozumieć, co model robi, jak pewny jest swoich wyników i dlaczego czasem się myli - a wszystko to bez dostępu do internetu, z ograniczonymi zasobami urządzenia. Artykuł omawia wzorce UX specyficzne dla lokalnej AI: komunikowanie wnioskowania w toku, wskaźniki pewności, onboarding pobierania modelu, projektowanie offline-first, wyjaśnialność decyzji (XAI), dostępność, prywatność oraz testowanie użyteczności funkcji AI. Każde zagadnienie zilustrowane jest przykładami kodu w Jetpack Compose (Android) i SwiftUI (iOS).
 
 **Słowa kluczowe:** UX, lokalna AI, on-device AI, confidence score, offline-first, Explainable AI, dostępność, prywatność, Material Design 3, iOS HIG, Jetpack Compose, SwiftUI
 
@@ -26,9 +26,9 @@ Lokalna AI wprowadza unikalne wyzwania projektowe, których nie ma w klasycznych
 
 ### 1.2 Trzy filary dobrego UX w lokalnej AI
 
-1. **Transparentność** — użytkownik rozumie, że wynik pochodzi z modelu AI i zna jego pewność
-2. **Kontrola** — użytkownik może odrzucić sugestię AI, poprawić wynik lub wyłączyć funkcję
-3. **Zaufanie** — aplikacja uczciwie komunikuje ograniczenia, błędy i wymagania modelu
+1. **Transparentność** - użytkownik rozumie, że wynik pochodzi z modelu AI i zna jego pewność
+2. **Kontrola** - użytkownik może odrzucić sugestię AI, poprawić wynik lub wyłączyć funkcję
+3. **Zaufanie** - aplikacja uczciwie komunikuje ograniczenia, błędy i wymagania modelu
 
 ### 1.3 Mental model użytkownika
 
@@ -45,10 +45,10 @@ Wnioskowanie lokalne może trwać od kilkudziesięciu milisekund do kilku sekund
 
 ### 2.1 Progressive disclosure wyników
 
-Zamiast czekać na pełny wynik, pokazuj częściowe rezultaty w miarę ich dostępności — szczególnie ważne przy modelach LLM i segmentacji obrazu.
+Zamiast czekać na pełny wynik, pokazuj częściowe rezultaty w miarę ich dostępności - szczególnie ważne przy modelach LLM i segmentacji obrazu.
 
 ```kotlin
-// Jetpack Compose — streaming wyników z modelu LLM
+// Jetpack Compose - streaming wyników z modelu LLM
 @Composable
 fun StreamingResponseView(viewModel: AiViewModel) {
     val partialResult by viewModel.streamingText.collectAsState("")
@@ -88,7 +88,7 @@ fun BlinkingCursor() {
 ```
 
 ```swift
-// SwiftUI — streaming tekstu z lokalnego LLM
+// SwiftUI - streaming tekstu z lokalnego LLM
 struct StreamingResponseView: View {
     @ObservedObject var viewModel: AiViewModel
 
@@ -127,7 +127,7 @@ struct BlinkingCursorView: View {
 Inicjalizacja modelu (ładowanie wag do pamięci) może trwać 1–5 sekund. Wymaga dedykowanego stanu UI.
 
 ```kotlin
-// Jetpack Compose — stany UI dla cyklu życia modelu
+// Jetpack Compose - stany UI dla cyklu życia modelu
 sealed class ModelState {
     object NotLoaded : ModelState()
     data class Loading(val progress: Float) : ModelState()
@@ -225,7 +225,7 @@ Modele klasyfikacyjne zwracają prawdopodobieństwo przynależności do klasy. P
 
 | Sytuacja | Zalecenie |
 |---|---|
-| Wysoka pewność (> 90%) | Można ukryć — nie zaśmiecaj UI |
+| Wysoka pewność (> 90%) | Można ukryć - nie zaśmiecaj UI |
 | Średnia pewność (60–90%) | Pokaż dyskretnie jako hint |
 | Niska pewność (< 60%) | Zawsze pokaż + zaproponuj alternatywy |
 | Dziedziny krytyczne (zdrowie, finanse) | Zawsze pokaż, nawet przy wysokiej pewności |
@@ -233,7 +233,7 @@ Modele klasyfikacyjne zwracają prawdopodobieństwo przynależności do klasy. P
 ### 3.2 Wizualne reprezentacje pewności
 
 ```kotlin
-// Jetpack Compose — komponent wskaźnika pewności
+// Jetpack Compose - komponent wskaźnika pewności
 @Composable
 fun ConfidenceBadge(confidence: Float, label: String) {
     val color = when {
@@ -274,7 +274,7 @@ fun ConfidenceBadge(confidence: Float, label: String) {
 ```
 
 ```swift
-// SwiftUI — pasek pewności z etykietą słowną
+// SwiftUI - pasek pewności z etykietą słowną
 struct ConfidenceBar: View {
     let confidence: Float
     let label: String
@@ -371,13 +371,13 @@ Modele AI mogą zawieść na wiele sposobów: zły typ wejścia, przekroczenie z
 | Błąd wejścia | Rozmazany obraz, szum | Poproś o lepsze dane wejściowe |
 | Niska pewność | Wynik < 30% | Pokaż alternatywy, poproś o potwierdzenie |
 | Timeout wnioskowania | Model zbyt wolny | Pokaż wynik cząstkowy lub przerwij |
-| Out-of-distribution | Nieznana klasa | „Nie rozpoznaję — spróbuj ponownie" |
+| Out-of-distribution | Nieznana klasa | „Nie rozpoznaję - spróbuj ponownie" |
 | Błąd sprzętowy | NPU niedostępny, fallback na CPU | Poinformuj o spowolnieniu |
 
 ### 4.2 Przyjazne komunikaty błędów
 
 ```kotlin
-// Jetpack Compose — komponent obsługi błędów AI
+// Jetpack Compose - komponent obsługi błędów AI
 @Composable
 fun AiErrorState(
     error: AiError,
@@ -424,7 +424,7 @@ fun AiError.userFriendlyMessage() = when (this) {
     is AiError.ModelInit ->
         "Nie udało się załadować modelu AI. Sprawdź dostępną pamięć urządzenia."
     is AiError.Timeout ->
-        "Analiza trwa zbyt długo. Urządzenie może być przeciążone — spróbuj za chwilę."
+        "Analiza trwa zbyt długo. Urządzenie może być przeciążone - spróbuj za chwilę."
     else -> "Wystąpił nieoczekiwany błąd. Spróbuj ponownie."
 }
 ```
@@ -434,7 +434,7 @@ fun AiError.userFriendlyMessage() = when (this) {
 Zawsze oferuj ścieżkę bez AI jako fallback:
 
 ```swift
-// SwiftUI — widok z opcją manualnego fallbacku
+// SwiftUI - widok z opcją manualnego fallbacku
 struct SmartInputField: View {
     @State private var useAI = true
     @State private var aiResult: String? = nil
@@ -474,12 +474,12 @@ Lokalna AI jest z natury offline-first, ale aplikacja może potrzebować sieci d
 | Full offline | Wszystkie funkcje AI działają bez sieci | Model jednorazowo pobrany, nie wymaga aktualizacji |
 | Graceful degradation | Podstawowe AI działa, zaawansowane wymaga sieci | Hybrydowe modele local+cloud |
 | Cache-first | Wyniki z cache, odświeżane gdy jest sieć | Modele aktualizowane regularnie |
-| Offline indicator | Pasek informujący o trybie offline | Zawsze — użytkownik musi wiedzieć |
+| Offline indicator | Pasek informujący o trybie offline | Zawsze - użytkownik musi wiedzieć |
 
 ### 5.2 Indykator trybu sieciowego
 
 ```kotlin
-// Jetpack Compose — NetworkAwareBanner
+// Jetpack Compose - NetworkAwareBanner
 @Composable
 fun NetworkAwareBanner(isOnline: Boolean, hasLocalModel: Boolean) {
     AnimatedVisibility(
@@ -507,9 +507,9 @@ fun NetworkAwareBanner(isOnline: Boolean, hasLocalModel: Boolean) {
                 Spacer(Modifier.width(8.dp))
                 Text(
                     text = if (hasLocalModel)
-                        "Tryb offline — AI działa lokalnie"
+                        "Tryb offline - AI działa lokalnie"
                     else
-                        "Brak połączenia — AI niedostępne",
+                        "Brak połączenia - AI niedostępne",
                     style = MaterialTheme.typography.labelMedium
                 )
             }
@@ -520,10 +520,10 @@ fun NetworkAwareBanner(isOnline: Boolean, hasLocalModel: Boolean) {
 
 ### 5.3 Określanie funkcjonalności offline
 
-Jasno informuj, które funkcje wymagają internetu — najlepiej już podczas onboardingu i w menu ustawień:
+Jasno informuj, które funkcje wymagają internetu - najlepiej już podczas onboardingu i w menu ustawień:
 
 ```xml
-<!-- res/layout — element listy funkcji z oznaczeniem offline -->
+<!-- res/layout - element listy funkcji z oznaczeniem offline -->
 <androidx.compose.ui.platform.ComposeView
     android:id="@+id/feature_list"
     android:layout_width="match_parent"
@@ -570,22 +570,22 @@ fun FeatureListItem(feature: AppFeature, isOnline: Boolean) {
 
 ---
 
-## 6. Onboarding — pobieranie modelu
+## 6. Onboarding - pobieranie modelu
 
 Modele lokalne często ważą od kilkudziesięciu MB do kilku GB. Onboarding musi zarządzać oczekiwaniami użytkownika.
 
 ### 6.1 Zasady onboardingu pobierania modelu
 
-- **Zapytaj przed pobraniem** — nigdy nie pobieraj bez zgody, szczególnie na danych mobilnych
-- **Podaj rozmiar** — "Model AI (245 MB)" — brak tego wzbudza nieufność
-- **Pokaż postęp** — pasek z procentami i szacowanym czasem
-- **Pozwól na przerwanie** — użytkownik może dokończyć później
-- **Wyjaśnij po co** — "Model umożliwia rozpoznawanie roślin bez internetu"
+- **Zapytaj przed pobraniem** - nigdy nie pobieraj bez zgody, szczególnie na danych mobilnych
+- **Podaj rozmiar** - "Model AI (245 MB)" - brak tego wzbudza nieufność
+- **Pokaż postęp** - pasek z procentami i szacowanym czasem
+- **Pozwól na przerwanie** - użytkownik może dokończyć później
+- **Wyjaśnij po co** - "Model umożliwia rozpoznawanie roślin bez internetu"
 
 ### 6.2 Ekran pobierania modelu
 
 ```kotlin
-// Jetpack Compose — pełny ekran onboardingu pobierania modelu
+// Jetpack Compose - pełny ekran onboardingu pobierania modelu
 @Composable
 fun ModelDownloadScreen(
     modelInfo: ModelInfo,
@@ -631,7 +631,7 @@ fun ModelDownloadScreen(
                     Button(onClick = onStartDownload, modifier = Modifier.fillMaxWidth()) {
                         Text("Pobierz model AI")
                     }
-                    TextButton(onClick = onSkip) { Text("Pomiń — użyj bez AI") }
+                    TextButton(onClick = onSkip) { Text("Pomiń - użyj bez AI") }
                 }
                 is DownloadState.InProgress -> {
                     LinearProgressIndicator(
@@ -640,7 +640,7 @@ fun ModelDownloadScreen(
                     )
                     Spacer(Modifier.height(8.dp))
                     Text(
-                        "${(downloadState.progress * 100).toInt()}% — " +
+                        "${(downloadState.progress * 100).toInt()}% - " +
                         "pozostało ~${downloadState.etaSeconds}s",
                         style = MaterialTheme.typography.labelMedium
                     )
@@ -662,7 +662,7 @@ fun ModelDownloadScreen(
 }
 ```
 
-### 6.3 Wariant iOS — pobieranie modelu
+### 6.3 Wariant iOS - pobieranie modelu
 
 ```swift
 struct ModelDownloadView: View {
@@ -739,7 +739,7 @@ Użytkownicy powinni rozumieć, *dlaczego* AI podjęło daną decyzję. Szczegó
 Wizualna mapa ciepła pokazuje, na które fragmenty obrazu patrzył model:
 
 ```kotlin
-// Jetpack Compose — nakładka mapy uwagi na obraz
+// Jetpack Compose - nakładka mapy uwagi na obraz
 @Composable
 fun ExplainabilityOverlay(
     originalBitmap: ImageBitmap,
@@ -783,7 +783,7 @@ fun ExplainabilityOverlay(
 ### 7.3 Karta wyjaśnienia decyzji
 
 ```swift
-// SwiftUI — rozwijana karta "Dlaczego taki wynik?"
+// SwiftUI - rozwijana karta "Dlaczego taki wynik?"
 struct ExplanationCard: View {
     let result: ClassificationResult
     @State private var expanded = false
@@ -829,12 +829,12 @@ struct ExplanationCard: View {
 
 ## 8. Dostępność (a11y) w aplikacjach z AI
 
-Funkcje AI generują dynamiczne treści — etykiety, wyniki, opisy — które muszą być dostępne dla użytkowników TalkBack (Android) i VoiceOver (iOS).
+Funkcje AI generują dynamiczne treści - etykiety, wyniki, opisy - które muszą być dostępne dla użytkowników TalkBack (Android) i VoiceOver (iOS).
 
 ### 8.1 Semantyczne opisy wyników AI
 
 ```kotlin
-// Jetpack Compose — semantyka dla wyników klasyfikacji
+// Jetpack Compose - semantyka dla wyników klasyfikacji
 @Composable
 fun AccessibleClassificationResult(result: ClassificationResult) {
     val announcement = buildString {
@@ -894,17 +894,17 @@ fun ResultsScreen(viewModel: InferenceViewModel) {
 }
 ```
 
-### 8.2 Dostępność na iOS — VoiceOver
+### 8.2 Dostępność na iOS - VoiceOver
 
 ```swift
-// SwiftUI — accessibility dla dynamicznych wyników AI
+// SwiftUI - accessibility dla dynamicznych wyników AI
 struct AccessibleResultCard: View {
     let result: ClassificationResult
 
     var accessibilityDescription: String {
         let conf = Int(result.confidence * 100)
         let certainty = conf >= 85 ? "pewny" : conf >= 60 ? "umiarkowanie pewny" : "niepewny"
-        return "Wynik AI: \(result.label). Model jest \(certainty) — \(conf) procent."
+        return "Wynik AI: \(result.label). Model jest \(certainty) - \(conf) procent."
     }
 
     var body: some View {
@@ -946,19 +946,19 @@ fun AccessibleLoadingIndicator(isLoading: Boolean) {
 
 ## 9. Prywatność w UX
 
-Jedną z największych zalet lokalnej AI jest przetwarzanie danych wyłącznie na urządzeniu. UX powinien aktywnie to komunikować — to przewaga konkurencyjna, nie tylko technikalia.
+Jedną z największych zalet lokalnej AI jest przetwarzanie danych wyłącznie na urządzeniu. UX powinien aktywnie to komunikować - to przewaga konkurencyjna, nie tylko technikalia.
 
-### 9.1 Privacy badge — znaczek prywatności
+### 9.1 Privacy badge - znaczek prywatności
 
 ```kotlin
-// Jetpack Compose — badge "Przetwarza lokalnie"
+// Jetpack Compose - badge "Przetwarza lokalnie"
 @Composable
 fun PrivacyBadge(modifier: Modifier = Modifier) {
     Surface(
         color = MaterialTheme.colorScheme.tertiaryContainer,
         shape = RoundedCornerShape(20.dp),
         modifier = modifier.semantics {
-            contentDescription = "Dane przetwarzane lokalnie — nie opuszczają urządzenia"
+            contentDescription = "Dane przetwarzane lokalnie - nie opuszczają urządzenia"
         }
     ) {
         Row(
@@ -987,7 +987,7 @@ fun PrivacyBadge(modifier: Modifier = Modifier) {
 Użytkownicy chcą wiedzieć: *jakie* dane przetwarza AI i *gdzie* trafiają.
 
 ```swift
-// SwiftUI — sekcja prywatności w ustawieniach
+// SwiftUI - sekcja prywatności w ustawieniach
 struct AIPrivacySettingsSection: View {
     var body: some View {
         Section {
@@ -1038,7 +1038,7 @@ struct PrivacyRow: View {
 
 ## 10. Material Design 3 i iOS HIG dla elementów AI
 
-### 10.1 Material Design 3 — rekomendacje dla AI
+### 10.1 Material Design 3 - rekomendacje dla AI
 
 Google Material Design 3 (M3) definiuje kilka komponentów szczególnie przydatnych w UI dla AI:
 
@@ -1052,7 +1052,7 @@ Google Material Design 3 (M3) definiuje kilka komponentów szczególnie przydatn
 | `BadgedBox` | Oznaczanie elementów UI wygenerowanych przez AI |
 
 ```kotlin
-// Jetpack Compose — chip sugestii AI zgodny z M3
+// Jetpack Compose - chip sugestii AI zgodny z M3
 @Composable
 fun AISuggestionChips(
     suggestions: List<String>,
@@ -1084,16 +1084,16 @@ fun AISuggestionChips(
 }
 ```
 
-### 10.2 iOS HIG — wskazówki dla elementów AI
+### 10.2 iOS HIG - wskazówki dla elementów AI
 
 Apple Human Interface Guidelines zaleca:
 - **Menu kontekstowe** dla opcji AI (long press → "Analizuj z AI")
 - **SF Symbols** dla ikon AI: `brain`, `cpu`, `wand.and.sparkles`, `sparkles`
-- **Dynamic Type** — wyniki AI muszą skalować się z preferencjami tekstu
+- **Dynamic Type** - wyniki AI muszą skalować się z preferencjami tekstu
 - **Haptic feedback** po zakończeniu wnioskowania (`UINotificationFeedbackGenerator`)
 
 ```swift
-// SwiftUI — przycisk AI z haptic feedback i SF Symbol
+// SwiftUI - przycisk AI z haptic feedback i SF Symbol
 struct AIActionButton: View {
     let action: () -> Void
     @State private var isProcessing = false
@@ -1125,7 +1125,7 @@ struct AIActionButton: View {
 ### 10.3 Autouzupełnianie i sugestie tekstowe
 
 ```kotlin
-// Jetpack Compose — pole z sugestiami AI
+// Jetpack Compose - pole z sugestiami AI
 @Composable
 fun AiAssistedTextField(
     value: String,
@@ -1181,14 +1181,14 @@ fun AiAssistedTextField(
 
 Uczciwe informowanie o tym, kiedy AI zawodzi, buduje długoterminowe zaufanie:
 
-- **Przed użyciem**: "Model rozpoznaje 100 gatunków roślin — inne kategorie mogą dawać błędne wyniki"
+- **Przed użyciem**: "Model rozpoznaje 100 gatunków roślin - inne kategorie mogą dawać błędne wyniki"
 - **Podczas użycia**: Wskaźnik pewności poniżej progu
-- **Po błędzie**: "AI się pomyliła — dziękujemy za korektę, pomaga to ulepszać model"
+- **Po błędzie**: "AI się pomyliła - dziękujemy za korektę, pomaga to ulepszać model"
 
 ### 11.2 Zbieranie feedback użytkownika
 
 ```kotlin
-// Jetpack Compose — micro-feedback po wyniku AI
+// Jetpack Compose - micro-feedback po wyniku AI
 @Composable
 fun ResultFeedback(
     result: ClassificationResult,
@@ -1237,10 +1237,10 @@ fun ResultFeedback(
 
 ### 12.1 Specyficzne wyzwania testowania AI UX
 
-- **Niedeterminizm** — wyniki mogą się różnić między sesjami testowymi
-- **Zależność od danych wejściowych** — wejście słabej jakości daje inne UX niż dobre
-- **Efekt nowości** — użytkownicy zachowują się inaczej przy pierwszym kontakcie z AI
-- **Calibracja zaufania** — testuj czy użytkownicy ufają AI tyle, ile powinni (nie za dużo, nie za mało)
+- **Niedeterminizm** - wyniki mogą się różnić między sesjami testowymi
+- **Zależność od danych wejściowych** - wejście słabej jakości daje inne UX niż dobre
+- **Efekt nowości** - użytkownicy zachowują się inaczej przy pierwszym kontakcie z AI
+- **Calibracja zaufania** - testuj czy użytkownicy ufają AI tyle, ile powinni (nie za dużo, nie za mało)
 
 ### 12.2 Metryki UX dla aplikacji AI
 
@@ -1260,7 +1260,7 @@ fun ResultFeedback(
    - Zróżnicuj pod kątem: doświadczenia z AI, grupy wiekowej, sprawności
    - Min. 5 uczestników na iterację (reguła Nielsena)
 
-2. ZADANIA TESTOWE — projektuj scenariusze dla:
+2. ZADANIA TESTOWE - projektuj scenariusze dla:
    a) Ścieżki "happy path" (dobra jakość wejścia, wysoka pewność)
    b) Granicznych przypadków (słabe wejście, niska pewność)
    c) Błędów modelu (celowo niepoprawny wynik)
@@ -1293,7 +1293,7 @@ fun AdaptiveConfidenceDisplay(
     when (variant) {
         ConfidenceDisplayVariant.HIDDEN -> Text(label)
         ConfidenceDisplayVariant.PERCENTAGE ->
-            Text("$label — ${(confidence * 100).toInt()}%")
+            Text("$label - ${(confidence * 100).toInt()}%")
         ConfidenceDisplayVariant.VERBAL ->
             Text("$label (${if (confidence > 0.85) "bardzo pewny" else if (confidence > 0.6) "dość pewny" else "niepewny"})")
         ConfidenceDisplayVariant.BAR ->
@@ -1307,8 +1307,8 @@ fun AdaptiveConfidenceDisplay(
 ## Powiązane artykuły
 
 - [Wprowadzenie do lokalnej AI na urządzeniu mobilnym](local-ai-intro.md)
-- [Wnioskowanie lokalne — architektura i wydajność](on-device-inference.md)
-- [MediaPipe — kompleksowe rozwiązania AI](mediapipe-mobile.md)
+- [Wnioskowanie lokalne - architektura i wydajność](on-device-inference.md)
+- [MediaPipe - kompleksowe rozwiązania AI](mediapipe-mobile.md)
 - [Modele językowe LLM na urządzeniu](llm-on-device.md)
 - [Prywatność i bezpieczeństwo w lokalnej AI](ai-privacy-security.md)
 - [Dostępność aplikacji mobilnych](accessibility.md)

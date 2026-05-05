@@ -1,6 +1,6 @@
 # Obsługa sensorów urządzenia mobilnego
 
-Urządzenia mobilne są naszpikowane sensorami. Ich obsługa otwiera możliwości niedostępne w żadnej innej formie oprogramowania — od pomiaru kroku, przez nawigację AR, po wykrywanie upadków.
+Urządzenia mobilne są naszpikowane sensorami. Ich obsługa otwiera możliwości niedostępne w żadnej innej formie oprogramowania - od pomiaru kroku, przez nawigację AR, po wykrywanie upadków.
 
 ## Przegląd sensorów
 
@@ -72,15 +72,15 @@ class SensorActivity : ComponentActivity(), SensorEventListener {
 ### Częstotliwości próbkowania
 
 ```kotlin
-SensorManager.SENSOR_DELAY_FASTEST  // ~200 Hz — maksymalna, gry VR
-SensorManager.SENSOR_DELAY_GAME     // ~50 Hz — gry, AR
-SensorManager.SENSOR_DELAY_UI       // ~16 Hz — animacje UI
-SensorManager.SENSOR_DELAY_NORMAL   // ~5 Hz — ogólne monitorowanie
+SensorManager.SENSOR_DELAY_FASTEST  // ~200 Hz - maksymalna, gry VR
+SensorManager.SENSOR_DELAY_GAME     // ~50 Hz - gry, AR
+SensorManager.SENSOR_DELAY_UI       // ~16 Hz - animacje UI
+SensorManager.SENSOR_DELAY_NORMAL   // ~5 Hz - ogólne monitorowanie
 ```
 
 > **Zasada:** Używaj jak najniższej częstotliwości, która spełnia wymagania. Każdy Hz to zużyta energia baterii.
 
-## Akcelerometr + Żyroskop — fuzja sensoryczna
+## Akcelerometr + Żyroskop - fuzja sensoryczna
 
 Żaden sensor nie jest idealny. Akcelerometr szumi na krótką skalę, żyroskop dryfuje na długą. Filtr komplementarny łączy zalety obu:
 
@@ -111,7 +111,7 @@ class OrientationFusion {
 ## GPS i Geolokalizacja
 
 ```kotlin
-// AndroidX — FusedLocationProviderClient (łączy GPS + WiFi + komórkowe)
+// AndroidX - FusedLocationProviderClient (łączy GPS + WiFi + komórkowe)
 class LocationActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     
@@ -146,11 +146,11 @@ class LocationActivity : AppCompatActivity() {
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
 <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
 
-<!-- Lokalizacja w tle — wymaga dodatkowego uzasadnienia -->
+<!-- Lokalizacja w tle - wymaga dodatkowego uzasadnienia -->
 <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
 ```
 
-## Barometr — pomiar wysokości
+## Barometr - pomiar wysokości
 
 ```kotlin
 val pressureSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PRESSURE)
@@ -170,8 +170,8 @@ override fun onSensorChanged(event: SensorEvent) {
 ## Sensor kroków (Step Detector / Counter)
 
 ```kotlin
-// TYPE_STEP_COUNTER — całkowita liczba kroków od ostatniego restartu
-// TYPE_STEP_DETECTOR — event za każdym krokiem
+// TYPE_STEP_COUNTER - całkowita liczba kroków od ostatniego restartu
+// TYPE_STEP_DETECTOR - event za każdym krokiem
 
 val stepCounter = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
 
@@ -212,11 +212,11 @@ class ShakeDetector(private val onShake: () -> Unit) : SensorEventListener {
 }
 ```
 
-## iOS — Core Motion Framework
+## iOS - Core Motion Framework
 
 Na platformie Apple odpowiednikiem Android Sensor Framework jest framework **Core Motion**. Centralnym obiektem jest `CMMotionManager`, który udostępnia dane z akcelerometru, żyroskopu, magnetometru oraz przetworzoną orientację urządzenia (fusion realizowana sprzętowo przez koprocesory M-series).
 
-### CMMotionManager — akcelerometr i żyroskop
+### CMMotionManager - akcelerometr i żyroskop
 
 ```swift
 import CoreMotion
@@ -262,7 +262,7 @@ class MotionViewController: UIViewController {
 }
 ```
 
-### DeviceMotion — gotowa fuzja sensoryczna
+### DeviceMotion - gotowa fuzja sensoryczna
 
 `CMDeviceMotion` to wygodne API, w którym iOS sam łączy dane z wielu sensorów i zwraca gotową orientację, grawitację i przyspieszenie liniowe:
 
@@ -291,7 +291,7 @@ func startDeviceMotion() {
 }
 ```
 
-### CMPedometer — krokomierz i aktywność
+### CMPedometer - krokomierz i aktywność
 
 `CMPedometer` korzysta z dedykowanego koprocesora ruchu i działa nawet gdy aplikacja jest w tle, nie obciążając głównego CPU:
 
@@ -327,9 +327,9 @@ class PedometerManager {
 
 ---
 
-## Fuzja sensoryczna — filtr Kalmana
+## Fuzja sensoryczna - filtr Kalmana
 
-Filtr komplementarny jest prosty, ale nie optymalny. **Filtr Kalmana** to statystyczne podejście minimalizujące wariancję błędu estymacji — stanowi złoty standard w systemach nawigacyjnych i robotyce.
+Filtr komplementarny jest prosty, ale nie optymalny. **Filtr Kalmana** to statystyczne podejście minimalizujące wariancję błędu estymacji - stanowi złoty standard w systemach nawigacyjnych i robotyce.
 
 ### Idea filtru Kalmana (1D)
 
@@ -347,9 +347,9 @@ Aktualizacja:
 ```
 
 Gdzie:
-- **Q** — kowariancja szumu procesu (jak bardzo ufamy modelowi)
-- **R** — kowariancja szumu pomiaru (jak bardzo ufamy sensorowi)
-- **K** — wzmocnienie Kalmana: gdy R→0, ufamy wyłącznie sensorowi; gdy Q→0, ufamy wyłącznie modelowi
+- **Q** - kowariancja szumu procesu (jak bardzo ufamy modelowi)
+- **R** - kowariancja szumu pomiaru (jak bardzo ufamy sensorowi)
+- **K** - wzmocnienie Kalmana: gdy R→0, ufamy wyłącznie sensorowi; gdy Q→0, ufamy wyłącznie modelowi
 
 ### Implementacja prostego filtru Kalmana dla kąta (Kotlin)
 
@@ -377,8 +377,8 @@ class KalmanFilter1D(
 
         // --- Krok aktualizacji ---
         val s = p00 + r                    // innowacyjna kowariancja
-        val k0 = p00 / s                   // wzmocnienie Kalmana — kąt
-        val k1 = p10 / s                   // wzmocnienie Kalmana — bias
+        val k0 = p00 / s                   // wzmocnienie Kalmana - kąt
+        val k1 = p10 / s                   // wzmocnienie Kalmana - bias
 
         val innovation = accelAngle - angle
         angle += k0 * innovation
@@ -557,7 +557,7 @@ fun MyScreen() {
 
 ## Model uprawnień do sensorów
 
-Większość sensorów ruchu (akcelerometr, żyroskop, barometr) **nie wymaga uprawnień** — są traktowane jako dane niskiej wrażliwości. Wyjątki:
+Większość sensorów ruchu (akcelerometr, żyroskop, barometr) **nie wymaga uprawnień** - są traktowane jako dane niskiej wrażliwości. Wyjątki:
 
 | Sensor / API | Uprawnienie | Poziom API |
 |---|---|---|
@@ -573,7 +573,7 @@ Większość sensorów ruchu (akcelerometr, żyroskop, barometr) **nie wymaga up
 ### Deklaracja w AndroidManifest.xml
 
 ```xml
-<!-- Aktywność fizyczna — wymagane od Android 10 -->
+<!-- Aktywność fizyczna - wymagane od Android 10 -->
 <uses-permission android:name="android.permission.ACTIVITY_RECOGNITION"/>
 
 <!-- Czujniki ciała (Wear OS) -->
@@ -618,7 +618,7 @@ private fun checkAndRequestActivityPermission() {
 }
 ```
 
-> **Ważne:** Brak uprawnienia `ACTIVITY_RECOGNITION` na API 29+ powoduje, że `TYPE_STEP_COUNTER` i `TYPE_STEP_DETECTOR` **milczą** — nie wywołują wyjątku, tylko nie dostarczają zdarzeń. To częste źródło błędów.
+> **Ważne:** Brak uprawnienia `ACTIVITY_RECOGNITION` na API 29+ powoduje, że `TYPE_STEP_COUNTER` i `TYPE_STEP_DETECTOR` **milczą** - nie wywołują wyjątku, tylko nie dostarczają zdarzeń. To częste źródło błędów.
 
 ---
 
@@ -628,12 +628,12 @@ Sensory to jeden z największych pożeraczy energii w urządzeniu mobilnym. Poni
 
 | Sensor | Relatywne zużycie | Uwagi |
 |---|---|---|
-| GPS (tryb HIGH_ACCURACY) | ★★★★★ | Najdroższy — unikaj ciągłego używania |
+| GPS (tryb HIGH_ACCURACY) | ★★★★★ | Najdroższy - unikaj ciągłego używania |
 | GPS (BALANCED_POWER) | ★★★☆☆ | Używa wież komórkowych i WiFi |
 | Akcelerometr @ 200 Hz | ★★★☆☆ | Pełna prędkość na krótki czas |
 | Akcelerometr @ 5 Hz | ★☆☆☆☆ | Bezpieczny do ciągłego monitorowania |
 | Barometr | ★★☆☆☆ | Stosunkowo tani |
-| Krokomierz (koprocesor) | ★☆☆☆☆ | Bardzo tani — dedykowany hardware |
+| Krokomierz (koprocesor) | ★☆☆☆☆ | Bardzo tani - dedykowany hardware |
 
 ### Zasady optymalizacji
 
@@ -649,18 +649,18 @@ override fun onPause() {
 **2. Używaj najniższej skutecznej częstotliwości**
 
 ```kotlin
-// Wykrycie orientacji ekranu — wystarczy 5 Hz
+// Wykrycie orientacji ekranu - wystarczy 5 Hz
 sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_NORMAL)
 
-// Gra FPS — potrzeba 50+ Hz
+// Gra FPS - potrzeba 50+ Hz
 sensorManager.registerListener(this, accel, SensorManager.SENSOR_DELAY_GAME)
 ```
 
 **3. Preferuj koprocesor dla kroków i aktywności**
 
-Zamiast rejestrować akcelerometr z wysoką częstotliwością i samodzielnie zliczać kroki, korzystaj z `TYPE_STEP_COUNTER` — dane są produkowane przez dedykowany koprocesor M (Android) lub M-series (Apple), który działa niezależnie od głównego CPU i zużywa mikroampery zamiast miliamperów.
+Zamiast rejestrować akcelerometr z wysoką częstotliwością i samodzielnie zliczać kroki, korzystaj z `TYPE_STEP_COUNTER` - dane są produkowane przez dedykowany koprocesor M (Android) lub M-series (Apple), który działa niezależnie od głównego CPU i zużywa mikroampery zamiast miliamperów.
 
-**4. Batching — opóźnione dostarczanie zdarzeń**
+**4. Batching - opóźnione dostarczanie zdarzeń**
 
 Android pozwala skonfigurować maksymalne opóźnienie dostarczenia danych (`maxReportLatencyUs`). System buforuje zdarzenia i dostarcza je partiami, co pozwala procesorowi przejść w stan uśpienia między partiami:
 
@@ -676,7 +676,7 @@ sensorManager.registerListener(
 **5. Geofencing zamiast ciągłego GPS**
 
 ```kotlin
-// Zamiast ciągłego requestLocationUpdates — zdefiniuj geofence
+// Zamiast ciągłego requestLocationUpdates - zdefiniuj geofence
 val geofence = Geofence.Builder()
     .setRequestId("campus")
     .setCircularRegion(52.2297, 21.0122, 200f)  // Warszawa, promień 200m
@@ -710,5 +710,5 @@ WorkManager.getInstance(context).enqueue(work)
 - [Core Motion (iOS)](https://developer.apple.com/documentation/coremotion)
 - [CMMotionManager (Apple Docs)](https://developer.apple.com/documentation/coremotion/cmmotionmanager)
 - [CMPedometer (Apple Docs)](https://developer.apple.com/documentation/coremotion/cmpedometer)
-- [Jetpack Compose — State and effects](https://developer.android.com/jetpack/compose/side-effects)
+- [Jetpack Compose - State and effects](https://developer.android.com/jetpack/compose/side-effects)
 - [Android Battery Optimization](https://developer.android.com/training/monitoring-device-state/battery-monitoring)

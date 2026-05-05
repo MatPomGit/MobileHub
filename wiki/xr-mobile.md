@@ -1,6 +1,6 @@
 # Programowanie aplikacji mobilnych XR
 
-XR (Extended Reality) to termin zbiorczy dla trzech typów rozszerzonej rzeczywistości: **AR** (Augmented Reality), **VR** (Virtual Reality) i **MR** (Mixed Reality). Smartfony są najpowszechniejszą platformą AR — każdy nowoczesny telefon ma kamerę i wystarczającą moc obliczeniową.
+XR (Extended Reality) to termin zbiorczy dla trzech typów rozszerzonej rzeczywistości: **AR** (Augmented Reality), **VR** (Virtual Reality) i **MR** (Mixed Reality). Smartfony są najpowszechniejszą platformą AR - każdy nowoczesny telefon ma kamerę i wystarczającą moc obliczeniową.
 
 ## Spektrum XR
 
@@ -18,9 +18,9 @@ Rzeczywistość ←────────────────────�
 
 ARCore to SDK Google do tworzenia aplikacji AR na Androidzie. Dostarcza trzy kluczowe możliwości:
 
-1. **Motion tracking** — śledzenie pozycji telefonu w przestrzeni 6DOF (Six Degrees of Freedom)
-2. **Environmental understanding** — wykrywanie płaskich powierzchni (podłoga, stół, ściany)
-3. **Light estimation** — szacowanie oświetlenia otoczenia dla realistycznego renderowania
+1. **Motion tracking** - śledzenie pozycji telefonu w przestrzeni 6DOF (Six Degrees of Freedom)
+2. **Environmental understanding** - wykrywanie płaskich powierzchni (podłoga, stół, ściany)
+3. **Light estimation** - szacowanie oświetlenia otoczenia dla realistycznego renderowania
 
 ### Konfiguracja ARCore
 
@@ -47,13 +47,13 @@ fun ArScreen() {
         cameraNode = cameraNode,
         childNodes = childNodes,
         onSessionUpdated = { session, frame ->
-            // Wywołane co klatkę — tutaj logika AR
+            // Wywołane co klatkę - tutaj logika AR
         },
         onGestureListener = rememberOnGestureListener(
             onSingleTapConfirmed = { motionEvent, node ->
                 // Gdy użytkownik tapnie w ekran
                 if (node == null) {
-                    // Tapnięto w pustą przestrzeń — umieść obiekt na płaszczyźnie
+                    // Tapnięto w pustą przestrzeń - umieść obiekt na płaszczyźnie
                     val hitResult = frame?.hitTest(motionEvent)?.firstOrNull()
                     hitResult?.let { hit ->
                         val anchor = hit.createAnchor()
@@ -78,7 +78,7 @@ session.update().let { frame ->
     session.getAllTrackables(Plane::class.java).forEach { plane ->
         when (plane.type) {
             Plane.Type.HORIZONTAL_UPWARD_FACING -> {
-                // Podłoga/stół — narysuj siatkę
+                // Podłoga/stół - narysuj siatkę
                 renderPlaneOverlay(plane)
             }
             Plane.Type.VERTICAL -> {
@@ -124,7 +124,7 @@ class ARViewController: UIViewController {
     @objc func handleTap(_ recognizer: UITapGestureRecognizer) {
         let location = recognizer.location(in: arView)
         
-        // Raycast — znajdź punkt na powierzchni
+        // Raycast - znajdź punkt na powierzchni
         guard let result = arView.raycast(
             from: location,
             allowing: .estimatedPlane,
@@ -153,10 +153,10 @@ AR wymaga modeli 3D. Popularne formaty:
 | **.glb** | Binary glTF 2.0 | ARCore, Three.js, powszechny |
 | **.gltf** | JSON glTF 2.0 | Web, ARCore |
 | **.usdz** | Universal Scene Description (Apple) | ARKit, Pixar |
-| **.fbx** | Filmbox — Autodesk | Edytory 3D |
+| **.fbx** | Filmbox - Autodesk | Edytory 3D |
 | **.obj** | Wavefront OBJ | Legacy, prosty |
 
-## Image Tracking — AR z markerami
+## Image Tracking - AR z markerami
 
 ```kotlin
 // ARCore: śledzenie obrazów (np. plakatów, produktów)
@@ -171,13 +171,13 @@ session.configure(config)
 // W pętli aktualizacji
 session.getAllTrackables(AugmentedImage::class.java).forEach { image ->
     if (image.trackingState == TrackingState.TRACKING) {
-        // Obraz wykryty — umieść model nad nim
+        // Obraz wykryty - umieść model nad nim
         placeModelAt(image.centerPose, "models/info_panel.glb")
     }
 }
 ```
 
-## WebXR — AR w przeglądarce
+## WebXR - AR w przeglądarce
 
 WebXR API pozwala tworzyć AR bezpośrednio w przeglądarce mobilnej (Chrome na Android):
 
@@ -205,7 +205,7 @@ if (supported) {
 }
 ```
 
-## Google Cardboard / GearVR — mobilne VR
+## Google Cardboard / GearVR - mobilne VR
 
 Proste VR mobilne wyświetla dwie sceny (stereo) na ekranie telefonu:
 
@@ -235,7 +235,7 @@ class VrActivity : AppCompatActivity() {
 
 ## Śledzenie i SLAM
 
-Kluczowym problemem w AR jest odpowiedź na pytanie: *gdzie jestem i gdzie patrzę?* Rozwiązuje go algorytm **SLAM** (Simultaneous Localization and Mapping — jednoczesna lokalizacja i budowanie mapy). SLAM buduje trójwymiarową mapę otoczenia i jednocześnie wyznacza pozycję urządzenia na tej mapie.
+Kluczowym problemem w AR jest odpowiedź na pytanie: *gdzie jestem i gdzie patrzę?* Rozwiązuje go algorytm **SLAM** (Simultaneous Localization and Mapping - jednoczesna lokalizacja i budowanie mapy). SLAM buduje trójwymiarową mapę otoczenia i jednocześnie wyznacza pozycję urządzenia na tej mapie.
 
 ### Wizualna inercyjna odometria (VIO)
 
@@ -243,7 +243,7 @@ ARCore i ARKit używają techniki **Visual-Inertial Odometry**:
 
 1. **Kamera** dostarcza kolejne klatki obrazu
 2. **IMU** (żyroskop + akcelerometr) mierzy przyspieszenie i obroty z częstotliwością ~1000 Hz
-3. Algorytm łączy oba źródła, śledząc **punkty charakterystyczne** (feature points) — narożniki, krawędzie, tekstury
+3. Algorytm łączy oba źródła, śledząc **punkty charakterystyczne** (feature points) - narożniki, krawędzie, tekstury
 
 ```
 Klatka N                Klatka N+1
@@ -253,7 +253,7 @@ Klatka N                Klatka N+1
                            Aktualizacja mapy + pozycji
 ```
 
-Wynikiem jest **6DOF** (Six Degrees of Freedom) — trzy osie translacji (X, Y, Z) i trzy osie rotacji (pitch, yaw, roll).
+Wynikiem jest **6DOF** (Six Degrees of Freedom) - trzy osie translacji (X, Y, Z) i trzy osie rotacji (pitch, yaw, roll).
 
 ### Typy punktów kotwicznych
 
@@ -271,7 +271,7 @@ hitResults.firstOrNull { hit ->
 }
 ```
 
-### LiDAR — precyzyjne skanowanie głębi
+### LiDAR - precyzyjne skanowanie głębi
 
 iPhone 12 Pro i nowsze modele Pro mają skaner LiDAR (Time-of-Flight), który mierzy odległość do powierzchni bez polegania wyłącznie na kamerze. Przekłada się to na:
 - Natychmiastowe wykrywanie płaszczyzn (bez skanowania panoramicznego)
@@ -309,7 +309,7 @@ val lightEstimate = frame.lightEstimate ?: return
 // Intensywność pikseli (0–1)
 val pixelIntensity = lightEstimate.pixelIntensity
 
-// Temperatura barwowa (Kelvin) — ciepłe vs zimne światło
+// Temperatura barwowa (Kelvin) - ciepłe vs zimne światło
 val colorCorrection = lightEstimate.colorCorrection  // FloatArray[4]: r,g,b,a
 
 // Ustaw oświetlenie w silniku 3D
@@ -378,14 +378,14 @@ class FaceARViewController: UIViewController, ARSessionDelegate {
 
     func session(_ session: ARSession, didUpdate anchors: [ARAnchor]) {
         for anchor in anchors.compactMap({ $0 as? ARFaceAnchor }) {
-            // Blend shapes — 52 parametry mimiki twarzy
+            // Blend shapes - 52 parametry mimiki twarzy
             let blendShapes = anchor.blendShapes
 
             let mouthOpen = blendShapes[.jawOpen]?.floatValue ?? 0
             let leftEyeBlink = blendShapes[.eyeBlinkLeft]?.floatValue ?? 0
             let browRaise = blendShapes[.browInnerUp]?.floatValue ?? 0
 
-            // Gdy usta otwarte > 50% — wyzwól akcję
+            // Gdy usta otwarte > 50% - wyzwól akcję
             if mouthOpen > 0.5 {
                 triggerAction()
             }
@@ -452,7 +452,7 @@ async function init() {
     renderer.xr.enabled = true;
     document.body.appendChild(renderer.domElement);
 
-    // Przycisk "Start AR" — automatycznie doda do strony
+    // Przycisk "Start AR" - automatycznie doda do strony
     document.body.appendChild(
         ARButton.createButton(renderer, {
             requiredFeatures: ['hit-test'],
@@ -540,7 +540,7 @@ function render(timestamp, frame) {
 init();
 ```
 
-WebXR działa natywnie w Chrome na Androidzie (z ARCore) — bez instalacji aplikacji. Safari na iOS obsługuje WebXR tylko w trybie VR od wersji 15.4; pełne AR (`immersive-ar`) wymaga polyfill lub aplikacji natywnej.
+WebXR działa natywnie w Chrome na Androidzie (z ARCore) - bez instalacji aplikacji. Safari na iOS obsługuje WebXR tylko w trybie VR od wersji 15.4; pełne AR (`immersive-ar`) wymaga polyfill lub aplikacji natywnej.
 
 ---
 
@@ -579,10 +579,10 @@ override fun onResume() {
 ### Utrata śledzenia (tracking loss)
 
 SLAM zawodzi w trudnych warunkach:
-- **Jednolite powierzchnie** (biała ściana, gładka podłoga) — brak punktów charakterystycznych
-- **Słabe oświetlenie** — kamera nie widzi tekstur
-- **Szybkie ruchy** — motion blur uniemożliwia śledzenie punktów
-- **Błyszczące/transparentne powierzchnie** — okna, lustra
+- **Jednolite powierzchnie** (biała ściana, gładka podłoga) - brak punktów charakterystycznych
+- **Słabe oświetlenie** - kamera nie widzi tekstur
+- **Szybkie ruchy** - motion blur uniemożliwia śledzenie punktów
+- **Błyszczące/transparentne powierzchnie** - okna, lustra
 
 ```kotlin
 // Obsługa utraty śledzenia
@@ -594,15 +594,15 @@ onSessionUpdated = { session, frame ->
         TrackingState.LIMITED -> {
             val reason = frame.camera.trackingFailureReason
             overlay.text = when (reason) {
-                TrackingFailureReason.INSUFFICIENT_LIGHT -> "Za ciemno — doświetl otoczenie"
-                TrackingFailureReason.EXCESSIVE_MOTION -> "Za szybki ruch — zwolnij"
+                TrackingFailureReason.INSUFFICIENT_LIGHT -> "Za ciemno - doświetl otoczenie"
+                TrackingFailureReason.EXCESSIVE_MOTION -> "Za szybki ruch - zwolnij"
                 TrackingFailureReason.INSUFFICIENT_FEATURES -> "Zbyt jednorodne otoczenie"
                 else -> "Utracono śledzenie"
             }
             overlay.visibility = View.VISIBLE
         }
         TrackingState.STOPPED -> {
-            // Sesja zakończona — restart
+            // Sesja zakończona - restart
         }
     }
 }
@@ -610,7 +610,7 @@ onSessionUpdated = { session, frame ->
 
 ### Prywatność i uprawnienia
 
-AR wymaga dostępu do kamery w czasie rzeczywistym — szczególnie wrażliwe są:
+AR wymaga dostępu do kamery w czasie rzeczywistym - szczególnie wrażliwe są:
 - **Face tracking**: dane biometryczne chronione przez RODO
 - **Skanowanie wnętrz**: mapy 3D pomieszczeń mogą być przechowywane przez SDK
 - **Image tracking**: możliwe śledzenie lokalizacji po znanych obrazach
@@ -621,7 +621,7 @@ Zawsze informuj użytkownika, że kamera jest aktywna, i minimalizuj dane wysył
 
 ## Porównanie platform
 
-### ARCore vs ARKit — możliwości
+### ARCore vs ARKit - możliwości
 
 | Funkcja | ARCore (Android) | ARKit (iOS) |
 |---------|-----------------|-------------|
@@ -649,10 +649,10 @@ Zawsze informuj użytkownika, że kamera jest aktywna, i minimalizuj dane wysył
 - **Web / bez instalacji** → WebXR + Three.js (Android Chrome; iOS z ograniczeniami)
 - **Zaawansowana AR / MR** → Unity MRTK3 (obsługa HoloLens, Quest, iOS, Android)
 
-### Unity AR Foundation — jeden kod, wiele platform
+### Unity AR Foundation - jeden kod, wiele platform
 
 ```csharp
-// Unity AR Foundation: wykrywanie płaszczyzn — działa na ARCore i ARKit
+// Unity AR Foundation: wykrywanie płaszczyzn - działa na ARCore i ARKit
 using UnityEngine;
 using UnityEngine.XR.ARFoundation;
 using UnityEngine.XR.ARSubsystems;
@@ -680,10 +680,10 @@ public class PlaneSpawner : MonoBehaviour {
 
 ## Linki
 
-- [ARCore — Google Developers](https://developers.google.com/ar)
-- [ARKit — Apple Developer](https://developer.apple.com/augmented-reality/arkit/)
-- [SceneView — AR/3D for Android](https://github.com/SceneView/sceneview-android)
-- [Poly Pizza — darmowe modele 3D](https://poly.pizza)
+- [ARCore - Google Developers](https://developers.google.com/ar)
+- [ARKit - Apple Developer](https://developer.apple.com/augmented-reality/arkit/)
+- [SceneView - AR/3D for Android](https://github.com/SceneView/sceneview-android)
+- [Poly Pizza - darmowe modele 3D](https://poly.pizza)
 - [WebXR Device API](https://developer.mozilla.org/en-US/docs/Web/API/WebXR_Device_API)
 - [Unity AR Foundation](https://docs.unity3d.com/Packages/com.unity.xr.arfoundation@latest)
 - [Three.js WebXR Examples](https://threejs.org/examples/?q=webxr)

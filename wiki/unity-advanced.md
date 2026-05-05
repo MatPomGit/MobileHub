@@ -1,4 +1,4 @@
-# Unity — zaawansowane techniki dla mobile
+# Unity - zaawansowane techniki dla mobile
 
 Profesjonalne gry mobilne w Unity wymagają znajomości zaawansowanych technik optymalizacji, monetyzacji i systemu animacji.
 
@@ -10,7 +10,7 @@ public class PlayerAnimator : MonoBehaviour
 {
     private Animator animator;
     
-    // Hashed IDs — szybszy dostęp niż stringi
+    // Hashed IDs - szybszy dostęp niż stringi
     private static readonly int IsRunning = Animator.StringToHash("IsRunning");
     private static readonly int IsJumping = Animator.StringToHash("IsJumping");
     private static readonly int Speed = Animator.StringToHash("Speed");
@@ -31,10 +31,10 @@ public class PlayerAnimator : MonoBehaviour
 }
 ```
 
-## Addressables — dynamiczne ładowanie zasobów
+## Addressables - dynamiczne ładowanie zasobów
 
 ```csharp
-// Zasoby pobierane na żądanie — mniejszy rozmiar APK
+// Zasoby pobierane na żądanie - mniejszy rozmiar APK
 public class AssetLoader : MonoBehaviour
 {
     [SerializeField] private AssetReference enemyPrefabRef;
@@ -94,7 +94,7 @@ public class AdsManager : MonoBehaviour, IUnityAdsLoadListener, IUnityAdsShowLis
     {
         if (state == UnityAdsShowCompletionState.COMPLETED)
         {
-            // Użytkownik obejrzał reklamę — daj nagrodę
+            // Użytkownik obejrzał reklamę - daj nagrodę
             PlayerDataManager.Instance.AddCoins(100);
             Debug.Log("Nagroda przyznana: 100 monet");
         }
@@ -132,11 +132,11 @@ public class HapticFeedback : MonoBehaviour
 
 ## Linki
 
-- [Unity Learn — Mobile](https://learn.unity.com/pathway/mobile-game-development)
+- [Unity Learn - Mobile](https://learn.unity.com/pathway/mobile-game-development)
 - [Unity Addressables](https://docs.unity3d.com/Packages/com.unity.addressables@1.21/manual/index.html)
 - [Unity Ads](https://docs.unity.com/ads/en-us/manual/UnityAdsHome)
 
-## Unity Input System — obsługa dotyku
+## Unity Input System - obsługa dotyku
 
 ```csharp
 // Nowy Input System (Package: com.unity.inputsystem)
@@ -202,12 +202,12 @@ public class TouchInputHandler : MonoBehaviour
 }
 ```
 
-## Optymalizacja — Batching i Culling
+## Optymalizacja - Batching i Culling
 
 ```csharp
 public class PerformanceOptimizer : MonoBehaviour
 {
-    // Statyczne batching — obiekty, które się nie ruszają
+    // Statyczne batching - obiekty, które się nie ruszają
     // W edytorze: Inspector → Static → Batching Static ✓
 
     // Dynamiczne batching automatyczne dla małych siatek (<900 werteksów)
@@ -218,7 +218,7 @@ public class PerformanceOptimizer : MonoBehaviour
 
     void Start()
     {
-        // LOD Group — zmień jakość modelu z odległością
+        // LOD Group - zmień jakość modelu z odległością
         var lodGroup = GetComponent<LODGroup>();
         var lods = new LOD[3];
 
@@ -233,7 +233,7 @@ public class PerformanceOptimizer : MonoBehaviour
         lodGroup.RecalculateBounds();
     }
 
-    // Object Pooling — zamiast Instantiate/Destroy
+    // Object Pooling - zamiast Instantiate/Destroy
     private Queue<GameObject> bulletPool = new Queue<GameObject>();
     [SerializeField] private GameObject bulletPrefab;
 
@@ -259,10 +259,10 @@ public class PerformanceOptimizer : MonoBehaviour
 ## Universal Render Pipeline (URP) dla Mobile
 
 ```csharp
-// URP — lżejszy renderer zoptymalizowany pod mobile
+// URP - lżejszy renderer zoptymalizowany pod mobile
 // Instalacja: Package Manager → Universal RP
 
-// Custom URP Pass — post-processing na mobile
+// Custom URP Pass - post-processing na mobile
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -281,7 +281,7 @@ public class MobileBloomPass : ScriptableRenderPass
     {
         var cmd = CommandBufferPool.Get("MobileBloom");
 
-        // Prosty bloom w jednym przejściu — przyjazny dla GPU mobilnych
+        // Prosty bloom w jednym przejściu - przyjazny dla GPU mobilnych
         Blit(cmd, renderingData.cameraData.renderer.cameraColorTargetHandle,
              tempTexture, bloomMaterial, 0);
         Blit(cmd, tempTexture,
@@ -293,7 +293,7 @@ public class MobileBloomPass : ScriptableRenderPass
 }
 ```
 
-## Profiler — pomiar wydajności w Unity
+## Profiler - pomiar wydajności w Unity
 
 ```
 Window → Analysis → Profiler
@@ -312,7 +312,7 @@ Reguła:   GC Alloc w klatce == 0  (nie alokuj w Update!)
 Target:   < 16.67ms całkowity czas klatki dla 60 FPS
 ```
 
-## Addressables — system zarządzania zasobami
+## Addressables - system zarządzania zasobami
 
 System Addressables pozwala ładować zasoby asynchronicznie, zmniejszać rozmiar APK i zarządzać pamięcią na urządzeniach mobilnych.
 
@@ -355,7 +355,7 @@ public class AddressablesManager : MonoBehaviour
         loadedHandles.Add(handle);
     }
 
-    // Zwalnianie pamięci — kluczowe na mobile!
+    // Zwalnianie pamięci - kluczowe na mobile!
     private void OnDestroy()
     {
         foreach (var handle in loadedHandles)
@@ -378,7 +378,7 @@ public class AddressablesManager : MonoBehaviour
 ```
 
 **Dobre praktyki Addressables na mobile:**
-- Grupuj assety w paczki według scen lub poziomów — ładuj tylko to, co potrzebne
+- Grupuj assety w paczki według scen lub poziomów - ładuj tylko to, co potrzebne
 - Zwalniaj uchwyty (`Release`) natychmiast po opuszczeniu sceny
 - Używaj `Addressables.InstantiateAsync` zamiast `LoadAsset + Instantiate`, by Addressables śledziło cykl życia obiektów
 
@@ -387,7 +387,7 @@ public class AddressablesManager : MonoBehaviour
 URP (Universal Render Pipeline) to lżejszy potok renderowania zoptymalizowany pod urządzenia mobilne. Zastępuje Built-in RP i oferuje lepszą wydajność na GPU mobilnych.
 
 ```csharp
-// Custom URP Renderer Feature — własny efekt post-processingu
+// Custom URP Renderer Feature - własny efekt post-processingu
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
@@ -439,7 +439,7 @@ public class MobileOutlinePass : ScriptableRenderPass
 - Ogranicz liczbę świateł per-obiekt w ustawieniach URP Asset (`Max Additional Lights: 2-4`)
 - Preferuj tekstury skompresowane ETC2 (Android) lub ASTC (iOS/Android)
 
-## Unity Profiler — profilowanie na urządzeniu mobilnym
+## Unity Profiler - profilowanie na urządzeniu mobilnym
 
 Profiler Unity umożliwia wykrycie wąskich gardeł CPU, GPU i pamięci bezpośrednio na fizycznym urządzeniu.
 
@@ -471,7 +471,7 @@ Kluczowe metryki:
 ```
 
 ```csharp
-// Profilowanie własnego kodu — znaczniki w Profilerze
+// Profilowanie własnego kodu - znaczniki w Profilerze
 using Unity.Profiling;
 
 public class EnemyAI : MonoBehaviour
@@ -505,7 +505,7 @@ public class EnemyAI : MonoBehaviour
 | Draw Calls | < 100 |
 | Trójkąty | < 100 000 |
 
-## Input System — nowy system wejścia
+## Input System - nowy system wejścia
 
 Pakiet `com.unity.inputsystem` zastępuje stary `Input` API i obsługuje dotyk, gamepady i akcelerometr w jednolity sposób.
 
@@ -567,7 +567,7 @@ public class TouchInputHandler : MonoBehaviour
     }
 }
 
-// Input Actions — obsługa gamepada i klawiatury jednocześnie
+// Input Actions - obsługa gamepada i klawiatury jednocześnie
 public class PlayerController : MonoBehaviour
 {
     private PlayerInputActions inputActions;
@@ -594,7 +594,7 @@ public class PlayerController : MonoBehaviour
 }
 ```
 
-## AR Foundation — rozszerzona rzeczywistość w Unity
+## AR Foundation - rozszerzona rzeczywistość w Unity
 
 AR Foundation to warstwa abstrakcji nad ARCore (Android) i ARKit (iOS), pozwalająca pisać jeden kod dla obu platform.
 
@@ -654,7 +654,7 @@ public class ARObjectPlacer : MonoBehaviour
     }
 }
 
-// Śledzenie twarzy — ARKit/ARCore
+// Śledzenie twarzy - ARKit/ARCore
 public class FaceTracker : MonoBehaviour
 {
     private ARFaceManager faceManager;

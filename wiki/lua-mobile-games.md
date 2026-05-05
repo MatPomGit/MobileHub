@@ -1,6 +1,6 @@
-# Lua w grach mobilnych — silniki i frameworki
+# Lua w grach mobilnych - silniki i frameworki
 
-Lua to lekki, skryptowy język programowania stworzony w 1993 r. na Pontifícia Universidade Católica do Rio de Janeiro. Zaprojektowany jako język osadzalny (*embeddable*), idealnie nadaje się do skryptowania logiki gry — interpreter zajmuje kilkadziesiąt kilobajtów, wykonanie jest szybkie, a integracja z kodem C/C++ jest natywna. Dziś Lua jest jednym z najpopularniejszych języków w branży gamedev, stosowanym w grach takich jak **World of Warcraft**, **Roblox**, **Angry Birds** czy **LÖVE**.
+Lua to lekki, skryptowy język programowania stworzony w 1993 r. na Pontifícia Universidade Católica do Rio de Janeiro. Zaprojektowany jako język osadzalny (*embeddable*), idealnie nadaje się do skryptowania logiki gry - interpreter zajmuje kilkadziesiąt kilobajtów, wykonanie jest szybkie, a integracja z kodem C/C++ jest natywna. Dziś Lua jest jednym z najpopularniejszych języków w branży gamedev, stosowanym w grach takich jak **World of Warcraft**, **Roblox**, **Angry Birds** czy **LÖVE**.
 
 ---
 
@@ -37,9 +37,9 @@ local nic = nil               -- nil
 ]]
 ```
 
-### Tabele — podstawowa struktura danych
+### Tabele - podstawowa struktura danych
 
-W Lua nie ma tablic, klas ani słowników w tradycyjnym sensie — wszystko to realizują **tabele**:
+W Lua nie ma tablic, klas ani słowników w tradycyjnym sensie - wszystko to realizują **tabele**:
 
 ```lua
 -- Tablica (indeksy od 1!)
@@ -167,7 +167,7 @@ print(bohater:status())    -- Ala: 80/100 HP
 
 ---
 
-## LÖVE 2D — najpopularniejszy silnik Lua na mobile
+## LÖVE 2D - najpopularniejszy silnik Lua na mobile
 
 [LÖVE](https://love2d.org/) (Love2D) to darmowy, otwartoźródłowy framework 2D napisany w C++, skryptowany w Lua. Obsługuje Android, iOS, Windows, macOS i Linux.
 
@@ -286,7 +286,7 @@ local function rysujDpad()
 end
 ```
 
-### Konfiguracja dla Androida — conf.lua
+### Konfiguracja dla Androida - conf.lua
 
 ```lua
 function love.conf(t)
@@ -322,14 +322,14 @@ apksigner sign --ks mykeystore.jks mygame-aligned.apk
 
 ---
 
-## Solar2D (Corona SDK) — Lua dla mobile
+## Solar2D (Corona SDK) - Lua dla mobile
 
 [Solar2D](https://solar2d.com/) (dawniej Corona SDK) to silnik 2D skupiony wyłącznie na mobile (Android/iOS). Oferuje szeroki ekosystem pluginów i bardzo szybki workflow.
 
 ### Przykład: scena z fizyką Box2D
 
 ```lua
--- main.lua — Solar2D
+-- main.lua - Solar2D
 
 local physics = require("physics")
 physics.start()
@@ -352,7 +352,7 @@ gracz.x = display.contentCenterX
 gracz.y = 100
 physics.addBody(gracz, "dynamic", {density=1.0, friction=0.3, bounce=0.1})
 
--- Obsługa dotyku — skok
+-- Obsługa dotyku - skok
 local function onTap(event)
     gracz:setLinearVelocity(0, -400)
     return true
@@ -419,7 +419,7 @@ return scene
 
 ---
 
-## Defold — silnik od King (Candy Crush)
+## Defold - silnik od King (Candy Crush)
 
 [Defold](https://defold.com/) to darmowy silnik 2D/3D, całkowicie skryptowany w Lua. Stworzony przez firmę King (twórcy Candy Crush Saga), dziś zarządzany przez Defold Foundation.
 
@@ -524,12 +524,12 @@ end
 
 ---
 
-## Gideros Mobile — lekki silnik Lua
+## Gideros Mobile - lekki silnik Lua
 
 [Gideros](http://giderosmobile.com/) to lekki silnik 2D z podejściem zdarzeniowym (event-driven), zbliżonym do AS3/Flash. Bardzo szybki prototyping, dobra integracja z OpenGL ES.
 
 ```lua
--- Gideros — main.lua
+-- Gideros - main.lua
 
 -- Sprite z teksturą
 local texture = Texture.new("gracz.png")
@@ -564,11 +564,11 @@ end)
 
 ---
 
-## Roblox — Lua w największej platformie gier mobilnych
+## Roblox - Lua w największej platformie gier mobilnych
 
 Roblox używa zmodyfikowanej wersji Lua zwanej **Luau** (z opcjonalną statyczną typizacją). To jedna z najważniejszych platform do tworzenia gier mobilnych przez społeczność.
 
-### Luau — statyczna typizacja
+### Luau - statyczna typizacja
 
 ```luau
 -- Luau (Roblox) z typami
@@ -582,7 +582,7 @@ local function calculateScore(player: Player, bonus: number): number
     return player.Points * player.Level + bonus
 end
 
--- RemoteEvent — komunikacja serwer-klient
+-- RemoteEvent - komunikacja serwer-klient
 local ReplicatedStorage = game:GetService("ReplicatedStorage")
 local CoinEvent = ReplicatedStorage:WaitForChild("CoinCollected")
 
@@ -603,7 +603,7 @@ end
 
 ---
 
-## LuaJIT — wydajność Lua na mobilnych CPU
+## LuaJIT - wydajność Lua na mobilnych CPU
 
 [LuaJIT](https://luajit.org/) to JIT-kompilator Lua oferujący kilkukrotnie wyższą wydajność niż standardowy interpreter. Wiele silników gier (Corona/Solar2D, niektóre wersje Defold) używa LuaJIT.
 
@@ -710,7 +710,7 @@ local graczId = world:newEntity({
 })
 ```
 
-### State Machine — maszyna stanów postaci
+### State Machine - maszyna stanów postaci
 
 ```lua
 local StateMachine = {}
@@ -834,10 +834,10 @@ end)
 
 Lua jest doskonałym wyborem do tworzenia gier mobilnych dzięki małemu śladowi pamięci, szybkości wykonania (LuaJIT) i łatwości integracji z silnikami C/C++. Główne silniki to:
 
-- **LÖVE** — idealny do nauki i prototypów 2D, open source,
-- **Solar2D** — dojrzały ekosystem, bezpłatny,
-- **Defold** — profesjonalne narzędzie od King, doskonałe do 2D mobile,
-- **Gideros** — szybki prototyping z podejściem zdarzeniowym,
-- **Roblox/Luau** — platforma z największą społecznością.
+- **LÖVE** - idealny do nauki i prototypów 2D, open source,
+- **Solar2D** - dojrzały ekosystem, bezpłatny,
+- **Defold** - profesjonalne narzędzie od King, doskonałe do 2D mobile,
+- **Gideros** - szybki prototyping z podejściem zdarzeniowym,
+- **Roblox/Luau** - platforma z największą społecznością.
 
 Niezależnie od silnika, kluczowe w Lua dla mobile to: zarządzanie garbage collectorem (object pools), keszowanie globalnych funkcji w lokalnych zmiennych, oddzielenie logiki od renderowania i testowanie na prawdziwym urządzeniu, gdzie CPU i GPU mają inne charakterystyki niż desktop.

@@ -20,10 +20,10 @@ Urządzenia mobilne posiadają istotne ograniczenia w porównaniu z serwerami:
 | Pasmo pamięci | 1–3 TB/s | 50–100 GB/s | 20–50 GB/s |
 
 Projektując sieci neuronowe na mobile, inżynierowie muszą balansować między:
-- **Dokładnością (accuracy)** — jakość predykcji modelu
-- **Opóźnieniem (latency)** — czas odpowiedzi inference
-- **Rozmiarem modelu (model size)** — zajętość dysku i RAM
-- **Zużyciem energii (power consumption)** — wpływ na baterię
+- **Dokładnością (accuracy)** - jakość predykcji modelu
+- **Opóźnieniem (latency)** - czas odpowiedzi inference
+- **Rozmiarem modelu (model size)** - zajętość dysku i RAM
+- **Zużyciem energii (power consumption)** - wpływ na baterię
 
 ---
 
@@ -31,7 +31,7 @@ Projektując sieci neuronowe na mobile, inżynierowie muszą balansować między
 
 ### 2.1 FLOPs i MACs
 
-**FLOPs** (Floating Point Operations) — całkowita liczba operacji zmiennoprzecinkowych wykonana podczas jednego forward pass. Często stosuje się termin **MACs** (Multiply-Accumulate Operations), gdzie 1 MAC ≈ 2 FLOPs.
+**FLOPs** (Floating Point Operations) - całkowita liczba operacji zmiennoprzecinkowych wykonana podczas jednego forward pass. Często stosuje się termin **MACs** (Multiply-Accumulate Operations), gdzie 1 MAC ≈ 2 FLOPs.
 
 Dla warstwy konwolucyjnej:
 
@@ -39,7 +39,7 @@ Dla warstwy konwolucyjnej:
 MACs = K_h × K_w × C_in × C_out × H_out × W_out
 ```
 
-Gdzie: `K_h, K_w` — rozmiar kernela, `C_in/C_out` — kanały, `H_out/W_out` — wymiary wyjścia.
+Gdzie: `K_h, K_w` - rozmiar kernela, `C_in/C_out` - kanały, `H_out/W_out` - wymiary wyjścia.
 
 ### 2.2 Parametry modelu
 
@@ -51,12 +51,12 @@ Liczba parametrów określa rozmiar modelu na dysku i w RAM:
 
 ### 2.3 Latency vs Throughput
 
-- **Latency** — czas przetworzenia pojedynczego sample (ms)
-- **Throughput** — liczba sample przetworzonych na sekundę (fps)
+- **Latency** - czas przetworzenia pojedynczego sample (ms)
+- **Throughput** - liczba sample przetworzonych na sekundę (fps)
 
 ---
 
-## 3. Depthwise Separable Convolution — matematyka
+## 3. Depthwise Separable Convolution - matematyka
 
 Kluczową innowacją MobileNet jest **depthwise separable convolution**, rozkład standardowej konwolucji na dwie operacje:
 
@@ -66,7 +66,7 @@ Kluczową innowacją MobileNet jest **depthwise separable convolution**, rozkła
 Koszt = D_K × D_K × M × N × D_F × D_F
 ```
 
-Gdzie: `D_K` — rozmiar kernela, `M` — kanały wejściowe, `N` — kanały wyjściowe, `D_F` — rozmiar feature map.
+Gdzie: `D_K` - rozmiar kernela, `M` - kanały wejściowe, `N` - kanały wyjściowe, `D_F` - rozmiar feature map.
 
 ### 3.2 Depthwise Convolution
 
@@ -126,7 +126,7 @@ Input (k channels)
 ### 4.3 MobileNet V3 (2019)
 
 Ulepszenia z NAS + ręczne korekty:
-- **Squeeze-and-Excitation (SE) blocks** w bottleneck — rekalibracja kanałów
+- **Squeeze-and-Excitation (SE) blocks** w bottleneck - rekalibracja kanałów
 - **Hard-Swish** activation: `x × ReLU6(x+3)/6` (szybsze od Swish dzięki uniknięciu exp)
 - Zoptymalizowane ostatnie warstwy (usunięcie kosztownych warstw końcowych)
 - Dwie wersje: **MobileNetV3-Large** i **MobileNetV3-Small**
@@ -162,7 +162,7 @@ EfficientNet-Lite to wersja EfficientNet przystosowana do edge devices i TFLite:
 
 Oparty na "Fire modules": squeeze (1×1) + expand (1×1 + 3×3):
 - Rozmiar ≈ 0,5 MB (bez kwantyzacji)
-- Top-1 ≈ 57% na ImageNet — znacznie niżej od MobileNet
+- Top-1 ≈ 57% na ImageNet - znacznie niżej od MobileNet
 - Przeznaczony dla środowisk z bardzo ograniczoną pamięcią (embedded)
 
 ### 6.2 MnasNet
@@ -173,7 +173,7 @@ Wynik **Neural Architecture Search** z latency jako częścią funkcji celu:
 reward(m) = ACC(m) × (LAT(m) / T)^w
 ```
 
-Gdzie `T` to target latency (np. 75 ms), `w=-0.07` — siła kary za przekroczenie. Szukanie odbywało się na realnym Pixel 1, a nie symulatorze.
+Gdzie `T` to target latency (np. 75 ms), `w=-0.07` - siła kary za przekroczenie. Szukanie odbywało się na realnym Pixel 1, a nie symulatorze.
 
 ### 6.3 ShuffleNet V2
 
@@ -188,7 +188,7 @@ Używa **channel split** i **channel shuffle** dla efektywności na CPU:
 ### 7.1 MobileBERT
 
 Kompresja BERT poprzez bottleneck architecture:
-- 25M params (BERT-Base: 110M params — 4,3× mniejszy)
+- 25M params (BERT-Base: 110M params - 4,3× mniejszy)
 - Trenowany przez **progressive knowledge distillation** od "inverted-bottleneck teacher"
 - Przyspieszenie 5,5× przy zachowaniu 99% jakości BERT na GLUE
 
@@ -197,14 +197,14 @@ Kompresja BERT poprzez bottleneck architecture:
 Destylacja wiedzy z BERT-Base z soft labels:
 - 66M params, 60% mniejszy od BERT
 - Zachowuje 97% jakości na GLUE benchmark
-- 60% szybszy inference — dobry kompromis
+- 60% szybszy inference - dobry kompromis
 
 ### 7.3 TinyBERT
 
 Dwuetapowa destylacja (Transformer distillation):
 
-1. **General Distillation** — naśladowanie attention matrices i hidden states nauczyciela (BERT) na dużym korpusie
-2. **Task-Specific Distillation** — augmentowany data distillation dla konkretnego zadania
+1. **General Distillation** - naśladowanie attention matrices i hidden states nauczyciela (BERT) na dużym korpusie
+2. **Task-Specific Distillation** - augmentowany data distillation dla konkretnego zadania
 
 | Model | Params | SQuAD v1.1 F1 | GLUE Score | Latency (Pixel 4) |
 |---|---|---|---|---|
@@ -223,11 +223,11 @@ NAS automatycznie projektuje architektury sieci zamiast ręcznego projektowania.
 
 - **Reinforcement Learning NAS** (NASNet): agent generuje architekturę (sekwencja decyzji), otrzymuje reward = accuracy na validation set
 - **Evolutionary NAS**: populacja architektur, krzyżowanie i mutacja, selekcja przez accuracy
-- **Differentiable NAS (DARTS)**: ciągła relaksacja przestrzeni architektur — gradient descent przez operacje
+- **Differentiable NAS (DARTS)**: ciągła relaksacja przestrzeni architektur - gradient descent przez operacje
 
 ### 8.2 Hardware-Aware NAS
 
-Kluczowe dla mobile — uwzględnia latency na docelowym hardware:
+Kluczowe dla mobile - uwzględnia latency na docelowym hardware:
 
 ```python
 def reward(accuracy, latency, target_latency=50.0, w=-0.07):
@@ -340,7 +340,7 @@ def convert_to_tflite_int8(model, calibration_data):
 
 ### 10.2 GRU vs LSTM na mobile
 
-GRU (Gated Recurrent Unit) ma mniej parametrów niż LSTM (2 bramki vs 3) przy zbliżonej jakości — jest preferowany w zastosowaniach mobilnych:
+GRU (Gated Recurrent Unit) ma mniej parametrów niż LSTM (2 bramki vs 3) przy zbliżonej jakości - jest preferowany w zastosowaniach mobilnych:
 
 | Model | Bramki | Params (hidden=256) | Relative Speed |
 |---|---|---|---|
@@ -486,12 +486,12 @@ class MobileNetClassifier(private val context: Context) {
 
 ## 13. Dobre praktyki
 
-1. **Dobieraj model do wymagań** — MobileNetV3-Small gdy priorytetem jest szybkość, EfficientNet-Lite4 gdy potrzebna dokładność
-2. **Kwantyzuj do INT8** — ~4× mniejszy rozmiar, ~2-3× przyspieszenie latency
-3. **Profiluj na docelowym urządzeniu** — latency mocno zależy od CPU/NPU/GPU konkretnego SoC
-4. **Używaj representative dataset** przy kalibracji PTQ — jakość INT8 jest lepsza przy dobrych przykładach
-5. **Transfer learning** drastycznie redukuje potrzebne dane i czas treningu — użyj ImageNet weights jako punktu startowego
-6. **GRU zamiast LSTM** dla modeli sekwencyjnych — mniej parametrów, szybszy inference
+1. **Dobieraj model do wymagań** - MobileNetV3-Small gdy priorytetem jest szybkość, EfficientNet-Lite4 gdy potrzebna dokładność
+2. **Kwantyzuj do INT8** - ~4× mniejszy rozmiar, ~2-3× przyspieszenie latency
+3. **Profiluj na docelowym urządzeniu** - latency mocno zależy od CPU/NPU/GPU konkretnego SoC
+4. **Używaj representative dataset** przy kalibracji PTQ - jakość INT8 jest lepsza przy dobrych przykładach
+5. **Transfer learning** drastycznie redukuje potrzebne dane i czas treningu - użyj ImageNet weights jako punktu startowego
+6. **GRU zamiast LSTM** dla modeli sekwencyjnych - mniej parametrów, szybszy inference
 
 ---
 
@@ -500,6 +500,6 @@ class MobileNetClassifier(private val context: Context) {
 - [Wprowadzenie do lokalnego AI na mobile](local-ai-intro.md)
 - [Frameworki ML na mobile](mobile-ml-frameworks.md)
 - [Kwantyzacja i optymalizacja modeli AI](model-quantization.md)
-- [Wnioskowanie lokalne — architektura i wydajność](on-device-inference.md)
+- [Wnioskowanie lokalne - architektura i wydajność](on-device-inference.md)
 - [AI w przetwarzaniu obrazu na urządzeniu](ai-image-processing.md)
 - [Modele językowe LLM na urządzeniu mobilnym](llm-on-device.md)

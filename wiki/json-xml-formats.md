@@ -1,10 +1,10 @@
-# JSON i XML — formaty wymiany danych
+# JSON i XML - formaty wymiany danych
 
-JSON i XML to dwa najszerzej stosowane formaty wymiany danych w ekosystemie mobilnym. Przez lata XML był dominującym standardem — napędzał konfigurację Androida, SOAP API i wiele protokołów enterprise. Dziś w nowych projektach przeważa JSON: jest zwięzły, czytelny i ma natywne wsparcie w językach skryptowych. Oba formaty współistnieją — XML wciąż jest nieodłączną częścią ekosystemu Android (resources, manifest, layout), a JSON króluje w REST API i lokalnym przechowywaniu konfiguracji.
+JSON i XML to dwa najszerzej stosowane formaty wymiany danych w ekosystemie mobilnym. Przez lata XML był dominującym standardem - napędzał konfigurację Androida, SOAP API i wiele protokołów enterprise. Dziś w nowych projektach przeważa JSON: jest zwięzły, czytelny i ma natywne wsparcie w językach skryptowych. Oba formaty współistnieją - XML wciąż jest nieodłączną częścią ekosystemu Android (resources, manifest, layout), a JSON króluje w REST API i lokalnym przechowywaniu konfiguracji.
 
 Ten artykuł omawia strukturę, typowe przypadki użycia, parsowanie w Kotlinie i Swifcie oraz najczęstsze pułapki związane z każdym z formatów.
 
-## JSON — JavaScript Object Notation
+## JSON - JavaScript Object Notation
 
 ### Struktura i składnia
 
@@ -41,13 +41,13 @@ Przykładowa struktura odpowiedzi REST API zwracającej profil użytkownika:
 
 ### Przypadki użycia JSON w aplikacjach mobilnych
 
-- **REST API** — de facto standard komunikacji z backendem,
-- **Lokalna konfiguracja** — pliki ustawień aplikacji, feature flags,
-- **Cache odpowiedzi HTTP** — zapis odpowiedzi na dysk z pominięciem ponownego żądania,
-- **Wymiana danych między komponentami** — np. argument nawigacyjny w Android Navigation Component,
-- **Bazy dokumentowe** — lokalny JSON jako uproszczona baza (np. pliki przechowywane przez `DataStore`).
+- **REST API** - de facto standard komunikacji z backendem,
+- **Lokalna konfiguracja** - pliki ustawień aplikacji, feature flags,
+- **Cache odpowiedzi HTTP** - zapis odpowiedzi na dysk z pominięciem ponownego żądania,
+- **Wymiana danych między komponentami** - np. argument nawigacyjny w Android Navigation Component,
+- **Bazy dokumentowe** - lokalny JSON jako uproszczona baza (np. pliki przechowywane przez `DataStore`).
 
-### Parsowanie JSON w Kotlinie — kotlinx.serialization
+### Parsowanie JSON w Kotlinie - kotlinx.serialization
 
 `kotlinx.serialization` to oficjalna biblioteka Kotlin, zalecana przez Google dla nowych projektów Android. Jest w pełni Kotlin-first, obsługuje `suspend` i działa z Kotlin Multiplatform.
 
@@ -95,12 +95,12 @@ data class Address(
 ```kotlin
 import kotlinx.serialization.json.Json
 
-// Konfiguracja parsera — warto ją współdzielić jako singleton
+// Konfiguracja parsera - warto ją współdzielić jako singleton
 val json = Json {
     ignoreUnknownKeys = true   // bezpieczne przy ewolucji API
     isLenient = false          // ścisłe przestrzeganie standardu JSON
     coerceInputValues = false  // nie wymuszaj konwersji typów
-    prettyPrint = false        // produkcja — zwięzły output
+    prettyPrint = false        // produkcja - zwięzły output
 }
 
 // Deserializacja z tekstu
@@ -127,7 +127,7 @@ fun parseUserFromStream(stream: InputStream): UserProfile =
     json.decodeFromStream<UserProfile>(stream)
 ```
 
-### Parsowanie JSON w Swifcie — Codable
+### Parsowanie JSON w Swifcie - Codable
 
 Swift oferuje protokoły `Encodable` i `Decodable` (łącznie: `Codable`) wbudowane w standardową bibliotekę. Nie wymaga zewnętrznych zależności.
 
@@ -191,11 +191,11 @@ do {
     let user = try parseUser(from: responseData)
     print("Zalogowano: \(user.username)")
 } catch DecodingError.keyNotFound(let key, let context) {
-    print("Brak klucza: \(key.stringValue) — \(context.debugDescription)")
+    print("Brak klucza: \(key.stringValue) - \(context.debugDescription)")
 } catch DecodingError.typeMismatch(let type, let context) {
-    print("Zły typ: \(type) — \(context.debugDescription)")
+    print("Zły typ: \(type) - \(context.debugDescription)")
 } catch DecodingError.valueNotFound(let type, let context) {
-    print("Brak wartości: \(type) — \(context.debugDescription)")
+    print("Brak wartości: \(type) - \(context.debugDescription)")
 } catch {
     print("Błąd parsowania: \(error)")
 }
@@ -203,7 +203,7 @@ do {
 
 ---
 
-## XML — eXtensible Markup Language
+## XML - eXtensible Markup Language
 
 ### Struktura i składnia
 
@@ -231,12 +231,12 @@ XML jest językiem znaczników opartym na tagach, atrybutach i przestrzeniach na
 
 ### Przypadki użycia XML na Androidzie
 
-- **Zasoby aplikacji** — `strings.xml`, `colors.xml`, `dimens.xml`, `styles.xml`,
-- **Layout'y UI** — pliki `.xml` definiujące widoki (choć Compose zastępuje to podejście),
-- **AndroidManifest.xml** — konfiguracja całej aplikacji,
-- **Pliki konfiguracyjne** — np. `network_security_config.xml`,
-- **SOAP API** — starsze systemy enterprise,
-- **RSS/Atom feed** — subskrypcje wiadomości.
+- **Zasoby aplikacji** - `strings.xml`, `colors.xml`, `dimens.xml`, `styles.xml`,
+- **Layout'y UI** - pliki `.xml` definiujące widoki (choć Compose zastępuje to podejście),
+- **AndroidManifest.xml** - konfiguracja całej aplikacji,
+- **Pliki konfiguracyjne** - np. `network_security_config.xml`,
+- **SOAP API** - starsze systemy enterprise,
+- **RSS/Atom feed** - subskrypcje wiadomości.
 
 Przykład zasobu `strings.xml`:
 
@@ -254,9 +254,9 @@ Przykład zasobu `strings.xml`:
 </resources>
 ```
 
-### Parsowanie XML w Kotlinie — XmlPullParser
+### Parsowanie XML w Kotlinie - XmlPullParser
 
-Android dostarcza `XmlPullParser` — lekki parser strumieniowy (SAX-like), który nie ładuje całego dokumentu do pamięci. Jest odpowiedni dla plików XML z zasobów aplikacji lub odpowiedzi sieciowych.
+Android dostarcza `XmlPullParser` - lekki parser strumieniowy (SAX-like), który nie ładuje całego dokumentu do pamięci. Jest odpowiedni dla plików XML z zasobów aplikacji lub odpowiedzi sieciowych.
 
 ```kotlin
 import android.util.Xml
@@ -325,7 +325,7 @@ fun parseRssFeed(inputStream: InputStream): List<RssItem> {
 | REST API | ✅ Dominuje | ❌ Rzadko (głównie SOAP) |
 | Zasoby aplikacji Android | ❌ Nie | ✅ Tak (wymagane) |
 
-## JSON Schema — walidacja struktury
+## JSON Schema - walidacja struktury
 
 JSON Schema pozwala zdefiniować i zweryfikować strukturę dokumentu JSON. Choć Android i iOS nie mają wbudowanej walidacji JSON Schema, można ją zaimplementować ręcznie lub użyć biblioteki.
 
@@ -389,7 +389,7 @@ Parsowanie dużego JSON-a przez DOM (wczytanie całości do pamięci) może spow
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.decodeToSequence
 
-// Parsowanie tablicy JSON jako strumień — element po elemencie
+// Parsowanie tablicy JSON jako strumień - element po elemencie
 fun processLargeArray(stream: InputStream) {
     val sequence = json.decodeToSequence<UserProfile>(stream)
     sequence.forEach { user ->
@@ -416,7 +416,7 @@ sealed class ApiResult<out T> {
 
 ### Liczby zmiennoprzecinkowe
 
-JSON nie rozróżnia `int` i `float`. Wartość `42` może zostać zinterpretowana jako `Double` w zależności od parsera. W Kotlinie `kotlinx.serialization` wymaga jawnych typów w modelu, co eliminuje ten problem — ale przy dynamicznym parsowaniu (`JsonElement`) należy uważać:
+JSON nie rozróżnia `int` i `float`. Wartość `42` może zostać zinterpretowana jako `Double` w zależności od parsera. W Kotlinie `kotlinx.serialization` wymaga jawnych typów w modelu, co eliminuje ten problem - ale przy dynamicznym parsowaniu (`JsonElement`) należy uważać:
 
 ```kotlin
 val element = json.parseToJsonElement("""{"price": 9.99}""")
@@ -426,7 +426,7 @@ val price = element.jsonObject["price"]?.jsonPrimitive?.double  // ✅
 
 ### Daty i strefy czasowe
 
-JSON nie ma wbudowanego typu daty — daty są zawsze stringami. Konwencja ISO 8601 (`"2024-03-15T14:22:00Z"`) jest powszechna, ale jej parsowanie wymaga jawnej konfiguracji:
+JSON nie ma wbudowanego typu daty - daty są zawsze stringami. Konwencja ISO 8601 (`"2024-03-15T14:22:00Z"`) jest powszechna, ale jej parsowanie wymaga jawnej konfiguracji:
 
 ```kotlin
 @Serializable
@@ -437,7 +437,7 @@ data class Event(
 ```
 
 ```swift
-// Swift — dekoder z obsługą ISO 8601
+// Swift - dekoder z obsługą ISO 8601
 let decoder = JSONDecoder()
 decoder.dateDecodingStrategy = .iso8601
 ```

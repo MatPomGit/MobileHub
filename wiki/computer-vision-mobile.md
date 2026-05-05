@@ -1,6 +1,6 @@
 # Wizja komputerowa w aplikacjach mobilnych
 
-Wizja komputerowa na urządzeniach mobilnych umożliwia detekcję obiektów, segmentację, klasyfikację i rozpoznawanie tekstu — bez internetu, z niskim opóźnieniem. Kluczem jest wybór właściwego modelu i optymalizacja pod ograniczenia sprzętowe urządzenia.
+Wizja komputerowa na urządzeniach mobilnych umożliwia detekcję obiektów, segmentację, klasyfikację i rozpoznawanie tekstu - bez internetu, z niskim opóźnieniem. Kluczem jest wybór właściwego modelu i optymalizacja pod ograniczenia sprzętowe urządzenia.
 
 ## Ekosystem narzędzi
 
@@ -19,9 +19,9 @@ Wizja komputerowa na urządzeniach mobilnych umożliwia detekcję obiektów, seg
 └────────────────────┴─────────────────────────────────────────┘
 ```
 
-## ML Kit — gotowe modele bez trenowania
+## ML Kit - gotowe modele bez trenowania
 
-ML Kit od Google oferuje gotowe do użycia modele detekcji, rozpoznawania tekstu, twarzy i wiele innych — bez konieczności trenowania ani wiedzy o sieciach neuronowych. Poniższy przykład pokazuje integrację detekcji obiektów w trybie strumieniowym z `CameraX ImageAnalysis`, gdzie każda klatka z kamery jest automatycznie analizowana. Wynik zawiera prostokąt otaczający wykryty obiekt (`boundingBox`), jego stały identyfikator między klatkami (`trackingId`) oraz etykietę kategorii z poziomem pewności.
+ML Kit od Google oferuje gotowe do użycia modele detekcji, rozpoznawania tekstu, twarzy i wiele innych - bez konieczności trenowania ani wiedzy o sieciach neuronowych. Poniższy przykład pokazuje integrację detekcji obiektów w trybie strumieniowym z `CameraX ImageAnalysis`, gdzie każda klatka z kamery jest automatycznie analizowana. Wynik zawiera prostokąt otaczający wykryty obiekt (`boundingBox`), jego stały identyfikator między klatkami (`trackingId`) oraz etykietę kategorii z poziomem pewności.
 
 ```kotlin
 // Detekcja obiektów (Object Detection and Tracking)
@@ -53,7 +53,7 @@ override fun analyze(imageProxy: ImageProxy) {
 }
 ```
 
-## TFLite — własny model
+## TFLite - własny model
 
 TensorFlow Lite pozwala uruchomić na urządzeniu mobilnym dowolny model wytrenowany w TensorFlow lub PyTorch (po konwersji), w tym popularne architektury jak YOLOv8 czy EfficientDet. Kluczową optymalizacją jest delegacja obliczeń do GPU, która może przyspieszyć inferencję 3–10-krotnie w porównaniu z CPU. Poniższy kod pokazuje oba podejścia: wygodne API wysokopoziomowe `ObjectDetector` oraz niskopoziomowy `Interpreter` z `GpuDelegate`.
 
@@ -83,7 +83,7 @@ class ObjectDetector(context: Context) {
     }
 }
 
-// GPU Delegate — 3-10x szybciej na obsługiwanych urządzeniach
+// GPU Delegate - 3-10x szybciej na obsługiwanych urządzeniach
 class GpuDetector(context: Context) {
     private val gpuDelegate = GpuDelegate()
     private val interpreter = Interpreter(
@@ -160,12 +160,12 @@ data class DetectionResult(
 )
 ```
 
-## MediaPipe — pipeline wizji
+## MediaPipe - pipeline wizji
 
 MediaPipe Tasks to zestaw gotowych, zoptymalizowanych pipeline'ów do analizy obrazu: detekcja ciała (pose), dłoni, twarzy i połączona (holistic). Działają w trybie strumieniowym z kamery z bardzo niskim opóźnieniem dzięki akceleracji GPU. Poniższy przykład implementuje detektor pozy, który w czasie rzeczywistym wyznacza 33 punkty charakterystyczne sylwetki i oblicza kąt między stawami.
 
 ```kotlin
-// MediaPipe Tasks — gotowe pipeline'y: pose, hands, face, holistic
+// MediaPipe Tasks - gotowe pipeline'y: pose, hands, face, holistic
 dependencies {
     implementation("com.google.mediapipe:tasks-vision:0.10.14")
 }
@@ -221,24 +221,24 @@ class PoseDetector(context: Context) {
 }
 ```
 
-## Optymalizacja modeli — quantization
+## Optymalizacja modeli - quantization
 
 Kwantyzacja to technika zmniejszania rozmiaru modelu i przyspieszania inferencji przez reprezentację wag z mniejszą precyzją (np. INT8 zamiast Float32). Wymaga kalibracji na reprezentatywnych danych wejściowych, aby skompensować utratę precyzji, ale często skutkuje 4-krotnym zmniejszeniem rozmiaru modelu przy minimalnym spadku dokładności. Poniższy skrypt Pythonowy konwertuje model TensorFlow do formatu TFLite z pełną kwantyzacją INT8 gotową do wdrożenia na urządzeniu mobilnym.
 
 ```python
-# Python — konwersja i optymalizacja modelu do TFLite
+# Python - konwersja i optymalizacja modelu do TFLite
 import tensorflow as tf
 
 # Wczytaj oryginalny model (SavedModel lub Keras)
 converter = tf.lite.TFLiteConverter.from_saved_model("my_model")
 
-# INT8 quantization — 4x mniejszy model, 2-3x szybszy
+# INT8 quantization - 4x mniejszy model, 2-3x szybszy
 converter.optimizations = [tf.lite.Optimize.DEFAULT]
 converter.target_spec.supported_ops = [
     tf.lite.OpsSet.TFLITE_BUILTINS_INT8,
     tf.lite.OpsSet.SELECT_TF_OPS
 ]
-# Dane kalibracyjne — reprezentatywne przykłady (bez labelek)
+# Dane kalibracyjne - reprezentatywne przykłady (bez labelek)
 converter.representative_dataset = lambda: (
     [tf.cast(img, tf.float32) / 255.0] for img in calibration_images
 )
@@ -264,11 +264,11 @@ print(f"Rozmiar: {len(tflite_model)/1024:.0f} KB")
 - [TFLite](https://www.tensorflow.org/lite/guide)
 - [MediaPipe Tasks](https://developers.google.com/mediapipe/solutions/guide)
 - [ONNX Runtime Mobile](https://onnxruntime.ai/docs/tutorials/mobile/)
-- [Roboflow — trenowanie i eksport modeli](https://roboflow.com)
+- [Roboflow - trenowanie i eksport modeli](https://roboflow.com)
 
 ---
 
-## Rozpoznawanie tekstu (OCR) — ML Kit Text Recognition v2
+## Rozpoznawanie tekstu (OCR) - ML Kit Text Recognition v2
 
 ML Kit Text Recognition v2 obsługuje łaciński, chiński, japoński, koreański i devanagari bez konieczności pobierania dodatkowych modeli. Model działa w pełni on-device.
 
@@ -338,13 +338,13 @@ fun recognizeFromUri(context: Context, uri: Uri, onResult: (String) -> Unit) {
 | Element | `Element` | Słowo lub token |
 | Symbol | `Symbol` | Pojedynczy znak (opcjonalnie) |
 
-Każdy obiekt udostępnia `boundingBox: Rect?` oraz `cornerPoints: Array<Point>?` — można narysować ramki na Canvas w Compose, analogicznie do sekcji o detekcji obiektów.
+Każdy obiekt udostępnia `boundingBox: Rect?` oraz `cornerPoints: Array<Point>?` - można narysować ramki na Canvas w Compose, analogicznie do sekcji o detekcji obiektów.
 
 ---
 
-## Segmentacja semantyczna — DeepLab na TFLite
+## Segmentacja semantyczna - DeepLab na TFLite
 
-Segmentacja semantyczna przypisuje każdemu pikselowi etykietę klasy (np. „droga", „niebo", „osoba") — w odróżnieniu od detekcji obiektów, która zwraca tylko ramkę. Wynikiem jest maska o rozdzielczości wejściowej.
+Segmentacja semantyczna przypisuje każdemu pikselowi etykietę klasy (np. „droga", „niebo", „osoba") - w odróżnieniu od detekcji obiektów, która zwraca tylko ramkę. Wynikiem jest maska o rozdzielczości wejściowej.
 
 ### Uruchomienie modelu DeepLab v3
 
@@ -363,7 +363,7 @@ class SemanticSegmentor(context: Context) {
         val resized = Bitmap.createScaledBitmap(bitmap, MODEL_SIZE, MODEL_SIZE, true)
         val input   = TensorImage.fromBitmap(resized)
 
-        // Wyjście: [1, 257, 257, 21] — score per klasa
+        // Wyjście: [1, 257, 257, 21] - score per klasa
         val outputBuffer = TensorBuffer.createFixedSize(
             intArrayOf(1, MODEL_SIZE, MODEL_SIZE, NUM_CLASSES), DataType.FLOAT32
         )
@@ -413,9 +413,9 @@ fun SegmentationOverlay(maskIndices: IntArray, modelSize: Int) {
 }
 ```
 
-Nakładka jest renderowana z `alpha = 0.55f`, dzięki czemu oryginalny obraz z kamery pozostaje widoczny pod kolorową maską. Każda klasa Pascal VOC ma unikalny kolor — użytkownik od razu widzi, które obszary zostały rozpoznane jako droga, ludzie lub pojazdy.
+Nakładka jest renderowana z `alpha = 0.55f`, dzięki czemu oryginalny obraz z kamery pozostaje widoczny pod kolorową maską. Każda klasa Pascal VOC ma unikalny kolor - użytkownik od razu widzi, które obszary zostały rozpoznane jako droga, ludzie lub pojazdy.
 
-## CameraX — integracja z analizą obrazu
+## CameraX - integracja z analizą obrazu
 
 CameraX to biblioteka AndroidX upraszczająca obsługę kamery. Łączy się bezpośrednio z pipeline'em wizji komputerowej przez `ImageAnalysis`:
 

@@ -1,6 +1,6 @@
 # Wprowadzenie do formatów plików w aplikacjach mobilnych
 
-Każda aplikacja mobilna — bez względu na platformę — przechowuje, przetwarza i wymienia dane. To, w jakim formacie dane są zapisane, ma bezpośredni wpływ na wydajność, zużycie baterii, wielkość paczki instalacyjnej oraz komfort użytkownika. Programista, który nie rozumie różnic między formatami, często podejmuje przypadkowe decyzje, które ujawniają się dopiero przy skalowaniu aplikacji: zbyt duże pliki zwalniają sieć, nieodpowiedni format obrazu zwiększa zużycie RAM-u, a nadmiarowe parsowanie XML blokuje wątek UI.
+Każda aplikacja mobilna - bez względu na platformę - przechowuje, przetwarza i wymienia dane. To, w jakim formacie dane są zapisane, ma bezpośredni wpływ na wydajność, zużycie baterii, wielkość paczki instalacyjnej oraz komfort użytkownika. Programista, który nie rozumie różnic między formatami, często podejmuje przypadkowe decyzje, które ujawniają się dopiero przy skalowaniu aplikacji: zbyt duże pliki zwalniają sieć, nieodpowiedni format obrazu zwiększa zużycie RAM-u, a nadmiarowe parsowanie XML blokuje wątek UI.
 
 Ten artykuł to mapa pojęciowa świata formatów plików w kontekście mobilnym. Kolejne artykuły w tej sekcji wikiów omawiają każdą kategorię szczegółowo.
 
@@ -36,7 +36,7 @@ Format pliku definiuje, jak bity i bajty są zorganizowane, aby niosły określo
 
 Zarówno Android, jak i iOS używają standardu MIME (Multipurpose Internet Mail Extensions) do identyfikowania treści. Typ MIME składa się z kategorii i podtypu, np. `image/webp`, `application/json`, `text/csv`.
 
-**Android** — system używa MIME przy:
+**Android** - system używa MIME przy:
 - pobieraniu pliku przez przeglądarkę lub `DownloadManager`,
 - udostępnianiu pliku innym aplikacjom przez `FileProvider`,
 - rejestrowaniu obsługiwanych typów w `AndroidManifest.xml`.
@@ -53,10 +53,10 @@ Zarówno Android, jak i iOS używają standardu MIME (Multipurpose Internet Mail
 </activity>
 ```
 
-**iOS** — system używa UTI (Uniform Type Identifiers) oraz typów zadeklarowanych w `Info.plist`:
+**iOS** - system używa UTI (Uniform Type Identifiers) oraz typów zadeklarowanych w `Info.plist`:
 
 ```xml
-<!-- Info.plist — deklaracja obsługiwanego UTI -->
+<!-- Info.plist - deklaracja obsługiwanego UTI -->
 <key>CFBundleDocumentTypes</key>
 <array>
     <dict>
@@ -76,7 +76,7 @@ Zarówno Android, jak i iOS używają standardu MIME (Multipurpose Internet Mail
 
 Rozszerzenia plików (`.json`, `.png`, `.mp4`) są konwencją, a nie gwarancją formatu. Zarówno Android, jak i iOS potrafią wykryć rzeczywisty typ pliku przez analizę nagłówka (magic bytes), lecz w praktyce aplikacje opierają się na rozszerzeniu przy wyborze parsera. Błędnie nazwany plik może prowadzić do wyjątków trudnych do debugowania.
 
-## Wybór formatu — kluczowe kryteria
+## Wybór formatu - kluczowe kryteria
 
 Przed wyborem formatu warto odpowiedzieć na kilka pytań:
 
@@ -106,7 +106,7 @@ Wybierając format, balansujemy między trzema właściwościami:
              /  \
             /    \
            /      \
-  Czytelność ——— Kompatybilność
+  Czytelność --- Kompatybilność
 ```
 
 - **Wydajność ↔ Czytelność**: Protobuf jest szybki, ale nie do czytania przez człowieka; JSON jest wolniejszy, ale przejrzysty.
@@ -156,9 +156,9 @@ Formaty binarne (Protocol Buffers, FlatBuffers) pozwalają na odczyt bez pełnej
 
 Format wpływa na baterię przez dwa mechanizmy:
 
-1. **Czas procesora na parsowanie** — wolniejsze parsowanie = dłuższa praca CPU = więcej energii. XML z parsowaniem DOM jest od 3× do 10× wolniejszy niż odpowiednik JSON, który z kolei jest wolniejszy od Protobuf.
+1. **Czas procesora na parsowanie** - wolniejsze parsowanie = dłuższa praca CPU = więcej energii. XML z parsowaniem DOM jest od 3× do 10× wolniejszy niż odpowiednik JSON, który z kolei jest wolniejszy od Protobuf.
 
-2. **Transfer danych przez sieć/Bluetooth** — większy payload = dłuższy transfer = więcej energii. Skompresowanie odpowiedzi JSON gzip-em redukuje jej rozmiar o ~70%, co bezpośrednio przekłada się na czas transferu LTE.
+2. **Transfer danych przez sieć/Bluetooth** - większy payload = dłuższy transfer = więcej energii. Skompresowanie odpowiedzi JSON gzip-em redukuje jej rozmiar o ~70%, co bezpośrednio przekłada się na czas transferu LTE.
 
 ```text
 Względne koszty parsowania (orientacyjnie):
@@ -175,9 +175,9 @@ Względne koszty parsowania (orientacyjnie):
 Wyobraź sobie aplikację pobierającą listę 1000 produktów co 5 minut:
 
 ```kotlin
-// ZŁY wybór: nieskompresowany JSON — ~250 KB per request
-// LEPSZY wybór: JSON + Content-Encoding: gzip — ~45 KB per request  
-// NAJLEPSZY dla baterii: Protobuf — ~30 KB per request, szybsze parsowanie
+// ZŁY wybór: nieskompresowany JSON - ~250 KB per request
+// LEPSZY wybór: JSON + Content-Encoding: gzip - ~45 KB per request
+// NAJLEPSZY dla baterii: Protobuf - ~30 KB per request, szybsze parsowanie
 
 // Konfiguracja OkHttp z automatyczną dekompresją gzip
 val client = OkHttpClient.Builder()
@@ -190,11 +190,11 @@ val client = OkHttpClient.Builder()
     .build()
 ```
 
-## Kodowanie znaków — często pomijana pułapka
+## Kodowanie znaków - często pomijana pułapka
 
 Wszystkie formaty tekstowe zależą od kodowania znaków. Mobilne aplikacje pracujące z wielojęzyczną zawartością powinny konsekwentnie używać **UTF-8**. Typowe problemy:
 
-- Pliki CSV zapisane w Excel domyślnie używają Windows-1250 (polskie znaki, kodowanie łacińskie) — parsowanie jako UTF-8 da błędne wyniki.
+- Pliki CSV zapisane w Excel domyślnie używają Windows-1250 (polskie znaki, kodowanie łacińskie) - parsowanie jako UTF-8 da błędne wyniki.
 - Odpowiedź HTTP bez nagłówka `Content-Type: application/json; charset=utf-8` może być błędnie zinterpretowana przez starszy klient.
 - Na Androidzie `FileReader()` używa domyślnego kodowania systemu, które nie zawsze jest UTF-8.
 
@@ -241,11 +241,11 @@ fun migrateConfig(raw: Map<String, Any>): AppConfig {
 
 ## Podsumowanie i wskazówki praktyczne
 
-- **Nie optymalizuj przedwcześnie** — zacznij od JSON, który jest czytelny i ma świetne wsparcie narzędzi. Przejdź na Protobuf, gdy zmierzysz rzeczywisty problem z wydajnością.
-- **Kompresuj transfer** — włączenie gzip na serwerze często daje więcej niż zmiana formatu.
-- **Weryfikuj kodowanie** — zawsze używaj UTF-8 dla danych tekstowych.
-- **Stosuj streaming dla dużych plików** — nigdy nie wczytuj pliku >1 MB w całości do pamięci, jeśli nie jest to konieczne.
+- **Nie optymalizuj przedwcześnie** - zacznij od JSON, który jest czytelny i ma świetne wsparcie narzędzi. Przejdź na Protobuf, gdy zmierzysz rzeczywisty problem z wydajnością.
+- **Kompresuj transfer** - włączenie gzip na serwerze często daje więcej niż zmiana formatu.
+- **Weryfikuj kodowanie** - zawsze używaj UTF-8 dla danych tekstowych.
+- **Stosuj streaming dla dużych plików** - nigdy nie wczytuj pliku >1 MB w całości do pamięci, jeśli nie jest to konieczne.
 - **Przechowuj pole wersji** w lokalnych plikach konfiguracyjnych i danych.
-- **Testuj na urządzeniach z małą pamięcią** — słabe telefony Android mają 2–3 GB RAM i agresywny OOM killer.
+- **Testuj na urządzeniach z małą pamięcią** - słabe telefony Android mają 2–3 GB RAM i agresywny OOM killer.
 
 Kolejne artykuły w tej sekcji omawiają szczegółowo: JSON i XML, CSV/YAML/TOML oraz formaty obrazów.

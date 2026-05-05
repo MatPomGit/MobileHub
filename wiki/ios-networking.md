@@ -1,8 +1,8 @@
-# Sieć i API w iOS — URLSession, Alamofire, Combine
+# Sieć i API w iOS - URLSession, Alamofire, Combine
 
 iOS oferuje `URLSession` jako wbudowany klient HTTP z pełnym wsparciem dla `async/await`. Alamofire to popularna biblioteka upraszczająca złożone scenariusze. Combine umożliwia reaktywne pipelines.
 
-## URLSession — podstawy async/await
+## URLSession - podstawy async/await
 
 ```swift
 // Warstwa sieciowa z generycznym dekodowaniem
@@ -69,10 +69,10 @@ enum NetworkError: LocalizedError {
 }
 ```
 
-## API Repository — warstwa danych
+## API Repository - warstwa danych
 
 ```swift
-// Protokół + implementacja — umożliwia MockRepository w testach
+// Protokół + implementacja - umożliwia MockRepository w testach
 protocol ProductsRepositoryProtocol {
     func getProducts(page: Int, pageSize: Int) async throws -> Page<Product>
     func getProduct(id: String) async throws -> Product
@@ -169,7 +169,7 @@ final class ProductListViewModel: ObservableObject {
         isLoading = false
     }
 
-    // Debounce wyszukiwania — poczekaj 300ms po ostatnim keystroke
+    // Debounce wyszukiwania - poczekaj 300ms po ostatnim keystroke
     func onSearchChanged(_ query: String) {
         searchTask?.cancel()
         searchTask = Task {
@@ -188,7 +188,7 @@ final class ProductListViewModel: ObservableObject {
         do {
             products = try await repository.searchProducts(query: query)
         } catch is CancellationError {
-            // Anulowano — ignoruj
+            // Anulowano - ignoruj
         } catch {
             errorMessage = error.localizedDescription
         }
@@ -197,7 +197,7 @@ final class ProductListViewModel: ObservableObject {
 }
 ```
 
-## Alamofire — zaawansowane scenariusze
+## Alamofire - zaawansowane scenariusze
 
 ```swift
 // Alamofire jest szczególnie przydatny dla:
@@ -265,7 +265,7 @@ class AuthInterceptor: RequestInterceptor {
 ## URLSession z Combine
 
 ```swift
-// Reaktywny pipeline — przydatny gdy korzystasz z ObservableObject + @Published
+// Reaktywny pipeline - przydatny gdy korzystasz z ObservableObject + @Published
 struct SearchService {
     func searchPublisher(query: String) -> AnyPublisher<[Product], Error> {
         var components = URLComponents(string: "https://api.example.com/search")!
@@ -312,7 +312,7 @@ func bindSearch() {
 
 ## URLCache i zarządzanie cache HTTP
 
-`URLCache` to wbudowany mechanizm cache HTTP w iOS, przechowujący odpowiedzi na dysku i w pamięci. Domyślna instancja ma 4 MB pamięci i 20 MB dysku — w większości aplikacji warto ją skonfigurować.
+`URLCache` to wbudowany mechanizm cache HTTP w iOS, przechowujący odpowiedzi na dysku i w pamięci. Domyślna instancja ma 4 MB pamięci i 20 MB dysku - w większości aplikacji warto ją skonfigurować.
 
 ### Konfiguracja i polityki cache
 
@@ -353,7 +353,7 @@ class ETagAwareLoader {
         guard let http = response as? HTTPURLResponse else { throw URLError(.badServerResponse) }
 
         if http.statusCode == 304 {
-            // Serwer potwierdził, że zasób się nie zmienił — zwróć z cache
+            // Serwer potwierdził, że zasób się nie zmienił - zwróć z cache
             return URLCache.shared.cachedResponse(for: request)?.data ?? data
         }
         if let newEtag = http.value(forHTTPHeaderField: "ETag") {
@@ -364,9 +364,9 @@ class ETagAwareLoader {
 }
 ```
 
-Polityki cache (`URLRequest.CachePolicy`) warto dobierać do kontekstu: `returnCacheDataDontLoad` sprawdza się w trybie offline, `reloadIgnoringLocalCacheData` — przy pull-to-refresh. Serwer kontroluje czas życia cache przez nagłówek `Cache-Control: max-age=300`.
+Polityki cache (`URLRequest.CachePolicy`) warto dobierać do kontekstu: `returnCacheDataDontLoad` sprawdza się w trybie offline, `reloadIgnoringLocalCacheData` - przy pull-to-refresh. Serwer kontroluje czas życia cache przez nagłówek `Cache-Control: max-age=300`.
 
-## WebSocket w iOS — URLSessionWebSocketTask
+## WebSocket w iOS - URLSessionWebSocketTask
 
 `URLSessionWebSocketTask` to natywne API do WebSocket dostępne od iOS 13, zintegrowane z `URLSession` i wspierające async/await.
 
@@ -409,12 +409,12 @@ actor WebSocketClient {
                 }
             }
         } catch {
-            // Połączenie zerwane — automatyczne ponowne połączenie z backoff
+            // Połączenie zerwane - automatyczne ponowne połączenie z backoff
             await scheduleReconnect()
         }
     }
 
-    // Ping co 25 s — utrzymanie połączenia przez NAT/serwery proxy
+    // Ping co 25 s - utrzymanie połączenia przez NAT/serwery proxy
     private func pingLoop() async {
         while task?.state == .running {
             try? await Task.sleep(nanoseconds: 25_000_000_000)
@@ -435,19 +435,19 @@ actor WebSocketClient {
 }
 ```
 
-Użycie `actor` gwarantuje bezpieczeństwo wątkowe bez ręcznych locków. Wzorzec exponential backoff przy ponownych połączeniach jest standardem — bez niego dziesiątki klientów mogłyby jednocześnie zaatakować serwer po jego restarcie.
+Użycie `actor` gwarantuje bezpieczeństwo wątkowe bez ręcznych locków. Wzorzec exponential backoff przy ponownych połączeniach jest standardem - bez niego dziesiątki klientów mogłyby jednocześnie zaatakować serwer po jego restarcie.
 
-## Background Downloads — URLSession background configuration
+## Background Downloads - URLSession background configuration
 
 Pobieranie dużych plików (wideo, bazy danych, archiwów) wymaga działania nawet po przejściu aplikacji w tło lub jej zamknięciu przez system. `URLSessionConfiguration.background` przenosi transfer do procesu demona systemowego.
 
 ### Konfiguracja i delegat
 
 ```swift
-// Unikalny identyfikator sesji — musi być stały w aplikacji
+// Unikalny identyfikator sesji - musi być stały w aplikacji
 private let backgroundSessionID = "com.example.app.background-download"
 
-// Tworzenie sesji (może być wołana wielokrotnie — system przywróci tę samą sesję)
+// Tworzenie sesji (może być wołana wielokrotnie - system przywróci tę samą sesję)
 lazy var backgroundSession: URLSession = {
     let config = URLSessionConfiguration.background(
         withIdentifier: backgroundSessionID
@@ -464,13 +464,13 @@ func startDownload(url: URL) {
     task.resume()
 }
 
-// AppDelegate — obsługa zdarzenia przebudzenia przez system
+// AppDelegate - obsługa zdarzenia przebudzenia przez system
 func application(
     _ application: UIApplication,
     handleEventsForBackgroundURLSession identifier: String,
     completionHandler: @escaping () -> Void
 ) {
-    // Zachowaj completion handler — wywołaj go PO zakończeniu wszystkich delegatów
+    // Zachowaj completion handler - wywołaj go PO zakończeniu wszystkich delegatów
     BackgroundDownloadManager.shared.completionHandler = completionHandler
 }
 ```
@@ -485,7 +485,7 @@ extension DownloadService: URLSessionDownloadDelegate {
         downloadTask: URLSessionDownloadTask,
         didFinishDownloadingTo location: URL
     ) {
-        // location to plik tymczasowy — MUSIMY go od razu przenieść
+        // location to plik tymczasowy - MUSIMY go od razu przenieść
         let dest = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
             .appendingPathComponent(downloadTask.originalRequest!.url!.lastPathComponent)
         try? FileManager.default.moveItem(at: location, to: dest)
@@ -516,11 +516,11 @@ extension DownloadService: URLSessionDownloadDelegate {
         guard let error = error as NSError?,
               let resumeData = error.userInfo[NSURLSessionDownloadTaskResumeData] as? Data
         else { return }
-        // Serwer wspiera Range — wznów od miejsca przerwania
+        // Serwer wspiera Range - wznów od miejsca przerwania
         let resumeTask = backgroundSession.downloadTask(withResumeData: resumeData)
         resumeTask.resume()
     }
 }
 ```
 
-Kluczowe zasady: completion handler z `handleEventsForBackgroundURLSession` musi być wywołany po obsłudze wszystkich zdarzeń delegata — inaczej system ponownie obudzi aplikację. Plik tymczasowy pod `location` jest usuwany natychmiast po powrocie z `didFinishDownloadingTo`, więc przeniesienie musi nastąpić synchronicznie wewnątrz tej metody.
+Kluczowe zasady: completion handler z `handleEventsForBackgroundURLSession` musi być wywołany po obsłudze wszystkich zdarzeń delegata - inaczej system ponownie obudzi aplikację. Plik tymczasowy pod `location` jest usuwany natychmiast po powrocie z `didFinishDownloadingTo`, więc przeniesienie musi nastąpić synchronicznie wewnątrz tej metody.

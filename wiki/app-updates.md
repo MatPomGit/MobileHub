@@ -1,8 +1,8 @@
 # Wypuszczanie Aktualizacji Własnej Aplikacji Mobilnej
 
-Aktualizacja aplikacji mobilnej to nie tylko „wrzucenie nowej wersji" — to złożony proces obejmujący planowanie wersji, zarządzanie numeracją, wybór strategii wydania, komunikację z użytkownikami i monitoring po wdrożeniu. Dobre praktyki aktualizacyjne wpływają bezpośrednio na retencję, oceny w sklepie, stabilność produktu oraz zaufanie użytkowników.
+Aktualizacja aplikacji mobilnej to nie tylko „wrzucenie nowej wersji" - to złożony proces obejmujący planowanie wersji, zarządzanie numeracją, wybór strategii wydania, komunikację z użytkownikami i monitoring po wdrożeniu. Dobre praktyki aktualizacyjne wpływają bezpośrednio na retencję, oceny w sklepie, stabilność produktu oraz zaufanie użytkowników.
 
-W tym artykule poznasz pełny cykl życia aktualizacji — od numeru wersji, przez mechanizmy dostarczania, po obsługę awaryjnych hotfixów i automatyzację wydań.
+W tym artykule poznasz pełny cykl życia aktualizacji - od numeru wersji, przez mechanizmy dostarczania, po obsługę awaryjnych hotfixów i automatyzację wydań.
 
 ---
 
@@ -12,8 +12,8 @@ W tym artykule poznasz pełny cykl życia aktualizacji — od numeru wersji, prz
 
 Android rozróżnia dwa atrybuty wersji:
 
-- **`versionCode`** — liczba całkowita, monotonicznie rosnąca, używana wewnętrznie przez platformę do wykrywania aktualizacji,
-- **`versionName`** — czytelny ciąg znaków wyświetlany użytkownikowi (np. `1.4.2`).
+- **`versionCode`** - liczba całkowita, monotonicznie rosnąca, używana wewnętrznie przez platformę do wykrywania aktualizacji,
+- **`versionName`** - czytelny ciąg znaków wyświetlany użytkownikowi (np. `1.4.2`).
 
 ```kotlin
 // build.gradle.kts (moduł app)
@@ -31,8 +31,8 @@ Przy każdej nowej wersji wysyłanej do sklepu `versionCode` **musi być większ
 
 iOS używa podobnego podwójnego schematu:
 
-- **`CFBundleShortVersionString`** — wersja widoczna dla użytkownika (np. `2.3.1`),
-- **`CFBundleVersion`** — numer build, musi rosnąć monotonicznie w ramach danej wersji.
+- **`CFBundleShortVersionString`** - wersja widoczna dla użytkownika (np. `2.3.1`),
+- **`CFBundleVersion`** - numer build, musi rosnąć monotonicznie w ramach danej wersji.
 
 ```xml
 <!-- Info.plist -->
@@ -42,7 +42,7 @@ iOS używa podobnego podwójnego schematu:
 <string>47</string>
 ```
 
-### 1.3 Konwencje numeracji — Semantic Versioning
+### 1.3 Konwencje numeracji - Semantic Versioning
 
 Najpopularniejszą konwencją jest **Semantic Versioning (SemVer)**: `MAJOR.MINOR.PATCH`
 
@@ -72,20 +72,20 @@ android {
 
 ## 2. Przygotowanie aktualizacji do wydania
 
-### 2.1 Changelog — co nowego w tej wersji
+### 2.1 Changelog - co nowego w tej wersji
 
 Każda aktualizacja powinna mieć dokumentację zmian widoczną zarówno w sklepie, jak i wewnątrz aplikacji.
 
 **Plik `CHANGELOG.md` w repozytorium:**
 
 ```markdown
-## [2.3.1] — 2025-11-15
+## [2.3.1] - 2025-11-15
 
 ### Poprawiono
 - Naprawiono crash przy ładowaniu obrazów w trybie offline
 - Poprawiono układ w trybie ciemnym na starszych urządzeniach
 
-## [2.3.0] — 2025-11-01
+## [2.3.0] - 2025-11-01
 
 ### Dodano
 - Nowy ekran powiadomień push
@@ -142,7 +142,7 @@ android {
 }
 ```
 
-> **Ważne:** Nie przechowuj haseł keystore w pliku `build.gradle.kts` — używaj zmiennych środowiskowych lub `local.properties` wykluczonych z `.gitignore`.
+> **Ważne:** Nie przechowuj haseł keystore w pliku `build.gradle.kts` - używaj zmiennych środowiskowych lub `local.properties` wykluczonych z `.gitignore`.
 
 ### 2.3 Budowanie release AAB
 
@@ -162,7 +162,7 @@ app/build/outputs/bundle/release/app-release.aab
 
 ### 3.1 Staged Rollout w Google Play
 
-Google Play umożliwia stopniowe udostępnianie aktualizacji — od 1% do 100% użytkowników.
+Google Play umożliwia stopniowe udostępnianie aktualizacji - od 1% do 100% użytkowników.
 
 ```text
 Staged rollout:
@@ -184,7 +184,7 @@ Rollout można **zatrzymać, cofnąć lub przyspieszyć** z poziomu Google Play 
 
 ### 3.2 Phased Release w App Store Connect
 
-Odpowiednikiem staged rollout na iOS jest **Phased Release** — automatyczne rozłożone w czasie.
+Odpowiednikiem staged rollout na iOS jest **Phased Release** - automatyczne rozłożone w czasie.
 
 ```text
 Dzień 1:  1%  użytkowników
@@ -211,7 +211,7 @@ Przed publikacją w production warto przejść przez cały lejek testowy:
 
 ---
 
-## 4. In-App Update API — aktualizacje wewnątrz aplikacji
+## 4. In-App Update API - aktualizacje wewnątrz aplikacji
 
 ### 4.1 Play In-App Update API (Android)
 
@@ -219,8 +219,8 @@ Google Play udostępnia **Play In-App Update API**, które pozwala inicjować ak
 
 Dwa tryby:
 
-- **Flexible** — aktualizacja pobierana w tle, użytkownik nie musi przerywać pracy,
-- **Immediate** — pełnoekranowy overlay zmuszający do instalacji przed kontynuowaniem.
+- **Flexible** - aktualizacja pobierana w tle, użytkownik nie musi przerywać pracy,
+- **Immediate** - pełnoekranowy overlay zmuszający do instalacji przed kontynuowaniem.
 
 ```kotlin
 // build.gradle.kts (zależność)
@@ -294,7 +294,7 @@ private fun showUpdateReadySnackbar() {
 
 ---
 
-## 5. Hotfixes — awaryjne aktualizacje
+## 5. Hotfixes - awaryjne aktualizacje
 
 ### 5.1 Czym jest hotfix
 
@@ -338,7 +338,7 @@ git merge --no-ff hotfix/2.3.2
 
 ### 5.3 Skrócony przegląd kodu (code review) dla hotfixa
 
-Hotfix nie zwalnia z code review — ale można skrócić jego zakres:
+Hotfix nie zwalnia z code review - ale można skrócić jego zakres:
 - skupiamy się wyłącznie na zmienionych liniach,
 - pomijamy analizę stylu i refaktoryzacji,
 - priorytetem jest weryfikacja, że poprawka nie wprowadza nowych błędów,
@@ -346,7 +346,7 @@ Hotfix nie zwalnia z code review — ale można skrócić jego zakres:
 
 ---
 
-## 6. CI/CD — automatyzacja procesu wydań
+## 6. CI/CD - automatyzacja procesu wydań
 
 ### 6.1 Podstawowy pipeline wydawniczy
 
@@ -389,7 +389,7 @@ jobs:
           changesNotSentForReview: true
 ```
 
-### 6.2 Fastlane — uproszczona automatyzacja
+### 6.2 Fastlane - uproszczona automatyzacja
 
 **Fastlane** to popularne narzędzie CLI do automatyzacji wydań zarówno na Androida, jak i iOS.
 
@@ -420,7 +420,7 @@ fastlane deploy_internal
 ### 6.3 Automatyczne wersjonowanie przez CI
 
 ```kotlin
-// build.gradle.kts — versionCode z numeru build CI
+// build.gradle.kts - versionCode z numeru build CI
 val buildNumber = System.getenv("BUILD_NUMBER")?.toInt() ?: 1
 
 android {
@@ -513,7 +513,7 @@ data class AppConfig(
 
 fun checkVersionCompatibility(config: AppConfig) {
     if (BuildConfig.VERSION_CODE < config.minRequiredVersion) {
-        // Wyświetl ekran wymagający aktualizacji — nie można kontynuować
+        // Wyświetl ekran wymagający aktualizacji - nie można kontynuować
         showForceUpdateScreen()
     }
 }
@@ -527,12 +527,12 @@ fun checkVersionCompatibility(config: AppConfig) {
 
 Każda aktualizacja na iOS **musi przejść review Apple**, co trwa zazwyczaj 24–48 godzin (w przypadku pilnych zgłoszeń można wnioskować o expedited review). Warto to uwzględnić w harmonogramie wydania.
 
-### 9.2 TestFlight — dystrybucja testowa
+### 9.2 TestFlight - dystrybucja testowa
 
 TestFlight pozwala dostarczyć aktualizację do testerów przed oficjalnym wydaniem:
 
-- **Internal testers** — do 100 osób z grupy, dostęp natychmiastowy,
-- **External testers** — do 10 000 osób, wymaga review Apple.
+- **Internal testers** - do 100 osób z grupy, dostęp natychmiastowy,
+- **External testers** - do 10 000 osób, wymaga review Apple.
 
 Nowe buildy TestFlight są widoczne dla testerów automatycznie po zatwierdzeniu.
 
@@ -558,12 +558,12 @@ Skuteczne wydawanie aktualizacji to połączenie wielu elementów:
 | **Monitoring** | Android Vitals, Crashlytics, metryki retencji |
 | **Komunikacja** | ekran „Co nowego", banery zamiast blokad |
 
-Regularne, dobrze zaplanowane aktualizacje budują zaufanie użytkowników i pozwalają szybko reagować na problemy — zanim negatywne opinie staną się poważnym problemem dla produktu.
+Regularne, dobrze zaplanowane aktualizacje budują zaufanie użytkowników i pozwalają szybko reagować na problemy - zanim negatywne opinie staną się poważnym problemem dla produktu.
 
 ## Linki
 - [Google Play In-App Update API](https://developer.android.com/guide/playcore/in-app-updates)
-- [Google Play Console — Staged rollouts](https://support.google.com/googleplay/android-developer/answer/6346149)
-- [App Store Connect — Phased Release](https://developer.apple.com/help/app-store-connect/update-your-app/release-a-version-update-in-phases)
-- [Fastlane — automatyzacja wydań](https://fastlane.tools)
+- [Google Play Console - Staged rollouts](https://support.google.com/googleplay/android-developer/answer/6346149)
+- [App Store Connect - Phased Release](https://developer.apple.com/help/app-store-connect/update-your-app/release-a-version-update-in-phases)
+- [Fastlane - automatyzacja wydań](https://fastlane.tools)
 - [Firebase Crashlytics](https://firebase.google.com/docs/crashlytics)
 - [Semantic Versioning](https://semver.org/lang/pl/)
