@@ -197,9 +197,9 @@ function getTimeLimitForMode(mode) {
 
 // Aktualizuje etykietę licznika czasu w interfejsie.
 function updateTimerDisplay() {
-    const timerLabel = document.getElementById('timerLabel');
-    if (timerLabel) {
-        timerLabel.textContent = `Pozostały czas: ${formatTime(state.timeLeft)}`;
+    state.timerLabelElement = state.timerLabelElement || document.getElementById('timerLabel');
+    if (state.timerLabelElement) {
+        state.timerLabelElement.textContent = `Pozostały czas: ${formatTime(state.timeLeft)}`;
     }
 }
 
