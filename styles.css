@@ -2987,7 +2987,7 @@ footer strong {
     #projektMergedWikiContent,
     #egzaminMergedWikiCard .markdown-body,
     #egzaminMergedWikiContent {
-        font-size: 1em;
+        font-size: var(--wiki-font-size);
         line-height: 1.6;
     }
 
