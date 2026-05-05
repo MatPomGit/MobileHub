@@ -49,6 +49,6 @@ using (true);
 
 ## Konfiguracja frontendu
 
-1. W `studenci.html` ustaw `SUPABASE_URL` na publiczny URL projektu.
-2. Ustaw `SUPABASE_ANON_KEY` na publiczny klucz anon.
+1. W `studenci.html` ustaw `SUPABASE_URL` na publiczny URL projektu, np. `https://ndebunrsdtulflzpemwd.supabase.co`.
+2. Ustaw `SUPABASE_ANON_KEY` na publiczny klucz publishable/anon.
 3. Nie używaj `service_role key` po stronie frontendu.

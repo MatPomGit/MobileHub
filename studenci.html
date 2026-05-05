@@ -649,8 +649,8 @@
         /* ------------------------------------------------------------------ */
         /*  Config                                                              */
         /* ------------------------------------------------------------------ */
-        const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
-        const SUPABASE_ANON_KEY = 'YOUR_PUBLIC_ANON_KEY';
+        const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
         const SUPABASE_TABLE = 'project_submissions';
         const ALLOWED_ROLES = ['Leader', 'Frontend', 'Backend'];
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -676,7 +676,12 @@
             document.getElementById('main-alert').className = 'alert hidden';
         }
 
-        function roleClass(role) { return role === 'Leader' ? 'role-lider' : role === 'Frontend' ? 'role-frontend' : 'role-backend'; }
+        /* Komentarz: mapowanie roli na klasę CSS badge. */
+        function roleClass(role) {
+            if (role === 'Leader') return 'role-lider';
+            if (role === 'Frontend') return 'role-frontend';
+            return 'role-backend';
+        }
 
         /* Komentarz: funkcja pobiera wpisy z Supabase i renderuje je w tabeli. */
         async function loadSubmissions() {
@@ -722,10 +727,55 @@
                 tbody.appendChild(tr);
             });
         }
-        function cell(value) { const td = document.createElement('td'); td.textContent = String(value || ''); return td; }
-        function roleCell(role) { const td = document.createElement('td'); const span = document.createElement('span'); span.className = 'role-badge ' + roleClass(role); span.textContent = role; td.appendChild(span); return td; }
-        function repoCell(url) { const td = document.createElement('td'); const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = url; td.appendChild(a); return td; }
-        function actionCell(row) { const td = document.createElement('td'); const e = document.createElement('button'); e.type = 'button'; e.className = 'btn-sm'; e.textContent = 'Edytuj'; e.onclick = () => startEdit(row); const d = document.createElement('button'); d.type = 'button'; d.className = 'btn-sm danger'; d.style.marginLeft = '6px'; d.textContent = 'Usuń'; d.onclick = () => deleteSubmission(row); td.append(e, d); return td; }
+        /* Komentarz: tworzy zwykłą komórkę tekstową tabeli. */
+        function cell(value) {
+            const td = document.createElement('td');
+            td.textContent = String(value || '');
+            return td;
+        }
+
+        /* Komentarz: tworzy badge roli z odpowiednią klasą stylu. */
+        function roleCell(role) {
+            const td = document.createElement('td');
+            const span = document.createElement('span');
+            span.className = 'role-badge ' + roleClass(role);
+            span.textContent = role;
+            td.appendChild(span);
+            return td;
+        }
+
+        /* Komentarz: tworzy bezpieczny link do repozytorium. */
+        function repoCell(url) {
+            const td = document.createElement('td');
+            const anchor = document.createElement('a');
+            anchor.href = url;
+            anchor.target = '_blank';
+            anchor.rel = 'noopener noreferrer';
+            anchor.textContent = url;
+            td.appendChild(anchor);
+            return td;
+        }
+
+        /* Komentarz: buduje zestaw akcji dla pojedynczego wpisu. */
+        function actionCell(row) {
+            const td = document.createElement('td');
+
+            const editButton = document.createElement('button');
+            editButton.type = 'button';
+            editButton.className = 'btn-sm';
+            editButton.textContent = 'Edytuj';
+            editButton.addEventListener('click', () => startEdit(row));
+
+            const deleteButton = document.createElement('button');
+            deleteButton.type = 'button';
+            deleteButton.className = 'btn-sm danger';
+            deleteButton.style.marginLeft = '6px';
+            deleteButton.textContent = 'Usuń';
+            deleteButton.addEventListener('click', () => deleteSubmission(row));
+
+            td.append(editButton, deleteButton);
+            return td;
+        }
 
         function validateForm(data) {
             if (!/^\d{4,10}$/.test(data.student_index)) return 'Numer indeksu musi zawierać 4-10 cyfr.';
@@ -736,9 +786,36 @@
             try { new URL(data.repository_url); } catch (_) { return 'Podaj poprawny URL repozytorium.'; }
             return '';
         }
-        function collectFormData() { return { student_index: document.getElementById('field-student-index').value.trim(), role: document.getElementById('field-role').value, project_name: document.getElementById('field-project-name').value.trim(), repository_url: document.getElementById('field-repository-url').value.trim(), description: document.getElementById('field-project-description').value.trim() }; }
-        function startEdit(row) { editingId = row.id; document.getElementById('field-student-index').value = row.student_index; document.getElementById('field-role').value = row.role; document.getElementById('field-project-name').value = row.project_name; document.getElementById('field-repository-url').value = row.repository_url; document.getElementById('field-project-description').value = row.description; document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Zapisz zmiany'; document.getElementById('btn-cancel-edit').classList.remove('hidden'); }
-        function resetEditState() { editingId = null; document.getElementById('submission-form').reset(); document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie'; document.getElementById('btn-cancel-edit').classList.add('hidden'); }
+        /* Komentarz: pobiera dane z formularza i normalizuje białe znaki. */
+        function collectFormData() {
+            return {
+                student_index: document.getElementById('field-student-index').value.trim(),
+                role: document.getElementById('field-role').value,
+                project_name: document.getElementById('field-project-name').value.trim(),
+                repository_url: document.getElementById('field-repository-url').value.trim(),
+                description: document.getElementById('field-project-description').value.trim()
+            };
+        }
+
+        /* Komentarz: uruchamia tryb edycji i uzupełnia formularz danymi wpisu. */
+        function startEdit(row) {
+            editingId = row.id;
+            document.getElementById('field-student-index').value = row.student_index;
+            document.getElementById('field-role').value = row.role;
+            document.getElementById('field-project-name').value = row.project_name;
+            document.getElementById('field-repository-url').value = row.repository_url;
+            document.getElementById('field-project-description').value = row.description;
+            document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Zapisz zmiany';
+            document.getElementById('btn-cancel-edit').classList.remove('hidden');
+        }
+
+        /* Komentarz: czyści tryb edycji i przywraca stan formularza dodawania. */
+        function resetEditState() {
+            editingId = null;
+            document.getElementById('submission-form').reset();
+            document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
+            document.getElementById('btn-cancel-edit').classList.add('hidden');
+        }
         /* Komentarz: funkcja zapisuje nowy wpis do bazy Supabase. */
         async function addSubmission(formData) {
             const { error } = await supabase.from(SUPABASE_TABLE).insert({
