@@ -187,6 +187,18 @@ function setupPresenterUx(config) {
   startTimer();
 }
 
+
+/**
+ * Zwraca listę pluginów Reveal dostępnych globalnie (np. Notes).
+ */
+function resolveRevealPlugins() {
+  const plugins = [];
+  if (typeof window.RevealNotes !== 'undefined') {
+    plugins.push(window.RevealNotes);
+  }
+  return plugins;
+}
+
 /**
  * Inicjuje Reveal.js z rozszerzoną konfiguracją pod prowadzenie zajęć live.
  * @param {Object} customConfig - opcjonalne nadpisania konfiguracji Reveal.
@@ -207,6 +219,7 @@ function initializeLiveReveal(customConfig = {}) {
     autoAnimate: true,
     autoAnimateEasing: 'ease-in-out',
     autoAnimateDuration: 0.8,
+    plugins: resolveRevealPlugins(),
   };
 
   const finalConfig = { ...baseConfig, ...customConfig };
