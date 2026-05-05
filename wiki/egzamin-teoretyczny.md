@@ -120,7 +120,7 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 ## Przykładowe pytania testowe
 
-**1.** W aplikacji Android z architekturą MVVM lista produktów jest prezentowana w `Composable`, a dane pochodzą z repozytorium. Która warstwa powinna przygotować stan widoku (np. ładowanie, dane, błąd) odporny na zmianę konfiguracji, taką jak obrót ekranu?
+**1.** W aplikacji Android z architekturą MVVM lista produktów jest prezentowana w `Composable`, a dane pochodzą z repozytorium. Który komponent powinien przygotować stan widoku (np. ładowanie, dane, błąd) odporny na zmianę konfiguracji, taką jak obrót ekranu?
 
 - a) Activity
 - b) Fragment
