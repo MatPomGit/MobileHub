@@ -3020,7 +3020,7 @@ footer strong {
         padding: 8px 12px;
     }
 
-    #presentation-preview {
+    body #presentation-preview {
         min-height: 260px;
         max-height: 62vh;
         border-radius: 10px;
