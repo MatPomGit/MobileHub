@@ -3006,9 +3006,10 @@ footer strong {
         padding: 16px;
     }
 
-    .presentation-controls {
+    body .presentation-controls {
         gap: 8px;
         overflow-x: auto;
+        flex-wrap: nowrap;
         padding-bottom: 4px;
         -webkit-overflow-scrolling: touch;
     }
