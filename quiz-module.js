@@ -2,8 +2,10 @@
 
 const QUIZ_QUESTIONS_URL = 'quiz-questions.json';
 const LETTERS = ['A', 'B', 'C', 'D'];
+const QUIZ_SESSION_SIZE = 16;
 
 const state = {
+    allQuestions: [],
     questions: [],
     currentIndex: 0,
     selectedAnswers: []
@@ -22,12 +24,13 @@ function bindEvents() {
     document.getElementById('restartBtn')?.addEventListener('click', restartQuiz);
 }
 
-// Wczytanie pytań z pliku JSON i przygotowanie stanu quizu.
+// Wczytanie pytań, losowanie zbalansowanego zestawu i przygotowanie stanu quizu.
 async function initializeQuiz() {
     try {
         const loadedQuestions = await loadQuestions();
-        state.questions = loadedQuestions;
-        state.selectedAnswers = new Array(state.questions.length).fill(null);
+        state.allQuestions = loadedQuestions;
+        state.questions = buildBalancedQuestionSet(state.allQuestions, QUIZ_SESSION_SIZE);
+        resetSessionState();
 
         updateQuestionTotal();
         updateProgress();
@@ -35,6 +38,12 @@ async function initializeQuiz() {
     } catch (error) {
         renderLoadError(error);
     }
+}
+
+// Zeruje indeks i odpowiedzi dla aktualnie przygotowanego zestawu pytań.
+function resetSessionState() {
+    state.currentIndex = 0;
+    state.selectedAnswers = new Array(state.questions.length).fill(null);
 }
 
 // Pobiera pytania z zewnętrznego pliku JSON i waliduje ich strukturę.
@@ -63,6 +72,63 @@ function validateQuestions(questions) {
             throw new Error(`Pytanie #${index + 1} ma niepoprawną strukturę.`);
         }
     });
+}
+
+// Buduje sesję pytań tak, aby każda kategoria była reprezentowana możliwie równomiernie.
+function buildBalancedQuestionSet(allQuestions, targetSize) {
+    const groupedByCategory = groupQuestionsByCategory(allQuestions);
+    const categories = [...groupedByCategory.keys()];
+    const finalSize = Math.min(targetSize, allQuestions.length);
+
+    if (categories.length === 0) return [];
+
+    const shuffledPools = new Map();
+    categories.forEach((category) => {
+        shuffledPools.set(category, shuffle([...groupedByCategory.get(category)]));
+    });
+
+    const selected = [];
+
+    // Pierwsza faza: rozdajemy pytania po jednej sztuce na kategorię w rundach.
+    while (selected.length < finalSize) {
+        let addedInRound = false;
+
+        for (const category of categories) {
+            if (selected.length >= finalSize) break;
+            const pool = shuffledPools.get(category);
+            if (!pool || pool.length === 0) continue;
+            selected.push(pool.pop());
+            addedInRound = true;
+        }
+
+        if (!addedInRound) break;
+    }
+
+    return shuffle(selected);
+}
+
+// Grupuje pytania po polu category dla późniejszego zbalansowanego losowania.
+function groupQuestionsByCategory(questions) {
+    const map = new Map();
+
+    questions.forEach((question) => {
+        if (!map.has(question.category)) {
+            map.set(question.category, []);
+        }
+        map.get(question.category).push(question);
+    });
+
+    return map;
+}
+
+// Zwraca nową tablicę z losową kolejnością elementów (Fisher-Yates).
+function shuffle(items) {
+    const copy = [...items];
+    for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+    }
+    return copy;
 }
 
 function updateQuestionTotal() {
@@ -142,11 +208,13 @@ function handlePrevious() {
     renderQuestion();
 }
 
+// Resetuje test i losuje nową, zbalansowaną sesję pytań dla kolejnego podejścia.
 function restartQuiz() {
-    state.currentIndex = 0;
-    state.selectedAnswers = new Array(state.questions.length).fill(null);
+    state.questions = buildBalancedQuestionSet(state.allQuestions, QUIZ_SESSION_SIZE);
+    resetSessionState();
     document.getElementById('quizCard').style.display = 'block';
     document.getElementById('resultCard').classList.remove('visible');
+    updateQuestionTotal();
     updateProgress();
     renderQuestion();
     window.scrollTo({ top: 0, behavior: 'smooth' });
