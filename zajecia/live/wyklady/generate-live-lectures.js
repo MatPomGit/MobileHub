@@ -59,7 +59,14 @@ function renderLecture(lecture) {
       const pdfjsModule = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
       pdfjsModule.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
 
-      const pdf = await pdfjsModule.getDocument(pdfSrc).promise;
+      let pdf;
+      try {
+        pdf = await pdfjsModule.getDocument(pdfSrc).promise;
+      } catch (err) {
+        console.error('Błąd ładowania PDF:', err);
+        if (loadingSlide) loadingSlide.innerHTML = '<h2>Błąd ładowania</h2><p>' + err.message + '</p>';
+        return;
+      }
 
       for (let pageNumber = 1; pageNumber <= pdf.numPages; pageNumber += 1) {
         const page = await pdf.getPage(pageNumber);
