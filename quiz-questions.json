@@ -1,0 +1,170 @@
+[
+  {
+    "question": "Która warstwa architektury MVVM odpowiada bezpośrednio za przygotowanie stanu dla interfejsu użytkownika?",
+    "category": "Architektura",
+    "answers": ["Repository", "ViewModel", "Room Database", "Service"],
+    "correctIndex": 1,
+    "explanation": "ViewModel przygotowuje i udostępnia stan dla UI, oddzielając logikę prezentacji od widoku."
+  },
+  {
+    "question": "Która biblioteka jest najczęściej używana w Androidzie do lokalnego przechowywania danych w relacyjnej bazie?",
+    "category": "Android",
+    "answers": ["Retrofit", "Room", "Glide", "WorkManager"],
+    "correctIndex": 1,
+    "explanation": "Room jest warstwą abstrakcji nad SQLite i służy do przechowywania danych lokalnie."
+  },
+  {
+    "question": "Jaki mechanizm w Flutterze służy do budowy interfejsu w podejściu deklaratywnym?",
+    "category": "Flutter",
+    "answers": ["Activities", "Fragments", "Widgets", "Services"],
+    "correctIndex": 2,
+    "explanation": "Flutter buduje interfejs z widgetów opisujących wygląd i zachowanie ekranu."
+  },
+  {
+    "question": "Który protokół jest lekki i często używany w rozwiązaniach IoT do wymiany wiadomości?",
+    "category": "Sieci",
+    "answers": ["FTP", "MQTT", "SOAP", "IMAP"],
+    "correctIndex": 1,
+    "explanation": "MQTT to lekki protokół publish/subscribe popularny w IoT."
+  },
+  {
+    "question": "Który element Androida odpowiada za definicję tras i przejść między ekranami w Compose?",
+    "category": "Android",
+    "answers": ["NavHost", "RecyclerView", "ConstraintLayout", "BroadcastReceiver"],
+    "correctIndex": 0,
+    "explanation": "NavHost przechowuje graf nawigacji i odpowiada za przechodzenie między ekranami."
+  },
+  {
+    "question": "Jak nazywa się test, który sprawdza pojedynczą funkcję lub klasę w izolacji?",
+    "category": "Testowanie",
+    "answers": ["Test jednostkowy", "Test akceptacyjny", "Test wydajnościowy", "Test manualny"],
+    "correctIndex": 0,
+    "explanation": "Test jednostkowy weryfikuje mały fragment logiki bez zależności od całego systemu."
+  },
+  {
+    "question": "Która technologia Apple jest standardowym frameworkiem do budowy nowoczesnego UI na iOS?",
+    "category": "iOS",
+    "answers": ["UIKit XML", "SwiftUI", "CoreDataUI", "SpriteKit"],
+    "correctIndex": 1,
+    "explanation": "SwiftUI to deklaratywny framework Apple do tworzenia interfejsów."
+  },
+  {
+    "question": "Co oznacza skrót PWA w kontekście aplikacji mobilnych?",
+    "category": "Web mobile",
+    "answers": ["Portable Web API", "Progressive Web App", "Programmed Widget Application", "Private Web Access"],
+    "correctIndex": 1,
+    "explanation": "PWA to Progressive Web App, czyli aplikacja webowa działająca jak aplikacja mobilna."
+  },
+  {
+    "question": "Który typ sensora pozwala wykrywać położenie urządzenia względem pola grawitacyjnego Ziemi?",
+    "category": "Urządzenie",
+    "answers": ["Akcelerometr", "Mikrofon", "Czytnik linii papilarnych", "Barometr"],
+    "correctIndex": 0,
+    "explanation": "Akcelerometr mierzy przyspieszenie i pomaga określić orientację urządzenia."
+  },
+  {
+    "question": "Która praktyka zwiększa bezpieczeństwo aplikacji mobilnej podczas komunikacji z API?",
+    "category": "Bezpieczeństwo",
+    "answers": ["Przechowywanie kluczy w kodzie źródłowym", "Wyłączenie HTTPS", "Stosowanie cert pinning i bezpiecznej autoryzacji", "Brak walidacji danych"],
+    "correctIndex": 2,
+    "explanation": "Cert pinning i bezpieczna autoryzacja utrudniają podszywanie się pod serwer."
+  },
+  {
+    "question": "Który komponent Androida najlepiej nadaje się do planowania gwarantowanej pracy w tle, nawet po restarcie aplikacji?",
+    "category": "Android",
+    "answers": ["WorkManager", "Toast", "Intent Filter", "TextView"],
+    "correctIndex": 0,
+    "explanation": "WorkManager służy do niezawodnego uruchamiania odroczonych zadań w tle."
+  },
+  {
+    "question": "Które rozwiązanie w iOS służy do trwałego, bezpiecznego przechowywania tokenów i haseł?",
+    "category": "iOS",
+    "answers": ["UserDefaults", "Clipboard", "Keychain", "Info.plist"],
+    "correctIndex": 2,
+    "explanation": "Keychain jest przeznaczony do przechowywania danych wrażliwych."
+  },
+  {
+    "question": "W Compose i SwiftUI stan interfejsu powinien być najczęściej traktowany jako:",
+    "category": "UI",
+    "answers": ["Dane niemutowalne obserwowane przez widok", "Stały plik konfiguracyjny", "Zmienna globalna współdzielona przez cały system", "Element zależny wyłącznie od XML"],
+    "correctIndex": 0,
+    "explanation": "Nowoczesne frameworki UI promują jednokierunkowy przepływ danych i obserwowalny stan."
+  },
+  {
+    "question": "Który format jest najczęściej używany do lekkiej komunikacji REST API z aplikacją mobilną?",
+    "category": "Sieci",
+    "answers": ["JSON", "BMP", "AVI", "PSD"],
+    "correctIndex": 0,
+    "explanation": "JSON jest lekki, czytelny i powszechnie stosowany w komunikacji klient-serwer."
+  },
+  {
+    "question": "Po co stosuje się cache lokalny w aplikacji mobilnej?",
+    "category": "Wydajność",
+    "answers": ["Aby spowolnić uruchamianie aplikacji", "Aby zmniejszyć liczbę renderowanych ekranów", "Aby przyspieszyć dostęp do danych i wspierać tryb offline", "Aby zastąpić system logowania"],
+    "correctIndex": 2,
+    "explanation": "Cache lokalny poprawia szybkość działania i umożliwia częściową pracę offline."
+  },
+  {
+    "question": "Która praktyka poprawia dostępność aplikacji mobilnej?",
+    "category": "Dostępność",
+    "answers": ["Ukrywanie etykiet pól formularza", "Dodawanie opisów dla czytników ekranu i odpowiedniego kontrastu", "Używanie wyłącznie koloru do przekazywania informacji", "Blokowanie skalowania tekstu"],
+    "correctIndex": 1,
+    "explanation": "Opisy semantyczne i właściwy kontrast wspierają technologie asystujące."
+  },
+  {
+    "question": "Który wzorzec w Androidzie najlepiej wspiera reaktywne aktualizacje UI przy zmianie danych?",
+    "category": "Android",
+    "answers": ["LiveData lub StateFlow obserwowane przez UI", "Ręczne odświeżanie całego ekranu timerem", "Stałe zapisywanie stanu do pliku tekstowego", "Wysyłanie SMS po każdej zmianie"],
+    "correctIndex": 0,
+    "explanation": "LiveData i StateFlow przekazują zmiany stanu do widoku w sposób reaktywny."
+  },
+  {
+    "question": "Które podejście najlepiej ogranicza zużycie baterii podczas pobierania lokalizacji?",
+    "category": "Urządzenie",
+    "answers": ["Ciągłe GPS z najwyższą dokładnością w tle", "Dopasowanie częstotliwości i dokładności do scenariusza", "Wyłączenie wszystkich sensorów poza GPS", "Wymuszenie aktualizacji co 100 ms"],
+    "correctIndex": 1,
+    "explanation": "Dobór interwałów i priorytetu lokalizacji do potrzeb funkcji zmniejsza koszt energetyczny."
+  },
+  {
+    "question": "Który mechanizm HTTP służy do bezpiecznego odświeżania sesji bez ponownego logowania użytkownika?",
+    "category": "Bezpieczeństwo",
+    "answers": ["Refresh token", "Publiczny klucz API w kodzie", "Brak wygasania sesji", "Cookie bez flag Secure i HttpOnly"],
+    "correctIndex": 0,
+    "explanation": "Refresh token pozwala odnowić access token bez podawania hasła przy każdej operacji."
+  },
+  {
+    "question": "Które narzędzie jest standardowo używane w Flutterze do zarządzania zależnościami pakietów?",
+    "category": "Flutter",
+    "answers": ["npm", "pubspec.yaml i pub", "CocoaPods", "Gradle Kotlin DSL"],
+    "correctIndex": 1,
+    "explanation": "Flutter korzysta z systemu pakietów pub i konfiguracji w pliku pubspec.yaml."
+  },
+  {
+    "question": "Który typ testu najlepiej sprawdza współpracę kilku modułów i warstw aplikacji?",
+    "category": "Testowanie",
+    "answers": ["Test integracyjny", "Test jednostkowy", "Test snapshot ikony", "Test statyczny README"],
+    "correctIndex": 0,
+    "explanation": "Test integracyjny weryfikuje działanie komponentów razem, a nie w izolacji."
+  },
+  {
+    "question": "W którym miejscu aplikacji mobilnej najbezpieczniej trzymać klucze prywatne użytkownika?",
+    "category": "Bezpieczeństwo",
+    "answers": ["W pamięci lokalnej bez szyfrowania", "W keychain/keystore z ochroną systemową", "W zasobach aplikacji jako plain text", "W logach diagnostycznych"],
+    "correctIndex": 1,
+    "explanation": "Systemowe magazyny sekretów (Keychain/Keystore) oferują izolację i kontrolę dostępu."
+  },
+  {
+    "question": "Który element Compose odpowiada za przewijalną listę zoptymalizowaną pod duże zbiory danych?",
+    "category": "Android",
+    "answers": ["LazyColumn", "Column", "Box", "Canvas"],
+    "correctIndex": 0,
+    "explanation": "LazyColumn renderuje elementy leniwie, co poprawia wydajność przy długich listach."
+  },
+  {
+    "question": "Dlaczego w aplikacjach mobilnych stosuje się paginację wyników z API?",
+    "category": "Wydajność",
+    "answers": ["Aby pobierać tylko część danych i ograniczać transfer", "Aby zawsze zwiększyć opóźnienia", "Aby wyłączyć cache", "Aby ominąć autoryzację"],
+    "correctIndex": 0,
+    "explanation": "Paginacja zmniejsza ilość danych na żądanie i poprawia responsywność interfejsu."
+  }
+]
