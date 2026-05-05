@@ -255,7 +255,7 @@ function showResults() {
 }
 
 function renderResultDetails() {
-    const detailsContainer = document.getElementById('resultDetails');
+    const detailsContainer = document.getElementById('reviewList');
     detailsContainer.innerHTML = '';
 
     state.questions.forEach((question, index) => {
