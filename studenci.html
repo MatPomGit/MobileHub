@@ -554,11 +554,13 @@
                         <thead>
                             <tr>
                                 <th>#</th>
-                                <th>Imię i nazwisko</th>
-                                <th>Temat</th>
-                                <th>Opis</th>
+                                <th>Nr indeksu</th>
                                 <th>Rola</th>
+                                <th>Nazwa projektu</th>
+                                <th>Repozytorium</th>
+                                <th>Opis</th>
                                 <th>Data</th>
+                                <th>Akcje</th>
                             </tr>
                         </thead>
                         <tbody id="students-tbody">
@@ -581,93 +583,45 @@
             </div>
             <div class="card-body">
 
-                <!-- GitHub Token setup — visible only in dev mode -->
-                <div class="token-section hidden" id="token-config">
-                    <button class="token-toggle" id="token-toggle" type="button" aria-expanded="false"
-                        aria-controls="token-body">
-                        <span class="token-toggle-label">
-                            <i class="fa-solid fa-key" aria-hidden="true"></i>
-                            Token GitHub
-                        </span>
-                        <span class="token-toggle-status" id="token-toggle-status"></span>
-                        <i class="fa-solid fa-chevron-down token-toggle-chevron" aria-hidden="true"></i>
-                    </button>
-                    <div class="token-body hidden" id="token-body">
-                        <div class="alert alert-info" style="margin-bottom:12px;">
-                            <i class="fa-solid fa-circle-info"></i>
-                            <span>GitHub Personal Access Token z uprawnieniami <code>repo</code> (Contents write).
-                                Token jest przechowywany lokalnie w przeglądarce i nigdy nie jest wysyłany nigdzie
-                                indziej poza GitHub API.</span>
-                        </div>
-                        <label for="gh-token-input">Wartość tokena</label>
-                        <div class="token-row" style="margin-top:6px;">
-                            <input type="password" id="gh-token-input" placeholder="ghp_…" autocomplete="off"
-                                spellcheck="false">
-                            <button class="btn-sm" id="btn-save-token" type="button">Zapisz token</button>
-                            <button class="btn-sm danger" id="btn-clear-token" type="button">Usuń</button>
-                        </div>
-                        <p class="token-status" id="token-status">Token nie jest zapisany.</p>
-                    </div>
+                <div class="alert alert-info" style="margin-bottom:16px;">
+                    <i class="fa-solid fa-circle-info"></i>
+                    <span>Formularz zapisuje dane do publicznej bazy Supabase (bez logowania).</span>
                 </div>
-
-                <hr id="token-hr" style="display:none;border:none;border-top:1px solid var(--border);margin:20px 0;">
 
                 <form id="submission-form" novalidate>
                     <div class="form-grid">
 
                         <div class="form-group">
-                            <label for="field-imie">Imię <span class="req">*</span></label>
-                            <input type="text" id="field-imie" name="imie" placeholder="np. Jan" required>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="field-nazwisko">Nazwisko <span class="req">*</span></label>
-                            <input type="text" id="field-nazwisko" name="nazwisko" placeholder="np. Kowalski" required>
+                            <label for="field-student-index">Numer indeksu <span class="req">*</span></label>
+                            <input type="text" id="field-student-index" name="student_index" placeholder="np. 123456"
+                                required>
                         </div>
 
                         <div class="form-group full">
-                            <label for="field-temat">Temat projektu <span class="req">*</span></label>
-                            <input type="text" id="field-temat" name="temat"
+                            <label for="field-project-name">Nazwa projektu <span class="req">*</span></label>
+                            <input type="text" id="field-project-name" name="project_name"
                                 placeholder="np. Aplikacja do zarządzania zadaniami" required>
                         </div>
 
                         <div class="form-group full">
-                            <label for="field-opis">Opis tematu <span class="req">*</span></label>
-                            <textarea id="field-opis" name="opis"
-                                placeholder="Krótki opis funkcjonalności i celu aplikacji…" required></textarea>
+                            <label for="field-repository-url">Link do repozytorium <span class="req">*</span></label>
+                            <input type="url" id="field-repository-url" name="repository_url"
+                                placeholder="https://github.com/org/repo" required>
                         </div>
 
                         <div class="form-group full">
-                            <label id="role-picker-label">Rola w projekcie <span class="req">*</span></label>
-                            <div class="role-picker" id="role-picker" role="radiogroup"
-                                aria-labelledby="role-picker-label">
-                                <div class="role-card" data-value="Product Lead &amp; UX" tabindex="0" role="radio"
-                                    aria-checked="false">
-                                    <i class="fa-solid fa-user-pen"></i>
-                                    <strong>Product Lead &amp; UX</strong>
-                                    <span class="role-desc">User stories, prototyp, opis do Play Store, screeny,
-                                        changelog, instrukcja użytkownika</span>
-                                </div>
-                                <div class="role-card" data-value="Frontend Developer" tabindex="0" role="radio"
-                                    aria-checked="false">
-                                    <i class="fa-solid fa-mobile-screen-button"></i>
-                                    <strong>Frontend Developer</strong>
-                                    <span class="role-desc">Min. 5 ekranów, natywne funkcje urządzenia, testy
-                                        jednostkowe, podpisany build APK/AAB</span>
-                                </div>
-                                <div class="role-card" data-value="Backend &amp; DevOps Engineer" tabindex="0"
-                                    role="radio" aria-checked="false">
-                                    <i class="fa-solid fa-server"></i>
-                                    <strong>Backend &amp; DevOps Engineer</strong>
-                                    <span class="role-desc">API REST, uwierzytelnianie (JWT), baza danych, CI/CD,
-                                        deployment, polityka prywatności</span>
-                                </div>
-                            </div>
-                            <select id="field-rola" name="rola" style="display:none;" aria-hidden="true">
-                                <option value=""></option>
-                                <option value="Product Lead &amp; UX">Product Lead &amp; UX</option>
-                                <option value="Frontend Developer">Frontend Developer</option>
-                                <option value="Backend &amp; DevOps Engineer">Backend &amp; DevOps Engineer</option>
+                            <label for="field-project-description">Opis projektu <span class="req">*</span></label>
+                            <textarea id="field-project-description" name="description"
+                                placeholder="Krótki opis funkcjonalności i celu aplikacji…" required></textarea>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="field-role">Rola w projekcie <span class="req">*</span></label>
+                            <select id="field-role" name="role" required>
+                                <option value="">Wybierz rolę…</option>
+                                <option value="Leader">Leader</option>
+                                <option value="Frontend">Frontend</option>
+                                <option value="Backend">Backend</option>
                             </select>
                         </div>
 
@@ -678,6 +632,8 @@
                             <i class="fa-solid fa-paper-plane"></i>
                             Wyślij zgłoszenie
                         </button>
+                        <button type="button" class="btn-sm danger hidden" id="btn-cancel-edit"
+                            style="margin-left:8px;">Anuluj edycję</button>
                     </div>
                 </form>
 
@@ -686,17 +642,19 @@
 
     </div><!-- /page-wrapper -->
 
-    <script>
+    <script type="module">
         'use strict';
+        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
         /* ------------------------------------------------------------------ */
         /*  Config                                                              */
         /* ------------------------------------------------------------------ */
-        const REPO_OWNER = 'MatPomGit';
-        const REPO_NAME = 'MobileHub';
-        const DATA_FILE = 'students-data.json';
-        const GH_API_BASE = 'https://api.github.com';
-        const LS_TOKEN_KEY = 'pam-gh-token';
+        const SUPABASE_URL = 'https://YOUR_PROJECT_ID.supabase.co';
+        const SUPABASE_ANON_KEY = 'YOUR_PUBLIC_ANON_KEY';
+        const SUPABASE_TABLE = 'project_submissions';
+        const ALLOWED_ROLES = ['Leader', 'Frontend', 'Backend'];
+        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        let editingId = null;
 
         /* ------------------------------------------------------------------ */
         /*  Helpers                                                             */
@@ -718,325 +676,96 @@
             document.getElementById('main-alert').className = 'alert hidden';
         }
 
-        function roleClass(role) {
-            if (role === 'Product Lead & UX') return 'role-product-lead';
-            if (role === 'Frontend Developer') return 'role-frontend';
-            if (role === 'Backend & DevOps Engineer') return 'role-backend';
-            if (role === 'Lider') return 'role-lider';
-            if (role === 'Developer') return 'role-developer';
-            if (role === 'Tester') return 'role-tester';
-            return '';
-        }
+        function roleClass(role) { return role === 'Leader' ? 'role-lider' : role === 'Frontend' ? 'role-frontend' : 'role-backend'; }
 
-        /* ------------------------------------------------------------------ */
-        /*  Dev mode — token section is only for the professor                  */
-        /* ------------------------------------------------------------------ */
-        const LS_DEV_KEY = 'pam-dev-mode';
-        const LS_LOCAL_KEY = 'pam-students-local';
-
-        function isDevMode() {
-            return !!localStorage.getItem(LS_DEV_KEY);
-        }
-
-        function updateTokenSectionVisibility() {
-            const section = document.getElementById('token-config');
-            const hr = document.getElementById('token-hr');
-            const devMode = isDevMode();
-            if (devMode) {
-                section.classList.remove('hidden');
-                hr.style.display = '';
-            } else {
-                section.classList.add('hidden');
-                hr.style.display = 'none';
-            }
-        }
-
-        /* React to dev mode toggled in the parent frame */
-        window.addEventListener('storage', function (e) {
-            if (e.key === LS_DEV_KEY) {
-                updateTokenSectionVisibility();
-            }
-        });
-
-        /* ------------------------------------------------------------------ */
-        /*  GitHub Token management                                             */
-        /* ------------------------------------------------------------------ */
-        function getToken() {
-            return localStorage.getItem(LS_TOKEN_KEY) || '';
-        }
-
-        function updateTokenStatus() {
-            const tok = getToken();
-            const status = document.getElementById('token-status');
-            const toggleStatus = document.getElementById('token-toggle-status');
-            const input = document.getElementById('gh-token-input');
-            if (tok) {
-                status.textContent = 'Token zapisany (' + tok.slice(0, 8) + '…).';
-                status.className = 'token-status ok';
-                toggleStatus.textContent = '✓ skonfigurowany';
-                toggleStatus.className = 'token-toggle-status ok';
-                input.value = '';
-                input.placeholder = '(token jest zapisany)';
-            } else {
-                status.textContent = 'Token nie jest zapisany.';
-                status.className = 'token-status';
-                toggleStatus.textContent = 'nie skonfigurowany';
-                toggleStatus.className = 'token-toggle-status';
-                input.placeholder = 'ghp_…';
-            }
-        }
-
-        document.getElementById('token-toggle').addEventListener('click', function () {
-            const body = document.getElementById('token-body');
-            const expanded = this.getAttribute('aria-expanded') === 'true';
-            this.setAttribute('aria-expanded', String(!expanded));
-            body.classList.toggle('hidden', expanded);
-        });
-
-        document.getElementById('btn-save-token').addEventListener('click', function () {
-            const val = document.getElementById('gh-token-input').value.trim();
-            if (!val) { showAlert('Wpisz token przed zapisaniem.', 'error'); return; }
-            localStorage.setItem(LS_TOKEN_KEY, val);
-            updateTokenStatus();
-            hideAlert();
-        });
-
-        document.getElementById('btn-clear-token').addEventListener('click', function () {
-            localStorage.removeItem(LS_TOKEN_KEY);
-            document.getElementById('gh-token-input').value = '';
-            updateTokenStatus();
-        });
-
-        /* ------------------------------------------------------------------ */
-        /*  Load data from repository and/or localStorage                       */
-        /* ------------------------------------------------------------------ */
-        async function loadData() {
+        /* Komentarz: funkcja pobiera wpisy z Supabase i renderuje je w tabeli. */
+        async function loadSubmissions() {
             const tbody = document.getElementById('students-tbody');
-            const empty = document.getElementById('empty-state');
-            const status = document.getElementById('table-state');
+            const emptyState = document.getElementById('empty-state');
+            const tableState = document.getElementById('table-state');
 
-            status.className = 'alert alert-info';
-            status.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Ładowanie danych…';
-            tbody.innerHTML = '';
-            empty.className = 'empty-state hidden';
+            tableState.className = 'alert alert-info';
+            tableState.textContent = 'Ładowanie danych…';
+            tbody.textContent = '';
+            emptyState.className = 'empty-state hidden';
 
-            let ghStudents = [];
+            const { data, error } = await supabase
+                .from(SUPABASE_TABLE)
+                .select('*')
+                .order('created_at', { ascending: false });
 
-            try {
-                const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
-                const headers = { 'Accept': 'application/vnd.github.v3+json' };
-                const tok = getToken();
-                if (tok) headers['Authorization'] = 'Bearer ' + tok;
-
-                const resp = await fetch(url, { headers });
-                if (resp.ok) {
-                    const json = await resp.json();
-                    const content = atob(json.content.replace(/\n/g, ''));
-                    const parsed = JSON.parse(content);
-                    if (Array.isArray(parsed)) ghStudents = parsed;
-                } else if (resp.status !== 401 && resp.status !== 403) {
-                    throw new Error('HTTP ' + resp.status + ' – ' + resp.statusText);
-                }
-            } catch (err) {
-                status.className = 'alert alert-error';
-                status.innerHTML = '<i class="fa-solid fa-circle-exclamation"></i> Błąd ładowania danych: ' + escHtml(err.message);
+            if (error) {
+                tableState.className = 'alert alert-error';
+                tableState.textContent = 'Błąd pobierania: ' + error.message;
                 return;
             }
 
-            /* Merge local (token-less) submissions with GitHub data */
-            let localStudents = [];
-            try {
-                localStudents = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
-                if (!Array.isArray(localStudents)) localStudents = [];
-            } catch (e) {
-                localStudents = [];
-            }
-            const allStudents = ghStudents.concat(localStudents);
+            tableState.className = 'alert alert-info hidden';
 
-            status.className = 'alert alert-info hidden';
-
-            if (allStudents.length === 0) {
-                empty.className = 'empty-state';
+            if (!data || data.length === 0) {
+                emptyState.className = 'empty-state';
                 return;
             }
 
-            allStudents.forEach(function (s, i) {
+            data.forEach((row, index) => {
                 const tr = document.createElement('tr');
-                tr.innerHTML =
-                    '<td>' + (i + 1) + '</td>' +
-                    '<td><strong>' + escHtml(s.imie) + ' ' + escHtml(s.nazwisko) + '</strong></td>' +
-                    '<td>' + escHtml(s.temat) + '</td>' +
-                    '<td style="max-width:260px;white-space:pre-wrap;">' + escHtml(s.opis) + '</td>' +
-                    '<td><span class="role-badge ' + roleClass(s.rola) + '">' + escHtml(s.rola) + '</span></td>' +
-                    '<td style="white-space:nowrap;color:var(--text-muted);font-size:0.82rem;">' + escHtml(s.data || '') + '</td>';
+                tr.append(
+                    cell(index + 1),
+                    cell(row.student_index),
+                    roleCell(row.role),
+                    cell(row.project_name),
+                    repoCell(row.repository_url),
+                    cell(row.description),
+                    cell(row.updated_at || row.created_at || ''),
+                    actionCell(row)
+                );
                 tbody.appendChild(tr);
             });
         }
+        function cell(value) { const td = document.createElement('td'); td.textContent = String(value || ''); return td; }
+        function roleCell(role) { const td = document.createElement('td'); const span = document.createElement('span'); span.className = 'role-badge ' + roleClass(role); span.textContent = role; td.appendChild(span); return td; }
+        function repoCell(url) { const td = document.createElement('td'); const a = document.createElement('a'); a.href = url; a.target = '_blank'; a.rel = 'noopener noreferrer'; a.textContent = url; td.appendChild(a); return td; }
+        function actionCell(row) { const td = document.createElement('td'); const e = document.createElement('button'); e.type = 'button'; e.className = 'btn-sm'; e.textContent = 'Edytuj'; e.onclick = () => startEdit(row); const d = document.createElement('button'); d.type = 'button'; d.className = 'btn-sm danger'; d.style.marginLeft = '6px'; d.textContent = 'Usuń'; d.onclick = () => deleteSubmission(row); td.append(e, d); return td; }
 
-        function escHtml(str) {
-            return String(str)
-                .replace(/&/g, '&amp;')
-                .replace(/</g, '&lt;')
-                .replace(/>/g, '&gt;')
-                .replace(/"/g, '&quot;')
-                .replace(/'/g, '&#39;');
+        function validateForm(data) {
+            if (!/^\d{4,10}$/.test(data.student_index)) return 'Numer indeksu musi zawierać 4-10 cyfr.';
+            if (!ALLOWED_ROLES.includes(data.role)) return 'Rola musi mieć wartość Leader, Frontend albo Backend.';
+            if (data.project_name.length < 3 || data.project_name.length > 120) return 'Nazwa projektu musi mieć 3-120 znaków.';
+            if (!/^https:\/\/.+/i.test(data.repository_url)) return 'Link repozytorium musi zaczynać się od https://.';
+            if (data.description.length < 20 || data.description.length > 1000) return 'Opis projektu musi mieć 20-1000 znaków.';
+            try { new URL(data.repository_url); } catch (_) { return 'Podaj poprawny URL repozytorium.'; }
+            return '';
         }
-
-        /* ------------------------------------------------------------------ */
-        /*  Save data — GitHub API when token is available, localStorage        */
-        /*  otherwise so students can submit without a token                    */
-        /* ------------------------------------------------------------------ */
-        async function saveData(newEntry) {
-            const tok = getToken();
-
-            if (!tok) {
-                /* No token — store locally so the form still works for students */
-                let existing = [];
-                try {
-                    existing = JSON.parse(localStorage.getItem(LS_LOCAL_KEY) || '[]');
-                    if (!Array.isArray(existing)) existing = [];
-                } catch (e) {
-                    existing = [];
-                }
-                existing.push(newEntry);
-                localStorage.setItem(LS_LOCAL_KEY, JSON.stringify(existing));
-                return true;
-            }
-
-            const url = GH_API_BASE + '/repos/' + REPO_OWNER + '/' + REPO_NAME + '/contents/' + DATA_FILE;
-            const headers = {
-                'Accept': 'application/vnd.github.v3+json',
-                'Authorization': 'Bearer ' + tok,
-                'Content-Type': 'application/json'
-            };
-
-            /* 1. Read current file (need SHA for update) */
-            let currentStudents = [];
-            let fileSha = null;
-            try {
-                const getResp = await fetch(url, { headers });
-                if (getResp.ok) {
-                    const fileData = await getResp.json();
-                    fileSha = fileData.sha;
-                    const decoded = atob(fileData.content.replace(/\n/g, ''));
-                    currentStudents = JSON.parse(decoded);
-                    if (!Array.isArray(currentStudents)) currentStudents = [];
-                } else if (getResp.status !== 404) {
-                    throw new Error('HTTP ' + getResp.status + ' przy odczycie pliku.');
-                }
-            } catch (err) {
-                showAlert('Błąd odczytu danych z repozytorium: ' + err.message, 'error');
-                return false;
-            }
-
-            /* 2. Append new entry */
-            currentStudents.push(newEntry);
-            const jsonStr = JSON.stringify(currentStudents, null, 2);
-            const bytes = new TextEncoder().encode(jsonStr);
-            let binary = '';
-            bytes.forEach(function (b) { binary += String.fromCharCode(b); });
-            const newContent = btoa(binary);
-
-            /* 3. Write file */
-            const body = {
-                message: 'Dodano zgłoszenie: ' + newEntry.imie + ' ' + newEntry.nazwisko,
-                content: newContent,
-            };
-            if (fileSha) body.sha = fileSha;
-
-            try {
-                const putResp = await fetch(url, {
-                    method: 'PUT',
-                    headers: headers,
-                    body: JSON.stringify(body)
-                });
-
-                if (!putResp.ok) {
-                    const errBody = await putResp.json().catch(() => ({}));
-                    throw new Error('HTTP ' + putResp.status + ': ' + (errBody.message || putResp.statusText));
-                }
-            } catch (err) {
-                showAlert('Błąd zapisu danych: ' + err.message, 'error');
-                return false;
-            }
-
-            return true;
+        function collectFormData() { return { student_index: document.getElementById('field-student-index').value.trim(), role: document.getElementById('field-role').value, project_name: document.getElementById('field-project-name').value.trim(), repository_url: document.getElementById('field-repository-url').value.trim(), description: document.getElementById('field-project-description').value.trim() }; }
+        function startEdit(row) { editingId = row.id; document.getElementById('field-student-index').value = row.student_index; document.getElementById('field-role').value = row.role; document.getElementById('field-project-name').value = row.project_name; document.getElementById('field-repository-url').value = row.repository_url; document.getElementById('field-project-description').value = row.description; document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Zapisz zmiany'; document.getElementById('btn-cancel-edit').classList.remove('hidden'); }
+        function resetEditState() { editingId = null; document.getElementById('submission-form').reset(); document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie'; document.getElementById('btn-cancel-edit').classList.add('hidden'); }
+        /* Komentarz: funkcja zapisuje nowy wpis do bazy Supabase. */
+        async function addSubmission(formData) {
+            const { error } = await supabase.from(SUPABASE_TABLE).insert({
+                student_index: formData.student_index,
+                role: formData.role,
+                project_name: formData.project_name,
+                repository_url: formData.repository_url,
+                description: formData.description
+            });
+            if (error) throw error;
         }
-
-        /* ------------------------------------------------------------------ */
-        /*  Form submission                                                     */
-        /* ------------------------------------------------------------------ */
-        document.getElementById('submission-form').addEventListener('submit', async function (e) {
-            e.preventDefault();
-            hideAlert();
-
-            const imie = document.getElementById('field-imie').value.trim();
-            const nazwisko = document.getElementById('field-nazwisko').value.trim();
-            const temat = document.getElementById('field-temat').value.trim();
-            const opis = document.getElementById('field-opis').value.trim();
-            const rola = document.getElementById('field-rola').value;
-
-            if (!imie || !nazwisko || !temat || !opis || !rola) {
-                showAlert('Wypełnij wszystkie wymagane pola.', 'error');
-                return;
-            }
-
-            const now = new Date();
-            const data = now.toLocaleDateString('pl-PL') + ' ' + now.toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
-
-            const entry = { imie, nazwisko, temat, opis, rola, data };
-
-            const btn = document.getElementById('btn-submit');
-            btn.disabled = true;
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Wysyłanie…';
-
-            const ok = await saveData(entry);
-
-            btn.disabled = false;
-            btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
-
-            if (ok) {
-                const msg = getToken()
-                    ? 'Zgłoszenie zostało pomyślnie zapisane w repozytorium!'
-                    : 'Zgłoszenie zostało zapisane.';
-                showAlert(msg, 'success');
-                document.getElementById('submission-form').reset();
-                document.querySelectorAll('#role-picker .role-card').forEach(function (c) {
-                    c.classList.remove('active');
-                    c.setAttribute('aria-checked', 'false');
-                });
-                /* Reload table to show updated data */
-                await loadData();
-            }
-        });
-
-        /* ------------------------------------------------------------------ */
-        /*  Role picker                                                        */
-        /* ------------------------------------------------------------------ */
-        document.querySelectorAll('#role-picker .role-card').forEach(function (card) {
-            card.addEventListener('click', function () {
-                document.querySelectorAll('#role-picker .role-card').forEach(function (c) {
-                    c.classList.remove('active');
-                    c.setAttribute('aria-checked', 'false');
-                });
-                card.classList.add('active');
-                card.setAttribute('aria-checked', 'true');
-                document.getElementById('field-rola').value = card.dataset.value;
-            });
-            card.addEventListener('keydown', function (e) {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault();
-                    card.click();
-                }
-            });
-        });
-
-        /* ------------------------------------------------------------------ */
-        /*  Init                                                                */
-        /* ------------------------------------------------------------------ */
-        updateTokenSectionVisibility();
-        updateTokenStatus();
-        loadData();
+        /* Komentarz: funkcja aktualizuje istniejący wpis na podstawie id. */
+        async function updateSubmission(id, formData) {
+            const { error } = await supabase.from(SUPABASE_TABLE).update({
+                student_index: formData.student_index,
+                role: formData.role,
+                project_name: formData.project_name,
+                repository_url: formData.repository_url,
+                description: formData.description,
+                updated_at: new Date().toISOString()
+            }).eq('id', id);
+            if (error) throw error;
+        }
+        async function deleteSubmission(row) { const typed = prompt('Aby usunąć wpis, wpisz numer indeksu:'); if (typed !== row.student_index) { showAlert('Numer indeksu nie zgadza się.', 'error'); return; } const { error } = await supabase.from(SUPABASE_TABLE).delete().eq('id', row.id); if (error) { showAlert('Błąd usuwania: ' + error.message, 'error'); return; } showAlert('Wpis usunięty.', 'success'); await loadSubmissions(); }
+        document.getElementById('submission-form').addEventListener('submit', async (e) => { e.preventDefault(); hideAlert(); const data = collectFormData(); const validationError = validateForm(data); if (validationError) return showAlert(validationError, 'error'); const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…'; try { if (editingId === null) { await addSubmission(data); showAlert('Dodano zgłoszenie.', 'success'); } else { await updateSubmission(editingId, data); showAlert('Zapisano zmiany.', 'success'); } resetEditState(); await loadSubmissions(); } catch (err) { showAlert('Błąd zapisu: ' + err.message, 'error'); } finally { btn.disabled = false; if (editingId === null) btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie'; } });
+        document.getElementById('btn-cancel-edit').addEventListener('click', resetEditState);
+        loadSubmissions();
     </script>
 </body>
 
