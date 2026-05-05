@@ -120,8 +120,6 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 ## Przykładowe pytania testowe
 
-> Każde pytanie ma **jedną poprawną odpowiedź**. Treść pytań została doprecyzowana tak, aby jasno określała kontekst i oczekiwany zakres odpowiedzi.
-
 **1.** W aplikacji Android z architekturą MVVM lista produktów jest prezentowana w `Composable`, a dane pochodzą z repozytorium. Która warstwa powinna przygotować stan widoku (np. ładowanie, dane, błąd) odporny na zmianę konfiguracji, taką jak obrót ekranu?
 
 - a) Activity
@@ -134,7 +132,7 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 **2.** Programista umieszcza bezpośrednie wywołanie repozytorium w funkcji `Composable`, zamiast pobierać dane przez `ViewModel`. Którą zasadę projektowania narusza przede wszystkim takie rozwiązanie?
 
 - a) Pojedyncza odpowiedzialność
-- b) **Rozdział odpowiedzialności (Separation of Concerns)** ✓
+- b) **Rozdzielenie odpowiedzialności (Separation of Concerns)** ✓
 - c) Otwarte-zamknięte
 - d) Segregacja interfejsów
 
@@ -151,10 +149,10 @@ Pytania testowe ABCD: 50 × 1 pkt = 50 pkt
 
 **4.** Aplikacja IoT przesyła komunikaty MQTT z wymaganiem, że wiadomość ma dotrzeć do odbiorcy **dokładnie raz**, bez duplikatów. Który poziom QoS należy wybrać?
 
-- a) QoS 0
-- b) QoS 1
-- c) **QoS 2** ✓
-- d) QoS 3
+- a) Wiadomość może nie dotrzeć
+- b) Wiadomość dotrze co najmniej raz
+- c) **Wiadomość dotrze dokładnie raz** ✓
+- d) Wiadomość jest szyfrowana end-to-end
 
 ---
 
