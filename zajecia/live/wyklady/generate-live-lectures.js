@@ -56,8 +56,43 @@ function renderLecture(lecture) {
       const pdfSrc = slidesRoot.dataset.pdfSrc;
       const loadingSlide = slidesRoot.querySelector('[data-loading-slide]');
 
-      const pdfjsModule = await import('https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs');
-      pdfjsModule.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs';
+      // Ładujemy PDF.js z kilku CDN-ów, aby wykłady działały nawet przy częściowych awariach sieci.
+      const pdfJsSources = [
+        {
+          moduleUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.min.mjs',
+          workerUrl: 'https://cdn.jsdelivr.net/npm/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs',
+        },
+        {
+          moduleUrl: 'https://unpkg.com/pdfjs-dist@4.10.38/build/pdf.min.mjs',
+          workerUrl: 'https://unpkg.com/pdfjs-dist@4.10.38/build/pdf.worker.min.mjs',
+        },
+      ];
+
+      let pdfjsModule = null;
+      let lastImportError = null;
+      for (const source of pdfJsSources) {
+        try {
+          pdfjsModule = await import(source.moduleUrl);
+          pdfjsModule.GlobalWorkerOptions.workerSrc = source.workerUrl;
+          break;
+        } catch (importError) {
+          lastImportError = importError;
+          console.warn('Nie udało się załadować PDF.js z:', source.moduleUrl, importError);
+        }
+      }
+
+      if (!pdfjsModule) {
+        const fallbackMessage = lastImportError?.message || 'Nie udało się pobrać modułu PDF.js.';
+        if (loadingSlide) {
+          loadingSlide.innerHTML = '<h2>Brak dostępu do silnika PDF</h2>' 
+            + '<p class="pdf-error-msg"></p>' 
+            + '<p>Użyj przycisku „Otwórz PDF” lub sprawdź połączenie z internetem.</p>' 
+            + '<p><a class="pdf-fallback-link" target="_blank" rel="noopener">Otwórz PDF</a></p>';
+          loadingSlide.querySelector('.pdf-error-msg').textContent = fallbackMessage;
+          loadingSlide.querySelector('.pdf-fallback-link').href = pdfSrc;
+        }
+        return;
+      }
 
       let pdf;
       try {
