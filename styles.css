@@ -1536,7 +1536,32 @@ header {
 .welcome-text {
     color: var(--text-muted);
     font-size: 15px;
-    margin-bottom: 32px;
+    margin-bottom: 18px;
+}
+
+.notice-box {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-left: 4px solid var(--accent);
+    border-radius: var(--radius);
+    padding: 14px 16px;
+    margin-bottom: 28px;
+}
+
+.notice-box h3 {
+    font-size: 14px;
+    font-weight: 700;
+    margin-bottom: 8px;
+}
+
+.notice-box ul {
+    margin: 0;
+    padding-left: 18px;
+}
+
+.notice-box li {
+    color: var(--text-muted);
+    margin-bottom: 6px;
 }
 
 .quick-start h3 {

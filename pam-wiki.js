@@ -480,6 +480,10 @@ async function loadArticle(articleId) {
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
         container.innerHTML = marked.parse(await res.text());
 
+        // Dbamy o spójne kolorowanie składni: jeżeli autor nie poda języka,
+        // ustawiamy domyślnie plaintext i czyścimy potencjalnie stare klasy.
+        prepareCodeBlocksForHighlighting(container);
+
         wrapTables(container);
         addReadingTime(container);
         generateTableOfContents(container);
@@ -496,6 +500,17 @@ async function loadArticle(articleId) {
     } catch (err) {
         showError(`Nie można załadować artykułu <strong>${articleId}</strong>. Upewnij się że uruchamiasz stronę przez serwer HTTP (np. <code>python -m http.server</code>).`);
     }
+}
+
+function prepareCodeBlocksForHighlighting(container) {
+    container.querySelectorAll('pre code').forEach(codeBlock => {
+        const classList = Array.from(codeBlock.classList);
+        const hasLanguageClass = classList.some(cls => cls.startsWith('language-'));
+
+        if (!hasLanguageClass) {
+            codeBlock.classList.add('language-plaintext');
+        }
+    });
 }
 
 function collapseTopicsList(container, articleId) {
