@@ -987,17 +987,16 @@
                 </div>
             </div>
 
-            <h3 class="section-title">Połączone kompendium — egzamin teoretyczny</h3>
+            <h3 class="section-title">Kompendium — egzamin teoretyczny</h3>
             <div class="info-card" id="egzaminMergedWikiCard">
                 <div class="info-card-header">
                     <i class="fa-solid fa-book-open-reader"></i>
-                    <strong>Treść z artykułu „Egzamin teoretyczny”</strong>
+                    <strong>Artykuł „Egzamin teoretyczny” w wiki</strong>
                 </div>
-                <p style="margin:0 0 10px 0;">
-                  <a href="wiki/egzamin-teoretyczny.md" target="_blank" rel="noopener" style="font-weight:600; color:#2a5ad7; text-decoration:underline;">Zobacz plik egzamin-teoretyczny.md w wiki</a><br>
-                  Poniżej wczytywana jest pełna treść wiki, aby materiały egzaminacyjne i zakładka egzamin były połączone.
+                <p style="margin:0;">
+                  Szczegółowe kompendium znajdziesz w artykule wiki: 
+                  <a href="wiki/egzamin-teoretyczny.md" target="_blank" rel="noopener" style="font-weight:600; color:#2a5ad7; text-decoration:underline;">Przejdź do „Egzamin teoretyczny”</a>.
                 </p>
-                <div id="egzaminMergedWikiContent"></div>
             </div>
         </div>
     </div><!-- /panel-egzamin -->
@@ -2326,7 +2325,6 @@
 
             // Synchronizuje treści między zakładkami i artykułami wiki, żeby uniknąć rozbieżności.
             loadMergedWikiArticle('projektMergedWikiContent', 'wiki/projekt-zaliczeniowy.md');
-            loadMergedWikiArticle('egzaminMergedWikiContent', 'wiki/egzamin-teoretyczny.md');
 
             // ===== TAB PANEL TRANSITION =====
             const origSwitchTab = window.switchTab;

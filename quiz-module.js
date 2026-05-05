@@ -2,13 +2,17 @@
 
 const QUIZ_QUESTIONS_URL = 'quiz-questions.json';
 const LETTERS = ['A', 'B', 'C', 'D'];
-const QUIZ_SESSION_SIZE = 16;
+const QUIZ_MODE_SIZES = {
+    short: 20,
+    normal: 40
+};
 
 const state = {
     allQuestions: [],
     questions: [],
     currentIndex: 0,
-    selectedAnswers: []
+    selectedAnswers: [],
+    mode: 'short'
 };
 
 // Inicjalizacja modułu testowego po załadowaniu drzewa DOM.
@@ -29,7 +33,8 @@ async function initializeQuiz() {
     try {
         const loadedQuestions = await loadQuestions();
         state.allQuestions = loadedQuestions;
-        state.questions = buildBalancedQuestionSet(state.allQuestions, QUIZ_SESSION_SIZE);
+        state.mode = getSelectedMode();
+        state.questions = buildBalancedQuestionSet(state.allQuestions, getTargetSizeForMode(state.mode));
         resetSessionState();
 
         updateQuestionTotal();
@@ -131,6 +136,18 @@ function shuffle(items) {
     return copy;
 }
 
+
+// Odczytuje aktualnie wybrany tryb testu z kontrolek formularza.
+function getSelectedMode() {
+    const checked = document.querySelector('input[name="quizMode"]:checked')?.value;
+    return checked && QUIZ_MODE_SIZES[checked] ? checked : 'short';
+}
+
+// Zwraca docelową liczbę pytań dla trybu krótkiego lub normalnego.
+function getTargetSizeForMode(mode) {
+    return QUIZ_MODE_SIZES[mode] ?? QUIZ_MODE_SIZES.short;
+}
+
 function updateQuestionTotal() {
     const total = document.getElementById('questionTotal');
     if (total) total.textContent = `${state.questions.length} pytań`;
@@ -210,7 +227,8 @@ function handlePrevious() {
 
 // Resetuje test i losuje nową, zbalansowaną sesję pytań dla kolejnego podejścia.
 function restartQuiz() {
-    state.questions = buildBalancedQuestionSet(state.allQuestions, QUIZ_SESSION_SIZE);
+    state.mode = getSelectedMode();
+    state.questions = buildBalancedQuestionSet(state.allQuestions, getTargetSizeForMode(state.mode));
     resetSessionState();
     document.getElementById('quizCard').style.display = 'block';
     document.getElementById('resultCard').classList.remove('visible');

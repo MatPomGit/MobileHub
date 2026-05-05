@@ -248,7 +248,15 @@
             <h1>Test wiedzy ABCD</h1>
             <p>Odpowiedz na pytania związane z programowaniem aplikacji mobilnych. Każde pytanie ma jedną poprawną odpowiedź.</p>
             <div class="stats">
-                <div class="stat" id="questionTotal">10 pytań</div>
+                <div class="stat" id="questionTotal">20 pytań</div>
+            <div class="quiz-meta" style="margin-top:12px;">
+                <div class="question-category">Tryb testu:</div>
+                <div style="display:flex; gap:10px; flex-wrap:wrap;">
+                    <label><input type="radio" name="quizMode" value="short" checked> Krótki (20 pytań)</label>
+                    <label><input type="radio" name="quizMode" value="normal"> Normalny (40 pytań)</label>
+                </div>
+            </div>
+
                 <div class="stat">4 odpowiedzi do wyboru</div>
                 <div class="stat">Podsumowanie z kategoriami po zakończeniu</div>
             </div>
@@ -261,7 +269,7 @@
             </div>
             <div class="progress-wrap">
                 <div class="progress-label">
-                    <span id="progressLabel">Postęp: 0/10 odpowiedzi</span>
+                    <span id="progressLabel">Postęp: 0/20 odpowiedzi</span>
                     <span>Możesz wracać do wcześniejszych pytań</span>
                 </div>
                 <div class="progress-track" role="progressbar" aria-label="Postęp testu" aria-valuemin="0" aria-valuemax="100">
@@ -281,10 +289,10 @@
 
         <section class="result-card" id="resultCard">
             <p class="muted">Wynik testu</p>
-            <div class="score" id="score"></div>
-            <p class="summary" id="summary"></p>
-            <div class="weak-areas" id="weakAreas"></div>
-            <div class="review-list" id="reviewList"></div>
+            <div class="score" id="resultScore"></div>
+            <p class="summary" id="resultSummary"></p>
+            <div class="weak-areas" id="resultRecommendation"></div>
+            <div class="review-list" id="resultDetails"></div>
         </section>
     </main>
 
