@@ -45,6 +45,7 @@ function renderLecture(lecture) {
   </div>
 
   <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
+  <script src="../vendor/reveal.js/plugin/notes/notes.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js'"></script>
   <script src="live-reveal-enhancements.js"></script>
   <script type="module">
     // Renderuje każdą stronę PDF jako osobny slajd Reveal.js, zapewniając zgodność treści 1:1.
@@ -92,11 +93,16 @@ function renderLecture(lecture) {
         const title = document.createElement('h2');
         title.textContent = 'Slajd ' + pageNumber;
 
+        const notes = document.createElement('aside');
+        notes.className = 'notes';
+        notes.textContent = 'Notatki: omów kluczowe punkty ze slajdu ' + pageNumber + ' i podaj przykład praktyczny.';
+
         const wrapper = document.createElement('div');
         wrapper.className = 'pdf-slide-wrapper';
         wrapper.appendChild(canvas);
 
         section.appendChild(title);
+        section.appendChild(notes);
         section.appendChild(wrapper);
         slidesRoot.appendChild(section);
       }
