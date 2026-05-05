@@ -398,10 +398,11 @@ function buildSidebar() {
             </h4>
             <ul class="cat-list ${isDefaultExpanded ? '' : 'collapsed'}" id="${cat.id}">
                 ${cat.articles.map(article => {
-                    const id = typeof article === 'string' ? article : article.id;
-                    const href = typeof article === 'string' ? `#${id}` : article.href;
-                    const target = typeof article === 'string' ? '' : ' target="_blank" rel="noopener noreferrer"';
-                    const dataArticle = typeof article === 'string' ? ` data-article="${id}"` : '';
+                    const isInternal = typeof article === 'string';
+                    const id = isInternal ? article : article.id;
+                    const href = isInternal ? `#${id}` : article.href;
+                    const target = isInternal ? '' : ' target="_blank" rel="noopener noreferrer"';
+                    const dataArticle = isInternal ? ` data-article="${id}"` : '';
                     const m = METADATA[id] || {};
                     return `<li><a href="${href}"${dataArticle}${target}><i class="${m.icon || 'fa-solid fa-file'} article-icon"></i>${m.title || id}</a></li>`;
                 }).join('')}
