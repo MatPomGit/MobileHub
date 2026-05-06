@@ -134,6 +134,7 @@ const ARTICLES = {
     'document-formats':      'wiki/document-formats.md',
     'database-file-formats': 'wiki/database-file-formats.md',
     'data-storage-best-practices': 'wiki/data-storage-best-practices.md',
+    'mobilehub-mvp-plan':      'wiki/mobilehub-mvp-plan.md',
 };
 
 const METADATA = {
@@ -265,10 +266,11 @@ const METADATA = {
     'document-formats':      { category: 'Formaty plików i przechowywanie danych', title: 'Formaty dokumentów w aplikacjach mobilnych',              icon: 'fa-solid fa-file-lines' },
     'database-file-formats': { category: 'Formaty plików i przechowywanie danych', title: 'Formaty plików baz danych w aplikacjach mobilnych',       icon: 'fa-solid fa-database' },
     'data-storage-best-practices': { category: 'Formaty plików i przechowywanie danych', title: 'Dobre praktyki przechowywania danych',              icon: 'fa-solid fa-shield-halved' },
+    'mobilehub-mvp-plan': { category: 'Zaliczenie', title: 'MobileHub MVP - plan wdrożenia (4 tygodnie)', icon: 'fa-solid fa-list-check' },
 };
 
 const CATEGORIES = [
-    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny'] },
+    { id: 'cat-zalicz',  name: 'Zaliczenie',                     icon: 'fa-solid fa-graduation-cap',       articles: ['projekt-zaliczeniowy','egzamin-teoretyczny','mobilehub-mvp-plan'] },
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','social-media-integration','mobile-performance','app-publishing','app-distribution','app-updates'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
