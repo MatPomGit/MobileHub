@@ -290,6 +290,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initThemePicker();
     initScrollProgress();
     initBackToTop();
+    initMouseResponsiveAnimations();
     waitForMarked();
 });
 
@@ -300,6 +301,50 @@ function waitForMarked(attempts = 0) {
 
 const VALID_THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose', 'aurora'];
 
+
+function initMouseResponsiveAnimations() {
+    // Efekt uruchamiamy wyłącznie dla urządzeń z precyzyjnym wskaźnikiem (mysz/stylus).
+    if (!window.matchMedia('(hover: hover) and (pointer: fine)').matches) return;
+
+    const interactiveCards = document.querySelectorAll('.quick-link-card, .info-card, .tool-card, .materials-card, .file-item');
+
+    interactiveCards.forEach((card) => {
+        // Minimalizujemy nakład obliczeń: przechowujemy ostatnie wartości i aktualizujemy je w klatce RAF.
+        let rafId = null;
+        let nextX = 0;
+        let nextY = 0;
+
+        const renderTilt = () => {
+            card.style.setProperty('--mouse-x', `${nextX}%`);
+            card.style.setProperty('--mouse-y', `${nextY}%`);
+            card.style.setProperty('--tilt-x', `${((50 - nextY) / 14).toFixed(2)}deg`);
+            card.style.setProperty('--tilt-y', `${((nextX - 50) / 14).toFixed(2)}deg`);
+            rafId = null;
+        };
+
+        card.addEventListener('mousemove', (event) => {
+            const rect = card.getBoundingClientRect();
+            nextX = ((event.clientX - rect.left) / rect.width) * 100;
+            nextY = ((event.clientY - rect.top) / rect.height) * 100;
+
+            if (!rafId) {
+                rafId = requestAnimationFrame(renderTilt);
+            }
+        });
+
+        card.addEventListener('mouseenter', () => {
+            card.classList.add('mouse-reactive-active');
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.classList.remove('mouse-reactive-active');
+            card.style.removeProperty('--tilt-x');
+            card.style.removeProperty('--tilt-y');
+            card.style.removeProperty('--mouse-x');
+            card.style.removeProperty('--mouse-y');
+        });
+    });
+}
 function initThemePicker() {
     const saved = localStorage.getItem('pam-theme') || 'light';
     const theme = VALID_THEMES.includes(saved) ? saved : 'light';
