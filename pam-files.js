@@ -32,6 +32,7 @@ const FILES_DATA = [
             { href: 'zajecia/laby/flutter.pdf',          type: 'pdf', label: 'Lab – Flutter' },
             { href: 'zajecia/laby/unity.pdf',            type: 'pdf', label: 'Lab – Unity' },
             { href: 'zajecia/laby/react.pdf',            type: 'pdf', label: 'Lab – React' },
+            { href: 'zajecia/laby/tests.pdf',            type: 'pdf', label: 'Lab – Tests' },
             { href: 'zajecia/laby/tematyprojektow.pdf',  type: 'pdf', label: 'Tematy projektów' },
         ],
     },
