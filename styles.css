@@ -2871,8 +2871,8 @@ footer strong {
     }
 
     #wikiArticle li {
-        font-size: calc(13px * var(--wiki-font-scale));
-        line-height: 1.3;
+        font-size: calc(12px * var(--wiki-font-scale));
+        line-height: 1.2;
     }
 
     #wikiArticle h2 {
@@ -2884,11 +2884,11 @@ footer strong {
     }
 
     #wikiArticle table {
-        font-size: calc(12px * var(--wiki-font-scale));
+        font-size: calc(10px * var(--wiki-font-scale));
     }
 
     #wikiArticle th {
-        font-size: calc(12px * var(--wiki-font-scale));
+        font-size: calc(11px * var(--wiki-font-scale));
     }
 
     .info-card p,
@@ -2926,8 +2926,8 @@ footer strong {
     /* Nowe komponenty z interfejsu webowego dostają mobilne odstępy i układ przyjazny dla kciuka. */
     .section-title {
         align-items: flex-start;
-        font-size: 15px;
-        line-height: 1.25;
+        font-size: 14px;
+        line-height: 0.75;
         margin: 24px 0 12px;
     }
 
@@ -3384,7 +3384,7 @@ footer strong {
 
     .article-toc a {
         font-size: calc(6px * var(--wiki-font-scale));
-        line-height: 1.6;
+        line-height: 1.0;
     }
 
     .article-toc h3 {
@@ -3637,7 +3637,7 @@ footer strong {
         padding: 24px 16px;
         text-align: center;
         color: var(--text-muted);
-        font-size: 13px;
+        font-size: 12px;
     }
 
     .toc-radial-empty i {
