@@ -4093,3 +4093,52 @@ footer strong {
         grid-template-columns: 1fr;
     }
 }
+
+/* Interaktywne animacje kart reagujące na pozycję kursora. */
+@media (hover: hover) and (pointer: fine) {
+    .quick-link-card,
+    .info-card,
+    .tool-card,
+    .materials-card,
+    .file-item {
+        position: relative;
+        overflow: hidden;
+        transform-style: preserve-3d;
+        transition: transform 0.16s ease, box-shadow 0.18s ease, background 0.2s ease;
+    }
+
+    .quick-link-card::after,
+    .info-card::after,
+    .tool-card::after,
+    .materials-card::after,
+    .file-item::after {
+        content: '';
+        position: absolute;
+        inset: 0;
+        pointer-events: none;
+        border-radius: inherit;
+        background: radial-gradient(
+            260px circle at var(--mouse-x, 50%) var(--mouse-y, 50%),
+            rgba(255, 255, 255, 0.16) 0%,
+            rgba(255, 255, 255, 0) 60%
+        );
+        opacity: 0;
+        transition: opacity 0.2s ease;
+    }
+
+    .quick-link-card.mouse-reactive-active,
+    .info-card.mouse-reactive-active,
+    .tool-card.mouse-reactive-active,
+    .materials-card.mouse-reactive-active,
+    .file-item.mouse-reactive-active {
+        transform: perspective(900px) rotateX(var(--tilt-x, 0deg)) rotateY(var(--tilt-y, 0deg)) translateY(-2px);
+    }
+
+    .quick-link-card.mouse-reactive-active::after,
+    .info-card.mouse-reactive-active::after,
+    .tool-card.mouse-reactive-active::after,
+    .materials-card.mouse-reactive-active::after,
+    .file-item.mouse-reactive-active::after {
+        opacity: 1;
+    }
+}
