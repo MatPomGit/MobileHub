@@ -2439,7 +2439,7 @@
                 const tag = event.target && event.target.tagName;
                 if (tag && /^(INPUT|TEXTAREA|SELECT)$/i.test(tag)) return;
                 event.preventDefault();
-                window.scrollBy({ top: event.deltaY * 6, behavior: 'auto' });
+                window.scrollBy({ top: event.deltaY * 4.5, behavior: 'auto' });
             }, { passive: false });
 
 
