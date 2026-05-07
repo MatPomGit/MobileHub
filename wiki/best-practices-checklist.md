@@ -7,12 +7,12 @@
 - [ ] Ustalony i zapisany standard stylu (konwencje nazewnictwa, formatowanie, struktura plików). Zobacz: [Android Lint](./android-lint.md), [Material Design](./material-design.md).
 - [ ] Spójny styl commitów i opisów PR (co, dlaczego, jak testowano). Zobacz: [Proces projektowania aplikacji](./app-design-process.md).
 - [ ] Brak „martwego kodu”, duplikacji i nieużywanych zasobów. Zobacz: [Android Studio — narzędzia jakości](./android-studio.md).
-- [ ] Czytelne nazwy klas/funkcji/modułów oraz małe, pojedynczo-odpowiedzialne komponenty. Zobacz: [Architektura Android](./android-architecture.md), [Clarion Architecture](./clarion-architecture.md).
+- [ ] Czytelne nazwy klas/funkcji/modułów oraz małe komponenty o pojedynczej odpowiedzialności. Zobacz: [Architektura Android](./android-architecture.md), [Clean Architecture](./clean-architecture.md).
 
 ## 2) Architektura
 
 - [ ] Rozdzielone warstwy: UI, logika domenowa, dane/integracje. Zobacz: [Architektura Android](./android-architecture.md), [Wzorce cross-platform](./cross-platform.md).
-- [ ] Jasno zdefiniowane granice modułów i kontrakty API. Zobacz: [Android Networking](./android-network.md), [iOS Networking](./ios-networking.md).
+- [ ] Jasno zdefiniowane granice modułów i kontrakty API. Zobacz: [Android Network](./android-network.md), [iOS Networking](./ios-networking.md).
 - [ ] Strategia stanu aplikacji (single source of truth, unikanie konfliktów stanu). Zobacz: [Jetpack Compose](./jetpack-compose.md), [SwiftUI Advanced](./swiftui-advanced.md).
 - [ ] Plan skalowania (modularizacja, build time, podział feature’ów). Zobacz: [Android Studio](./android-studio.md), [KMP Multiplatform](./kmp-multiplatform.md).
 
@@ -61,7 +61,7 @@
 - [ ] Podniesiona wersja aplikacji + changelog użytkowy. Materiały: [App Updates](./app-updates.md).
 - [ ] Zweryfikowane zgody i uprawnienia (tylko niezbędne). Materiały: [Mobile Security](./mobile-security.md), [AI Legal Aspects](./ai-legal-aspects.md).
 - [ ] Testy release build na docelowych urządzeniach i wersjach OS. Materiały: [Android Ecosystem](./android-ecosystem.md), [iOS Ecosystem](./ios-ecosystem.md).
-- [ ] Plan monitoringu po wydaniu (crashe, ANR, feedback, KPI). Materiały: [Mobile Performance](./mobile-performance.md), [Aplikacje i aktualizacje](./app-updates.md).
+- [ ] Plan monitoringu po wydaniu (crashe, ANR, feedback, KPI). Materiały: [Mobile Performance](./mobile-performance.md), [App Updates](./app-updates.md).
 - [ ] Plan rollback/hotfix i gotowość do szybkiej poprawki. Materiały: [App Updates](./app-updates.md), [App Distribution](./app-distribution.md).
 
 ---
