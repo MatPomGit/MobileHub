@@ -3161,8 +3161,13 @@ footer strong {
 
     body #presentation-preview {
         min-height: 260px;
+        height: min(62vh, 420px);
         max-height: 62vh;
         border-radius: 10px;
+    }
+
+    .presentation-preview-open {
+        display: inline-flex;
     }
 
     .file-item {
@@ -4180,6 +4185,26 @@ footer strong {
     border-color: var(--accent);
     color: var(--accent2);
     font-weight: 700;
+}
+
+/* Link zapasowy pozwala otworzyć PDF poza iframe, co jest stabilniejsze na telefonach. */
+.presentation-preview-open {
+    display: none;
+    margin-top: 10px;
+    width: fit-content;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    padding: 8px 12px;
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    color: var(--text);
+    background: var(--surface2);
+}
+
+.presentation-preview-open.is-visible {
+    display: inline-flex;
+    align-items: center;
 }
 
 /* Iframe ma spójny wygląd, pełną szerokość karty i proporcję 16:9 dla prezentacji. */
