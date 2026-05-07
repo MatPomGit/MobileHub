@@ -135,6 +135,7 @@ const ARTICLES = {
     'database-file-formats': 'wiki/database-file-formats.md',
     'data-storage-best-practices': 'wiki/data-storage-best-practices.md',
     'mobilehub-mvp-plan':      'wiki/mobilehub-mvp-plan.md',
+    'snippet-catalog':         'wiki/snippet-catalog.md',
 };
 
 const METADATA = {
@@ -267,6 +268,7 @@ const METADATA = {
     'database-file-formats': { category: 'Formaty plików i przechowywanie danych', title: 'Formaty plików baz danych w aplikacjach mobilnych',       icon: 'fa-solid fa-database' },
     'data-storage-best-practices': { category: 'Formaty plików i przechowywanie danych', title: 'Dobre praktyki przechowywania danych',              icon: 'fa-solid fa-shield-halved' },
     'mobilehub-mvp-plan': { category: 'Zaliczenie', title: 'MobileHub MVP - plan wdrożenia (4 tygodnie)', icon: 'fa-solid fa-list-check' },
+    'snippet-catalog': { category: 'Programowanie natywne Android', title: 'Katalog snippetów mobilnych', icon: 'fa-solid fa-code' },
 };
 
 const CATEGORIES = [
@@ -274,7 +276,7 @@ const CATEGORIES = [
     { id: 'cat-os',       name: 'Projektowanie i OS',             icon: 'fa-solid fa-mobile-screen-button', articles: ['mobile-os','mobile-design','app-design-process','app-metadata','android-ecosystem','ios-ecosystem','mobile-security','social-media-integration','mobile-performance','app-publishing','app-distribution','app-updates'] },
     { id: 'cat-hw',       name: 'Architektura sprzętu',           icon: 'fa-solid fa-microchip',            articles: ['mobile-hardware','gpu-rendering','battery-power','memory-management','display-screen','connectivity'] },
     { id: 'cat-ux',       name: 'Metody interakcji UI/UX',        icon: 'fa-solid fa-hand-pointer',         articles: ['ui-ux','material-design','accessibility','ergonomia-uzytkowania','animations','navigation-patterns','gestures-interactions'] },
-    { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','termux','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','android-lint','agp-upgrade-assistant','file-storage-mobile','google-maven'] },
+    { id: 'cat-android',  name: 'Programowanie natywne Android',  icon: 'fa-brands fa-android',             articles: ['android-studio','termux','kotlin-basics','jetpack-compose','android-architecture','android-data','android-network','android-testing','android-lint','agp-upgrade-assistant','file-storage-mobile','google-maven','snippet-catalog'] },
     { id: 'cat-ios',      name: 'Programowanie natywne iOS',      icon: 'fa-brands fa-apple',               articles: ['xcode-ios','swift-basics','swiftui-advanced','ios-networking','ios-data','ios-notifications'] },
     { id: 'cat-cross',    name: 'Cross-platform i PWA',           icon: 'fa-solid fa-layer-group',          articles: ['cross-platform','flutter-advanced','react-native','pwa-advanced','jak-stworzyc-pwa','kmp-multiplatform','buildozer','mobile-docker'] },
     { id: 'cat-sensors',  name: 'Obsługa sensorów',               icon: 'fa-solid fa-compass',              articles: ['sensors','camera-api','location-maps','audio-microphone','biometrics'] },
@@ -670,24 +672,66 @@ function processInternalLinks(container) {
 }
 
 function addCopyButtons(container) {
-    container.querySelectorAll('pre').forEach(pre => {
+    // Dodaje akcje dla bloków kodu: szybkie kopiowanie i zgłaszanie błędów.
+    container.querySelectorAll('pre').forEach((pre, index) => {
         const wrap = document.createElement('div');
         wrap.className = 'code-block-wrapper';
         pre.parentNode.insertBefore(wrap, pre);
         wrap.appendChild(pre);
-        const btn = document.createElement('button');
-        btn.className = 'copy-code-btn';
-        btn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopiuj';
-        btn.addEventListener('click', async () => {
+
+        const actions = document.createElement('div');
+        actions.className = 'snippet-actions';
+
+        const copyBtn = document.createElement('button');
+        copyBtn.className = 'copy-code-btn';
+        copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopiuj';
+        copyBtn.addEventListener('click', async () => {
             const code = pre.querySelector('code')?.textContent || pre.textContent;
             try {
                 await navigator.clipboard.writeText(code);
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Skopiowano!';
-                btn.classList.add('copied');
-                setTimeout(() => { btn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopiuj'; btn.classList.remove('copied'); }, 2000);
-            } catch { btn.innerHTML = '<i class="fa-solid fa-xmark"></i> Błąd'; }
+                copyBtn.innerHTML = '<i class="fa-solid fa-check"></i> Skopiowano!';
+                copyBtn.classList.add('copied');
+                setTimeout(() => { copyBtn.innerHTML = '<i class="fa-solid fa-copy"></i> Kopiuj'; copyBtn.classList.remove('copied'); }, 2000);
+            } catch {
+                copyBtn.innerHTML = '<i class="fa-solid fa-xmark"></i> Błąd';
+            }
         });
-        wrap.appendChild(btn);
+
+        // Przycisk tworzy zgłoszenie z predefiniowanym tytułem i miejscem na opis od studenta.
+        const reportBtn = document.createElement('button');
+        reportBtn.className = 'copy-code-btn report-code-btn';
+        reportBtn.innerHTML = '<i class="fa-solid fa-bug"></i> Zgłoś błąd';
+        reportBtn.addEventListener('click', () => {
+            const articleTitle = container.querySelector('h1')?.textContent?.trim() || 'Nieznany artykuł';
+            const snippetTitle = pre.previousElementSibling?.textContent?.trim() || `Snippet #${index + 1}`;
+            const codeSample = (pre.querySelector('code')?.textContent || pre.textContent || '').trim();
+            const subject = encodeURIComponent(`[Snippet] ${articleTitle} / ${snippetTitle}`);
+            const body = encodeURIComponent(
+                `Artykuł: ${articleTitle}
+Snippet: ${snippetTitle}
+
+Opis problemu:
+-
+
+Kroki odtworzenia:
+1.
+2.
+
+Oczekiwany rezultat:
+-
+
+Rzeczywisty rezultat:
+-
+
+Fragment kodu:
+${codeSample.slice(0, 500)}`
+            );
+            window.location.href = `mailto:mobilehub.snippets+bugs@gmail.com?subject=${subject}&body=${body}`;
+        });
+
+        actions.appendChild(copyBtn);
+        actions.appendChild(reportBtn);
+        wrap.appendChild(actions);
     });
 }
 
