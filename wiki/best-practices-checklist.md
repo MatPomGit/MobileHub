@@ -66,6 +66,112 @@
 
 ---
 
+
+## Przykład poprawnego `README.md` dla repozytorium studenckiej aplikacji
+
+Skopiuj i uzupełnij poniższy szablon:
+
+```md
+# Nazwa aplikacji
+
+Krótki opis aplikacji (1–3 zdania): jaki problem rozwiązuje i dla kogo jest przeznaczona.
+
+## Spis treści
+- [Funkcje](#funkcje)
+- [Stack technologiczny](#stack-technologiczny)
+- [Wymagania](#wymagania)
+- [Instalacja i uruchomienie](#instalacja-i-uruchomienie)
+- [Struktura projektu](#struktura-projektu)
+- [Architektura](#architektura)
+- [Testowanie](#testowanie)
+- [Bezpieczeństwo i prywatność](#bezpieczeństwo-i-prywatność)
+- [Znane ograniczenia](#znane-ograniczenia)
+- [Roadmapa](#roadmapa)
+- [Autorzy](#autorzy)
+- [Licencja](#licencja)
+
+## Funkcje
+- Funkcja 1
+- Funkcja 2
+- Funkcja 3
+
+## Stack technologiczny
+- Język: (np. Kotlin / Swift / Dart)
+- Framework: (np. Jetpack Compose / SwiftUI / Flutter)
+- Baza danych: (np. Room / Core Data / SQLite)
+- API: (np. REST / GraphQL)
+
+## Wymagania
+- Android min. API XX / iOS XX+
+- Narzędzia: Android Studio / Xcode / Flutter SDK
+- Wersja Node/Python (jeśli dotyczy)
+
+## Instalacja i uruchomienie
+```bash
+# 1) Klon repozytorium
+git clone <REPO_URL>
+cd <PROJECT_DIR>
+
+# 2) Instalacja zależności
+# npm install / yarn / gradle sync / pod install
+
+# 3) Uruchomienie
+# np. ./gradlew installDebug lub flutter run
+```
+
+## Struktura projektu
+```text
+project-root/
+├─ app/
+├─ docs/
+├─ assets/
+├─ tests/
+└─ README.md
+```
+
+## Architektura
+Krótki opis podziału na warstwy (UI / Domain / Data) oraz przepływu danych.
+
+## Testowanie
+- Testy jednostkowe: jak uruchomić.
+- Testy integracyjne: jak uruchomić.
+- Testy UI/E2E: jak uruchomić.
+
+Przykład:
+```bash
+# Android
+./gradlew test
+./gradlew connectedAndroidTest
+
+# Flutter
+flutter test
+```
+
+## Bezpieczeństwo i prywatność
+- Brak sekretów w repozytorium (`.env`, CI secrets).
+- Opis przechowywania i przetwarzania danych użytkownika.
+- Lista uprawnień i uzasadnienie ich użycia.
+
+## Znane ograniczenia
+- Ograniczenie 1 + obejście.
+- Ograniczenie 2 + plan poprawy.
+
+## Roadmapa
+- [ ] Etap 1
+- [ ] Etap 2
+- [ ] Etap 3
+
+## Autorzy
+- Imię i nazwisko, rola, kontakt.
+
+## Licencja
+Informacja o licencji (np. MIT) i link do `LICENSE`.
+```
+
+Materiały uzupełniające: [Proces projektowania aplikacji](./app-design-process.md), [Projekt zaliczeniowy](./projekt-zaliczeniowy.md), [Projekt zaliczeniowy z laboratorium](./projekt-zaliczeniowy_z_laboratorium.md), [App Metadata](./app-metadata.md).
+
+---
+
 ## Gotowiec do skopiowania do własnego repo
 
 Skopiuj poniższy blok do `CHECKLIST.md` lub `docs/best-practices.md`:
