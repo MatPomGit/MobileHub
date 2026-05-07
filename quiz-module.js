@@ -14,6 +14,35 @@ const QUIZ_MODE_TIME_LIMITS = {
     normal: 40 * 60
 };
 
+
+const PRACTICE_MODULES = {
+    // Kluczowe moduły z zadaniami praktycznymi i jednoznacznym kryterium zaliczenia.
+    4: {
+        materialUrl: 'wiki/kotlin-basics.md',
+        tasks: [
+            { title: 'Walidacja danych formularza', criterion: 'Funkcja zwraca `true` dla poprawnych danych i `false` dla niepoprawnych.', validation: 'Uruchom testy jednostkowe: 4/4 testów musi przejść.', hint: 'Zacznij od funkcji z guard clauses dla pustych pól.', solution: 'Rozwiązanie referencyjne: osobna funkcja `validateProfile(input)` + testy skrajnych przypadków.' },
+            { title: 'Obsługa stanu ekranu', criterion: 'Po zmianie danych widok aktualizuje wszystkie pola bez odświeżania aktywności.', validation: 'Expected output: po kliknięciu „Odśwież” licznik zwiększa się o 1.', hint: 'Wykorzystaj `mutableStateOf` lub `StateFlow`.', solution: 'Rozwiązanie referencyjne: ViewModel z jednym źródłem prawdy i mapowaniem stanu UI.' }
+        ]
+    },
+    8: {
+        materialUrl: 'wiki/android-network.md',
+        tasks: [
+            { title: 'Pobranie API z timeoutem', criterion: 'Aplikacja pokazuje dane lub kontrolowany komunikat błędu przy timeout.', validation: 'Checklist: timeout=3s, retry=1, komunikat błędu widoczny.', hint: 'Dodaj timeout w kliencie HTTP i oddziel warstwę repozytorium.', solution: 'Rozwiązanie referencyjne: `suspend fun fetchData()` + `Result.Success/Error` i test mockowanego timeoutu.' },
+            { title: 'Mapowanie DTO->UI', criterion: 'Każde pole widoczne na ekranie jest mapowane z modelu domenowego.', validation: 'Expected output: lista 5 elementów wyświetla tytuł i status bez `null`.', hint: 'Stwórz funkcję `toUiModel()` i obsłuż brakujące wartości domyślne.', solution: 'Rozwiązanie referencyjne: mapper z fallbackami i test snapshot odpowiedzi.' }
+        ]
+    },
+    10: {
+        materialUrl: 'wiki/android-testing.md',
+        tasks: [
+            { title: 'Test regresji logiki', criterion: 'Błąd zgłoszony przez prowadzącego jest odtwarzany testem i naprawiony.', validation: 'Uruchom `npm test`/`gradle test`: test regresji ma status PASS.', hint: 'Najpierw napisz failing test na minimalnym przykładzie.', solution: 'Rozwiązanie referencyjne: scenariusz RED->GREEN->REFACTOR z jednym testem regresji.' },
+            { title: 'Pomiar wydajności', criterion: 'Czas renderu kluczowego ekranu spada o min. 20%.', validation: 'Expected output: metryka before/after zapisana w raporcie.', hint: 'Zidentyfikuj najdroższe operacje w profilerze.', solution: 'Rozwiązanie referencyjne: memoizacja + paginacja + porównanie metryk przed/po.' }
+        ]
+    }
+};
+
+const HELP_UNLOCK_SECONDS = 60;
+const SOLUTION_UNLOCK_SECONDS = 120;
+
 const CATEGORY_LABELS = {
     // Mapowanie numerów kategorii na nazwy tematów z sekcji „Tematy egzaminacyjne”.
     1: 'Systemy operacyjne i ekosystemy mobilne',
@@ -38,7 +67,8 @@ const state = {
     mode: 'short',
     isReady: false,
     timeLeft: 0,
-    timerId: null
+    timerId: null,
+    resultShownAt: null
 };
 
 // Inicjalizacja modułu testowego po załadowaniu drzewa DOM.
@@ -388,6 +418,8 @@ function showResults() {
 
     renderResultDetails();
     renderRecommendation();
+    state.resultShownAt = Date.now();
+    renderPracticeTasks();
     window.scrollTo({ top: document.getElementById('resultCard').offsetTop - 16, behavior: 'smooth' });
 }
 
@@ -436,6 +468,82 @@ function getWeakestCategory() {
 
     const sorted = [...categoryMistakes.entries()].sort((a, b) => b[1] - a[1]);
     return sorted[0]?.[0] ?? null;
+}
+
+
+
+function renderPracticeTasks() {
+    const container = document.getElementById('practiceTasks');
+    if (!container) return;
+    container.innerHTML = '';
+
+    const modulesToShow = getKeyModulesForReview();
+    modulesToShow.forEach((category) => {
+        const moduleConfig = PRACTICE_MODULES[category];
+        if (!moduleConfig) return;
+
+        const assessment = assessTaskReadiness(category);
+        moduleConfig.tasks.forEach((task, taskIndex) => {
+            const article = document.createElement('article');
+            article.className = `review-item ${assessment.ready ? 'correct' : 'incorrect'}`;
+            article.innerHTML = `
+                <h3>${getCategoryLabel(category)} — zadanie ${taskIndex + 1}</h3>
+                <p><strong>Zadanie:</strong> ${task.title}</p>
+                <p><strong>Kryterium zaliczenia:</strong> ${task.criterion}</p>
+                <p><strong>Automatyczna walidacja:</strong> ${task.validation}</p>
+                <span class="task-badge ${assessment.ready ? 'ok' : 'fix'}">${assessment.ready ? 'Co działa: baza opanowana' : 'Wymaga poprawy: utrwal moduł'}</span>
+                <p class="task-note">Materiał do powtórki: <a href="${moduleConfig.materialUrl}" target="_blank" rel="noopener">${moduleConfig.materialUrl}</a></p>
+                <div class="task-actions">
+                    <button class="secondary-btn" data-action="hint" data-category="${category}" data-task="${taskIndex}">Podpowiedź</button>
+                    <button class="secondary-btn" data-action="solution" data-category="${category}" data-task="${taskIndex}">Rozwiązanie referencyjne</button>
+                </div>
+                <p class="task-note" id="taskMessage-${category}-${taskIndex}">Podpowiedź odblokuje się po ${HELP_UNLOCK_SECONDS}s, rozwiązanie po ${SOLUTION_UNLOCK_SECONDS}s.</p>
+            `;
+            container.appendChild(article);
+        });
+    });
+
+    container.querySelectorAll('button[data-action]').forEach((button) => {
+        button.addEventListener('click', handleTaskAction);
+    });
+}
+
+function getKeyModulesForReview() {
+    const present = new Set(state.questions.map((q) => q.category));
+    return Object.keys(PRACTICE_MODULES)
+        .map(Number)
+        .filter((category) => present.has(category));
+}
+
+function assessTaskReadiness(category) {
+    const categoryQuestions = state.questions.filter((q) => q.category === category);
+    if (categoryQuestions.length === 0) return { ready: false };
+    const correct = categoryQuestions.filter((question) => {
+        const index = state.questions.indexOf(question);
+        return state.selectedAnswers[index] === question.correctIndex;
+    }).length;
+    const ratio = correct / categoryQuestions.length;
+    return { ready: ratio >= 0.6 };
+}
+
+function handleTaskAction(event) {
+    const button = event.currentTarget;
+    const category = Number(button.dataset.category);
+    const taskIndex = Number(button.dataset.task);
+    const action = button.dataset.action;
+    const task = PRACTICE_MODULES[category]?.tasks?.[taskIndex];
+    const message = document.getElementById(`taskMessage-${category}-${taskIndex}`);
+    if (!task || !message) return;
+
+    const elapsedSeconds = Math.floor((Date.now() - (state.resultShownAt || Date.now())) / 1000);
+    const unlockSeconds = action === 'hint' ? HELP_UNLOCK_SECONDS : SOLUTION_UNLOCK_SECONDS;
+
+    if (elapsedSeconds < unlockSeconds) {
+        message.textContent = `Treść będzie dostępna za ${unlockSeconds - elapsedSeconds}s.`;
+        return;
+    }
+
+    message.textContent = action === 'hint' ? `Podpowiedź: ${task.hint}` : `Rozwiązanie referencyjne: ${task.solution}`;
 }
 
 function formatAnswer(index, answers) {

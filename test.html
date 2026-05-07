@@ -257,6 +257,32 @@
         .review-item.incorrect { border-color: rgba(239, 68, 68, 0.35); }
         .review-item h3 { margin: 0 0 10px; font-size: 1rem; }
         .review-item p { margin: 6px 0; }
+        .task-badge {
+            display: inline-block;
+            margin-top: 6px;
+            padding: 4px 8px;
+            border-radius: 999px;
+            font-size: 0.78rem;
+            font-weight: 700;
+        }
+        .task-badge.ok { background: #d1fae5; color: #065f46; }
+        .task-badge.fix { background: #fee2e2; color: #991b1b; }
+        .task-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
+        }
+        .task-actions button {
+            padding: 8px 12px;
+            border-radius: 10px;
+            font-size: 0.86rem;
+        }
+        .task-note {
+            font-size: 0.88rem;
+            color: var(--text-muted);
+            margin-top: 8px;
+        }
         .muted { color: var(--text-muted); }
         @media (max-width: 640px) {
             .page { width: min(100% - 20px, 920px); padding-top: 20px; }
@@ -343,6 +369,7 @@
             <div class="actions">
                 <button class="primary-btn" id="resultRestartBtn" type="button">Wybierz parametry i rozpocznij ponownie</button>
             </div>
+            <section class="review-list" id="practiceTasks"></section>
             <div class="review-list" id="resultDetails"></div>
         </section>
     </main>
