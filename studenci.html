@@ -792,7 +792,7 @@ background: var(--surface);
 
             const metrics = [
                 { label: 'Ukończone tematy', value: `${completedModules.length}/${COURSE_MODULES.length}` },
-                { label: 'Średni wynik zadań', value: `${Math.round(COURSE_MODULES.reduce((sum, item) => sum + item.score, 0) / COURSE_MODULES.length)}%` },
+{ label: 'Średni wynik zadań', value: `${COURSE_MODULES.length > 0 ? Math.round(COURSE_MODULES.reduce((sum, item) => sum + item.score, 0) / COURSE_MODULES.length) : 0}%` },
                 { label: 'Aktywne cele nauki', value: activeGoals.length },
                 { label: 'Postęp kursu', value: `${progressPercent}%` }
             ];
