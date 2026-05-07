@@ -338,8 +338,8 @@
 
                         <section class="learning-paths" id="learningPathsModule" aria-labelledby="learningPathsTitle">
                             <div class="learning-paths-header">
-                                <h3 id="learningPathsTitle"><i class="fa-solid fa-route"></i>&nbsp; Learning Paths</h3>
-                                <p>Wybierz technologię i poziom, aby przejść gotową ścieżkę nauki z checklistą i miernikiem postępu.</p>
+                                <h3 id="learningPathsTitle"><i class="fa-solid fa-route"></i>&nbsp; Roadmapa semestru</h3>
+                                <p>Interaktywna mapa tematów z zależnościami, widokiem tygodniowym, terminami i oznaczeniami priorytetów.</p>
                             </div>
                             <div class="learning-paths-filters">
                                 <label>
@@ -1421,13 +1421,11 @@
             const levelFilter = document.getElementById('learningPathsLevelFilter');
             if (!container || !techFilter || !levelFilter) return;
 
-            // Dane przykładowych ścieżek nauki wraz z materiałami dostępnymi w serwisie.
+            // Dane roadmapy semestru wraz z zależnościami tematów i planem tygodniowym.
             const learningPaths = [
-                { id: 'android-foundations', title: 'Android Foundations', technology: 'Android', level: 'beginner', duration: '3-4 tygodnie', prerequisites: ['Podstawy programowania', 'Znajomość składni Kotlin'], topics: ['Android Studio', 'Architektura Android', 'Jetpack Compose', 'Nawigacja UI'], steps: [{ id: 'apf-1', title: 'Wprowadzenie do Android Studio', type: 'article', link: '#android-studio', article: 'android-studio' }, { id: 'apf-2', title: 'Podstawy Kotlin', type: 'article', link: '#kotlin-basics', article: 'kotlin-basics' }, { id: 'apf-3', title: 'Laboratorium Kotlin', type: 'lab', link: 'zajecia/laby/kotlin.pdf' }, { id: 'apf-4', title: 'Jetpack Compose', type: 'article', link: '#jetpack-compose', article: 'jetpack-compose' }] },
-                { id: 'ios-fast-track', title: 'iOS Fast Track', technology: 'iOS', level: 'beginner', duration: '3 tygodnie', prerequisites: ['Podstawy programowania obiektowego'], topics: ['Xcode', 'Swift', 'SwiftUI', 'Warstwa danych iOS'], steps: [{ id: 'ios-1', title: 'Xcode i ekosystem iOS', type: 'article', link: '#xcode-ios', article: 'xcode-ios' }, { id: 'ios-2', title: 'Podstawy Swift', type: 'article', link: '#swift-basics', article: 'swift-basics' }, { id: 'ios-3', title: 'Zaawansowane SwiftUI', type: 'article', link: '#swiftui-advanced', article: 'swiftui-advanced' }, { id: 'ios-4', title: 'Dane i sieć w iOS', type: 'article', link: '#ios-data', article: 'ios-data' }] },
-                { id: 'flutter-ship', title: 'Flutter Ship It', technology: 'Flutter', level: 'intermediate', duration: '4-5 tygodni', prerequisites: ['Podstawy Dart', 'Podstawy UI mobilnego'], topics: ['Flutter widgets', 'State management', 'Wydajność', 'Publikacja aplikacji'], steps: [{ id: 'flt-1', title: 'Cross-platform overview', type: 'article', link: '#cross-platform', article: 'cross-platform' }, { id: 'flt-2', title: 'Laboratorium Flutter', type: 'lab', link: 'zajecia/laby/flutter.pdf' }, { id: 'flt-3', title: 'Zaawansowany Flutter', type: 'article', link: '#flutter-advanced', article: 'flutter-advanced' }, { id: 'flt-4', title: 'Dystrybucja aplikacji', type: 'article', link: '#app-distribution', article: 'app-distribution' }] },
-                { id: 'react-native-product', title: 'React Native Product Path', technology: 'React Native', level: 'intermediate', duration: '4 tygodnie', prerequisites: ['JavaScript ES6+', 'Podstawy React'], topics: ['RN architektura', 'Nawigacja', 'Integracja API', 'Testowanie'], steps: [{ id: 'rn-1', title: 'Wprowadzenie do React Native', type: 'article', link: '#react-native', article: 'react-native' }, { id: 'rn-2', title: 'Nawigacja i wzorce UI', type: 'article', link: '#navigation-patterns', article: 'navigation-patterns' }, { id: 'rn-3', title: 'Laboratorium React', type: 'lab', link: 'zajecia/laby/react.pdf' }, { id: 'rn-4', title: 'Testowanie Android', type: 'article', link: '#android-testing', article: 'android-testing' }] },
-                { id: 'android-ai-advanced', title: 'Android + Edge AI', technology: 'Android', level: 'advanced', duration: '5-6 tygodni', prerequisites: ['Android średniozaawansowany', 'Podstawy ML'], topics: ['On-device inference', 'Kwantyzacja modeli', 'Sensory', 'Optymalizacja baterii'], steps: [{ id: 'adai-1', title: 'Wprowadzenie do Local AI', type: 'article', link: '#local-ai-intro', article: 'local-ai-intro' }, { id: 'adai-2', title: 'LiteRT LM na Androidzie', type: 'article', link: '#litert-lm-android', article: 'litert-lm-android' }, { id: 'adai-3', title: 'Kwantyzacja modeli', type: 'article', link: '#model-quantization', article: 'model-quantization' }, { id: 'adai-4', title: 'Laboratorium testy mobilne', type: 'lab', link: 'zajecia/laby/testy.pdf' }] }
+                { id: 'android-foundations', title: 'Android Foundations', technology: 'Android', level: 'beginner', duration: '1-4 tydzień', prerequisites: ['Podstawy programowania', 'Znajomość składni Kotlin'], topics: ['Android Studio', 'Architektura Android', 'Jetpack Compose', 'Nawigacja UI'], steps: [{ id: 'apf-1', title: 'Wprowadzenie do Android Studio', type: 'article', link: '#android-studio', article: 'android-studio', tag: 'critical' }, { id: 'apf-2', title: 'Podstawy Kotlin', type: 'article', link: '#kotlin-basics', article: 'kotlin-basics', tag: 'critical' }, { id: 'apf-3', title: 'Laboratorium Kotlin', type: 'lab', link: 'zajecia/laby/kotlin.pdf', tag: 'critical' }, { id: 'apf-4', title: 'Jetpack Compose', type: 'article', link: '#jetpack-compose', article: 'jetpack-compose', tag: 'optional' }], weeklyPlan: [{ week: 'T1', topic: 'Setup środowiska', dependencies: 'Brak', material: 'android-studio', lab: 'Lab 1: konfiguracja projektu', deadline: 'Quiz instalacyjny (koniec tygodnia)' }, { week: 'T2', topic: 'Kotlin + OOP', dependencies: 'Setup środowiska', material: 'kotlin-basics', lab: 'Lab 2: podstawy składni', deadline: 'Zadanie 1: klasy i funkcje' }, { week: 'T3', topic: 'Compose i UI', dependencies: 'Kotlin + OOP', material: 'jetpack-compose', lab: 'Lab 3: ekran aplikacji', deadline: 'Oddanie widoków UI' }, { week: 'T4', topic: 'Nawigacja i architektura', dependencies: 'Compose i UI', material: 'android-architecture', lab: 'Lab 4: nawigacja', deadline: 'Milestone MVP' }] },
+                { id: 'flutter-ship', title: 'Flutter Ship It', technology: 'Flutter', level: 'intermediate', duration: '5-8 tydzień', prerequisites: ['Podstawy Dart', 'Podstawy UI mobilnego'], topics: ['Flutter widgets', 'State management', 'Wydajność', 'Publikacja aplikacji'], steps: [{ id: 'flt-1', title: 'Cross-platform overview', type: 'article', link: '#cross-platform', article: 'cross-platform', tag: 'critical' }, { id: 'flt-2', title: 'Laboratorium Flutter', type: 'lab', link: 'zajecia/laby/flutter.pdf', tag: 'critical' }, { id: 'flt-3', title: 'Zaawansowany Flutter', type: 'article', link: '#flutter-advanced', article: 'flutter-advanced', tag: 'optional' }, { id: 'flt-4', title: 'Dystrybucja aplikacji', type: 'article', link: '#app-distribution', article: 'app-distribution', tag: 'critical' }], weeklyPlan: [{ week: 'T5', topic: 'Widget tree', dependencies: 'Kotlin/Swift lub podstawy mobilne', material: 'cross-platform', lab: 'Lab 5: layout i komponenty', deadline: 'Oddanie layoutów' }, { week: 'T6', topic: 'State management', dependencies: 'Widget tree', material: 'flutter-advanced', lab: 'Lab 6: logika stanu', deadline: 'Zadanie 2: stan i walidacja' }, { week: 'T7', topic: 'Integracja API', dependencies: 'State management', material: 'data-storage-best-practices', lab: 'Lab 7: REST i cache', deadline: 'Milestone Beta' }, { week: 'T8', topic: 'Build i release', dependencies: 'Integracja API', material: 'app-distribution', lab: 'Lab 8: pipeline release', deadline: 'Oddanie release candidate' }] },
+                { id: 'android-ai-advanced', title: 'Android + Edge AI', technology: 'Android', level: 'advanced', duration: '9-12 tydzień', prerequisites: ['Android średniozaawansowany', 'Podstawy ML'], topics: ['On-device inference', 'Kwantyzacja modeli', 'Sensory', 'Optymalizacja baterii'], steps: [{ id: 'adai-1', title: 'Wprowadzenie do Local AI', type: 'article', link: '#local-ai-intro', article: 'local-ai-intro', tag: 'critical' }, { id: 'adai-2', title: 'LiteRT LM na Androidzie', type: 'article', link: '#litert-lm-android', article: 'litert-lm-android', tag: 'critical' }, { id: 'adai-3', title: 'Kwantyzacja modeli', type: 'article', link: '#model-quantization', article: 'model-quantization', tag: 'optional' }, { id: 'adai-4', title: 'Laboratorium testy mobilne', type: 'lab', link: 'zajecia/laby/tests.pdf', tag: 'critical' }], weeklyPlan: [{ week: 'T9', topic: 'AI on-device baseline', dependencies: 'Android średniozaawansowany', material: 'local-ai-intro', lab: 'Lab 9: inferencja lokalna', deadline: 'Zadanie 3: benchmark' }, { week: 'T10', topic: 'Kwantyzacja', dependencies: 'AI on-device baseline', material: 'model-quantization', lab: 'Lab 10: optymalizacja modelu', deadline: 'Oddanie raportu wydajności' }, { week: 'T11', topic: 'Sensory i kontekst', dependencies: 'Kwantyzacja', material: 'pam_w06_sensors.pdf', lab: 'Lab 11: dane sensorów', deadline: 'Milestone Final' }, { week: 'T12', topic: 'Prezentacja projektu', dependencies: 'Sensory i kontekst', material: 'projekt-zaliczeniowy', lab: 'Lab 12: demo', deadline: 'Oddanie końcowe + prezentacja' }] }
             ];
 
             // Mapa etykiet materiałów do wyświetlania typu zasobu.
@@ -1457,7 +1455,7 @@
                         <li>
                             <label class="learning-step-row">
                                 <input type="checkbox" data-path-id="${path.id}" data-step-id="${step.id}" ${progress[step.id] ? 'checked' : ''}>
-                                <span>${step.title}</span>
+                                <span>${step.title} ${step.tag === 'critical' ? '<strong>[krytyczne dla projektu]</strong>' : '<em>[opcjonalne rozszerzenie]</em>'}</span>
                             </label>
                             <a href="${step.link}" ${step.article ? `data-article="${step.article}"` : ''} class="learning-step-link">
                                 ${typeLabels[step.type] || 'Materiał'}
@@ -1467,6 +1465,7 @@
 
                     const topicsHtml = path.topics.map(topic => `<li>${topic}</li>`).join('');
                     const prerequisitesHtml = path.prerequisites.map(item => `<li>${item}</li>`).join('');
+                    const weeklyHtml = (path.weeklyPlan || []).map(item => `<tr><td>${item.week}</td><td>${item.topic}<br><small><strong>Zależności:</strong> ${item.dependencies}</small></td><td>${item.material}</td><td>${item.lab}</td><td>${item.deadline}</td></tr>`).join('');
 
                     container.insertAdjacentHTML('beforeend', `
                         <article class="learning-path-card">
@@ -1487,6 +1486,15 @@
                             <div>
                                 <strong>Checklista ukończenia</strong>
                                 <ul class="learning-steps-list">${stepsHtml}</ul>
+                            </div>
+                            <div style="margin-top:12px;">
+                                <strong>Widok tygodniowy</strong>
+                                <div style="overflow-x:auto;">
+                                    <table class="weekly-roadmap-table">
+                                        <thead><tr><th>Tydzień</th><th>Temat i zależności</th><th>Materiał</th><th>Laboratorium</th><th>Termin oddania</th></tr></thead>
+                                        <tbody>${weeklyHtml}</tbody>
+                                    </table>
+                                </div>
                             </div>
                         </article>
                     `);

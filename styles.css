@@ -1750,6 +1750,25 @@ header {
     font-size: 11px;
 }
 
+.weekly-roadmap-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 8px;
+    font-size: 11px;
+}
+
+.weekly-roadmap-table th,
+.weekly-roadmap-table td {
+    border: 1px solid var(--border);
+    padding: 6px 8px;
+    text-align: left;
+    vertical-align: top;
+}
+
+.weekly-roadmap-table th {
+    background: var(--accent-light);
+}
+
 /* Loading */
 .wiki-loading {
     display: flex;
