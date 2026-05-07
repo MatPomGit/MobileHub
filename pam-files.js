@@ -209,6 +209,7 @@ document.addEventListener('DOMContentLoaded', initPresentationPreview);
 function initPresentationPreview() {
     const controls = document.getElementById('presentation-controls');
     const previewFrame = document.getElementById('presentation-preview');
+    const openInNewTabLink = document.getElementById('presentation-preview-open');
     if (!controls || !previewFrame) return;
 
     // Budujemy listy PDF dla wykładów i laboratoriów, aby użytkownik mógł przełączać kontekst podglądu.
@@ -232,8 +233,15 @@ function initPresentationPreview() {
     const renderMaterialButtons = (materials) => {
         controls.querySelectorAll('.presentation-item-btn').forEach(button => button.remove());
 
+        // Aktualizujemy iframe i link awaryjny, który rozwiązuje problemy z osadzaniem PDF na części urządzeń mobilnych.
         const setActivePresentation = (path, buttonEl) => {
             previewFrame.src = path;
+
+            if (openInNewTabLink) {
+                openInNewTabLink.href = path;
+                openInNewTabLink.classList.add('is-visible');
+            }
+
             controls.querySelectorAll('.presentation-btn').forEach(btn => btn.classList.remove('active'));
             buttonEl?.classList.add('active');
         };
