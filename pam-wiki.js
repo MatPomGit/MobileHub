@@ -724,7 +724,7 @@ Rzeczywisty rezultat:
 -
 
 Fragment kodu:
-${codeSample.slice(0, 1200)}`
+${codeSample.slice(0, 500)}`
             );
             window.location.href = `mailto:mobilehub.snippets+bugs@gmail.com?subject=${subject}&body=${body}`;
         });
