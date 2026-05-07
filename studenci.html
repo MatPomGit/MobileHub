@@ -976,9 +976,12 @@ background: var(--surface);
         function exportTeacherReportCSV() {
             const filtered = getFilteredTeachingData();
             const headers = ['group', 'week', 'technology', 'topic', 'task', 'passRate', 'activityDrop', 'projectDelayRisk'];
-            const rows = filtered.map((item) => headers.map((key) => item[key]).join(','));
-            const csv = [headers.join(','), ...rows].join('\n');
-            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const rows = filtered.map((item) => headers.map((key) => {
+                const val = String(item[key] ?? '').replace(/"/g, '""');
+                return `"${val}"`;
+            }).join(','));
+            const csv = [headers.join(','), ...rows].join('\\n');
+            const blob = new Blob(['\\ufeff', csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
