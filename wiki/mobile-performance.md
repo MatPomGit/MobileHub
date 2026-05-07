@@ -319,7 +319,7 @@ Poniższa sekcja zawiera zestaw bazowych scenariuszy, które można uruchamiać 
    - Wi-Fi referencyjne,
    - LTE symulowane,
    - słaba sieć (wysoka latencja + packet loss).
-3. Dla każdego endpointu zbierz minimum 30 próbek.
+3. Dla każdego endpointu zbierz minimum 100 próbek.
 4. Raportuj P50/P95/P99 dla całkowitego czasu odpowiedzi.
 
 **Rekomendowane progi jakości:**
