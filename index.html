@@ -456,6 +456,112 @@
                 </a>
             </div>
 
+
+
+            <h3 class="section-title">Starter Kits</h3>
+            <p>Gotowe szablony repozytoriów przyspieszające start projektu. Każdy starter zawiera proponowaną architekturę, wymagania środowiskowe, kroki uruchomienia oraz sugerowaną strukturę katalogów.</p>
+            <div class="cards-grid">
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-android"></i>
+                        <strong>Android — Kotlin + Jetpack Compose</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Clean Architecture + MVVM, podział na moduły <code>app</code>, <code>core</code>, <code>feature</code>, przepływ danych przez UseCase i StateFlow.</p>
+                    <p><strong>Wymagania:</strong> Android Studio Iguana+, JDK 17, Android SDK 34+, Gradle 8+.</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repozytorium i przejdź do katalogu projektu.</li>
+                        <li>Uruchom synchronizację Gradle (<code>./gradlew --refresh-dependencies</code>).</li>
+                        <li>Skonfiguruj <code>local.properties</code> oraz plik <code>.env</code> z kluczami.</li>
+                        <li>Uruchom emulator lub podłącz urządzenie fizyczne.</li>
+                        <li>Zbuduj i uruchom aplikację poleceniem <code>./gradlew installDebug</code>.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>android-starter/
+├─ app/
+├─ core/
+│  ├─ ui/
+│  ├─ network/
+│  └─ database/
+├─ feature/
+│  ├─ auth/
+│  └─ dashboard/
+└─ buildSrc/</code></pre>
+                    <a href="https://github.com/topics/android-template" target="_blank" rel="noopener" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-flutter"></i>
+                        <strong>Flutter — Dart + Riverpod</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Feature-first + Clean, warstwy Presentation / Domain / Data, zarządzanie stanem Riverpod.</p>
+                    <p><strong>Wymagania:</strong> Flutter 3.22+, Dart 3.4+, Android/iOS toolchain, CocoaPods (dla iOS).</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repozytorium i wykonaj <code>flutter pub get</code>.</li>
+                        <li>Skopiuj <code>.env.example</code> do <code>.env</code> i uzupełnij wartości.</li>
+                        <li>Wygeneruj kod poleceniem <code>dart run build_runner build</code>.</li>
+                        <li>Sprawdź dostępne urządzenia przez <code>flutter devices</code>.</li>
+                        <li>Uruchom aplikację: <code>flutter run</code>.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>flutter-starter/
+├─ lib/
+│  ├─ core/
+│  ├─ features/
+│  │  ├─ auth/
+│  │  └─ home/
+│  └─ shared/
+├─ test/
+└─ assets/</code></pre>
+                    <a href="https://github.com/topics/flutter-template" target="_blank" rel="noopener" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-react"></i>
+                        <strong>React Native — Expo + TypeScript</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Modular monorepo (apps/packages), feature folders, React Query + Zustand dla stanu lokalnego i serwerowego.</p>
+                    <p><strong>Wymagania:</strong> Node.js 20 LTS, pnpm 9+, Expo CLI, Android Studio/Xcode.</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repo i zainstaluj zależności: <code>pnpm install</code>.</li>
+                        <li>Skopiuj <code>.env.example</code> do <code>.env</code> oraz uzupełnij endpointy.</li>
+                        <li>Uruchom Metro bundler: <code>pnpm expo start</code>.</li>
+                        <li>Wybierz platformę (Android/iOS/Web) z menu Expo.</li>
+                        <li>Zbuduj paczkę developerską: <code>pnpm expo run:android</code> lub <code>pnpm expo run:ios</code>.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>rn-starter/
+├─ apps/mobile/
+├─ packages/
+│  ├─ ui/
+│  ├─ api/
+│  └─ config/
+├─ scripts/
+└─ docs/</code></pre>
+                    <a href="https://github.com/topics/react-native-template" target="_blank" rel="noopener" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+            </div>
+
+            <h3 class="section-title">Checklista po sklonowaniu startera</h3>
+            <div class="info-card">
+                <div class="info-card-header">
+                    <i class="fa-solid fa-list-check"></i>
+                    <strong>Co zmienić zaraz po starcie projektu</strong>
+                </div>
+                <ul>
+                    <li><strong>Package name / bundle identifier:</strong> zmień identyfikator aplikacji we wszystkich build flavorach.</li>
+                    <li><strong>Signing:</strong> utwórz własny keystore / certyfikaty i skonfiguruj podpisywanie buildów release.</li>
+                    <li><strong>Endpointy:</strong> ustaw adresy API dla środowisk dev/stage/prod i zweryfikuj CORS/polityki sieciowe.</li>
+                    <li><strong>Klucze API:</strong> przenieś sekrety do bezpiecznego storage (CI secrets, vault), nie trzymaj ich w repozytorium.</li>
+                    <li><strong>Branding:</strong> podmień nazwę aplikacji, ikonę, splash screen, kolory, fonty i podstawowe teksty.</li>
+                    <li><strong>Analityka i crash reporting:</strong> skonfiguruj własne projekty (np. Firebase/Sentry) i klucze środowiskowe.</li>
+                </ul>
+            </div>
+
             <h3 class="section-title">Wymagania techniczne</h3>
             <div class="cards-grid">
                 <div class="info-card">
