@@ -948,8 +948,9 @@ background: var(--surface);
             const filtered = getFilteredTeachingData();
             const averagePassRate = filtered.length ? Math.round(filtered.reduce((sum, item) => sum + item.passRate, 0) / filtered.length) : 0;
             const averageRisk = filtered.length ? Math.round(filtered.reduce((sum, item) => sum + item.projectDelayRisk, 0) / filtered.length) : 0;
-            const hardestTopics = [...filtered].sort((a, b) => a.passRate - b.passRate).slice(0, 3);
-            const failedTasks = [...filtered].sort((a, b) => a.passRate - b.passRate).slice(0, 3);
+            const sortedByPassRate = [...filtered].sort((a, b) => a.passRate - b.passRate).slice(0, 3);
+            const hardestTopics = sortedByPassRate;
+            const failedTasks = sortedByPassRate;
             const alerts = filtered.filter((item) => item.activityDrop >= 15 || item.projectDelayRisk >= 50);
 
             const metrics = [
