@@ -459,7 +459,7 @@
 
 
             <h3 class="section-title">Starter Kits</h3>
-            <p>Gotowe szablony repozytoriów przyspieszające start projektu. Każdy starter zawiera proponowaną architekturę, wymagania środowiskowe, kroki uruchomienia oraz sugerowaną strukturę katalogów.</p>
+            <p>Gotowe szablony repozytoriów przyspieszające start projektu. Każdy starter zawiera proponowaną architekturę, wymagania środowiskowe, kroki uruchomienia (z wyjaśnieniem celu każdego kroku) oraz sugerowaną strukturę katalogów, aby zespół od początku pracował według spójnych standardów.</p>
             <div class="cards-grid">
                 <div class="info-card">
                     <div class="info-card-header">
@@ -470,11 +470,11 @@
                     <p><strong>Wymagania:</strong> Android Studio Iguana+, JDK 17, Android SDK 34+, Gradle 8+.</p>
                     <p><strong>Uruchomienie krok po kroku:</strong></p>
                     <ol>
-                        <li>Sklonuj repozytorium i przejdź do katalogu projektu.</li>
-                        <li>Uruchom synchronizację Gradle (<code>./gradlew --refresh-dependencies</code>).</li>
-                        <li>Skonfiguruj <code>local.properties</code> oraz plik <code>.env</code> z kluczami.</li>
-                        <li>Uruchom emulator lub podłącz urządzenie fizyczne.</li>
-                        <li>Zbuduj i uruchom aplikację poleceniem <code>./gradlew installDebug</code>.</li>
+                        <li>Sklonuj repozytorium i przejdź do katalogu projektu, aby pracować na tym samym baseline co cały zespół.</li>
+                        <li>Uruchom synchronizację Gradle (<code>./gradlew --refresh-dependencies</code>), żeby pobrać poprawne wersje bibliotek i uniknąć konfliktów zależności.</li>
+                        <li>Skonfiguruj <code>local.properties</code> oraz plik <code>.env</code> z kluczami, aby oddzielić sekrety od kodu źródłowego i ułatwić zmianę środowisk.</li>
+                        <li>Uruchom emulator lub podłącz urządzenie fizyczne, żeby szybko zweryfikować UI i zachowanie aplikacji na docelowej platformie.</li>
+                        <li>Zbuduj i uruchom aplikację poleceniem <code>./gradlew installDebug</code>, aby potwierdzić poprawność konfiguracji i procesu build.</li>
                     </ol>
                     <p><strong>Struktura katalogów:</strong></p>
                     <pre><code>android-starter/
@@ -499,11 +499,11 @@
                     <p><strong>Wymagania:</strong> Flutter 3.22+, Dart 3.4+, Android/iOS toolchain, CocoaPods (dla iOS).</p>
                     <p><strong>Uruchomienie krok po kroku:</strong></p>
                     <ol>
-                        <li>Sklonuj repozytorium i wykonaj <code>flutter pub get</code>.</li>
-                        <li>Skopiuj <code>.env.example</code> do <code>.env</code> i uzupełnij wartości.</li>
-                        <li>Wygeneruj kod poleceniem <code>dart run build_runner build</code>.</li>
-                        <li>Sprawdź dostępne urządzenia przez <code>flutter devices</code>.</li>
-                        <li>Uruchom aplikację: <code>flutter run</code>.</li>
+                        <li>Sklonuj repozytorium i wykonaj <code>flutter pub get</code>, aby pobrać paczki i zsynchronizować lockfile projektu.</li>
+                        <li>Skopiuj <code>.env.example</code> do <code>.env</code> i uzupełnij wartości, aby lokalnie podłączyć właściwe endpointy i klucze.</li>
+                        <li>Wygeneruj kod poleceniem <code>dart run build_runner build</code>, aby utworzyć klasy serializacji i adaptery wymagane przez warstwę data.</li>
+                        <li>Sprawdź dostępne urządzenia przez <code>flutter devices</code>, aby upewnić się, że toolchain poprawnie wykrywa środowisko testowe.</li>
+                        <li>Uruchom aplikację: <code>flutter run</code>, aby zweryfikować przepływy użytkownika oraz poprawność integracji bibliotek.</li>
                     </ol>
                     <p><strong>Struktura katalogów:</strong></p>
                     <pre><code>flutter-starter/
@@ -527,11 +527,11 @@
                     <p><strong>Wymagania:</strong> Node.js 20 LTS, pnpm 9+, Expo CLI, Android Studio/Xcode.</p>
                     <p><strong>Uruchomienie krok po kroku:</strong></p>
                     <ol>
-                        <li>Sklonuj repo i zainstaluj zależności: <code>pnpm install</code>.</li>
-                        <li>Skopiuj <code>.env.example</code> do <code>.env</code> oraz uzupełnij endpointy.</li>
-                        <li>Uruchom Metro bundler: <code>pnpm expo start</code>.</li>
-                        <li>Wybierz platformę (Android/iOS/Web) z menu Expo.</li>
-                        <li>Zbuduj paczkę developerską: <code>pnpm expo run:android</code> lub <code>pnpm expo run:ios</code>.</li>
+                        <li>Sklonuj repo i zainstaluj zależności: <code>pnpm install</code>, aby odtworzyć identyczne środowisko JavaScript jak w CI.</li>
+                        <li>Skopiuj <code>.env.example</code> do <code>.env</code> oraz uzupełnij endpointy, żeby aplikacja łączyła się z prawidłowym backendem.</li>
+                        <li>Uruchom Metro bundler: <code>pnpm expo start</code>, aby rozpocząć hot-reload i szybkie testowanie zmian.</li>
+                        <li>Wybierz platformę (Android/iOS/Web) z menu Expo, by zweryfikować zachowanie UI na różnych runtime'ach.</li>
+                        <li>Zbuduj paczkę developerską: <code>pnpm expo run:android</code> lub <code>pnpm expo run:ios</code>, żeby przetestować natywne moduły poza Expo Go.</li>
                     </ol>
                     <p><strong>Struktura katalogów:</strong></p>
                     <pre><code>rn-starter/
@@ -543,6 +543,38 @@
 ├─ scripts/
 └─ docs/</code></pre>
                     <a href="https://github.com/topics/react-native-template" target="_blank" rel="noopener" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-gamepad"></i>
+                        <strong>Unity — C# + URP (mobile)</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Warstwowy podział Scripts/Systems/UI, wzorzec MVC lub MVVM dla paneli UI, ScriptableObjects do konfiguracji danych i balansu.</p>
+                    <p><strong>Wymagania:</strong> Unity 2022 LTS+, Android Build Support, iOS Build Support, Visual Studio/Rider, Git LFS dla dużych assetów.</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repozytorium i otwórz projekt przez Unity Hub, aby zachować zgodność wersji edytora z zespołem.</li>
+                        <li>Poczekaj na import assetów i kompilację skryptów, ponieważ pierwszy import buduje cache i rozwiązuje referencje pakietów.</li>
+                        <li>Skonfiguruj <code>Project Settings</code> (Package Name, Company Name, min SDK), aby przygotować projekt pod publikację mobilną.</li>
+                        <li>Uzupełnij pliki konfiguracyjne backendu (np. <code>Resources/Config</code>) i klucze API, by uruchomić integracje online.</li>
+                        <li>Uruchom scenę startową w Play Mode i wykonaj build testowy na urządzenie (<code>Build And Run</code>), aby potwierdzić płynność oraz poprawność inputu dotykowego.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>unity-starter/
+├─ Assets/
+│  ├─ Art/
+│  ├─ Audio/
+│  ├─ Prefabs/
+│  ├─ Scenes/
+│  ├─ Scripts/
+│  │  ├─ Core/
+│  │  ├─ Gameplay/
+│  │  └─ UI/
+│  └─ Settings/
+├─ Packages/
+└─ ProjectSettings/</code></pre>
+                    <a href="https://github.com/topics/unity-template" target="_blank" rel="noopener" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
                 </div>
             </div>
 
