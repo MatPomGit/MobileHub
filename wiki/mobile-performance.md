@@ -272,3 +272,142 @@ if (BuildConfig.DEBUG) {
 - [Macrobenchmark](https://developer.android.com/topic/performance/benchmarking/macrobenchmark-overview)
 - [LeakCanary](https://square.github.io/leakcanary/)
 - [Perfetto](https://perfetto.dev)
+
+## Gotowe scenariusze testów wydajności
+
+Poniższa sekcja zawiera zestaw bazowych scenariuszy, które można uruchamiać cyklicznie (np. raz na sprint) lub automatycznie w CI/CD. Każdy scenariusz ma instrukcję pomiaru oraz rekomendowane progi jakości do monitorowania regresji.
+
+### 1) Start aplikacji (cold/warm/hot)
+
+**Cel:** walidacja czasu wejścia użytkownika do pierwszego interaktywnego ekranu.
+
+**Instrukcja pomiaru:**
+1. Użyj `Macrobenchmark` (`StartupTimingMetric`) na urządzeniu fizycznym.
+2. Uruchom co najmniej 10 iteracji dla każdego trybu (`COLD`, `WARM`, `HOT`).
+3. Zamknij aplikacje w tle i utrzymuj stały stan baterii/temperatury urządzenia.
+4. Zapisz medianę, P90 i najgorszy wynik.
+
+**Rekomendowane progi jakości:**
+- **Cold start:** P50 <= 2000 ms, P90 <= 3000 ms.
+- **Warm start:** P50 <= 1000 ms, P90 <= 1500 ms.
+- **Hot start:** P50 <= 700 ms, P90 <= 1000 ms.
+- **Regresja:** alarm przy wzroście >15% względem baseline.
+
+### 2) Scroll listy (płynność UI)
+
+**Cel:** wykrywanie dropów klatek i zacięć podczas przewijania długich list.
+
+**Instrukcja pomiaru:**
+1. Uruchom ekran z listą min. 100 elementów i obrazami.
+2. Wykonaj 5 przejazdów scroll: dół-góra-dół ze stałą prędkością (gesture automation).
+3. Zbieraj metryki: `frameTime`, `jank`, `frozen frames`, CPU usage.
+4. Dodatkowo oznacz sekcje kodu `Trace.beginSection(...)` dla miejsc potencjalnie ciężkich.
+
+**Rekomendowane progi jakości:**
+- **Jank frames:** <3% wszystkich klatek.
+- **Frozen frames (>700 ms):** <0.1%.
+- **95 percentyl frame time:** <= 24 ms.
+- **Regresja:** alarm przy wzroście jank >1.5 pp albo P95 >20%.
+
+### 3) Opóźnienia sieciowe (network latency)
+
+**Cel:** kontrola odporności UX na wolną sieć i niestabilne API.
+
+**Instrukcja pomiaru:**
+1. Włącz profilowanie OkHttp (`EventListener`) dla czasów DNS/connect/TTFB/total.
+2. Przetestuj co najmniej 3 profile sieci:
+   - Wi-Fi referencyjne,
+   - LTE symulowane,
+   - słaba sieć (wysoka latencja + packet loss).
+3. Dla każdego endpointu zbierz minimum 30 próbek.
+4. Raportuj P50/P95/P99 dla całkowitego czasu odpowiedzi.
+
+**Rekomendowane progi jakości:**
+- **TTFB P95:** <= 800 ms (API krytyczne UX).
+- **Total request P95:** <= 1500 ms.
+- **Timeout/error rate:** <1% dla krytycznych ścieżek.
+- **Regresja:** alarm przy wzroście P95 >20% lub błędach >2x baseline.
+
+### 4) Zużycie pamięci (memory usage)
+
+**Cel:** wykrywanie wycieków i nadmiernego narzutu pamięci po dłuższym użyciu.
+
+**Instrukcja pomiaru:**
+1. Zdefiniuj scenariusz 15-20 minut: nawigacja między ekranami + multimedia + powrót.
+2. Rejestruj `Total PSS`, Java heap, native heap co 30-60 sekund.
+3. Po scenariuszu wykonaj heap dump i analizę dominator tree.
+4. Uruchom LeakCanary w debug i porównaj liczbę podejrzanych wycieków.
+
+**Rekomendowane progi jakości:**
+- **Wzrost PSS po scenariuszu:** <= 20% względem startu.
+- **Brak trendu rosnącego po 3 cyklach GC** (stabilizacja pamięci).
+- **LeakCanary:** 0 krytycznych wycieków (Activity/Fragment/View binding).
+- **Regresja:** alarm, gdy PSS rośnie stale >3 pomiary z rzędu.
+
+## Przykładowe raporty
+
+### Raport A: Start aplikacji
+
+| Metryka | Baseline | Aktualnie | Delta | Status |
+|---------|----------|-----------|-------|--------|
+| Cold P50 | 1650 ms | 1820 ms | +10.3% | OK |
+| Cold P90 | 2480 ms | 3010 ms | +21.4% | REGRESJA |
+| Warm P50 | 740 ms | 810 ms | +9.4% | OK |
+| Hot P50 | 510 ms | 600 ms | +17.6% | UWAGA |
+
+**Wniosek:** regresja dotyczy głównie cold startu (P90), sugeruje problem z inicjalizacją zależności na starcie.
+
+### Raport B: Scroll i renderowanie
+
+| Metryka | Baseline | Aktualnie | Delta | Status |
+|---------|----------|-----------|-------|--------|
+| Jank frames | 1.8% | 3.9% | +2.1 pp | REGRESJA |
+| Frozen frames | 0.03% | 0.08% | +0.05 pp | OK |
+| Frame time P95 | 18 ms | 26 ms | +44.4% | REGRESJA |
+| CPU avg | 29% | 41% | +12 pp | UWAGA |
+
+**Wniosek:** duża liczba rekompozycji i ciężkie operacje podczas bindu elementów listy.
+
+### Raport C: Sieć i pamięć
+
+| Metryka | Baseline | Aktualnie | Delta | Status |
+|---------|----------|-----------|-------|--------|
+| API `/feed` P95 | 920 ms | 1340 ms | +45.6% | REGRESJA |
+| Error rate | 0.4% | 0.7% | +0.3 pp | OK |
+| PSS po 20 min | 220 MB | 289 MB | +31.4% | REGRESJA |
+| LeakCanary critical leaks | 0 | 2 | +2 | REGRESJA |
+
+**Wniosek:** prawdopodobny wyciek w warstwie UI + wolniejsze odpowiedzi backendu lub brak cache.
+
+## Checklista optymalizacji po wykryciu regresji
+
+1. **Potwierdź reprodukcję** na tym samym modelu urządzenia i wersji systemu.
+2. **Porównaj commit range** między baseline i regresją.
+3. **Wyizoluj obszar problemu** (startup, rendering, network, memory).
+4. **Startup:** przenieś inicjalizacje poza `Application.onCreate`, włącz lazy init.
+5. **Scroll/Compose:** stabilne modele danych, `remember`, `derivedStateOf`, paginacja.
+6. **Network:** cache HTTP, kompresja payloadu, retry/backoff, timeouty per endpoint.
+7. **Memory:** usuwaj referencje w `onDestroyView`, unikaj singletonów z `Context`.
+8. **Zweryfikuj R8 i resource shrinking** w release.
+9. **Uruchom testy porównawcze A/B** przed i po poprawce.
+10. **Zaktualizuj baseline** dopiero po potwierdzeniu trwałej poprawy.
+
+## Krótkie case study: przed/po optymalizacji
+
+### Case 1: Wolny cold start
+
+- **Przed:** średni cold start 2900 ms, ciężka inicjalizacja analityki i bazy w `Application.onCreate`.
+- **Działanie:** lazy init, przeniesienie części inicjalizacji do pierwszego użycia, baseline profile.
+- **Po:** cold start 1700 ms (poprawa ~41%), brak ANR przy starcie.
+
+### Case 2: Jank na liście produktów
+
+- **Przed:** jank 5.2%, frame time P95 = 31 ms, niestabilne modele i brak kluczy.
+- **Działanie:** `ImmutableList`, `@Immutable`, klucze w listach, memoizacja lambd i obrazów.
+- **Po:** jank 2.0%, frame time P95 = 19 ms (wyraźnie płynniejszy scroll).
+
+### Case 3: Rosnące zużycie pamięci
+
+- **Przed:** PSS rośnie z 210 MB do 320 MB po 15 minutach, 3 wycieki fragmentów.
+- **Działanie:** czyszczenie bindingów, lifecycle-aware collect, usunięcie referencji do `Activity`.
+- **Po:** PSS stabilizuje się przy 235 MB, 0 krytycznych wycieków w LeakCanary.
