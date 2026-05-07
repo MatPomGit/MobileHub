@@ -336,6 +336,35 @@
                             </div>
                         </div>
 
+                        <section class="learning-paths" id="learningPathsModule" aria-labelledby="learningPathsTitle">
+                            <div class="learning-paths-header">
+                                <h3 id="learningPathsTitle"><i class="fa-solid fa-route"></i>&nbsp; Learning Paths</h3>
+                                <p>Wybierz technologię i poziom, aby przejść gotową ścieżkę nauki z checklistą i miernikiem postępu.</p>
+                            </div>
+                            <div class="learning-paths-filters">
+                                <label>
+                                    Technologia
+                                    <select id="learningPathsTechFilter">
+                                        <option value="all">Wszystkie</option>
+                                        <option value="Android">Android</option>
+                                        <option value="iOS">iOS</option>
+                                        <option value="Flutter">Flutter</option>
+                                        <option value="React Native">React Native</option>
+                                    </select>
+                                </label>
+                                <label>
+                                    Poziom
+                                    <select id="learningPathsLevelFilter">
+                                        <option value="all">Wszystkie</option>
+                                        <option value="beginner">beginner</option>
+                                        <option value="intermediate">intermediate</option>
+                                        <option value="advanced">advanced</option>
+                                    </select>
+                                </label>
+                            </div>
+                            <div class="learning-paths-grid" id="learningPathsGrid"></div>
+                        </section>
+
                         <div class="info-box">
                             <i class="fa-solid fa-circle-info"></i>
                             <div>
@@ -1242,6 +1271,102 @@
                 sidebar.classList.remove('open');
             }
         });
+
+        // ===== LEARNING PATHS MODULE =====
+        (function initLearningPathsModule() {
+            const container = document.getElementById('learningPathsGrid');
+            const techFilter = document.getElementById('learningPathsTechFilter');
+            const levelFilter = document.getElementById('learningPathsLevelFilter');
+            if (!container || !techFilter || !levelFilter) return;
+
+            // Dane przykładowych ścieżek nauki wraz z materiałami dostępnymi w serwisie.
+            const learningPaths = [
+                { id: 'android-foundations', title: 'Android Foundations', technology: 'Android', level: 'beginner', duration: '3-4 tygodnie', prerequisites: ['Podstawy programowania', 'Znajomość składni Kotlin'], topics: ['Android Studio', 'Architektura Android', 'Jetpack Compose', 'Nawigacja UI'], steps: [{ id: 'apf-1', title: 'Wprowadzenie do Android Studio', type: 'article', link: '#android-studio', article: 'android-studio' }, { id: 'apf-2', title: 'Podstawy Kotlin', type: 'article', link: '#kotlin-basics', article: 'kotlin-basics' }, { id: 'apf-3', title: 'Laboratorium Kotlin', type: 'lab', link: 'zajecia/laby/kotlin.pdf' }, { id: 'apf-4', title: 'Jetpack Compose', type: 'article', link: '#jetpack-compose', article: 'jetpack-compose' }] },
+                { id: 'ios-fast-track', title: 'iOS Fast Track', technology: 'iOS', level: 'beginner', duration: '3 tygodnie', prerequisites: ['Podstawy programowania obiektowego'], topics: ['Xcode', 'Swift', 'SwiftUI', 'Warstwa danych iOS'], steps: [{ id: 'ios-1', title: 'Xcode i ekosystem iOS', type: 'article', link: '#xcode-ios', article: 'xcode-ios' }, { id: 'ios-2', title: 'Podstawy Swift', type: 'article', link: '#swift-basics', article: 'swift-basics' }, { id: 'ios-3', title: 'Zaawansowane SwiftUI', type: 'article', link: '#swiftui-advanced', article: 'swiftui-advanced' }, { id: 'ios-4', title: 'Dane i sieć w iOS', type: 'article', link: '#ios-data', article: 'ios-data' }] },
+                { id: 'flutter-ship', title: 'Flutter Ship It', technology: 'Flutter', level: 'intermediate', duration: '4-5 tygodni', prerequisites: ['Podstawy Dart', 'Podstawy UI mobilnego'], topics: ['Flutter widgets', 'State management', 'Wydajność', 'Publikacja aplikacji'], steps: [{ id: 'flt-1', title: 'Cross-platform overview', type: 'article', link: '#cross-platform', article: 'cross-platform' }, { id: 'flt-2', title: 'Laboratorium Flutter', type: 'lab', link: 'zajecia/laby/flutter.pdf' }, { id: 'flt-3', title: 'Zaawansowany Flutter', type: 'article', link: '#flutter-advanced', article: 'flutter-advanced' }, { id: 'flt-4', title: 'Dystrybucja aplikacji', type: 'article', link: '#app-distribution', article: 'app-distribution' }] },
+                { id: 'react-native-product', title: 'React Native Product Path', technology: 'React Native', level: 'intermediate', duration: '4 tygodnie', prerequisites: ['JavaScript ES6+', 'Podstawy React'], topics: ['RN architektura', 'Nawigacja', 'Integracja API', 'Testowanie'], steps: [{ id: 'rn-1', title: 'Wprowadzenie do React Native', type: 'article', link: '#react-native', article: 'react-native' }, { id: 'rn-2', title: 'Nawigacja i wzorce UI', type: 'article', link: '#navigation-patterns', article: 'navigation-patterns' }, { id: 'rn-3', title: 'Laboratorium React', type: 'lab', link: 'zajecia/laby/react.pdf' }, { id: 'rn-4', title: 'Testowanie Android', type: 'article', link: '#android-testing', article: 'android-testing' }] },
+                { id: 'android-ai-advanced', title: 'Android + Edge AI', technology: 'Android', level: 'advanced', duration: '5-6 tygodni', prerequisites: ['Android średniozaawansowany', 'Podstawy ML'], topics: ['On-device inference', 'Kwantyzacja modeli', 'Sensory', 'Optymalizacja baterii'], steps: [{ id: 'adai-1', title: 'Wprowadzenie do Local AI', type: 'article', link: '#local-ai-intro', article: 'local-ai-intro' }, { id: 'adai-2', title: 'LiteRT LM na Androidzie', type: 'article', link: '#litert-lm-android', article: 'litert-lm-android' }, { id: 'adai-3', title: 'Kwantyzacja modeli', type: 'article', link: '#model-quantization', article: 'model-quantization' }, { id: 'adai-4', title: 'Laboratorium testy mobilne', type: 'lab', link: 'zajecia/laby/testy.pdf' }] }
+            ];
+
+            // Mapa etykiet materiałów do wyświetlania typu zasobu.
+            const typeLabels = { article: 'Artykuł', video: 'Wideo', lab: 'Laboratorium' };
+
+            function getSavedProgress(pathId) {
+                try {
+                    return JSON.parse(localStorage.getItem(`learningPathProgress:${pathId}`) || '{}');
+                } catch {
+                    return {};
+                }
+            }
+
+            // Renderuje karty ścieżek, ich checklisty oraz pasek postępu użytkownika.
+            function renderPaths() {
+                const techValue = techFilter.value;
+                const levelValue = levelFilter.value;
+                const filteredPaths = learningPaths.filter(path => (techValue === 'all' || path.technology === techValue) && (levelValue === 'all' || path.level === levelValue));
+                container.innerHTML = '';
+
+                filteredPaths.forEach(path => {
+                    const progress = getSavedProgress(path.id);
+                    const completedSteps = path.steps.filter(step => progress[step.id]).length;
+                    const percent = Math.round((completedSteps / path.steps.length) * 100);
+
+                    const stepsHtml = path.steps.map(step => `
+                        <li>
+                            <label class="learning-step-row">
+                                <input type="checkbox" data-path-id="${path.id}" data-step-id="${step.id}" ${progress[step.id] ? 'checked' : ''}>
+                                <span>${step.title}</span>
+                            </label>
+                            <a href="${step.link}" ${step.article ? `data-article="${step.article}"` : ''} class="learning-step-link">
+                                ${typeLabels[step.type] || 'Materiał'}
+                            </a>
+                        </li>
+                    `).join('');
+
+                    const topicsHtml = path.topics.map(topic => `<li>${topic}</li>`).join('');
+                    const prerequisitesHtml = path.prerequisites.map(item => `<li>${item}</li>`).join('');
+
+                    container.insertAdjacentHTML('beforeend', `
+                        <article class="learning-path-card">
+                            <div class="learning-path-meta">
+                                <span class="badge-tech">${path.technology}</span>
+                                <span class="badge-level">${path.level}</span>
+                            </div>
+                            <h4>${path.title}</h4>
+                            <p><strong>Szacowany czas:</strong> ${path.duration}</p>
+                            <div class="learning-progress">
+                                <div class="learning-progress-bar"><span style="width:${percent}%"></span></div>
+                                <small>Postęp: ${completedSteps}/${path.steps.length} kroków (${percent}%)</small>
+                            </div>
+                            <div class="learning-columns">
+                                <div><strong>Wymagania wstępne</strong><ul>${prerequisitesHtml}</ul></div>
+                                <div><strong>Tematy</strong><ul>${topicsHtml}</ul></div>
+                            </div>
+                            <div>
+                                <strong>Checklista ukończenia</strong>
+                                <ul class="learning-steps-list">${stepsHtml}</ul>
+                            </div>
+                        </article>
+                    `);
+                });
+            }
+
+            container.addEventListener('change', (event) => {
+                const input = event.target;
+                if (!(input instanceof HTMLInputElement) || input.type !== 'checkbox') return;
+                const pathId = input.dataset.pathId;
+                const stepId = input.dataset.stepId;
+                if (!pathId || !stepId) return;
+                const progress = getSavedProgress(pathId);
+                progress[stepId] = input.checked;
+                localStorage.setItem(`learningPathProgress:${pathId}`, JSON.stringify(progress));
+                renderPaths();
+            });
+
+            techFilter.addEventListener('change', renderPaths);
+            levelFilter.addEventListener('change', renderPaths);
+            renderPaths();
+        })();
 
         // ===== TAB SWITCHING (shared logic) =====
         function switchTab(tab) {
