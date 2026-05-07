@@ -12,7 +12,7 @@
 ## 2) Architektura
 
 - [ ] Rozdzielone warstwy: UI, logika domenowa, dane/integracje. Zobacz: [Architektura Android](./android-architecture.md), [Wzorce cross-platform](./cross-platform.md).
-- [ ] Jasno zdefiniowane granice modułów i kontrakty API. Zobacz: [Android Networking](./android-network.md), [iOS Networking](./ios-networking.md).
+- [ ] Jasno zdefiniowane granice modułów i kontrakty API. Zobacz: [Android Network](./android-network.md), [iOS Networking](./ios-networking.md).
 - [ ] Strategia stanu aplikacji (single source of truth, unikanie konfliktów stanu). Zobacz: [Jetpack Compose](./jetpack-compose.md), [SwiftUI Advanced](./swiftui-advanced.md).
 - [ ] Plan skalowania (modularizacja, build time, podział feature’ów). Zobacz: [Android Studio](./android-studio.md), [KMP Multiplatform](./kmp-multiplatform.md).
 
