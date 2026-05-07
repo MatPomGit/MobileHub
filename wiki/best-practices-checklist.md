@@ -61,7 +61,7 @@
 - [ ] Podniesiona wersja aplikacji + changelog użytkowy. Materiały: [App Updates](./app-updates.md).
 - [ ] Zweryfikowane zgody i uprawnienia (tylko niezbędne). Materiały: [Mobile Security](./mobile-security.md), [AI Legal Aspects](./ai-legal-aspects.md).
 - [ ] Testy release build na docelowych urządzeniach i wersjach OS. Materiały: [Android Ecosystem](./android-ecosystem.md), [iOS Ecosystem](./ios-ecosystem.md).
-- [ ] Plan monitoringu po wydaniu (crashe, ANR, feedback, KPI). Materiały: [Mobile Performance](./mobile-performance.md), [Aplikacje i aktualizacje](./app-updates.md).
+- [ ] Plan monitoringu po wydaniu (crashe, ANR, feedback, KPI). Materiały: [Mobile Performance](./mobile-performance.md), [App Updates](./app-updates.md).
 - [ ] Plan rollback/hotfix i gotowość do szybkiej poprawki. Materiały: [App Updates](./app-updates.md), [App Distribution](./app-distribution.md).
 
 ---
