@@ -387,7 +387,7 @@ Poniższa sekcja zawiera zestaw bazowych scenariuszy, które można uruchamiać 
 4. **Startup:** przenieś inicjalizacje poza `Application.onCreate`, włącz lazy init.
 5. **Scroll/Compose:** stabilne modele danych, `remember`, `derivedStateOf`, paginacja.
 6. **Network:** cache HTTP, kompresja payloadu, retry/backoff, timeouty per endpoint.
-7. **Memory:** usuwaj referencje w `onDestroyView`, unikaj singletonów z `Context`.
+7. Memory: usuwaj referencje w onDestroyView, unikaj trzymania Activity Context w singletonach.
 8. **Zweryfikuj R8 i resource shrinking** w release.
 9. **Uruchom testy porównawcze A/B** przed i po poprawce.
 10. **Zaktualizuj baseline** dopiero po potwierdzeniu trwałej poprawy.
