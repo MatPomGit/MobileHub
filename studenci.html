@@ -394,6 +394,58 @@
             display: none !important;
         }
 
+        /* ===== DASHBOARD ===== */
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .metric-tile {
+            background: var(--surface2);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 12px;
+        }
+
+        .metric-tile h3 {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+        }
+
+        .metric-value {
+            font-size: 1.4rem;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .dashboard-list {
+            list-style: none;
+            display: grid;
+            gap: 8px;
+        }
+
+        .dashboard-list li {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            padding: 10px 12px;
+            background: #fff;
+            line-height: 1.2;
+        }
+
+        .tag {
+            display: inline-block;
+            border-radius: 999px;
+            padding: 2px 8px;
+            font-size: 0.72rem;
+            font-weight: 700;
+            margin-left: 4px;
+            background: var(--accent-light);
+            color: #991b1b;
+        }
+
         /* ===== TOKEN SETUP ===== */
         .token-section {
             margin-bottom: 16px;
@@ -538,6 +590,38 @@
         <!-- ALERT BOX (shared) -->
         <div id="main-alert" class="alert hidden" role="alert"></div>
 
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-chart-line"></i>
+                <h2>Dashboard użytkownika</h2>
+            </div>
+            <div class="card-body">
+                <div class="dashboard-grid" id="dashboard-metrics"></div>
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label for="project-readiness-target">Gotowość projektowa dla typu aplikacji</label>
+                        <select id="project-readiness-target"></select>
+                    </div>
+                </div>
+                <div id="project-readiness-box" class="alert alert-info" style="margin-top: 12px;"></div>
+
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Historia ukończonych tematów</h3>
+                <ul id="completed-topics-list" class="dashboard-list"></ul>
+
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Wyniki zadań i laboratoriów</h3>
+                <ul id="scores-list" class="dashboard-list"></ul>
+
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Aktywne cele nauki</h3>
+                <ul id="learning-goals-list" class="dashboard-list"></ul>
+
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Rekomendacje kolejnych materiałów</h3>
+                <ul id="recommendations-list" class="dashboard-list"></ul>
+
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Przypomnienia</h3>
+                <ul id="reminders-list" class="dashboard-list"></ul>
+            </div>
+        </div>
+
         <!-- TABLE CARD -->
         <div class="card">
             <div class="card-header">
@@ -654,6 +738,18 @@
         const SUPABASE_TABLE = 'project_submissions';
         const ALLOWED_ROLES = ['Leader', 'Frontend', 'Backend'];
         const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        const COURSE_MODULES = [
+            { id: 'ux', title: 'UX w aplikacjach mobilnych', competency: 'Projektowanie UX', done: true, score: 88 },
+            { id: 'api', title: 'Integracja REST API', competency: 'Integracje backendowe', done: true, score: 74 },
+            { id: 'auth', title: 'Autoryzacja i sesje', competency: 'Bezpieczeństwo aplikacji', done: false, score: 41 },
+            { id: 'testing', title: 'Testy instrumentacyjne', competency: 'Testowanie mobilne', done: false, score: 52 },
+            { id: 'state', title: 'Zarządzanie stanem', competency: 'Architektura aplikacji', done: true, score: 81 }
+        ];
+        const PROJECT_REQUIREMENTS = {
+            ecommerce: ['Projektowanie UX', 'Integracje backendowe', 'Bezpieczeństwo aplikacji', 'Testowanie mobilne'],
+            social: ['Architektura aplikacji', 'Bezpieczeństwo aplikacji', 'Integracje backendowe'],
+            productivity: ['Projektowanie UX', 'Architektura aplikacji', 'Testowanie mobilne']
+        };
         let editingId = null;
 
         /* ------------------------------------------------------------------ */
@@ -674,6 +770,86 @@
 
         function hideAlert() {
             document.getElementById('main-alert').className = 'alert hidden';
+        }
+
+        /* Komentarz: renderuje elementy listy dla przekazanych danych tekstowych. */
+        function renderList(listId, values) {
+            const list = document.getElementById(listId);
+            list.textContent = '';
+            values.forEach((value) => {
+                const li = document.createElement('li');
+                li.innerHTML = value;
+                list.appendChild(li);
+            });
+        }
+
+        /* Komentarz: wylicza postęp i buduje dashboard z rekomendacjami oraz przypomnieniami. */
+        function renderLearningDashboard() {
+            const completedModules = COURSE_MODULES.filter((module) => module.done);
+            const failedLabs = COURSE_MODULES.filter((module) => module.score < 60);
+            const activeGoals = COURSE_MODULES.filter((module) => !module.done);
+            const progressPercent = Math.round((completedModules.length / COURSE_MODULES.length) * 100);
+
+            const metrics = [
+                { label: 'Ukończone tematy', value: `${completedModules.length}/${COURSE_MODULES.length}` },
+                { label: 'Średni wynik zadań', value: `${Math.round(COURSE_MODULES.reduce((sum, item) => sum + item.score, 0) / COURSE_MODULES.length)}%` },
+                { label: 'Aktywne cele nauki', value: activeGoals.length },
+                { label: 'Postęp kursu', value: `${progressPercent}%` }
+            ];
+
+            const metricsContainer = document.getElementById('dashboard-metrics');
+            metricsContainer.textContent = '';
+            metrics.forEach((metric) => {
+                const tile = document.createElement('div');
+                tile.className = 'metric-tile';
+                tile.innerHTML = `<h3>${metric.label}</h3><div class="metric-value">${metric.value}</div>`;
+                metricsContainer.appendChild(tile);
+            });
+
+            renderList('completed-topics-list', completedModules.map((module) => `${module.title}<span class="tag">zaliczony</span>`));
+            renderList('scores-list', COURSE_MODULES.map((module) => `${module.title}: <strong>${module.score}%</strong>`));
+            renderList('learning-goals-list', activeGoals.map((goal) => `Ukończ moduł: <strong>${goal.title}</strong> (kompetencja: ${goal.competency})`));
+
+            const recommendations = activeGoals.map((goal) => `Następny materiał: <strong>${goal.title}</strong> — brakująca kompetencja: ${goal.competency}`);
+            renderList('recommendations-list', recommendations.length ? recommendations : ['Brak nowych rekomendacji — wszystkie materiały ukończone.']);
+
+            const reminders = [
+                ...activeGoals.map((goal) => `Przypomnienie: przerób zaległy moduł <strong>${goal.title}</strong>.`),
+                ...failedLabs.map((lab) => `Przypomnienie: podejdź ponownie do laboratorium <strong>${lab.title}</strong> (aktualny wynik ${lab.score}%).`)
+            ];
+            renderList('reminders-list', reminders.length ? reminders : ['Brak aktywnych przypomnień.']);
+        }
+
+        /* Komentarz: oblicza gotowość do projektu i brakujące kompetencje dla wybranego typu aplikacji. */
+        function updateProjectReadiness() {
+            const target = document.getElementById('project-readiness-target').value;
+            const needed = PROJECT_REQUIREMENTS[target] || [];
+            const passedCompetencies = new Set(COURSE_MODULES.filter((module) => module.score >= 60).map((module) => module.competency));
+            const missing = needed.filter((competency) => !passedCompetencies.has(competency));
+            const ready = missing.length === 0;
+            const box = document.getElementById('project-readiness-box');
+            box.className = ready ? 'alert alert-success' : 'alert alert-error';
+            box.innerHTML = ready
+                ? '<i class="fa-solid fa-circle-check"></i> Student ma komplet umiejętności do realizacji wybranego typu aplikacji.'
+                : `<i class="fa-solid fa-triangle-exclamation"></i> Brakujące kompetencje: <strong>${missing.join(', ')}</strong>.`;
+        }
+
+        /* Komentarz: inicjalizuje selektor typu projektu dla widoku gotowości projektowej. */
+        function initReadinessSelector() {
+            const select = document.getElementById('project-readiness-target');
+            const labels = {
+                ecommerce: 'E-commerce',
+                social: 'Social media',
+                productivity: 'Produktywność'
+            };
+            Object.keys(PROJECT_REQUIREMENTS).forEach((key) => {
+                const option = document.createElement('option');
+                option.value = key;
+                option.textContent = labels[key];
+                select.appendChild(option);
+            });
+            select.addEventListener('change', updateProjectReadiness);
+            updateProjectReadiness();
         }
 
         /* Komentarz: mapowanie roli na klasę CSS badge. */
@@ -842,6 +1018,8 @@
         async function deleteSubmission(row) { const typed = prompt('Aby usunąć wpis, wpisz numer indeksu:'); if (typed !== row.student_index) { showAlert('Numer indeksu nie zgadza się.', 'error'); return; } const { error } = await supabase.from(SUPABASE_TABLE).delete().eq('id', row.id); if (error) { showAlert('Błąd usuwania: ' + error.message, 'error'); return; } showAlert('Wpis usunięty.', 'success'); await loadSubmissions(); }
         document.getElementById('submission-form').addEventListener('submit', async (e) => { e.preventDefault(); hideAlert(); const data = collectFormData(); const validationError = validateForm(data); if (validationError) return showAlert(validationError, 'error'); const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…'; try { if (editingId === null) { await addSubmission(data); showAlert('Dodano zgłoszenie.', 'success'); } else { await updateSubmission(editingId, data); showAlert('Zapisano zmiany.', 'success'); } resetEditState(); await loadSubmissions(); } catch (err) { showAlert('Błąd zapisu: ' + err.message, 'error'); } finally { btn.disabled = false; if (editingId === null) btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie'; } });
         document.getElementById('btn-cancel-edit').addEventListener('click', resetEditState);
+        renderLearningDashboard();
+        initReadinessSelector();
         loadSubmissions();
     </script>
 </body>
