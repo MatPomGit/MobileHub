@@ -7,7 +7,7 @@
 - [ ] Ustalony i zapisany standard stylu (konwencje nazewnictwa, formatowanie, struktura plików). Zobacz: [Android Lint](./android-lint.md), [Material Design](./material-design.md).
 - [ ] Spójny styl commitów i opisów PR (co, dlaczego, jak testowano). Zobacz: [Proces projektowania aplikacji](./app-design-process.md).
 - [ ] Brak „martwego kodu”, duplikacji i nieużywanych zasobów. Zobacz: [Android Studio — narzędzia jakości](./android-studio.md).
-- [ ] Czytelne nazwy klas/funkcji/modułów oraz małe, pojedynczo-odpowiedzialne komponenty. Zobacz: [Architektura Android](./android-architecture.md), [Clarion Architecture](./clarion-architecture.md).
+- [ ] Czytelne nazwy klas/funkcji/modułów oraz małe komponenty o pojedynczej odpowiedzialności. Zobacz: [Architektura Android](./android-architecture.md), [Clean Architecture](./clean-architecture.md).
 
 ## 2) Architektura
 
