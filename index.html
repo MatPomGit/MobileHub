@@ -350,15 +350,16 @@
                                         <option value="iOS">iOS</option>
                                         <option value="Flutter">Flutter</option>
                                         <option value="React Native">React Native</option>
+                                        <option value="Unity">Unity</option>
                                     </select>
                                 </label>
                                 <label>
                                     Poziom
                                     <select id="learningPathsLevelFilter">
                                         <option value="all">Wszystkie</option>
-                                        <option value="beginner">beginner</option>
-                                        <option value="intermediate">intermediate</option>
-                                        <option value="advanced">advanced</option>
+                                        <option value="beginner">Początkujący</option>
+                                        <option value="intermediate">Średniozaawansowany</option>
+                                        <option value="advanced">Zaawansowany</option>
                                     </select>
                                 </label>
                             </div>
@@ -1499,6 +1500,16 @@
                 progress[stepId] = input.checked;
                 localStorage.setItem(`learningPathProgress:${pathId}`, JSON.stringify(progress));
                 renderPaths();
+                const card = input.closest('.learning-path-card');
+                if (card) {
+                    const path = learningPaths.find(p => p.id === pathId);
+                    const completedSteps = path.steps.filter(step => progress[step.id]).length;
+                    const percent = Math.round((completedSteps / path.steps.length) * 100);
+                    const bar = card.querySelector('.learning-progress-bar span');
+                    const label = card.querySelector('.learning-progress small');
+                    if (bar) bar.style.width = percent + '%';
+                    if (label) label.textContent = 'Postęp: ' + completedSteps + '/' + path.steps.length + ' kroków (' + percent + '%)';
+                }
             });
 
             techFilter.addEventListener('change', renderPaths);
