@@ -306,7 +306,7 @@ Poniższa sekcja zawiera zestaw bazowych scenariuszy, które można uruchamiać 
 **Rekomendowane progi jakości:**
 - **Jank frames:** <3% wszystkich klatek.
 - **Frozen frames (>700 ms):** <0.1%.
-- **95 percentyl frame time:** <= 24 ms.
+- 95 percentyl frame time: <= 16 ms.
 - **Regresja:** alarm przy wzroście jank >1.5 pp albo P95 >20%.
 
 ### 3) Opóźnienia sieciowe (network latency)
