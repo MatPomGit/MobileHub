@@ -482,8 +482,8 @@ function renderPracticeTasks() {
         const moduleConfig = PRACTICE_MODULES[category];
         if (!moduleConfig) return;
 
+        const assessment = assessTaskReadiness(category);
         moduleConfig.tasks.forEach((task, taskIndex) => {
-            const assessment = assessTaskReadiness(category);
             const article = document.createElement('article');
             article.className = `review-item ${assessment.ready ? 'correct' : 'incorrect'}`;
             article.innerHTML = `
