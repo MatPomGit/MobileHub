@@ -446,6 +446,20 @@ background: var(--surface);
             color: #991b1b;
         }
 
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 12px;
+            margin-bottom: 16px;
+        }
+
+        .export-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
         /* ===== TOKEN SETUP ===== */
         .token-section {
             margin-bottom: 16px;
@@ -622,6 +636,40 @@ background: var(--surface);
             </div>
         </div>
 
+        <div class="card">
+            <div class="card-header">
+                <i class="fa-solid fa-chalkboard-user"></i>
+                <h2>Dashboard dydaktyczny prowadzącego</h2>
+            </div>
+            <div class="card-body">
+                <div class="filters-grid">
+                    <div class="form-group">
+                        <label for="teacher-filter-group">Filtr grupy</label>
+                        <select id="teacher-filter-group"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacher-filter-week">Filtr tygodnia</label>
+                        <select id="teacher-filter-week"></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="teacher-filter-tech">Filtr technologii</label>
+                        <select id="teacher-filter-tech"></select>
+                    </div>
+                </div>
+                <div class="dashboard-grid" id="teacher-metrics"></div>
+                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Najtrudniejsze tematy</h3>
+                <ul id="hard-topics-list" class="dashboard-list"></ul>
+                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Najczęściej niezaliczane zadania</h3>
+                <ul id="failed-tasks-list" class="dashboard-list"></ul>
+                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Alerty dydaktyczne</h3>
+                <ul id="teacher-alerts-list" class="dashboard-list"></ul>
+                <div class="export-actions">
+                    <button type="button" class="btn-sm" id="btn-export-csv"><i class="fa-solid fa-file-csv"></i> Eksport CSV</button>
+                    <button type="button" class="btn-sm" id="btn-export-pdf"><i class="fa-solid fa-file-pdf"></i> Eksport PDF</button>
+                </div>
+            </div>
+        </div>
+
         <!-- TABLE CARD -->
         <div class="card">
             <div class="card-header">
@@ -750,6 +798,14 @@ background: var(--surface);
             social: ['Architektura aplikacji', 'Bezpieczeństwo aplikacji', 'Integracje backendowe'],
             productivity: ['Projektowanie UX', 'Architektura aplikacji', 'Testowanie mobilne']
         };
+        const TEACHING_ACTIVITY = [
+            { group: 'L1', week: 10, technology: 'Android', topic: 'Autoryzacja JWT', task: 'Lab 4', passRate: 48, activityDrop: 16, projectDelayRisk: 45 },
+            { group: 'L1', week: 10, technology: 'Flutter', topic: 'Zarządzanie stanem', task: 'Lab 5', passRate: 52, activityDrop: 8, projectDelayRisk: 28 },
+            { group: 'L2', week: 11, technology: 'iOS', topic: 'Testy UI', task: 'Lab 6', passRate: 44, activityDrop: 18, projectDelayRisk: 51 },
+            { group: 'L2', week: 11, technology: 'Android', topic: 'WorkManager', task: 'Lab 7', passRate: 39, activityDrop: 20, projectDelayRisk: 63 },
+            { group: 'L3', week: 12, technology: 'React Native', topic: 'Nawigacja i Deep Linki', task: 'Lab 8', passRate: 57, activityDrop: 12, projectDelayRisk: 35 },
+            { group: 'L3', week: 12, technology: 'Flutter', topic: 'Integracja REST API', task: 'Lab 9', passRate: 61, activityDrop: 6, projectDelayRisk: 24 }
+        ];
         let editingId = null;
 
         /* ------------------------------------------------------------------ */
@@ -850,6 +906,90 @@ background: var(--surface);
             });
             select.addEventListener('change', updateProjectReadiness);
             updateProjectReadiness();
+        }
+
+        /* Komentarz: inicjalizuje filtry prowadzącego i odświeża dashboard po zmianie wartości. */
+        function initTeacherFilters() {
+            fillSelect('teacher-filter-group', ['Wszystkie grupy', ...new Set(TEACHING_ACTIVITY.map((item) => item.group))]);
+            fillSelect('teacher-filter-week', ['Wszystkie tygodnie', ...new Set(TEACHING_ACTIVITY.map((item) => `Tydzień ${item.week}`))]);
+            fillSelect('teacher-filter-tech', ['Wszystkie technologie', ...new Set(TEACHING_ACTIVITY.map((item) => item.technology))]);
+            ['teacher-filter-group', 'teacher-filter-week', 'teacher-filter-tech'].forEach((id) => {
+                document.getElementById(id).addEventListener('change', renderTeacherDashboard);
+            });
+            renderTeacherDashboard();
+        }
+
+        /* Komentarz: pomocniczo wypełnia select listą opcji tekstowych. */
+        function fillSelect(id, labels) {
+            const select = document.getElementById(id);
+            select.textContent = '';
+            labels.forEach((label) => {
+                const option = document.createElement('option');
+                option.value = label;
+                option.textContent = label;
+                select.appendChild(option);
+            });
+        }
+
+        /* Komentarz: filtruje rekordy dydaktyczne zgodnie z ustawieniami prowadzącego. */
+        function getFilteredTeachingData() {
+            const group = document.getElementById('teacher-filter-group').value;
+            const week = document.getElementById('teacher-filter-week').value;
+            const tech = document.getElementById('teacher-filter-tech').value;
+            return TEACHING_ACTIVITY.filter((item) =>
+                (group === 'Wszystkie grupy' || item.group === group) &&
+                (week === 'Wszystkie tygodnie' || `Tydzień ${item.week}` === week) &&
+                (tech === 'Wszystkie technologie' || item.technology === tech)
+            );
+        }
+
+        /* Komentarz: buduje dashboard dydaktyczny: postęp grupy, trudności i alerty ryzyka. */
+        function renderTeacherDashboard() {
+            const filtered = getFilteredTeachingData();
+            const averagePassRate = filtered.length ? Math.round(filtered.reduce((sum, item) => sum + item.passRate, 0) / filtered.length) : 0;
+            const averageRisk = filtered.length ? Math.round(filtered.reduce((sum, item) => sum + item.projectDelayRisk, 0) / filtered.length) : 0;
+            const hardestTopics = [...filtered].sort((a, b) => a.passRate - b.passRate).slice(0, 3);
+            const failedTasks = [...filtered].sort((a, b) => a.passRate - b.passRate).slice(0, 3);
+            const alerts = filtered.filter((item) => item.activityDrop >= 15 || item.projectDelayRisk >= 50);
+
+            const metrics = [
+                { label: 'Postęp grupy (średnia zaliczeń)', value: `${averagePassRate}%` },
+                { label: 'Średnie ryzyko opóźnienia', value: `${averageRisk}%` },
+                { label: 'Rekordy po filtrze', value: filtered.length },
+                { label: 'Alerty aktywności/ryzyka', value: alerts.length }
+            ];
+            const metricsContainer = document.getElementById('teacher-metrics');
+            metricsContainer.textContent = '';
+            metrics.forEach((metric) => {
+                const tile = document.createElement('div');
+                tile.className = 'metric-tile';
+                tile.innerHTML = `<h3>${metric.label}</h3><div class="metric-value">${metric.value}</div>`;
+                metricsContainer.appendChild(tile);
+            });
+
+            renderList('hard-topics-list', hardestTopics.length ? hardestTopics.map((item) => `${item.topic} (${item.technology}) — skuteczność <strong>${item.passRate}%</strong>`) : ['Brak danych dla wybranego filtra.']);
+            renderList('failed-tasks-list', failedTasks.length ? failedTasks.map((item) => `${item.task} (${item.group}, tydz. ${item.week}) — niezaliczenia: <strong>${100 - item.passRate}%</strong>`) : ['Brak danych dla wybranego filtra.']);
+            renderList('teacher-alerts-list', alerts.length ? alerts.map((item) => `Alert dla ${item.group}: spadek aktywności <strong>${item.activityDrop}%</strong>, ryzyko opóźnienia projektu <strong>${item.projectDelayRisk}%</strong>.`) : ['Brak krytycznych alertów dla aktualnego filtra.']);
+        }
+
+        /* Komentarz: eksportuje aktualny widok dashboardu dydaktycznego do pliku CSV. */
+        function exportTeacherReportCSV() {
+            const filtered = getFilteredTeachingData();
+            const headers = ['group', 'week', 'technology', 'topic', 'task', 'passRate', 'activityDrop', 'projectDelayRisk'];
+            const rows = filtered.map((item) => headers.map((key) => item[key]).join(','));
+            const csv = [headers.join(','), ...rows].join('\n');
+            const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+            const url = URL.createObjectURL(blob);
+            const link = document.createElement('a');
+            link.href = url;
+            link.download = 'raport-dydaktyczny.csv';
+            link.click();
+            URL.revokeObjectURL(url);
+        }
+
+        /* Komentarz: eksportuje widok raportu do PDF przy użyciu natywnego okna drukowania. */
+        function exportTeacherReportPDF() {
+            window.print();
         }
 
         /* Komentarz: mapowanie roli na klasę CSS badge. */
@@ -1018,8 +1158,11 @@ background: var(--surface);
         async function deleteSubmission(row) { const typed = prompt('Aby usunąć wpis, wpisz numer indeksu:'); if (typed !== row.student_index) { showAlert('Numer indeksu nie zgadza się.', 'error'); return; } const { error } = await supabase.from(SUPABASE_TABLE).delete().eq('id', row.id); if (error) { showAlert('Błąd usuwania: ' + error.message, 'error'); return; } showAlert('Wpis usunięty.', 'success'); await loadSubmissions(); }
         document.getElementById('submission-form').addEventListener('submit', async (e) => { e.preventDefault(); hideAlert(); const data = collectFormData(); const validationError = validateForm(data); if (validationError) return showAlert(validationError, 'error'); const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…'; try { if (editingId === null) { await addSubmission(data); showAlert('Dodano zgłoszenie.', 'success'); } else { await updateSubmission(editingId, data); showAlert('Zapisano zmiany.', 'success'); } resetEditState(); await loadSubmissions(); } catch (err) { showAlert('Błąd zapisu: ' + err.message, 'error'); } finally { btn.disabled = false; if (editingId === null) btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie'; } });
         document.getElementById('btn-cancel-edit').addEventListener('click', resetEditState);
+        document.getElementById('btn-export-csv').addEventListener('click', exportTeacherReportCSV);
+        document.getElementById('btn-export-pdf').addEventListener('click', exportTeacherReportPDF);
         renderLearningDashboard();
         initReadinessSelector();
+        initTeacherFilters();
         loadSubmissions();
     </script>
 </body>
