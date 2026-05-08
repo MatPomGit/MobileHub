@@ -252,7 +252,7 @@ gitleaks detect --source . --redact --verbose
 9. **Stare podatne zależności.**
    **Naprawa:** regularne aktualizacje + SCA (np. Dependabot, OSV-Scanner) i review CVE przed release.
 10. **Brak planu reakcji na incydent bezpieczeństwa.**
-    **Naprawa:** playbook incydentu, kanał eskalacji, checklista revokacji tokenów i publikacji hotfixa.
+    **Naprawa:** playbook incydentu, kanał eskalacji, checklista unieważniania tokenów i publikacji hotfixa.
 
 ---
 
