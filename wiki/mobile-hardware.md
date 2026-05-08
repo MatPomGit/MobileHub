@@ -31,7 +31,7 @@ Na iOS sytuacja jest prostsza: współczesne aplikacje są budowane głównie po
    Natywny kod skompilowany pod właściwą architekturę działa szybciej i zwykle zużywa mniej energii niż warstwy translacyjne/emulacyjne.
 
 4. **Zgodność z Google Play i ekosystemem 64-bit**  
-   Dla aplikacji z kodem natywnym wsparcie 64-bit (w praktyce `arm64-v8a`) to obecnie wymóg rynkowy i jakościowy.
+   Dla aplikacji z kodem natywnym wsparcie 64-bit (w praktyce arm64-v8a) to obecnie wymóg Google Play oraz standard jakościowy.
 
 #### Praktyka projektowa: które ABI wybrać?
 
