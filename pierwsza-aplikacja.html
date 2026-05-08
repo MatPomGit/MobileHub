@@ -1850,6 +1850,133 @@ jobs:
             </div>
         </div>
 
+
+        <!-- ===== ROZSZERZENIE: CHECKLISTA DEMO I MATERIAŁY PREZENTACYJNE ===== -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number"><i class="fa-solid fa-clipboard-check"></i></div>
+                <div class="step-title-block">
+                    <span class="step-tag blue"><i class="fa-solid fa-video"></i> Demo checklist</span>
+                    <h3>Checklista demo projektu (do przejścia 24h przed prezentacją)</h3>
+                    <div class="step-meta">
+                        <span><i class="fa-solid fa-clock"></i> ~30–45 minut</span>
+                        <span><i class="fa-solid fa-calendar"></i> Dzień przed Lab 8</span>
+                        <span>Cały zespół</span>
+                    </div>
+                </div>
+            </div>
+
+            <p class="step-desc">Ta sekcja pomaga uporządkować finałową próbę generalną. Zespół powinien przejść checklistę punkt po punkcie i oznaczyć status przed wejściem na salę.</p>
+
+            <!-- Komentarz: Lista scenariusza prezentacji prowadzi przez pełny flow demo. -->
+            <p class="step-desc" style="margin-bottom:10px;"><strong>1) Scenariusz prezentacji (8–12 min):</strong></p>
+            <ul class="sub-steps">
+                <li><div class="sub-step-dot">1</div><span>Wstęp (30s): problem użytkownika, cel aplikacji, grupa docelowa.</span></li>
+                <li><div class="sub-step-dot">2</div><span>Demo happy-path (4–5 min): logowanie/rejestracja → główny use case → zapis wyników.</span></li>
+                <li><div class="sub-step-dot">3</div><span>Demo funkcji natywnych (1–2 min): aparat/GPS/powiadomienia/sensory.</span></li>
+                <li><div class="sub-step-dot">4</div><span>Jakość techniczna (2 min): testy, CI/CD, obsłużone błędy i walidacje.</span></li>
+                <li><div class="sub-step-dot">5</div><span>Podsumowanie (1 min): co działa dziś, co będzie rozwijane po semestrze.</span></li>
+            </ul>
+
+            <p class="step-desc" style="margin:14px 0 10px;"><strong>2) Dane testowe do demo:</strong></p>
+            <table class="mini-table">
+                <thead>
+                    <tr><th>Typ danych</th><th>Przykład</th><th>Cel</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Konto użytkownika</td><td><code>demo@student.pl / Demo123!</code></td><td>Szybkie logowanie bez tworzenia konta na żywo</td></tr>
+                    <tr><td>Przypadek pozytywny</td><td>Kompletne dane formularza</td><td>Pokazanie poprawnego zapisu i odczytu</td></tr>
+                    <tr><td>Przypadek błędny</td><td>Puste pole wymagane / zły format e-mail</td><td>Prezentacja walidacji i komunikatów</td></tr>
+                    <tr><td>Dane graniczne</td><td>Opis 500 znaków, maks. liczba elementów</td><td>Weryfikacja stabilności i ograniczeń</td></tr>
+                </tbody>
+            </table>
+
+            <p class="step-desc" style="margin:14px 0 10px;"><strong>3) Plan awaryjny (fallback):</strong></p>
+            <ul class="checklist">
+                <li class="required"><i class="fa-solid fa-circle-check"></i><span>Backup build APK/AAB na 2 urządzeniach + wersja na emulatorze.</span></li>
+                <li class="required"><i class="fa-solid fa-circle-check"></i><span>Nagrany screen capture najważniejszego flow (2–3 min) na wypadek awarii sieci/sprzętu.</span></li>
+                <li><i class="fa-solid fa-circle-arrow-right"></i><span>Lokalna kopia slajdów (PDF) i repozytorium z pobranymi zależnościami.</span></li>
+                <li><i class="fa-solid fa-circle-arrow-right"></i><span>Przypisane role awaryjne: osoba A prowadzi demo, osoba B uruchamia backup, osoba C omawia architekturę.</span></li>
+            </ul>
+
+            <p class="step-desc" style="margin:14px 0 10px;"><strong>4) Metryki jakości do pokazania prowadzącemu:</strong></p>
+            <ul class="checklist">
+                <li class="required"><i class="fa-solid fa-circle-check"></i><span>Stabilność: crash-free sessions (np. > 98% w testach zespołu).</span></li>
+                <li class="required"><i class="fa-solid fa-circle-check"></i><span>Pokrycie testami: minimum smoke + krytyczne scenariusze biznesowe.</span></li>
+                <li><i class="fa-solid fa-circle-arrow-right"></i><span>Wydajność: czas startu aplikacji i czas odpowiedzi kluczowych ekranów.</span></li>
+                <li><i class="fa-solid fa-circle-arrow-right"></i><span>Jakość procesu: liczba zamkniętych issue, PR z review, zielony pipeline CI.</span></li>
+            </ul>
+        </div>
+
+        <!-- ===== ROZSZERZENIE: SZABLON SLAJDÓW TECHNICZNYCH ===== -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number"><i class="fa-solid fa-layer-group"></i></div>
+                <div class="step-title-block">
+                    <span class="step-tag purple"><i class="fa-solid fa-file-powerpoint"></i> Slides</span>
+                    <h3>Szablon slajdów technicznych (8 slajdów)</h3>
+                </div>
+            </div>
+            <ul class="sub-steps">
+                <li><div class="sub-step-dot">1</div><span><strong>Architektura:</strong> diagram modułów, przepływ danych, podział odpowiedzialności.</span></li>
+                <li><div class="sub-step-dot">2</div><span><strong>Decyzje projektowe:</strong> 3–5 kluczowych decyzji + alternatywy, które odrzuciliście.</span></li>
+                <li><div class="sub-step-dot">3</div><span><strong>Testy:</strong> strategia (unit/integration/manual), przykładowe przypadki i wyniki.</span></li>
+                <li><div class="sub-step-dot">4</div><span><strong>Wnioski:</strong> co się udało, największe ryzyka, plan rozwoju po zaliczeniu.</span></li>
+            </ul>
+            <div class="tip-box">
+                <i class="fa-solid fa-lightbulb"></i>
+                <div>
+                    <strong>Praktyka prezentacyjna</strong>
+                    Stosuj zasadę: jeden slajd = jedna myśl. Każdy slajd techniczny zakończ krótkim zdaniem "co to daje użytkownikowi".
+                </div>
+            </div>
+        </div>
+
+        <!-- ===== ROZSZERZENIE: RUBRYKA SAMOOCENY ===== -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number"><i class="fa-solid fa-list"></i></div>
+                <div class="step-title-block">
+                    <span class="step-tag amber"><i class="fa-solid fa-graduation-cap"></i> Samoocena</span>
+                    <h3>Krótka rubryka samooceny projektu (przed oddaniem)</h3>
+                </div>
+            </div>
+            <table class="mini-table">
+                <thead>
+                    <tr><th>Kryterium prowadzącego</th><th>Pytanie kontrolne</th><th>Ocena (1–5)</th></tr>
+                </thead>
+                <tbody>
+                    <tr><td>Funkcjonalność MVP</td><td>Czy wszystkie kluczowe scenariusze działają bez błędów?</td><td>__ / 5</td></tr>
+                    <tr><td>Wykorzystanie mobile-native</td><td>Czy aplikacja realnie korzysta z funkcji smartfona?</td><td>__ / 5</td></tr>
+                    <tr><td>Jakość kodu i architektura</td><td>Czy kod jest modularny, czytelny i spójny z MVVM?</td><td>__ / 5</td></tr>
+                    <tr><td>Testy i niezawodność</td><td>Czy zespół ma dowody testów i stabilnego działania?</td><td>__ / 5</td></tr>
+                    <tr><td>Proces zespołowy</td><td>Czy repo pokazuje regularną pracę: Issues, PR, review, CI?</td><td>__ / 5</td></tr>
+                    <tr><td>Prezentacja i dokumentacja</td><td>Czy demo, slajdy i README są kompletne i profesjonalne?</td><td>__ / 5</td></tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- ===== ROZSZERZENIE: PUNKT ODNIESIENIA WIDEO ===== -->
+        <div class="step-card">
+            <div class="step-header">
+                <div class="step-number"><i class="fa-solid fa-circle-play"></i></div>
+                <div class="step-title-block">
+                    <span class="step-tag red"><i class="fa-brands fa-youtube"></i> Benchmark</span>
+                    <h3>Przykładowe nagranie: „dobra prezentacja projektu”</h3>
+                </div>
+            </div>
+            <p class="step-desc">Punkt odniesienia (styl prowadzenia narracji, tempo, układ demo + slajdy):
+                <a href="https://www.youtube.com/watch?v=Q8TXgCzxEnw" target="_blank" rel="noopener noreferrer">How to Present a Software Project Demo (przykład wideo)</a>.
+            </p>
+            <div class="warn-box">
+                <i class="fa-solid fa-scale-balanced"></i>
+                <div>
+                    <strong>Uwaga organizacyjna</strong>
+                    Traktuj materiał jako inspirację do struktury wystąpienia. Treści merytoryczne i dane demo muszą odpowiadać Waszemu projektowi oraz wymaganiom prowadzącego.
+                </div>
+            </div>
+        </div>
+
         <!-- ===== SUMMARY ===== -->
         <div class="summary-box">
             <h2><i class="fa-solid fa-flag-checkered"></i> Jesteś gotowy, powodzenia!</h2>
