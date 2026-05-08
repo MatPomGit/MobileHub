@@ -203,7 +203,7 @@ Poniżej znajdziesz rozszerzenie checklisty o **konkretne kroki wykonania** dla 
   3. Sekrety trzymaj w `--dart-define` lub plikach nieśledzonych przez Git (np. `.env.local` + wpis w `.gitignore`).
 - **React Native starter:**
   1. `node -v`, `npm -v`, `java -version` (oraz `xcodebuild -version` na macOS).
-  2. `npm install` -> `cd ios && pod install && cd ..` -> `npm run android` albo `npm run ios`.
+  2. npm install -> (macOS) cd ios && pod install && cd .. -> npm run android albo npm run ios.
   3. Ustandaryzuj plik `.env.local` i mapowanie wartości do CI Secrets.
 - **Unity starter:**
   1. Sprawdź wersję Unity Hub + Editor zgodną z projektem (`ProjectVersion.txt`).
