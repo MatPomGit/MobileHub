@@ -220,7 +220,7 @@ jobs:
 #### Przykład lokalnego skanu przed commit (gitleaks)
 
 ```bash
-# Skanuje repo i blokuje release, gdy wykryje możliwe sekrety.
+# Skanuje repo i wykrywa potencjalne sekrety przed wysłaniem zmian.
 gitleaks detect --source . --redact --verbose
 ```
 
