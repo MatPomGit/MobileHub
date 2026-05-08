@@ -165,6 +165,72 @@ fun createPinnedClient(): OkHttpClient {
 - Rozdzielać sekrety dla środowisk: dev/stage/prod.
 - Regularna rotacja kluczy i audyt dostępu.
 
+### Sekrety w repozytorium (GitHub) – praktyka R&D
+
+#### Minimalny standard zespołowy
+- Włączyć **GitHub Secret Scanning** i **Push Protection** dla repo.
+- Dodać politykę branch protection (PR review + status checks).
+- Blokować merge, jeżeli skan bezpieczeństwa wykrył sekret.
+- Używać krótkotrwałych tokenów (OIDC / federation) zamiast stałych sekretów tam, gdzie to możliwe.
+
+#### `.gitignore` dla projektów mobilnych
+
+```gitignore
+# Pliki lokalne z sekretami i konfiguracją środowiskową
+.env
+.env.*
+local.properties
+*.jks
+*.keystore
+*.p12
+*.mobileprovision
+GoogleService-Info.plist
+google-services.json
+fastlane/.env
+```
+
+#### Przykład workflow GitHub Actions (bez hardkodowania sekretów)
+
+```yaml
+name: android-ci
+
+on:
+  pull_request:
+  push:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    env:
+      # Zmienna pobierana z GitHub Secrets, nie z kodu repozytorium.
+      MAPS_API_KEY: ${{ secrets.MAPS_API_KEY }}
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Prepare local properties
+        run: |
+          # Generujemy plik lokalnie w pipeline; nie commitujemy go do repo.
+          echo "MAPS_API_KEY=${MAPS_API_KEY}" >> local.properties
+
+      - name: Build
+        run: ./gradlew assembleRelease
+```
+
+#### Przykład lokalnego skanu przed commit (gitleaks)
+
+```bash
+# Skanuje repo i wykrywa potencjalne sekrety przed wysłaniem zmian.
+gitleaks detect --source . --redact --verbose
+```
+
+#### Co zrobić, gdy sekret wyciekł do GitHub
+1. **Natychmiast unieważnij** klucz/token po stronie dostawcy usługi.
+2. **Wygeneruj nowy sekret** i podmień go w Secret Store.
+3. **Usuń sekret z historii Git** (np. `git filter-repo` / BFG) i wymuś aktualizację branchy.
+4. **Przeprowadź post-mortem**: skąd wyciek, jakie dane zagrożone, jakie poprawki procesu.
+5. **Dodaj automatyzację** (secret scanning + pre-commit), żeby błąd się nie powtórzył.
+
 ### Przykład kodu (Gradle local.properties)
 
 ```kotlin
@@ -180,6 +246,8 @@ fun loadApiKey(project: Project): String {
 ### Materiały uzupełniające
 - OWASP Secrets Management Cheat Sheet.
 - GitHub Secret Scanning.
+- GitHub Push Protection.
+- Gitleaks / TruffleHog.
 
 ---
 
