@@ -49,7 +49,7 @@ android {
         ndk {
             // Lista ABI, dla których budujemy biblioteki natywne.
             // W produkcji zwykle wystarczy arm64-v8a (+ ewentualnie armeabi-v7a).
-            abiFilters += listOf("arm64-v8a", "armeabi-v7a", "x86_64")
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
         }
     }
 
