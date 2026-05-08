@@ -1178,12 +1178,16 @@ header {
 }
 
 .cat-list li a {
-    display: flex;
-    align-items: center;
+    display: grid;
+    grid-template-columns: 10px minmax(0, 1fr);
+    align-items: start;
     gap: 8px;
     padding: 3px 10px;
     border-radius: 6px;
     font-size: 13px;
+    line-height: 1.35;
+    white-space: normal;
+    overflow-wrap: anywhere;
     color: var(--text-muted);
     transition: all var(--transition);
 }
@@ -1202,6 +1206,7 @@ header {
 .article-icon {
     font-size: 10px;
     flex-shrink: 0;
+    margin-top: 0.2em;
     opacity: 0.7;
 }
 
