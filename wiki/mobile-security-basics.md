@@ -242,7 +242,7 @@ gitleaks detect --source . --redact --verbose
 4. **Wysyłanie tokena w URL albo logach debugowych.**
    **Naprawa:** token tylko w nagłówku `Authorization`, redakcja danych w logach.
 5. **Włączony ruch HTTP (cleartext) na produkcji.**
-   **Naprawa:** `usesCleartextTraffic=false`, ATS/Network Security Config, testy integracyjne wymuszające HTTPS.
+   **Naprawa:** `android:usesCleartextTraffic="false"`, ATS/Network Security Config, testy integracyjne wymuszające HTTPS.
 6. **Brak certificate pinning dla aplikacji o podwyższonym ryzyku.**
    **Naprawa:** dodać pinning z pinem zapasowym i procesem rotacji.
 7. **Zbyt szerokie uprawnienia aplikacji.**
