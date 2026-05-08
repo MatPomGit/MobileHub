@@ -11,10 +11,32 @@ Model tabeli:
 - `project_id` - identyfikator projektu, np. `pam.26.01`
 - `title` - tytuł projektu
 - `members` - tablica JSON z obiektami `{ index, role }`
+- `repository_url` - opcjonalny link HTTPS do repozytorium projektu, aktualizowany przez studentów
 - `source` - URL źródła danych
 - `created_at`, `updated_at` - znaczniki czasu
 
-Frontend w [studenci.html](studenci.html) najpierw próbuje odczytać `project_teams`, potem spada do starego `project_submissions`, a na końcu do lokalnego `students-data.json`.
+Frontend w [studenci.html](studenci.html) czyta `project_teams` jako główne źródło i przy problemie (np. brak migracji) przełącza się na lokalne `students-data.json`.
+
+### Migracja istniejącej tabeli
+
+Jeśli tabela `project_teams` już istnieje, uruchom poniższy SQL, aby dodać pole repozytorium:
+
+```sql
+alter table public.project_teams
+  add column if not exists repository_url text;
+
+do $$
+begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_repository_url_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_repository_url_chk
+      check (repository_url is null or repository_url ~ '^https://');
+  end if;
+end
+$$;
+```
 
 ## Stary model: `project_submissions`
 
