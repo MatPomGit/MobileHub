@@ -25,7 +25,7 @@ To dobra strategia przed wejściem na większe marketplace’y: najpierw walidac
 1. **Przygotuj build release APK**
    - zbuduj stabilny plik APK,
    - upewnij się, że wersja ma numer (`versionName`, `versionCode`),
-   - podpisz build kluczem release.
+   - podpisz build kluczem release (zachowaj go do przyszłych aktualizacji).
 
 2. **Załóż stronę projektu na itch.io**
    - wybierz typ projektu „Game”,
