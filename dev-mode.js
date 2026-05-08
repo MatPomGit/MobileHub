@@ -35,7 +35,6 @@
         }
 
         const theme = document.documentElement.getAttribute('data-theme') || localStorage.getItem('pam-theme') || 'domyślny';
-
         const appVersion = (document.querySelector('meta[name="app-version"]') || {}).content || '?';
 
         return {
@@ -292,4 +291,5 @@
     } else {
         init();
     }
+    
 }());
