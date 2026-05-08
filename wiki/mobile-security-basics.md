@@ -238,7 +238,7 @@ gitleaks detect --source . --redact --verbose
 fun loadApiKey(project: Project): String {
     val props = Properties()
     val localPropsFile = project.rootProject.file("local.properties")
-    props.load(localPropsFile.inputStream())
+    localPropsFile.inputStream().use { props.load(it) }
     return props.getProperty("MAPS_API_KEY") ?: error("Missing MAPS_API_KEY")
 }
 ```
