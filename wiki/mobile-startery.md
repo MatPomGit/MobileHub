@@ -196,7 +196,7 @@ Poniżej znajdziesz rozszerzenie checklisty o **konkretne kroki wykonania** dla 
 - **Android starter (Kotlin/Compose):**
   1. `./gradlew --version` i `java -version`.
   2. Uruchom emulator Android Studio i wykonaj `./gradlew installDebug`.
-  3. Jeśli używasz `.env`, dodaj `local.properties`/`gradle.properties` poza repo (sekrety tylko lokalnie lub przez CI Variables).
+  3. Użyj secrets-gradle-plugin do mapowania sekretów z local.properties (poza repo) do BuildConfig.
 - **Flutter starter:**
   1. `flutter --version` oraz `flutter doctor`.
   2. `flutter pub get`, potem `flutter run`.
