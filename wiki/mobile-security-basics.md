@@ -220,92 +220,92 @@ jobs:
 #### Przykład lokalnego skanu przed commit (gitleaks)
 
 ```bash
-# Skanuje repo i wykrywa potencjalne sekrety przed wysłaniem zmian.
+# Skanuje repo i blokuje release, gdy wykryje możliwe sekrety.
 gitleaks detect --source . --redact --verbose
-```
-
-#### Co zrobić, gdy sekret wyciekł do GitHub
-1. **Natychmiast unieważnij** klucz/token po stronie dostawcy usługi.
-2. **Wygeneruj nowy sekret** i podmień go w Secret Store.
-3. **Usuń sekret z historii Git** (np. `git filter-repo` / BFG) i wymuś aktualizację branchy.
-4. **Przeprowadź post-mortem**: skąd wyciek, jakie dane zagrożone, jakie poprawki procesu.
-5. **Dodaj automatyzację** (secret scanning + pre-commit), żeby błąd się nie powtórzył.
-
-### Przykład kodu (Gradle local.properties)
-
-```kotlin
-// Funkcja wczytuje klucz z local.properties, aby nie trzymać sekretu w kodzie źródłowym.
-fun loadApiKey(project: Project): String {
-    val props = Properties()
-    val localPropsFile = project.rootProject.file("local.properties")
-    localPropsFile.inputStream().use { props.load(it) }
-    return props.getProperty("MAPS_API_KEY") ?: error("Missing MAPS_API_KEY")
-}
 ```
 
 ### Materiały uzupełniające
 - OWASP Secrets Management Cheat Sheet.
 - GitHub Secret Scanning.
-- GitHub Push Protection.
-- Gitleaks / TruffleHog.
+- TruffleHog/Gitleaks.
 
 ---
 
-## Najczęstsze błędy bezpieczeństwa w projektach studenckich i naprawy
+## Najczęstsze błędy bezpieczeństwa w projektach studenckich i sposoby naprawy
 
-| Błąd | Ryzyko | Jak naprawić |
-|---|---|---|
-| Token w `SharedPreferences` bez szyfrowania | Kradzież sesji po przejęciu urządzenia | Przenieść token do EncryptedSharedPreferences/Keychain |
-| Hardkodowany API key w kodzie | Nadużycie API i koszty | Przenieść sekret do CI/CD i configu środowiskowego |
-| `usesCleartextTraffic=true` | Podsłuch i MITM | Wymusić HTTPS i wyłączyć cleartext |
-| Brak pinningu przy danych krytycznych | Podstawienie certyfikatu | Dodać certificate pinning + backup pin |
-| Logowanie tokenów do Logcat | Wyciek danych z logów | Maskować dane lub usuwać logi produkcyjne |
-| `android:debuggable=true` w release | Łatwiejsza analiza i modyfikacja aplikacji | Oddzielić build types, sprawdzić release manifest |
-| Brak walidacji danych wejściowych | Iniekcje i błędy logiki | Dodać walidację DTO + testy negatywne |
-| Zbyt szerokie uprawnienia Android | Nadmiarowy dostęp do danych | Zasada least privilege, runtime permissions |
+1. **Sekrety w repozytorium (API key, token, hasło do DB).**
+   **Naprawa:** usunąć sekret z historii Git, przenieść do CI/CD secrets, dodać skan `gitleaks` do pipeline.
+2. **Przechowywanie tokena w plain text (`SharedPreferences` / `UserDefaults`).**
+   **Naprawa:** użyć `EncryptedSharedPreferences` (Android) lub Keychain (iOS) + wymuszać logout cleanup.
+3. **Brak wygasania sesji i refresh tokenów.**
+   **Naprawa:** krótkie TTL access tokena, rotacja refresh tokena, endpoint revoke.
+4. **Wysyłanie tokena w URL albo logach debugowych.**
+   **Naprawa:** token tylko w nagłówku `Authorization`, redakcja danych w logach.
+5. **Włączony ruch HTTP (cleartext) na produkcji.**
+   **Naprawa:** `usesCleartextTraffic=false`, ATS/Network Security Config, testy integracyjne wymuszające HTTPS.
+6. **Brak certificate pinning dla aplikacji o podwyższonym ryzyku.**
+   **Naprawa:** dodać pinning z pinem zapasowym i procesem rotacji.
+7. **Zbyt szerokie uprawnienia aplikacji.**
+   **Naprawa:** zasada least privilege, usunąć nieużywane permissions i opisać uzasadnienie biznesowe.
+8. **Brak walidacji wejścia z API/formularzy.**
+   **Naprawa:** walidacja po stronie klienta i serwera, jawne limity długości i formatów.
+9. **Stare podatne zależności.**
+   **Naprawa:** regularne aktualizacje + SCA (np. Dependabot, OSV-Scanner) i review CVE przed release.
+10. **Brak planu reakcji na incydent bezpieczeństwa.**
+    **Naprawa:** playbook incydentu, kanał eskalacji, checklista revokacji tokenów i publikacji hotfixa.
 
 ---
 
 ## Checklista audytu bezpieczeństwa przed oddaniem projektu
 
-> Każdy punkt zawiera **kontrolę**, **przykład kodu** i **materiał uzupełniający**.
+> Każdy punkt zawiera: **co sprawdzić**, **przykład kodu/konfiguracji**, **materiały uzupełniające**.
 
-1. **Storage:** Czy dane wrażliwe są szyfrowane lokalnie?  
-   - Kod: `saveSecureToken(...)` z sekcji 1.  
-   - Materiał: OWASP MASVS (Data Storage).
+### 1) Data storage
+- [ ] **Sprawdź:** dane wrażliwe są szyfrowane lokalnie i czyszczone po wylogowaniu.
+- **Przykład:** `saveSecureToken(...)` z `EncryptedSharedPreferences` (sekcja 1).
+- **Materiały:** [File storage mobile](./file-storage-mobile.md), [Data storage best practices](./data-storage-best-practices.md), [iOS Data](./ios-data.md).
 
-2. **Token lifecycle:** Czy tokeny mają poprawny cykl życia i logout?  
-   - Kod: `AuthInterceptor` z sekcji 2 + endpoint revoke po logout.  
-   - Materiał: RFC 6750, OAuth BCP.
+### 2) Token lifecycle
+- [ ] **Sprawdź:** access token ma krótki TTL, refresh token jest rotowany i możliwy do unieważnienia.
+- **Przykład:** `AuthInterceptor` z nagłówkiem `Authorization: Bearer ...` (sekcja 2).
+- **Materiały:** [Android Network](./android-network.md), [iOS Networking](./ios-networking.md), [AI Privacy & Security](./ai-privacy-security.md).
 
-3. **Transport security:** Czy aplikacja wymusza HTTPS i TLS?  
-   - Kod: `android:usesCleartextTraffic="false"` + `network_security_config.xml` z sekcji 4.  
-   - Materiał: Android Network Security Config.
+### 3) Certificate pinning
+- [ ] **Sprawdź:** pinning jest skonfigurowany dla domen produkcyjnych, istnieje pin zapasowy.
+- **Przykład:** `createPinnedClient()` z dwoma pinami SHA-256 (sekcja 3).
+- **Materiały:** [Mobile Security](./mobile-security.md), [Android Network](./android-network.md).
 
-4. **Pinning:** Czy dla krytycznych endpointów wdrożono certificate pinning?  
-   - Kod: `createPinnedClient()` z sekcji 3.  
-   - Materiał: OWASP MASTG Network Tests.
+### 4) Secure communication
+- [ ] **Sprawdź:** HTTP jest zablokowane, aplikacja wymusza TLS i walidację hosta.
+- **Przykład:** `android:usesCleartextTraffic="false"` i `network_security_config` (sekcja 4).
+- **Materiały:** [Connectivity](./connectivity.md), [Android Network](./android-network.md), [iOS Networking](./ios-networking.md).
 
-5. **Sekrety:** Czy sekrety nie znajdują się w repozytorium?  
-   - Kod: `loadApiKey(...)` z sekcji 5.  
-   - Materiał: OWASP Secrets Management Cheat Sheet.
+### 5) Secrets management
+- [ ] **Sprawdź:** brak sekretów w repo i w logach, sekrety pobierane z CI/CD.
+- **Przykład:** workflow GitHub Actions z `${{ secrets.MAPS_API_KEY }}` oraz `.gitignore` (sekcja 5).
+- **Materiały:** [Mobile Security](./mobile-security.md), [App Publishing](./app-publishing.md), [App Distribution](./app-distribution.md).
 
-6. **Build release:** Czy build produkcyjny ma wyłączone debugowanie i testowe flagi?  
-   - Kod: release config + manifest (`debuggable=false`).  
-   - Materiał: Android App Security Best Practices.
+### 6) Uprawnienia i prywatność
+- [ ] **Sprawdź:** aplikacja żąda wyłącznie niezbędnych uprawnień i ma jasne uzasadnienie ich użycia.
+- **Przykład:** manifest z minimalnym zestawem permissions i opisem funkcjonalnym w README.
+- **Materiały:** [Accessibility](./accessibility.md), [AI Legal Aspects](./ai-legal-aspects.md), [App Metadata](./app-metadata.md).
 
-7. **Uprawnienia:** Czy żądane uprawnienia są minimalne i uzasadnione?  
-   - Kod: Android permissions + runtime request tylko przy użyciu funkcji.  
-   - Materiał: Android Permission Guidelines.
+### 7) Aktualizacje zależności
+- [ ] **Sprawdź:** brak krytycznych CVE i istnieje plan aktualizacji bibliotek.
+- **Przykład:** cykliczny job CI uruchamiający skan podatności + raport w PR.
+- **Materiały:** [AGP Upgrade Assistant](./agp-upgrade-assistant.md), [Android Studio](./android-studio.md), [App Updates](./app-updates.md).
 
-8. **Logowanie:** Czy logi nie zawierają tokenów, haseł i danych użytkownika?  
-   - Kod: helper maskujący (`token.take(4) + "***"`).  
-   - Materiał: OWASP Logging Cheat Sheet.
+### 8) Logowanie i monitoring incydentów
+- [ ] **Sprawdź:** logi nie zawierają PII/tokenów, a alerty bezpieczeństwa są monitorowane.
+- **Przykład:** redakcja wartości nagłówków i pól wrażliwych przed wysłaniem logów do crash analytics.
+- **Materiały:** [Mobile Performance](./mobile-performance.md), [App Updates](./app-updates.md), [AI Privacy & Security](./ai-privacy-security.md).
 
-9. **Obsługa błędów:** Czy komunikaty błędów nie ujawniają szczegółów backendu?  
-   - Kod: generyczne komunikaty UI + szczegóły tylko w bezpiecznym monitoringu.  
-   - Materiał: OWASP Error Handling Cheat Sheet.
+### 9) Testy bezpieczeństwa
+- [ ] **Sprawdź:** wykonano minimum testów: MITM, brute-force login, walidacja inputu, replay tokena.
+- **Przykład:** scenariusze testowe w raporcie QA + automatyczne testy API.
+- **Materiały:** [Android Testing](./android-testing.md), [Projekt zaliczeniowy z laboratorium](./projekt-zaliczeniowy_z_laboratorium.md).
 
-10. **Weryfikacja końcowa:** Czy wykonano testy bezpieczeństwa przed oddaniem?  
-   - Kod/narzędzia: MobSF, OWASP ZAP, Android Lint, dependency scan.  
-   - Materiał: OWASP Mobile Testing Guide.
+### 10) Go/No-Go przed oddaniem
+- [ ] **Sprawdź:** każdy błąd security ma severity, właściciela i termin naprawy.
+- **Przykład:** tabela ryzyk (`issue`, `severity`, `owner`, `due date`, `mitigation`) dołączona do PR.
+- **Materiały:** [Projekt zaliczeniowy](./projekt-zaliczeniowy.md), [Best Practices Checklist](./best-practices-checklist.md).
