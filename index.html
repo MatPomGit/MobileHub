@@ -33,7 +33,7 @@
 </head>
 
 <body>
-
+    <a class="skip-link" href="#mainContent">Przejdź do głównej treści</a>
 
     <!-- Scroll progress -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -44,7 +44,8 @@
         <div class="pull-panel-body">
             <p class="pull-panel-title"><i class="fa-solid fa-bolt"></i> Szybka nawigacja</p>
             <div class="pull-search-wrap">
-                <i class="fa-solid fa-magnifying-glass"></i>
+                <label for="pullSearchInput" class="sr-only">Szukaj artykułów w szybkiej nawigacji</label>
+                <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                 <input type="text" id="pullSearchInput" placeholder="Szukaj artykułów..." autocomplete="off">
             </div>
             <div class="pull-shortcuts">
@@ -187,7 +188,8 @@
                 <div class="sidebar-inner">
                     <!-- Search -->
                     <div class="wiki-search">
-                        <i class="fa-solid fa-magnifying-glass"></i>
+                        <label for="wikiSearch" class="sr-only">Szukaj artykułów w bazie wiedzy</label>
+                        <i class="fa-solid fa-magnifying-glass" aria-hidden="true"></i>
                         <input type="text" id="wikiSearch" placeholder="Szukaj artykułów..." autocomplete="off">
                     </div>
 
@@ -199,7 +201,7 @@
             </aside>
 
             <!-- CONTENT -->
-            <main class="wiki-main">
+            <main class="wiki-main" id="mainContent">
                 <!-- Breadcrumbs -->
                 <nav id="breadcrumbs" aria-label="Ścieżka">
                     <i class="fa-solid fa-house"></i>
