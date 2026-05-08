@@ -59,6 +59,7 @@ To dobra strategia przed wejściem na większe marketplace’y: najpierw walidac
 - **Czytelny onboarding** – 3–5 ekranów max lub tutorial kontekstowy.
 - **Obsługa różnych ekranów** – testy na małych i dużych urządzeniach.
 - **Offline-first (jeśli możliwe)** – gra działająca bez internetu ma większą użyteczność.
+- **Instrukcja instalacji** – warto dodać na stronie opis włączenia "Nieznanych źródeł" w systemie Android, aby ułatwić instalację graczom.
 
 ## itch.io vs Google Play (perspektywa studenta/twórcy indie)
 
