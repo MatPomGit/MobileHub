@@ -1754,7 +1754,7 @@ header {
     width: 100%;
     border-collapse: collapse;
     margin-top: 8px;
-    font-size: 9px;
+    font-size: 0.85em;
     table-layout: fixed;
 }
 
