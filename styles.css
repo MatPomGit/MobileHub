@@ -1754,7 +1754,7 @@ header {
     width: 100%;
     border-collapse: collapse;
     margin-top: 8px;
-    font-size: 10px;
+    font-size: 0.85em;
     table-layout: fixed;
 }
 
@@ -1773,10 +1773,9 @@ header {
 }
 
 .weekly-roadmap-table th:nth-child(1) { width: 10%; }
-.weekly-roadmap-table th:nth-child(2) { width: 32%; }
+.weekly-roadmap-table th:nth-child(2) { width: 40%; }
 .weekly-roadmap-table th:nth-child(3),
-.weekly-roadmap-table th:nth-child(4) { width: 21%; }
-.weekly-roadmap-table th:nth-child(5) { width: 16%; }
+.weekly-roadmap-table th:nth-child(4) { width: 25%; }
 
 /* Loading */
 .wiki-loading {
