@@ -824,6 +824,7 @@ background: var(--surface);
         const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
         const SUPABASE_TEAMS_TABLE = 'project_teams';
+        const STUDENTS_ACTIVE_TAB_KEY = 'students.activeInternalTab';
         const TEAM_DATA_SOURCE = {
             supabase: 'supabase',
             json: 'json'
@@ -1187,17 +1188,25 @@ background: var(--surface);
         function setActiveInternalTab(targetTab) {
             const buttons = Array.from(document.querySelectorAll('.tab-btn[data-tab-target]'));
             const panels = Array.from(document.querySelectorAll('.tab-panel[data-tab-panel]'));
+            const hasMatchingTab = buttons.some((button) => button.dataset.tabTarget === targetTab);
+            const safeTargetTab = hasMatchingTab ? targetTab : 'topics';
 
             buttons.forEach((button) => {
-                const isActive = button.dataset.tabTarget === targetTab;
+                const isActive = button.dataset.tabTarget === safeTargetTab;
                 button.classList.toggle('active', isActive);
                 button.setAttribute('aria-selected', isActive ? 'true' : 'false');
             });
 
             panels.forEach((panel) => {
-                const isActive = panel.dataset.tabPanel === targetTab;
+                const isActive = panel.dataset.tabPanel === safeTargetTab;
                 panel.classList.toggle('hidden', !isActive);
             });
+
+            try {
+                localStorage.setItem(STUDENTS_ACTIVE_TAB_KEY, safeTargetTab);
+            } catch (error) {
+                // LocalStorage may be unavailable in strict browser contexts.
+            }
         }
 
         function initInternalTabs() {
@@ -1210,7 +1219,14 @@ background: var(--surface);
                 });
             });
 
-            setActiveInternalTab('topics');
+            let initialTab = 'topics';
+            try {
+                const storedTab = localStorage.getItem(STUDENTS_ACTIVE_TAB_KEY);
+                if (storedTab) initialTab = storedTab;
+            } catch (error) {
+                // Ignore storage access errors and fall back to default tab.
+            }
+            setActiveInternalTab(initialTab);
         }
 
         function fillSelect(id, labels) {
@@ -1406,8 +1422,8 @@ background: var(--surface);
         }
 
         async function initPage() {
-            await loadProjectData();
             initInternalTabs();
+            await loadProjectData();
             renderOverviewDashboard();
             initProjectSelector();
             initTeacherFilters();
