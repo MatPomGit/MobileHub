@@ -238,7 +238,7 @@ Poniżej znajdziesz rozszerzenie checklisty o **konkretne kroki wykonania** dla 
 - **Android:** `./gradlew ktlintCheck testDebugUnitTest assembleDebug`.
 - **Flutter:** dart format --output=none --set-exit-if-changed ., flutter analyze, flutter test.
 - **React Native:** npm run lint, npm test, cd android && ./gradlew assembleDebug.
-- **Unity:** uruchom Unity Test Runner (EditMode/PlayMode) i build headless w CI (batchmode).
+- **Unity:** uruchom Unity Test Runner oraz build w CI (np. -batchmode -quit -executeMethod BuildScript.Build).
 
 > Wspólna praktyka: ustaw status checks jako wymagane przed mergem do `main`.
 
