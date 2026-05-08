@@ -149,7 +149,8 @@ cd <PROJECT_DIR>
 
 # 2) Instalacja zależności
 npm install
-
+# Dla iOS (wymagane CocoaPods):
+cd ios && pod install && cd ..
 # 3) Start Metro + aplikacja
 npm run start
 npm run android
