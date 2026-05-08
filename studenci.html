@@ -498,26 +498,6 @@
             margin-bottom: 16px;
         }
 
-        /* Moduły dashboardu rozdzielają sekcję szczegółów i listę zespołów kompletnych. */
-        .dashboard-modules-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
-            gap: 12px;
-            margin-bottom: 16px;
-        }
-
-        .dashboard-module {
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--surface2);
-            padding: 12px;
-        }
-
-        .dashboard-module h3 {
-            margin: 0 0 10px;
-            font-size: 0.92rem;
-        }
-
         .metric-tile {
             background: var(--surface2);
             border: 1px solid var(--border);
@@ -853,25 +833,16 @@ background: var(--surface);
             </div>
             <div class="card-body">
                 <div class="dashboard-grid" id="dashboard-metrics"></div>
-
-                <!-- Moduł 1: szczegóły pojedynczego, wybranego projektu. -->
-                <!-- Moduł 2: lista zespołów/projektów, które mają kompletną obsadę. -->
-                <div class="dashboard-modules-grid">
-                    <section class="dashboard-module" aria-label="Szczegóły wybranego projektu">
-                        <h3>Szczegóły wybranego projektu</h3>
-                        <div class="form-grid">
-                            <div class="form-group full">
-                                <label for="project-readiness-target">Wybierz projekt</label>
-                                <select id="project-readiness-target"></select>
-                            </div>
-                        </div>
-                        <div id="project-readiness-box" class="alert alert-info" style="margin-top: 12px;"></div>
-                    </section>
-                    <section class="dashboard-module" aria-label="Zespoły kompletne">
-                        <h3>Zespoły kompletne</h3>
-                        <ul id="completed-topics-list" class="dashboard-list"></ul>
-                    </section>
+                <div class="form-grid">
+                    <div class="form-group full">
+                        <label for="project-readiness-target">Szczegóły wybranego projektu</label>
+                        <select id="project-readiness-target"></select>
+                    </div>
                 </div>
+                <div id="project-readiness-box" class="alert alert-info" style="margin-top: 12px;"></div>
+
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Zespoły kompletne</h3>
+                <ul id="completed-topics-list" class="dashboard-list"></ul>
 
                 <h3 style="margin:18px 0 10px;font-size:0.92rem;">Obsada ról</h3>
                 <ul id="scores-list" class="dashboard-list"></ul>
