@@ -6,6 +6,70 @@ Zrozumienie sprzętu urządzenia mobilnego pozwala pisać lepsze, wydajniejsze a
 
 Sercem urządzenia mobilnego jest **SoC** (System on a Chip) - układ scalony integrujący CPU, GPU, pamięć RAM, modem, DSP i inne komponenty na jednym krzemie.
 
+### Wspierane architektury CPU (ABI) w aplikacjach mobilnych
+
+W praktyce publikowania aplikacji (szczególnie na Androidzie) ważny jest nie tylko „typ procesora”, ale też **ABI** (*Application Binary Interface*), czyli sposób, w jaki skompilowany kod natywny (`.so`) komunikuje się z systemem i procesorem.
+
+Najczęściej spotykane ABI na Androidzie:
+
+- **`arm64-v8a`** - 64-bitowy ARM (obecny standard dla nowoczesnych telefonów).
+- **`armeabi-v7a`** - 32-bitowy ARM (starsze urządzenia, malejące znaczenie).
+- **`x86`** - 32-bitowy Intel/AMD (głównie stare emulatory i niszowe urządzenia).
+- **`x86_64`** - 64-bitowy Intel/AMD (często emulatory, czasem ChromeOS).
+
+Na iOS sytuacja jest prostsza: współczesne aplikacje są budowane głównie pod **ARM64** (urządzenia Apple Silicon).
+
+#### Dlaczego to ma znaczenie dla dewelopera?
+
+1. **Uruchamianie bibliotek natywnych**  
+   Jeśli używasz JNI/NDK (np. silnik gry, codec audio/video, kryptografia, AI), musisz dostarczyć binaria dla ABI urządzenia. Brak zgodnej wersji = `UnsatisfiedLinkError`.
+
+2. **Rozmiar aplikacji**  
+   Im więcej ABI spakujesz do jednego APK, tym większy rozmiar pliku. Dlatego preferowane jest publikowanie przez **Android App Bundle (AAB)**, gdzie sklep dostarcza tylko potrzebne warianty.
+
+3. **Wydajność i zużycie energii**  
+   Natywny kod skompilowany pod właściwą architekturę działa szybciej i zwykle zużywa mniej energii niż warstwy translacyjne/emulacyjne.
+
+4. **Zgodność z Google Play i ekosystemem 64-bit**  
+   Dla aplikacji z kodem natywnym wsparcie 64-bit (w praktyce arm64-v8a) to obecnie wymóg Google Play oraz standard jakościowy.
+
+#### Praktyka projektowa: które ABI wybrać?
+
+- **Minimum produkcyjne:** `arm64-v8a`.
+- **Kompatybilność wsteczna (opcjonalnie):** `armeabi-v7a`.
+- **Lepsze testy na emulatorach/desktopie:** dodatkowo `x86_64`.
+
+Jeśli aplikacja nie korzysta z bibliotek natywnych (czysty Kotlin/Java/Flutter bez własnych modułów C/C++), temat ABI jest mniej odczuwalny, bo większość kodu działa na maszynie wirtualnej/warstwie runtime.
+
+#### Konfiguracja ABI w Gradle (Android)
+
+```kotlin
+android {
+    defaultConfig {
+        ndk {
+            // Lista ABI, dla których budujemy biblioteki natywne.
+            // W produkcji zwykle wystarczy arm64-v8a (+ ewentualnie armeabi-v7a).
+            abiFilters += listOf("arm64-v8a", "armeabi-v7a")
+        }
+    }
+
+    bundle {
+        abi {
+            // Włącza podział pakietu per ABI w AAB,
+            // aby użytkownik pobierał tylko właściwy wariant binarny.
+            enableSplit = true
+        }
+    }
+}
+```
+
+#### Checklist przed publikacją
+
+- Zweryfikuj, czy każda biblioteka `.so` ma wariant `arm64-v8a`.
+- Sprawdź uruchamianie aplikacji na fizycznym ARM64 i emulatorze `x86_64`.
+- Upewnij się, że build release nie pakuje nieużywanych ABI.
+- Mierz różnicę rozmiaru artefaktu po zmianach w ABI (`analyze APK` / `bundletool`).
+
 ### Główni producenci SoC
 
 | Producent | Seria | Platforma |
