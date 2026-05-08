@@ -714,12 +714,6 @@ background: var(--surface);
                 <h2>Formularz zgłoszenia</h2>
             </div>
             <div class="card-body">
-
-                <div class="alert alert-info" style="margin-bottom:16px;">
-                    <i class="fa-solid fa-circle-info"></i>
-                    <span>Formularz zapisuje dane do publicznej bazy Supabase (bez logowania).</span>
-                </div>
-
                 <form id="submission-form" novalidate>
                     <div class="form-grid">
 
@@ -756,7 +750,6 @@ background: var(--surface);
                                 <option value="Backend">Backend</option>
                             </select>
                         </div>
-
                     </div>
 
                     <div style="margin-top:20px;">
@@ -768,7 +761,6 @@ background: var(--surface);
                             style="margin-left:8px;">Anuluj edycję</button>
                     </div>
                 </form>
-
             </div>
         </div>
 
@@ -848,7 +840,7 @@ background: var(--surface);
 
             const metrics = [
                 { label: 'Ukończone tematy', value: `${completedModules.length}/${COURSE_MODULES.length}` },
-{ label: 'Średni wynik zadań', value: `${COURSE_MODULES.length > 0 ? Math.round(COURSE_MODULES.reduce((sum, item) => sum + item.score, 0) / COURSE_MODULES.length) : 0}%` },
+                { label: 'Średni wynik zadań', value: `${COURSE_MODULES.length > 0 ? Math.round(COURSE_MODULES.reduce((sum, item) => sum + item.score, 0) / COURSE_MODULES.length) : 0}%` },
                 { label: 'Aktywne cele nauki', value: activeGoals.length },
                 { label: 'Postęp kursu', value: `${progressPercent}%` }
             ];
