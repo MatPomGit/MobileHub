@@ -598,7 +598,7 @@ background: var(--surface);
         <div class="page-hero">
             <div class="page-hero-icon"><i class="fa-solid fa-users"></i></div>
             <h1>Studenci – zgłoszenia projektów</h1>
-            <p>Lista zgłoszonych tematów projektów aplikacji mobilnych oraz formularz nowego zgłoszenia.</p>
+            <p>Oficjalna lista zespołów projektowych PAM 2026 zbudowana wyłącznie na podstawie zatwierdzonych danych zespołów.</p>
         </div>
 
         <!-- ALERT BOX (shared) -->
@@ -607,31 +607,31 @@ background: var(--surface);
         <div class="card">
             <div class="card-header">
                 <i class="fa-solid fa-chart-line"></i>
-                <h2>Dashboard użytkownika</h2>
+                <h2>Dashboard zespołów</h2>
             </div>
             <div class="card-body">
                 <div class="dashboard-grid" id="dashboard-metrics"></div>
                 <div class="form-grid">
                     <div class="form-group full">
-                        <label for="project-readiness-target">Gotowość projektowa dla typu aplikacji</label>
+                        <label for="project-readiness-target">Szczegóły wybranego projektu</label>
                         <select id="project-readiness-target"></select>
                     </div>
                 </div>
                 <div id="project-readiness-box" class="alert alert-info" style="margin-top: 12px;"></div>
 
-                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Historia ukończonych tematów</h3>
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Zespoły kompletne</h3>
                 <ul id="completed-topics-list" class="dashboard-list"></ul>
 
-                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Wyniki zadań i laboratoriów</h3>
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Obsada ról</h3>
                 <ul id="scores-list" class="dashboard-list"></ul>
 
-                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Aktywne cele nauki</h3>
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Zespoły z brakami</h3>
                 <ul id="learning-goals-list" class="dashboard-list"></ul>
 
-                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Rekomendacje kolejnych materiałów</h3>
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Projekty i liczebność</h3>
                 <ul id="recommendations-list" class="dashboard-list"></ul>
 
-                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Przypomnienia</h3>
+                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Uwagi organizacyjne</h3>
                 <ul id="reminders-list" class="dashboard-list"></ul>
             </div>
         </div>
@@ -639,29 +639,29 @@ background: var(--surface);
         <div class="card">
             <div class="card-header">
                 <i class="fa-solid fa-chalkboard-user"></i>
-                <h2>Dashboard dydaktyczny prowadzącego</h2>
+                <h2>Dashboard organizacyjny prowadzącego</h2>
             </div>
             <div class="card-body">
                 <div class="filters-grid">
                     <div class="form-group">
-                        <label for="teacher-filter-group">Filtr grupy</label>
+                        <label for="teacher-filter-group">Status zespołu</label>
                         <select id="teacher-filter-group"></select>
                     </div>
                     <div class="form-group">
-                        <label for="teacher-filter-week">Filtr tygodnia</label>
+                        <label for="teacher-filter-week">Brakująca rola</label>
                         <select id="teacher-filter-week"></select>
                     </div>
                     <div class="form-group">
-                        <label for="teacher-filter-tech">Filtr technologii</label>
+                        <label for="teacher-filter-tech">Rola w zestawieniu</label>
                         <select id="teacher-filter-tech"></select>
                     </div>
                 </div>
                 <div class="dashboard-grid" id="teacher-metrics"></div>
-                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Najtrudniejsze tematy</h3>
+                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Zespoły wymagające uzupełnienia</h3>
                 <ul id="hard-topics-list" class="dashboard-list"></ul>
-                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Najczęściej niezaliczane zadania</h3>
+                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Zespoły kompletne</h3>
                 <ul id="failed-tasks-list" class="dashboard-list"></ul>
-                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Alerty dydaktyczne</h3>
+                <h3 style="margin:12px 0 10px;font-size:0.92rem;">Obsada wybranej roli</h3>
                 <ul id="teacher-alerts-list" class="dashboard-list"></ul>
                 <div class="export-actions">
                     <button type="button" class="btn-sm" id="btn-export-csv"><i class="fa-solid fa-file-csv"></i> Eksport CSV</button>
@@ -686,13 +686,13 @@ background: var(--surface);
                         <thead>
                             <tr>
                                 <th>#</th>
+                                <th>ID projektu</th>
+                                <th>Tytuł projektu</th>
                                 <th>Nr indeksu</th>
                                 <th>Rola</th>
-                                <th>Nazwa projektu</th>
-                                <th>Repozytorium</th>
-                                <th>Opis</th>
-                                <th>Data</th>
-                                <th>Akcje</th>
+                                <th>Obsada</th>
+                                <th>Status</th>
+                                <th>Uwaga</th>
                             </tr>
                         </thead>
                         <tbody id="students-tbody">
@@ -702,107 +702,59 @@ background: var(--surface);
                 </div>
                 <div id="empty-state" class="empty-state hidden">
                     <i class="fa-solid fa-inbox"></i>
-                    <p>Brak zgłoszeń. Wypełnij formularz poniżej.</p>
+                    <p>Brak danych zespołów do wyświetlenia.</p>
                 </div>
             </div>
         </div>
 
-        <!-- SUBMISSION FORM CARD -->
         <div class="card">
             <div class="card-header">
-                <i class="fa-solid fa-paper-plane"></i>
-                <h2>Formularz zgłoszenia</h2>
+                <i class="fa-solid fa-circle-info"></i>
+                <h2>Źródło danych</h2>
             </div>
             <div class="card-body">
-                <form id="submission-form" novalidate>
-                    <div class="form-grid">
-
-                        <div class="form-group">
-                            <label for="field-student-index">Numer indeksu <span class="req">*</span></label>
-                            <input type="text" id="field-student-index" name="student_index" placeholder="np. 123456"
-                                required>
-                        </div>
-
-                        <div class="form-group full">
-                            <label for="field-project-name">Nazwa projektu <span class="req">*</span></label>
-                            <input type="text" id="field-project-name" name="project_name"
-                                placeholder="np. Aplikacja do zarządzania zadaniami" required>
-                        </div>
-
-                        <div class="form-group full">
-                            <label for="field-repository-url">Link do repozytorium <span class="req">*</span></label>
-                            <input type="url" id="field-repository-url" name="repository_url"
-                                placeholder="https://github.com/org/repo" required>
-                        </div>
-
-                        <div class="form-group full">
-                            <label for="field-project-description">Opis projektu <span class="req">*</span></label>
-                            <textarea id="field-project-description" name="description"
-                                placeholder="Krótki opis funkcjonalności i celu aplikacji…" required></textarea>
-                        </div>
-
-                        <div class="form-group">
-                            <label for="field-role">Rola w projekcie <span class="req">*</span></label>
-                            <select id="field-role" name="role" required>
-                                <option value="">Wybierz rolę…</option>
-                                <option value="Leader">Leader</option>
-                                <option value="Frontend">Frontend</option>
-                                <option value="Backend">Backend</option>
-                            </select>
-                        </div>
+                <div class="alert alert-info" style="margin-bottom:0;">
+                    <i class="fa-solid fa-database"></i>
+                    <div>
+                        Widok jest teraz tylko do odczytu i korzysta z oficjalnej listy zespołów zapisanej w pliku <strong>students-data.json</strong>,
+                        z wbudowaną kopią awaryjną tych samych danych dla uruchomień lokalnych. Celowo nie pokazuje repozytoriów,
+                        opisów projektów ani dat, ponieważ takie dane nie zostały zweryfikowane w przekazanym zestawieniu.
                     </div>
-
-                    <div style="margin-top:20px;">
-                        <button type="submit" class="btn-submit" id="btn-submit">
-                            <i class="fa-solid fa-paper-plane"></i>
-                            Wyślij zgłoszenie
-                        </button>
-                        <button type="button" class="btn-sm danger hidden" id="btn-cancel-edit"
-                            style="margin-left:8px;">Anuluj edycję</button>
-                    </div>
-                </form>
+                </div>
             </div>
         </div>
 
     </div><!-- /page-wrapper -->
 
-    <script type="module">
+    <script>
         'use strict';
-        import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
 
-        /* ------------------------------------------------------------------ */
-        /*  Config                                                              */
-        /* ------------------------------------------------------------------ */
-        const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
-        const SUPABASE_TABLE = 'project_submissions';
-        const ALLOWED_ROLES = ['Leader', 'Frontend', 'Backend'];
-        const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-        const COURSE_MODULES = [
-            { id: 'ux', title: 'UX w aplikacjach mobilnych', competency: 'Projektowanie UX', done: true, score: 88 },
-            { id: 'api', title: 'Integracja REST API', competency: 'Integracje backendowe', done: true, score: 74 },
-            { id: 'auth', title: 'Autoryzacja i sesje', competency: 'Bezpieczeństwo aplikacji', done: false, score: 41 },
-            { id: 'testing', title: 'Testy instrumentacyjne', competency: 'Testowanie mobilne', done: false, score: 52 },
-            { id: 'state', title: 'Zarządzanie stanem', competency: 'Architektura aplikacji', done: true, score: 81 }
-        ];
-        const PROJECT_REQUIREMENTS = {
-            ecommerce: ['Projektowanie UX', 'Integracje backendowe', 'Bezpieczeństwo aplikacji', 'Testowanie mobilne'],
-            social: ['Architektura aplikacji', 'Bezpieczeństwo aplikacji', 'Integracje backendowe'],
-            productivity: ['Projektowanie UX', 'Architektura aplikacji', 'Testowanie mobilne']
+        const TEAM_ROLES = ['Leader', 'Frontend', 'Backend'];
+        const FALLBACK_PROJECT_DATA = {
+            updatedAt: '2026-05-08',
+            projects: [
+                { id: 'pam.26.01', title: 'Aplikacja walutowa', members: [{ index: '177087', role: 'Leader' }, { index: '177119', role: 'Frontend' }, { index: '177126', role: 'Backend' }] },
+                { id: 'pam.26.02', title: 'Sterowania robotem BLE', members: [{ index: '177114', role: 'Leader' }, { index: '177118', role: 'Frontend' }, { index: '177191', role: 'Backend' }] },
+                { id: 'pam.26.03', title: 'Aplikacja do liczenia kalorii', members: [{ index: '177111', role: 'Leader' }, { index: '177110', role: 'Frontend' }, { index: '177112', role: 'Backend' }] },
+                { id: 'pam.26.04', title: 'Lokalizator ekipy', members: [{ index: '177162', role: 'Leader' }, { index: '177176', role: 'Frontend' }, { index: null, role: 'Backend' }] },
+                { id: 'pam.26.05', title: 'Dzielenie rachunków', members: [{ index: '177104', role: 'Leader' }, { index: '177164', role: 'Frontend' }, { index: '177132', role: 'Backend' }] },
+                { id: 'pam.26.06', title: 'SudSolver', members: [{ index: '177064', role: 'Leader' }, { index: '177186', role: 'Frontend' }, { index: '177063', role: 'Backend' }] },
+                { id: 'pam.26.07', title: 'Raportowanie problemów miejskich', members: [{ index: '169646', role: 'Leader' }, { index: '177043', role: 'Frontend' }, { index: '177050', role: 'Backend' }] },
+                { id: 'pam.26.08', title: 'Gra trivia multiplayer', members: [{ index: '177182', role: 'Leader' }, { index: '177054', role: 'Frontend' }, { index: '177055', role: 'Backend' }] },
+                { id: 'pam.26.09', title: 'Ben-9 do nauki fiszek', members: [{ index: '177181', role: 'Leader' }, { index: '177045', role: 'Frontend' }, { index: '177188', role: 'Backend' }] },
+                { id: 'pam.26.10', title: 'Aplikacja przypominania o lekach', members: [{ index: '177143', role: 'Leader' }, { index: '177139', role: 'Frontend' }, { index: '177147', role: 'Backend' }] },
+                { id: 'pam.26.11', title: 'Flip to Focus', members: [{ index: '177135', role: 'Leader' }, { index: '177149', role: 'Frontend' }, { index: '177140', role: 'Backend' }] },
+                { id: 'pam.26.12', title: 'Zamki elektryczne NFC', members: [{ index: '177102', role: 'Leader' }, { index: '177091', role: 'Frontend' }, { index: '177103', role: 'Backend' }] },
+                { id: 'pam.26.13', title: 'Przypomnienia kontekstowe', members: [{ index: '177106', role: 'Leader' }, { index: '177107', role: 'Frontend' }, { index: '177108', role: 'Backend' }] },
+                { id: 'pam.26.14', title: 'Live GeoGuesser', members: [{ index: '177174', role: 'Leader' }, { index: '177192', role: 'Frontend' }, { index: '177177', role: 'Backend' }] },
+                { id: 'pam.26.15', title: 'Katalogowania przedmiotów', members: [{ index: '177190', role: 'Leader' }, { index: '167821', role: 'Frontend' }, { index: '177159', role: 'Backend' }] },
+                { id: 'pam.26.16', title: 'WaterMonitor (tem72)', members: [{ index: '177160', role: 'Leader' }, { index: '177156', role: 'Frontend' }, { index: '177080', role: 'Backend' }] },
+                { id: 'pam.26.17', title: 'SleepyGuardian', members: [{ index: '177151', role: 'Leader' }, { index: '177158', role: 'Frontend' }, { index: '177165', role: 'Backend' }] }
+            ]
         };
-        const TEACHING_ACTIVITY = [
-            { group: 'L1', week: 10, technology: 'Android', topic: 'Autoryzacja JWT', task: 'Lab 4', passRate: 48, activityDrop: 16, projectDelayRisk: 45 },
-            { group: 'L1', week: 10, technology: 'Flutter', topic: 'Zarządzanie stanem', task: 'Lab 5', passRate: 52, activityDrop: 8, projectDelayRisk: 28 },
-            { group: 'L2', week: 11, technology: 'iOS', topic: 'Testy UI', task: 'Lab 6', passRate: 44, activityDrop: 18, projectDelayRisk: 51 },
-            { group: 'L2', week: 11, technology: 'Android', topic: 'WorkManager', task: 'Lab 7', passRate: 39, activityDrop: 20, projectDelayRisk: 63 },
-            { group: 'L3', week: 12, technology: 'React Native', topic: 'Nawigacja i Deep Linki', task: 'Lab 8', passRate: 57, activityDrop: 12, projectDelayRisk: 35 },
-            { group: 'L3', week: 12, technology: 'Flutter', topic: 'Integracja REST API', task: 'Lab 9', passRate: 61, activityDrop: 6, projectDelayRisk: 24 }
-        ];
-        let editingId = null;
 
-        /* ------------------------------------------------------------------ */
-        /*  Helpers                                                             */
-        /* ------------------------------------------------------------------ */
+        let projectData = FALLBACK_PROJECT_DATA;
+
         function showAlert(msg, type) {
             const el = document.getElementById('main-alert');
             const iconClass = type === 'success' ? 'fa-circle-check' : type === 'error' ? 'fa-circle-exclamation' : 'fa-circle-info';
@@ -813,14 +765,8 @@ background: var(--surface);
             icon.setAttribute('aria-hidden', 'true');
             el.appendChild(icon);
             el.appendChild(document.createTextNode(' ' + msg));
-            el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
 
-        function hideAlert() {
-            document.getElementById('main-alert').className = 'alert hidden';
-        }
-
-        /* Komentarz: renderuje elementy listy dla przekazanych danych tekstowych. */
         function renderList(listId, values) {
             const list = document.getElementById(listId);
             list.textContent = '';
@@ -831,18 +777,72 @@ background: var(--surface);
             });
         }
 
-        /* Komentarz: wylicza postęp i buduje dashboard z rekomendacjami oraz przypomnieniami. */
-        function renderLearningDashboard() {
-            const completedModules = COURSE_MODULES.filter((module) => module.done);
-            const failedLabs = COURSE_MODULES.filter((module) => module.score < 60);
-            const activeGoals = COURSE_MODULES.filter((module) => !module.done);
-            const progressPercent = Math.round((completedModules.length / COURSE_MODULES.length) * 100);
+        function roleClass(role) {
+            if (role === 'Leader') return 'role-lider';
+            if (role === 'Frontend') return 'role-frontend';
+            return 'role-backend';
+        }
 
+        function normalizeProjects(rawProjects) {
+            return (rawProjects || []).map((project) => ({
+                id: project.id,
+                title: project.title,
+                members: TEAM_ROLES.map((role) => {
+                    const existing = (project.members || []).find((member) => member.role === role);
+                    return existing ? { role, index: existing.index || null } : { role, index: null };
+                })
+            }));
+        }
+
+        function getAssignedMembers(project) {
+            return project.members.filter((member) => member.index);
+        }
+
+        function getMissingRoles(project) {
+            return project.members.filter((member) => !member.index).map((member) => member.role);
+        }
+
+        function getProjectStatus(project) {
+            return getMissingRoles(project).length === 0 ? 'Kompletny' : 'Niekompletny';
+        }
+
+        function getStats(projects) {
+            const assignedStudents = projects.reduce((sum, project) => sum + getAssignedMembers(project).length, 0);
+            const completeProjects = projects.filter((project) => getProjectStatus(project) === 'Kompletny').length;
+            const vacantSlots = projects.reduce((sum, project) => sum + getMissingRoles(project).length, 0);
+            const roleCounts = TEAM_ROLES.reduce((acc, role) => {
+                acc[role] = projects.reduce((sum, project) => sum + project.members.filter((member) => member.role === role && member.index).length, 0);
+                return acc;
+            }, {});
+            return {
+                totalProjects: projects.length,
+                assignedStudents,
+                completeProjects,
+                incompleteProjects: projects.length - completeProjects,
+                vacantSlots,
+                roleCounts
+            };
+        }
+
+        async function loadProjectData() {
+            try {
+                const response = await fetch('students-data.json', { cache: 'no-store' });
+                if (!response.ok) throw new Error('Nie udało się odczytać students-data.json');
+                const json = await response.json();
+                if (!json || !Array.isArray(json.projects)) throw new Error('Niepoprawny format pliku danych');
+                projectData = { updatedAt: json.updatedAt || FALLBACK_PROJECT_DATA.updatedAt, projects: normalizeProjects(json.projects) };
+            } catch (error) {
+                projectData = { updatedAt: FALLBACK_PROJECT_DATA.updatedAt, projects: normalizeProjects(FALLBACK_PROJECT_DATA.projects) };
+            }
+        }
+
+        function renderOverviewDashboard() {
+            const stats = getStats(projectData.projects);
             const metrics = [
-                { label: 'Ukończone tematy', value: `${completedModules.length}/${COURSE_MODULES.length}` },
-                { label: 'Średni wynik zadań', value: `${COURSE_MODULES.length > 0 ? Math.round(COURSE_MODULES.reduce((sum, item) => sum + item.score, 0) / COURSE_MODULES.length) : 0}%` },
-                { label: 'Aktywne cele nauki', value: activeGoals.length },
-                { label: 'Postęp kursu', value: `${progressPercent}%` }
+                { label: 'Liczba projektów', value: stats.totalProjects },
+                { label: 'Przypisani studenci', value: stats.assignedStudents },
+                { label: 'Zespoły kompletne', value: stats.completeProjects },
+                { label: 'Nieobsadzone role', value: stats.vacantSlots }
             ];
 
             const metricsContainer = document.getElementById('dashboard-metrics');
@@ -854,103 +854,124 @@ background: var(--surface);
                 metricsContainer.appendChild(tile);
             });
 
-            renderList('completed-topics-list', completedModules.map((module) => `${module.title}<span class="tag">zaliczony</span>`));
-            renderList('scores-list', COURSE_MODULES.map((module) => `${module.title}: <strong>${module.score}%</strong>`));
-            renderList('learning-goals-list', activeGoals.map((goal) => `Ukończ moduł: <strong>${goal.title}</strong> (kompetencja: ${goal.competency})`));
+            const completeProjects = projectData.projects.filter((project) => getProjectStatus(project) === 'Kompletny');
+            const incompleteProjects = projectData.projects.filter((project) => getProjectStatus(project) !== 'Kompletny');
 
-            const recommendations = activeGoals.map((goal) => `Następny materiał: <strong>${goal.title}</strong> — brakująca kompetencja: ${goal.competency}`);
-            renderList('recommendations-list', recommendations.length ? recommendations : ['Brak nowych rekomendacji — wszystkie materiały ukończone.']);
+            renderList('completed-topics-list', completeProjects.map((project) => `${project.id} — <strong>${project.title}</strong><span class="tag">3/3</span>`));
+            renderList('scores-list', TEAM_ROLES.map((role) => `${role}: <strong>${stats.roleCounts[role]}/${stats.totalProjects}</strong> obsadzonych`));
+            renderList('learning-goals-list', incompleteProjects.length
+                ? incompleteProjects.map((project) => `${project.id} — <strong>${project.title}</strong>; brakujące role: <strong>${getMissingRoles(project).join(', ')}</strong>`)
+                : ['Brak zespołów wymagających uzupełnienia.']);
+            renderList('recommendations-list', projectData.projects.map((project) => `${project.id} — <strong>${project.title}</strong>: <strong>${getAssignedMembers(project).length}/3</strong> osób`));
 
-            const reminders = [
-                ...activeGoals.map((goal) => `Przypomnienie: przerób zaległy moduł <strong>${goal.title}</strong>.`),
-                ...failedLabs.map((lab) => `Przypomnienie: podejdź ponownie do laboratorium <strong>${lab.title}</strong> (aktualny wynik ${lab.score}%).`)
+            const notes = [
+                `Ostatnia aktualizacja oficjalnej listy: <strong>${projectData.updatedAt}</strong>.`,
+                `Każdy projekt ma przypisanego lidera: <strong>${stats.roleCounts.Leader}/${stats.totalProjects}</strong>.`,
+                stats.vacantSlots > 0
+                    ? `Do uzupełnienia pozostaje <strong>${stats.vacantSlots}</strong> rola: ${incompleteProjects.map((project) => `${project.id} (${getMissingRoles(project).join(', ')})`).join('; ')}.`
+                    : 'Wszystkie role w projektach są obsadzone.'
             ];
-            renderList('reminders-list', reminders.length ? reminders : ['Brak aktywnych przypomnień.']);
+            renderList('reminders-list', notes);
         }
 
-        /* Komentarz: oblicza gotowość do projektu i brakujące kompetencje dla wybranego typu aplikacji. */
-        function updateProjectReadiness() {
-            const target = document.getElementById('project-readiness-target').value;
-            const needed = PROJECT_REQUIREMENTS[target] || [];
-            const passedCompetencies = new Set(COURSE_MODULES.filter((module) => module.score >= 60).map((module) => module.competency));
-            const missing = needed.filter((competency) => !passedCompetencies.has(competency));
-            const ready = missing.length === 0;
-            const box = document.getElementById('project-readiness-box');
-            box.className = ready ? 'alert alert-success' : 'alert alert-error';
-            box.innerHTML = ready
-                ? '<i class="fa-solid fa-circle-check"></i> Student ma komplet umiejętności do realizacji wybranego typu aplikacji.'
-                : `<i class="fa-solid fa-triangle-exclamation"></i> Brakujące kompetencje: <strong>${missing.join(', ')}</strong>.`;
-        }
-
-        /* Komentarz: inicjalizuje selektor typu projektu dla widoku gotowości projektowej. */
-        function initReadinessSelector() {
+        function initProjectSelector() {
             const select = document.getElementById('project-readiness-target');
-            const labels = {
-                ecommerce: 'E-commerce',
-                social: 'Social media',
-                productivity: 'Produktywność'
-            };
-            Object.keys(PROJECT_REQUIREMENTS).forEach((key) => {
+            select.textContent = '';
+            projectData.projects.forEach((project) => {
                 const option = document.createElement('option');
-                option.value = key;
-                option.textContent = labels[key];
+                option.value = project.id;
+                option.textContent = `${project.id} — ${project.title}`;
                 select.appendChild(option);
             });
-            select.addEventListener('change', updateProjectReadiness);
-            updateProjectReadiness();
+            select.addEventListener('change', renderSelectedProjectSummary);
+            renderSelectedProjectSummary();
         }
 
-        /* Komentarz: inicjalizuje filtry prowadzącego i odświeża dashboard po zmianie wartości. */
+        function renderSelectedProjectSummary() {
+            const select = document.getElementById('project-readiness-target');
+            const project = projectData.projects.find((item) => item.id === select.value) || projectData.projects[0];
+            if (!project) return;
+
+            const missingRoles = getMissingRoles(project);
+            const assigned = getAssignedMembers(project);
+            const membersSummary = project.members
+                .map((member) => `${member.role}: <strong>${member.index || 'nieobsadzone'}</strong>`)
+                .join(' | ');
+            const box = document.getElementById('project-readiness-box');
+            box.className = missingRoles.length ? 'alert alert-error' : 'alert alert-success';
+            box.innerHTML = missingRoles.length
+                ? `<i class="fa-solid fa-triangle-exclamation"></i> ${project.id} — <strong>${project.title}</strong>. Obsada: ${assigned.length}/3. ${membersSummary}. Brakujące role: <strong>${missingRoles.join(', ')}</strong>.`
+                : `<i class="fa-solid fa-circle-check"></i> ${project.id} — <strong>${project.title}</strong>. Pełny skład 3/3. ${membersSummary}.`;
+        }
+
+        function fillSelect(id, labels) {
+            const select = document.getElementById(id);
+            select.textContent = '';
+            labels.forEach((label) => {
+                const option = document.createElement('option');
+                option.value = label.value;
+                option.textContent = label.text;
+                select.appendChild(option);
+            });
+        }
+
         function initTeacherFilters() {
-            fillSelect('teacher-filter-group', ['Wszystkie grupy', ...new Set(TEACHING_ACTIVITY.map((item) => item.group))]);
-            fillSelect('teacher-filter-week', ['Wszystkie tygodnie', ...new Set(TEACHING_ACTIVITY.map((item) => `Tydzień ${item.week}`))]);
-            fillSelect('teacher-filter-tech', ['Wszystkie technologie', ...new Set(TEACHING_ACTIVITY.map((item) => item.technology))]);
+            fillSelect('teacher-filter-group', [
+                { value: 'all', text: 'Wszystkie zespoły' },
+                { value: 'complete', text: 'Kompletne' },
+                { value: 'incomplete', text: 'Niekompletne' }
+            ]);
+            fillSelect('teacher-filter-week', [
+                { value: 'all', text: 'Dowolny brak' },
+                { value: 'Leader', text: 'Brak lidera' },
+                { value: 'Frontend', text: 'Brak frontendu' },
+                { value: 'Backend', text: 'Brak backendu' },
+                { value: 'none', text: 'Brak wakatów' }
+            ]);
+            fillSelect('teacher-filter-tech', [
+                { value: 'all', text: 'Wszystkie role' },
+                { value: 'Leader', text: 'Leader' },
+                { value: 'Frontend', text: 'Frontend' },
+                { value: 'Backend', text: 'Backend' }
+            ]);
             ['teacher-filter-group', 'teacher-filter-week', 'teacher-filter-tech'].forEach((id) => {
                 document.getElementById(id).addEventListener('change', renderTeacherDashboard);
             });
             renderTeacherDashboard();
         }
 
-        /* Komentarz: pomocniczo wypełnia select listą opcji tekstowych. */
-        function fillSelect(id, labels) {
-            const select = document.getElementById(id);
-            select.textContent = '';
-            labels.forEach((label) => {
-                const option = document.createElement('option');
-                option.value = label;
-                option.textContent = label;
-                select.appendChild(option);
+        function getFilteredProjects() {
+            const statusFilter = document.getElementById('teacher-filter-group').value;
+            const missingRoleFilter = document.getElementById('teacher-filter-week').value;
+
+            return projectData.projects.filter((project) => {
+                const missingRoles = getMissingRoles(project);
+                const statusMatch = statusFilter === 'all'
+                    || (statusFilter === 'complete' && missingRoles.length === 0)
+                    || (statusFilter === 'incomplete' && missingRoles.length > 0);
+                const missingRoleMatch = missingRoleFilter === 'all'
+                    || (missingRoleFilter === 'none' && missingRoles.length === 0)
+                    || missingRoles.includes(missingRoleFilter);
+                return statusMatch && missingRoleMatch;
             });
         }
 
-        /* Komentarz: filtruje rekordy dydaktyczne zgodnie z ustawieniami prowadzącego. */
-        function getFilteredTeachingData() {
-            const group = document.getElementById('teacher-filter-group').value;
-            const week = document.getElementById('teacher-filter-week').value;
-            const tech = document.getElementById('teacher-filter-tech').value;
-            return TEACHING_ACTIVITY.filter((item) =>
-                (group === 'Wszystkie grupy' || item.group === group) &&
-                (week === 'Wszystkie tygodnie' || `Tydzień ${item.week}` === week) &&
-                (tech === 'Wszystkie technologie' || item.technology === tech)
-            );
-        }
-
-        /* Komentarz: buduje dashboard dydaktyczny: postęp grupy, trudności i alerty ryzyka. */
         function renderTeacherDashboard() {
-            const filtered = getFilteredTeachingData();
-            const averagePassRate = filtered.length ? Math.round(filtered.reduce((sum, item) => sum + item.passRate, 0) / filtered.length) : 0;
-            const averageRisk = filtered.length ? Math.round(filtered.reduce((sum, item) => sum + item.projectDelayRisk, 0) / filtered.length) : 0;
-            const sortedByPassRate = [...filtered].sort((a, b) => a.passRate - b.passRate).slice(0, 3);
-            const hardestTopics = sortedByPassRate;
-            const failedTasks = sortedByPassRate;
-            const alerts = filtered.filter((item) => item.activityDrop >= 15 || item.projectDelayRisk >= 50);
+            const filteredProjects = getFilteredProjects();
+            const selectedRole = document.getElementById('teacher-filter-tech').value;
+            const completeProjects = filteredProjects.filter((project) => getProjectStatus(project) === 'Kompletny');
+            const incompleteProjects = filteredProjects.filter((project) => getProjectStatus(project) !== 'Kompletny');
+            const assignedStudents = filteredProjects.reduce((sum, project) => sum + getAssignedMembers(project).length, 0);
+            const vacancies = filteredProjects.reduce((sum, project) => sum + getMissingRoles(project).length, 0);
+            const completionRate = filteredProjects.length ? Math.round((completeProjects.length / filteredProjects.length) * 100) : 0;
 
             const metrics = [
-                { label: 'Postęp grupy (średnia zaliczeń)', value: `${averagePassRate}%` },
-                { label: 'Średnie ryzyko opóźnienia', value: `${averageRisk}%` },
-                { label: 'Rekordy po filtrze', value: filtered.length },
-                { label: 'Alerty aktywności/ryzyka', value: alerts.length }
+                { label: 'Projekty po filtrze', value: filteredProjects.length },
+                { label: 'Przypisani studenci', value: assignedStudents },
+                { label: 'Nieobsadzone role', value: vacancies },
+                { label: 'Kompletność filtrowanej puli', value: `${completionRate}%` }
             ];
+
             const metricsContainer = document.getElementById('teacher-metrics');
             metricsContainer.textContent = '';
             metrics.forEach((metric) => {
@@ -960,93 +981,59 @@ background: var(--surface);
                 metricsContainer.appendChild(tile);
             });
 
-            renderList('hard-topics-list', hardestTopics.length ? hardestTopics.map((item) => `${item.topic} (${item.technology}) — skuteczność <strong>${item.passRate}%</strong>`) : ['Brak danych dla wybranego filtra.']);
-            renderList('failed-tasks-list', failedTasks.length ? failedTasks.map((item) => `${item.task} (${item.group}, tydz. ${item.week}) — niezaliczenia: <strong>${100 - item.passRate}%</strong>`) : ['Brak danych dla wybranego filtra.']);
-            renderList('teacher-alerts-list', alerts.length ? alerts.map((item) => `Alert dla ${item.group}: spadek aktywności <strong>${item.activityDrop}%</strong>, ryzyko opóźnienia projektu <strong>${item.projectDelayRisk}%</strong>.`) : ['Brak krytycznych alertów dla aktualnego filtra.']);
+            renderList('hard-topics-list', incompleteProjects.length
+                ? incompleteProjects.map((project) => `${project.id} — <strong>${project.title}</strong>; brakujące role: <strong>${getMissingRoles(project).join(', ')}</strong>`)
+                : ['Brak zespołów wymagających uzupełnienia dla aktualnego filtra.']);
+
+            renderList('failed-tasks-list', completeProjects.length
+                ? completeProjects.map((project) => `${project.id} — <strong>${project.title}</strong>; skład: <strong>${getAssignedMembers(project).length}/3</strong>`)
+                : ['Brak zespołów kompletnych dla aktualnego filtra.']);
+
+            const roleAssignments = filteredProjects
+                .flatMap((project) => project.members
+                    .filter((member) => member.index && (selectedRole === 'all' || member.role === selectedRole))
+                    .map((member) => `${project.id} — <strong>${member.index}</strong> (${member.role})`));
+
+            renderList('teacher-alerts-list', roleAssignments.length
+                ? roleAssignments
+                : ['Brak przypisań dla wybranej roli i filtra.']);
         }
 
-        /* Komentarz: eksportuje aktualny widok dashboardu dydaktycznego do pliku CSV. */
         function exportTeacherReportCSV() {
-            const filtered = getFilteredTeachingData();
-            const headers = ['group', 'week', 'technology', 'topic', 'task', 'passRate', 'activityDrop', 'projectDelayRisk'];
-            const rows = filtered.map((item) => headers.map((key) => {
-                const val = String(item[key] ?? '').replace(/"/g, '""');
-                return `"${val}"`;
-            }).join(','));
-            const csv = [headers.join(','), ...rows].join('\\n');
-            const blob = new Blob(['\\ufeff', csv], { type: 'text/csv;charset=utf-8;' });
+            const filteredProjects = getFilteredProjects();
+            const headers = ['project_id', 'project_title', 'team_status', 'member_index', 'member_role', 'slot_status'];
+            const rows = filteredProjects.flatMap((project) => project.members.map((member) => {
+                const values = [
+                    project.id,
+                    project.title,
+                    getProjectStatus(project),
+                    member.index || '',
+                    member.role,
+                    member.index ? 'obsadzone' : 'nieobsadzone'
+                ];
+                return values.map((value) => `"${String(value).replace(/"/g, '""')}"`).join(',');
+            }));
+
+            const csv = [headers.join(','), ...rows].join('\n');
+            const blob = new Blob(['\ufeff', csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const link = document.createElement('a');
             link.href = url;
-            link.download = 'raport-dydaktyczny.csv';
+            link.download = 'zespoly-projektowe-pam.csv';
             link.click();
             URL.revokeObjectURL(url);
         }
 
-        /* Komentarz: eksportuje widok raportu do PDF przy użyciu natywnego okna drukowania. */
         function exportTeacherReportPDF() {
             window.print();
         }
 
-        /* Komentarz: mapowanie roli na klasę CSS badge. */
-        function roleClass(role) {
-            if (role === 'Leader') return 'role-lider';
-            if (role === 'Frontend') return 'role-frontend';
-            return 'role-backend';
-        }
-
-        /* Komentarz: funkcja pobiera wpisy z Supabase i renderuje je w tabeli. */
-        async function loadSubmissions() {
-            const tbody = document.getElementById('students-tbody');
-            const emptyState = document.getElementById('empty-state');
-            const tableState = document.getElementById('table-state');
-
-            tableState.className = 'alert alert-info';
-            tableState.textContent = 'Ładowanie danych…';
-            tbody.textContent = '';
-            emptyState.className = 'empty-state hidden';
-
-            const { data, error } = await supabase
-                .from(SUPABASE_TABLE)
-                .select('*')
-                .order('created_at', { ascending: false });
-
-            if (error) {
-                tableState.className = 'alert alert-error';
-                tableState.textContent = 'Błąd pobierania: ' + error.message;
-                return;
-            }
-
-            tableState.className = 'alert alert-info hidden';
-
-            if (!data || data.length === 0) {
-                emptyState.className = 'empty-state';
-                return;
-            }
-
-            data.forEach((row, index) => {
-                const tr = document.createElement('tr');
-                tr.append(
-                    cell(index + 1),
-                    cell(row.student_index),
-                    roleCell(row.role),
-                    cell(row.project_name),
-                    repoCell(row.repository_url),
-                    cell(row.description),
-                    cell((row.updated_at || row.created_at) ? new Date(row.updated_at || row.created_at).toLocaleString('pl-PL', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit' }) : ''),
-                    actionCell(row)
-                );
-                tbody.appendChild(tr);
-            });
-        }
-        /* Komentarz: tworzy zwykłą komórkę tekstową tabeli. */
         function cell(value) {
             const td = document.createElement('td');
             td.textContent = String(value || '');
             return td;
         }
 
-        /* Komentarz: tworzy badge roli z odpowiednią klasą stylu. */
         function roleCell(role) {
             const td = document.createElement('td');
             const span = document.createElement('span');
@@ -1056,110 +1043,54 @@ background: var(--surface);
             return td;
         }
 
-        /* Komentarz: tworzy bezpieczny link do repozytorium. */
-        function repoCell(url) {
-            const td = document.createElement('td');
-            const anchor = document.createElement('a');
-            anchor.href = url;
-            anchor.target = '_blank';
-            anchor.rel = 'noopener noreferrer';
-            anchor.textContent = url;
-            td.appendChild(anchor);
-            return td;
-        }
+        function renderProjectsTable() {
+            const tbody = document.getElementById('students-tbody');
+            const emptyState = document.getElementById('empty-state');
+            const tableState = document.getElementById('table-state');
 
-        /* Komentarz: buduje zestaw akcji dla pojedynczego wpisu. */
-        function actionCell(row) {
-            const td = document.createElement('td');
+            tbody.textContent = '';
 
-            const editButton = document.createElement('button');
-            editButton.type = 'button';
-            editButton.className = 'btn-sm';
-            editButton.textContent = 'Edytuj';
-            editButton.addEventListener('click', () => startEdit(row));
+            if (!projectData.projects.length) {
+                tableState.className = 'alert alert-info hidden';
+                emptyState.className = 'empty-state';
+                return;
+            }
 
-            const deleteButton = document.createElement('button');
-            deleteButton.type = 'button';
-            deleteButton.className = 'btn-sm danger';
-            deleteButton.style.marginLeft = '6px';
-            deleteButton.textContent = 'Usuń';
-            deleteButton.addEventListener('click', () => deleteSubmission(row));
+            tableState.className = 'alert alert-info hidden';
+            emptyState.className = 'empty-state hidden';
 
-            td.append(editButton, deleteButton);
-            return td;
-        }
-
-        function validateForm(data) {
-            if (!/^\d{4,10}$/.test(data.student_index)) return 'Numer indeksu musi zawierać 4-10 cyfr.';
-            if (!ALLOWED_ROLES.includes(data.role)) return 'Rola musi mieć wartość Leader, Frontend albo Backend.';
-            if (data.project_name.length < 3 || data.project_name.length > 120) return 'Nazwa projektu musi mieć 3-120 znaków.';
-            if (!/^https:\/\/.+/i.test(data.repository_url)) return 'Link repozytorium musi zaczynać się od https://.';
-            if (data.description.length < 20 || data.description.length > 1000) return 'Opis projektu musi mieć 20-1000 znaków.';
-            try { new URL(data.repository_url); } catch (_) { return 'Podaj poprawny URL repozytorium.'; }
-            return '';
-        }
-        /* Komentarz: pobiera dane z formularza i normalizuje białe znaki. */
-        function collectFormData() {
-            return {
-                student_index: document.getElementById('field-student-index').value.trim(),
-                role: document.getElementById('field-role').value,
-                project_name: document.getElementById('field-project-name').value.trim(),
-                repository_url: document.getElementById('field-repository-url').value.trim(),
-                description: document.getElementById('field-project-description').value.trim()
-            };
-        }
-
-        /* Komentarz: uruchamia tryb edycji i uzupełnia formularz danymi wpisu. */
-        function startEdit(row) {
-            editingId = row.id;
-            document.getElementById('field-student-index').value = row.student_index;
-            document.getElementById('field-role').value = row.role;
-            document.getElementById('field-project-name').value = row.project_name;
-            document.getElementById('field-repository-url').value = row.repository_url;
-            document.getElementById('field-project-description').value = row.description;
-            document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-floppy-disk"></i> Zapisz zmiany';
-            document.getElementById('btn-cancel-edit').classList.remove('hidden');
-        }
-
-        /* Komentarz: czyści tryb edycji i przywraca stan formularza dodawania. */
-        function resetEditState() {
-            editingId = null;
-            document.getElementById('submission-form').reset();
-            document.getElementById('btn-submit').innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie';
-            document.getElementById('btn-cancel-edit').classList.add('hidden');
-        }
-        /* Komentarz: funkcja zapisuje nowy wpis do bazy Supabase. */
-        async function addSubmission(formData) {
-            const { error } = await supabase.from(SUPABASE_TABLE).insert({
-                student_index: formData.student_index,
-                role: formData.role,
-                project_name: formData.project_name,
-                repository_url: formData.repository_url,
-                description: formData.description
+            let rowNumber = 1;
+            projectData.projects.forEach((project) => {
+                const assignedCount = getAssignedMembers(project).length;
+                const missingRoles = getMissingRoles(project);
+                project.members.forEach((member) => {
+                    const tr = document.createElement('tr');
+                    tr.append(
+                        cell(rowNumber++),
+                        cell(project.id),
+                        cell(project.title),
+                        cell(member.index || 'Nieobsadzone'),
+                        roleCell(member.role),
+                        cell(`${assignedCount}/3`),
+                        cell(getProjectStatus(project)),
+                        cell(missingRoles.length ? `Brak: ${missingRoles.join(', ')}` : 'Pełny skład')
+                    );
+                    tbody.appendChild(tr);
+                });
             });
-            if (error) throw error;
         }
-        /* Komentarz: funkcja aktualizuje istniejący wpis na podstawie id. */
-        async function updateSubmission(id, formData) {
-            const { error } = await supabase.from(SUPABASE_TABLE).update({
-                student_index: formData.student_index,
-                role: formData.role,
-                project_name: formData.project_name,
-                repository_url: formData.repository_url,
-                description: formData.description,
-                updated_at: new Date().toISOString()
-            }).eq('id', id);
-            if (error) throw error;
+
+        async function initPage() {
+            await loadProjectData();
+            renderOverviewDashboard();
+            initProjectSelector();
+            initTeacherFilters();
+            renderProjectsTable();
         }
-        async function deleteSubmission(row) { const typed = prompt('Aby usunąć wpis, wpisz numer indeksu:'); if (typed !== row.student_index) { showAlert('Numer indeksu nie zgadza się.', 'error'); return; } const { error } = await supabase.from(SUPABASE_TABLE).delete().eq('id', row.id); if (error) { showAlert('Błąd usuwania: ' + error.message, 'error'); return; } showAlert('Wpis usunięty.', 'success'); await loadSubmissions(); }
-        document.getElementById('submission-form').addEventListener('submit', async (e) => { e.preventDefault(); hideAlert(); const data = collectFormData(); const validationError = validateForm(data); if (validationError) return showAlert(validationError, 'error'); const btn = document.getElementById('btn-submit'); btn.disabled = true; btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…'; try { if (editingId === null) { await addSubmission(data); showAlert('Dodano zgłoszenie.', 'success'); } else { await updateSubmission(editingId, data); showAlert('Zapisano zmiany.', 'success'); } resetEditState(); await loadSubmissions(); } catch (err) { showAlert('Błąd zapisu: ' + err.message, 'error'); } finally { btn.disabled = false; if (editingId === null) btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Wyślij zgłoszenie'; } });
-        document.getElementById('btn-cancel-edit').addEventListener('click', resetEditState);
+
         document.getElementById('btn-export-csv').addEventListener('click', exportTeacherReportCSV);
         document.getElementById('btn-export-pdf').addEventListener('click', exportTeacherReportPDF);
-        renderLearningDashboard();
-        initReadinessSelector();
-        initTeacherFilters();
-        loadSubmissions();
+        initPage();
     </script>
 </body>
 
