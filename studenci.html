@@ -712,16 +712,6 @@ background: var(--surface);
                 <i class="fa-solid fa-circle-info"></i>
                 <h2>Źródło danych</h2>
             </div>
-            <div class="card-body">
-                <div class="alert alert-info" style="margin-bottom:0;">
-                    <i class="fa-solid fa-database"></i>
-                    <div>
-                        Widok jest teraz tylko do odczytu i korzysta z oficjalnej listy zespołów zapisanej w pliku <strong>students-data.json</strong>,
-                        z wbudowaną kopią awaryjną tych samych danych dla uruchomień lokalnych. Celowo nie pokazuje repozytoriów,
-                        opisów projektów ani dat, ponieważ takie dane nie zostały zweryfikowane w przekazanym zestawieniu.
-                    </div>
-                </div>
-            </div>
         </div>
 
     </div><!-- /page-wrapper -->
@@ -730,30 +720,11 @@ background: var(--surface);
         'use strict';
 
         const TEAM_ROLES = ['Leader', 'Frontend', 'Backend'];
-        const FALLBACK_PROJECT_DATA = {
-            updatedAt: '2026-05-08',
-            projects: [
-                { id: 'pam.26.01', title: 'Aplikacja walutowa', members: [{ index: '177087', role: 'Leader' }, { index: '177119', role: 'Frontend' }, { index: '177126', role: 'Backend' }] },
-                { id: 'pam.26.02', title: 'Sterowania robotem BLE', members: [{ index: '177114', role: 'Leader' }, { index: '177118', role: 'Frontend' }, { index: '177191', role: 'Backend' }] },
-                { id: 'pam.26.03', title: 'Aplikacja do liczenia kalorii', members: [{ index: '177111', role: 'Leader' }, { index: '177110', role: 'Frontend' }, { index: '177112', role: 'Backend' }] },
-                { id: 'pam.26.04', title: 'Lokalizator ekipy', members: [{ index: '177162', role: 'Leader' }, { index: '177176', role: 'Frontend' }, { index: null, role: 'Backend' }] },
-                { id: 'pam.26.05', title: 'Dzielenie rachunków', members: [{ index: '177104', role: 'Leader' }, { index: '177164', role: 'Frontend' }, { index: '177132', role: 'Backend' }] },
-                { id: 'pam.26.06', title: 'SudSolver', members: [{ index: '177064', role: 'Leader' }, { index: '177186', role: 'Frontend' }, { index: '177063', role: 'Backend' }] },
-                { id: 'pam.26.07', title: 'Raportowanie problemów miejskich', members: [{ index: '169646', role: 'Leader' }, { index: '177043', role: 'Frontend' }, { index: '177050', role: 'Backend' }] },
-                { id: 'pam.26.08', title: 'Gra trivia multiplayer', members: [{ index: '177182', role: 'Leader' }, { index: '177054', role: 'Frontend' }, { index: '177055', role: 'Backend' }] },
-                { id: 'pam.26.09', title: 'Ben-9 do nauki fiszek', members: [{ index: '177181', role: 'Leader' }, { index: '177045', role: 'Frontend' }, { index: '177188', role: 'Backend' }] },
-                { id: 'pam.26.10', title: 'Aplikacja przypominania o lekach', members: [{ index: '177143', role: 'Leader' }, { index: '177139', role: 'Frontend' }, { index: '177147', role: 'Backend' }] },
-                { id: 'pam.26.11', title: 'Flip to Focus', members: [{ index: '177135', role: 'Leader' }, { index: '177149', role: 'Frontend' }, { index: '177140', role: 'Backend' }] },
-                { id: 'pam.26.12', title: 'Zamki elektryczne NFC', members: [{ index: '177102', role: 'Leader' }, { index: '177091', role: 'Frontend' }, { index: '177103', role: 'Backend' }] },
-                { id: 'pam.26.13', title: 'Przypomnienia kontekstowe', members: [{ index: '177106', role: 'Leader' }, { index: '177107', role: 'Frontend' }, { index: '177108', role: 'Backend' }] },
-                { id: 'pam.26.14', title: 'Live GeoGuesser', members: [{ index: '177174', role: 'Leader' }, { index: '177192', role: 'Frontend' }, { index: '177177', role: 'Backend' }] },
-                { id: 'pam.26.15', title: 'Katalogowania przedmiotów', members: [{ index: '177190', role: 'Leader' }, { index: '167821', role: 'Frontend' }, { index: '177159', role: 'Backend' }] },
-                { id: 'pam.26.16', title: 'WaterMonitor (tem72)', members: [{ index: '177160', role: 'Leader' }, { index: '177156', role: 'Frontend' }, { index: '177080', role: 'Backend' }] },
-                { id: 'pam.26.17', title: 'SleepyGuardian', members: [{ index: '177151', role: 'Leader' }, { index: '177158', role: 'Frontend' }, { index: '177165', role: 'Backend' }] }
-            ]
-        };
+        const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
+        const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
+        const SUPABASE_TABLE = 'project_submissions';
 
-        let projectData = FALLBACK_PROJECT_DATA;
+        let projectData = { updatedAt: '', projects: [] };
 
         function showAlert(msg, type) {
             const el = document.getElementById('main-alert');
@@ -781,6 +752,45 @@ background: var(--surface);
             if (role === 'Leader') return 'role-lider';
             if (role === 'Frontend') return 'role-frontend';
             return 'role-backend';
+        }
+
+        function parseProjectId(row) {
+            const candidates = [row.repository_url || '', row.description || '', row.project_name || ''];
+            for (const candidate of candidates) {
+                const match = String(candidate).match(/pam\.26\.\d{2}/i);
+                if (match) return match[0].toLowerCase();
+            }
+            return null;
+        }
+
+        function normalizeProjectId(value) {
+            return value ? String(value).toLowerCase() : '';
+        }
+
+        function sortProjects(projects) {
+            return [...projects].sort((left, right) => left.id.localeCompare(right.id, 'pl', { numeric: true }));
+        }
+
+        function buildProjectsFromRows(rows) {
+            const grouped = new Map();
+
+            rows.forEach((row) => {
+                const projectId = parseProjectId(row) || normalizeProjectId(row.project_name);
+                if (!grouped.has(projectId)) {
+                    grouped.set(projectId, {
+                        id: projectId,
+                        title: row.project_name,
+                        members: []
+                    });
+                }
+
+                grouped.get(projectId).members.push({
+                    index: row.student_index || null,
+                    role: row.role
+                });
+            });
+
+            return sortProjects(normalizeProjects(Array.from(grouped.values())));
         }
 
         function normalizeProjects(rawProjects) {
@@ -824,15 +834,52 @@ background: var(--surface);
             };
         }
 
-        async function loadProjectData() {
+        async function loadProjectDataFromSupabase() {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?select=student_index,role,project_name,repository_url,description&order=project_name.asc,student_index.asc`, {
+                headers: {
+                    apikey: SUPABASE_ANON_KEY,
+                    Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                    Accept: 'application/json'
+                }
+            });
+
+            if (!response.ok) {
+                throw new Error(`Supabase zwrocilo status ${response.status}`);
+            }
+
+            const rows = await response.json();
+            const officialRows = Array.isArray(rows)
+                ? rows.filter((row) => parseProjectId(row))
+                : [];
+
+            if (officialRows.length === 0) {
+                throw new Error('Brak oficjalnych danych zespolow w Supabase');
+            }
+
+            projectData = {
+                updatedAt: new Date().toISOString().slice(0, 10),
+                projects: buildProjectsFromRows(officialRows)
+            };
+        }
+
+        async function loadProjectDataFromJson() {
             try {
                 const response = await fetch('students-data.json', { cache: 'no-store' });
                 if (!response.ok) throw new Error('Nie udało się odczytać students-data.json');
                 const json = await response.json();
                 if (!json || !Array.isArray(json.projects)) throw new Error('Niepoprawny format pliku danych');
-                projectData = { updatedAt: json.updatedAt || FALLBACK_PROJECT_DATA.updatedAt, projects: normalizeProjects(json.projects) };
+                projectData = { updatedAt: json.updatedAt || '', projects: sortProjects(normalizeProjects(json.projects)) };
             } catch (error) {
-                projectData = { updatedAt: FALLBACK_PROJECT_DATA.updatedAt, projects: normalizeProjects(FALLBACK_PROJECT_DATA.projects) };
+                throw new Error('Nie udało się odczytać ani Supabase, ani students-data.json');
+            }
+        }
+
+        async function loadProjectData() {
+            try {
+                await loadProjectDataFromSupabase();
+            } catch (supabaseError) {
+                await loadProjectDataFromJson();
+                showAlert('Widok przełączono na lokalny plik students-data.json, bo Supabase nie zwrócił kompletu danych.', 'info');
             }
         }
 
