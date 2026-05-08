@@ -79,6 +79,7 @@ Praktyczny workflow:
 - [ ] Opis gry i tagi SEO gotowe.
 - [ ] Krótka lista znanych problemów.
 - [ ] Link kontaktowy do zgłaszania błędów.
+- [ ] Sprawdzenie wspieranych architektur procesora (np. ARM64-v8a).
 
 ## Podsumowanie
 
