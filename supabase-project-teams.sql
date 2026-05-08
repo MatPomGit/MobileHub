@@ -5,13 +5,32 @@ create table if not exists public.project_teams (
   project_id text not null unique,
   title varchar(120) not null,
   members jsonb not null default '[]'::jsonb,
+  repository_url text,
   source text,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   constraint project_teams_project_id_chk check (project_id ~ '^pam\.26\.[0-9]{2}$'),
   constraint project_teams_title_chk check (char_length(title) between 3 and 120),
-  constraint project_teams_members_array_chk check (jsonb_typeof(members) = 'array')
+  constraint project_teams_members_array_chk check (jsonb_typeof(members) = 'array'),
+  constraint project_teams_repository_url_chk check (repository_url is null or repository_url ~ '^https://')
 );
+
+alter table public.project_teams
+  add column if not exists repository_url text;
+
+do $$
+begin
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'project_teams_repository_url_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_repository_url_chk
+      check (repository_url is null or repository_url ~ '^https://');
+  end if;
+end
+$$;
 
 create index if not exists project_teams_project_id_idx on public.project_teams(project_id);
 

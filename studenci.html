@@ -460,6 +460,43 @@ background: var(--surface);
             margin-top: 12px;
         }
 
+        /* ===== INTERNAL TABS ===== */
+        .tabs-shell {
+            display: grid;
+            gap: 8px;
+        }
+
+        .tabs-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .tab-btn {
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text-muted);
+            border-radius: var(--radius-sm);
+            padding: 8px 12px;
+            font-family: var(--font);
+            font-size: 0.85rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, border-color 0.2s;
+        }
+
+        .tab-btn:hover {
+            background: #e9edf7;
+            color: var(--text);
+        }
+
+        .tab-btn.active,
+        .tab-btn[aria-selected="true"] {
+            background: var(--accent-light);
+            color: #991b1b;
+            border-color: #fecaca;
+        }
+
         /* ===== TOKEN SETUP ===== */
         .token-section {
             margin-bottom: 16px;
@@ -638,6 +675,31 @@ background: var(--surface);
 
         <div class="card">
             <div class="card-header">
+                <i class="fa-solid fa-layer-group"></i>
+                <h2>Zakładki widoku</h2>
+            </div>
+            <div class="card-body">
+                <div class="tabs-shell">
+                    <div class="tabs-nav" role="tablist" aria-label="Wewnętrzne zakładki strony studenci">
+                        <button type="button" class="tab-btn active" id="tab-btn-topics" role="tab" aria-controls="panel-topics" aria-selected="true" data-tab-target="topics">
+                            <i class="fa-solid fa-table-list"></i> Tematy zespołów
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-btn-teacher" role="tab" aria-controls="panel-teacher" aria-selected="false" data-tab-target="teacher">
+                            <i class="fa-solid fa-chalkboard-user"></i> Panel prowadzącego
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-btn-repo" role="tab" aria-controls="panel-repo" aria-selected="false" data-tab-target="repo">
+                            <i class="fa-solid fa-code-branch"></i> Aktualizacja repo
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-btn-source" role="tab" aria-controls="panel-source" aria-selected="false" data-tab-target="source">
+                            <i class="fa-solid fa-circle-info"></i> Źródło danych
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card tab-panel hidden" id="panel-teacher" data-tab-panel="teacher" role="tabpanel" aria-labelledby="tab-btn-teacher">
+            <div class="card-header">
                 <i class="fa-solid fa-chalkboard-user"></i>
                 <h2>Dashboard organizacyjny prowadzącego</h2>
             </div>
@@ -671,7 +733,7 @@ background: var(--surface);
         </div>
 
         <!-- TABLE CARD -->
-        <div class="card">
+        <div class="card tab-panel" id="panel-topics" data-tab-panel="topics" role="tabpanel" aria-labelledby="tab-btn-topics">
             <div class="card-header">
                 <i class="fa-solid fa-table-list"></i>
                 <h2>Zgłoszone tematy</h2>
@@ -688,6 +750,7 @@ background: var(--surface);
                                 <th>#</th>
                                 <th>ID projektu</th>
                                 <th>Tytuł projektu</th>
+                                <th>Repozytorium</th>
                                 <th>Nr indeksu</th>
                                 <th>Rola</th>
                                 <th>Obsada</th>
@@ -707,10 +770,48 @@ background: var(--surface);
             </div>
         </div>
 
-        <div class="card">
+        <div class="card tab-panel hidden" id="panel-repo" data-tab-panel="repo" role="tabpanel" aria-labelledby="tab-btn-repo">
+            <div class="card-header">
+                <i class="fa-solid fa-code-branch"></i>
+                <h2>Uzupełnij repozytorium projektu</h2>
+            </div>
+            <div class="card-body">
+                <form id="repo-update-form" class="form-grid" novalidate>
+                    <div class="form-group full">
+                        <label for="repo-project-select">Projekt</label>
+                        <select id="repo-project-select" required></select>
+                    </div>
+                    <div class="form-group">
+                        <label for="repo-student-index">Numer indeksu członka zespołu</label>
+                        <input type="text" id="repo-student-index" placeholder="np. 177087" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="repo-url">Link do repozytorium</label>
+                        <input type="url" id="repo-url" placeholder="https://github.com/org/repo" required>
+                    </div>
+                    <div class="form-group full" style="margin-top:4px;">
+                        <button type="submit" class="btn-submit" id="repo-submit-btn">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Zapisz repository_url
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card tab-panel hidden" id="panel-source" data-tab-panel="source" role="tabpanel" aria-labelledby="tab-btn-source">
             <div class="card-header">
                 <i class="fa-solid fa-circle-info"></i>
                 <h2>Źródło danych</h2>
+            </div>
+            <div class="card-body">
+                <div class="alert alert-info" style="margin-bottom:0;">
+                    <i class="fa-solid fa-database"></i>
+                    <div>
+                        Dane zespołów są pobierane z tabeli <strong>project_teams</strong>. Pole <strong>repository_url</strong>
+                        jest utrzymywane przez studentów i może być aktualizowane formularzem powyżej.
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -723,8 +824,14 @@ background: var(--surface);
         const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
         const SUPABASE_TEAMS_TABLE = 'project_teams';
+        const STUDENTS_ACTIVE_TAB_KEY = 'students.activeInternalTab';
+        const TEAM_DATA_SOURCE = {
+            supabase: 'supabase',
+            json: 'json'
+        };
 
         let projectData = { updatedAt: '', projects: [] };
+        let projectDataSource = TEAM_DATA_SOURCE.supabase;
 
         function showAlert(msg, type) {
             const el = document.getElementById('main-alert');
@@ -762,7 +869,8 @@ background: var(--surface);
             return sortProjects(normalizeProjects((rows || []).map((row) => ({
                 id: row.project_id,
                 title: row.title,
-                members: Array.isArray(row.members) ? row.members : []
+                members: Array.isArray(row.members) ? row.members : [],
+                repository_url: row.repository_url || ''
             }))));
         }
 
@@ -770,6 +878,7 @@ background: var(--surface);
             return (rawProjects || []).map((project) => ({
                 id: project.id,
                 title: project.title,
+                repository_url: project.repository_url || '',
                 members: TEAM_ROLES.map((role) => {
                     const existing = (project.members || []).find((member) => member.role === role);
                     return existing ? { role, index: existing.index || null } : { role, index: null };
@@ -817,14 +926,29 @@ background: var(--surface);
             });
 
             if (!response.ok) {
-                throw new Error(`Supabase zwrocilo status ${response.status}`);
+                const details = await response.text();
+                throw new Error(`Supabase zwrocilo status ${response.status}: ${details}`);
             }
 
             return response.json();
         }
 
         async function loadProjectDataFromTeamsTable() {
-            const rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=project_id,title,members,updated_at&order=project_id.asc`);
+            let rows;
+            try {
+                rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=project_id,title,members,repository_url,updated_at&order=project_id.asc`);
+            } catch (error) {
+                const errorText = String(error && error.message ? error.message : error);
+                if (!errorText.includes('42703')) {
+                    throw error;
+                }
+                // Backward compatibility: table exists without repository_url column.
+                rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=project_id,title,members,updated_at&order=project_id.asc`);
+                rows = (Array.isArray(rows) ? rows : []).map((row) => ({
+                    ...row,
+                    repository_url: ''
+                }));
+            }
             const validRows = Array.isArray(rows)
                 ? rows.filter((row) => row.project_id && row.title)
                 : [];
@@ -843,6 +967,7 @@ background: var(--surface);
                 updatedAt: updatedAt ? String(updatedAt).slice(0, 10) : new Date().toISOString().slice(0, 10),
                 projects: buildProjectsFromTeamRows(validRows)
             };
+            projectDataSource = TEAM_DATA_SOURCE.supabase;
         }
 
         async function loadProjectDataFromJson() {
@@ -852,6 +977,7 @@ background: var(--surface);
                 const json = await response.json();
                 if (!json || !Array.isArray(json.projects)) throw new Error('Niepoprawny format pliku danych');
                 projectData = { updatedAt: json.updatedAt || '', projects: sortProjects(normalizeProjects(json.projects)) };
+                projectDataSource = TEAM_DATA_SOURCE.json;
             } catch (error) {
                 throw new Error('Nie udało się odczytać ani Supabase, ani students-data.json');
             }
@@ -927,11 +1053,180 @@ background: var(--surface);
             const membersSummary = project.members
                 .map((member) => `${member.role}: <strong>${member.index || 'nieobsadzone'}</strong>`)
                 .join(' | ');
+            const repositoryInfo = project.repository_url
+                ? `Repozytorium: <a href="${project.repository_url}" target="_blank" rel="noopener noreferrer">${project.repository_url}</a>.`
+                : 'Repozytorium: <strong>brak</strong>.';
             const box = document.getElementById('project-readiness-box');
             box.className = missingRoles.length ? 'alert alert-error' : 'alert alert-success';
             box.innerHTML = missingRoles.length
-                ? `<i class="fa-solid fa-triangle-exclamation"></i> ${project.id} — <strong>${project.title}</strong>. Obsada: ${assigned.length}/3. ${membersSummary}. Brakujące role: <strong>${missingRoles.join(', ')}</strong>.`
-                : `<i class="fa-solid fa-circle-check"></i> ${project.id} — <strong>${project.title}</strong>. Pełny skład 3/3. ${membersSummary}.`;
+                ? `<i class="fa-solid fa-triangle-exclamation"></i> ${project.id} — <strong>${project.title}</strong>. Obsada: ${assigned.length}/3. ${membersSummary}. Brakujące role: <strong>${missingRoles.join(', ')}</strong>. ${repositoryInfo}`
+                : `<i class="fa-solid fa-circle-check"></i> ${project.id} — <strong>${project.title}</strong>. Pełny skład 3/3. ${membersSummary}. ${repositoryInfo}`;
+        }
+
+        function renderRepoProjectSelect() {
+            const select = document.getElementById('repo-project-select');
+            if (!select) return;
+            select.textContent = '';
+            projectData.projects.forEach((project) => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = `${project.id} — ${project.title}`;
+                select.appendChild(option);
+            });
+        }
+
+        function findProjectById(projectId) {
+            return projectData.projects.find((project) => project.id === projectId);
+        }
+
+        function isMemberOfProject(project, studentIndex) {
+            return project.members.some((member) => String(member.index || '') === studentIndex);
+        }
+
+        function normalizeRepositoryUrl(url) {
+            return String(url || '').trim();
+        }
+
+        async function updateProjectRepository(projectId, repositoryUrl) {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TEAMS_TABLE}?project_id=eq.${encodeURIComponent(projectId)}`, {
+                method: 'PATCH',
+                headers: {
+                    apikey: SUPABASE_ANON_KEY,
+                    Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
+                    Accept: 'application/json',
+                    'Content-Type': 'application/json',
+                    Prefer: 'return=representation'
+                },
+                body: JSON.stringify({
+                    repository_url: repositoryUrl,
+                    updated_at: new Date().toISOString()
+                })
+            });
+
+            if (!response.ok) {
+                const details = await response.text();
+                throw new Error(`Nie udało się zapisać repository_url (${response.status}): ${details}`);
+            }
+        }
+
+        function initRepositoryForm() {
+            const form = document.getElementById('repo-update-form');
+            const select = document.getElementById('repo-project-select');
+            const indexInput = document.getElementById('repo-student-index');
+            const urlInput = document.getElementById('repo-url');
+            const submitButton = document.getElementById('repo-submit-btn');
+            if (!form || !select || !indexInput || !urlInput || !submitButton) return;
+
+            renderRepoProjectSelect();
+
+            if (projectDataSource !== TEAM_DATA_SOURCE.supabase) {
+                submitButton.disabled = true;
+                showAlert('Aktualizacja repository_url jest dostępna tylko, gdy dane są pobierane z tabeli project_teams w Supabase.', 'info');
+                return;
+            }
+
+            submitButton.disabled = false;
+
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const projectId = select.value;
+                const studentIndex = String(indexInput.value || '').trim();
+                const repositoryUrl = normalizeRepositoryUrl(urlInput.value);
+                const project = findProjectById(projectId);
+
+                if (!project) {
+                    showAlert('Wybrany projekt nie istnieje.', 'error');
+                    return;
+                }
+
+                if (!/^\d{4,10}$/.test(studentIndex)) {
+                    showAlert('Podaj poprawny numer indeksu (4-10 cyfr).', 'error');
+                    return;
+                }
+
+                if (!isMemberOfProject(project, studentIndex)) {
+                    showAlert('Podany numer indeksu nie należy do składu wybranego projektu.', 'error');
+                    return;
+                }
+
+                if (!/^https:\/\/.+/i.test(repositoryUrl)) {
+                    showAlert('Link do repozytorium musi zaczynać się od https://.', 'error');
+                    return;
+                }
+
+                try {
+                    new URL(repositoryUrl);
+                } catch (error) {
+                    showAlert('Podaj poprawny adres URL repozytorium.', 'error');
+                    return;
+                }
+
+                submitButton.disabled = true;
+                const previousLabel = submitButton.innerHTML;
+                submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…';
+
+                try {
+                    await updateProjectRepository(projectId, repositoryUrl);
+                    await loadProjectDataFromTeamsTable();
+                    renderOverviewDashboard();
+                    initProjectSelector();
+                    renderTeacherDashboard();
+                    renderProjectsTable();
+                    renderRepoProjectSelect();
+                    select.value = projectId;
+                    showAlert('Zapisano repository_url projektu.', 'success');
+                } catch (error) {
+                    showAlert(error.message || 'Nie udało się zapisać repository_url.', 'error');
+                } finally {
+                    submitButton.disabled = false;
+                    submitButton.innerHTML = previousLabel;
+                }
+            });
+        }
+
+        function setActiveInternalTab(targetTab) {
+            const buttons = Array.from(document.querySelectorAll('.tab-btn[data-tab-target]'));
+            const panels = Array.from(document.querySelectorAll('.tab-panel[data-tab-panel]'));
+            const hasMatchingTab = buttons.some((button) => button.dataset.tabTarget === targetTab);
+            const safeTargetTab = hasMatchingTab ? targetTab : 'topics';
+
+            buttons.forEach((button) => {
+                const isActive = button.dataset.tabTarget === safeTargetTab;
+                button.classList.toggle('active', isActive);
+                button.setAttribute('aria-selected', isActive ? 'true' : 'false');
+            });
+
+            panels.forEach((panel) => {
+                const isActive = panel.dataset.tabPanel === safeTargetTab;
+                panel.classList.toggle('hidden', !isActive);
+            });
+
+            try {
+                localStorage.setItem(STUDENTS_ACTIVE_TAB_KEY, safeTargetTab);
+            } catch (error) {
+                // LocalStorage may be unavailable in strict browser contexts.
+            }
+        }
+
+        function initInternalTabs() {
+            const buttons = Array.from(document.querySelectorAll('.tab-btn[data-tab-target]'));
+            if (!buttons.length) return;
+
+            buttons.forEach((button) => {
+                button.addEventListener('click', () => {
+                    setActiveInternalTab(button.dataset.tabTarget);
+                });
+            });
+
+            let initialTab = 'topics';
+            try {
+                const storedTab = localStorage.getItem(STUDENTS_ACTIVE_TAB_KEY);
+                if (storedTab) initialTab = storedTab;
+            } catch (error) {
+                // Ignore storage access errors and fall back to default tab.
+            }
+            setActiveInternalTab(initialTab);
         }
 
         function fillSelect(id, labels) {
@@ -1064,6 +1359,21 @@ background: var(--surface);
             return td;
         }
 
+        function repositoryCell(url) {
+            const td = document.createElement('td');
+            if (!url) {
+                td.textContent = 'Brak';
+                return td;
+            }
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = 'Repo';
+            td.appendChild(link);
+            return td;
+        }
+
         function roleCell(role) {
             const td = document.createElement('td');
             const span = document.createElement('span');
@@ -1099,6 +1409,7 @@ background: var(--surface);
                         cell(rowNumber++),
                         cell(project.id),
                         cell(project.title),
+                        repositoryCell(project.repository_url),
                         cell(member.index || 'Nieobsadzone'),
                         roleCell(member.role),
                         cell(`${assignedCount}/3`),
@@ -1111,11 +1422,13 @@ background: var(--surface);
         }
 
         async function initPage() {
+            initInternalTabs();
             await loadProjectData();
             renderOverviewDashboard();
             initProjectSelector();
             initTeacherFilters();
             renderProjectsTable();
+            initRepositoryForm();
         }
 
         document.getElementById('btn-export-csv').addEventListener('click', exportTeacherReportCSV);
