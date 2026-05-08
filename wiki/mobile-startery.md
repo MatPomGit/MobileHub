@@ -236,7 +236,7 @@ Poniżej znajdziesz rozszerzenie checklisty o **konkretne kroki wykonania** dla 
 
 **Jak to wykonać dla starterów:**
 - **Android:** `./gradlew ktlintCheck testDebugUnitTest assembleDebug`.
-- **Flutter:** `flutter format --set-exit-if-changed .`, `flutter analyze`, `flutter test`.
+- **Flutter:** dart format --output=none --set-exit-if-changed ., flutter analyze, flutter test.
 - **React Native:** `npm run lint`, `npm test`, `npm run android -- --variant debug` (lub dedykowany skrypt CI build).
 - **Unity:** uruchom Unity Test Runner (EditMode/PlayMode) i build headless w CI (batchmode).
 
