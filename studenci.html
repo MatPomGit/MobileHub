@@ -38,6 +38,7 @@
             --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
             --font: 'Outfit', sans-serif;
             --mono: 'JetBrains Mono', monospace;
+            --icon-size: 42px;
         }
 
         body {
@@ -111,6 +112,10 @@
             gap: 10px;
         }
 
+        .card-header.clickable {
+            cursor: pointer;
+        }
+
         .card-header h2 {
             font-size: 1rem;
             font-weight: 700;
@@ -121,8 +126,99 @@
             font-size: 1rem;
         }
 
+        .collapse-toggle {
+            margin-left: auto;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            color: var(--text-muted);
+            width: 34px;
+            height: 34px;
+            border-radius: 999px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: background 0.2s, color 0.2s, transform 0.2s;
+        }
+
+        .collapse-toggle:hover {
+            background: #e9edf7;
+            color: var(--text);
+        }
+
+        .collapse-toggle[aria-expanded="false"] {
+            transform: rotate(-90deg);
+        }
+
+        .card-body.is-collapsed {
+            display: none;
+        }
+
         .card-body {
             padding: 16px 24px;
+        }
+
+        .project-icon {
+            width: var(--icon-size);
+            height: var(--icon-size);
+            border-radius: 12px;
+            object-fit: cover;
+            border: 1px solid var(--border);
+            background: var(--surface2);
+            flex: 0 0 var(--icon-size);
+        }
+
+        .project-icon.small {
+            --icon-size: 28px;
+            border-radius: 9px;
+        }
+
+        .project-icon.placeholder {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+
+        .project-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .project-chip-text {
+            min-width: 0;
+            line-height: 1.25;
+        }
+
+        .file-input {
+            font-family: var(--font);
+            font-size: 0.86rem;
+            color: var(--text);
+        }
+
+        .icon-preview-wrap {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 10px 12px;
+            border: 1px dashed var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface2);
+        }
+
+        .icon-preview-note {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            line-height: 1.3;
+        }
+
+        .icon-preview-actions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-top: 10px;
         }
 
         /* ===== TABLE ===== */
@@ -435,6 +531,70 @@ background: var(--surface);
             line-height: 1.2;
         }
 
+        .team-expand {
+            border: 1px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--surface2);
+            padding: 8px 10px;
+        }
+
+        .team-expand summary {
+            cursor: pointer;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            list-style: none;
+        }
+
+        .team-expand summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .team-expand summary::before {
+            content: '\f0da';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            color: var(--accent);
+            transition: transform 0.2s;
+        }
+
+        .team-expand[open] summary::before {
+            transform: rotate(90deg);
+        }
+
+        .team-expand-body {
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border);
+            display: grid;
+            gap: 6px;
+            font-size: 0.82rem;
+            line-height: 1.25;
+            color: var(--text);
+        }
+
+        .team-expand-body p {
+            margin: 0;
+        }
+
+        .project-readiness-grid {
+            display: grid;
+            gap: 8px;
+            line-height: 1.3;
+        }
+
+        .project-readiness-title {
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+            font-weight: 700;
+        }
+
+        .project-readiness-grid p {
+            margin: 0;
+        }
+
         .tag {
             display: inline-block;
             border-radius: 999px;
@@ -641,7 +801,32 @@ background: var(--surface);
         <!-- ALERT BOX (shared) -->
         <div id="main-alert" class="alert hidden" role="alert"></div>
 
-        <div class="card">
+        <div class="card collapsible-card" data-collapsed-default="false">
+            <div class="card-header">
+                <i class="fa-solid fa-layer-group"></i>
+                <h2>Zakładki widoku</h2>
+            </div>
+            <div class="card-body">
+                <div class="tabs-shell">
+                    <div class="tabs-nav" role="tablist" aria-label="Wewnętrzne zakładki strony studenci">
+                        <button type="button" class="tab-btn active" id="tab-btn-dashboard" role="tab" aria-controls="panel-dashboard" aria-selected="true" data-tab-target="dashboard">
+                            <i class="fa-solid fa-chart-line"></i> Dashboard zespołów
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-btn-topics" role="tab" aria-controls="panel-topics" aria-selected="false" data-tab-target="topics">
+                            <i class="fa-solid fa-table-list"></i> Tematy zespołów
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-btn-teacher" role="tab" aria-controls="panel-teacher" aria-selected="false" data-tab-target="teacher">
+                            <i class="fa-solid fa-chalkboard-user"></i> Panel prowadzącego
+                        </button>
+                        <button type="button" class="tab-btn" id="tab-btn-repo" role="tab" aria-controls="panel-repo" aria-selected="false" data-tab-target="repo">
+                            <i class="fa-solid fa-code-branch"></i> Aktualizacja projektu
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card tab-panel collapsible-card" id="panel-dashboard" data-tab-panel="dashboard" data-collapsed-default="false" role="tabpanel" aria-labelledby="tab-btn-dashboard">
             <div class="card-header">
                 <i class="fa-solid fa-chart-line"></i>
                 <h2>Dashboard zespołów</h2>
@@ -665,40 +850,12 @@ background: var(--surface);
                 <h3 style="margin:18px 0 10px;font-size:0.92rem;">Zespoły z brakami</h3>
                 <ul id="learning-goals-list" class="dashboard-list"></ul>
 
-                <h3 style="margin:18px 0 10px;font-size:0.92rem;">Projekty i liczebność</h3>
-                <ul id="recommendations-list" class="dashboard-list"></ul>
-
                 <h3 style="margin:18px 0 10px;font-size:0.92rem;">Uwagi organizacyjne</h3>
                 <ul id="reminders-list" class="dashboard-list"></ul>
             </div>
         </div>
 
-        <div class="card">
-            <div class="card-header">
-                <i class="fa-solid fa-layer-group"></i>
-                <h2>Zakładki widoku</h2>
-            </div>
-            <div class="card-body">
-                <div class="tabs-shell">
-                    <div class="tabs-nav" role="tablist" aria-label="Wewnętrzne zakładki strony studenci">
-                        <button type="button" class="tab-btn active" id="tab-btn-topics" role="tab" aria-controls="panel-topics" aria-selected="true" data-tab-target="topics">
-                            <i class="fa-solid fa-table-list"></i> Tematy zespołów
-                        </button>
-                        <button type="button" class="tab-btn" id="tab-btn-teacher" role="tab" aria-controls="panel-teacher" aria-selected="false" data-tab-target="teacher">
-                            <i class="fa-solid fa-chalkboard-user"></i> Panel prowadzącego
-                        </button>
-                        <button type="button" class="tab-btn" id="tab-btn-repo" role="tab" aria-controls="panel-repo" aria-selected="false" data-tab-target="repo">
-                            <i class="fa-solid fa-code-branch"></i> Aktualizacja repo
-                        </button>
-                        <button type="button" class="tab-btn" id="tab-btn-source" role="tab" aria-controls="panel-source" aria-selected="false" data-tab-target="source">
-                            <i class="fa-solid fa-circle-info"></i> Źródło danych
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="card tab-panel hidden" id="panel-teacher" data-tab-panel="teacher" role="tabpanel" aria-labelledby="tab-btn-teacher">
+        <div class="card tab-panel collapsible-card hidden" id="panel-teacher" data-tab-panel="teacher" data-collapsed-default="false" role="tabpanel" aria-labelledby="tab-btn-teacher">
             <div class="card-header">
                 <i class="fa-solid fa-chalkboard-user"></i>
                 <h2>Dashboard organizacyjny prowadzącego</h2>
@@ -733,7 +890,7 @@ background: var(--surface);
         </div>
 
         <!-- TABLE CARD -->
-        <div class="card tab-panel" id="panel-topics" data-tab-panel="topics" role="tabpanel" aria-labelledby="tab-btn-topics">
+        <div class="card tab-panel collapsible-card" id="panel-topics" data-tab-panel="topics" data-collapsed-default="true" role="tabpanel" aria-labelledby="tab-btn-topics">
             <div class="card-header">
                 <i class="fa-solid fa-table-list"></i>
                 <h2>Zgłoszone tematy</h2>
@@ -750,6 +907,9 @@ background: var(--surface);
                                 <th>#</th>
                                 <th>ID projektu</th>
                                 <th>Tytuł projektu</th>
+                                <th>Ikona</th>
+                                <th>Opis projektu</th>
+                                <th>Strona projektu</th>
                                 <th>Repozytorium</th>
                                 <th>Nr indeksu</th>
                                 <th>Rola</th>
@@ -770,10 +930,10 @@ background: var(--surface);
             </div>
         </div>
 
-        <div class="card tab-panel hidden" id="panel-repo" data-tab-panel="repo" role="tabpanel" aria-labelledby="tab-btn-repo">
+        <div class="card tab-panel collapsible-card hidden" id="panel-repo" data-tab-panel="repo" data-collapsed-default="false" role="tabpanel" aria-labelledby="tab-btn-repo">
             <div class="card-header">
                 <i class="fa-solid fa-code-branch"></i>
-                <h2>Uzupełnij repozytorium projektu</h2>
+                <h2>Aktualizacja danych projektu</h2>
             </div>
             <div class="card-body">
                 <form id="repo-update-form" class="form-grid" novalidate>
@@ -789,29 +949,36 @@ background: var(--surface);
                         <label for="repo-url">Link do repozytorium</label>
                         <input type="url" id="repo-url" placeholder="https://github.com/org/repo" required>
                     </div>
+                    <div class="form-group full">
+                        <label for="project-page-url">Link do strony projektu</label>
+                        <input type="url" id="project-page-url" placeholder="https://twoj-projekt.example.com">
+                    </div>
+                    <div class="form-group full">
+                        <label for="project-description">Opis projektu</label>
+                        <textarea id="project-description" placeholder="Krótko opisz problem, grupę docelową i najważniejsze funkcje." required></textarea>
+                    </div>
+                    <div class="form-group full">
+                        <label for="project-icon-file">Ikona projektu</label>
+                        <input type="file" id="project-icon-file" class="file-input" accept="image/png,image/jpeg,image/webp,image/svg+xml,image/gif">
+                    </div>
+                    <div class="form-group full">
+                        <div class="icon-preview-wrap">
+                            <div id="project-icon-preview"></div>
+                            <div class="icon-preview-note">
+                                Wgraj ikonę projektu. Obraz zostanie automatycznie zmniejszony i skompresowany przed zapisem, a potem pokazany przy temacie.
+                            </div>
+                        </div>
+                        <div class="icon-preview-actions">
+                            <button type="button" class="btn-sm danger" id="remove-project-icon-btn">Usuń ikonę</button>
+                        </div>
+                    </div>
                     <div class="form-group full" style="margin-top:4px;">
                         <button type="submit" class="btn-submit" id="repo-submit-btn">
                             <i class="fa-solid fa-floppy-disk"></i>
-                            Zapisz repository_url
+                            Zapisz dane projektu
                         </button>
                     </div>
                 </form>
-            </div>
-        </div>
-
-        <div class="card tab-panel hidden" id="panel-source" data-tab-panel="source" role="tabpanel" aria-labelledby="tab-btn-source">
-            <div class="card-header">
-                <i class="fa-solid fa-circle-info"></i>
-                <h2>Źródło danych</h2>
-            </div>
-            <div class="card-body">
-                <div class="alert alert-info" style="margin-bottom:0;">
-                    <i class="fa-solid fa-database"></i>
-                    <div>
-                        Dane zespołów są pobierane z tabeli <strong>project_teams</strong>. Pole <strong>repository_url</strong>
-                        jest utrzymywane przez studentów i może być aktualizowane formularzem powyżej.
-                    </div>
-                </div>
             </div>
         </div>
 
@@ -821,10 +988,14 @@ background: var(--surface);
         'use strict';
 
         const TEAM_ROLES = ['Leader', 'Frontend', 'Backend'];
+        const DESCRIPTION_PREFIX = 'Przykladowy opis aplikacji:';
+        const MAX_ICON_FILE_SIZE = 512 * 1024;
+        const MAX_ICON_DIMENSION = 256;
+        const ICON_OUTPUT_QUALITY = 0.82;
         const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
         const SUPABASE_TEAMS_TABLE = 'project_teams';
-        const STUDENTS_ACTIVE_TAB_KEY = 'students.activeInternalTab';
+        const STUDENTS_ACTIVE_TAB_KEY = 'students.activeInternalTab.v3';
         const TEAM_DATA_SOURCE = {
             supabase: 'supabase',
             json: 'json'
@@ -832,6 +1003,8 @@ background: var(--surface);
 
         let projectData = { updatedAt: '', projects: [] };
         let projectDataSource = TEAM_DATA_SOURCE.supabase;
+        let pendingProjectIconData = null;
+        let pendingProjectIconRemoved = false;
 
         function showAlert(msg, type) {
             const el = document.getElementById('main-alert');
@@ -869,21 +1042,67 @@ background: var(--surface);
             return sortProjects(normalizeProjects((rows || []).map((row) => ({
                 id: row.project_id,
                 title: row.title,
+                description: row.description || '',
+                icon_url: row.icon_url || '',
+                project_url: row.project_url || '',
                 members: Array.isArray(row.members) ? row.members : [],
                 repository_url: row.repository_url || ''
             }))));
+        }
+
+        function ensureDescriptionPrefix(description) {
+            const text = String(description || '').trim();
+            if (!text) return '';
+            return text.startsWith(DESCRIPTION_PREFIX) ? text : `${DESCRIPTION_PREFIX} ${text}`;
+        }
+
+        function normalizeProjectDescription(project) {
+            const rawDescription = String(project.description || '').trim();
+            if (rawDescription) return ensureDescriptionPrefix(rawDescription);
+            return `${DESCRIPTION_PREFIX} Projekt ${project.title} realizuje cele funkcjonalne zgodne z zakresem tematu i dokumentacją zespołu.`;
         }
 
         function normalizeProjects(rawProjects) {
             return (rawProjects || []).map((project) => ({
                 id: project.id,
                 title: project.title,
+                description: normalizeProjectDescription(project),
+                icon_url: String(project.icon_url || '').trim(),
+                project_url: String(project.project_url || '').trim(),
                 repository_url: project.repository_url || '',
                 members: TEAM_ROLES.map((role) => {
                     const existing = (project.members || []).find((member) => member.role === role);
                     return existing ? { role, index: existing.index || null } : { role, index: null };
                 })
             }));
+        }
+
+        function createProjectIconNode(iconUrl, sizeClass) {
+            if (!iconUrl) {
+                const placeholder = document.createElement('div');
+                placeholder.className = `project-icon placeholder${sizeClass ? ` ${sizeClass}` : ''}`;
+                placeholder.innerHTML = '<i class="fa-solid fa-image"></i>';
+                return placeholder;
+            }
+
+            const img = document.createElement('img');
+            img.className = `project-icon${sizeClass ? ` ${sizeClass}` : ''}`;
+            img.src = iconUrl;
+            img.alt = 'Ikona projektu';
+            return img;
+        }
+
+        function projectIdentityFragment(project, sizeClass) {
+            const wrapper = document.createElement('div');
+            wrapper.className = 'project-chip';
+
+            wrapper.appendChild(createProjectIconNode(project.icon_url, sizeClass));
+
+            const text = document.createElement('div');
+            text.className = 'project-chip-text';
+            text.innerHTML = `${project.id} — <strong>${project.title}</strong>`;
+            wrapper.appendChild(text);
+            return wrapper;
         }
 
         function getAssignedMembers(project) {
@@ -934,21 +1153,7 @@ background: var(--surface);
         }
 
         async function loadProjectDataFromTeamsTable() {
-            let rows;
-            try {
-                rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=project_id,title,members,repository_url,updated_at&order=project_id.asc`);
-            } catch (error) {
-                const errorText = String(error && error.message ? error.message : error);
-                if (!errorText.includes('42703')) {
-                    throw error;
-                }
-                // Backward compatibility: table exists without repository_url column.
-                rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=project_id,title,members,updated_at&order=project_id.asc`);
-                rows = (Array.isArray(rows) ? rows : []).map((row) => ({
-                    ...row,
-                    repository_url: ''
-                }));
-            }
+            const rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=*&order=project_id.asc`);
             const validRows = Array.isArray(rows)
                 ? rows.filter((row) => row.project_id && row.title)
                 : [];
@@ -997,8 +1202,7 @@ background: var(--surface);
             const metrics = [
                 { label: 'Liczba projektów', value: stats.totalProjects },
                 { label: 'Przypisani studenci', value: stats.assignedStudents },
-                { label: 'Zespoły kompletne', value: stats.completeProjects },
-                { label: 'Nieobsadzone role', value: stats.vacantSlots }
+                { label: 'Zespoły kompletne', value: stats.completeProjects }
             ];
 
             const metricsContainer = document.getElementById('dashboard-metrics');
@@ -1013,21 +1217,73 @@ background: var(--surface);
             const completeProjects = projectData.projects.filter((project) => getProjectStatus(project) === 'Kompletny');
             const incompleteProjects = projectData.projects.filter((project) => getProjectStatus(project) !== 'Kompletny');
 
-            renderList('completed-topics-list', completeProjects.map((project) => `${project.id} — <strong>${project.title}</strong><span class="tag">3/3</span>`));
+            renderCompletedTeamsList(completeProjects);
             renderList('scores-list', TEAM_ROLES.map((role) => `${role}: <strong>${stats.roleCounts[role]}/${stats.totalProjects}</strong> obsadzonych`));
             renderList('learning-goals-list', incompleteProjects.length
                 ? incompleteProjects.map((project) => `${project.id} — <strong>${project.title}</strong>; brakujące role: <strong>${getMissingRoles(project).join(', ')}</strong>`)
                 : ['Brak zespołów wymagających uzupełnienia.']);
-            renderList('recommendations-list', projectData.projects.map((project) => `${project.id} — <strong>${project.title}</strong>: <strong>${getAssignedMembers(project).length}/3</strong> osób`));
 
             const notes = [
                 `Ostatnia aktualizacja oficjalnej listy: <strong>${projectData.updatedAt}</strong>.`,
                 `Każdy projekt ma przypisanego lidera: <strong>${stats.roleCounts.Leader}/${stats.totalProjects}</strong>.`,
-                stats.vacantSlots > 0
-                    ? `Do uzupełnienia pozostaje <strong>${stats.vacantSlots}</strong> rola: ${incompleteProjects.map((project) => `${project.id} (${getMissingRoles(project).join(', ')})`).join('; ')}.`
-                    : 'Wszystkie role w projektach są obsadzone.'
+                incompleteProjects.length > 0
+                    ? `Zespoły wymagające dopięcia składu: ${incompleteProjects.map((project) => `${project.id} (${getMissingRoles(project).join(', ')})`).join('; ')}.`
+                    : 'Wszystkie zespoły mają kompletny skład.'
             ];
             renderList('reminders-list', notes);
+        }
+
+        function renderCompletedTeamsList(projects) {
+            const list = document.getElementById('completed-topics-list');
+            list.textContent = '';
+
+            if (!projects.length) {
+                const li = document.createElement('li');
+                li.textContent = 'Brak zespołów kompletnych.';
+                list.appendChild(li);
+                return;
+            }
+
+            projects.forEach((project) => {
+                const li = document.createElement('li');
+                const details = document.createElement('details');
+                details.className = 'team-expand';
+
+                const summary = document.createElement('summary');
+                summary.appendChild(projectIdentityFragment(project, 'small'));
+                const tag = document.createElement('span');
+                tag.className = 'tag';
+                tag.textContent = '3/3';
+                summary.appendChild(tag);
+                details.appendChild(summary);
+
+                const body = document.createElement('div');
+                body.className = 'team-expand-body';
+
+                const description = document.createElement('p');
+                description.innerHTML = `<strong>Opis:</strong> ${project.description}`;
+                body.appendChild(description);
+
+                const members = document.createElement('p');
+                members.innerHTML = `<strong>Skład:</strong> ${project.members.map((member) => `${member.role}: <strong>${member.index || 'nieobsadzone'}</strong>`).join(' | ')}`;
+                body.appendChild(members);
+
+                const repository = document.createElement('p');
+                repository.innerHTML = project.repository_url
+                    ? `<strong>Repozytorium:</strong> <a href="${project.repository_url}" target="_blank" rel="noopener noreferrer">${project.repository_url}</a>`
+                    : '<strong>Repozytorium:</strong> brak';
+                body.appendChild(repository);
+
+                const projectPage = document.createElement('p');
+                projectPage.innerHTML = project.project_url
+                    ? `<strong>Strona projektu:</strong> <a href="${project.project_url}" target="_blank" rel="noopener noreferrer">${project.project_url}</a>`
+                    : '<strong>Strona projektu:</strong> brak';
+                body.appendChild(projectPage);
+
+                details.appendChild(body);
+                li.appendChild(details);
+                list.appendChild(li);
+            });
         }
 
         function initProjectSelector() {
@@ -1050,17 +1306,35 @@ background: var(--surface);
 
             const missingRoles = getMissingRoles(project);
             const assigned = getAssignedMembers(project);
-            const membersSummary = project.members
-                .map((member) => `${member.role}: <strong>${member.index || 'nieobsadzone'}</strong>`)
-                .join(' | ');
             const repositoryInfo = project.repository_url
                 ? `Repozytorium: <a href="${project.repository_url}" target="_blank" rel="noopener noreferrer">${project.repository_url}</a>.`
                 : 'Repozytorium: <strong>brak</strong>.';
+            const projectPageInfo = project.project_url
+                ? `Strona projektu: <a href="${project.project_url}" target="_blank" rel="noopener noreferrer">${project.project_url}</a>.`
+                : 'Strona projektu: <strong>brak</strong>.';
             const box = document.getElementById('project-readiness-box');
             box.className = missingRoles.length ? 'alert alert-error' : 'alert alert-success';
-            box.innerHTML = missingRoles.length
-                ? `<i class="fa-solid fa-triangle-exclamation"></i> ${project.id} — <strong>${project.title}</strong>. Obsada: ${assigned.length}/3. ${membersSummary}. Brakujące role: <strong>${missingRoles.join(', ')}</strong>. ${repositoryInfo}`
-                : `<i class="fa-solid fa-circle-check"></i> ${project.id} — <strong>${project.title}</strong>. Pełny skład 3/3. ${membersSummary}. ${repositoryInfo}`;
+            const statusIcon = missingRoles.length
+                ? '<i class="fa-solid fa-triangle-exclamation"></i>'
+                : '<i class="fa-solid fa-circle-check"></i>';
+            const membersSummary = project.members
+                .map((member) => `<div><strong>${member.role}:</strong> ${member.index || 'nieobsadzone'}</div>`)
+                .join('');
+            const statusSummary = missingRoles.length
+                ? `Obsada ${assigned.length}/3. Brakujące role: <strong>${missingRoles.join(', ')}</strong>.`
+                : 'Pełny skład 3/3.';
+
+            box.innerHTML = `
+                <div class="project-readiness-grid">
+                    <div class="project-readiness-title">${statusIcon}</div>
+                    <p><strong>Status:</strong> ${statusSummary}</p>
+                    <div><strong>Skład zespołu:</strong>${membersSummary}</div>
+                    <p><strong>Opis:</strong> ${project.description}</p>
+                    <p>${projectPageInfo}</p>
+                    <p>${repositoryInfo}</p>
+                </div>`;
+            const titleContainer = box.querySelector('.project-readiness-title');
+            titleContainer.appendChild(projectIdentityFragment(project));
         }
 
         function renderRepoProjectSelect() {
@@ -1072,6 +1346,140 @@ background: var(--surface);
                 option.value = project.id;
                 option.textContent = `${project.id} — ${project.title}`;
                 select.appendChild(option);
+            });
+        }
+
+        function fillProjectMetaForm(projectId) {
+            const project = findProjectById(projectId);
+            const repoInput = document.getElementById('repo-url');
+            const pageInput = document.getElementById('project-page-url');
+            const descriptionInput = document.getElementById('project-description');
+            const fileInput = document.getElementById('project-icon-file');
+            if (!project || !repoInput || !pageInput || !descriptionInput) return;
+
+            repoInput.value = project.repository_url || '';
+            pageInput.value = project.project_url || '';
+            descriptionInput.value = project.description || '';
+            if (fileInput) fileInput.value = '';
+            pendingProjectIconData = null;
+            pendingProjectIconRemoved = false;
+            updateProjectIconPreview(project.icon_url || '');
+        }
+
+        function updateProjectIconPreview(iconUrl) {
+            const preview = document.getElementById('project-icon-preview');
+            if (!preview) return;
+            preview.textContent = '';
+            preview.appendChild(createProjectIconNode(iconUrl));
+        }
+
+        async function fileToDataUrl(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(String(reader.result || ''));
+                reader.onerror = () => reject(new Error('Nie udało się odczytać pliku ikony.'));
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function estimateDataUrlBytes(dataUrl) {
+            const base64 = String(dataUrl || '').split(',')[1] || '';
+            return Math.ceil((base64.length * 3) / 4);
+        }
+
+        async function loadImageFromFile(file) {
+            return new Promise((resolve, reject) => {
+                const objectUrl = URL.createObjectURL(file);
+                const image = new Image();
+                image.onload = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    resolve(image);
+                };
+                image.onerror = () => {
+                    URL.revokeObjectURL(objectUrl);
+                    reject(new Error('Nie udało się przetworzyć grafiki ikony.'));
+                };
+                image.src = objectUrl;
+            });
+        }
+
+        async function optimizeIconFile(file) {
+            if (file.type === 'image/svg+xml') {
+                const dataUrl = await fileToDataUrl(file);
+                if (estimateDataUrlBytes(dataUrl) > MAX_ICON_FILE_SIZE) {
+                    throw new Error('Ikona SVG po zapisie przekracza limit 512 KB.');
+                }
+                return dataUrl;
+            }
+
+            const image = await loadImageFromFile(file);
+            const sourceWidth = image.naturalWidth || image.width;
+            const sourceHeight = image.naturalHeight || image.height;
+            const scale = Math.min(1, MAX_ICON_DIMENSION / Math.max(sourceWidth, sourceHeight));
+            const width = Math.max(1, Math.round(sourceWidth * scale));
+            const height = Math.max(1, Math.round(sourceHeight * scale));
+
+            const canvas = document.createElement('canvas');
+            canvas.width = width;
+            canvas.height = height;
+            const context = canvas.getContext('2d');
+            if (!context) {
+                throw new Error('Przegladarka nie udostepnia kontekstu canvas dla kompresji ikony.');
+            }
+
+            context.clearRect(0, 0, width, height);
+            context.drawImage(image, 0, 0, width, height);
+
+            const dataUrl = canvas.toDataURL('image/webp', ICON_OUTPUT_QUALITY);
+            if (estimateDataUrlBytes(dataUrl) > MAX_ICON_FILE_SIZE) {
+                throw new Error('Ikona po kompresji nadal przekracza limit 512 KB.');
+            }
+            return dataUrl;
+        }
+
+        function setCardCollapsed(card, isCollapsed) {
+            const body = card.querySelector('.card-body');
+            const toggle = card.querySelector('.collapse-toggle');
+            if (!body || !toggle) return;
+
+            body.classList.toggle('is-collapsed', isCollapsed);
+            toggle.setAttribute('aria-expanded', isCollapsed ? 'false' : 'true');
+            toggle.setAttribute('title', isCollapsed ? 'Rozwiń sekcję' : 'Zwiń sekcję');
+        }
+
+        function initCollapsibleSections() {
+            const cards = Array.from(document.querySelectorAll('.collapsible-card'));
+            cards.forEach((card) => {
+                const header = card.querySelector('.card-header');
+                const body = card.querySelector('.card-body');
+                if (!header || !body || header.querySelector('.collapse-toggle')) return;
+
+                header.classList.add('clickable');
+
+                const button = document.createElement('button');
+                button.type = 'button';
+                button.className = 'collapse-toggle';
+                button.setAttribute('aria-label', 'Przełącz widoczność sekcji');
+                button.innerHTML = '<i class="fa-solid fa-chevron-down"></i>';
+                header.appendChild(button);
+
+                const defaultCollapsed = card.dataset.collapsedDefault === 'true';
+                setCardCollapsed(card, defaultCollapsed);
+
+                const toggleCollapsed = () => {
+                    const currentlyCollapsed = body.classList.contains('is-collapsed');
+                    setCardCollapsed(card, !currentlyCollapsed);
+                };
+
+                button.addEventListener('click', (event) => {
+                    event.stopPropagation();
+                    toggleCollapsed();
+                });
+
+                header.addEventListener('click', (event) => {
+                    if (event.target.closest('button, a, select, input, textarea')) return;
+                    toggleCollapsed();
+                });
             });
         }
 
@@ -1087,7 +1495,7 @@ background: var(--surface);
             return String(url || '').trim();
         }
 
-        async function updateProjectRepository(projectId, repositoryUrl) {
+        async function updateProjectMetadata(projectId, payload) {
             const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TEAMS_TABLE}?project_id=eq.${encodeURIComponent(projectId)}`, {
                 method: 'PATCH',
                 headers: {
@@ -1098,14 +1506,14 @@ background: var(--surface);
                     Prefer: 'return=representation'
                 },
                 body: JSON.stringify({
-                    repository_url: repositoryUrl,
+                    ...payload,
                     updated_at: new Date().toISOString()
                 })
             });
 
             if (!response.ok) {
                 const details = await response.text();
-                throw new Error(`Nie udało się zapisać repository_url (${response.status}): ${details}`);
+                throw new Error(`Nie udało się zapisać danych projektu (${response.status}): ${details}`);
             }
         }
 
@@ -1114,14 +1522,50 @@ background: var(--surface);
             const select = document.getElementById('repo-project-select');
             const indexInput = document.getElementById('repo-student-index');
             const urlInput = document.getElementById('repo-url');
+            const pageInput = document.getElementById('project-page-url');
+            const descriptionInput = document.getElementById('project-description');
+            const fileInput = document.getElementById('project-icon-file');
+            const removeIconButton = document.getElementById('remove-project-icon-btn');
             const submitButton = document.getElementById('repo-submit-btn');
-            if (!form || !select || !indexInput || !urlInput || !submitButton) return;
+            if (!form || !select || !indexInput || !urlInput || !pageInput || !descriptionInput || !fileInput || !removeIconButton || !submitButton) return;
 
             renderRepoProjectSelect();
+            fillProjectMetaForm(select.value);
+            select.addEventListener('change', () => fillProjectMetaForm(select.value));
+
+            fileInput.addEventListener('change', async () => {
+                const file = fileInput.files && fileInput.files[0];
+                const project = findProjectById(select.value);
+                if (!file) {
+                    pendingProjectIconData = null;
+                    pendingProjectIconRemoved = false;
+                    updateProjectIconPreview(project ? project.icon_url : '');
+                    return;
+                }
+
+                try {
+                    pendingProjectIconData = await optimizeIconFile(file);
+                    pendingProjectIconRemoved = false;
+                    updateProjectIconPreview(pendingProjectIconData);
+                } catch (error) {
+                    fileInput.value = '';
+                    pendingProjectIconData = null;
+                    pendingProjectIconRemoved = false;
+                    updateProjectIconPreview(project ? project.icon_url : '');
+                    showAlert(error.message || 'Nie udało się wczytać ikony projektu.', 'error');
+                }
+            });
+
+            removeIconButton.addEventListener('click', () => {
+                fileInput.value = '';
+                pendingProjectIconData = null;
+                pendingProjectIconRemoved = true;
+                updateProjectIconPreview('');
+            });
 
             if (projectDataSource !== TEAM_DATA_SOURCE.supabase) {
                 submitButton.disabled = true;
-                showAlert('Aktualizacja repository_url jest dostępna tylko, gdy dane są pobierane z tabeli project_teams w Supabase.', 'info');
+                showAlert('Aktualizacja danych projektu jest dostępna tylko, gdy dane są pobierane z tabeli project_teams w Supabase.', 'info');
                 return;
             }
 
@@ -1133,6 +1577,8 @@ background: var(--surface);
                 const projectId = select.value;
                 const studentIndex = String(indexInput.value || '').trim();
                 const repositoryUrl = normalizeRepositoryUrl(urlInput.value);
+                const projectPageUrl = normalizeRepositoryUrl(pageInput.value);
+                const projectDescription = ensureDescriptionPrefix(descriptionInput.value);
                 const project = findProjectById(projectId);
 
                 if (!project) {
@@ -1155,10 +1601,21 @@ background: var(--surface);
                     return;
                 }
 
+                if (projectPageUrl && !/^https:\/\/.+/i.test(projectPageUrl)) {
+                    showAlert('Link do strony projektu musi zaczynać się od https://.', 'error');
+                    return;
+                }
+
+                if (projectDescription.length < 20) {
+                    showAlert('Opis projektu powinien mieć co najmniej 20 znaków.', 'error');
+                    return;
+                }
+
                 try {
                     new URL(repositoryUrl);
+                    if (projectPageUrl) new URL(projectPageUrl);
                 } catch (error) {
-                    showAlert('Podaj poprawny adres URL repozytorium.', 'error');
+                    showAlert('Podaj poprawne adresy URL projektu.', 'error');
                     return;
                 }
 
@@ -1167,17 +1624,23 @@ background: var(--surface);
                 submitButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…';
 
                 try {
-                    await updateProjectRepository(projectId, repositoryUrl);
+                    await updateProjectMetadata(projectId, {
+                        repository_url: repositoryUrl,
+                        project_url: projectPageUrl || null,
+                        description: projectDescription,
+                        icon_url: pendingProjectIconRemoved ? null : (pendingProjectIconData || project.icon_url || null)
+                    });
                     await loadProjectDataFromTeamsTable();
                     renderOverviewDashboard();
                     initProjectSelector();
                     renderTeacherDashboard();
                     renderProjectsTable();
                     renderRepoProjectSelect();
+                    fillProjectMetaForm(projectId);
                     select.value = projectId;
-                    showAlert('Zapisano repository_url projektu.', 'success');
+                    showAlert('Zapisano opis i linki projektu.', 'success');
                 } catch (error) {
-                    showAlert(error.message || 'Nie udało się zapisać repository_url.', 'error');
+                    showAlert(error.message || 'Nie udało się zapisać danych projektu.', 'error');
                 } finally {
                     submitButton.disabled = false;
                     submitButton.innerHTML = previousLabel;
@@ -1189,7 +1652,7 @@ background: var(--surface);
             const buttons = Array.from(document.querySelectorAll('.tab-btn[data-tab-target]'));
             const panels = Array.from(document.querySelectorAll('.tab-panel[data-tab-panel]'));
             const hasMatchingTab = buttons.some((button) => button.dataset.tabTarget === targetTab);
-            const safeTargetTab = hasMatchingTab ? targetTab : 'topics';
+            const safeTargetTab = hasMatchingTab ? targetTab : 'dashboard';
 
             buttons.forEach((button) => {
                 const isActive = button.dataset.tabTarget === safeTargetTab;
@@ -1219,7 +1682,7 @@ background: var(--surface);
                 });
             });
 
-            let initialTab = 'topics';
+            let initialTab = 'dashboard';
             try {
                 const storedTab = localStorage.getItem(STUDENTS_ACTIVE_TAB_KEY);
                 if (storedTab) initialTab = storedTab;
@@ -1287,13 +1750,12 @@ background: var(--surface);
             const completeProjects = filteredProjects.filter((project) => getProjectStatus(project) === 'Kompletny');
             const incompleteProjects = filteredProjects.filter((project) => getProjectStatus(project) !== 'Kompletny');
             const assignedStudents = filteredProjects.reduce((sum, project) => sum + getAssignedMembers(project).length, 0);
-            const vacancies = filteredProjects.reduce((sum, project) => sum + getMissingRoles(project).length, 0);
             const completionRate = filteredProjects.length ? Math.round((completeProjects.length / filteredProjects.length) * 100) : 0;
 
             const metrics = [
                 { label: 'Projekty po filtrze', value: filteredProjects.length },
                 { label: 'Przypisani studenci', value: assignedStudents },
-                { label: 'Nieobsadzone role', value: vacancies },
+                { label: 'Zespoły niekompletne', value: incompleteProjects.length },
                 { label: 'Kompletność filtrowanej puli', value: `${completionRate}%` }
             ];
 
@@ -1374,6 +1836,27 @@ background: var(--surface);
             return td;
         }
 
+        function iconCell(project) {
+            const td = document.createElement('td');
+            td.appendChild(createProjectIconNode(project.icon_url, 'small'));
+            return td;
+        }
+
+        function projectPageCell(url) {
+            const td = document.createElement('td');
+            if (!url) {
+                td.textContent = 'Brak';
+                return td;
+            }
+            const link = document.createElement('a');
+            link.href = url;
+            link.target = '_blank';
+            link.rel = 'noopener noreferrer';
+            link.textContent = 'Strona';
+            td.appendChild(link);
+            return td;
+        }
+
         function roleCell(role) {
             const td = document.createElement('td');
             const span = document.createElement('span');
@@ -1409,6 +1892,9 @@ background: var(--surface);
                         cell(rowNumber++),
                         cell(project.id),
                         cell(project.title),
+                        iconCell(project),
+                        cell(project.description),
+                        projectPageCell(project.project_url),
                         repositoryCell(project.repository_url),
                         cell(member.index || 'Nieobsadzone'),
                         roleCell(member.role),
@@ -1422,6 +1908,7 @@ background: var(--surface);
         }
 
         async function initPage() {
+            initCollapsibleSections();
             initInternalTabs();
             await loadProjectData();
             renderOverviewDashboard();

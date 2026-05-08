@@ -11,6 +11,9 @@ Model tabeli:
 - `project_id` - identyfikator projektu, np. `pam.26.01`
 - `title` - tytuł projektu
 - `members` - tablica JSON z obiektami `{ index, role }`
+- `description` - opis projektu aktualizowany przez studentów
+- `icon_url` - opcjonalna ikona projektu jako adres HTTPS lub zapisany obraz `data:image/...`
+- `project_url` - opcjonalny link HTTPS do strony projektu
 - `repository_url` - opcjonalny link HTTPS do repozytorium projektu, aktualizowany przez studentów
 - `source` - URL źródła danych
 - `created_at`, `updated_at` - znaczniki czasu
@@ -19,14 +22,47 @@ Frontend w [studenci.html](studenci.html) czyta `project_teams` jako główne ź
 
 ### Migracja istniejącej tabeli
 
-Jeśli tabela `project_teams` już istnieje, uruchom poniższy SQL, aby dodać pole repozytorium:
+Jeśli tabela `project_teams` już istnieje, uruchom poniższy SQL, aby dodać pola opisu i linków projektu:
 
 ```sql
+alter table public.project_teams
+  add column if not exists description text;
+
+alter table public.project_teams
+  add column if not exists icon_url text;
+
+alter table public.project_teams
+  add column if not exists project_url text;
+
 alter table public.project_teams
   add column if not exists repository_url text;
 
 do $$
 begin
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_description_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_description_chk
+      check (description is null or char_length(trim(description)) between 20 and 2000);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_icon_url_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_icon_url_chk
+      check (icon_url is null or icon_url ~ '^(https://|data:image/)');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_project_url_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_project_url_chk
+      check (project_url is null or project_url ~ '^https://');
+  end if;
+
   if not exists (
     select 1 from pg_constraint where conname = 'project_teams_repository_url_chk'
   ) then

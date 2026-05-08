@@ -4,6 +4,7 @@
 		{
 			"id": "pam.26.01",
 			"title": "Aplikacja walutowa",
+			"description": "Aplikacja do monitorowania kursów walut, szybkiego przeliczania kwot i ustawiania alertów przy zmianach kursu.",
 			"members": [
 				{ "index": "177087", "role": "Leader" },
 				{ "index": "177119", "role": "Frontend" },
@@ -13,6 +14,7 @@
 		{
 			"id": "pam.26.02",
 			"title": "Sterowania robotem BLE",
+			"description": "Aplikacja do zdalnego sterowania robotem przez Bluetooth Low Energy z obsługą komend, statusu i podstawowej telemetrii.",
 			"members": [
 				{ "index": "177114", "role": "Leader" },
 				{ "index": "177118", "role": "Frontend" },
@@ -22,6 +24,7 @@
 		{
 			"id": "pam.26.03",
 			"title": "Aplikacja do liczenia kalorii",
+			"description": "Aplikacja wspierająca kontrolę diety przez liczenie kalorii, planowanie posiłków i śledzenie dziennych postępów użytkownika.",
 			"members": [
 				{ "index": "177111", "role": "Leader" },
 				{ "index": "177110", "role": "Frontend" },
@@ -31,6 +34,7 @@
 		{
 			"id": "pam.26.04",
 			"title": "Lokalizator ekipy",
+			"description": "Aplikacja do współdzielenia lokalizacji członków grupy, planowania spotkań i szybkiego sprawdzania, kto jest najbliżej celu.",
 			"members": [
 				{ "index": "177162", "role": "Leader" },
 				{ "index": "177176", "role": "Frontend" },
@@ -40,6 +44,7 @@
 		{
 			"id": "pam.26.05",
 			"title": "Dzielenie rachunków",
+			"description": "Aplikacja do sprawiedliwego podziału rachunków, rozliczania wydatków grupowych i prowadzenia historii spłat między użytkownikami.",
 			"members": [
 				{ "index": "177104", "role": "Leader" },
 				{ "index": "177164", "role": "Frontend" },
@@ -49,6 +54,7 @@
 		{
 			"id": "pam.26.06",
 			"title": "SudSolver",
+			"description": "Aplikacja do rozwiązywania sudoku z podpowiedziami krok po kroku, analizą planszy i trybem nauki dla użytkownika.",
 			"members": [
 				{ "index": "177064", "role": "Leader" },
 				{ "index": "177186", "role": "Frontend" },
@@ -58,6 +64,7 @@
 		{
 			"id": "pam.26.07",
 			"title": "Raportowanie problemów miejskich",
+			"description": "Aplikacja do zgłaszania usterek miejskich z geolokalizacją, zdjęciami, kategoriami zgłoszeń i śledzeniem statusu naprawy.",
 			"members": [
 				{ "index": "169646", "role": "Leader" },
 				{ "index": "177043", "role": "Frontend" },
@@ -67,6 +74,7 @@
 		{
 			"id": "pam.26.08",
 			"title": "Gra trivia multiplayer",
+			"description": "Aplikacja do rozgrywek quizowych multiplayer z pokojami, pytaniami na żywo, rankingiem i rywalizacją wielu graczy jednocześnie.",
 			"members": [
 				{ "index": "177182", "role": "Leader" },
 				{ "index": "177054", "role": "Frontend" },
@@ -76,6 +84,7 @@
 		{
 			"id": "pam.26.09",
 			"title": "Ben-9 do nauki fiszek",
+			"description": "Aplikacja do nauki z fiszek z powtórkami rozłożonymi w czasie, zestawami tematycznymi i monitorowaniem postępów użytkownika.",
 			"members": [
 				{ "index": "177181", "role": "Leader" },
 				{ "index": "177045", "role": "Frontend" },
@@ -85,6 +94,7 @@
 		{
 			"id": "pam.26.10",
 			"title": "Aplikacja przypominania o lekach",
+			"description": "Aplikacja do planowania dawek leków, wysyłania przypomnień, potwierdzania przyjęcia i budowania harmonogramu terapii.",
 			"members": [
 				{ "index": "177143", "role": "Leader" },
 				{ "index": "177139", "role": "Frontend" },
@@ -94,6 +104,7 @@
 		{
 			"id": "pam.26.11",
 			"title": "Flip to Focus",
+			"description": "Aplikacja wspierająca skupienie przez sesje pracy, ograniczanie rozpraszaczy i analizę czasu poświęconego na zadania.",
 			"members": [
 				{ "index": "177135", "role": "Leader" },
 				{ "index": "177149", "role": "Frontend" },
@@ -103,6 +114,7 @@
 		{
 			"id": "pam.26.12",
 			"title": "Zamki elektryczne NFC",
+			"description": "Aplikacja do zarządzania dostępem do zamków elektrycznych NFC, autoryzacji użytkowników i rejestrowania zdarzeń otwarcia.",
 			"members": [
 				{ "index": "177102", "role": "Leader" },
 				{ "index": "177091", "role": "Frontend" },
@@ -112,6 +124,7 @@
 		{
 			"id": "pam.26.13",
 			"title": "Przypomnienia kontekstowe",
+			"description": "Aplikacja tworząca przypomnienia zależne od kontekstu, na przykład lokalizacji, czasu, aktywności lub obecności w konkretnym miejscu.",
 			"members": [
 				{ "index": "177106", "role": "Leader" },
 				{ "index": "177107", "role": "Frontend" },
@@ -121,6 +134,7 @@
 		{
 			"id": "pam.26.14",
 			"title": "Live GeoGuesser",
+			"description": "Aplikacja do zgadywania lokalizacji na mapie w trybie live z rundami, punktacją i rywalizacją pomiędzy graczami.",
 			"members": [
 				{ "index": "177174", "role": "Leader" },
 				{ "index": "177192", "role": "Frontend" },
@@ -130,6 +144,7 @@
 		{
 			"id": "pam.26.15",
 			"title": "Katalogowania przedmiotów",
+			"description": "Aplikacja do katalogowania przedmiotów z kategoriami, zdjęciami, tagami i wyszukiwaniem ułatwiającym organizację zasobów.",
 			"members": [
 				{ "index": "177190", "role": "Leader" },
 				{ "index": "167821", "role": "Frontend" },
@@ -139,6 +154,7 @@
 		{
 			"id": "pam.26.16",
 			"title": "WaterMonitor (tem72)",
+			"description": "Aplikacja do monitorowania zużycia wody, prezentacji pomiarów, wykrywania anomalii oraz wysyłania ostrzeżeń o nadmiernym poborze.",
 			"members": [
 				{ "index": "177160", "role": "Leader" },
 				{ "index": "177156", "role": "Frontend" },
@@ -148,6 +164,7 @@
 		{
 			"id": "pam.26.17",
 			"title": "SleepyGuardian",
+			"description": "Aplikacja wspierająca higienę snu przez analizę nawyków, ocenę zmęczenia i przypomnienia pomagające ograniczać senność.",
 			"members": [
 				{ "index": "177151", "role": "Leader" },
 				{ "index": "177158", "role": "Frontend" },
