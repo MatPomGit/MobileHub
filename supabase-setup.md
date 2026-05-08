@@ -1,4 +1,24 @@
-# Konfiguracja Supabase dla formularza zgłoszeń
+# Konfiguracja Supabase dla danych zespołów
+
+## Zalecany model: `project_teams`
+
+Od teraz aplikacja preferuje tabelę `public.project_teams` jako główne źródło prawdy dla oficjalnych składów zespołów. To eliminuje upychanie `project_id` w polach odziedziczonych po starym formularzu.
+
+Gotowy skrypt tworzący i zasilający tabelę znajduje się w [supabase-project-teams.sql](supabase-project-teams.sql).
+
+Model tabeli:
+
+- `project_id` - identyfikator projektu, np. `pam.26.01`
+- `title` - tytuł projektu
+- `members` - tablica JSON z obiektami `{ index, role }`
+- `source` - URL źródła danych
+- `created_at`, `updated_at` - znaczniki czasu
+
+Frontend w [studenci.html](studenci.html) najpierw próbuje odczytać `project_teams`, potem spada do starego `project_submissions`, a na końcu do lokalnego `students-data.json`.
+
+## Stary model: `project_submissions`
+
+Poniższa tabela zostaje tylko jako legacy fallback dla wcześniejszych wpisów.
 
 ```sql
 create table if not exists public.project_submissions (
@@ -49,6 +69,7 @@ using (true);
 
 ## Konfiguracja frontendu
 
-1. W `studenci.html` ustaw `SUPABASE_URL` na publiczny URL projektu, np. `https://ndebunrsdtulflzpemwd.supabase.co`.
-2. Ustaw `SUPABASE_ANON_KEY` na publiczny klucz publishable/anon.
-3. Nie używaj `service_role key` po stronie frontendu.
+1. Uruchom skrypt z [supabase-project-teams.sql](supabase-project-teams.sql) w SQL Editorze Supabase.
+2. W [studenci.html](studenci.html) ustaw `SUPABASE_URL` na publiczny URL projektu, np. `https://ndebunrsdtulflzpemwd.supabase.co`.
+3. Ustaw w [studenci.html](studenci.html) `SUPABASE_ANON_KEY` na publiczny klucz publishable/anon.
+4. Nie używaj `service_role key` po stronie frontendu.
