@@ -84,7 +84,7 @@
 		{
 			"id": "pam.26.09",
 			"title": "Ben-9 do nauki fiszek",
-			"description": "A simple flashcard app for Android. Create your decks, organize your knowledge, and study efficiently.",
+			"description": "Aplikacja do nauki z fiszek na Androida. Pozwala tworzyć własne talie, porządkować wiedzę i uczyć się skutecznie.",
 			"icon_url": "assets/ben9-icon.svg",
 			"project_url": "https://ben9.ktty.is/",
 			"repository_url": "https://gitea.7o7.cx/PamTeam/ben9",
