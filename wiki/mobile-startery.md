@@ -185,26 +185,79 @@ npm run ios
 
 > Cel: po 60 minutach masz działający projekt debug, podstawową strukturę i automatyczne sanity-checki.
 
+Poniżej znajdziesz rozszerzenie checklisty o **konkretne kroki wykonania** dla starterów z tej strony (Android, Flutter, React Native, Unity).
+
 ### 0–15 min — Setup środowiska
 - [ ] Potwierdź wersje narzędzi (`java -version`, `node -v`, `flutter --version`, `xcodebuild -version`).
 - [ ] Wykonaj pierwszy build debug na emulatorze/symulatorze.
 - [ ] Zweryfikuj dostęp do sekretów (lokalnie przez `.env.local`, w CI przez secrets).
+
+**Jak to wykonać dla starterów:**
+- **Android starter (Kotlin/Compose):**
+  1. `./gradlew --version` i `java -version`.
+  2. Uruchom emulator Android Studio i wykonaj `./gradlew installDebug`.
+  3. Użyj secrets-gradle-plugin do mapowania sekretów z local.properties (poza repo) do BuildConfig.
+- **Flutter starter:**
+  1. `flutter --version` oraz `flutter doctor`.
+  2. `flutter pub get`, potem `flutter run`.
+  3. Sekrety trzymaj w `--dart-define` lub plikach nieśledzonych przez Git (np. `.env.local` + wpis w `.gitignore`).
+- **React Native starter:**
+  1. `node -v`, `npm -v`, `java -version` (oraz `xcodebuild -version` na macOS).
+  2. npm install -> (macOS) cd ios && pod install && cd .. -> npm run android albo npm run ios.
+  3. Ustandaryzuj plik `.env.local` i mapowanie wartości do CI Secrets.
+- **Unity starter:**
+  1. Sprawdź wersję Unity Hub + Editor zgodną z projektem (`ProjectVersion.txt`).
+  2. Otwórz projekt i uruchom scenę startową w Play Mode.
+  3. Sekrety przechowuj przez CI (np. klucze podpisywania), a lokalnie przez pliki poza repo.
 
 ### 15–30 min — Struktura i architektura
 - [ ] Utwórz moduły/foldery: `app`, `core`, `features`, `tests`, `docs`.
 - [ ] Dodaj opis architektury w `README.md` (UI / Domain / Data + przepływ danych).
 - [ ] Dodaj konwencję branchy i commitów (np. `feat/*`, `fix/*`, Conventional Commits).
 
+**Jak to wykonać dla starterów:**
+- **Android:**
+  - Rozbij kod na moduły Gradle (`:app`, `:core`, `:feature:*`).
+  - Dodaj diagram przepływu danych (UI -> ViewModel -> UseCase -> Repository -> API/DB).
+- **Flutter:**
+  - W `lib/` utwórz `core/`, `features/`, `shared/`, a testy w `test/`.
+  - Opisz wzorzec stanu (BLoC/Riverpod/Provider) oraz zasady nawigacji.
+- **React Native:**
+  - Przyjmij podział `src/app`, `src/core`, `src/features`, `src/tests`.
+  - Dopisz konwencję warstw: `screens`/`components`/`services`/`repositories`.
+- **Unity:**
+  - Uporządkuj `Assets/Scripts/{Core,Features,UI}` i `Assets/Scenes`.
+  - Opisz granice odpowiedzialności skryptów gameplay, UI i integracji usług.
+
 ### 30–45 min — CI i jakość
 - [ ] Dodaj pipeline CI uruchamiający: lint + testy jednostkowe + build debug.
 - [ ] Ustaw minimalne quality gates (build musi przejść, testy smoke muszą przejść).
 - [ ] Dodaj automatyczną walidację formatowania (np. ktlint/swiftformat/eslint/dart format).
+
+**Jak to wykonać dla starterów:**
+- **Android:** `./gradlew ktlintCheck testDebugUnitTest assembleDebug`.
+- **Flutter:** dart format --output=none --set-exit-if-changed ., flutter analyze, flutter test.
+- **React Native:** npm run lint, npm test, cd android && ./gradlew assembleDebug.
+- **Unity:** uruchom Unity Test Runner oraz build w CI (np. -batchmode -quit -executeMethod BuildScript.Build).
+
+> Wspólna praktyka: ustaw status checks jako wymagane przed mergem do `main`.
 
 ### 45–60 min — Smoke testy i release debug
 - [ ] Przygotuj 3 smoke scenariusze: uruchomienie, nawigacja, zapis/odczyt danych.
 - [ ] Zapisz checklistę ręcznego testu na emulatorze/symulatorze.
 - [ ] Wykonaj build „Staging” (wariant release z logowaniem developerskim lub staging config) i potwierdź, że aplikacja startuje.
 - [ ] Opisz znane ryzyka konfiguracyjne dla użytego stacku.
+
+**Jak to wykonać dla starterów:**
+- **Android:** dodaj `stagingDebug`/`stagingRelease` jako flavor i uruchom `./gradlew installStagingDebug`.
+- **Flutter:** użyj flavora `staging` i uruchom `flutter run --flavor staging -t lib/main_staging.dart`.
+- **React Native:** przygotuj osobny plik env dla staging oraz wariant builda (`debugStaging` / schemat iOS).
+- **Unity:** użyj osobnego profilu builda (scripting define symbols + endpointy staging) i wykonaj build testowy APK/IPA.
+
+**Minimalny szablon smoke testów (do skopiowania do `docs/smoke-tests.md`):**
+1. **App launch:** aplikacja startuje bez crasha w < 5 s.
+2. **Nawigacja:** przejście Ekran A -> Ekran B -> powrót działa poprawnie.
+3. **Dane:** zapis testowego rekordu i odczyt po restarcie aplikacji.
 
 **Dodatkowe materiały wiki do checklisty:**
 - [Best Practices — checklisty do projektu](./best-practices-checklist.md)
