@@ -63,7 +63,7 @@ cd <PROJECT_DIR>
 pod install
 
 # 3) Uruchomienie testów
-xcodebuild test -scheme <SCHEME> -destination 'platform=iOS Simulator,name=iPhone 15'
+xcodebuild test -scheme <SCHEME> -destination 'platform=iOS Simulator,name=iPhone 15' # Dostosuj nazwę do dostępnego symulatora
 ```
 
 **Proponowana architektura:**
