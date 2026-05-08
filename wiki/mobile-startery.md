@@ -203,7 +203,7 @@ npm run ios
 ### 45–60 min — Smoke testy i release debug
 - [ ] Przygotuj 3 smoke scenariusze: uruchomienie, nawigacja, zapis/odczyt danych.
 - [ ] Zapisz checklistę ręcznego testu na emulatorze/symulatorze.
-- [ ] Wykonaj build „release debug” (wariant release z logowaniem developerskim lub staging config) i potwierdź, że aplikacja startuje.
+- [ ] Wykonaj build „Staging” (wariant release z logowaniem developerskim lub staging config) i potwierdź, że aplikacja startuje.
 - [ ] Opisz znane ryzyka konfiguracyjne dla użytego stacku.
 
 **Dodatkowe materiały wiki do checklisty:**
