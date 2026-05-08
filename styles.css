@@ -1754,20 +1754,34 @@ header {
     width: 100%;
     border-collapse: collapse;
     margin-top: 8px;
-    font-size: 11px;
+    font-size: 10px;
+    table-layout: fixed;
 }
 
 .weekly-roadmap-table th,
 .weekly-roadmap-table td {
     border: 1px solid var(--border);
-    padding: 6px 8px;
+    padding: 5px 6px;
     text-align: left;
     vertical-align: top;
+    white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 .weekly-roadmap-table th {
     background: var(--accent-light);
 }
+
+.weekly-roadmap-table th:nth-child(1),
+.weekly-roadmap-table td:nth-child(1) { width: 10%; }
+.weekly-roadmap-table th:nth-child(2),
+.weekly-roadmap-table td:nth-child(2) { width: 32%; }
+.weekly-roadmap-table th:nth-child(3),
+.weekly-roadmap-table td:nth-child(3),
+.weekly-roadmap-table th:nth-child(4),
+.weekly-roadmap-table td:nth-child(4) { width: 21%; }
+.weekly-roadmap-table th:nth-child(5),
+.weekly-roadmap-table td:nth-child(5) { width: 16%; }
 
 /* Loading */
 .wiki-loading {
