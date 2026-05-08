@@ -1,0 +1,1031 @@
+{
+  "articles": {
+    "mobile-os": "wiki/mobile-os.md",
+    "mobile-design": "wiki/mobile-design.md",
+    "android-ecosystem": "wiki/android-ecosystem.md",
+    "ios-ecosystem": "wiki/ios-ecosystem.md",
+    "mobile-security": "wiki/mobile-security.md",
+    "mobile-security-basics": "wiki/mobile-security-basics.md",
+    "social-media-integration": "wiki/social-media-integration.md",
+    "mobile-performance": "wiki/mobile-performance.md",
+    "mobile-hardware": "wiki/mobile-hardware.md",
+    "ui-ux": "wiki/ui-ux.md",
+    "material-design": "wiki/material-design.md",
+    "accessibility": "wiki/accessibility.md",
+    "ergonomia-uzytkowania": "wiki/ergonomia-uzytkowania.md",
+    "android-studio": "wiki/android-studio.md",
+    "termux": "wiki/termux.md",
+    "kotlin-basics": "wiki/kotlin-basics.md",
+    "jetpack-compose": "wiki/jetpack-compose.md",
+    "android-architecture": "wiki/android-architecture.md",
+    "android-data": "wiki/android-data.md",
+    "android-network": "wiki/android-network.md",
+    "android-testing": "wiki/android-testing.md",
+    "android-lint": "wiki/android-lint.md",
+    "agp-upgrade-assistant": "wiki/agp-upgrade-assistant.md",
+    "xcode-ios": "wiki/xcode-ios.md",
+    "swift-basics": "wiki/swift-basics.md",
+    "swiftui-advanced": "wiki/swiftui-advanced.md",
+    "ios-networking": "wiki/ios-networking.md",
+    "ios-data": "wiki/ios-data.md",
+    "ios-notifications": "wiki/ios-notifications.md",
+    "cross-platform": "wiki/cross-platform.md",
+    "flutter-advanced": "wiki/flutter-advanced.md",
+    "react-native": "wiki/react-native.md",
+    "pwa-advanced": "wiki/pwa-advanced.md",
+    "jak-stworzyc-pwa": "wiki/jak-stworzyc-pwa.md",
+    "kmp-multiplatform": "wiki/kmp-multiplatform.md",
+    "buildozer": "wiki/buildozer.md",
+    "mobile-docker": "wiki/mobile-docker.md",
+    "sensors": "wiki/sensors.md",
+    "camera-api": "wiki/camera-api.md",
+    "location-maps": "wiki/location-maps.md",
+    "audio-microphone": "wiki/audio-microphone.md",
+    "biometrics": "wiki/biometrics.md",
+    "iot-mobile": "wiki/iot-mobile.md",
+    "wifi-networking": "wiki/wifi-networking.md",
+    "smart-home": "wiki/smart-home.md",
+    "affective-computing": "wiki/affective-computing.md",
+    "emotion-recognition": "wiki/emotion-recognition.md",
+    "voice-analysis": "wiki/voice-analysis.md",
+    "mental-health-apps": "wiki/mental-health-apps.md",
+    "cognitive-robotics": "wiki/cognitive-robotics.md",
+    "computational-cognition": "wiki/computational-cognition.md",
+    "software-agent": "wiki/software-agent.md",
+    "intelligent-agent": "wiki/intelligent-agent.md",
+    "knowledge-representation": "wiki/knowledge-representation.md",
+    "cognitive-models": "wiki/cognitive-models.md",
+    "cognitive-perception": "wiki/cognitive-perception.md",
+    "lida-architecture": "wiki/lida-architecture.md",
+    "soar-architecture": "wiki/soar-architecture.md",
+    "clarion-architecture": "wiki/clarion-architecture.md",
+    "actr-architecture": "wiki/actr-architecture.md",
+    "opencog-architecture": "wiki/opencog-architecture.md",
+    "computer-aided-diagnosis": "wiki/computer-aided-diagnosis.md",
+    "active-vision": "wiki/active-vision.md",
+    "foveated-vision": "wiki/foveated-vision.md",
+    "xr-mobile": "wiki/xr-mobile.md",
+    "arcore-advanced": "wiki/arcore-advanced.md",
+    "vr-mobile": "wiki/vr-mobile.md",
+    "mobile-games": "wiki/mobile-games.md",
+    "neurogaming": "wiki/neurogaming.md",
+    "lua-mobile-games": "wiki/lua-mobile-games.md",
+    "unity-advanced": "wiki/unity-advanced.md",
+    "game-physics": "wiki/game-physics.md",
+    "robotics-mobile": "wiki/robotics-mobile.md",
+    "gpu-rendering": "wiki/gpu-rendering.md",
+    "battery-power": "wiki/battery-power.md",
+    "memory-management": "wiki/memory-management.md",
+    "display-screen": "wiki/display-screen.md",
+    "connectivity": "wiki/connectivity.md",
+    "animations": "wiki/animations.md",
+    "navigation-patterns": "wiki/navigation-patterns.md",
+    "gestures-interactions": "wiki/gestures-interactions.md",
+    "mqtt-protocol": "wiki/mqtt-protocol.md",
+    "game-monetization": "wiki/game-monetization.md",
+    "itchio-android": "wiki/itchio-android.md",
+    "robot-control-ui": "wiki/robot-control-ui.md",
+    "ros2-mobile": "wiki/ros2-mobile.md",
+    "computer-vision-mobile": "wiki/computer-vision-mobile.md",
+    "visual-odometry": "wiki/visual-odometry.md",
+    "fuzja-modalnosci-kalman": "wiki/fuzja-modalnosci-kalman.md",
+    "projekt-zaliczeniowy": "wiki/projekt-zaliczeniowy.md",
+    "egzamin-teoretyczny": "wiki/egzamin-teoretyczny.md",
+    "app-publishing": "wiki/app-publishing.md",
+    "app-distribution": "wiki/app-distribution.md",
+    "app-updates": "wiki/app-updates.md",
+    "app-design-process": "wiki/app-design-process.md",
+    "app-metadata": "wiki/app-metadata.md",
+    "file-storage-mobile": "wiki/file-storage-mobile.md",
+    "gamedev-market": "wiki/gamedev-market.md",
+    "small-engine-games": "wiki/small-engine-games.md",
+    "frotz-zmachine": "wiki/frotz-zmachine.md",
+    "serious-games": "wiki/serious-games.md",
+    "local-ai-intro": "wiki/local-ai-intro.md",
+    "mobile-ml-frameworks": "wiki/mobile-ml-frameworks.md",
+    "neural-networks-mobile": "wiki/neural-networks-mobile.md",
+    "llm-on-device": "wiki/llm-on-device.md",
+    "model-quantization": "wiki/model-quantization.md",
+    "on-device-inference": "wiki/on-device-inference.md",
+    "ai-image-processing": "wiki/ai-image-processing.md",
+    "ai-speech-nlp": "wiki/ai-speech-nlp.md",
+    "ai-privacy-security": "wiki/ai-privacy-security.md",
+    "ai-legal-aspects": "wiki/ai-legal-aspects.md",
+    "mediapipe-mobile": "wiki/mediapipe-mobile.md",
+    "ai-mobile-ux": "wiki/ai-mobile-ux.md",
+    "edge-ai-future": "wiki/edge-ai-future.md",
+    "litert-lm-android": "wiki/litert-lm-android.md",
+    "litert-lm-npu": "wiki/litert-lm-npu.md",
+    "google-maven": "wiki/google-maven.md",
+    "file-formats-intro": "wiki/file-formats-intro.md",
+    "json-xml-formats": "wiki/json-xml-formats.md",
+    "csv-yaml-toml": "wiki/csv-yaml-toml.md",
+    "image-formats-mobile": "wiki/image-formats-mobile.md",
+    "audio-video-formats": "wiki/audio-video-formats.md",
+    "3d-model-formats": "wiki/3d-model-formats.md",
+    "ml-file-formats": "wiki/ml-file-formats.md",
+    "binary-serialization": "wiki/binary-serialization.md",
+    "compression-mobile": "wiki/compression-mobile.md",
+    "document-formats": "wiki/document-formats.md",
+    "database-file-formats": "wiki/database-file-formats.md",
+    "data-storage-best-practices": "wiki/data-storage-best-practices.md",
+    "snippet-catalog": "wiki/snippet-catalog.md"
+  },
+  "metadata": {
+    "mobile-os": {
+      "category": "Projektowanie i OS",
+      "title": "Systemy operacyjne urządzeń mobilnych",
+      "icon": "fa-solid fa-mobile-screen-button"
+    },
+    "mobile-design": {
+      "category": "Projektowanie i OS",
+      "title": "Projektowanie aplikacji mobilnych",
+      "icon": "fa-solid fa-pen-ruler"
+    },
+    "android-ecosystem": {
+      "category": "Projektowanie i OS",
+      "title": "Ekosystem Android i Google Play",
+      "icon": "fa-brands fa-android"
+    },
+    "ios-ecosystem": {
+      "category": "Projektowanie i OS",
+      "title": "Ekosystem iOS i App Store",
+      "icon": "fa-brands fa-apple"
+    },
+    "mobile-security": {
+      "category": "Projektowanie i OS",
+      "title": "Bezpieczeństwo aplikacji mobilnych",
+      "icon": "fa-solid fa-shield-halved"
+    },
+    "mobile-security-basics": {
+      "category": "Projektowanie i OS",
+      "title": "Mobile Security Basics",
+      "icon": "fa-solid fa-user-shield"
+    },
+    "social-media-integration": {
+      "category": "Projektowanie i OS",
+      "title": "Integracja mediów społecznościowych",
+      "icon": "fa-solid fa-share-nodes"
+    },
+    "mobile-performance": {
+      "category": "Projektowanie i OS",
+      "title": "Wydajność aplikacji mobilnych",
+      "icon": "fa-solid fa-gauge-high"
+    },
+    "mobile-hardware": {
+      "category": "Architektura sprzętu",
+      "title": "Architektura i budowa urządzeń mobilnych",
+      "icon": "fa-solid fa-microchip"
+    },
+    "ui-ux": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Metody interakcji i projektowanie UI/UX",
+      "icon": "fa-solid fa-hand-pointer"
+    },
+    "material-design": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Material Design 3",
+      "icon": "fa-solid fa-palette"
+    },
+    "accessibility": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Dostępność aplikacji mobilnych",
+      "icon": "fa-solid fa-universal-access"
+    },
+    "ergonomia-uzytkowania": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Ergonomia użytkowania",
+      "icon": "fa-solid fa-hand-holding-heart"
+    },
+    "android-studio": {
+      "category": "Programowanie natywne Android",
+      "title": "Android Studio - Kotlin & Compose",
+      "icon": "fa-brands fa-android"
+    },
+    "termux": {
+      "category": "Programowanie natywne Android",
+      "title": "Termux - terminal emulator with packages",
+      "icon": "fa-solid fa-terminal"
+    },
+    "kotlin-basics": {
+      "category": "Programowanie natywne Android",
+      "title": "Kotlin - podstawy języka",
+      "icon": "fa-solid fa-code"
+    },
+    "jetpack-compose": {
+      "category": "Programowanie natywne Android",
+      "title": "Jetpack Compose - deklaratywny UI",
+      "icon": "fa-solid fa-layer-group"
+    },
+    "android-architecture": {
+      "category": "Programowanie natywne Android",
+      "title": "Architektura aplikacji - MVVM",
+      "icon": "fa-solid fa-sitemap"
+    },
+    "android-data": {
+      "category": "Programowanie natywne Android",
+      "title": "Przechowywanie danych - Room",
+      "icon": "fa-solid fa-database"
+    },
+    "android-network": {
+      "category": "Programowanie natywne Android",
+      "title": "Sieć i REST API - Retrofit",
+      "icon": "fa-solid fa-network-wired"
+    },
+    "android-testing": {
+      "category": "Programowanie natywne Android",
+      "title": "Testowanie aplikacji Android",
+      "icon": "fa-solid fa-flask"
+    },
+    "android-lint": {
+      "category": "Programowanie natywne Android",
+      "title": "Android Lint - analiza statyczna kodu",
+      "icon": "fa-solid fa-magnifying-glass-chart"
+    },
+    "agp-upgrade-assistant": {
+      "category": "Programowanie natywne Android",
+      "title": "Asystent uaktualniania AGP - praktyka zaawansowana",
+      "icon": "fa-solid fa-screwdriver-wrench"
+    },
+    "xcode-ios": {
+      "category": "Programowanie natywne iOS",
+      "title": "Xcode - Swift & SwiftUI",
+      "icon": "fa-brands fa-apple"
+    },
+    "swift-basics": {
+      "category": "Programowanie natywne iOS",
+      "title": "Swift - podstawy języka",
+      "icon": "fa-solid fa-terminal"
+    },
+    "swiftui-advanced": {
+      "category": "Programowanie natywne iOS",
+      "title": "SwiftUI - zaawansowane techniki",
+      "icon": "fa-solid fa-wand-magic-sparkles"
+    },
+    "ios-networking": {
+      "category": "Programowanie natywne iOS",
+      "title": "Sieć i API w iOS",
+      "icon": "fa-solid fa-network-wired"
+    },
+    "ios-data": {
+      "category": "Programowanie natywne iOS",
+      "title": "Przechowywanie danych w iOS",
+      "icon": "fa-solid fa-database"
+    },
+    "ios-notifications": {
+      "category": "Programowanie natywne iOS",
+      "title": "Powiadomienia push w iOS",
+      "icon": "fa-solid fa-bell"
+    },
+    "cross-platform": {
+      "category": "Cross-platform i PWA",
+      "title": "Programowanie cross-platformowe",
+      "icon": "fa-solid fa-layer-group"
+    },
+    "flutter-advanced": {
+      "category": "Cross-platform i PWA",
+      "title": "Flutter - zaawansowane techniki",
+      "icon": "fa-solid fa-wind"
+    },
+    "react-native": {
+      "category": "Cross-platform i PWA",
+      "title": "React Native",
+      "icon": "fa-brands fa-react"
+    },
+    "pwa-advanced": {
+      "category": "Cross-platform i PWA",
+      "title": "Progressive Web Apps",
+      "icon": "fa-solid fa-globe"
+    },
+    "jak-stworzyc-pwa": {
+      "category": "Cross-platform i PWA",
+      "title": "Jak stworzyć stronę PWA",
+      "icon": "fa-solid fa-rocket"
+    },
+    "kmp-multiplatform": {
+      "category": "Cross-platform i PWA",
+      "title": "Kotlin Multiplatform",
+      "icon": "fa-solid fa-code-branch"
+    },
+    "buildozer": {
+      "category": "Cross-platform i PWA",
+      "title": "Buildozer - pakowanie aplikacji Python/Kivy",
+      "icon": "fa-brands fa-python"
+    },
+    "mobile-docker": {
+      "category": "Cross-platform i PWA",
+      "title": "Konteneryzacja i Docker w projektach mobilnych",
+      "icon": "fa-brands fa-docker"
+    },
+    "sensors": {
+      "category": "Obsługa sensorów",
+      "title": "Sensory ruchu i środowiskowe",
+      "icon": "fa-solid fa-compass"
+    },
+    "camera-api": {
+      "category": "Obsługa sensorów",
+      "title": "Camera API i przetwarzanie obrazu",
+      "icon": "fa-solid fa-camera"
+    },
+    "location-maps": {
+      "category": "Obsługa sensorów",
+      "title": "Lokalizacja i mapy",
+      "icon": "fa-solid fa-location-dot"
+    },
+    "audio-microphone": {
+      "category": "Obsługa sensorów",
+      "title": "Audio i mikrofon",
+      "icon": "fa-solid fa-microphone"
+    },
+    "biometrics": {
+      "category": "Obsługa sensorów",
+      "title": "Biometria i uwierzytelnianie",
+      "icon": "fa-solid fa-fingerprint"
+    },
+    "iot-mobile": {
+      "category": "IoT mobile",
+      "title": "Aplikacje mobilne IoT",
+      "icon": "fa-solid fa-wifi"
+    },
+    "wifi-networking": {
+      "category": "IoT mobile",
+      "title": "Wi-Fi i sieć lokalna",
+      "icon": "fa-solid fa-house-signal"
+    },
+    "smart-home": {
+      "category": "IoT mobile",
+      "title": "Smart Home i protokoły automatyki",
+      "icon": "fa-solid fa-house"
+    },
+    "mqtt-protocol": {
+      "category": "IoT mobile",
+      "title": "MQTT - protokół dla IoT",
+      "icon": "fa-solid fa-tower-broadcast"
+    },
+    "affective-computing": {
+      "category": "Informatyka afektywna",
+      "title": "Informatyka afektywna w mobile",
+      "icon": "fa-solid fa-face-smile"
+    },
+    "emotion-recognition": {
+      "category": "Informatyka afektywna",
+      "title": "Rozpoznawanie emocji z kamery",
+      "icon": "fa-solid fa-eye"
+    },
+    "voice-analysis": {
+      "category": "Informatyka afektywna",
+      "title": "Analiza głosu i mowy",
+      "icon": "fa-solid fa-wave-square"
+    },
+    "mental-health-apps": {
+      "category": "Informatyka afektywna",
+      "title": "Aplikacje zdrowia psychicznego",
+      "icon": "fa-solid fa-heart-pulse"
+    },
+    "cognitive-robotics": {
+      "category": "Informatyka afektywna",
+      "title": "Robotyka poznawcza",
+      "icon": "fa-solid fa-robot"
+    },
+    "computational-cognition": {
+      "category": "Informatyka afektywna",
+      "title": "Computational cognition",
+      "icon": "fa-solid fa-brain"
+    },
+    "software-agent": {
+      "category": "Informatyka afektywna",
+      "title": "Agent programowy",
+      "icon": "fa-solid fa-gears"
+    },
+    "intelligent-agent": {
+      "category": "Informatyka afektywna",
+      "title": "Inteligentny agent",
+      "icon": "fa-solid fa-microchip"
+    },
+    "knowledge-representation": {
+      "category": "Informatyka afektywna",
+      "title": "Reprezentacja wiedzy i wnioskowanie",
+      "icon": "fa-solid fa-diagram-project"
+    },
+    "cognitive-models": {
+      "category": "Informatyka afektywna",
+      "title": "Modele kognitywne",
+      "icon": "fa-solid fa-sitemap"
+    },
+    "cognitive-perception": {
+      "category": "Informatyka afektywna",
+      "title": "Modelowanie kognitywne ludzkiej percepcji",
+      "icon": "fa-solid fa-eye-low-vision"
+    },
+    "lida-architecture": {
+      "category": "Informatyka afektywna",
+      "title": "LIDA - Learning Intelligent Distribution Agent",
+      "icon": "fa-solid fa-circle-nodes"
+    },
+    "soar-architecture": {
+      "category": "Informatyka afektywna",
+      "title": "Soar - architektura kognitywna",
+      "icon": "fa-solid fa-layer-group"
+    },
+    "clarion-architecture": {
+      "category": "Informatyka afektywna",
+      "title": "CLARION - Connectionist Learning with Adaptive Rule Induction",
+      "icon": "fa-solid fa-network-wired"
+    },
+    "actr-architecture": {
+      "category": "Informatyka afektywna",
+      "title": "ACT-R - Adaptive Control of Thought Rational",
+      "icon": "fa-solid fa-gears"
+    },
+    "opencog-architecture": {
+      "category": "Informatyka afektywna",
+      "title": "Architektury kognitywne: ACT-R, Soar, OpenCog",
+      "icon": "fa-solid fa-brain"
+    },
+    "computer-aided-diagnosis": {
+      "category": "Informatyka afektywna",
+      "title": "Computer-Aided Diagnosis (CAD)",
+      "icon": "fa-solid fa-stethoscope"
+    },
+    "active-vision": {
+      "category": "Informatyka afektywna",
+      "title": "Active Vision - aktywna wizja",
+      "icon": "fa-solid fa-eye"
+    },
+    "foveated-vision": {
+      "category": "Informatyka afektywna",
+      "title": "Foveated Vision - widzenie fowealne",
+      "icon": "fa-solid fa-bullseye"
+    },
+    "xr-mobile": {
+      "category": "XR i rozszerzona rzeczywistość",
+      "title": "Wprowadzenie do XR mobile",
+      "icon": "fa-solid fa-vr-cardboard"
+    },
+    "arcore-advanced": {
+      "category": "XR i rozszerzona rzeczywistość",
+      "title": "ARCore - zaawansowane techniki",
+      "icon": "fa-solid fa-cube"
+    },
+    "vr-mobile": {
+      "category": "XR i rozszerzona rzeczywistość",
+      "title": "VR mobilne i Google Cardboard",
+      "icon": "fa-solid fa-glasses"
+    },
+    "mobile-games": {
+      "category": "Gry mobilne",
+      "title": "Podstawy programowania gier mobilnych",
+      "icon": "fa-solid fa-gamepad"
+    },
+    "lua-mobile-games": {
+      "category": "Gry mobilne",
+      "title": "Lua w grach mobilnych - silniki i frameworki",
+      "icon": "fa-solid fa-code"
+    },
+    "unity-advanced": {
+      "category": "Gry mobilne",
+      "title": "Unity - zaawansowane techniki",
+      "icon": "fa-solid fa-cube"
+    },
+    "game-physics": {
+      "category": "Gry mobilne",
+      "title": "Fizyka i kolizje w grach mobilnych",
+      "icon": "fa-solid fa-atom"
+    },
+    "game-monetization": {
+      "category": "Gry mobilne",
+      "title": "Monetyzacja gier mobilnych",
+      "icon": "fa-solid fa-coins"
+    },
+    "itchio-android": {
+      "category": "Gry mobilne",
+      "title": "itch.io i publikacja gier Android APK",
+      "icon": "fa-solid fa-upload"
+    },
+    "gpu-rendering": {
+      "category": "Architektura sprzętu",
+      "title": "GPU i renderowanie grafiki",
+      "icon": "fa-solid fa-display"
+    },
+    "battery-power": {
+      "category": "Architektura sprzętu",
+      "title": "Bateria i zarządzanie energią",
+      "icon": "fa-solid fa-battery-half"
+    },
+    "memory-management": {
+      "category": "Architektura sprzętu",
+      "title": "Pamięć RAM i zarządzanie zasobami",
+      "icon": "fa-solid fa-memory"
+    },
+    "display-screen": {
+      "category": "Architektura sprzętu",
+      "title": "Wyświetlacze i technologie ekranów",
+      "icon": "fa-solid fa-display"
+    },
+    "connectivity": {
+      "category": "Architektura sprzętu",
+      "title": "Łączność bezprzewodowa - LTE, 5G, Wi-Fi 6",
+      "icon": "fa-solid fa-signal"
+    },
+    "animations": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Animacje w aplikacjach mobilnych",
+      "icon": "fa-solid fa-wand-magic-sparkles"
+    },
+    "navigation-patterns": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Wzorce nawigacji",
+      "icon": "fa-solid fa-route"
+    },
+    "gestures-interactions": {
+      "category": "Metody interakcji UI/UX",
+      "title": "Gesty i interakcje dotykowe",
+      "icon": "fa-solid fa-hand-pointer"
+    },
+    "robot-control-ui": {
+      "category": "Robotyka autonomiczna",
+      "title": "UI sterowania robotem",
+      "icon": "fa-solid fa-gamepad"
+    },
+    "robotics-mobile": {
+      "category": "Robotyka autonomiczna",
+      "title": "Aplikacja jako kontroler robota",
+      "icon": "fa-solid fa-robot"
+    },
+    "ros2-mobile": {
+      "category": "Robotyka autonomiczna",
+      "title": "ROS2 i sterowanie robotem",
+      "icon": "fa-solid fa-diagram-project"
+    },
+    "computer-vision-mobile": {
+      "category": "Robotyka autonomiczna",
+      "title": "Computer Vision w robotyce mobilnej",
+      "icon": "fa-solid fa-eye"
+    },
+    "visual-odometry": {
+      "category": "Robotyka autonomiczna",
+      "title": "Odometria wizyjna i Egomotion",
+      "icon": "fa-solid fa-route"
+    },
+    "fuzja-modalnosci-kalman": {
+      "category": "Robotyka autonomiczna",
+      "title": "Fuzja modalności: filtr Kalmana, GP i SYAC",
+      "icon": "fa-solid fa-circle-nodes"
+    },
+    "robohub-external": {
+      "category": "Robotyka autonomiczna",
+      "title": "RoboHub - materiały dodatkowe",
+      "icon": "fa-solid fa-up-right-from-square"
+    },
+    "projekt-zaliczeniowy": {
+      "category": "Zaliczenie",
+      "title": "Projekt aplikacji",
+      "icon": "fa-solid fa-laptop-code"
+    },
+    "egzamin-teoretyczny": {
+      "category": "Zaliczenie",
+      "title": "Egzamin teoretyczny - przygotowanie",
+      "icon": "fa-solid fa-graduation-cap"
+    },
+    "app-publishing": {
+      "category": "Projektowanie i OS",
+      "title": "Publikacja i promocja własnej aplikacji",
+      "icon": "fa-solid fa-rocket"
+    },
+    "app-distribution": {
+      "category": "Projektowanie i OS",
+      "title": "Metody dystrybucji - Google Play i F-Droid",
+      "icon": "fa-solid fa-store"
+    },
+    "app-updates": {
+      "category": "Projektowanie i OS",
+      "title": "Wypuszczanie aktualizacji własnej aplikacji",
+      "icon": "fa-solid fa-arrows-rotate"
+    },
+    "app-design-process": {
+      "category": "Projektowanie i OS",
+      "title": "Proces projektowania - Brief, BRD, FRD, TRD",
+      "icon": "fa-solid fa-file-lines"
+    },
+    "app-metadata": {
+      "category": "Projektowanie i OS",
+      "title": "Zbieranie metadanych przez aplikację",
+      "icon": "fa-solid fa-tags"
+    },
+    "file-storage-mobile": {
+      "category": "Programowanie natywne Android",
+      "title": "Zapisywanie i odczyt plików na urządzeniu mobilnym",
+      "icon": "fa-solid fa-file-arrow-down"
+    },
+    "gamedev-market": {
+      "category": "Gry mobilne",
+      "title": "Rynek gamedev w Polsce i na świecie",
+      "icon": "fa-solid fa-earth-europe"
+    },
+    "small-engine-games": {
+      "category": "Gry mobilne",
+      "title": "Małe silniki gier mobilnych - Pico-8, LÖVE, Defold",
+      "icon": "fa-solid fa-floppy-disk"
+    },
+    "frotz-zmachine": {
+      "category": "Gry mobilne",
+      "title": "A Portable Z-Machine Interpreter - Frotz",
+      "icon": "fa-solid fa-terminal"
+    },
+    "serious-games": {
+      "category": "Gry mobilne",
+      "title": "Gry poważne (Serious Games)",
+      "icon": "fa-solid fa-graduation-cap"
+    },
+    "neurogaming": {
+      "category": "Gry mobilne",
+      "title": "Neurogaming - gry sterowane mózgiem",
+      "icon": "fa-solid fa-brain"
+    },
+    "local-ai-intro": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Wprowadzenie do lokalnej AI na urządzeniu mobilnym",
+      "icon": "fa-solid fa-microchip"
+    },
+    "mobile-ml-frameworks": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Frameworki ML na urządzeniu: TFLite, Core ML, ONNX",
+      "icon": "fa-solid fa-layer-group"
+    },
+    "neural-networks-mobile": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Sieci neuronowe na urządzeniu mobilnym",
+      "icon": "fa-solid fa-diagram-project"
+    },
+    "llm-on-device": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Modele językowe LLM na urządzeniu",
+      "icon": "fa-solid fa-comment-dots"
+    },
+    "model-quantization": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Kwantyzacja i optymalizacja modeli AI",
+      "icon": "fa-solid fa-compress"
+    },
+    "on-device-inference": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Wnioskowanie lokalne - architektura i wydajność",
+      "icon": "fa-solid fa-bolt"
+    },
+    "ai-image-processing": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "AI w przetwarzaniu obrazu na urządzeniu",
+      "icon": "fa-solid fa-image"
+    },
+    "ai-speech-nlp": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Przetwarzanie mowy i NLP na urządzeniu",
+      "icon": "fa-solid fa-microphone-lines"
+    },
+    "ai-privacy-security": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Prywatność i bezpieczeństwo w lokalnej AI",
+      "icon": "fa-solid fa-shield-halved"
+    },
+    "ai-legal-aspects": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Prawne aspekty AI na urządzeniach mobilnych",
+      "icon": "fa-solid fa-scale-balanced"
+    },
+    "mediapipe-mobile": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "MediaPipe - kompleksowe rozwiązania AI",
+      "icon": "fa-solid fa-wand-magic-sparkles"
+    },
+    "ai-mobile-ux": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Projektowanie UX aplikacji z lokalną AI",
+      "icon": "fa-solid fa-hand-pointer"
+    },
+    "edge-ai-future": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "Przyszłość Edge AI - trendy i kierunki rozwoju",
+      "icon": "fa-solid fa-rocket"
+    },
+    "litert-lm-android": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "LiteRT LM na Androidzie - implementacja praktyczna",
+      "icon": "fa-brands fa-android"
+    },
+    "litert-lm-npu": {
+      "category": "Lokalna AI na urządzeniu",
+      "title": "LiteRT LM i akceleracja NPU",
+      "icon": "fa-solid fa-microchip"
+    },
+    "google-maven": {
+      "category": "Programowanie natywne Android",
+      "title": "Google Maven - zarządzanie zależnościami Android",
+      "icon": "fa-brands fa-google"
+    },
+    "file-formats-intro": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Wprowadzenie do formatów plików w aplikacjach mobilnych",
+      "icon": "fa-solid fa-file-circle-question"
+    },
+    "json-xml-formats": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "JSON i XML - formaty wymiany danych",
+      "icon": "fa-solid fa-code"
+    },
+    "csv-yaml-toml": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "CSV, YAML i TOML - lekkie formaty danych i konfiguracji",
+      "icon": "fa-solid fa-table"
+    },
+    "image-formats-mobile": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Formaty obrazów w aplikacjach mobilnych",
+      "icon": "fa-solid fa-image"
+    },
+    "audio-video-formats": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Formaty audio i wideo w aplikacjach mobilnych",
+      "icon": "fa-solid fa-film"
+    },
+    "3d-model-formats": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Formaty modeli 3D w aplikacjach mobilnych",
+      "icon": "fa-solid fa-cube"
+    },
+    "ml-file-formats": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Formaty plików modeli uczenia maszynowego",
+      "icon": "fa-solid fa-brain"
+    },
+    "binary-serialization": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Binarne formaty serializacji danych",
+      "icon": "fa-solid fa-file-zipper"
+    },
+    "compression-mobile": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Kompresja danych w aplikacjach mobilnych",
+      "icon": "fa-solid fa-compress"
+    },
+    "document-formats": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Formaty dokumentów w aplikacjach mobilnych",
+      "icon": "fa-solid fa-file-lines"
+    },
+    "database-file-formats": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Formaty plików baz danych w aplikacjach mobilnych",
+      "icon": "fa-solid fa-database"
+    },
+    "data-storage-best-practices": {
+      "category": "Formaty plików i przechowywanie danych",
+      "title": "Dobre praktyki przechowywania danych",
+      "icon": "fa-solid fa-shield-halved"
+    },
+    "snippet-catalog": {
+      "category": "Programowanie natywne Android",
+      "title": "Katalog snippetów mobilnych",
+      "icon": "fa-solid fa-code"
+    }
+  },
+  "categories": [
+    {
+      "id": "cat-zalicz",
+      "name": "Zaliczenie",
+      "icon": "fa-solid fa-graduation-cap",
+      "articles": [
+        "projekt-zaliczeniowy",
+        "egzamin-teoretyczny"
+      ]
+    },
+    {
+      "id": "cat-os",
+      "name": "Projektowanie i OS",
+      "icon": "fa-solid fa-mobile-screen-button",
+      "articles": [
+        "mobile-os",
+        "mobile-design",
+        "app-design-process",
+        "app-metadata",
+        "android-ecosystem",
+        "ios-ecosystem",
+        "mobile-security",
+        "social-media-integration",
+        "mobile-performance",
+        "app-publishing",
+        "app-distribution",
+        "app-updates"
+      ]
+    },
+    {
+      "id": "cat-hw",
+      "name": "Architektura sprzętu",
+      "icon": "fa-solid fa-microchip",
+      "articles": [
+        "mobile-hardware",
+        "gpu-rendering",
+        "battery-power",
+        "memory-management",
+        "display-screen",
+        "connectivity"
+      ]
+    },
+    {
+      "id": "cat-ux",
+      "name": "Metody interakcji UI/UX",
+      "icon": "fa-solid fa-hand-pointer",
+      "articles": [
+        "ui-ux",
+        "material-design",
+        "accessibility",
+        "ergonomia-uzytkowania",
+        "animations",
+        "navigation-patterns",
+        "gestures-interactions"
+      ]
+    },
+    {
+      "id": "cat-android",
+      "name": "Programowanie natywne Android",
+      "icon": "fa-brands fa-android",
+      "articles": [
+        "android-studio",
+        "termux",
+        "kotlin-basics",
+        "jetpack-compose",
+        "android-architecture",
+        "android-data",
+        "android-network",
+        "android-testing",
+        "android-lint",
+        "agp-upgrade-assistant",
+        "file-storage-mobile",
+        "google-maven",
+        "snippet-catalog"
+      ]
+    },
+    {
+      "id": "cat-ios",
+      "name": "Programowanie natywne iOS",
+      "icon": "fa-brands fa-apple",
+      "articles": [
+        "xcode-ios",
+        "swift-basics",
+        "swiftui-advanced",
+        "ios-networking",
+        "ios-data",
+        "ios-notifications"
+      ]
+    },
+    {
+      "id": "cat-cross",
+      "name": "Cross-platform i PWA",
+      "icon": "fa-solid fa-layer-group",
+      "articles": [
+        "cross-platform",
+        "flutter-advanced",
+        "react-native",
+        "pwa-advanced",
+        "jak-stworzyc-pwa",
+        "kmp-multiplatform",
+        "buildozer",
+        "mobile-docker"
+      ]
+    },
+    {
+      "id": "cat-sensors",
+      "name": "Obsługa sensorów",
+      "icon": "fa-solid fa-compass",
+      "articles": [
+        "sensors",
+        "camera-api",
+        "location-maps",
+        "audio-microphone",
+        "biometrics"
+      ]
+    },
+    {
+      "id": "cat-iot",
+      "name": "IoT mobile",
+      "icon": "fa-solid fa-wifi",
+      "articles": [
+        "iot-mobile",
+        "wifi-networking",
+        "smart-home",
+        "mqtt-protocol"
+      ]
+    },
+    {
+      "id": "cat-affective",
+      "name": "Informatyka afektywna",
+      "icon": "fa-solid fa-face-smile",
+      "articles": [
+        "affective-computing",
+        "emotion-recognition",
+        "voice-analysis",
+        "mental-health-apps",
+        "cognitive-robotics",
+        "computational-cognition",
+        "software-agent",
+        "intelligent-agent",
+        "knowledge-representation",
+        "cognitive-models",
+        "cognitive-perception",
+        "lida-architecture",
+        "soar-architecture",
+        "clarion-architecture",
+        "actr-architecture",
+        "opencog-architecture",
+        "computer-aided-diagnosis",
+        "active-vision",
+        "foveated-vision"
+      ]
+    },
+    {
+      "id": "cat-xr",
+      "name": "XR i rozszerzona rzeczywistość",
+      "icon": "fa-solid fa-vr-cardboard",
+      "articles": [
+        "xr-mobile",
+        "arcore-advanced",
+        "vr-mobile"
+      ]
+    },
+    {
+      "id": "cat-games",
+      "name": "Gry mobilne",
+      "icon": "fa-solid fa-gamepad",
+      "articles": [
+        "mobile-games",
+        "lua-mobile-games",
+        "unity-advanced",
+        "game-physics",
+        "game-monetization",
+        "itchio-android",
+        "gamedev-market",
+        "small-engine-games",
+        "frotz-zmachine",
+        "serious-games",
+        "neurogaming"
+      ]
+    },
+    {
+      "id": "cat-robots",
+      "name": "Robotyka autonomiczna",
+      "icon": "fa-solid fa-robot",
+      "articles": [
+        "robotics-mobile",
+        "ros2-mobile",
+        "computer-vision-mobile",
+        "robot-control-ui",
+        "visual-odometry",
+        "fuzja-modalnosci-kalman",
+        {
+          "id": "robohub-external",
+          "href": "https://matpomgit.github.io/RoboHub/"
+        }
+      ]
+    },
+    {
+      "id": "cat-local-ai",
+      "name": "Lokalna AI na urządzeniu",
+      "icon": "fa-solid fa-microchip",
+      "articles": [
+        "local-ai-intro",
+        "mobile-ml-frameworks",
+        "neural-networks-mobile",
+        "llm-on-device",
+        "model-quantization",
+        "on-device-inference",
+        "ai-image-processing",
+        "ai-speech-nlp",
+        "ai-privacy-security",
+        "ai-legal-aspects",
+        "mediapipe-mobile",
+        "ai-mobile-ux",
+        "edge-ai-future",
+        "litert-lm-android",
+        "litert-lm-npu"
+      ]
+    },
+    {
+      "id": "cat-file-formats",
+      "name": "Formaty plików i przechowywanie danych",
+      "icon": "fa-solid fa-folder-open",
+      "articles": [
+        "file-formats-intro",
+        "json-xml-formats",
+        "csv-yaml-toml",
+        "image-formats-mobile",
+        "audio-video-formats",
+        "3d-model-formats",
+        "ml-file-formats",
+        "binary-serialization",
+        "compression-mobile",
+        "document-formats",
+        "database-file-formats",
+        "data-storage-best-practices"
+      ]
+    }
+  ]
+}
