@@ -1072,9 +1072,21 @@ background: var(--surface);
                 repository_url: project.repository_url || '',
                 members: TEAM_ROLES.map((role) => {
                     const existing = (project.members || []).find((member) => member.role === role);
-                    return existing ? { role, index: existing.index || null } : { role, index: null };
+                    return existing
+                        ? { role, index: existing.index || null, profile_url: String(existing.profile_url || '').trim() }
+                        : { role, index: null, profile_url: '' };
                 })
             }));
+        }
+
+        function memberIndexHtml(member) {
+            if (!member || !member.index) return 'nieobsadzone';
+            const index = String(member.index);
+            const profileUrl = String(member.profile_url || '').trim();
+            if (profileUrl && /^https:\/\//i.test(profileUrl)) {
+                return `<a href="${profileUrl}" target="_blank" rel="noopener noreferrer">${index}</a>`;
+            }
+            return index;
         }
 
         function createProjectIconNode(iconUrl, sizeClass) {
@@ -1265,7 +1277,7 @@ background: var(--surface);
                 body.appendChild(description);
 
                 const members = document.createElement('p');
-                members.innerHTML = `<strong>Skład:</strong> ${project.members.map((member) => `${member.role}: <strong>${member.index || 'nieobsadzone'}</strong>`).join(' | ')}`;
+                members.innerHTML = `<strong>Skład:</strong> ${project.members.map((member) => `${member.role}: <strong>${memberIndexHtml(member)}</strong>`).join(' | ')}`;
                 body.appendChild(members);
 
                 const repository = document.createElement('p');
@@ -1318,7 +1330,7 @@ background: var(--surface);
                 ? '<i class="fa-solid fa-triangle-exclamation"></i>'
                 : '<i class="fa-solid fa-circle-check"></i>';
             const membersSummary = project.members
-                .map((member) => `<div><strong>${member.role}:</strong> ${member.index || 'nieobsadzone'}</div>`)
+                .map((member) => `<div><strong>${member.role}:</strong> ${memberIndexHtml(member)}</div>`)
                 .join('');
             const statusSummary = missingRoles.length
                 ? `Obsada ${assigned.length}/3. Brakujące role: <strong>${missingRoles.join(', ')}</strong>.`
@@ -1779,7 +1791,7 @@ background: var(--surface);
             const roleAssignments = filteredProjects
                 .flatMap((project) => project.members
                     .filter((member) => member.index && (selectedRole === 'all' || member.role === selectedRole))
-                    .map((member) => `${project.id} — <strong>${member.index}</strong> (${member.role})`));
+                    .map((member) => `${project.id} — <strong>${memberIndexHtml(member)}</strong> (${member.role})`));
 
             renderList('teacher-alerts-list', roleAssignments.length
                 ? roleAssignments
@@ -1866,6 +1878,28 @@ background: var(--surface);
             return td;
         }
 
+        function memberIndexCell(member) {
+            const td = document.createElement('td');
+            if (!member || !member.index) {
+                td.textContent = 'Nieobsadzone';
+                return td;
+            }
+
+            const profileUrl = String(member.profile_url || '').trim();
+            if (profileUrl && /^https:\/\//i.test(profileUrl)) {
+                const link = document.createElement('a');
+                link.href = profileUrl;
+                link.target = '_blank';
+                link.rel = 'noopener noreferrer';
+                link.textContent = String(member.index);
+                td.appendChild(link);
+                return td;
+            }
+
+            td.textContent = String(member.index);
+            return td;
+        }
+
         function renderProjectsTable() {
             const tbody = document.getElementById('students-tbody');
             const emptyState = document.getElementById('empty-state');
@@ -1896,7 +1930,7 @@ background: var(--surface);
                         cell(project.description),
                         projectPageCell(project.project_url),
                         repositoryCell(project.repository_url),
-                        cell(member.index || 'Nieobsadzone'),
+                        memberIndexCell(member),
                         roleCell(member.role),
                         cell(`${assignedCount}/3`),
                         cell(getProjectStatus(project)),

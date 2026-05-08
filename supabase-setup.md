@@ -15,6 +15,13 @@ Model tabeli:
 - `icon_url` - opcjonalna ikona projektu jako adres HTTPS lub zapisany obraz `data:image/...`
 - `project_url` - opcjonalny link HTTPS do strony projektu
 - `repository_url` - opcjonalny link HTTPS do repozytorium projektu, aktualizowany przez studentów
+- `package_name` - identyfikator aplikacji w Google Play, np. `is.ktty.ben9`
+- `play_console_url` - adres widoku aplikacji lub listy aplikacji w Play Console
+- `play_store_url` - publiczny adres sklepu Play, jeśli aplikacja jest opublikowana
+- `play_download_size_mb`, `play_install_size_mb` - rozmiar pobierania i instalacji z Play Console
+- `play_startup_cold_ms`, `play_startup_warm_ms`, `play_startup_hot_ms` - metryki uruchamiania aplikacji
+- `play_anr_rate`, `play_crash_rate` - wskaźniki jakości aplikacji z Play Console
+- `play_metrics_updated_at`, `play_metrics_source` - kiedy i skąd zsynchronizowano metryki Play
 - `source` - URL źródła danych
 - `created_at`, `updated_at` - znaczniki czasu
 
@@ -22,7 +29,7 @@ Frontend w [studenci.html](studenci.html) czyta `project_teams` jako główne ź
 
 ### Migracja istniejącej tabeli
 
-Jeśli tabela `project_teams` już istnieje, uruchom poniższy SQL, aby dodać pola opisu i linków projektu:
+Jeśli tabela `project_teams` już istnieje, uruchom poniższy SQL, aby dodać pola opisu, linków projektu i metryk Google Play:
 
 ```sql
 alter table public.project_teams
@@ -131,3 +138,4 @@ using (true);
 2. W [studenci.html](studenci.html) ustaw `SUPABASE_URL` na publiczny URL projektu, np. `https://ndebunrsdtulflzpemwd.supabase.co`.
 3. Ustaw w [studenci.html](studenci.html) `SUPABASE_ANON_KEY` na publiczny klucz publishable/anon.
 4. Nie używaj `service_role key` po stronie frontendu.
+5. Prywatne metryki z Google Play Console nie powinny być pobierane bezpośrednio z [studenci.html](studenci.html). Importuj je przez bezpieczny backend albo ręczny, autoryzowany eksport do `project_teams`.

@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" role="img" aria-label="Ben-9 owl icon">
+  <defs>
+    <linearGradient id="bg" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#7b2cff"/>
+      <stop offset="100%" stop-color="#5b19db"/>
+    </linearGradient>
+    <linearGradient id="owl" x1="0" x2="0" y1="0" y2="1">
+      <stop offset="0%" stop-color="#aa8cf2"/>
+      <stop offset="100%" stop-color="#7852ce"/>
+    </linearGradient>
+    <linearGradient id="wing" x1="0" x2="1" y1="0" y2="1">
+      <stop offset="0%" stop-color="#7e55d9"/>
+      <stop offset="100%" stop-color="#5d32b6"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="10" stdDeviation="10" flood-opacity="0.18"/>
+    </filter>
+  </defs>
+  <rect width="512" height="512" rx="32" fill="url(#bg)"/>
+  <g filter="url(#shadow)">
+    <path d="M53 374 189 345c32-7 64-7 96 0l174 36-17 14-178-15-184 11z" fill="#5c2db2"/>
+    <path d="M46 361 185 334c32-6 63-6 94 0l182 33-38 18H88z" fill="#fffdf8"/>
+    <path d="M77 345h339l21 10H57z" fill="#ffffff"/>
+    <path d="M120 364c35 10 76 14 118 14 55 0 108-7 156-22" fill="none" stroke="#d5d0d8" stroke-linecap="round" stroke-width="5" opacity="0.85"/>
+    <path d="M87 381c46 4 99 7 152 7 54 0 109-3 161-10" fill="none" stroke="#e7e0dd" stroke-linecap="round" stroke-width="4" opacity="0.9"/>
+  </g>
+  <g filter="url(#shadow)">
+    <ellipse cx="257" cy="237" rx="124" ry="139" fill="url(#owl)"/>
+    <path d="M171 116c22 6 52 21 86 43 31-21 61-36 84-42-11 28-31 52-55 70h-59c-26-18-44-40-56-71z" fill="#9d7ee4"/>
+    <path d="M177 157c-29 24-47 62-47 105v10c0 29 11 56 31 78l15-105z" fill="url(#wing)"/>
+    <path d="M337 158c29 24 47 62 47 105v10c0 29-11 56-31 78l-15-105z" fill="url(#wing)"/>
+    <ellipse cx="204" cy="197" rx="50" ry="45" fill="#fff"/>
+    <ellipse cx="309" cy="197" rx="50" ry="45" fill="#fff"/>
+    <circle cx="209" cy="198" r="18" fill="#2d3256"/>
+    <circle cx="306" cy="198" r="18" fill="#2d3256"/>
+    <circle cx="202" cy="191" r="6" fill="#fff"/>
+    <circle cx="299" cy="191" r="6" fill="#fff"/>
+    <path d="M255 207c11 0 20 9 20 20l-20 29-20-29c0-11 9-20 20-20z" fill="#ffab00"/>
+    <g fill="#7b59d5">
+      <path d="M205 280c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+      <path d="M239 285c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+      <path d="M273 286c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+      <path d="M307 281c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+      <path d="M213 324c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+      <path d="M247 330c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+      <path d="M281 330c8 5 14 13 14 22-12 3-24-5-25-16 0-4 3-8 11-6z"/>
+    </g>
+    <path d="M204 350c0 14-9 24-21 31" fill="none" stroke="#ffab00" stroke-linecap="round" stroke-width="10"/>
+    <path d="M307 350c0 14 9 24 21 31" fill="none" stroke="#ffab00" stroke-linecap="round" stroke-width="10"/>
+  </g>
+</svg>
