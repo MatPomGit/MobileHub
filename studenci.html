@@ -722,7 +722,7 @@ background: var(--surface);
         const TEAM_ROLES = ['Leader', 'Frontend', 'Backend'];
         const SUPABASE_URL = 'https://ndebunrsdtulflzpemwd.supabase.co';
         const SUPABASE_ANON_KEY = 'sb_publishable_00hCok_8Bm3nteWusHg2Eg_5fFwDsps';
-        const SUPABASE_TABLE = 'project_submissions';
+        const SUPABASE_TEAMS_TABLE = 'project_teams';
 
         let projectData = { updatedAt: '', projects: [] };
 
@@ -754,43 +754,16 @@ background: var(--surface);
             return 'role-backend';
         }
 
-        function parseProjectId(row) {
-            const candidates = [row.repository_url || '', row.description || '', row.project_name || ''];
-            for (const candidate of candidates) {
-                const match = String(candidate).match(/pam\.26\.\d{2}/i);
-                if (match) return match[0].toLowerCase();
-            }
-            return null;
-        }
-
-        function normalizeProjectId(value) {
-            return value ? String(value).toLowerCase() : '';
-        }
-
         function sortProjects(projects) {
             return [...projects].sort((left, right) => left.id.localeCompare(right.id, 'pl', { numeric: true }));
         }
 
-        function buildProjectsFromRows(rows) {
-            const grouped = new Map();
-
-            rows.forEach((row) => {
-                const projectId = parseProjectId(row) || normalizeProjectId(row.project_name);
-                if (!grouped.has(projectId)) {
-                    grouped.set(projectId, {
-                        id: projectId,
-                        title: row.project_name,
-                        members: []
-                    });
-                }
-
-                grouped.get(projectId).members.push({
-                    index: row.student_index || null,
-                    role: row.role
-                });
-            });
-
-            return sortProjects(normalizeProjects(Array.from(grouped.values())));
+        function buildProjectsFromTeamRows(rows) {
+            return sortProjects(normalizeProjects((rows || []).map((row) => ({
+                id: row.project_id,
+                title: row.title,
+                members: Array.isArray(row.members) ? row.members : []
+            }))));
         }
 
         function normalizeProjects(rawProjects) {
@@ -834,8 +807,8 @@ background: var(--surface);
             };
         }
 
-        async function loadProjectDataFromSupabase() {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TABLE}?select=student_index,role,project_name,repository_url,description&order=project_name.asc,student_index.asc`, {
+        async function fetchSupabaseJson(path) {
+            const response = await fetch(`${SUPABASE_URL}/rest/v1/${path}`, {
                 headers: {
                     apikey: SUPABASE_ANON_KEY,
                     Authorization: `Bearer ${SUPABASE_ANON_KEY}`,
@@ -847,18 +820,28 @@ background: var(--surface);
                 throw new Error(`Supabase zwrocilo status ${response.status}`);
             }
 
-            const rows = await response.json();
-            const officialRows = Array.isArray(rows)
-                ? rows.filter((row) => parseProjectId(row))
+            return response.json();
+        }
+
+        async function loadProjectDataFromTeamsTable() {
+            const rows = await fetchSupabaseJson(`${SUPABASE_TEAMS_TABLE}?select=project_id,title,members,updated_at&order=project_id.asc`);
+            const validRows = Array.isArray(rows)
+                ? rows.filter((row) => row.project_id && row.title)
                 : [];
 
-            if (officialRows.length === 0) {
-                throw new Error('Brak oficjalnych danych zespolow w Supabase');
+            if (validRows.length === 0) {
+                throw new Error('Brak rekordow w project_teams');
             }
 
+            const updatedAt = validRows
+                .map((row) => row.updated_at)
+                .filter(Boolean)
+                .sort()
+                .at(-1);
+
             projectData = {
-                updatedAt: new Date().toISOString().slice(0, 10),
-                projects: buildProjectsFromRows(officialRows)
+                updatedAt: updatedAt ? String(updatedAt).slice(0, 10) : new Date().toISOString().slice(0, 10),
+                projects: buildProjectsFromTeamRows(validRows)
             };
         }
 
@@ -876,10 +859,10 @@ background: var(--surface);
 
         async function loadProjectData() {
             try {
-                await loadProjectDataFromSupabase();
-            } catch (supabaseError) {
+                await loadProjectDataFromTeamsTable();
+            } catch (teamsError) {
                 await loadProjectDataFromJson();
-                showAlert('Widok przełączono na lokalny plik students-data.json, bo Supabase nie zwrócił kompletu danych.', 'info');
+                showAlert('Widok przełączono na lokalny plik students-data.json, bo tabela project_teams nie zwróciła kompletu danych.', 'info');
             }
         }
 
