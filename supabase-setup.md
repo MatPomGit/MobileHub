@@ -10,7 +10,7 @@ Model tabeli:
 
 - `project_id` - identyfikator projektu, np. `pam.26.01`
 - `title` - tytuł projektu
-- `members` - tablica JSON z obiektami `{ index, role }`
+- `members` - tablica JSON z obiektami `{ index, role }`; opcjonalnie członek może mieć też `profile_url`
 - `description` - opis projektu aktualizowany przez studentów
 - `icon_url` - opcjonalna ikona projektu jako adres HTTPS lub zapisany obraz `data:image/...`
 - `project_url` - opcjonalny link HTTPS do strony projektu
@@ -44,6 +44,42 @@ alter table public.project_teams
 alter table public.project_teams
   add column if not exists repository_url text;
 
+alter table public.project_teams
+  add column if not exists package_name text;
+
+alter table public.project_teams
+  add column if not exists play_console_url text;
+
+alter table public.project_teams
+  add column if not exists play_store_url text;
+
+alter table public.project_teams
+  add column if not exists play_download_size_mb numeric(6,2);
+
+alter table public.project_teams
+  add column if not exists play_install_size_mb numeric(6,2);
+
+alter table public.project_teams
+  add column if not exists play_startup_cold_ms integer;
+
+alter table public.project_teams
+  add column if not exists play_startup_warm_ms integer;
+
+alter table public.project_teams
+  add column if not exists play_startup_hot_ms integer;
+
+alter table public.project_teams
+  add column if not exists play_anr_rate numeric(6,3);
+
+alter table public.project_teams
+  add column if not exists play_crash_rate numeric(6,3);
+
+alter table public.project_teams
+  add column if not exists play_metrics_updated_at timestamptz;
+
+alter table public.project_teams
+  add column if not exists play_metrics_source text;
+
 do $$
 begin
   if not exists (
@@ -76,6 +112,86 @@ begin
     alter table public.project_teams
       add constraint project_teams_repository_url_chk
       check (repository_url is null or repository_url ~ '^https://');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_package_name_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_package_name_chk
+      check (package_name is null or package_name ~ '^[A-Za-z0-9_]+(\.[A-Za-z0-9_]+)+$');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_console_url_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_console_url_chk
+      check (play_console_url is null or play_console_url ~ '^https://play\.google\.com/console');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_store_url_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_store_url_chk
+      check (play_store_url is null or play_store_url ~ '^https://play\.google\.com/store/apps/details');
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_download_size_mb_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_download_size_mb_chk
+      check (play_download_size_mb is null or play_download_size_mb >= 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_install_size_mb_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_install_size_mb_chk
+      check (play_install_size_mb is null or play_install_size_mb >= 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_startup_cold_ms_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_startup_cold_ms_chk
+      check (play_startup_cold_ms is null or play_startup_cold_ms >= 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_startup_warm_ms_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_startup_warm_ms_chk
+      check (play_startup_warm_ms is null or play_startup_warm_ms >= 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_startup_hot_ms_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_startup_hot_ms_chk
+      check (play_startup_hot_ms is null or play_startup_hot_ms >= 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_anr_rate_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_anr_rate_chk
+      check (play_anr_rate is null or play_anr_rate >= 0);
+  end if;
+
+  if not exists (
+    select 1 from pg_constraint where conname = 'project_teams_play_crash_rate_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_play_crash_rate_chk
+      check (play_crash_rate is null or play_crash_rate >= 0);
   end if;
 end
 $$;
