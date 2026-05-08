@@ -40,6 +40,45 @@
     padding: 2px 8px;
     font-size: 1em;
 }
+
+/* Klasa pomocnicza dla etykiet dostępnych dla czytników ekranu. */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* Link pomijania nawigacji poprawia szybkość obsługi klawiaturą. */
+.skip-link {
+    position: absolute;
+    left: 12px;
+    top: -48px;
+    z-index: 10000;
+    padding: 10px 14px;
+    border-radius: 8px;
+    background: var(--accent);
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    transition: top 0.2s ease;
+}
+
+.skip-link:focus {
+    top: 12px;
+}
+
+/* Ujednolicony obrys fokusu dla elementów interaktywnych. */
+:where(a, button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
+    outline: 3px solid var(--accent2);
+    outline-offset: 2px;
+}
+
 /* ===== CSS VARIABLES ===== */
 :root {
     --bg: #f4f6fb;
