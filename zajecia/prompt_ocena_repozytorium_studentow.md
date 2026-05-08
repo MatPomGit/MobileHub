@@ -90,13 +90,12 @@ Podaj krótkie podsumowanie oraz tabelę z punktacją cząstkową i oceną końc
 
 Tabela ma mieć kolumny:
 - Kryterium,
-- Maksymalna liczba punktów,
-- Przyznane punkty,
+- Przyznane punkty/Maksymalna liczba punktów,
 - Uzasadnienie.
 
 Na końcu tej sekcji podaj:
 - sumę punktów,
-- ocenę końcową w skali 2.0–5.0,
+- ocenę za aplikację w skali 2.0–5.0,
 - status: zaliczone / niezaliczone.
 
 ### 3. Ocena indywidualna członków zespołu
@@ -109,6 +108,9 @@ W każdej podsekcji podaj:
 - krótkie streszczenie odpowiedzialności tej roli na podstawie repozytorium,
 - jakie wymagania projektowe ta rola realizuje,
 - tabelę z punktacją tej osoby.
+- ocenę za wypełnienie swojej roli w skali 2.0–5.0,
+- ocenę końcową w skali 2.0–5.0,
+- status: zaliczone / niezaliczone.
 
 Tabela ma mieć kolumny:
 - Obszar oceny,
@@ -122,6 +124,8 @@ W ocenie indywidualnej uwzględnij nie tylko udział w kodzie, lecz także:
 - wkład dokumentacyjny,
 - ewentualne testy i poprawki,
 - widoczny rozkład odpowiedzialności.
+
+Ocena końcowa każdego studenta ma składać się w 60% z oceny własnej (za rolę) i 40% z oceny za aplikację.
 
 ### 4. Wnioski końcowe
 Na końcu dodaj 3–5 krótkich punktów z najważniejszymi mocnymi stronami i brakami projektu. Wnioski mają być konkretne i techniczne.
@@ -143,11 +147,11 @@ Na końcu dodaj 3–5 krótkich punktów z najważniejszymi mocnymi stronami i b
 ...
 
 ## 2. Ocena ogólna aplikacji
-| Kryterium | Maks. | Punkty | Uzasadnienie |
-|---|---:|---:|---|
-| ... | ... | ... | ... |
+| Kryterium | Punkty | Uzasadnienie |
+|---|---:|---|
+| ... | ... | ... |
 **Suma punktów:** ...
-**Ocena końcowa:** ...
+**Ocena za aplikację:** ...
 **Status:** ...
 
 ## 3. Ocena indywidualna członków zespołu
@@ -157,18 +161,24 @@ Na końcu dodaj 3–5 krótkich punktów z najważniejszymi mocnymi stronami i b
 | Obszar oceny | Punkty | Uzasadnienie |
 |---|---:|---|
 | ... | ... | ... |
+**Ocena za rolę:** ...
+**Ocena koncowa:** ...
 
 ### Frontend
 ...
 | Obszar oceny | Punkty | Uzasadnienie |
 |---|---:|---|
 | ... | ... | ... |
+**Ocena za rolę:** ...
+**Ocena koncowa:** ...
 
 ### Backend
 ...
 | Obszar oceny | Punkty | Uzasadnienie |
 |---|---:|---|
 | ... | ... | ... |
+**Ocena za rolę:** ...
+**Ocena koncowa:** ...
 
 ## 4. Wnioski końcowe
 - ...
