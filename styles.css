@@ -1772,16 +1772,11 @@ header {
     background: var(--accent-light);
 }
 
-.weekly-roadmap-table th:nth-child(1),
-.weekly-roadmap-table td:nth-child(1) { width: 10%; }
-.weekly-roadmap-table th:nth-child(2),
-.weekly-roadmap-table td:nth-child(2) { width: 32%; }
+.weekly-roadmap-table th:nth-child(1) { width: 10%; }
+.weekly-roadmap-table th:nth-child(2) { width: 32%; }
 .weekly-roadmap-table th:nth-child(3),
-.weekly-roadmap-table td:nth-child(3),
-.weekly-roadmap-table th:nth-child(4),
-.weekly-roadmap-table td:nth-child(4) { width: 21%; }
-.weekly-roadmap-table th:nth-child(5),
-.weekly-roadmap-table td:nth-child(5) { width: 16%; }
+.weekly-roadmap-table th:nth-child(4) { width: 21%; }
+.weekly-roadmap-table th:nth-child(5) { width: 16%; }
 
 /* Loading */
 .wiki-loading {
