@@ -364,9 +364,9 @@
     "category": 7,
     "answers": [
       "Retained message",
-      "Rola Publisher",
-      "Rola Subscriber",
-      "Rola brokera MQTT"
+      "Rola: Publisher",
+      "Rola: Subscriber",
+      "Rola: Broker MQTT"
     ],
     "correctIndex": 2,
     "explanation": "Subscriber subskrybuje temat i odbiera wiadomości. Broker pośredniczy w komunikacji, a publisher publikuje komunikaty."
