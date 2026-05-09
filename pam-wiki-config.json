@@ -71,6 +71,7 @@
     "neurogaming": "wiki/neurogaming.md",
     "lua-mobile-games": "wiki/lua-mobile-games.md",
     "unity-advanced": "wiki/unity-advanced.md",
+    "unreal-mobile-learning-path": "wiki/unreal-mobile-learning-path.md",
     "game-physics": "wiki/game-physics.md",
     "robotics-mobile": "wiki/robotics-mobile.md",
     "gpu-rendering": "wiki/gpu-rendering.md",
@@ -486,6 +487,11 @@
       "category": "Gry mobilne",
       "title": "Unity - zaawansowane techniki",
       "icon": "fa-solid fa-cube"
+    },
+    "unreal-mobile-learning-path": {
+      "category": "Gry mobilne",
+      "title": "Unreal Engine - ścieżka nauki mobile",
+      "icon": "fa-solid fa-road"
     },
     "game-physics": {
       "category": "Gry mobilne",
@@ -959,6 +965,7 @@
         "mobile-games",
         "lua-mobile-games",
         "unity-advanced",
+        "unreal-mobile-learning-path",
         "game-physics",
         "game-monetization",
         "itchio-android",
