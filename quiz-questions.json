@@ -126,7 +126,7 @@
       "CoroutineScope utworzony w Activity",
       "Komunikat Toast UI",
       "BroadcastReceiver bez harmonogramu",
-      "Komponent WorkManager"
+      "Biblioteka WorkManager"
     ],
     "correctIndex": 3,
     "explanation": "WorkManager jest przeznaczony do odroczonej, gwarantowanej pracy w tle z uwzględnieniem ograniczeń systemowych, np. sieci lub ładowania."
