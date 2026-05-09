@@ -4,9 +4,9 @@
     "category": 4,
     "answers": [
       "Activity/Composable",
-      "ViewModel",
-      "Repository",
-      "Room DAO"
+      "Warstwa ViewModel",
+      "Warstwa Repository",
+      "Interfejs Room DAO"
     ],
     "correctIndex": 1,
     "explanation": "ViewModel agreguje dane z warstwy domenowej lub repozytorium i wystawia stan dla widoku, np. przez StateFlow/LiveData. Repository odpowiada głównie za dostęp do danych, a widok powinien jedynie renderować stan."
@@ -15,7 +15,7 @@
     "question": "Aplikacja Android ma przechowywać lokalnie encje użytkowników i umożliwiać zapytania SQL bez pisania dużej ilości kodu niskopoziomowego. Które rozwiązanie najlepiej pasuje do tego przypadku?",
     "category": 4,
     "answers": [
-      "Room",
+      "Biblioteka Room ORM",
       "DataStore Preferences",
       "EncryptedSharedPreferences",
       "Retrofit z konwerterem JSON"
@@ -53,8 +53,8 @@
     "answers": [
       "LaunchedEffect",
       "Modifier.navigationBarsPadding()",
-      "NavHost",
-      "Scaffold"
+      "Komponent NavHost",
+      "Komponent Scaffold"
     ],
     "correctIndex": 2,
     "explanation": "NavHost wiąże NavController z grafem nawigacji i określa, które composable są dostępne pod konkretnymi trasami."
@@ -75,8 +75,8 @@
     "question": "Zespół iOS chce budować ekran jako deklarację zależną od stanu, korzystać z podglądów oraz ograniczyć ręczne aktualizowanie kontrolek. Który framework najlepiej odpowiada takiemu modelowi pracy?",
     "category": 4,
     "answers": [
-      "SwiftUI",
-      "SpriteKit",
+      "Framework SwiftUI",
+      "Framework SpriteKit",
       "Core Animation",
       "UIKit ze storyboardami"
     ],
@@ -99,10 +99,10 @@
     "question": "Telefon ma automatycznie zmienić układ ekranu po obróceniu urządzenia z pionu do poziomu. Potrzebny jest pomiar przyspieszenia względem osi urządzenia i pola grawitacji. Które źródło danych najlepiej dostarcza takiej informacji?",
     "category": 2,
     "answers": [
-      "Akcelerometr",
-      "Żyroskop",
-      "Magnetometr",
-      "Barometr"
+      "Sensor akcelerometru",
+      "Sensor żyroskopu",
+      "Sensor magnetometru",
+      "Sensor barometru"
     ],
     "correctIndex": 0,
     "explanation": "Akcelerometr mierzy przyspieszenia, w tym składową wynikającą z grawitacji, dlatego pomaga określać orientację urządzenia. Żyroskop mierzy prędkość kątową, a magnetometr kierunek pola magnetycznego."
@@ -124,9 +124,9 @@
     "category": 4,
     "answers": [
       "CoroutineScope utworzony w Activity",
-      "Toast",
+      "Komunikat Toast UI",
       "BroadcastReceiver bez harmonogramu",
-      "WorkManager"
+      "Komponent WorkManager"
     ],
     "correctIndex": 3,
     "explanation": "WorkManager jest przeznaczony do odroczonej, gwarantowanej pracy w tle z uwzględnieniem ograniczeń systemowych, np. sieci lub ładowania."
@@ -135,10 +135,10 @@
     "question": "Aplikacja iOS musi przechować token odświeżający tak, aby nie był zwykłą wartością w preferencjach użytkownika. Gdzie powinien trafić taki sekret?",
     "category": 4,
     "answers": [
-      "Keychain",
-      "Info.plist",
+      "Systemowy Keychain",
+      "Plik Info.plist",
       "Cache URLSession",
-      "UserDefaults"
+      "Magazyn UserDefaults"
     ],
     "correctIndex": 0,
     "explanation": "Keychain służy do bezpiecznego przechowywania sekretów, takich jak hasła, tokeny i klucze. UserDefaults i Info.plist nie są właściwym miejscem dla wrażliwych danych."
@@ -160,9 +160,9 @@
     "category": 7,
     "answers": [
       "Protocol Buffers",
-      "YAML",
-      "CSV",
-      "JSON"
+      "Format YAML",
+      "Format CSV",
+      "Format JSON"
     ],
     "correctIndex": 3,
     "explanation": "JSON jest najczęściej stosowany w REST API ze względu na czytelność, szerokie wsparcie bibliotek i prostą reprezentację obiektów. Protocol Buffers bywa wydajniejszy, ale jest mniej typowy dla klasycznych REST API."
@@ -270,7 +270,7 @@
       "Column z verticalScroll",
       "Canvas rysujący tekst bez semantyki",
       "Box z ręcznie ustawianymi pozycjami",
-      "LazyColumn"
+      "Komponent LazyColumn"
     ],
     "correctIndex": 3,
     "explanation": "LazyColumn tworzy i renderuje głównie widoczne elementy listy, dlatego lepiej skaluje się dla dużych zbiorów niż zwykły Column z pełnym zestawem dzieci."
@@ -303,10 +303,10 @@
     "question": "Aplikacja AR ma stabilnie reagować na szybkie obroty telefonu podczas celowania kamerą. Potrzebny jest pomiar prędkości kątowej, a nie samego przyspieszenia liniowego. Który sensor odpowiada temu wymaganiu?",
     "category": 2,
     "answers": [
-      "Żyroskop",
-      "Magnetometr",
+      "Sensor żyroskopu",
+      "Sensor magnetometru",
       "Czujnik zbliżeniowy",
-      "Akcelerometr"
+      "Sensor akcelerometru"
     ],
     "correctIndex": 0,
     "explanation": "Żyroskop mierzy prędkość kątową, dlatego wspiera śledzenie rotacji. Akcelerometr mierzy przyspieszenie, a magnetometr pole magnetyczne."
@@ -327,10 +327,10 @@
     "question": "Użytkownik otwiera w klasycznej aplikacji Android ekran logowania z własnym cyklem życia, obsługą zdarzeń i powiązaniem z systemem. Który komponent najczęściej reprezentuje taki ekran?",
     "category": 4,
     "answers": [
-      "ApplicationId",
+      "Parametr ApplicationId",
       "Gradle Wrapper",
-      "Activity",
-      "ADB server"
+      "Komponent Activity",
+      "Usługa ADB server"
     ],
     "correctIndex": 2,
     "explanation": "Activity jest komponentem aplikacji Android powiązanym z ekranem i cyklem życia interakcji użytkownika. W nowoczesnych aplikacjach ekran może być też fragmentem lub composable hostowanym przez Activity."
@@ -351,10 +351,10 @@
     "question": "Krokomierz w telefonie analizuje powtarzalne wzorce ruchu podczas chodzenia. Dane z którego sensora są zwykle podstawą takiej detekcji?",
     "category": 6,
     "answers": [
-      "Barometr",
-      "Akcelerometr",
-      "Czujnik światła",
-      "NFC"
+      "Sensor barometru",
+      "Sensor akcelerometru",
+      "Sensor światła",
+      "Moduł NFC"
     ],
     "correctIndex": 1,
     "explanation": "Akcelerometr rejestruje zmiany przyspieszenia typowe dla kroków. Inne sensory mogą uzupełniać kontekst, ale nie są podstawowym źródłem detekcji kroków."
@@ -364,9 +364,9 @@
     "category": 7,
     "answers": [
       "Retained message",
-      "Publisher",
-      "Subscriber",
-      "Broker"
+      "Rola Publisher",
+      "Rola Subscriber",
+      "Rola brokera MQTT"
     ],
     "correctIndex": 2,
     "explanation": "Subscriber subskrybuje temat i odbiera wiadomości. Broker pośredniczy w komunikacji, a publisher publikuje komunikaty."
@@ -473,8 +473,8 @@
     "answers": [
       "Czujnik zbliżeniowy",
       "Czujnik światła RGB aparatu",
-      "Magnetometr",
-      "Barometr"
+      "Sensor magnetometru",
+      "Sensor barometru"
     ],
     "correctIndex": 0,
     "explanation": "Czujnik zbliżeniowy wykrywa obecność obiektu blisko ekranu, np. twarzy podczas rozmowy. Magnetometr dotyczy pola magnetycznego, a barometr ciśnienia atmosferycznego."
@@ -880,9 +880,9 @@
     "category": 2,
     "answers": [
       "Czujnik zbliżeniowy",
-      "NFC",
+      "Moduł NFC",
       "Czytnik linii papilarnych",
-      "Barometr"
+      "Sensor barometru"
     ],
     "correctIndex": 3,
     "explanation": "Barometr mierzy ciśnienie atmosferyczne, które może służyć do szacowania zmian wysokości. Czujnik zbliżeniowy, NFC i czytnik linii papilarnych nie mierzą tego typu ruchu."
@@ -891,9 +891,9 @@
     "question": "Aplikacja kompasu ma wskazywać kierunek względem północy magnetycznej. Który sensor dostarcza podstawowego sygnału o kierunku pola magnetycznego?",
     "category": 2,
     "answers": [
-      "Barometr",
-      "Czujnik światła",
-      "Magnetometr",
+      "Sensor barometru",
+      "Sensor światła",
+      "Sensor magnetometru",
       "Mikrofon kierunkowy"
     ],
     "correctIndex": 2,
@@ -904,8 +904,8 @@
     "category": 2,
     "answers": [
       "Czujnik zbliżeniowy",
-      "Moduł GPS",
-      "Żyroskop",
+      "Moduł lokalizacji GPS",
+      "Sensor żyroskopu",
       "Akcelerator graficzny GPU"
     ],
     "correctIndex": 0,
@@ -1012,7 +1012,7 @@
     "category": 4,
     "answers": [
       "NavController",
-      "DAO",
+      "Interfejs DAO",
       "Composable Preview",
       "Manifest permission"
     ],
@@ -1095,10 +1095,10 @@
     "question": "Aplikacja ma wykonać akcję po wejściu użytkownika do określonej strefy, ale bez ciągłego odpytywania GPS z najwyższą dokładnością. Jaki mechanizm lokalizacyjny najlepiej pasuje do tego wymagania?",
     "category": 6,
     "answers": [
-      "Texture atlas",
+      "Struktura texture atlas",
       "Continuous integration",
-      "Key rotation",
-      "Geofencing"
+      "Mechanizm key rotation",
+      "Mechanizm geofencingu"
     ],
     "correctIndex": 3,
     "explanation": "Geofencing pozwala reagować na wejście lub wyjście z obszaru geograficznego. Jest bardziej adekwatny niż ciągłe ręczne próbkowanie lokalizacji w wielu scenariuszach kontekstowych."
@@ -1504,7 +1504,7 @@
     "category": 2,
     "answers": [
       "Akcelerometr liniowy",
-      "Magnetometr",
+      "Sensor magnetometru",
       "Czujnik zbliżeniowy",
       "Moduł wibracji haptycznej"
     ],
@@ -1515,8 +1515,8 @@
     "question": "Telefon ma wygasić ekran podczas rozmowy, gdy użytkownik przykłada urządzenie do ucha, a następnie odblokować ekran po odsunięciu telefonu. Który sensor obsługuje ten przypadek?",
     "category": 2,
     "answers": [
-      "Barometr",
-      "Żyroskop",
+      "Sensor barometru",
+      "Sensor żyroskopu",
       "Czujnik zbliżeniowy",
       "GPS o wysokiej dokładności"
     ],
@@ -1527,10 +1527,10 @@
     "question": "Aplikacja AR stabilizuje obiekt podczas szybkich ruchów telefonu i potrzebuje bezpośredniego pomiaru prędkości kątowej urządzenia. Który sensor dostarcza takiego sygnału?",
     "category": 2,
     "answers": [
-      "Barometr",
-      "Czujnik światła",
-      "NFC",
-      "Żyroskop"
+      "Sensor barometru",
+      "Sensor światła",
+      "Moduł NFC",
+      "Sensor żyroskopu"
     ],
     "correctIndex": 3,
     "explanation": "Żyroskop mierzy prędkość obrotową, czyli zmianę orientacji w czasie. W połączeniu z akcelerometrem i kamerą wspiera stabilne śledzenie ruchu."
