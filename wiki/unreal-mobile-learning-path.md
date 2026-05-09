@@ -56,8 +56,11 @@ void AMobilePlayerController::SetupInputComponent()
     Super::SetupInputComponent();
 
     // Rejestracja podstawowych akcji dotykowych.
-    InputComponent->BindTouch(IE_Pressed, this, &AMobilePlayerController::OnTouchPressed);
-    InputComponent->BindTouch(IE_Released, this, &AMobilePlayerController::OnTouchReleased);
+    if (InputComponent)
+    {
+        InputComponent->BindTouch(IE_Pressed, this, &AMobilePlayerController::OnTouchPressed);
+        InputComponent->BindTouch(IE_Released, this, &AMobilePlayerController::OnTouchReleased);
+    }
 }
 ```
 
