@@ -27,7 +27,7 @@ Ustal twarde limity:
 - **FPS target**: 30 lub 60 (na jakiej klasie urządzeń?),
 - **CPU/GPU frame time** (np. ~16.6 ms dla 60 FPS),
 - **RAM budget** (np. 2–3 GB dla średniej półki),
-- **Docelowy rozmiar paczki** (APK/AAB + asset packs).
+- **Docelowy rozmiar paczki** (AAB + Play Asset Delivery dla dużych zasobów).
 
 Bez tych liczb zespół art/tech będzie podejmował decyzje „na oko”.
 
