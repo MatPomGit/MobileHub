@@ -153,7 +153,7 @@ r.PostProcessAAQuality=2
    - ustaw `Package Name`,
    - ustaw `Min SDK` i `Target SDK`,
    - podłącz keystore do podpisywania.
-3. Kliknij: **File → Package Project → Android (AAB)**.
+3. Kliknij: **Platforms → Android → Package Project** (wybierz format AAB w ustawieniach).
 4. Uruchom testy na min. 3 klasach urządzeń i zapisz wyniki (FPS, RAM, temperatura, battery drain).
 5. Wgraj build do **Google Play Console (Internal testing)** lub **TestFlight**.
 6. Po akceptacji testów wygeneruj **Release Candidate** i zamroź scope zmian.
