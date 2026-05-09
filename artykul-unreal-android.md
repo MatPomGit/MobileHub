@@ -128,7 +128,7 @@ Wykorzystuj profilery UE i testy na **fizycznych urządzeniach**. Emulator nie z
 - Ustaw unikalny `Application ID` (package name),
 - Wybierz `minSdkVersion` i `targetSdkVersion` zgodne z wymaganiami Google Play,
 - Zadbaj o wersjonowanie (`versionCode`, `versionName`),
-- Preferuj **AAB** (Android App Bundle).
+- Obowiązkowo używaj **AAB** (Android App Bundle) do publikacji nowych aplikacji.
 
 ### Krok 3: Build testowy
 
