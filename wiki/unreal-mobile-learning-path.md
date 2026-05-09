@@ -167,9 +167,9 @@ r.PostProcessAAQuality=2
 
 ## Rekomendowane materiały
 
-- Unreal Engine Documentation - Mobile Development
-- Unreal Online Learning - kursy UE5
-- Android Performance Patterns + oficjalne checklisty Play Console
+- [Unreal Engine Documentation - Mobile Development](https://docs.unrealengine.com/5.0/en-US/sharing-and-releasing-projects-for-mobile-platforms-in-unreal-engine/)
+- [Unreal Online Learning - kursy UE5](https://dev.epicgames.com/community/unreal-engine/learning)
+- [Android Performance Patterns](https://developer.android.com/topic/performance)
 
 ## Najczęstsze pułapki i jak ich uniknąć
 
