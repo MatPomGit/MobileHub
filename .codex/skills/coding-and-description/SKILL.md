@@ -44,7 +44,7 @@ Zapewnić, że wielu agentów pracuje spójnie, bez dublowania pracy i z pełną
 5. Finalny artefakt musi mieć wskazanego właściciela odpowiedzialnego za publikację.
 
 ### Protokół przekazania pracy (handoff)
-Przekazanie między agentami musi zawierać:
+Przekazanie między agentami (w ramach sekcji **Output**) musi zawierać:
 - identyfikator zadania,
 - aktualny stan realizacji (%),
 - listę ukończonych kroków,
