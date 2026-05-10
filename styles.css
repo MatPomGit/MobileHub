@@ -2754,6 +2754,8 @@ footer strong {
     border-radius: var(--radius);
     padding: 22px 24px;
     transition: all var(--transition);
+    /* Chroni siatkę przed poszerzaniem przez długie treści wewnątrz karty. */
+    min-width: 0;
 }
 
 .materials-card:hover {
@@ -2802,6 +2804,8 @@ footer strong {
     text-decoration: none;
     color: var(--text);
     transition: all var(--transition);
+    /* Zapobiega rozszerzaniu elementu linku poza szerokość rodzica. */
+    min-width: 0;
 }
 
 .file-item:hover {
@@ -4293,7 +4297,13 @@ footer strong {
 
 @media (max-width: 900px) {
     .materials-layout {
-        grid-template-columns: 1fr;
+        /* Jedna kolumna i zerowy minimalny rozmiar eliminują poziomy scroll na telefonach. */
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .file-list {
+        /* Wymuszenie pojedynczej kolumny stabilizuje szerokość listy materiałów mobilnie. */
+        grid-template-columns: minmax(0, 1fr);
     }
 }
 
