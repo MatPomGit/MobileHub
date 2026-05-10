@@ -1,50 +1,40 @@
+#!/usr/bin/env node
 'use strict';
 
+/**
+ * Test wykrywa uszkodzenie struktury plików live lectures (Reveal + PDF sync)
+ * i blokuje regresję, w której wykład nie renderuje slajdów albo traci zasoby startowe.
+ */
 const fs = require('fs');
 const path = require('path');
 
 const baseDir = path.join(__dirname, '..', 'zajecia', 'live', 'wyklady');
-const files = fs.readdirSync(baseDir).filter(name => /^w\d{2}-.+-live\.html$/.test(name)).sort();
+const files = fs.readdirSync(baseDir).filter((name) => /^w\d{2}-.+-live\.html$/.test(name)).sort();
 
 const required = [
-  { name: 'Cele i efekty uczenia', pattern: /Cele i efekty uczenia/i },
-  { name: 'Case study', pattern: /Case study \/ praktyka inżynierska/i },
-  { name: 'Najczęstsze błędy', pattern: /Najczęstsze błędy/i },
-  { name: 'Quiz', pattern: /Pytania kontrolne \+ mini quiz/i },
-  { name: 'info-card', pattern: /class="[^"]*info-card[^"]*"/i },
-  { name: 'comparison-grid', pattern: /class="[^"]*comparison-grid[^"]*"/i },
-  { name: 'timeline', pattern: /class="[^"]*timeline[^"]*"/i },
-  { name: 'callout', pattern: /class="[^"]*callout[^"]*"/i },
-  { name: 'quiz-checkpoint', pattern: /class="[^"]*quiz-checkpoint[^"]*"/i },
-  { name: 'co najmniej 3 slajdy rdzenia', pattern: /(class="[^"]*knowledge-slide[^"]*"[\s\S]*?){3,}/i }
+  { name: 'root Reveal `.reveal`', pattern: /class="reveal"/i },
+  { name: 'kontener slajdów `.slides`', pattern: /class="slides[^"]*"/i },
+  { name: 'atrybut data-pdf-src', pattern: /data-pdf-src="[^"]+\.pdf"/i },
+  { name: 'slajd ładowania `[data-loading-slide]`', pattern: /data-loading-slide/i },
+  { name: 'podpięty live-theme.css', pattern: /live-theme\.css/i },
+  { name: 'podpięty live-reveal-enhancements.js', pattern: /live-reveal-enhancements\.js/i },
+  { name: 'inicjalizacja renderPdfSlides', pattern: /renderPdfSlides\s*\(/i }
 ];
 
 let hasError = false;
-
 for (const file of files) {
-  const fullPath = path.join(baseDir, file);
-  const content = fs.readFileSync(fullPath, 'utf8');
-
-  if (/Najważniejsze pojęcia/i.test(content)) {
-    hasError = true;
-    console.error(`❌ ${file}: znaleziono placeholder "Najważniejsze pojęcia".`);
-  }
-
+  const content = fs.readFileSync(path.join(baseDir, file), 'utf8');
   for (const check of required) {
     if (!check.pattern.test(content)) {
       hasError = true;
-      console.error(`❌ ${file}: brak wymaganego bloku: ${check.name}.`);
+      console.error(`❌ ${file}: brak wymaganego elementu struktury: ${check.name}.`);
     }
-  }
-
-  if (!hasError) {
-    // brak
   }
 }
 
 if (hasError) {
-  console.error('\nWalidacja wykładów live zakończona błędami.');
+  console.error('\nWalidacja struktury live lectures zakończona błędami.');
   process.exit(1);
 }
 
-console.log(`✅ Walidacja OK (${files.length} wykładów).`);
+console.log(`✅ Walidacja struktury live lectures OK (${files.length} plików).`);

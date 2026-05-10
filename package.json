@@ -1,0 +1,10 @@
+{
+  "name": "mobilehub",
+  "private": true,
+  "scripts": {
+    "validate:all": "bash scripts/run-quality-gates.sh"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.54.0"
+  }
+}
