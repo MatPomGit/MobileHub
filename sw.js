@@ -21,8 +21,8 @@ const ASSETS_TO_CACHE = [
     './assets/background_4.jpg'
 ];
 
-const NETWORK_FIRST_PATHS = new Set(['/index.html', '/pam-wiki-config.json']);
-const STALE_WHILE_REVALIDATE_PATHS = new Set(['/styles.css', '/pam-wiki.js', '/quiz-module.js', '/dev-mode.js']);
+const NETWORK_FIRST_PATHS = new Set(['/', '/index.html', '/pam-wiki-config.json']);
+const STALE_WHILE_REVALIDATE_PATHS = new Set(['/styles.css', '/pam-wiki.js', '/pam-files.js', '/quiz-module.js', '/dev-mode.js']);
 
 self.addEventListener('install', event => {
     event.waitUntil(
