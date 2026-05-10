@@ -50,7 +50,7 @@ Przekazanie między agentami (w ramach sekcji **Output**) musi zawierać:
 - listę ukończonych kroków,
 - listę kroków otwartych,
 - zależności i blokery,
-- checklistę jakości.
+- checklistę jakości (zgodną z sekcją Standardy jakości).
 
 ## Zasady ogólne
 1. **Priorytet poprawności:** najpierw poprawność logiczna i bezpieczeństwo, potem optymalizacja.
