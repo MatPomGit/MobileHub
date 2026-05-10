@@ -2,9 +2,15 @@
 
 > Cel: lista krytycznych i wysokopriorytetowych zadań, które są niezbędne do poprawnego i stabilnego działania strony (UI, PWA, dostępność, wydajność, bezpieczeństwo utrzymania).
 
+## Status migracji backlogu
+- Źródło kanoniczne: `docs/TODO`.
+- Aktywne zadania z `ToDo.md`: brak (w pliku były wyłącznie pozycje oznaczone jako ukończone).
+
 ## P0 (krytyczne) — do realizacji w pierwszej kolejności
 
 ### 1) Naprawić strategię cache w Service Worker, aby nie blokować aktualizacji i nie psuć API/CDN
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Rozdzielić strategię cache per typ zasobu:
   - [ ] `NetworkFirst` dla `index.html` i `pam-wiki-config.json`.
   - [ ] `StaleWhileRevalidate` dla `styles.css`, `pam-wiki.js`, `quiz-module.js`, `dev-mode.js`.
@@ -17,6 +23,8 @@
 **Dlaczego to ważne:** obecna implementacja obsługuje wszystkie requesty globalnie i może prowadzić do nieprzewidywalnych błędów, starych danych oraz problemów przy odświeżeniach PWA.
 
 ### 2) Naprawić podwójne tworzenie paska postępu scrolla
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Usunąć duplikację elementu `.scroll-progress`:
   - [ ] Albo zostawić element tylko w HTML.
   - [ ] Albo tworzyć go wyłącznie w JS (i usunąć z HTML).
@@ -25,6 +33,8 @@
 **Dlaczego to ważne:** obecnie pasek istnieje w HTML i jest tworzony ponownie przez JS, co powoduje niespójny UI i utrudnia utrzymanie.
 
 ### 3) Domknąć krytyczne luki jakości w sekcji wykładów live
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Ujednolicić strukturę wszystkich plików `zajecia/live/wyklady/w*-live.html` do kontraktu walidatora.
 - [ ] Dodać wymagane bloki:
   - [ ] Cele i efekty uczenia,
@@ -39,6 +49,8 @@
 
 
 ### 4) Uszczelnić UX mobilny (telefon/tablet) dla kluczowych przepływów nawigacji
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Zweryfikować i poprawić działanie panelu pull-down (`pullPanel`) na małych ekranach:
   - [ ] płynność drag/scroll bez konfliktu z przewijaniem strony,
   - [ ] stabilne otwieranie/zamykanie po rotacji ekranu,
@@ -51,6 +63,8 @@
 **Dlaczego to ważne:** mobilny interfejs jest głównym kanałem użycia strony; błędy w geometrii i gestach powodują natychmiastowe porzucenie sesji.
 
 ### 5) Dokończyć checklistę zgodności PWA instalowalnej i offline-first
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Zweryfikować kompletność `manifest.json`:
   - [ ] `name`, `short_name`, `start_url`, `scope`, `display`, `theme_color`, `background_color`, maskowalne ikony.
 - [ ] Dodać walidację, że `start_url` działa offline po pierwszej instalacji.
@@ -67,34 +81,46 @@
 ## P1 (wysokie) — stabilność funkcjonalna, UX i mobilność
 
 ### 6) Wzmocnić obsługę błędów ładowania konfiguracji i artykułów
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Dodać retry z backoff dla `pam-wiki-config.json`.
 - [ ] Dodać komunikat użytkownika z akcją „Spróbuj ponownie”.
 - [ ] Logować błędy techniczne do jednej funkcji telemetrycznej (nawet jeśli tymczasowo `console.error`).
 - [ ] Dodać walidację runtime struktury JSON przed użyciem (`articles`, `metadata`, `categories`).
 
 ### 7) Uporządkować inicjalizację i cykl życia UI
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Wydzielić jeden moduł `bootstrap/init` odpowiedzialny za kolejność startu.
 - [ ] Dodać zabezpieczenia, żeby te same listenery nie były podpinane wielokrotnie (idempotent init).
 - [ ] Dodać cleanup listenerów dla elementów dynamicznych przy re-renderach (jeśli dotyczy).
 
 ### 8) Ograniczyć ryzyko XSS przy renderowaniu treści dynamicznych
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Sanitizować HTML generowany z markdown (np. DOMPurify) przed wstawieniem do DOM.
 - [ ] Zablokować niebezpieczne tagi/atrybuty i URL-e (`javascript:`).
 - [ ] Dodać test bezpieczeństwa dla przykładowego payloadu XSS.
 
 ### 9) Poprawić dostępność (a11y) elementów interaktywnych niestandardowych
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Zweryfikować obsługę klawiatury (Enter/Space) dla elementów z `role="button"`.
 - [ ] Dodać pułapkę fokusu i zamykanie `Esc` dla paneli/dialogów mobilnych.
 - [ ] Sprawdzić kontrast w motywach niestandardowych (ocean/sunset/aurora/rose).
 - [ ] Dodać testy a11y (axe/lighthouse CI).
 
 ### 10) Urealnić parametry typografii i czytelności
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Zweryfikować bardzo małą bazową wielkość tekstu wiki (`--wiki-font-size: 11px`) pod kątem WCAG.
 - [ ] Podnieść minimalny rozmiar fontu i spacing dla mobile.
 - [ ] Dodać snapshoty wizualne dla kluczowych breakpointów.
 
 
 ### 11) Zweryfikować poprawność wyświetlania tekstu we wszystkich artykułach
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Dodać automatyczny skrypt audytu renderu artykułów (wszystkie wpisy z `pam-wiki-config.json`):
   - [ ] wykrywanie pustych sekcji po renderze markdown,
   - [ ] wykrywanie uszkodzonych nagłówków/list/tabel/kodów,
@@ -115,11 +141,15 @@
 ## P2 (średnie) — utrzymanie i wydajność długoterminowa
 
 ### 12) Ustandaryzować architekturę JS na moduły
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Podzielić `pam-wiki.js` na mniejsze moduły: `theme`, `navigation`, `wiki-render`, `search`, `a11y`, `pwa-ui`.
 - [ ] Ograniczyć globalny stan (`ARTICLES`, `METADATA`, `CATEGORIES`) poprzez warstwę store.
 - [ ] Dodać JSDoc typy i kontrakty wejść/wyjść funkcji.
 
 ### 13) Dodać automatyczne testy regresji
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Testy jednostkowe dla parsera konfiguracji i logiki nawigacji hash.
 - [ ] Testy E2E (np. Playwright):
   - [ ] ładowanie strony głównej,
@@ -129,11 +159,15 @@
 - [ ] Uruchamianie walidatorów i testów w CI.
 
 ### 14) Uporządkować politykę zasobów zewnętrznych
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Rozważyć self-hosting kluczowych bibliotek (fontawesome/highlight) lub fallback lokalny.
 - [ ] Dodać SRI (`integrity`) dla zasobów CDN.
 - [ ] Zdefiniować politykę CSP i przetestować jej zgodność.
 
 ### 15) Ujednolicić nazewnictwo i porządek dokumentacji roboczej
+- **Status:** `todo`
+- **Owner:** `unassigned`
 - [ ] Scalić `ToDo.md` i `docs/TODO` w jeden kanoniczny plik planu prac.
 - [ ] Dodać statusy zadań (`todo / in-progress / done`) i właścicieli.
 - [ ] Dodać sekcję „Definition of Done” dla każdego obszaru.
@@ -153,3 +187,31 @@
 - [ ] Lighthouse (mobile) bez krytycznych błędów w Performance/A11y/Best Practices/PWA.
 - [ ] Brak regresji funkcjonalnej: nawigacja, wyszukiwanie, render markdown, motywy, tryb offline.
 - [ ] Każda naprawa posiada test lub co najmniej reprodukowalny scenariusz weryfikacji.
+
+
+## Definition of Done
+
+### PWA
+- [ ] Instalacja działa na Android Chrome, iOS Safari (Add to Home Screen) i desktop Chrome.
+- [ ] Aplikacja aktualizuje się kontrolowanie (komunikat o nowej wersji + bezpieczne przeładowanie).
+- [ ] `start_url` oraz kluczowe widoki działają offline po pierwszym uruchomieniu.
+
+### Czytelność
+- [ ] Minimalny rozmiar fontu i spacing spełnia założenia WCAG dla mobile i desktop.
+- [ ] Nie występują problemy z overflow, łamaniem długich słów i czytelnością bloków `code`.
+- [ ] Snapshoty wizualne dla breakpointów referencyjnych nie wykazują regresji.
+
+### A11y
+- [ ] Wszystkie niestandardowe kontrolki są obsługiwane klawiaturą (Tab/Enter/Space/Esc).
+- [ ] Kontrast kolorów dla aktywnych motywów przechodzi walidację.
+- [ ] Testy axe/lighthouse CI przechodzą bez krytycznych naruszeń.
+
+### Bezpieczeństwo
+- [ ] Render treści dynamicznych jest sanitizowany i blokuje niedozwolone tagi/atrybuty/URL-e.
+- [ ] Zasoby zewnętrzne mają SRI lub bezpieczny fallback lokalny.
+- [ ] Zdefiniowana polityka CSP działa bez regresji funkcjonalnych.
+
+### Testy
+- [ ] Testy jednostkowe, E2E oraz walidatory treści działają w CI na zielono.
+- [ ] Każda poprawka ma test lub udokumentowany scenariusz reprodukcji i weryfikacji.
+- [ ] Raport końcowy (np. article-render-health) jest publikowany i nie zawiera błędów krytycznych.
