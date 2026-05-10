@@ -185,8 +185,9 @@ Jeśli potraktujesz te punkty jako „Definition of Done” dla produkcji mobiln
 
 W praktyce największy zysk daje świadome użycie **Device Profiles**:
 
+- wybierz odpowiednie API graficzne (Vulkan dla nowszych, OpenGL ES dla starszych urządzeń),
 - przypisz profile jakości do klas SoC/GPU (np. Adreno 6xx, Mali G7x),
-- ustaw osobne wartości dla `r.ScreenPercentage`, cieni, efektów i odległości renderowania,
+- ustaw osobne wartości dla r.ScreenPercentage, cieni, efektów i odległości renderowania,
 - utrzymuj konfiguracje w repozytorium i wersjonuj je jak kod.
 
 Dzięki temu nie tworzysz „jednej gry dla wszystkich”, tylko kontrolujesz kompromisy jakościowe per segment urządzeń.
