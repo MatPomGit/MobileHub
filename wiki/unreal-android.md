@@ -269,7 +269,7 @@ Jeśli wyeliminujesz tylko te pięć punktów, ryzyko problematycznej premiery s
 ## Rozszerzona checklista produkcyjna
 
 - [ ] Zmapowane profile urządzeń na konkretne modele testowe.
-- [ ] Zdefiniowane budżety: CPU, GPU, RAM, rozmiar AAB i czas startu.
+- [ ] Zdefiniowane budżety: CPU, GPU, RAM, rozmiar AAB (z uwzględnieniem Play Asset Delivery) i czas startu.
 - [ ] Konfiguracje `Scalability` i Device Profiles utrzymywane w repo.
 - [ ] Testy długiej sesji i scenariuszy przerwania aplikacji.
 - [ ] Monitoring jakości po modelu telefonu i wersji Androida.
