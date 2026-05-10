@@ -118,7 +118,10 @@ async function staleWhileRevalidate(request) {
         })
         .catch(() => null);
 
-    return cached || networkPromise || new Response('Offline: brak kopii zasobu.', {
+    if (cached) return cached;
+
+    const networkResponse = await networkPromise;
+    return networkResponse || new Response('Offline: brak kopii zasobu.', {
         status: 503,
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     });
