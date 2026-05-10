@@ -324,15 +324,15 @@ function sanitizeRenderedMarkdown(html) {
 
     const template = document.createElement('template');
     template.innerHTML = html;
+    const forbiddenTags = ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select'];
+    forbiddenTags.forEach(tag => {
+        template.content.querySelectorAll(tag).forEach(el => el.remove());
+    });
     template.content.querySelectorAll('*').forEach((node) => {
         [...node.attributes].forEach((attr) => {
             const name = attr.name.toLowerCase();
-            const value = attr.value.trim().toLowerCase();
-            if (name.startsWith('on')) {
-                node.removeAttribute(attr.name);
-                return;
-            }
-            if ((name === 'href' || name === 'src' || name === 'xlink:href') && value.startsWith('javascript:')) {
+            const value = attr.value.replace(/\s+/g, '').toLowerCase();
+            if (name.startsWith('on') || (['href', 'src', 'xlink:href'].includes(name) && value.startsWith('javascript:'))) {
                 node.removeAttribute(attr.name);
             }
         });
