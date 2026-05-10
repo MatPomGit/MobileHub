@@ -3532,7 +3532,7 @@ footer strong {
         padding: 12px 20px;
         min-height: 44px;
         cursor: pointer;
-        touch-action: pan-y;
+        touch-action: none;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
     }
