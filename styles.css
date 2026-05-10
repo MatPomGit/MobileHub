@@ -3,7 +3,7 @@
     background: none !important;
     color: var(--text);
     /* Bazowy rozmiar tekstu oparty o zmienną, aby skala była spójna na wszystkich breakpointach. */
-    font-size: 1em;
+    font-size: var(--wiki-font-size);
     font-family: var(--font), sans-serif;
     /* Luźniejszy rytm pionowy zmniejsza efekt „ściany tekstu” przy długich artykułach. */
     line-height: var(--wiki-line-height);
