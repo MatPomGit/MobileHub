@@ -149,9 +149,11 @@ function applyTheme(t) {
 }
 
 function initScrollProgress() {
-    const bar = document.createElement('div');
-    bar.className = 'scroll-progress';
-    document.body.appendChild(bar);
+    // Decyzja architektoniczna: korzystamy z jednego, statycznego elementu z index.html,
+    // aby uniknąć duplikacji paska przy wielokrotnej inicjalizacji skryptów i zachować stabilny DOM.
+    const bar = document.getElementById('scrollProgress');
+    if (!bar || bar.dataset.initialized) return;
+    bar.dataset.initialized = 'true';
 
     const updateProgress = () => {
         const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
