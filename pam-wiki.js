@@ -285,7 +285,8 @@ async function loadArticle(articleId) {
     try {
         const res = await fetch(path);
         if (!res.ok) throw new Error(`HTTP ${res.status}`);
-        container.innerHTML = marked.parse(await res.text());
+        const renderedMarkdown = marked.parse(await res.text());
+        container.innerHTML = sanitizeRenderedMarkdown(renderedMarkdown);
 
         // Dbamy o spójne kolorowanie składni: jeżeli autor nie poda języka,
         // ustawiamy domyślnie plaintext i czyścimy potencjalnie stare klasy.
@@ -307,6 +308,37 @@ async function loadArticle(articleId) {
     } catch (err) {
         showError(`Nie można załadować artykułu <strong>${articleId}</strong>. Upewnij się że uruchamiasz stronę przez serwer HTTP (np. <code>python -m http.server</code>).`);
     }
+}
+
+
+function sanitizeRenderedMarkdown(html) {
+    // Sanitizacja jest konieczna nawet dla „zaufanych” treści, bo treść może zostać zmieniona
+    // po stronie repo/CDN i wtedy bez tej warstwy jedna podatna linia markdown otworzy drogę do XSS.
+    if (typeof DOMPurify !== 'undefined') {
+        return DOMPurify.sanitize(html, {
+            FORBID_TAGS: ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select'],
+            FORBID_ATTR: ['onerror', 'onload', 'onclick', 'onmouseover', 'style'],
+            ALLOW_UNKNOWN_PROTOCOLS: false
+        });
+    }
+
+    const template = document.createElement('template');
+    template.innerHTML = html;
+    const forbiddenTags = ['script', 'style', 'iframe', 'object', 'embed', 'form', 'input', 'button', 'textarea', 'select'];
+    forbiddenTags.forEach(tag => {
+        template.content.querySelectorAll(tag).forEach(el => el.remove());
+    });
+    template.content.querySelectorAll('*').forEach((node) => {
+        [...node.attributes].forEach((attr) => {
+            const name = attr.name.toLowerCase();
+            const value = attr.value.replace(/\s+/g, '').toLowerCase();
+            if (name.startsWith('on') || (['href', 'src', 'xlink:href'].includes(name) && value.startsWith('javascript:'))) {
+                node.removeAttribute(attr.name);
+            }
+        });
+    });
+
+    return template.innerHTML;
 }
 
 function prepareCodeBlocksForHighlighting(container) {
