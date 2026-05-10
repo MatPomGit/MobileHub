@@ -1626,9 +1626,15 @@
             let startY = 0, startTranslate = 0, isDragging = false;
             let closeBodyClassTimeout = null;
             let activePointerId = null;
+            const DRAG_THRESHOLD_PX = 6;
+
+            // Ujednolicamy punkt "zamknięcia" panelu, aby CSS i JS używały tego samego modelu pionowego.
+            const panelBody = panel.querySelector('.pull-panel-body');
 
             function getClosedTranslate() {
-                return -(panel.offsetHeight - 54 - 24);
+                const headerH = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--header-h')) || 42;
+                const safeTop = parseInt(getComputedStyle(document.documentElement).getPropertyValue('--safe-top')) || 0;
+                return -(panel.offsetHeight - headerH - safeTop - 24);
             }
 
             function openPanel() {
@@ -1638,6 +1644,7 @@
                 overlay.classList.add('open');
                 handle.setAttribute('aria-expanded', 'true');
                 panel.style.transform = '';
+                panelBody?.style.removeProperty('overscroll-behavior');
             }
 
             function closePanel() {
@@ -1645,6 +1652,7 @@
                 overlay.classList.remove('open');
                 handle.setAttribute('aria-expanded', 'false');
                 panel.style.transform = '';
+                panelBody?.style.removeProperty('overscroll-behavior');
                 closeBodyClassTimeout = setTimeout(() => {
                     document.body.classList.remove('pull-panel-open');
                 }, 300);
@@ -1667,6 +1675,10 @@
             overlay.addEventListener('click', closePanel);
 
             // Touch/pointer drag support
+            // Priorytet gestów:
+            // 1) Drag zaczynamy wyłącznie z uchwytu, aby nie kraść scrolla treści.
+            // 2) Po przekroczeniu progu blokujemy przewijanie panelu (overscroll-behavior),
+            //    dzięki czemu ruch pionowy kontroluje tylko transform panelu.
             handle.addEventListener('pointerdown', (e) => {
                 isDragging = false;
                 startY = e.clientY;
@@ -1678,9 +1690,14 @@
             });
 
             handle.addEventListener('pointermove', (e) => {
+                if (activePointerId !== e.pointerId) return;
                 const dy = e.clientY - startY;
-                if (Math.abs(dy) > 5) isDragging = true;
+                if (Math.abs(dy) > DRAG_THRESHOLD_PX) {
+                    isDragging = true;
+                    panelBody?.style.setProperty('overscroll-behavior', 'contain');
+                }
                 if (!isDragging) return;
+                e.preventDefault();
                 const closed = getClosedTranslate();
                 const newY = Math.max(closed, Math.min(0, startTranslate + dy));
                 panel.style.transform = `translateY(${newY}px)`;
@@ -1690,12 +1707,14 @@
                 document.body.classList.toggle('pull-panel-open', progress > 0.05);
             });
 
-            handle.addEventListener('pointerup', () => {
+            handle.addEventListener('pointerup', (e) => {
+                if (activePointerId !== e.pointerId) return;
                 if (activePointerId !== null) {
                     handle.releasePointerCapture(activePointerId);
                     activePointerId = null;
                 }
                 overlay.style.opacity = '';
+                panelBody?.style.removeProperty('overscroll-behavior');
                 if (!isDragging) return;
                 isDragging = false;
                 panel.style.transition = '';
@@ -1713,6 +1732,7 @@
                 isDragging = false;
                 panel.style.transition = '';
                 overlay.style.opacity = '';
+                panelBody?.style.removeProperty('overscroll-behavior');
             });
 
             // Pull shortcut buttons

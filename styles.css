@@ -153,6 +153,16 @@
     --wiki-list-margin-bottom: 1em;
     --wiki-heading-margin-top: 1.65em;
     --wiki-heading-margin-bottom: 0.7em;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-right: env(safe-area-inset-right, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-left: env(safe-area-inset-left, 0px);
+    --stack-gap: 8px;
+    --z-header: 120;
+    --z-tabbar: 110;
+    --z-sidebar: 100;
+    --z-overlay: 130;
+    --z-pull-panel: 140;
 }
 
 /* 768 px: tablet i większe telefony — delikatnie ciaśniejszy układ przy zachowaniu czytelności. */
@@ -508,10 +518,10 @@ a:hover {
 header {
     background: var(--header-bg);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 8px 0;
+    padding: calc(8px + var(--safe-top)) var(--safe-right) 8px var(--safe-left);
     position: sticky;
     top: 0;
-    z-index: 100;
+    z-index: var(--z-header);
     box-shadow: 0 2px 20px rgba(0, 0, 0, 0.4);
 }
 
@@ -571,8 +581,8 @@ header {
 }
 
 .btn-icon {
-    width: 36px;
-    height: 38px;
+    width: 44px;
+    height: 44px;
     background: rgba(255, 255, 255, 0.08);
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 8px;
@@ -593,7 +603,7 @@ header {
     color: #fff;
     font-size: 11px;
     font-weight: 700;
-    padding: 4px 10px;
+    padding: 10px 12px;
     border-radius: 20px;
     letter-spacing: 0.5px;
     border: none;
@@ -832,6 +842,7 @@ header {
     white-space: nowrap;
     width: 100%;
     text-align: left;
+    min-height: 44px;
 }
 
 .theme-option:hover {
@@ -1953,8 +1964,8 @@ header {
     background: var(--surface);
     border-bottom: 2px solid var(--border);
     position: sticky;
-    top: var(--header-h);
-    z-index: 90;
+    top: calc(var(--header-h) + var(--safe-top));
+    z-index: var(--z-tabbar);
     box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
 
@@ -1976,7 +1987,8 @@ header {
     display: flex;
     align-items: center;
     gap: 8px;
-    padding: 9px 16px;
+    padding: 10px 16px;
+    min-height: 44px;
     border: none;
     background: none;
     cursor: pointer;
@@ -2682,6 +2694,8 @@ footer strong {
     right: 24px;
     width: 48px;
     height: 48px;
+    min-width: 44px;
+    min-height: 44px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     border: none;
     border-radius: 50%;
@@ -2689,7 +2703,7 @@ footer strong {
     font-size: 14px;
     cursor: pointer;
     box-shadow: 0 4px 24px rgba(91, 79, 207, 0.4);
-    z-index: 49;
+    z-index: calc(var(--z-sidebar) - 1);
     opacity: 0;
     translate: 0 16px;
     pointer-events: none;
@@ -2716,10 +2730,10 @@ footer strong {
     .wiki-sidebar {
         position: fixed;
         left: -320px;
-        top: var(--chrome-h);
+        top: calc(var(--chrome-h) + var(--safe-top) + var(--stack-gap));
         width: 300px;
-        height: calc(80vh - var(--chrome-h));
-        z-index: 40;
+        height: calc(80vh - var(--chrome-h) - var(--safe-top) - var(--stack-gap));
+        z-index: var(--z-sidebar);
         transition: left 0.3s ease;
         box-shadow: var(--shadow-lg);
     }
@@ -3003,7 +3017,7 @@ footer strong {
         font-family: var(--font);
         color: var(--text-muted);
         transition: color var(--transition);
-        min-height: 42px;
+        min-height: 44px;
         -webkit-tap-highlight-color: transparent;
     }
 
@@ -3037,7 +3051,9 @@ footer strong {
 
     /* adjust body for bottom nav */
     body {
-        padding-bottom: calc(56px + env(safe-area-inset-bottom));
+        padding-bottom: calc(56px + var(--safe-bottom));
+        padding-left: var(--safe-left);
+        padding-right: var(--safe-right);
         overflow-x: hidden;
     }
 
@@ -3074,7 +3090,7 @@ footer strong {
 
     /* header compact */
     header {
-        padding: 6px 0;
+        padding: calc(6px + var(--safe-top)) var(--safe-right) 6px var(--safe-left);
     }
 
     .header-inner {
@@ -3162,21 +3178,21 @@ footer strong {
 
     /* back-to-top and sidebar toggle above bottom nav */
     .back-to-top {
-        bottom: calc(72px + env(safe-area-inset-bottom));
+        bottom: calc(72px + var(--safe-bottom));
     }
 
     .sidebar-toggle {
-        bottom: calc(72px + env(safe-area-inset-bottom));
+        bottom: calc(72px + var(--safe-bottom));
     }
 
     /* wiki main with bottom padding for bottom nav */
     .wiki-main {
-        padding-bottom: calc(60px + env(safe-area-inset-bottom));
+        padding-bottom: calc(60px + var(--safe-bottom));
     }
 
     /* info panel mobile */
     .info-panel {
-        padding: 20px 16px calc(72px + env(safe-area-inset-bottom));
+        padding: 20px 16px calc(72px + var(--safe-bottom));
     }
 
     .info-panel-header h2 {
@@ -3339,8 +3355,8 @@ footer strong {
 
     /* wiki sidebar in mobile adjustments */
     .wiki-sidebar {
-        top: var(--header-h);
-        height: calc(80vh - var(--header-h));
+        top: calc(var(--header-h) + var(--safe-top) + var(--stack-gap));
+        height: calc(80vh - var(--header-h) - var(--safe-top) - var(--stack-gap));
     }
 
     .wiki-search input {
@@ -3469,7 +3485,7 @@ footer strong {
         position: fixed;
         inset: 0;
         background: rgba(0, 0, 0, 0.4);
-        z-index: 85;
+        z-index: var(--z-overlay);
         opacity: 0;
         pointer-events: none;
         transition: opacity 0.3s ease;
@@ -3481,7 +3497,7 @@ footer strong {
     }
 
     body.pull-panel-open .bottom-nav {
-        z-index: 84;
+        z-index: calc(var(--z-overlay) - 1);
     }
 
     .pull-panel {
@@ -3490,12 +3506,14 @@ footer strong {
         top: 0;
         left: 0;
         right: 0;
-        z-index: 90;
+        z-index: var(--z-pull-panel);
         background: var(--surface);
         border-radius: 0 0 24px 24px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.15);
-        padding-top: var(--header-h);
-        transform: translateY(calc(-100% + var(--header-h) + 24px));
+        padding-top: calc(var(--header-h) + var(--safe-top));
+        padding-left: var(--safe-left);
+        padding-right: var(--safe-right);
+        transform: translateY(calc(-100% + var(--header-h) + var(--safe-top) + 24px));
         transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
             box-shadow 0.35s ease;
         will-change: transform;
@@ -3511,9 +3529,10 @@ footer strong {
         display: flex;
         justify-content: center;
         align-items: center;
-        padding: 10px 20px;
+        padding: 12px 20px;
+        min-height: 44px;
         cursor: pointer;
-        touch-action: pan-y;
+        touch-action: none;
         user-select: none;
         -webkit-tap-highlight-color: transparent;
     }
@@ -3534,7 +3553,7 @@ footer strong {
     .pull-panel-body {
         padding: 4px 20px 24px;
         overflow-y: auto;
-        max-height: calc(80vh - var(--header-h) - 44px);
+        max-height: calc(80vh - var(--header-h) - var(--safe-top) - 44px);
     }
 
     .pull-panel-title {
@@ -3608,6 +3627,7 @@ footer strong {
         -webkit-tap-highlight-color: transparent;
         transform: translateZ(0);
         will-change: transform;
+        min-height: 44px;
     }
 
     .pull-shortcut i {
