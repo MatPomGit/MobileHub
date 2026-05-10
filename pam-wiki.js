@@ -152,7 +152,8 @@ function initScrollProgress() {
     // Decyzja architektoniczna: korzystamy z jednego, statycznego elementu z index.html,
     // aby uniknąć duplikacji paska przy wielokrotnej inicjalizacji skryptów i zachować stabilny DOM.
     const bar = document.getElementById('scrollProgress');
-    if (!bar) return;
+    if (!bar || bar.dataset.initialized) return;
+    bar.dataset.initialized = 'true';
 
     const updateProgress = () => {
         const h = document.documentElement.scrollHeight - document.documentElement.clientHeight;
