@@ -198,6 +198,7 @@ Długi „first launch” lub przycięcia podczas pierwszych starć często wyni
 
 Warto:
 
+- wdrożyć **PSO Caching** (Pipeline State Object), aby wyeliminować przycięcia podczas renderowania nowych efektów,
 - ograniczyć liczbę wariantów materiałów,
 - redukować nadmiar feature switchy w shaderach,
 - testować sceny o największym zagęszczeniu efektów przed publikacją.
