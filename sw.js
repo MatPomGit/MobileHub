@@ -3,6 +3,9 @@
 const BUILD_HASH = new URL(self.location.href).searchParams.get('v') || 'dev';
 const CACHE_NAME = `app-cache-${BUILD_HASH}`;
 
+const OPAQUE_ASSETS_CACHE_NAME = `opaque-assets-${BUILD_HASH}`;
+const OPAQUE_ASSETS_MAX_ENTRIES = 20;
+
 // Zasoby wymagające szybkiej dostępności po instalacji SW.
 const ASSETS_TO_CACHE = [
     './',
@@ -22,7 +25,7 @@ const ASSETS_TO_CACHE = [
 ];
 
 const NETWORK_FIRST_PATHS = new Set(['/', '/index.html', '/pam-wiki-config.json']);
-const STALE_WHILE_REVALIDATE_PATHS = new Set(['/styles.css', '/pam-wiki.js', '/pam-files.js', '/quiz-module.js', '/dev-mode.js']);
+const STALE_WHILE_REVALIDATE_PATHS = new Set(['/styles.css', '/pam-wiki.js', '/quiz-module.js', '/dev-mode.js']);
 
 self.addEventListener('install', event => {
     event.waitUntil(
@@ -34,7 +37,7 @@ self.addEventListener('install', event => {
 self.addEventListener('activate', event => {
     event.waitUntil(
         caches.keys().then(keys =>
-            Promise.all(keys.filter(k => k !== CACHE_NAME).map(k => caches.delete(k)))
+            Promise.all(keys.filter(k => k !== CACHE_NAME && k !== OPAQUE_ASSETS_CACHE_NAME).map(k => caches.delete(k)))
         )
     );
     self.clients.claim();
@@ -82,6 +85,16 @@ function toPathname(url) {
     return new URL(url).pathname;
 }
 
+async function trimOpaqueAssetsCache(cache) {
+    const keys = await cache.keys();
+
+    // Ograniczenie liczby wpisów chroni przed niekontrolowanym wzrostem pamięci dla opaque.
+    if (keys.length <= OPAQUE_ASSETS_MAX_ENTRIES) return;
+
+    const overflow = keys.length - OPAQUE_ASSETS_MAX_ENTRIES;
+    await Promise.all(keys.slice(0, overflow).map(request => cache.delete(request)));
+}
+
 async function networkFirst(request) {
     const cache = await caches.open(CACHE_NAME);
     try {
@@ -121,7 +134,13 @@ async function staleWhileRevalidate(request) {
     if (cached) return cached;
 
     const networkResponse = await networkPromise;
-    return networkResponse || new Response('Offline: brak kopii zasobu.', {
+    if (networkResponse) return networkResponse;
+
+    if (request.mode === 'navigate') {
+        return cache.match('./offline.html');
+    }
+
+    return new Response('Offline: brak kopii zasobu.', {
         status: 503,
         headers: { 'Content-Type': 'text/plain; charset=utf-8' }
     });
@@ -129,16 +148,30 @@ async function staleWhileRevalidate(request) {
 
 async function cacheFirstForAssets(request) {
     const cache = await caches.open(CACHE_NAME);
-    const cached = await cache.match(request);
+    const opaqueCache = await caches.open(OPAQUE_ASSETS_CACHE_NAME);
+
+    const cached = (await cache.match(request)) || (await opaqueCache.match(request));
     if (cached) return cached;
 
     try {
         const response = await fetch(request);
+
         if (isCacheableResponse(response)) {
             await cache.put(request, response.clone());
+            return response;
         }
+
+        // Opaque cache'ujemy tylko dla obrazów/ikon i pod ścisłym limitem liczby wpisów.
+        if (response && response.type === 'opaque') {
+            await opaqueCache.put(request, response.clone());
+            await trimOpaqueAssetsCache(opaqueCache);
+        }
+
         return response;
     } catch {
+        const offlineFallback = await cache.match('./offline.html');
+        if (offlineFallback) return offlineFallback;
+
         return new Response('Offline: obraz/ikona niedostępny.', {
             status: 503,
             headers: { 'Content-Type': 'text/plain; charset=utf-8' }
