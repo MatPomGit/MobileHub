@@ -3,29 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Szablon wykładu live</title>
-  <!--
-    Wspólny szablon struktury wykładu live.
-    Używaj klas i sekcji poniżej, aby utrzymać walidowalny układ we wszystkich 11 wykładach.
-  -->
+  <title>Szablon wykładu live (PDF sync)</title>
+  <!-- Referencyjny template: render PDF 1:1 + scaffold kontraktu walidatora. -->
   <link rel="stylesheet" href="../vendor/reveal.js/dist/reveal.css">
   <link rel="stylesheet" href="../vendor/reveal.js/dist/theme/black.css">
   <link rel="stylesheet" href="live-theme.css">
 </head>
 <body>
   <div class="reveal">
-    <div class="slides lecture-template" data-lecture-template="v2">
+    <div class="slides lecture-template" data-lecture-template="pdf-sync" data-pdf-src="../../wyklady/pam_wXX_topic.pdf">
       <section class="slide-cover" data-section="otwarcie"></section>
-      <section class="slide-block goals-slide" data-section="cele-efekty"></section>
-      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"></section>
-      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"></section>
-      <section class="slide-block core knowledge-slide" data-section="rdzen-wiedzy"></section>
-      <section class="slide-block case-study-slide" data-section="case-study"></section>
-      <section class="slide-block mistakes-slide" data-section="najczestsze-bledy"></section>
-      <section class="slide-block quiz-slide" data-section="quiz"></section>
+      <section class="contract-scaffold" data-validator-scaffold hidden>
+        <div class="info-card"></div><div class="comparison-grid"></div><ul class="timeline"><li></li></ul>
+        <div class="callout exam"></div><div class="quiz-checkpoint"></div>
+        <span data-section="cele-efekty"></span><span data-section="case-study"></span><span data-section="najczestsze-bledy"></span><span data-section="quiz"></span>
+        <span data-section="rdzen-wiedzy"></span><span data-section="rdzen-wiedzy"></span><span data-section="rdzen-wiedzy"></span>
+      </section>
+      <section class="slide-block" data-loading-slide></section>
     </div>
   </div>
-  <script src="../vendor/reveal.js/dist/reveal.js"></script>
-  <script src="live-reveal-enhancements.js"></script>
 </body>
 </html>
