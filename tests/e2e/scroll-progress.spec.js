@@ -24,11 +24,9 @@ test('scroll progress exists exactly once and updates width after scroll', async
 
   // Przewijamy stronę i czekamy na obsłużenie eventu scroll przez aplikację.
   await page.evaluate(() => window.scrollTo(0, 1200));
-  await page.waitForTimeout(100);
+  const getWidth = () => page.locator('#scrollProgress').evaluate((el) => el.style.width || '');
 
-  const scrolledWidth = await page.locator('#scrollProgress').evaluate((element) => element.style.width || '');
-
-  // Po przewinięciu szerokość paska powinna zostać zaktualizowana.
-  expect(scrolledWidth).not.toBe(initialWidth);
-  expect(scrolledWidth).not.toBe('0%');
+  // Asercja z automatycznym ponawianiem (polling) zapewnia stabilność bez waitForTimeout.
+  await expect.poll(getWidth).not.toBe(initialWidth);
+  await expect.poll(getWidth).not.toBe('0%');
 });
