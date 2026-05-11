@@ -2,7 +2,9 @@
   "name": "mobilehub",
   "private": true,
   "scripts": {
-    "validate:all": "bash scripts/run-quality-gates.sh"
+    "validate:all": "bash scripts/run-quality-gates.sh",
+    "validate:live": "node scripts/validate-live-lectures.js",
+    "audit:precommit": "bash scripts/pre-commit-audit.sh"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0"

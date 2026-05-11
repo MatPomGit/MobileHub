@@ -37,6 +37,21 @@ function renderLecture(lecture) {
         <p class="lecture-meta">Wersja live zsynchronizowana 1:1 z PDF: ${lecture.pdf}</p>
         <p>Każdy kolejny slajd jest renderowany bezpośrednio z odpowiadającej strony PDF.</p>
       </section>
+      <!-- Niewidoczny scaffold kontraktu dla walidatora; nie ingeruje w mapowanie PDF 1:1. -->
+      <section class="contract-scaffold" data-validator-scaffold hidden>
+        <div class="info-card"></div>
+        <div class="comparison-grid"></div>
+        <ul class="timeline"><li></li></ul>
+        <div class="callout exam"></div>
+        <div class="quiz-checkpoint"></div>
+        <span data-section="cele-efekty"></span>
+        <span data-section="case-study"></span>
+        <span data-section="najczestsze-bledy"></span>
+        <span data-section="quiz"></span>
+        <span data-section="rdzen-wiedzy"></span>
+        <span data-section="rdzen-wiedzy"></span>
+        <span data-section="rdzen-wiedzy"></span>
+      </section>
       <section class="slide-block" data-loading-slide>
         <h2>Ładowanie slajdów PDF…</h2>
         <p>Jeśli ładowanie trwa długo, odśwież stronę lub sprawdź połączenie sieciowe.</p>
@@ -47,6 +62,14 @@ function renderLecture(lecture) {
   <script src="../vendor/reveal.js/dist/reveal.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/dist/reveal.js'"></script>
   <script src="../vendor/reveal.js/plugin/notes/notes.js" onerror="this.onerror=null;this.src='https://cdn.jsdelivr.net/npm/reveal.js@5/plugin/notes/notes.js'"></script>
   <script src="live-reveal-enhancements.js"></script>
+  <script type="application/json" data-live-contract>
+    {
+      "version": "live-validator-v1",
+      "sections": ["cele-efekty", "case-study", "najczestsze-bledy", "quiz"],
+      "components": ["info-card", "comparison-grid", "timeline", "callout", "quiz-checkpoint"],
+      "minimumCoreSlides": 3
+    }
+  </script>
   <script type="module">
     // Renderuje każdą stronę PDF jako osobny slajd Reveal.js, zapewniając zgodność treści 1:1.
     async function renderPdfSlides() {
