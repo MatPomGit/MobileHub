@@ -164,7 +164,7 @@ async function cacheFirstForAssets(request) {
         // Opaque cache'ujemy tylko dla obrazów/ikon i pod ścisłym limitem liczby wpisów.
         if (response && response.type === 'opaque') {
             await opaqueCache.put(request, response.clone());
-            await trimOpaqueAssetsCache();
+            await trimOpaqueAssetsCache(opaqueCache);
         }
 
         return response;
