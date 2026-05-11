@@ -6,8 +6,8 @@
 - [ ] Dodać krótką regułę redakcyjną: pojedynczy wpis ma mieć spójny język.
 
 ## 2) Usunięcie błędu (offline fallback PWA)
-- [ ] Dodać `offline.html` z czytelną informacją o braku sieci.
-- [ ] Uzupełnić Service Worker o poprawny fallback nawigacyjny offline.
+- [x] Dodać `offline.html` z czytelną informacją o braku sieci.
+- [x] Uzupełnić Service Worker o poprawny fallback nawigacyjny offline.
 - [ ] Zweryfikować scenariusz: pierwsze wejście online -> tryb offline -> ponowne otwarcie `index.html`.
 
 ## 3) Korekta komentarza / dokumentacji (test mobilny)
