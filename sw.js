@@ -85,8 +85,7 @@ function toPathname(url) {
     return new URL(url).pathname;
 }
 
-async function trimOpaqueAssetsCache() {
-    const cache = await caches.open(OPAQUE_ASSETS_CACHE_NAME);
+async function trimOpaqueAssetsCache(cache) {
     const keys = await cache.keys();
 
     // Ograniczenie liczby wpisów chroni przed niekontrolowanym wzrostem pamięci dla opaque.
