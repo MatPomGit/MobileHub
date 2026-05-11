@@ -2,9 +2,9 @@
 
 > Cel: lista krytycznych i wysokopriorytetowych zadań, które są niezbędne do poprawnego i stabilnego działania strony (UI, PWA, dostępność, wydajność, bezpieczeństwo utrzymania).
 
-## Status migracji backlogu
+## Status backlogu
 - Źródło kanoniczne: `docs/TODO`.
-- Aktywne zadania z `ToDo.md`: brak (w pliku były wyłącznie pozycje oznaczone jako ukończone).
+- Historyczne zadania ze starego pliku backlogu zostały przeniesione; aktywne utrzymanie planu prowadzimy wyłącznie tutaj.
 
 ## P0 (krytyczne) — do realizacji w pierwszej kolejności
 
@@ -168,7 +168,7 @@
 ### 15) Ujednolicić nazewnictwo i porządek dokumentacji roboczej
 - **Status:** `todo`
 - **Owner:** `unassigned`
-- [ ] Scalić `ToDo.md` i `docs/TODO` w jeden kanoniczny plik planu prac.
+- [x] Scalić historyczne pliki backlogu do jednego kanonicznego pliku planu prac (`docs/TODO`).
 - [ ] Dodać statusy zadań (`todo / in-progress / done`) i właścicieli.
 - [ ] Dodać sekcję „Definition of Done” dla każdego obszaru.
 
@@ -215,3 +215,42 @@
 - [ ] Testy jednostkowe, E2E oraz walidatory treści działają w CI na zielono.
 - [ ] Każda poprawka ma test lub udokumentowany scenariusz reprodukcji i weryfikacji.
 - [ ] Raport końcowy (np. article-render-health) jest publikowany i nie zawiera błędów krytycznych.
+
+## P1A (szybkie zadania naprawcze po przeglądzie kodu)
+
+### 16) Ujednolicić nazewnictwo backlogu i odwołań w dokumentacji
+- **Status:** `todo`
+- **Owner:** `unassigned`
+- [ ] Upewnić się, że cała dokumentacja odwołuje się wyłącznie do `docs/TODO` jako jedynego backlogu.
+- [ ] Usunąć lub poprawić historyczne wzmianki o dawnych nazwach plików backlogu.
+- [ ] Dodać krótką zasadę nazewnictwa plików planistycznych w sekcji statusowej backlogu.
+
+**Definition of Done:** brak odwołań do alternatywnych nazw backlogu w repozytorium i jedna, spójna instrukcja utrzymania.
+
+### 17) Naprawić błąd offline: brakujący fallback `offline.html` w PWA
+- **Status:** `todo`
+- **Owner:** `unassigned`
+- [ ] Dodać `offline.html` zgodny ze stylem aplikacji i komunikatem o braku sieci.
+- [ ] Zweryfikować, że `sw.js` poprawnie pre-cache’uje `offline.html` i nie wywala instalacji SW.
+- [ ] Dodać manualny scenariusz QA: pierwsze wejście online, przejście offline, ponowne otwarcie `index.html`.
+
+**Definition of Done:** Service Worker instaluje się bez błędów, a nawigacja offline zwraca czytelny fallback.
+
+### 18) Skorygować komentarz testu mobilnego do faktycznego zakresu asercji
+- **Status:** `todo`
+- **Owner:** `unassigned`
+- [ ] Zaktualizować komentarz w `tests/e2e/mobilehub-flow.spec.js`, aby opisywał dokładnie obecny zakres testu.
+- [ ] Jeśli komentarz ma pozostać „krytyczny”, dopisać brakujące asercje i dopiero wtedy utrzymać mocne sformułowanie.
+- [ ] Ustalić krótką regułę: komentarz testu nie może deklarować szerszego pokrycia niż faktycznie sprawdzane warunki.
+
+**Definition of Done:** opis testu i asercje są spójne i nie wprowadzają w błąd podczas code review.
+
+### 19) Wzmocnić test offline `start_url`
+- **Status:** `todo`
+- **Owner:** `unassigned`
+- [ ] Rozszerzyć `tests/e2e/pwa-offline-start-url.spec.js` o asercję treści specyficznej dla fallbacku offline.
+- [ ] Dodać kontrolowany marker testowy (np. `data-testid`) w widoku offline i asercję jego obecności.
+- [ ] Dodać asercję, że po powrocie online aplikacja odzyskuje standardowy widok.
+
+**Definition of Done:** test wykrywa regresje offline/fallback, a nie tylko obecność bazowych kontenerów DOM.
+
