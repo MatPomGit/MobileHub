@@ -8,7 +8,7 @@ module.exports = defineConfig({
     headless: true,
   },
   webServer: {
-    command: 'npx http-server . -p 4173',
+    command: 'python3 -m http.server 4173 --bind 127.0.0.1',
     port: 4173,
     reuseExistingServer: true,
   },
