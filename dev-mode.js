@@ -280,10 +280,14 @@
             });
         }
 
-        /* Dev mode disabled by default – clear any lingering state */
-        localStorage.removeItem(LS_KEY);
-        markBadge(false);
-        hideStudenciTab();
+        /* Restore persisted dev mode state */
+        const isDevActive = localStorage.getItem(LS_KEY) === '1';
+        markBadge(isDevActive);
+        if (isDevActive) {
+            showStudenciTab();
+        } else {
+            hideStudenciTab();
+        }
     }
 
     if (document.readyState === 'loading') {
