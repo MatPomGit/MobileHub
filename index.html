@@ -69,6 +69,10 @@
                     <i class="fa-solid fa-users"></i>
                     <span>Studenci</span>
                 </button>
+                <button class="pull-shortcut dev-only-tab" data-tab="zal">
+                    <i class="fa-solid fa-user-shield"></i>
+                    <span>ZAL</span>
+                </button>
             </div>
             <div class="pull-categories" id="pullCategories">
                 <div class="pull-categories-title">
@@ -174,6 +178,10 @@
             <button class="tab-btn dev-only-tab" data-tab="studenci" id="tab-studenci">
                 <i class="fa-solid fa-users"></i>
                 Studenci
+            </button>
+            <button class="tab-btn dev-only-tab" data-tab="zal" id="tab-zal">
+                <i class="fa-solid fa-user-shield"></i>
+                ZAL
             </button>
         </div>
     </nav>
@@ -1232,6 +1240,14 @@
         </iframe>
     </div><!-- /panel-studenci -->
 
+    <!-- TAB PANEL: ZAL (dev mode only) -->
+    <div class="tab-panel" id="panel-zal">
+        <iframe id="iframe-zal" src="zal.html"
+            style="border:none; width:100%; display:block; min-height:600px;" title="ZAL — wejściówki i zaliczenia online"
+            onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
+        </iframe>
+    </div><!-- /panel-zal -->
+
     <!-- Mobile sidebar toggle -->
     <button class="sidebar-toggle" id="sidebarToggle" aria-label="Otwórz menu">
         <i class="fa-solid fa-bars"></i>
@@ -1352,6 +1368,10 @@
         <button class="bottom-nav-btn dev-only-tab" data-tab="studenci">
             <i class="fa-solid fa-users"></i>
             <span>Studenci</span>
+        </button>
+        <button class="bottom-nav-btn dev-only-tab" data-tab="zal">
+            <i class="fa-solid fa-user-shield"></i>
+            <span>ZAL</span>
         </button>
     </nav>
 
@@ -1546,9 +1566,9 @@
             document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
             document.getElementById('panel-' + tab)?.classList.add('active');
 
-            // Resize "studenci" iframe once its panel is visible
-            if (tab === 'studenci') {
-                const iframe = document.getElementById('iframe-studenci');
+            // Resize iframe once its panel is visible
+            if (tab === 'studenci' || tab === 'zal') {
+                const iframe = document.getElementById('iframe-' + tab);
                 if (iframe) {
                     const resize = () => {
                         try {

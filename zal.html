@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZAL — wejściówki i zaliczenia online</title>
+  <style>
+    :root { color-scheme: dark; }
+    body {
+      margin: 0;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      background: #0f172a;
+      color: #e2e8f0;
+      line-height: 1.6;
+    }
+    main {
+      max-width: 980px;
+      margin: 0 auto;
+      padding: 24px 20px 56px;
+    }
+    .badge {
+      display: inline-block;
+      background: #1d4ed8;
+      color: #dbeafe;
+      border-radius: 999px;
+      padding: 4px 10px;
+      font-size: 12px;
+      letter-spacing: .04em;
+      text-transform: uppercase;
+      font-weight: 700;
+    }
+    h1 { margin: 12px 0 10px; font-size: clamp(28px, 4vw, 40px); }
+    .lead { color: #cbd5e1; max-width: 70ch; }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 14px;
+      margin-top: 24px;
+    }
+    .card {
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .card h2 { margin: 0 0 8px; font-size: 18px; }
+    .muted { color: #94a3b8; font-size: 14px; }
+  </style>
+</head>
+<body>
+  <main>
+    <span class="badge">Szablon modułu</span>
+    <h1>ZAL — wejściówki i zaliczenia online</h1>
+    <p class="lead">
+      To jest wstępny szablon nowej sekcji. W kolejnych etapach strona będzie rozwijana
+      jako moduł do realizacji wejściówek i zaliczeń online pod kontrolą proktoringu.
+    </p>
+
+    <section class="grid" aria-label="Plan funkcjonalny modułu ZAL">
+      <article class="card">
+        <h2>Sesje zaliczeniowe</h2>
+        <p class="muted">Tworzenie sesji, harmonogramów, limitów czasowych i zasad podejścia.</p>
+      </article>
+      <article class="card">
+        <h2>Proktoring</h2>
+        <p class="muted">Weryfikacja tożsamości, monitoring przebiegu i sygnalizacja naruszeń.</p>
+      </article>
+      <article class="card">
+        <h2>Bank pytań</h2>
+        <p class="muted">Kategorie pytań, losowanie zestawów i wersjonowanie treści egzaminu.</p>
+      </article>
+      <article class="card">
+        <h2>Raporty</h2>
+        <p class="muted">Wyniki, logi zdarzeń, eksport danych i ślad audytowy dla prowadzących.</p>
+      </article>
+    </section>
+  </main>
+</body>
+</html>
