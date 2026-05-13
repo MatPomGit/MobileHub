@@ -6,6 +6,7 @@ create table if not exists public.project_teams (
   title varchar(120) not null,
   members jsonb not null default '[]'::jsonb,
   description text,
+  notes text,
   icon_url text,
   project_url text,
   repository_url text,
@@ -28,6 +29,7 @@ create table if not exists public.project_teams (
   constraint project_teams_title_chk check (char_length(title) between 3 and 120),
   constraint project_teams_members_array_chk check (jsonb_typeof(members) = 'array'),
   constraint project_teams_description_chk check (description is null or char_length(trim(description)) between 20 and 2000),
+  constraint project_teams_notes_chk check (notes is null or char_length(trim(notes)) <= 4000),
   constraint project_teams_icon_url_chk check (icon_url is null or icon_url ~ '^(https://|data:image/)'),
   constraint project_teams_project_url_chk check (project_url is null or project_url ~ '^https://'),
   constraint project_teams_repository_url_chk check (repository_url is null or repository_url ~ '^https://'),
@@ -45,6 +47,9 @@ create table if not exists public.project_teams (
 
 alter table public.project_teams
   add column if not exists description text;
+
+alter table public.project_teams
+  add column if not exists notes text;
 
 alter table public.project_teams
   add column if not exists icon_url text;
@@ -101,6 +106,16 @@ begin
     alter table public.project_teams
       add constraint project_teams_description_chk
       check (description is null or char_length(trim(description)) between 20 and 2000);
+  end if;
+
+  if not exists (
+    select 1
+    from pg_constraint
+    where conname = 'project_teams_notes_chk'
+  ) then
+    alter table public.project_teams
+      add constraint project_teams_notes_chk
+      check (notes is null or char_length(trim(notes)) <= 4000);
   end if;
 
   if not exists (
