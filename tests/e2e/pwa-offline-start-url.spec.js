@@ -17,6 +17,12 @@ test('start_url remains reachable offline after first online load', async ({ pag
   await context.setOffline(true);
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
   await expect(page.locator('body')).toBeVisible();
-  await expect(page.locator('#mainContent')).toBeVisible();
+
+  const offlineFallback = page.locator('#offlineIndicator');
+  await expect(offlineFallback).toContainText('Tryb offline');
+
   await context.setOffline(false);
+  await page.reload({ waitUntil: 'domcontentloaded' });
+  await expect(offlineFallback).toContainText('Online');
+  await expect(page.locator('#mainContent')).toBeVisible();
 });

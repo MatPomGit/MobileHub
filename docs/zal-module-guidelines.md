@@ -47,3 +47,9 @@ przy zachowaniu bezpieczeństwa, audytowalności i dostępności.
 2. Spisać model danych (encje i relacje).
 3. Zdefiniować protokół zdarzeń proktoringowych i ich priorytety.
 4. Opracować scenariusze testów QA dla integralności i uczciwości egzaminu.
+
+
+## Reguła językowa (P1.7)
+- Pojedynczy wpis (np. element listy, nazwa kroku roadmapy, etykieta UI) powinien być zapisany w jednym języku.
+- Nie mieszaj języka polskiego i angielskiego w tym samym tytule/etykiecie, chyba że to nazwa własna technologii (np. `SwiftUI`, `Android Studio`).
+- Dla roadmap preferowany jest język polski z pozostawieniem nazw własnych technologii po angielsku.
