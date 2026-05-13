@@ -310,9 +310,9 @@
 
           filtered.forEach((question, index) => {
             const listItem = document.createElement('li');
-            const content = typeof question.question === 'string' && question.question.trim()
+            const content = question && typeof question.question === "string" && question.question.trim()
               ? question.question.trim()
-              : `Pytanie ${index + 1}`;
+              : "Pytanie " + (index + 1);
             listItem.textContent = content;
             topicList.appendChild(listItem);
           });
