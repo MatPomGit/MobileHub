@@ -258,6 +258,30 @@
         .data-table tr:hover td {
             background: var(--surface2);
         }
+        .project-note-wrap {
+            display: grid;
+            gap: 6px;
+            min-width: 240px;
+        }
+        .project-note-view {
+            width: 100%;
+            min-height: 78px;
+            max-height: 220px;
+            overflow-y: auto;
+            resize: none;
+            line-height: 1.3;
+            padding: 8px;
+            border: 1px solid #d8def0;
+            border-radius: 10px;
+            background: #f8faff;
+            color: #23314f;
+            font-size: 0.82rem;
+        }
+        .project-note-toggle {
+            justify-self: start;
+            font-size: 0.74rem;
+            padding: 5px 10px;
+        }
 
         .role-badge {
             display: inline-block;
@@ -876,6 +900,22 @@ background: var(--surface);
                     </div>
                 </div>
                 <div class="dashboard-grid" id="teacher-metrics"></div>
+                <div class="filters-grid" style="margin:14px 0 10px;">
+                    <div class="form-group">
+                        <label for="teacher-note-project">Projekt (uwagi)</label>
+                        <select id="teacher-note-project"></select>
+                    </div>
+                    <div class="form-group full">
+                        <label for="teacher-note-text">Uwagi do projektu</label>
+                        <textarea id="teacher-note-text" placeholder="Wpisz uwagi dla zespołu i projektu."></textarea>
+                    </div>
+                    <div class="form-group full">
+                        <button type="button" class="btn-submit" id="teacher-note-save-btn">
+                            <i class="fa-solid fa-floppy-disk"></i>
+                            Zapisz uwagi
+                        </button>
+                    </div>
+                </div>
                 <h3 style="margin:12px 0 10px;font-size:0.92rem;">Zespoły wymagające uzupełnienia</h3>
                 <ul id="hard-topics-list" class="dashboard-list"></ul>
                 <h3 style="margin:12px 0 10px;font-size:0.92rem;">Zespoły kompletne</h3>
@@ -916,6 +956,7 @@ background: var(--surface);
                                 <th>Obsada</th>
                                 <th>Status</th>
                                 <th>Uwaga</th>
+                                <th>Uwagi</th>
                             </tr>
                         </thead>
                         <tbody id="students-tbody">
@@ -1046,7 +1087,8 @@ background: var(--surface);
                 icon_url: row.icon_url || '',
                 project_url: row.project_url || '',
                 members: Array.isArray(row.members) ? row.members : [],
-                repository_url: row.repository_url || ''
+                repository_url: row.repository_url || '',
+                notes: String(row.notes ?? row.teacher_notes ?? '').trim()
             }))));
         }
 
@@ -1070,6 +1112,7 @@ background: var(--surface);
                 icon_url: String(project.icon_url || '').trim(),
                 project_url: String(project.project_url || '').trim(),
                 repository_url: project.repository_url || '',
+                notes: String(project.notes || '').trim(),
                 members: TEAM_ROLES.map((role) => {
                     const existing = (project.members || []).find((member) => member.role === role);
                     return existing
@@ -1324,6 +1367,9 @@ background: var(--surface);
             const projectPageInfo = project.project_url
                 ? `Strona projektu: <a href="${project.project_url}" target="_blank" rel="noopener noreferrer">${project.project_url}</a>.`
                 : 'Strona projektu: <strong>brak</strong>.';
+            const notesInfo = project.notes
+                ? `Uwagi prowadzącego: <strong>${project.notes}</strong>.`
+                : 'Uwagi prowadzącego: <strong>brak</strong>.';
             const box = document.getElementById('project-readiness-box');
             box.className = missingRoles.length ? 'alert alert-error' : 'alert alert-success';
             const statusIcon = missingRoles.length
@@ -1342,6 +1388,7 @@ background: var(--surface);
                     <p><strong>Status:</strong> ${statusSummary}</p>
                     <div><strong>Skład zespołu:</strong>${membersSummary}</div>
                     <p><strong>Opis:</strong> ${project.description}</p>
+                    <p>${notesInfo}</p>
                     <p>${projectPageInfo}</p>
                     <p>${repositoryInfo}</p>
                 </div>`;
@@ -1737,7 +1784,61 @@ background: var(--surface);
             ['teacher-filter-group', 'teacher-filter-week', 'teacher-filter-tech'].forEach((id) => {
                 document.getElementById(id).addEventListener('change', renderTeacherDashboard);
             });
+            initTeacherNotesEditor();
             renderTeacherDashboard();
+        }
+
+        function initTeacherNotesEditor() {
+            const projectSelect = document.getElementById('teacher-note-project');
+            const notesInput = document.getElementById('teacher-note-text');
+            const saveButton = document.getElementById('teacher-note-save-btn');
+            if (!projectSelect || !notesInput || !saveButton) return;
+
+            projectSelect.textContent = '';
+            projectData.projects.forEach((project) => {
+                const option = document.createElement('option');
+                option.value = project.id;
+                option.textContent = `${project.id} — ${project.title}`;
+                projectSelect.appendChild(option);
+            });
+
+            const syncInput = () => {
+                const project = findProjectById(projectSelect.value);
+                notesInput.value = project?.notes || '';
+            };
+
+            projectSelect.addEventListener('change', syncInput);
+            syncInput();
+
+            saveButton.addEventListener('click', async () => {
+                if (projectDataSource !== TEAM_DATA_SOURCE.supabase) {
+                    showAlert('Zapis uwag jest dostępny tylko przy źródle danych Supabase.', 'info');
+                    return;
+                }
+                const projectId = projectSelect.value;
+                const notes = String(notesInput.value || '').trim();
+                saveButton.disabled = true;
+                const previousLabel = saveButton.innerHTML;
+                saveButton.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Zapisywanie…';
+                try {
+                    await updateProjectMetadata(projectId, { notes: notes || null });
+                    await loadProjectDataFromTeamsTable();
+                    renderOverviewDashboard();
+                    initProjectSelector();
+                    renderTeacherDashboard();
+                    renderProjectsTable();
+                    renderRepoProjectSelect();
+                    fillProjectMetaForm(projectId);
+                    projectSelect.value = projectId;
+                    syncInput();
+                    showAlert('Zapisano uwagi prowadzącego.', 'success');
+                } catch (error) {
+                    showAlert(error.message || 'Nie udało się zapisać uwag.', 'error');
+                } finally {
+                    saveButton.disabled = false;
+                    saveButton.innerHTML = previousLabel;
+                }
+            });
         }
 
         function getFilteredProjects() {
@@ -1900,6 +2001,33 @@ background: var(--surface);
             return td;
         }
 
+        function notesCell(project) {
+            const td = document.createElement('td');
+            const wrap = document.createElement('div');
+            wrap.className = 'project-note-wrap';
+
+            const textarea = document.createElement('textarea');
+            textarea.className = 'project-note-view';
+            textarea.readOnly = true;
+            textarea.rows = 3;
+            textarea.value = String(project.notes || '');
+            wrap.appendChild(textarea);
+
+            const toggle = document.createElement('button');
+            toggle.type = 'button';
+            toggle.className = 'btn-sm project-note-toggle';
+            toggle.textContent = 'Rozwiń do 10 wierszy';
+            toggle.addEventListener('click', () => {
+                const expanded = textarea.rows === 10;
+                textarea.rows = expanded ? 3 : 10;
+                toggle.textContent = expanded ? 'Rozwiń do 10 wierszy' : 'Zwiń do 3 wierszy';
+            });
+            wrap.appendChild(toggle);
+
+            td.appendChild(wrap);
+            return td;
+        }
+
         function renderProjectsTable() {
             const tbody = document.getElementById('students-tbody');
             const emptyState = document.getElementById('empty-state');
@@ -1934,7 +2062,8 @@ background: var(--surface);
                         roleCell(member.role),
                         cell(`${assignedCount}/3`),
                         cell(getProjectStatus(project)),
-                        cell(missingRoles.length ? `Brak: ${missingRoles.join(', ')}` : 'Pełny skład')
+                        cell(missingRoles.length ? `Brak: ${missingRoles.join(', ')}` : 'Pełny skład'),
+                        notesCell(project)
                     );
                     tbody.appendChild(tr);
                 });
