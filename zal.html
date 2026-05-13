@@ -85,6 +85,13 @@
       padding-left: 20px;
     }
     .module li { margin-bottom: 6px; }
+    #topic-list {
+      margin-top: 12px;
+      padding-left: 18px;
+    }
+    #topic-list li {
+      margin-bottom: 10px;
+    }
     .metrics-table {
       width: 100%;
       border-collapse: collapse;
@@ -149,6 +156,7 @@
           <option value="all">Wszystkie tematy</option>
         </select>
         <p id="topic-summary" class="muted">Ładowanie pytań testowych…</p>
+        <ul id="topic-list"></ul>
       </div>
     </section>
 
@@ -251,6 +259,7 @@
       const source = 'quiz-questions.json';
       const select = document.getElementById('topic-range');
       const summary = document.getElementById('topic-summary');
+      const topicList = document.getElementById('topic-list');
 
       const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
       const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
@@ -290,6 +299,23 @@
             ? questions
             : questions.filter((q) => String(q.category) === chosen);
           summary.textContent = `Zakres: ${chosen === 'all' ? 'wszystkie tematy' : `temat ${chosen}`}. Dostępne pytania: ${filtered.length}. Źródło: ${source}.`;
+
+          topicList.replaceChildren();
+          if (filtered.length === 0) {
+            const emptyItem = document.createElement('li');
+            emptyItem.textContent = 'Brak pytań dla wybranego zakresu.';
+            topicList.appendChild(emptyItem);
+            return;
+          }
+
+          filtered.forEach((question, index) => {
+            const listItem = document.createElement('li');
+            const content = question && typeof question.question === "string" && question.question.trim()
+              ? question.question.trim()
+              : "Pytanie " + (index + 1);
+            listItem.textContent = content;
+            topicList.appendChild(listItem);
+          });
         };
 
         select.addEventListener('change', updateSummary);
@@ -307,6 +333,7 @@
         })
         .catch((error) => {
           summary.textContent = `Nie udało się wczytać pytań z ${source}: ${error.message}`;
+          topicList.replaceChildren();
         });
     }());
   </script>
