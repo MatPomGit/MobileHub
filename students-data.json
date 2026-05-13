@@ -91,9 +91,9 @@
 			"package_name": "is.ktty.ben9",
 			"play_console_url": "https://play.google.com/console/u/0/developers/5585680289117975139/app-list?hl=pl",
 			"members": [
-				{ "index": "177181", "role": "Leader", "profile_url": "https://gitea.7o7.cx/sherl" },
+				{ "index": "177188", "role": "Leader", "profile_url": "https://gitea.7o7.cx/sherl" },
 				{ "index": "177045", "role": "Frontend", "profile_url": "https://gitea.7o7.cx/Nom4ne" },
-				{ "index": "177188", "role": "Backend", "profile_url": "https://gitea.7o7.cx/Evilbrine" }
+				{ "index": "177181", "role": "Backend", "profile_url": "https://gitea.7o7.cx/Evilbrine" }
 			]
 		},
 		{
