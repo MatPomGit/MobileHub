@@ -1,5 +1,5 @@
-// Test E2E wykrywa regresję krytycznej ścieżki użytkownika: panel -> zakładka -> wyszukiwanie -> artykuł -> powrót.
-// Blokuje sytuację, w której nawigacja mobilna przestaje prowadzić do treści i nie da się wrócić do listy.
+// // Test E2E waliduje pełny przepływ użytkownika w panelu mobilnym:
+// otwarcie panelu, przejście do zakładki wiki, wyszukiwanie, otwarcie artykułu i nawigację wstecz.
 const { test, expect } = require('@playwright/test');
 
 test('mobile pull panel flow: open, tab, search, open article, back', async ({ page }) => {

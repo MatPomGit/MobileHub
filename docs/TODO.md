@@ -108,13 +108,13 @@
 - [ ] Publikować raport `article-render-health` w CI.
 
 ### P1.7 Szybkie zadania po przeglądzie kodu
-- **Status:** `todo`
+- **Status:** `done`
 - **Owner:** `unassigned`
-- [ ] Ujednolicić nazwę kroku `iOS ecosystem i workflow` do jednej wersji językowej.
-- [ ] Przejrzeć blok `learningPaths` pod kątem mieszanek językowych.
-- [ ] Dopisać regułę redakcyjną: pojedynczy wpis ma być w jednym języku.
-- [ ] Zaktualizować komentarz testu w `tests/e2e/mobilehub-flow.spec.js` do realnych asercji.
-- [ ] Rozszerzyć test `pwa-offline-start-url` o asercję treści fallbacku i recovery po powrocie online.
+- [x] Ujednolicić nazwę kroku `iOS ecosystem i workflow` do jednej wersji językowej.
+- [x] Przejrzeć blok `learningPaths` pod kątem mieszanek językowych.
+- [x] Dopisać regułę redakcyjną: pojedynczy wpis ma być w jednym języku.
+- [x] Zaktualizować komentarz testu w `tests/e2e/mobilehub-flow.spec.js` do realnych asercji.
+- [x] Rozszerzyć test `pwa-offline-start-url` o asercję treści fallbacku i recovery po powrocie online.
 
 ## P2 (średnie) — utrzymanie i rozwój
 
