@@ -31,8 +31,13 @@
 - **Status:** `todo`
 - **Owner:** `unassigned`
 - [ ] Ujednolicić strukturę plików `zajecia/live/wyklady/w*-live.html` do kontraktu walidatora.
-- [ ] Dodać wymagane bloki: cele i efekty uczenia, case study, najczęstsze błędy, quiz,
-      `info-card`, `comparison-grid`, `timeline`, `callout`, `quiz-checkpoint`, min. 3 slajdy rdzenia.
+- [ ] Dodać wymagane bloki:
+  - [ ] cele i efekty uczenia
+  - [ ] case study
+  - [ ] najczęstsze błędy
+  - [ ] quiz
+  - [ ] `info-card`, `comparison-grid`, `timeline`, `callout`, `quiz-checkpoint`
+  - [ ] min. 3 slajdy rdzenia
 - [ ] Poprawić generator/template, aby nie tworzył niezgodnych plików.
 
 ### P0.4 UX mobilny (telefon/tablet) dla głównych przepływów
