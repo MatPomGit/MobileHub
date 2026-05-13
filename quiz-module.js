@@ -100,9 +100,10 @@ async function initializeQuiz() {
         const status = document.getElementById('questionsLoadStatus');
         if (status) {
             const categoryCount = groupQuestionsByCategory(state.allQuestions).size;
-            status.textContent = `Dostępne pytania: ${state.allQuestions.length}, kategorie: ${categoryCount}.`;
+            status.textContent = `Dostępne pytania: ${state.allQuestions.length}, dostępnych tematów: ${categoryCount}.`;
         }
 
+        renderTopicSelector();
         document.getElementById('startQuizBtn')?.removeAttribute('disabled');
         updateModePreview();
         showConfigPanel({ scroll: false });
@@ -293,6 +294,59 @@ function updateModePreview() {
 function updateQuestionTotal(count = state.questions.length) {
     const total = document.getElementById('questionTotal');
     if (total) total.textContent = `${count} pytań w wybranym trybie`;
+}
+
+
+function renderTopicSelector() {
+    const selector = document.getElementById('topicSelector');
+    if (!selector) return;
+
+    selector.innerHTML = '';
+
+    const allButton = buildTopicButton('all', 'Wszystkie pytania');
+    allButton.classList.add('active');
+    selector.appendChild(allButton);
+
+    Object.keys(CATEGORY_LABELS).map(Number).forEach((categoryNumber) => {
+        const button = buildTopicButton(String(categoryNumber), getCategoryLabel(categoryNumber));
+        selector.appendChild(button);
+    });
+
+    renderQuestionBankList('all');
+}
+
+function buildTopicButton(value, label) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'topic-chip';
+    button.textContent = label;
+    button.dataset.topic = value;
+    button.addEventListener('click', () => {
+        document.querySelectorAll('.topic-chip').forEach((chip) => chip.classList.remove('active'));
+        button.classList.add('active');
+        renderQuestionBankList(value);
+    });
+    return button;
+}
+
+function renderQuestionBankList(topic) {
+    const container = document.getElementById('questionBankList');
+    if (!container) return;
+
+    const filteredQuestions = topic === 'all'
+        ? state.allQuestions
+        : state.allQuestions.filter((question) => String(question.category) === String(topic));
+
+    if (filteredQuestions.length === 0) {
+        container.innerHTML = '<p class="muted">Brak pytań dla wybranego zakresu.</p>';
+        return;
+    }
+
+    const listItems = filteredQuestions
+        .map((question) => `<li>${question.question}</li>`)
+        .join('');
+
+    container.innerHTML = `<ol>${listItems}</ol>`;
 }
 
 function startQuiz() {

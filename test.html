@@ -283,6 +283,50 @@
             color: var(--text-muted);
             margin-top: 8px;
         }
+
+        .question-bank {
+            margin-top: 20px;
+            border-top: 1px solid var(--border);
+            padding-top: 16px;
+        }
+        .question-bank h3 {
+            margin: 0 0 12px;
+        }
+        .topic-selector {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+        .topic-chip {
+            border: 1px solid var(--border);
+            background: #fff;
+            color: var(--text);
+            border-radius: 999px;
+            padding: 8px 12px;
+            font-size: 0.9rem;
+            cursor: pointer;
+        }
+        .topic-chip.active {
+            border-color: var(--accent);
+            background: var(--accent-light);
+            color: var(--accent);
+            font-weight: 700;
+        }
+        .question-bank-list {
+            background: var(--surface2);
+            border-radius: 12px;
+            padding: 12px;
+            max-height: 280px;
+            overflow: auto;
+        }
+        .question-bank-list ol {
+            margin: 0;
+            padding-left: 18px;
+            display: grid;
+            gap: 8px;
+        }
+
         .muted { color: var(--text-muted); }
         @media (max-width: 640px) {
             .page { width: min(100% - 20px, 920px); padding-top: 20px; }
@@ -334,6 +378,15 @@
                 </label>
             </div>
             <button class="primary-btn" id="startQuizBtn" type="button" disabled>Rozpocznij test</button>
+
+            <section class="question-bank" aria-label="Bank pytań">
+                <h3>Zakres tematów testów</h3>
+                <div class="topic-selector" id="topicSelector"></div>
+                <div class="question-bank-list" id="questionBankList">
+                    <p class="muted">Wybierz temat, aby zobaczyć listę pytań (bez odpowiedzi).</p>
+                </div>
+            </section>
+
         </section>
 
         <section class="quiz-card" id="quizCard" hidden>
