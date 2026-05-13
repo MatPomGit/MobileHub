@@ -337,16 +337,22 @@ function renderQuestionBankList(topic) {
         ? state.allQuestions
         : state.allQuestions.filter((question) => String(question.category) === String(topic));
 
+    container.innerHTML = '';
     if (filteredQuestions.length === 0) {
-        container.innerHTML = '<p class="muted">Brak pytań dla wybranego zakresu.</p>';
+        const p = document.createElement('p');
+        p.className = 'muted';
+        p.textContent = 'Brak pytań dla wybranego zakresu.';
+        container.appendChild(p);
         return;
     }
 
-    const listItems = filteredQuestions
-        .map((question) => `<li>${question.question}</li>`)
-        .join('');
-
-    container.innerHTML = `<ol>${listItems}</ol>`;
+    const list = document.createElement('ol');
+    for (const question of filteredQuestions) {
+        const listItem = document.createElement('li');
+        listItem.textContent = question.question;
+        list.appendChild(listItem);
+    }
+    container.appendChild(list);
 }
 
 function startQuiz() {
