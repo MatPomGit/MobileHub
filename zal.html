@@ -163,95 +163,11 @@
     <section id="proctoring-panel" class="module tab-panel" aria-label="Wytyczne proktoringu modułu testowego" hidden>
       <h2>Wytyczne proktoringu modułu testowego</h2>
       <p class="muted">
-        Poniższe założenia definiują minimalny standard bezpieczeństwa i monitoringu
-        dla testów uruchamianych w ramach modułu ZAL.
+        Szczegółowe wymagania proktoringowe zostały przeniesione do dokumentacji modułu.
       </p>
-
-      <h3>1) Uruchamianie i blokada kontekstu testu</h3>
-      <ul>
-        <li>Po kliknięciu „Rozpocznij test” system wymusza wejście w tryb pełnoekranowy (Fullscreen API).</li>
-        <li>Test działa w dedykowanym widoku bez możliwości otwierania paneli bocznych i linków zewnętrznych.</li>
-        <li>Wyjście z pełnego ekranu, minimalizacja okna lub utrata fokusowania jest logowana jako zdarzenie ryzyka.</li>
-        <li>Wysoki poziom naruszeń (np. 3+ zdarzenia krytyczne) powinien automatycznie zakończyć podejście.</li>
-      </ul>
-
-      <h3>2) Wykrywanie skrótów klawiszowych i prób obejścia</h3>
-      <ul>
-        <li>Monitorowane skróty: Alt+Tab, Ctrl/Cmd+Tab, Ctrl/Cmd+L, Ctrl/Cmd+T, Ctrl/Cmd+N, PrintScreen, F11, Esc.</li>
-        <li>Przechwytywanie zdarzeń <code>keydown</code>/<code>keyup</code> z klasyfikacją: informacyjne, ostrzeżenie, krytyczne.</li>
-        <li>Każde wykrycie skrótu zapisuje: czas, kod klawisza, aktywne pytanie, tryb pełnoekranowy i stan widoczności karty.</li>
-        <li>Przy skrótach krytycznych system pokazuje użytkownikowi ostrzeżenie i zwiększa licznik naruszeń.</li>
-      </ul>
-
-      <h3>3) Wykrywanie przełączania kart i utraty uwagi</h3>
-      <ul>
-        <li>Wykorzystać Page Visibility API (<code>document.visibilityState</code>) oraz zdarzenia <code>blur/focus</code>.</li>
-        <li>Każde przejście do stanu <code>hidden</code> należy logować z długością nieobecności.</li>
-        <li>Powrót do karty testu wymaga krótkiego potwierdzenia i pokazania komunikatu o zarejestrowanym zdarzeniu.</li>
-        <li>W raporcie końcowym podsumować liczbę i łączny czas przełączeń poza kartę testu.</li>
-      </ul>
-
-      <h3>4) Śledzenie twarzy i skupienia (MediaPipe)</h3>
-      <ul>
-        <li>Wymagać zgody na kamerę przed startem testu; brak zgody uniemożliwia rozpoczęcie egzaminu.</li>
-        <li>Użyć MediaPipe Face Landmarker / Face Mesh do estymacji pozycji głowy i punktów oczu.</li>
-        <li>Monitorować, czy twarz jest widoczna, centralnie ustawiona i skierowana w stronę ekranu.</li>
-        <li>Wykrywać brak twarzy, wiele twarzy, długie odchylenie wzroku oraz gwałtowne ruchy głowy.</li>
-        <li>Dla prywatności przechowywać głównie metryki i flagi zdarzeń, a nie surowe nagranie wideo (chyba że polityka uczelni stanowi inaczej).</li>
-      </ul>
-
-      <h3>5) Metryki behawioralne i poznawcze do raportu ryzyka</h3>
-      <table class="metrics-table">
-        <thead>
-          <tr>
-            <th>Metryka</th>
-            <th>Opis / sposób liczenia</th>
-            <th>Przykładowy sygnał ryzyka</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Czas odpowiedzi na pytanie</td>
-            <td>Różnica między wyświetleniem pytania a zatwierdzeniem odpowiedzi.</td>
-            <td>Nienaturalnie krótki lub bardzo zmienny czas między pytaniami.</td>
-          </tr>
-          <tr>
-            <td>Nerwowość ruchów głowy</td>
-            <td>Odchylenie standardowe kąta yaw/pitch/roll w oknie czasowym.</td>
-            <td>Wysoka częstotliwość mikro-ruchów i nagłe zwroty poza ekran.</td>
-          </tr>
-          <tr>
-            <td>Nerwowość ruchów oczu</td>
-            <td>Wariancja wektora spojrzenia i liczba szybkich sakad.</td>
-            <td>Powtarzalne skoki wzroku poza obszar monitora.</td>
-          </tr>
-          <tr>
-            <td>Ilość mrugnięć</td>
-            <td>Detekcja mrugnięć na podstawie Eye Aspect Ratio (EAR), np. na minutę.</td>
-            <td>Nietypowo wysoka lub skrajnie niska częstość przez dłuższy okres.</td>
-          </tr>
-          <tr>
-            <td>Czas poza ekranem</td>
-            <td>Procent czasu, gdy wzrok nie jest skierowany na ekran przez &gt; X sekund.</td>
-            <td>Długie epizody patrzenia poza ekran podczas trudnych pytań.</td>
-          </tr>
-          <tr>
-            <td>Brak twarzy / wiele twarzy</td>
-            <td>Licznik i łączny czas klatek bez twarzy lub z więcej niż jedną twarzą.</td>
-            <td>Powtarzalna obecność drugiej osoby albo znikanie z kadru.</td>
-          </tr>
-          <tr>
-            <td>Aktywność okna i karty</td>
-            <td>Liczba zdarzeń blur/hidden oraz ich łączny czas.</td>
-            <td>Wielokrotne przełączanie aplikacji i kart.</td>
-          </tr>
-          <tr>
-            <td>Wzorzec odpowiedzi</td>
-            <td>Analiza sekwencji: tempo, poprawki, skoki po pytaniach, seryjność wyborów.</td>
-            <td>Nietypowe serie odpowiedzi o identycznym czasie i schemacie.</td>
-          </tr>
-        </tbody>
-      </table>
+      <p>
+        Przejdź do dokumentu: <a href="docs/proctoring-guidelines.md">docs/proctoring-guidelines.md</a>
+      </p>
     </section>
   </main>
   <script>
