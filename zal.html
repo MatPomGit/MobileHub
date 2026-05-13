@@ -166,16 +166,30 @@
         Szczegółowe wymagania proktoringowe zostały przeniesione do dokumentacji modułu.
       </p>
       <p>
-        Przejdź do dokumentu: <a href="docs/proctoring-guidelines.md">docs/proctoring-guidelines.md</a>
+        ---
       </p>
     </section>
   </main>
   <script>
     (function () {
-      const source = 'quiz-questions.json';
       const select = document.getElementById('topic-range');
       const summary = document.getElementById('topic-summary');
       const topicList = document.getElementById('topic-list');
+
+      const lectureTopicByCategory = {
+        1: 'Wprowadzenie do aplikacji mobilnych',
+        2: 'Sprzęt i ekosystem Android/iOS',
+        3: 'Projektowanie UI/UX',
+        4: 'Aplikacje natywne',
+        5: 'Frameworki cross-platform',
+        6: 'Sensory i dane kontekstowe',
+        7: 'IoT i komunikacja sieciowa',
+        8: 'Informatyka afektywna',
+        9: 'XR i interakcje przestrzenne',
+        10: 'Gry mobilne',
+        11: 'Robotyka mobilna'
+      };
+
 
       const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
       const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
@@ -205,7 +219,11 @@
         categories.forEach((category) => {
           const option = document.createElement('option');
           option.value = String(category);
-          option.textContent = `Temat ${category}`;
+          const lectureTopic = lectureTopicByCategory[Number(category)];
+          option.textContent = lectureTopic
+            ? `Temat ${category} — Wykład ${category}: ${lectureTopic}`
+            : `Temat ${category}`;
+
           select.appendChild(option);
         });
 
@@ -214,8 +232,8 @@
           const filtered = chosen === 'all'
             ? questions
             : questions.filter((q) => String(q.category) === chosen);
-          summary.textContent = `Zakres: ${chosen === 'all' ? 'wszystkie tematy' : `temat ${chosen}`}. Dostępne pytania: ${filtered.length}. Źródło: ${source}.`;
-
+          summary.textContent = `Zakres: ${chosen === 'all' ? 'wszystkie tematy' : `temat ${chosen}`}. Dostępne pytania: ${filtered.length}.`;
+          
           topicList.replaceChildren();
           if (filtered.length === 0) {
             const emptyItem = document.createElement('li');

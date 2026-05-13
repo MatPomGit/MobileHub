@@ -10,6 +10,7 @@
 
 (function () {
     const LS_KEY = 'pam-dev-mode';
+        const LS_ACTIVATION_COUNT_KEY = 'pam-dev-mode-activations';
 
     /* ------------------------------------------------------------------ */
     /*  Sprawdź informacje o środowisku                                     */
@@ -167,18 +168,23 @@
     /* ------------------------------------------------------------------ */
     /*  Aktywacja / deaktywacja                                             */
     /* ------------------------------------------------------------------ */
-    function activateDev() {
+ function activateDev() {
         localStorage.setItem(LS_KEY, '1');
         markBadge(true);
-        showStudenciTab();
+
+        const activationCount = Number(localStorage.getItem(LS_ACTIVATION_COUNT_KEY) || '0') + 1;
+        localStorage.setItem(LS_ACTIVATION_COUNT_KEY, String(activationCount));
+
+        showDevTabs(activationCount >= 3);
     }
 
     function deactivateDev() {
         localStorage.removeItem(LS_KEY);
         markBadge(false);
-        hideStudenciTab();
+        hideDevTabs();
         closePanel();
     }
+
 
     function markBadge(active) {
         const trigger = document.getElementById('dev-mode-trigger');
@@ -203,19 +209,24 @@
     }
 
     /* ------------------------------------------------------------------ */
-    /*  Zakładka Studenci                                                   */
+    /*  Zakładka Studenci                                                 */
     /* ------------------------------------------------------------------ */
-    function showStudenciTab() {
-        document.querySelectorAll('[data-tab="studenci"], [data-tab="zal"]').forEach(function (el) {
+    function showDevTabs(showZalTab) {
+        document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
             el.classList.remove('dev-only-tab');
+        });
+
+        document.querySelectorAll('[data-tab="zal"]').forEach(function (el) {
+            el.classList.toggle('dev-only-tab', !showZalTab);
         });
     }
 
-    function hideStudenciTab() {
+    function hideDevTabs() {
         document.querySelectorAll('[data-tab="studenci"], [data-tab="zal"]').forEach(function (el) {
             el.classList.add('dev-only-tab');
         });
     }
+
 
     /* ------------------------------------------------------------------ */
     /*  Inicjalizacja                                                       */
@@ -280,14 +291,15 @@
             });
         }
 
-        /* Restore persisted dev mode state */
-        const isDevActive = localStorage.getItem(LS_KEY) === '1';
+        /* Default to hidden/off on startup; require explicit activation each visit */
+        const isDevActive = false;
         markBadge(isDevActive);
         if (isDevActive) {
-            showStudenciTab();
+            showDevTabs(true);
         } else {
-            hideStudenciTab();
+            hideDevTabs();
         }
+
     }
 
     if (document.readyState === 'loading') {
