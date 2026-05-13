@@ -259,6 +259,9 @@
         tabPanels.forEach((panel) => {
           panel.hidden = panel.id !== targetId;
         });
+        tabButtons.forEach((btn) => {
+          btn.setAttribute('aria-selected', String(btn.dataset.target === targetId));
+        });
       }
 
       tabButtons.forEach((button) => {
