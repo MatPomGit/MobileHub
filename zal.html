@@ -44,6 +44,18 @@
       padding: 14px;
     }
     .card h2 { margin: 0 0 8px; font-size: 18px; }
+
+    .tab-btn {
+      all: unset;
+      display: block;
+      width: 100%;
+      cursor: pointer;
+    }
+    .tab-btn:focus-visible {
+      outline: 2px solid #60a5fa;
+      outline-offset: 6px;
+      border-radius: 10px;
+    }
     .muted { color: #94a3b8; font-size: 14px; }
     .module {
       margin-top: 28px;
@@ -102,25 +114,34 @@
     </p>
 
     <section class="grid" aria-label="Plan funkcjonalny modułu ZAL">
+      <p class="muted">Wybierz moduł, aby wyświetlić szczegóły.</p>
       <article class="card">
-        <h2>Sesje zaliczeniowe</h2>
+        <button type="button" class="tab-btn" data-target="sessions-panel">
+          <h2>Sesje zaliczeniowe</h2>
         <p class="muted">Tworzenie sesji, harmonogramów, limitów czasowych i zasad podejścia.</p>
+        </button>
       </article>
       <article class="card">
-        <h2>Proktoring</h2>
+        <button type="button" class="tab-btn" data-target="proctoring-panel">
+          <h2>Proktoring</h2>
         <p class="muted">Weryfikacja tożsamości, monitoring przebiegu i sygnalizacja naruszeń.</p>
+        </button>
       </article>
       <article class="card">
-        <h2>Bank pytań</h2>
+        <button type="button" class="tab-btn" data-target="topics-panel">
+          <h2>Bank pytań</h2>
         <p class="muted">Kategorie pytań, losowanie zestawów i wersjonowanie treści egzaminu.</p>
+        </button>
       </article>
       <article class="card">
-        <h2>Raporty</h2>
+        <button type="button" class="tab-btn" data-target="reports-panel">
+          <h2>Raporty</h2>
         <p class="muted">Wyniki, logi zdarzeń, eksport danych i ślad audytowy dla prowadzących.</p>
+        </button>
       </article>
     </section>
 
-    <section class="module" aria-label="Zakres tematów testów">
+    <section id="topics-panel" class="module tab-panel" aria-label="Zakres tematów testów" hidden>
       <h2>Zakres tematów testów</h2>
       <div class="module-controls">
         <label for="topic-range">Wybierz zakres tematyczny:</label>
@@ -131,7 +152,7 @@
       </div>
     </section>
 
-    <section class="module" aria-label="Wytyczne proktoringu modułu testowego">
+    <section id="proctoring-panel" class="module tab-panel" aria-label="Wytyczne proktoringu modułu testowego" hidden>
       <h2>Wytyczne proktoringu modułu testowego</h2>
       <p class="muted">
         Poniższe założenia definiują minimalny standard bezpieczeństwa i monitoringu
@@ -230,6 +251,24 @@
       const source = 'quiz-questions.json';
       const select = document.getElementById('topic-range');
       const summary = document.getElementById('topic-summary');
+
+      const tabButtons = Array.from(document.querySelectorAll('.tab-btn'));
+      const tabPanels = Array.from(document.querySelectorAll('.tab-panel'));
+
+      function activatePanel(targetId) {
+        tabPanels.forEach((panel) => {
+          panel.hidden = panel.id !== targetId;
+        });
+        tabButtons.forEach((btn) => {
+          btn.setAttribute('aria-selected', String(btn.dataset.target === targetId));
+        });
+      }
+
+      tabButtons.forEach((button) => {
+        button.addEventListener('click', () => {
+          activatePanel(button.dataset.target);
+        });
+      });
 
       function renderOptions(questions) {
         const categories = [...new Set(
