@@ -45,6 +45,24 @@
     }
     .card h2 { margin: 0 0 8px; font-size: 18px; }
     .muted { color: #94a3b8; font-size: 14px; }
+    .module {
+      margin-top: 28px;
+      background: #111827;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      padding: 16px;
+    }
+    .module h2 { margin: 0 0 12px; font-size: 20px; }
+    .module-controls { display: grid; gap: 10px; }
+    .module label { font-weight: 600; }
+    .module select {
+      background: #0b1220;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+    }
   </style>
 </head>
 <body>
@@ -74,6 +92,63 @@
         <p class="muted">Wyniki, logi zdarzeń, eksport danych i ślad audytowy dla prowadzących.</p>
       </article>
     </section>
+
+    <section class="module" aria-label="Zakres tematów testów">
+      <h2>Zakres tematów testów</h2>
+      <div class="module-controls">
+        <label for="topic-range">Wybierz zakres tematyczny:</label>
+        <select id="topic-range" name="topic-range" aria-describedby="topic-summary">
+          <option value="all">Wszystkie tematy</option>
+        </select>
+        <p id="topic-summary" class="muted">Ładowanie pytań testowych…</p>
+      </div>
+    </section>
   </main>
+  <script>
+    (function () {
+      const source = 'quiz-questions.json';
+      const select = document.getElementById('topic-range');
+      const summary = document.getElementById('topic-summary');
+
+      function renderOptions(questions) {
+        const categories = [...new Set(
+          questions
+            .map((item) => item.category)
+            .filter((category) => category !== undefined && category !== null)
+        )].sort((a, b) => Number(a) - Number(b));
+
+        categories.forEach((category) => {
+          const option = document.createElement('option');
+          option.value = String(category);
+          option.textContent = `Temat ${category}`;
+          select.appendChild(option);
+        });
+
+        const updateSummary = () => {
+          const chosen = select.value;
+          const filtered = chosen === 'all'
+            ? questions
+            : questions.filter((q) => String(q.category) === chosen);
+          summary.textContent = `Zakres: ${chosen === 'all' ? 'wszystkie tematy' : `temat ${chosen}`}. Dostępne pytania: ${filtered.length}. Źródło: ${source}.`;
+        };
+
+        select.addEventListener('change', updateSummary);
+        updateSummary();
+      }
+
+      fetch(source)
+        .then((response) => {
+          if (!response.ok) throw new Error(`Błąd HTTP ${response.status}`);
+          return response.json();
+        })
+        .then((questions) => {
+          if (!Array.isArray(questions)) throw new Error('Nieprawidłowy format danych pytań.');
+          renderOptions(questions);
+        })
+        .catch((error) => {
+          summary.textContent = `Nie udało się wczytać pytań z ${source}: ${error.message}`;
+        });
+    }());
+  </script>
 </body>
 </html>
