@@ -206,13 +206,13 @@
     /*  Zakładka Studenci                                                   */
     /* ------------------------------------------------------------------ */
     function showStudenciTab() {
-        document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
+        document.querySelectorAll('[data-tab="studenci"], [data-tab="zal"]').forEach(function (el) {
             el.classList.remove('dev-only-tab');
         });
     }
 
     function hideStudenciTab() {
-        document.querySelectorAll('[data-tab="studenci"]').forEach(function (el) {
+        document.querySelectorAll('[data-tab="studenci"], [data-tab="zal"]').forEach(function (el) {
             el.classList.add('dev-only-tab');
         });
     }
