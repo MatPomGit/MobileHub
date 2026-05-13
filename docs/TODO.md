@@ -140,11 +140,11 @@
 - [ ] Zdefiniować i przetestować CSP.
 
 ## Proponowana kolejność realizacji
-1. P0.1–P0.5.
-2. P1.3 + P1.4.
-3. P1.1 + P1.2 + P1.5 + P1.7.
-4. P1.6 + P2.2.
-5. P2.1 + P2.3.
+1. P0.1–P0.5 (krytyczne działanie, mobilność i zgodność PWA).
+2. P1.3 + P1.4 (bezpieczeństwo i dostępność).
+3. P1.1 + P1.2 + P1.5 + P1.7 (odporność na błędy, inicjalizacja UI i czytelność).
+4. P1.6 + P2.2 (weryfikacja renderowania treści i testy regresji).
+5. P2.1 + P2.3 (architektura i zasoby zewnętrzne).
 
 ## Kryteria akceptacji zamknięcia backlogu
 - [ ] Wszystkie walidatory kończą się sukcesem.
