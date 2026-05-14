@@ -135,7 +135,7 @@ function sanitizeRenderedMarkdown(html) {
 
   const parser = new DOMParser();
   const doc = parser.parseFromString(html, 'text/html');
-  doc.querySelectorAll('script, style, iframe, object, embed, form, input, button, textarea, select').forEach((el) => el.remove());
+  doc.querySelectorAll('script, style, iframe, object, embed, form, input, button, textarea, select, svg, math').forEach((el) => el.remove());
   doc.querySelectorAll('*').forEach((el) => {
     [...el.attributes].forEach((attr) => {
       const n = attr.name.toLowerCase();
