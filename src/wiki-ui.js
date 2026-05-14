@@ -27,7 +27,7 @@ export function initThemePicker() {
     }
   });
 
-  onClick(document, `.${CLASSES.themeOption}`, (_event, btn) => {
+  onClick(dropdown, `.${CLASSES.themeOption}`, (_event, btn) => {
     const t = btn.dataset.theme;
     if (!VALID_THEMES.includes(t)) return;
     applyTheme(t);
