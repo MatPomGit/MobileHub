@@ -1409,23 +1409,6 @@
                 console.warn('SW registration failed:', err);
             });
         }
-
-        // Mobile sidebar toggle
-        document.getElementById('sidebarToggle')?.addEventListener('click', () => {
-            const sidebar = document.getElementById('wikiSidebar');
-            sidebar?.classList.toggle('open');
-        });
-
-        // Close sidebar when clicking outside
-        document.addEventListener('click', e => {
-            const sidebar = document.getElementById('wikiSidebar');
-            const toggle = document.getElementById('sidebarToggle');
-            if (sidebar?.classList.contains('open') &&
-                !sidebar.contains(e.target) && !toggle?.contains(e.target)) {
-                sidebar.classList.remove('open');
-            }
-        });
-
         // ===== LEARNING PATHS MODULE =====
         (function initLearningPathsModule() {
             const container = document.getElementById('learningPathsGrid');
