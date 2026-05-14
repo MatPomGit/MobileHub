@@ -204,7 +204,7 @@
                     const md = await resp.text();
                     // Wyświetl całą treść markdowna, łącznie z tytułem.
                     target.innerHTML = marked.parse(md);
-                    if (window.hljs) target.querySelectorAll('pre code').forEach(el => hljs.highlightElement(el));
+                    target.innerHTML = DOMPurify.sanitize(marked.parse(md));
                 } catch (err) {
                     target.innerHTML = '<p>Nie udało się wczytać połączonej treści wiki.</p>';
                     console.warn('Błąd ładowania artykułu wiki:', markdownPath, err);
