@@ -1,5 +1,8 @@
 'use strict';
 
+import { IDS, CLASSES } from './dom-map.js';
+import { onClick, setOpenState } from './wiki-dom-utils.js';
+
 const VALID_THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose', 'aurora'];
 
 export function initThemePicker() {
@@ -7,41 +10,40 @@ export function initThemePicker() {
   const theme = VALID_THEMES.includes(saved) ? saved : 'light';
   applyTheme(theme);
 
-  const pickerBtn = document.getElementById('themePickerBtn');
-  const dropdown = document.getElementById('themeDropdown');
-  const pickerContainer = document.getElementById('themePicker');
+  const pickerBtn = document.getElementById(IDS.themePickerBtn);
+  const dropdown = document.getElementById(IDS.themeDropdown);
+  const pickerContainer = document.getElementById(IDS.themePicker);
 
   pickerBtn?.addEventListener('click', (e) => {
     e.stopPropagation();
-    const isOpen = dropdown.classList.contains('open');
-    dropdown.classList.toggle('open', !isOpen);
-    pickerBtn.setAttribute('aria-expanded', String(!isOpen));
+    const isOpen = dropdown.classList.contains(CLASSES.open);
+    setOpenState(dropdown, pickerBtn, !isOpen, CLASSES.open);
+    if (!isOpen) dropdown.querySelector(`.${CLASSES.themeOption}`)?.focus();
   });
 
   document.addEventListener('click', (e) => {
     if (!pickerContainer?.contains(e.target)) {
-      dropdown?.classList.remove('open');
-      pickerBtn?.setAttribute('aria-expanded', 'false');
+      setOpenState(dropdown, pickerBtn, false, CLASSES.open);
     }
   });
 
-  document.querySelectorAll('.theme-option').forEach((btn) => btn.addEventListener('click', () => {
+  onClick(dropdown, `.${CLASSES.themeOption}`, (_event, btn) => {
     const t = btn.dataset.theme;
     if (!VALID_THEMES.includes(t)) return;
     applyTheme(t);
     localStorage.setItem('pam-theme', t);
-    dropdown?.classList.remove('open');
-    pickerBtn?.setAttribute('aria-expanded', 'false');
-  }));
+    setOpenState(dropdown, pickerBtn, false, CLASSES.open);
+    pickerBtn?.focus();
+  });
 }
 
 function applyTheme(t) {
   document.documentElement.setAttribute('data-theme', t);
-  document.querySelectorAll('.theme-option').forEach((btn) => btn.classList.toggle('active', btn.dataset.theme === t));
+  document.querySelectorAll(`.${CLASSES.themeOption}`).forEach((btn) => btn.classList.toggle(CLASSES.active, btn.dataset.theme === t));
 }
 
 export function initScrollProgress() {
-  const bar = document.getElementById('scrollProgress');
+  const bar = document.getElementById(IDS.scrollProgress);
   if (!bar || bar.dataset.initialized) return;
 
   bar.dataset.initialized = 'true';
@@ -57,11 +59,11 @@ export function initScrollProgress() {
 }
 
 export function initBackToTop() {
-  const btn = document.getElementById('backToTop');
+  const btn = document.getElementById(IDS.backToTop);
   if (!btn) return;
 
   window.addEventListener('scroll', () => {
-    btn.classList.toggle('visible', window.scrollY > 300);
+    btn.classList.toggle(CLASSES.visible, window.scrollY > 300);
   });
 
   btn.addEventListener('click', () => {
@@ -70,13 +72,17 @@ export function initBackToTop() {
 }
 
 export function initSidebarToggle() {
-  const toggle = document.getElementById('sidebarToggle');
-  const sidebar = document.getElementById('wikiSidebar');
+  const toggle = document.getElementById(IDS.sidebarToggle);
+  const sidebar = document.getElementById(IDS.wikiSidebar);
 
-  toggle?.addEventListener('click', () => sidebar?.classList.toggle('open'));
+  toggle?.addEventListener('click', () => {
+    const isOpen = !sidebar?.classList.contains(CLASSES.open);
+    setOpenState(sidebar, toggle, isOpen, CLASSES.open);
+    if (isOpen) sidebar?.querySelector('a, button')?.focus();
+  });
   document.addEventListener('click', (e) => {
-    if (sidebar?.classList.contains('open') && !sidebar.contains(e.target) && !toggle?.contains(e.target)) {
-      sidebar.classList.remove('open');
+    if (sidebar?.classList.contains(CLASSES.open) && !sidebar.contains(e.target) && !toggle?.contains(e.target)) {
+      setOpenState(sidebar, toggle, false, CLASSES.open);
     }
   });
 }
