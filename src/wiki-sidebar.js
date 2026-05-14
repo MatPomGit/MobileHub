@@ -14,7 +14,7 @@ export function buildSidebar(navigateToArticle) {
     const sec = document.createElement('div');
     sec.className = CLASSES.wikiCategory;
     sec.innerHTML = `
-      <h4 class="${CLASSES.catHeader}" data-cat="${cat.id}" aria-expanded="${String(isDefaultExpanded)}">
+      <h4 class="${CLASSES.catHeader}" data-cat="${cat.id}" aria-expanded="${String(isDefaultExpanded)}" role="button" tabindex="0">
         <i class="${cat.icon}"></i><span>${cat.name}</span>
         <i class="fa-solid fa-chevron-down ${CLASSES.toggleIcon}"></i>
       </h4>
