@@ -48,7 +48,7 @@ export function buildSidebar(navigateToArticle) {
   onClick(nav, `[${DATA_ATTRS.article}]`, (e, link) => {
     e.preventDefault();
     navigateToArticle(link.dataset.article);
-    if (window.innerWidth < 900) document.querySelector(`.${CLASSES.pullPanel}`)?.classList.remove(CLASSES.open);
+    if (window.innerWidth < 900) document.getElementById(IDS.wikiSidebar)?.classList.remove(CLASSES.open);
   });
 }
 
