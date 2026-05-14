@@ -6,7 +6,7 @@ import { onInput } from './wiki-dom-utils.js';
 export function setupSearch() {
   const input = document.getElementById(IDS.wikiSearch);
   if (!input) return;
-  onInput(document, `#${IDS.wikiSearch}`, () => {
+  input.addEventListener('input', () => {
     const q = input.value.toLowerCase().trim();
     document.querySelectorAll(`.${CLASSES.wikiCategory}`).forEach(cat => {
       let vis = 0;
