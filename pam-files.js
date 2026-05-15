@@ -30,14 +30,14 @@ function setupSearch() {
     });
 }
 
-document.addEventListener('DOMContentLoaded', renderDownloadMaterials);
-document.addEventListener('DOMContentLoaded', renderLiveMaterials);
-document.addEventListener('DOMContentLoaded', setupSearch);
-document.addEventListener('DOMContentLoaded', () => {
+export function initMaterials() {
+    renderDownloadMaterials();
+    renderLiveMaterials();
+    setupSearch();
     initPresentationPreview({
         controlsId: 'presentation-controls',
         frameId: 'presentation-preview',
         openLinkId: 'presentation-preview-open',
         data: FILES_DATA
     });
-});
+}
