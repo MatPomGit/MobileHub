@@ -173,6 +173,8 @@
       const summary = document.getElementById('topic-summary');
       const topicList = document.getElementById('topic-list');
 
+      const source = 'quiz-questions.json';
+
       const lectureTopicByCategory = {
         1:  'Wprowadzenie do aplikacji mobilnych',
         2:  'Sprzęt i ekosystem Android/iOS',
@@ -230,7 +232,13 @@
           const filtered = chosen === 'all'
             ? questions
             : questions.filter((q) => String(q.category) === chosen);
-          summary.textContent = `Zakres: ${chosen === 'all' ? 'wszystkie tematy' : `temat ${chosen}`}. Dostępne pytania: ${filtered.length}.`;
+          const selectedTopicName = lectureTopicByCategory[Number(chosen)];
+          const scopeLabel = chosen === 'all'
+            ? 'wszystkie tematy'
+            : selectedTopicName
+              ? `temat ${chosen} — ${selectedTopicName}`
+              : `temat ${chosen}`;
+          summary.textContent = `Zakres: ${scopeLabel}. Dostępne pytania: ${filtered.length}.`;
           
           topicList.replaceChildren();
           if (filtered.length === 0) {
