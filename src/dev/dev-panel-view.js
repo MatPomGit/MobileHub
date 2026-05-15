@@ -11,7 +11,7 @@
     if (options.text != null) el.textContent = String(options.text);
     if (options.attrs) {
       Object.entries(options.attrs).forEach(function ([name, value]) {
-        el.setAttribute(name, String(value));
+        if (value != null) el.setAttribute(name, String(value));
       });
     }
     return el;
