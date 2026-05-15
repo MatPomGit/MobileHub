@@ -3,7 +3,7 @@
 'use strict';
 
 /**
- * Skrypt waliduje linki do materiałów (download + live) z konfiguracji pam-files.js.
+ * Skrypt waliduje linki do materiałów (download + live) z konfiguracji src/materials/materials-data.js.
  * Dla każdej ścieżki lokalnej sprawdza istnienie pliku w repozytorium.
  */
 
@@ -12,10 +12,10 @@ const path = require('path');
 const vm = require('vm');
 
 const REPO_ROOT = path.resolve(__dirname, '..');
-const MATERIALS_CONFIG_PATH = path.join(REPO_ROOT, 'pam-files.js');
+const MATERIALS_DATA_PATH = path.join(REPO_ROOT, 'src/materials/materials-data.js');
 
 /**
- * Wyciąga deklarację `const <name> = [...]` z pliku źródłowego.
+ * Wyciąga deklarację `export const <name> = [...]` z pliku źródłowego.
  * @param {string} source - Treść pliku konfiguracyjnego.
  * @param {string} constName - Nazwa stałej do wyodrębnienia.
  * @returns {string}
@@ -25,18 +25,18 @@ function extractConstArray(source, constName) {
     const match = source.match(pattern);
 
     if (!match) {
-        throw new Error(`Nie znaleziono stałej ${constName} w pliku ${path.basename(MATERIALS_CONFIG_PATH)}.`);
+        throw new Error(`Nie znaleziono stałej ${constName} w pliku ${path.basename(MATERIALS_DATA_PATH)}.`);
     }
 
     return match[0];
 }
 
 /**
- * Wczytuje FILES_DATA i LIVE_MATERIALS_DATA bez uruchamiania kodu zależnego od DOM.
+ * Wczytuje FILES_DATA i LIVE_MATERIALS_DATA z modułu danych bez uruchamiania kodu zależnego od DOM.
  * @returns {{FILES_DATA: Array, LIVE_MATERIALS_DATA: Array}}
  */
 function loadMaterialsConfig() {
-    const source = fs.readFileSync(MATERIALS_CONFIG_PATH, 'utf8');
+    const source = fs.readFileSync(MATERIALS_DATA_PATH, 'utf8');
 
     const filesDataDeclaration = extractConstArray(source, 'FILES_DATA');
     const liveMaterialsDataDeclaration = extractConstArray(source, 'LIVE_MATERIALS_DATA');
