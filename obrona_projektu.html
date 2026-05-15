@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Obrona projektu — PAM</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin: 0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#0f172a; color:#e2e8f0; }
+    main { max-width: 1100px; margin: 0 auto; padding: 24px 18px 56px; }
+    h1 { margin: 0 0 8px; font-size: clamp(1.8rem, 3.4vw, 2.5rem); }
+    h2 { margin: 24px 0 10px; color:#bfdbfe; }
+    .lead { color:#cbd5e1; }
+    .box { background:#111827; border:1px solid #334155; border-radius:14px; padding:16px; margin-top:14px; }
+    .grid { display:grid; gap:14px; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); }
+    ul { margin:8px 0 0; padding-left:20px; }
+    .formula { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#0b1220; border:1px solid #334155; border-radius:10px; padding:12px; overflow:auto; }
+    .grading-row { margin-top:12px; }
+    .grading-row-title { display:flex; justify-content:space-between; margin-bottom:6px; font-size:14px; }
+    .grading-inputs { display:grid; grid-template-columns: 1fr 86px; gap:10px; align-items:center; }
+    input[type="range"] { width:100%; }
+    input[type="number"] { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:8px; padding:6px 8px; }
+    .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:14px; }
+    .stat { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; }
+    .stat span { display:block; color:#94a3b8; font-size:12px; }
+    .stat strong { font-size:20px; }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Obrona projektu i moduł oceniania</h1>
+    <p class="lead">Strona zawiera skrót wymagań projektu, odpowiedzialności ról i kalkulator oceny końcowej dla aplikacji oraz każdego członka zespołu.</p>
+
+    <h2>Wymagania projektu (zwięźle)</h2>
+    <div class="grid">
+      <section class="box"><strong>Zakres techniczny</strong><ul><li>Minimum 3 ekrany i nawigacja.</li><li>Warstwowa architektura (MVVM/MVI/Clean).</li><li>Obsługa danych lokalnych i z API.</li><li>Obsługa błędów oraz stanu offline.</li></ul></section>
+      <section class="box"><strong>Jakość i UX</strong><ul><li>Spójny interfejs i czytelny przepływ.</li><li>Podstawowa dostępność i responsywność.</li><li>Repozytorium z historią commitów.</li><li>README z instrukcją uruchomienia.</li></ul></section>
+      <section class="box"><strong>Oddanie i obrona</strong><ul><li>Demo działającej aplikacji.</li><li>Prezentacja architektury i decyzji projektowych.</li><li>Podział prac między role.</li><li>Odpowiedzi na pytania prowadzącego.</li></ul></section>
+    </div>
+
+    <h2>Role studentów</h2>
+    <div class="grid">
+      <section class="box"><strong>1) Lider / PM</strong><ul><li>Plan sprintów i koordynacja zespołu.</li><li>Jakość backlogu i priorytetów.</li><li>Organizacja obrony i komunikacji.</li></ul></section>
+      <section class="box"><strong>2) Mobile Developer</strong><ul><li>Implementacja funkcji i UI.</li><li>Integracja API i logiki aplikacji.</li><li>Refaktoryzacja i stabilność kodu.</li></ul></section>
+      <section class="box"><strong>3) QA / DevOps</strong><ul><li>Testy scenariuszy użytkownika.</li><li>Wykrywanie błędów i regresji.</li><li>Build/release i dokumentacja techniczna.</li></ul></section>
+    </div>
+
+    <h2>Wzór na ocenę</h2>
+    <div class="box">
+      <div class="formula">Ocena_końcowa_roli = 0.7 × Ocena_aplikacji + 0.3 × Ocena_roli</div>
+      <p class="lead">Ocena aplikacji jest wspólna dla zespołu, a ocena roli jest indywidualna. Wynik końcowy każdej osoby to suma ważona.</p>
+    </div>
+
+    <h2>Moduł oceniania (suwaki)</h2>
+    <div class="box" id="grader">
+      <div class="grading-row" data-group="app" data-label="Działające funkcje" data-max="30"><div class="grading-row-title"><strong>Aplikacja: działające funkcje</strong><span>0 / 30</span></div><div class="grading-inputs"><input type="range" min="0" max="30" value="0"><input type="number" min="0" max="30" value="0"></div></div>
+      <div class="grading-row" data-group="app" data-label="Jakość kodu i architektura" data-max="20"><div class="grading-row-title"><strong>Aplikacja: jakość kodu i architektura</strong><span>0 / 20</span></div><div class="grading-inputs"><input type="range" min="0" max="20" value="0"><input type="number" min="0" max="20" value="0"></div></div>
+      <div class="grading-row" data-group="app" data-label="UI/UX i dokumentacja" data-max="20"><div class="grading-row-title"><strong>Aplikacja: UI/UX i dokumentacja</strong><span>0 / 20</span></div><div class="grading-inputs"><input type="range" min="0" max="20" value="0"><input type="number" min="0" max="20" value="0"></div></div>
+      <div class="grading-row" data-group="app" data-label="Testy i niezawodność" data-max="15"><div class="grading-row-title"><strong>Aplikacja: testy i niezawodność</strong><span>0 / 15</span></div><div class="grading-inputs"><input type="range" min="0" max="15" value="0"><input type="number" min="0" max="15" value="0"></div></div>
+      <div class="grading-row" data-group="app" data-label="Prezentacja" data-max="15"><div class="grading-row-title"><strong>Aplikacja: prezentacja</strong><span>0 / 15</span></div><div class="grading-inputs"><input type="range" min="0" max="15" value="0"><input type="number" min="0" max="15" value="0"></div></div>
+
+      <hr style="border-color:#334155; margin:16px 0">
+
+      <div class="grading-row" data-group="leader" data-max="100"><div class="grading-row-title"><strong>Rola Lider/PM (0–100)</strong><span>0 / 100</span></div><div class="grading-inputs"><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></div></div>
+      <div class="grading-row" data-group="dev" data-max="100"><div class="grading-row-title"><strong>Rola Mobile Developer (0–100)</strong><span>0 / 100</span></div><div class="grading-inputs"><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></div></div>
+      <div class="grading-row" data-group="qa" data-max="100"><div class="grading-row-title"><strong>Rola QA/DevOps (0–100)</strong><span>0 / 100</span></div><div class="grading-inputs"><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></div></div>
+
+      <div class="summary">
+        <div class="stat"><span>Wynik aplikacji</span><strong id="appPts">0 / 100</strong></div>
+        <div class="stat"><span>Ocena aplikacji</span><strong id="appGrade">2.0</strong></div>
+        <div class="stat"><span>Lider — ocena końcowa</span><strong id="leaderFinal">2.0</strong></div>
+        <div class="stat"><span>Developer — ocena końcowa</span><strong id="devFinal">2.0</strong></div>
+        <div class="stat"><span>QA/DevOps — ocena końcowa</span><strong id="qaFinal">2.0</strong></div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const rows = [...document.querySelectorAll('.grading-row')];
+    const grade = (score) => score>=91?5.0:score>=81?4.5:score>=71?4.0:score>=61?3.5:score>=51?3.0:2.0;
+    const clamp = (v,max)=>Math.max(0,Math.min(max,Number(v)||0));
+
+    function recalc(){
+      let appTotal = 0;
+      const roles = { leader:0, dev:0, qa:0 };
+      rows.forEach((row)=>{
+        const max = Number(row.dataset.max);
+        const range = row.querySelector('input[type="range"]');
+        const num = row.querySelector('input[type="number"]');
+        const v = clamp(num.value,max);
+        range.value = v; num.value = v;
+        row.querySelector('.grading-row-title span').textContent = `${v} / ${max}`;
+        if(row.dataset.group==='app') appTotal += v; else roles[row.dataset.group]=v;
+      });
+
+      const appGrade = grade(appTotal);
+      const final = (rolePts)=>((0.7*appGrade)+(0.3*grade(rolePts))).toFixed(1);
+      document.getElementById('appPts').textContent = `${appTotal} / 100`;
+      document.getElementById('appGrade').textContent = appGrade.toFixed(1);
+      document.getElementById('leaderFinal').textContent = final(roles.leader);
+      document.getElementById('devFinal').textContent = final(roles.dev);
+      document.getElementById('qaFinal').textContent = final(roles.qa);
+    }
+
+    rows.forEach((row)=>{
+      const r = row.querySelector('input[type="range"]');
+      const n = row.querySelector('input[type="number"]');
+      r.addEventListener('input',()=>{ n.value=r.value; recalc(); });
+      n.addEventListener('input', recalc);
+    });
+    recalc();
+  </script>
+</body>
+</html>
