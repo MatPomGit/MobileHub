@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>3DGS Viewer — Szkielet</title>
+    <style>
+      :root {
+        color-scheme: dark;
+        --bg: #0b1020;
+        --panel: #151d35;
+        --panel-border: #263154;
+        --text: #eef2ff;
+        --muted: #adbbde;
+        --accent: #5a8cff;
+        --ok: #33d69f;
+      }
+      * { box-sizing: border-box; }
+      body {
+        margin: 0;
+        font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+        color: var(--text);
+        background: radial-gradient(circle at top, #172445, var(--bg));
+      }
+      .layout {
+        min-height: 100vh;
+        display: grid;
+        grid-template-columns: 320px 1fr;
+      }
+      aside {
+        border-right: 1px solid var(--panel-border);
+        background: rgba(17, 23, 42, 0.88);
+        backdrop-filter: blur(8px);
+        padding: 16px;
+        overflow-y: auto;
+      }
+      main {
+        display: grid;
+        grid-template-rows: auto 1fr;
+      }
+      header {
+        padding: 16px;
+        border-bottom: 1px solid var(--panel-border);
+      }
+      .viewer {
+        margin: 16px;
+        border: 1px dashed var(--panel-border);
+        border-radius: 12px;
+        display: grid;
+        place-items: center;
+        color: var(--muted);
+        min-height: 60vh;
+      }
+      h1, h2 { margin: 0 0 8px; }
+      .panel {
+        border: 1px solid var(--panel-border);
+        background: var(--panel);
+        border-radius: 12px;
+        padding: 12px;
+        margin-bottom: 12px;
+      }
+      .field { margin-bottom: 10px; }
+      label { font-size: 0.9rem; color: var(--muted); display: block; margin-bottom: 4px; }
+      input, select, button {
+        width: 100%;
+        padding: 8px 10px;
+        border-radius: 8px;
+        border: 1px solid var(--panel-border);
+        background: #0f162b;
+        color: var(--text);
+      }
+      button.primary {
+        background: var(--accent);
+        border-color: var(--accent);
+        font-weight: 600;
+      }
+      .status {
+        font-size: 0.85rem;
+        color: var(--ok);
+      }
+      @media (max-width: 960px) {
+        .layout { grid-template-columns: 1fr; }
+        aside { border-right: none; border-bottom: 1px solid var(--panel-border); }
+      }
+    </style>
+  </head>
+  <body>
+    <div class="layout">
+      <aside>
+        <h1>3DGS Viewer</h1>
+        <p>Szkielet strony do renderowania scen Gaussian Splatting (3DGS).</p>
+
+        <section class="panel" aria-labelledby="source-title">
+          <h2 id="source-title">Źródło sceny</h2>
+          <div class="field">
+            <label for="sceneUrl">URL pliku (.ply / .splat / .ksplat)</label>
+            <input id="sceneUrl" type="url" placeholder="https://.../model.splat" />
+          </div>
+          <div class="field">
+            <label for="sceneFile">lub lokalny plik</label>
+            <input id="sceneFile" type="file" accept=".ply,.splat,.ksplat" />
+          </div>
+          <button id="loadSceneBtn" class="primary" type="button">Załaduj scenę</button>
+        </section>
+
+        <section class="panel" aria-labelledby="render-title">
+          <h2 id="render-title">Parametry renderingu</h2>
+          <div class="field">
+            <label for="qualityPreset">Preset jakości</label>
+            <select id="qualityPreset">
+              <option value="auto">Auto</option>
+              <option value="high">High</option>
+              <option value="medium">Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+          <div class="field">
+            <label for="pointBudget">Budżet punktów (splat budget)</label>
+            <input id="pointBudget" type="number" min="50000" step="50000" value="1500000" />
+          </div>
+          <div class="field">
+            <label for="fov">FOV kamery</label>
+            <input id="fov" type="range" min="30" max="110" value="75" />
+          </div>
+        </section>
+
+        <section class="panel" aria-labelledby="debug-title">
+          <h2 id="debug-title">Diagnostyka</h2>
+          <p class="status" id="statusText">Gotowe do ładowania sceny.</p>
+          <button id="resetCameraBtn" type="button">Reset kamery</button>
+        </section>
+      </aside>
+
+      <main>
+        <header>
+          <strong>Canvas 3DGS</strong>
+          <p>Tu docelowo zostanie osadzony renderer WebGL/WebGPU + kontroler kamery.</p>
+        </header>
+        <section class="viewer" id="viewerRoot" aria-label="Podgląd sceny 3DGS">
+          <div>
+            <p>Placeholder renderera 3DGS</p>
+            <small>Plan: adapter do biblioteki `@mkkellogg/gaussian-splats-3d` lub równoważnej.</small>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <script>
+      /**
+       * Plan logiki działania (MVP):
+       * 1) initViewer()
+       *    - wykrycie wsparcia WebGL2/WebGPU
+       *    - inicjalizacja renderera i sceny bazowej
+       * 2) bindUI()
+       *    - przypięcie listenerów do kontrolek formularza
+       * 3) loadScene({ url, file })
+       *    - walidacja rozszerzenia i rozmiaru
+       *    - pobranie / odczyt pliku
+       *    - parsowanie splatów i upload do GPU
+       * 4) applyRenderSettings()
+       *    - aktualizacja quality preset, point budget, FOV
+       * 5) animate()
+       *    - pętla renderująca + statystyki FPS
+       * 6) handleError(err)
+       *    - status użytkownika + log techniczny
+       */
+
+      const state = {
+        viewerReady: false,
+        currentScene: null,
+        quality: 'auto',
+        pointBudget: 1500000,
+      };
+
+      const statusEl = document.getElementById('statusText');
+      const loadBtn = document.getElementById('loadSceneBtn');
+      const resetCameraBtn = document.getElementById('resetCameraBtn');
+
+      function updateStatus(message, isError = false) {
+        statusEl.textContent = message;
+        statusEl.style.color = isError ? '#ff8b8b' : 'var(--ok)';
+      }
+
+      loadBtn.addEventListener('click', () => {
+        updateStatus('Szkielet UI gotowy. Implementacja loadScene() w kolejnym kroku.');
+      });
+
+      resetCameraBtn.addEventListener('click', () => {
+        updateStatus('Szkielet UI gotowy. Implementacja resetu kamery w kolejnym kroku.');
+      });
+
+      window.__THREE_DGS_SKELETON__ = state;
+    </script>
+  </body>
+</html>

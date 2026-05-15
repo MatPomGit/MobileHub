@@ -151,3 +151,14 @@
 - [ ] Lighthouse (mobile) bez krytycznych błędów Performance/A11y/Best Practices/PWA.
 - [ ] Brak regresji: nawigacja, wyszukiwanie, render markdown, motywy, offline.
 - [ ] Każda naprawa ma test lub reprodukowalny scenariusz weryfikacji.
+
+## P2.4 Moduł 3D Gaussian Splatting (3DGS)
+- **Status:** `todo`
+- **Owner:** `unassigned`
+- [ ] Wybrać docelowy silnik renderujący 3DGS (WebGL2/WebGPU) i przygotować adapter dla `pages/3dgs.html`.
+- [ ] Zaimplementować `loadScene()` z obsługą URL i plików lokalnych (`.ply`, `.splat`, `.ksplat`).
+- [ ] Dodać walidację plików (rozmiar, rozszerzenie, komunikaty błędów dla użytkownika).
+- [ ] Dodać panel wydajności (FPS, użycie pamięci GPU, liczba aktywnych splatów).
+- [ ] Dodać kontrolę kamery (orbit/pan/zoom) + reset pozycji i zapis presetów widoku.
+- [ ] Dodać fallback UI, gdy WebGL2/WebGPU jest niedostępne.
+- [ ] Przygotować test smoke E2E dla uruchomienia strony i inicjalizacji viewer-a.
