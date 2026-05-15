@@ -3,6 +3,96 @@
 (function initDevPanelViewNamespace() {
   const NS = (window.__pamDev = window.__pamDev || {});
 
+  function createElement(tag, options) {
+    const el = document.createElement(tag);
+    if (!options) return el;
+    if (options.id) el.id = options.id;
+    if (options.className) el.className = options.className;
+    if (options.text != null) el.textContent = String(options.text);
+    if (options.attrs) {
+      Object.entries(options.attrs).forEach(function ([name, value]) {
+        el.setAttribute(name, String(value));
+      });
+    }
+    return el;
+  }
+
+  function createIcon(className) {
+    return createElement('i', { className, attrs: { 'aria-hidden': 'true' } });
+  }
+
+  function createInfoRow(key, value) {
+    const tr = createElement('tr');
+    tr.appendChild(createElement('th', { text: key }));
+    tr.appendChild(createElement('td', { text: value }));
+    return tr;
+  }
+
+  function createPanelSection(tag, options, children) {
+    const section = createElement(tag, options);
+    (children || []).forEach(function (child) {
+      section.appendChild(child);
+    });
+    return section;
+  }
+
+  function createButton({ id, ariaLabel, title, text, iconClass }) {
+    const button = createElement('button', {
+      id,
+      attrs: {
+        'aria-label': ariaLabel,
+        title,
+      },
+    });
+    if (iconClass) button.appendChild(createIcon(iconClass));
+    if (text) button.appendChild(document.createTextNode(text));
+    return button;
+  }
+
+  function buildPanelContent(panel) {
+    const title = createPanelSection('span', { id: 'dev-panel-title' }, [
+      createIcon('fa-solid fa-code'),
+      document.createTextNode(' Tryb deweloperski'),
+    ]);
+    const header = createPanelSection('div', { id: 'dev-panel-header' }, [
+      title,
+      createButton({
+        id: 'dev-panel-close',
+        ariaLabel: 'Zamknij panel deweloperski',
+        title: 'Zamknij',
+        text: '✕',
+      }),
+    ]);
+
+    const banner = createPanelSection('div', { id: 'dev-panel-banner' }, [
+      createIcon('fa-solid fa-triangle-exclamation'),
+      document.createTextNode(' Jesteś w trybie deweloperskim. Te informacje są przeznaczone dla programistów.'),
+    ]);
+
+    const table = createElement('table', { id: 'dev-info-table', attrs: { 'aria-label': 'Informacje deweloperskie' } });
+    const footer = createPanelSection('div', { id: 'dev-panel-footer' }, [
+      createButton({
+        id: 'dev-panel-refresh',
+        ariaLabel: 'Odśwież dane',
+        title: 'Odśwież dane',
+        text: ' Odśwież dane',
+        iconClass: 'fa-solid fa-rotate-right',
+      }),
+      createButton({
+        id: 'dev-panel-deactivate',
+        ariaLabel: 'Wyłącz tryb dev',
+        title: 'Wyłącz tryb dev',
+        text: ' Wyłącz tryb dev',
+        iconClass: 'fa-solid fa-power-off',
+      }),
+    ]);
+
+    panel.appendChild(header);
+    panel.appendChild(banner);
+    panel.appendChild(table);
+    panel.appendChild(footer);
+  }
+
   function renderPanel({ onDeactivate }) {
     if (document.getElementById('dev-panel')) return;
     const overlay = document.createElement('div');
@@ -13,8 +103,7 @@
 
     const panel = document.createElement('div');
     panel.id = 'dev-panel';
-
-    panel.innerHTML = '<div id="dev-panel-header"><span id="dev-panel-title"><i class="fa-solid fa-code" aria-hidden="true"></i> Tryb deweloperski</span><button id="dev-panel-close" aria-label="Zamknij panel deweloperski" title="Zamknij">✕</button></div><div id="dev-panel-banner"><i class="fa-solid fa-triangle-exclamation" aria-hidden="true"></i> Jesteś w trybie deweloperskim. Te informacje są przeznaczone dla programistów.</div><table id="dev-info-table" aria-label="Informacje deweloperskie"></table><div id="dev-panel-footer"><button id="dev-panel-refresh"><i class="fa-solid fa-rotate-right" aria-hidden="true"></i> Odśwież dane</button><button id="dev-panel-deactivate"><i class="fa-solid fa-power-off" aria-hidden="true"></i> Wyłącz tryb dev</button></div>';
+    buildPanelContent(panel);
 
     overlay.appendChild(panel);
     document.body.appendChild(overlay);
@@ -34,11 +123,7 @@
     table.innerHTML = '';
     const info = NS.info.getDevInfo();
     Object.entries(info).forEach(function ([key, val]) {
-      const tr = document.createElement('tr');
-      tr.innerHTML = '<th></th><td></td>';
-      tr.querySelector('th').textContent = key;
-      tr.querySelector('td').textContent = val;
-      table.appendChild(tr);
+      table.appendChild(createInfoRow(key, val));
     });
   }
 
