@@ -4,7 +4,9 @@
   "scripts": {
     "validate:all": "bash scripts/run-quality-gates.sh",
     "validate:live": "node scripts/validate-live-lectures.js",
-    "audit:precommit": "bash scripts/pre-commit-audit.sh"
+    "audit:precommit": "bash scripts/pre-commit-audit.sh",
+    "test:e2e:smoke": "playwright test tests/e2e/smoke",
+    "test:e2e:smoke:ci": "playwright test tests/e2e/smoke --reporter=line"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0"
