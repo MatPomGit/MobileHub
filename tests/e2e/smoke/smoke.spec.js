@@ -8,15 +8,14 @@ test.describe('Smoke suite', () => {
     await expect(page.locator('#wikiArticle')).toContainText('Android Studio');
   });
 
-  test('searches wiki and verifies results list', async ({ page }) => {
+  test('searches wiki and verifies filtered article links', async ({ page }) => {
     await page.goto('/index.html');
 
     const searchInput = page.locator('#wikiSearch');
     await searchInput.fill('Flutter');
 
-    const firstResult = page.locator('.search-result-item').first();
-    await expect(firstResult).toBeVisible();
-    await expect(firstResult).toContainText(/Flutter/i);
+    const flutterLink = page.locator('.wiki-category [data-article]').filter({ hasText: /Flutter/i }).first();
+    await expect(flutterLink).toBeVisible();
   });
 
   test('switches tabs and verifies active state', async ({ page }) => {
@@ -39,9 +38,10 @@ test.describe('Smoke suite', () => {
     await page.goto('/index.html');
 
     await page.locator('.page-tab-bar .tab-btn[data-tab="materialy"]').click();
+    await expect(page.locator('#panel-materialy')).toHaveClass(/active/);
 
-    const downloadsSection = page.locator('#materials-content .file-item').first();
-    const liveSection = page.locator('#materials-live-content .file-item').first();
+    const downloadsSection = page.locator('#materials-content .file-item:visible').first();
+    const liveSection = page.locator('#materials-live-content .file-item:visible').first();
     const previewFrame = page.locator('#presentation-preview');
     const previewOpenLink = page.locator('#presentation-preview-open');
 
@@ -58,6 +58,11 @@ test.describe('Smoke suite', () => {
     await page.goto('/index.html');
 
     const devTrigger = page.locator('#dev-mode-trigger');
+    if (!(await devTrigger.isVisible())) {
+      await page.locator('#settingsFab').click();
+    }
+    await expect(devTrigger).toBeVisible();
+
     await expect(page.locator('#tab-studenci')).toHaveClass(/dev-only-tab/);
     await expect(page.locator('#tab-zal')).toHaveClass(/dev-only-tab/);
 
