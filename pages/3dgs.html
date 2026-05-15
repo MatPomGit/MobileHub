@@ -179,7 +179,7 @@
 
       function updateStatus(message, isError = false) {
         statusEl.textContent = message;
-        statusEl.style.color = isError ? '#ff8b8b' : 'var(--ok)';
+        statusEl.style.color = isError ? 'var(--error)' : 'var(--ok)';
       }
 
       loadBtn.addEventListener('click', () => {
