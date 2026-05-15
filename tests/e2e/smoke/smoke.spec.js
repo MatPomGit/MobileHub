@@ -38,7 +38,7 @@ test.describe('Smoke suite', () => {
     await page.goto('/index.html');
 
     await page.locator('.page-tab-bar .tab-btn[data-tab="materialy"]').click();
-    await expect(page.locator('#panel-materialy')).toHaveClass(/active/);
+    await expect(page.locator('#panel-materialy')).toHaveClass(/\bactive\b/);
 
     const downloadsSection = page.locator('#materials-content .file-item:visible').first();
     const liveSection = page.locator('#materials-live-content .file-item:visible').first();
