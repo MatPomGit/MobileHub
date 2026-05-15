@@ -150,7 +150,7 @@ sequenceDiagram
 | `src/materials/render-download-materials.js` | **pure renderer** | Renderuje listy plików bez zarządzania przepływem aplikacji. |
 | `src/materials/render-live-materials.js` | **pure renderer** | Renderuje sekcje live. |
 | `src/materials/presentation-preview-controller.js` | **controller** | Steruje podglądem i przełączaniem trybów. |
-| `pam-files.js` | **controller** | Spina renderer’y i kontroler preview dla materials. |
+| `pam-files.js` | **controller** | Spina renderery i kontroler preview dla materials. |
 | `dev-mode.js` | **controller + state-adapter** | Zarządza aktywacją, panelem i storage. |
 | `src/app-init.js` | **controller (root orchestrator)** | Definiuje kolejność startupu całej aplikacji. |
 | `src/bootstrap-ui.js` | **controller + renderer** | Inicjuje SW i tworzy część dynamicznego UI. |
