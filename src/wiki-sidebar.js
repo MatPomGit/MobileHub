@@ -1,6 +1,8 @@
 'use strict';
 
 import { WikiStore } from './wiki-data.js';
+import { CLASSES, DATA_ATTRS } from './dom-map.js';
+import { onClick } from './wiki-dom-utils.js';
 
 export function buildSidebar(navigateToArticle) {
   const nav = document.querySelector('.wiki-nav-categories');
@@ -10,54 +12,57 @@ export function buildSidebar(navigateToArticle) {
   WikiStore.categories.forEach(cat => {
     const isDefaultExpanded = cat.id === 'cat-zalicz';
     const sec = document.createElement('div');
-    sec.className = 'wiki-category';
+    sec.className = CLASSES.wikiCategory;
     sec.innerHTML = `
-      <h4 class="cat-header" data-cat="${cat.id}">
+      <h4 class="${CLASSES.catHeader}" data-cat="${cat.id}" aria-expanded="${String(isDefaultExpanded)}" role="button" tabindex="0">
         <i class="${cat.icon}"></i><span>${cat.name}</span>
-        <i class="fa-solid fa-chevron-down toggle-icon"></i>
+        <i class="fa-solid fa-chevron-down ${CLASSES.toggleIcon}"></i>
       </h4>
-      <ul class="cat-list ${isDefaultExpanded ? '' : 'collapsed'}" id="${cat.id}">
+      <ul class="${CLASSES.catList} ${isDefaultExpanded ? '' : CLASSES.collapsed}" id="${cat.id}" aria-hidden="${String(!isDefaultExpanded)}">
         ${cat.articles.map(article => {
           const isInternal = typeof article === 'string';
           const id = isInternal ? article : article.id;
           const href = isInternal ? `#${id}` : article.href;
           const target = isInternal ? '' : ' target="_blank" rel="noopener noreferrer"';
-          const dataArticle = isInternal ? ` data-article="${id}"` : '';
+          const dataArticle = isInternal ? ` ${DATA_ATTRS.article}="${id}"` : '';
           const m = WikiStore.metadata[id] || {};
           return `<li><a href="${href}"${dataArticle}${target}><i class="${m.icon || 'fa-solid fa-file'} article-icon"></i>${m.title || id}</a></li>`;
         }).join('')}
       </ul>`;
     nav.appendChild(sec);
-    const icon = sec.querySelector('.toggle-icon');
+    const icon = sec.querySelector(`.${CLASSES.toggleIcon}`);
     if (icon && !isDefaultExpanded) icon.style.transform = 'rotate(-90deg)';
   });
 
-  document.querySelectorAll('.cat-header').forEach(h => h.addEventListener('click', () => {
-    const list = document.getElementById(h.dataset.cat);
+  onClick(nav, `.${CLASSES.catHeader}`, (_event, header) => {
+    const list = document.getElementById(header.dataset.cat);
     if (!list) return;
-    const open = !list.classList.contains('collapsed');
-    list.classList.toggle('collapsed', open);
-    const icon = h.querySelector('.toggle-icon');
+    const open = !list.classList.contains(CLASSES.collapsed);
+    list.classList.toggle(CLASSES.collapsed, open);
+    list.setAttribute('aria-hidden', String(open));
+    header.setAttribute('aria-expanded', String(!open));
+    const icon = header.querySelector(`.${CLASSES.toggleIcon}`);
     if (icon) icon.style.transform = open ? 'rotate(-90deg)' : '';
-  }));
+  });
 
-  document.querySelectorAll('[data-article]').forEach(link => link.addEventListener('click', e => {
+  onClick(nav, `[${DATA_ATTRS.article}]`, (e, link) => {
     e.preventDefault();
-    const id = link.dataset.article;
-    navigateToArticle(id);
-    if (window.innerWidth < 900) document.querySelector('.wiki-sidebar')?.classList.remove('open');
-  }));
+    navigateToArticle(link.dataset.article);
+    if (window.innerWidth < 900) document.getElementById(IDS.wikiSidebar)?.classList.remove(CLASSES.open);
+  });
 }
 
 export function setActiveLink(id) {
-  document.querySelectorAll('[data-article]').forEach(l => l.classList.remove('active'));
-  document.querySelectorAll(`[data-article="${id}"]`).forEach(l => l.classList.add('active'));
-  const activeLink = document.querySelector(`[data-article="${id}"]`);
+  document.querySelectorAll(`[${DATA_ATTRS.article}]`).forEach(l => l.classList.remove(CLASSES.active));
+  document.querySelectorAll(`[${DATA_ATTRS.article}="${id}"]`).forEach(l => l.classList.add(CLASSES.active));
+  const activeLink = document.querySelector(`[${DATA_ATTRS.article}="${id}"]`);
   if (!activeLink) return;
-  const catList = activeLink.closest('.cat-list');
+  const catList = activeLink.closest(`.${CLASSES.catList}`);
   if (!catList) return;
-  catList.classList.remove('collapsed');
-  const header = document.querySelector(`[data-cat="${catList.id}"]`);
-  const icon = header?.querySelector('.toggle-icon');
+  catList.classList.remove(CLASSES.collapsed);
+  catList.setAttribute('aria-hidden', 'false');
+  const header = document.querySelector(`[${DATA_ATTRS.cat}="${catList.id}"]`);
+  header?.setAttribute('aria-expanded', 'true');
+  const icon = header?.querySelector(`.${CLASSES.toggleIcon}`);
   if (icon) icon.style.transform = '';
 }

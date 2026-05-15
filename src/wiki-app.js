@@ -10,6 +10,8 @@ import {
 import { createWikiRouter } from './wiki-router.js';
 import { buildSidebar, setActiveLink } from './wiki-sidebar.js';
 import { setupSearch } from './wiki-search.js';
+import { IDS } from './dom-map.js';
+import { onClick } from './wiki-dom-utils.js';
 
 export async function initApp() {
   initThemePicker();
@@ -49,21 +51,21 @@ function initWiki() {
 }
 
 function showConfigError(error) {
-  const c = document.getElementById('wikiArticle');
+  const c = document.getElementById(IDS.wikiArticle);
   if (c) {
     c.innerHTML = `<div class="wiki-error"><p><strong>Błąd konfiguracji wiki.</strong></p><p>${error.message}</p></div>`;
   }
 }
 
 function showError(msg) {
-  const c = document.getElementById('wikiArticle');
+  const c = document.getElementById(IDS.wikiArticle);
   if (c) {
     c.innerHTML = `<div class="wiki-error"><i class="fa-solid fa-triangle-exclamation"></i><p>${msg}</p></div>`;
   }
 }
 
 async function loadArticle(articleId) {
-  const container = document.getElementById('wikiArticle');
+  const container = document.getElementById(IDS.wikiArticle);
   if (!container) return;
 
   const path = WikiStore.articles[articleId];
@@ -106,21 +108,19 @@ async function loadArticle(articleId) {
 }
 
 function processInternalLinks(container, navigateToArticle) {
-  container.querySelectorAll('a[href^="#wiki-"]').forEach((link) => {
-    link.addEventListener('click', (e) => {
-      e.preventDefault();
-      navigateToArticle(link.getAttribute('href').replace('#wiki-', ''));
-    });
+  onClick(container, 'a[href^="#wiki-"]', (e, link) => {
+    e.preventDefault();
+    navigateToArticle(link.getAttribute('href').replace('#wiki-', ''));
   });
 }
 
 function updateBreadcrumbs(id) {
-  const crumbs = document.getElementById('breadcrumbs');
+  const crumbs = document.getElementById(IDS.breadcrumbs);
   const meta = WikiStore.metadata[id];
   if (!crumbs || !meta) return;
 
-  document.getElementById('currentCategory').textContent = meta.category;
-  document.getElementById('currentArticle').textContent = meta.title;
+  document.getElementById(IDS.currentCategory).textContent = meta.category;
+  document.getElementById(IDS.currentArticle).textContent = meta.title;
   crumbs.style.display = 'flex';
 }
 
@@ -238,13 +238,15 @@ function generateTableOfContents(container) {
     li.innerHTML = `<a href="#${id}">${h.textContent}</a>`;
     ul.appendChild(li);
 
-    li.querySelector('a').addEventListener('click', (e) => {
-      e.preventDefault();
-      h.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    });
   });
 
   container.querySelector('h1')?.insertAdjacentElement('afterend', toc);
+
+  onClick(toc, 'a[href^="#heading-"]', (e, link) => {
+    e.preventDefault();
+    const target = container.querySelector(link.getAttribute('href'));
+    target?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
 }
 
 function initMouseResponsiveAnimations() {
