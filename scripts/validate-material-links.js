@@ -42,8 +42,8 @@ function loadMaterialsConfig() {
     const liveMaterialsDataDeclaration = extractConstArray(source, 'LIVE_MATERIALS_DATA');
 
     const script = [
-        filesDataDeclaration.replace(/^export\s+/, ''),
-        liveMaterialsDataDeclaration.replace(/^export\s+/, ''),
+        filesDataDeclaration,
+        liveMaterialsDataDeclaration,
         'module.exports = { FILES_DATA, LIVE_MATERIALS_DATA };',
     ].join('\n');
 
