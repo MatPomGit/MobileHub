@@ -71,7 +71,10 @@ function initPageTabs() {
                 btn.addEventListener('click', () => {
                     switchTab(btn.dataset.tab);
                     btn.querySelector('.tab-badge')?.remove();
-                });
+                    window.scrollTo({ top: 0 });
+                }
+                window.switchTab = switchTab;
+                );
             });
     
             // Bottom nav clicks
