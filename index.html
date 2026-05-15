@@ -392,17 +392,6 @@
                 </div>
             </div>
 
-            <div class="grading-shortcut-card">
-                <div class="grading-shortcut-copy">
-                    <strong><i class="fa-solid fa-chalkboard-user"></i> Szybki dostęp dla wykładowcy</strong>
-                    <p>Nie musisz przewijać całej sekcji — kliknij, aby przejść od razu do modułu oceniania.</p>
-                </div>
-                <a href="#lecturerGradingCard" class="grading-shortcut-btn">
-                    <i class="fa-solid fa-arrow-down"></i>
-                    Przejdź do modułu oceniania
-                </a>
-            </div>
-
             <h3 class="section-title">Harmonogram realizacji</h3>
             <ul class="milestone-list">
                 <li class="milestone-item">
@@ -454,6 +443,14 @@
                     <p>Zamień pomysł w plan realizacji: zakres, zadania, roboczogodziny, wycena i baza pod dokumenty
                         BRD/FRD/TRD.</p>
                     <span class="tool-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Otwórz kreator</span>
+                </a>
+                <a href="obrona_projektu.html" class="info-card tool-card" target="_blank" rel="noopener">
+                    <div class="info-card-header">
+                        <i class="fa-solid fa-chalkboard-user"></i>
+                        <strong>Obrona projektu i moduł oceniania</strong>
+                    </div>
+                    <p>Wymagania końcowe projektu, role studentów, wzór oceny oraz kalkulator punktów i ocen dla zespołu i ról.</p>
+                    <span class="tool-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Otwórz stronę obrony</span>
                 </a>
             </div>
 
@@ -725,90 +722,6 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-
-            <div class="lecturer-grading-card" id="lecturerGradingCard">
-                <div class="lecturer-grading-header">
-                    <div>
-                        <h4><i class="fa-solid fa-chalkboard-user"></i> Moduł oceniania dla wykładowcy</h4>
-                        <p>Wprowadź punkty cząstkowe, aby automatycznie obliczyć wynik końcowy i sugestię informacji zwrotnej.</p>
-                    </div>
-                    <button type="button" class="grading-reset-btn" id="gradingResetBtn">
-                        <i class="fa-solid fa-rotate-left"></i> Reset
-                    </button>
-                </div>
-
-                <div class="grading-criteria-list" id="gradingCriteriaList">
-                    <div class="grading-row" data-criterion-label="Działające funkcje podstawowe" data-criterion-max="30">
-                        <div class="grading-row-title">
-                            <strong>Działające funkcje podstawowe</strong>
-                            <span>Maks. 30 pkt</span>
-                        </div>
-                        <input type="range" min="0" max="30" value="0" class="grading-range" aria-label="Działające funkcje podstawowe">
-                        <input type="number" min="0" max="30" value="0" class="grading-number" aria-label="Punkty za działające funkcje podstawowe">
-                    </div>
-                    <div class="grading-row" data-criterion-label="Jakość kodu i architektura" data-criterion-max="20">
-                        <div class="grading-row-title">
-                            <strong>Jakość kodu i architektura</strong>
-                            <span>Maks. 20 pkt</span>
-                        </div>
-                        <input type="range" min="0" max="20" value="0" class="grading-range" aria-label="Jakość kodu i architektura">
-                        <input type="number" min="0" max="20" value="0" class="grading-number" aria-label="Punkty za jakość kodu i architekturę">
-                    </div>
-                    <div class="grading-row" data-criterion-label="Interfejs użytkownika i UX" data-criterion-max="15">
-                        <div class="grading-row-title">
-                            <strong>Interfejs użytkownika i UX</strong>
-                            <span>Maks. 15 pkt</span>
-                        </div>
-                        <input type="range" min="0" max="15" value="0" class="grading-range" aria-label="Interfejs użytkownika i UX">
-                        <input type="number" min="0" max="15" value="0" class="grading-number" aria-label="Punkty za interfejs użytkownika i UX">
-                    </div>
-                    <div class="grading-row" data-criterion-label="Komunikacja sieciowa i dane" data-criterion-max="15">
-                        <div class="grading-row-title">
-                            <strong>Komunikacja sieciowa i dane</strong>
-                            <span>Maks. 15 pkt</span>
-                        </div>
-                        <input type="range" min="0" max="15" value="0" class="grading-range" aria-label="Komunikacja sieciowa i dane">
-                        <input type="number" min="0" max="15" value="0" class="grading-number" aria-label="Punkty za komunikację sieciową i dane">
-                    </div>
-                    <div class="grading-row" data-criterion-label="Prezentacja i dokumentacja" data-criterion-max="10">
-                        <div class="grading-row-title">
-                            <strong>Prezentacja i dokumentacja</strong>
-                            <span>Maks. 10 pkt</span>
-                        </div>
-                        <input type="range" min="0" max="10" value="0" class="grading-range" aria-label="Prezentacja i dokumentacja">
-                        <input type="number" min="0" max="10" value="0" class="grading-number" aria-label="Punkty za prezentację i dokumentację">
-                    </div>
-                    <div class="grading-row" data-criterion-label="Dodatkowe funkcje i kreatywność" data-criterion-max="10">
-                        <div class="grading-row-title">
-                            <strong>Dodatkowe funkcje i kreatywność</strong>
-                            <span>Maks. 10 pkt</span>
-                        </div>
-                        <input type="range" min="0" max="10" value="0" class="grading-range" aria-label="Dodatkowe funkcje i kreatywność">
-                        <input type="number" min="0" max="10" value="0" class="grading-number" aria-label="Punkty za dodatkowe funkcje i kreatywność">
-                    </div>
-                </div>
-
-                <div class="grading-summary">
-                    <div class="grading-summary-stat">
-                        <span>Łącznie punktów</span>
-                        <strong id="gradingTotal">0 / 100</strong>
-                    </div>
-                    <div class="grading-summary-stat">
-                        <span>Proponowana ocena</span>
-                        <strong id="gradingGrade">2.0</strong>
-                    </div>
-                    <div class="grading-summary-stat">
-                        <span>Status</span>
-                        <strong id="gradingStatus" class="grading-status fail">Nie zaliczono</strong>
-                    </div>
-                </div>
-
-                <label class="grading-feedback-label" for="gradingFeedback">Sugestia informacji zwrotnej</label>
-                <textarea id="gradingFeedback" class="grading-feedback" readonly></textarea>
-                <button type="button" class="grading-copy-btn" id="gradingCopyBtn">
-                    <i class="fa-solid fa-copy"></i> Kopiuj komentarz
-                </button>
             </div>
 
             <h3 class="section-title">Przykładowe tematy projektów</h3>
@@ -1401,6 +1314,8 @@
     <script type="module" src="pam-files.js"></script>
     <script type="module" src="pam-wiki.js"></script>
     <script src="dev-mode.js" defer></script>
+    <script src="src/page-tabs.js" defer></script>
+    <script src="src/pull-panel.js" defer></script>
     <script src="src/bootstrap-ui.js" defer></script>
     <script src="src/gsap-animations.js" defer></script>
     <script src="src/offline-indicator.js" defer></script>
