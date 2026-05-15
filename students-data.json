@@ -5,6 +5,7 @@
 			"id": "pam.26.01",
 			"title": "Aplikacja walutowa",
 			"description": "Aplikacja do monitorowania kursów walut, szybkiego przeliczania kwot i ustawiania alertów przy zmianach kursu.",
+			"notes": "",
 			"members": [
 				{ "index": "177087", "role": "Leader" },
 				{ "index": "177119", "role": "Frontend" },
@@ -15,6 +16,7 @@
 			"id": "pam.26.02",
 			"title": "Sterowania robotem BLE",
 			"description": "Aplikacja do zdalnego sterowania robotem przez Bluetooth Low Energy z obsługą komend, statusu i podstawowej telemetrii.",
+			"notes": "",
 			"members": [
 				{ "index": "177114", "role": "Leader" },
 				{ "index": "177118", "role": "Frontend" },
@@ -25,6 +27,7 @@
 			"id": "pam.26.03",
 			"title": "Aplikacja do liczenia kalorii",
 			"description": "Aplikacja wspierająca kontrolę diety przez liczenie kalorii, planowanie posiłków i śledzenie dziennych postępów użytkownika.",
+			"notes": "",
 			"members": [
 				{ "index": "177111", "role": "Leader" },
 				{ "index": "177110", "role": "Frontend" },
@@ -35,6 +38,7 @@
 			"id": "pam.26.04",
 			"title": "Lokalizator ekipy",
 			"description": "Aplikacja do współdzielenia lokalizacji członków grupy, planowania spotkań i szybkiego sprawdzania, kto jest najbliżej celu.",
+			"notes": "",
 			"members": [
 				{ "index": "177162", "role": "Leader" },
 				{ "index": "177176", "role": "Frontend" },
@@ -45,6 +49,7 @@
 			"id": "pam.26.05",
 			"title": "Dzielenie rachunków",
 			"description": "Aplikacja do sprawiedliwego podziału rachunków, rozliczania wydatków grupowych i prowadzenia historii spłat między użytkownikami.",
+			"notes": "",
 			"members": [
 				{ "index": "177104", "role": "Leader" },
 				{ "index": "177164", "role": "Frontend" },
@@ -55,6 +60,7 @@
 			"id": "pam.26.06",
 			"title": "SudSolver",
 			"description": "Aplikacja do rozwiązywania sudoku z podpowiedziami krok po kroku, analizą planszy i trybem nauki dla użytkownika.",
+			"notes": "",
 			"members": [
 				{ "index": "177064", "role": "Leader" },
 				{ "index": "177186", "role": "Frontend" },
@@ -65,6 +71,7 @@
 			"id": "pam.26.07",
 			"title": "Raportowanie problemów miejskich",
 			"description": "Aplikacja do zgłaszania usterek miejskich z geolokalizacją, zdjęciami, kategoriami zgłoszeń i śledzeniem statusu naprawy.",
+			"notes": "",
 			"members": [
 				{ "index": "169646", "role": "Leader" },
 				{ "index": "177043", "role": "Frontend" },
@@ -75,6 +82,7 @@
 			"id": "pam.26.08",
 			"title": "Gra trivia multiplayer",
 			"description": "Aplikacja do rozgrywek quizowych multiplayer z pokojami, pytaniami na żywo, rankingiem i rywalizacją wielu graczy jednocześnie.",
+			"notes": "",
 			"members": [
 				{ "index": "177182", "role": "Leader" },
 				{ "index": "177054", "role": "Frontend" },
@@ -84,7 +92,8 @@
 		{
 			"id": "pam.26.09",
 			"title": "Ben-9 do nauki fiszek",
-			"description": "ben9 to aplikacja Flutter do tworzenia, organizowania, nauki i udostępniania talii fiszek. Aplikacja jest przeznaczona dla użytkowników uczących się przez powtórki: pozwala tworzyć foldery, talie, karty z wieloma definicjami oraz uruchamiać tryb nauki. Projekt rozwiązuje problem lokalnego gromadzenia materiałów edukacyjnych i ich prostego współdzielenia przez eksport JSON, QR oraz serwer pomocniczy. Główne moduły to aplikacja mobilna Flutter, lokalna warstwa danych SQLite/sqflite, ekran importu/udostępniania oraz pomocniczy backend Flask z MongoDB dla prywatnych i publicznych talii. Projekt ma stosunkowo dojrzałą warstwę funkcjonalną, CI/CD i wydania APK/AAB, ale dokumentacja użytkowa i testy są słabe, a architektura aplikacji nie spełnia w pełni wzorca MVVM/MVI/Clean Architecture. Repozytorium pokazuje aktywny rozwój, zamknięte PR-y, automatyczne buildy i release’y, jednak część funkcji jest niedokończona, np. globalne wyszukiwanie w aplikacji jest tylko placeholderem.  
+			"description": "",
+			"notes": "ben9 to aplikacja Flutter do tworzenia, organizowania, nauki i udostępniania talii fiszek. Aplikacja jest przeznaczona dla użytkowników uczących się przez powtórki: pozwala tworzyć foldery, talie, karty z wieloma definicjami oraz uruchamiać tryb nauki. Projekt rozwiązuje problem lokalnego gromadzenia materiałów edukacyjnych i ich prostego współdzielenia przez eksport JSON, QR oraz serwer pomocniczy. Główne moduły to aplikacja mobilna Flutter, lokalna warstwa danych SQLite/sqflite, ekran importu/udostępniania oraz pomocniczy backend Flask z MongoDB dla prywatnych i publicznych talii. Projekt ma stosunkowo dojrzałą warstwę funkcjonalną, CI/CD i wydania APK/AAB, ale dokumentacja użytkowa i testy są słabe, a architektura aplikacji nie spełnia w pełni wzorca MVVM/MVI/Clean Architecture. Repozytorium pokazuje aktywny rozwój, zamknięte PR-y, automatyczne buildy i release’y, jednak część funkcji jest niedokończona, np. globalne wyszukiwanie w aplikacji jest tylko placeholderem.  
 
 Projekt spełnia większość wymagań funkcjonalnych aplikacji mobilnej: ma więcej niż trzy ekrany, nawigację, lokalną bazę danych, komunikację HTTP, obsługę błędów sieciowych, tryb ciemny, kamerę/QR oraz eksport/import talii. Największe braki dotyczą architektury, testów, dokumentacji oraz pełnego rozdzielenia logiki od UI. Kod zawiera duże klasy ekranów ze stanem lokalnym i logiką operacji biznesowych, co obniża testowalność oraz zgodność z MVVM/MVI/Clean Architecture. 
 
@@ -123,6 +132,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.10",
 			"title": "Aplikacja przypominania o lekach",
 			"description": "Aplikacja do planowania dawek leków, wysyłania przypomnień, potwierdzania przyjęcia i budowania harmonogramu terapii.",
+			"notes": "",
 			"members": [
 				{ "index": "177143", "role": "Leader" },
 				{ "index": "177139", "role": "Frontend" },
@@ -133,6 +143,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.11",
 			"title": "Flip to Focus",
 			"description": "Aplikacja wspierająca skupienie przez sesje pracy, ograniczanie rozpraszaczy i analizę czasu poświęconego na zadania.",
+			"notes": "",
 			"members": [
 				{ "index": "177135", "role": "Leader" },
 				{ "index": "177149", "role": "Frontend" },
@@ -143,6 +154,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.12",
 			"title": "Zamki elektryczne NFC",
 			"description": "Aplikacja do zarządzania dostępem do zamków elektrycznych NFC, autoryzacji użytkowników i rejestrowania zdarzeń otwarcia.",
+			"notes": "",
 			"members": [
 				{ "index": "177102", "role": "Leader" },
 				{ "index": "177091", "role": "Frontend" },
@@ -153,6 +165,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.13",
 			"title": "Przypomnienia kontekstowe",
 			"description": "Aplikacja tworząca przypomnienia zależne od kontekstu, na przykład lokalizacji, czasu, aktywności lub obecności w konkretnym miejscu.",
+			"notes": "",
 			"members": [
 				{ "index": "177106", "role": "Leader" },
 				{ "index": "177107", "role": "Frontend" },
@@ -163,6 +176,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.14",
 			"title": "Live GeoGuesser",
 			"description": "Aplikacja do zgadywania lokalizacji na mapie w trybie live z rundami, punktacją i rywalizacją pomiędzy graczami.",
+			"notes": "",
 			"members": [
 				{ "index": "177174", "role": "Leader" },
 				{ "index": "177192", "role": "Frontend" },
@@ -173,6 +187,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.15",
 			"title": "Katalogowania przedmiotów",
 			"description": "Aplikacja do katalogowania przedmiotów z kategoriami, zdjęciami, tagami i wyszukiwaniem ułatwiającym organizację zasobów.",
+			"notes": "",
 			"members": [
 				{ "index": "177190", "role": "Leader" },
 				{ "index": "167821", "role": "Frontend" },
@@ -183,6 +198,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.16",
 			"title": "WaterMonitor (tem72)",
 			"description": "Aplikacja do monitorowania zużycia wody, prezentacji pomiarów, wykrywania anomalii oraz wysyłania ostrzeżeń o nadmiernym poborze.",
+			"notes": "",
 			"members": [
 				{ "index": "177160", "role": "Leader" },
 				{ "index": "177156", "role": "Frontend" },
@@ -193,6 +209,7 @@ Ocena na ten moment: 4",
 			"id": "pam.26.17",
 			"title": "SleepyGuardian",
 			"description": "Aplikacja wspierająca higienę snu przez analizę nawyków, ocenę zmęczenia i przypomnienia pomagające ograniczać senność.",
+			"notes": "",
 			"members": [
 				{ "index": "177151", "role": "Leader" },
 				{ "index": "177158", "role": "Frontend" },
