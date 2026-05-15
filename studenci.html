@@ -1554,8 +1554,8 @@ background: var(--surface);
             return String(url || '').trim();
         }
 
-        async function updateProjectMetadata(projectId, payload) {
-            const response = await fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TEAMS_TABLE}?project_id=eq.${encodeURIComponent(projectId)}`, {
+        async function patchProjectMetadata(projectId, payload) {
+            return fetch(`${SUPABASE_URL}/rest/v1/${SUPABASE_TEAMS_TABLE}?project_id=eq.${encodeURIComponent(projectId)}`, {
                 method: 'PATCH',
                 headers: {
                     apikey: SUPABASE_ANON_KEY,
@@ -1569,11 +1569,30 @@ background: var(--surface);
                     updated_at: new Date().toISOString()
                 })
             });
+        }
 
-            if (!response.ok) {
-                const details = await response.text();
-                throw new Error(`Nie udało się zapisać danych projektu (${response.status}): ${details}`);
+        async function updateProjectMetadata(projectId, payload) {
+            const response = await patchProjectMetadata(projectId, payload);
+            if (response.ok) return;
+
+            const details = await response.text();
+            const hasNotes = Object.prototype.hasOwnProperty.call(payload || {}, 'notes');
+            const missingNotesInSchema = details.includes(`Could not find the 'notes' column`) && details.includes('project_teams');
+
+            if (hasNotes && missingNotesInSchema) {
+                const fallbackPayload = { ...payload };
+                delete fallbackPayload.notes;
+                const fallbackResponse = await patchProjectMetadata(projectId, fallbackPayload);
+                if (fallbackResponse.ok) {
+                    showAlert('Zapisano dane bez pola notatek (kolumna notes nie jest jeszcze dostępna w cache Supabase).', 'info');
+                    return;
+                }
+
+                const fallbackDetails = await fallbackResponse.text();
+                throw new Error(`Nie udało się zapisać danych projektu (${fallbackResponse.status}): ${fallbackDetails}`);
             }
+
+            throw new Error(`Nie udało się zapisać danych projektu (${response.status}): ${details}`);
         }
 
         function initRepositoryForm() {
