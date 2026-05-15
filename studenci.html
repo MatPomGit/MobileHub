@@ -1577,7 +1577,7 @@ background: var(--surface);
 
             const details = await response.text();
             const hasNotes = Object.prototype.hasOwnProperty.call(payload || {}, 'notes');
-            const missingNotesInSchema = details.includes(`Could not find the 'notes' column`) && details.includes('project_teams');
+            const missingNotesInSchema = details.includes('PGRST204') && details.includes('notes');
 
             if (hasNotes && missingNotesInSchema) {
                 const fallbackPayload = { ...payload };
