@@ -18,5 +18,8 @@ jobs:
         with:
           node-version: '20'
 
-      - name: Validate material links
-        run: node scripts/validate-material-links.js
+      - name: Install dependencies
+        run: npm ci
+
+      - name: Validate materials data (shape + paths)
+        run: npm run validate:materials

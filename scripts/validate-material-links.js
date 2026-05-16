@@ -3,8 +3,11 @@
 'use strict';
 
 /**
- * Skrypt waliduje linki do materiałów (download + live) z konfiguracji src/materials/materials-data.js.
- * Dla każdej ścieżki lokalnej sprawdza istnienie pliku w repozytorium.
+ * Walidator danych materiałów:
+ * 1) Sprawdza shape wpisów (wymagane pola i typy).
+ * 2) Sprawdza istnienie lokalnych zasobów wskazywanych przez ścieżki.
+ *
+ * Kod wyjścia != 0 przerywa build/hook/CI.
  */
 
 const fs = require('fs');
@@ -14,12 +17,6 @@ const vm = require('vm');
 const REPO_ROOT = path.resolve(__dirname, '..');
 const MATERIALS_DATA_PATH = path.join(REPO_ROOT, 'src/materials/materials-data.js');
 
-/**
- * Wyciąga deklarację `export const <name> = [...]` z pliku źródłowego.
- * @param {string} source - Treść pliku konfiguracyjnego.
- * @param {string} constName - Nazwa stałej do wyodrębnienia.
- * @returns {string}
- */
 function extractConstArray(source, constName) {
     const pattern = new RegExp(`const\\s+${constName}\\s*=\\s*\\[[\\s\\S]*?\\];`);
     const match = source.match(pattern);
@@ -31,10 +28,6 @@ function extractConstArray(source, constName) {
     return match[0];
 }
 
-/**
- * Wczytuje FILES_DATA i LIVE_MATERIALS_DATA z modułu danych bez uruchamiania kodu zależnego od DOM.
- * @returns {{FILES_DATA: Array, LIVE_MATERIALS_DATA: Array}}
- */
 function loadMaterialsConfig() {
     const source = fs.readFileSync(MATERIALS_DATA_PATH, 'utf8');
 
@@ -56,17 +49,82 @@ function loadMaterialsConfig() {
     return sandbox.module.exports;
 }
 
-/**
- * Zwraca wszystkie lokalne ścieżki plików z konfiguracji materiałów.
- * @param {{FILES_DATA: Array, LIVE_MATERIALS_DATA: Array}} config
- * @returns {Array<{source: string, value: string}>}
- */
+function isExternalLink(value) {
+    return /^(https?:)?\/\//i.test(value);
+}
+
+function isNonEmptyString(value) {
+    return typeof value === 'string' && value.trim().length > 0;
+}
+
+function validateFilesEntry(entry, entryPath, errors) {
+    const requiredFields = ['href', 'type', 'label'];
+    for (const field of requiredFields) {
+        if (!isNonEmptyString(entry[field])) {
+            errors.push(`${entryPath}.${field} musi być niepustym stringiem.`);
+        }
+    }
+}
+
+function validateLiveEntry(entry, entryPath, errors) {
+    const requiredFields = ['livePath', 'title'];
+    for (const field of requiredFields) {
+        if (!isNonEmptyString(entry[field])) {
+            errors.push(`${entryPath}.${field} musi być niepustym stringiem.`);
+        }
+    }
+
+    if (entry.pdfPath !== undefined && entry.pdfPath !== null && !isNonEmptyString(entry.pdfPath)) {
+        errors.push(`${entryPath}.pdfPath jeśli podany, musi być niepustym stringiem.`);
+    }
+}
+
+function validateShape(config) {
+    const errors = [];
+
+    if (!Array.isArray(config.FILES_DATA)) {
+        errors.push('FILES_DATA musi być tablicą.');
+    }
+
+    if (!Array.isArray(config.LIVE_MATERIALS_DATA)) {
+        errors.push('LIVE_MATERIALS_DATA musi być tablicą.');
+    }
+
+    for (const [groupIndex, group] of (config.FILES_DATA || []).entries()) {
+        const groupPath = `FILES_DATA[${groupIndex}]`;
+        if (!Array.isArray(group.files)) {
+            errors.push(`${groupPath}.files musi być tablicą.`);
+            continue;
+        }
+
+        for (const [fileIndex, file] of group.files.entries()) {
+            validateFilesEntry(file, `${groupPath}.files[${fileIndex}]`, errors);
+        }
+    }
+
+    if (Array.isArray(config.LIVE_MATERIALS_DATA)) {
+        for (const [groupIndex, group] of config.LIVE_MATERIALS_DATA.entries()) {
+            const groupPath = `LIVE_MATERIALS_DATA[${groupIndex}]`;
+            if (!Array.isArray(group.files)) {
+                errors.push(`${groupPath}.files musi być tablicą.`);
+                continue;
+            }
+
+            for (const [fileIndex, file] of group.files.entries()) {
+                validateLiveEntry(file, `${groupPath}.files[${fileIndex}]`, errors);
+            }
+        }
+    }
+
+    return errors;
+}
+
 function collectMaterialPaths(config) {
     const collected = [];
 
     for (const group of config.FILES_DATA || []) {
         for (const file of group.files || []) {
-            if (file.href) {
+            if (isNonEmptyString(file.href)) {
                 collected.push({ source: 'FILES_DATA.href', value: file.href });
             }
         }
@@ -74,10 +132,10 @@ function collectMaterialPaths(config) {
 
     for (const group of config.LIVE_MATERIALS_DATA || []) {
         for (const file of group.files || []) {
-            if (file.livePath) {
+            if (isNonEmptyString(file.livePath)) {
                 collected.push({ source: 'LIVE_MATERIALS_DATA.livePath', value: file.livePath });
             }
-            if (file.pdfPath) {
+            if (isNonEmptyString(file.pdfPath)) {
                 collected.push({ source: 'LIVE_MATERIALS_DATA.pdfPath', value: file.pdfPath });
             }
         }
@@ -86,37 +144,45 @@ function collectMaterialPaths(config) {
     return collected;
 }
 
-/**
- * Sprawdza, czy wartość jest adresem zewnętrznym i nie powinna być walidowana lokalnie.
- * @param {string} value
- * @returns {boolean}
- */
-function isExternalLink(value) {
-    return /^(https?:)?\/\//i.test(value);
+function validatePaths(paths) {
+    return paths.filter(entry => {
+        if (isExternalLink(entry.value)) {
+            return false;
+        }
+
+        const resolvedPath = path.join(REPO_ROOT, entry.value);
+        return !fs.existsSync(resolvedPath);
+    });
 }
 
 function main() {
     const config = loadMaterialsConfig();
+
+    const shapeErrors = validateShape(config);
     const paths = collectMaterialPaths(config);
+    const missingPaths = validatePaths(paths);
 
-    const missing = paths.filter(entry => {
-        if (!entry.value || isExternalLink(entry.value)) {
-            return false;
+    if (shapeErrors.length > 0 || missingPaths.length > 0) {
+        console.error('❌ Walidacja danych materiałów nie powiodła się.');
+
+        if (shapeErrors.length > 0) {
+            console.error('\nBłędy shape:');
+            for (const error of shapeErrors) {
+                console.error(`  - ${error}`);
+            }
         }
 
-        const resolvedPath = path.resolve(REPO_ROOT, entry.value);
-        return !fs.existsSync(resolvedPath);
-    });
-
-    if (missing.length > 0) {
-        console.error('❌ Wykryto brakujące pliki w konfiguracji materiałów:');
-        for (const entry of missing) {
-            console.error(`  - ${entry.value} (źródło: ${entry.source})`);
+        if (missingPaths.length > 0) {
+            console.error('\nBrakujące zasoby:');
+            for (const entry of missingPaths) {
+                console.error(`  - ${entry.value} (źródło: ${entry.source})`);
+            }
         }
+
         process.exit(1);
     }
 
-    console.log(`✅ Walidacja zakończona sukcesem. Sprawdzono ${paths.length} ścieżek.`);
+    console.log(`✅ Walidacja zakończona sukcesem (shape + ścieżki). Sprawdzono ${paths.length} ścieżek.`);
 }
 
 main();
