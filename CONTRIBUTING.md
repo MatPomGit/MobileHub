@@ -1,3 +1,3 @@
 # Contributing
 
-- Nie commituj zależności z katalogu `node_modules/` do repozytorium.
+- Do not commit dependencies from the node_modules/ directory to the repository.
