@@ -2,12 +2,13 @@
   "name": "mobilehub",
   "private": true,
   "scripts": {
-    "validate:all": "bash scripts/run-quality-gates.sh",
+    "qa": "bash scripts/run-quality-gates.sh",
+    "validate:all": "npm run qa",
     "validate:live": "node scripts/validate-live-lectures.js",
-    "audit:precommit": "bash scripts/pre-commit-audit.sh",
+    "validate:materials": "node scripts/validate-material-links.js",
     "test:e2e:smoke": "playwright test tests/e2e/smoke",
     "test:e2e:smoke:ci": "playwright test tests/e2e/smoke --reporter=github,line --forbid-only",
-    "validate:materials": "node scripts/validate-material-links.js"
+    "audit:precommit": "bash scripts/pre-commit-audit.sh"
   },
   "devDependencies": {
     "@playwright/test": "^1.54.0"
