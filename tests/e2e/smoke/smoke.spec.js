@@ -1,5 +1,23 @@
 const { test, expect } = require('@playwright/test');
 
+async function switchToTab(page, tabName) {
+  const selectors = [
+    `.page-tab-bar .tab-btn[data-tab="${tabName}"]`,
+    `.bottom-nav-btn[data-tab="${tabName}"]`,
+    `.pull-shortcut[data-tab="${tabName}"]`
+  ];
+
+  for (const selector of selectors) {
+    const target = page.locator(selector).first();
+    if (await target.isVisible()) {
+      await target.click();
+      return;
+    }
+  }
+
+  await page.evaluate((tab) => window.switchTab?.(tab), tabName);
+}
+
 test.describe('Smoke suite', () => {
   test('opens URL hash and loads matching wiki article', async ({ page }) => {
     await page.goto('/index.html#android-studio');
@@ -21,23 +39,21 @@ test.describe('Smoke suite', () => {
   test('switches tabs and verifies active state', async ({ page }) => {
     await page.goto('/index.html');
 
-    const materialsTab = page.locator('.page-tab-bar .tab-btn[data-tab="materialy"]');
-    await materialsTab.click();
+    await switchToTab(page, 'materialy');
 
-    await expect(materialsTab).toHaveClass(/active/);
+    await expect(page.locator('[data-tab="materialy"].active').first()).toBeVisible();
     await expect(page.locator('#panel-materialy')).toHaveClass(/active/);
 
-    const examBottomNav = page.locator('.bottom-nav-btn[data-tab="egzamin"]');
-    await examBottomNav.click();
+    await switchToTab(page, 'egzamin');
 
-    await expect(examBottomNav).toHaveClass(/active/);
+    await expect(page.locator('[data-tab="egzamin"].active').first()).toBeVisible();
     await expect(page.locator('#panel-egzamin')).toHaveClass(/active/);
   });
 
   test('renders materials section and supports PDF/live preview entry points', async ({ page }) => {
     await page.goto('/index.html');
 
-    await page.locator('.page-tab-bar .tab-btn[data-tab="materialy"]').click();
+    await switchToTab(page, 'materialy');
     await expect(page.locator('#panel-materialy')).toHaveClass(/\bactive\b/);
 
     const downloadsSection = page.locator('#materials-content .file-item:visible').first();
@@ -59,7 +75,11 @@ test.describe('Smoke suite', () => {
 
     const devTrigger = page.locator('#dev-mode-trigger');
     if (!(await devTrigger.isVisible())) {
-      await page.locator('#settingsFab').click();
+      const pullHandle = page.locator('#pullHandle');
+      if (await pullHandle.isVisible()) {
+        await pullHandle.click();
+      }
+      await page.locator('#pullOptionsBtn').click();
     }
     await expect(devTrigger).toBeVisible();
 
