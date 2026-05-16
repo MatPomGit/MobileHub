@@ -150,7 +150,7 @@ function validatePaths(paths) {
             return false;
         }
 
-        const resolvedPath = path.resolve(REPO_ROOT, entry.value);
+        const resolvedPath = path.join(REPO_ROOT, entry.value);
         return !fs.existsSync(resolvedPath);
     });
 }
