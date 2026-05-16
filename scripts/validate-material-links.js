@@ -102,15 +102,17 @@ function validateShape(config) {
         }
     }
 
-    for (const [groupIndex, group] of (config.LIVE_MATERIALS_DATA || []).entries()) {
-        const groupPath = `LIVE_MATERIALS_DATA[${groupIndex}]`;
-        if (!Array.isArray(group.files)) {
-            errors.push(`${groupPath}.files musi być tablicą.`);
-            continue;
-        }
+    if (Array.isArray(config.LIVE_MATERIALS_DATA)) {
+        for (const [groupIndex, group] of config.LIVE_MATERIALS_DATA.entries()) {
+            const groupPath = `LIVE_MATERIALS_DATA[${groupIndex}]`;
+            if (!Array.isArray(group.files)) {
+                errors.push(`${groupPath}.files musi być tablicą.`);
+                continue;
+            }
 
-        for (const [fileIndex, file] of group.files.entries()) {
-            validateLiveEntry(file, `${groupPath}.files[${fileIndex}]`, errors);
+            for (const [fileIndex, file] of group.files.entries()) {
+                validateLiveEntry(file, `${groupPath}.files[${fileIndex}]`, errors);
+            }
         }
     }
 
