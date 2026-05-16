@@ -26,6 +26,7 @@ run_smoke_e2e() {
 }
 
 # Jeden punkt wejścia QA dla local + CI.
+stage "Walidacja postępu scrollowania" node scripts/validate-scroll-progress.js
 stage "Walidacja danych materiałów (kontrakty + ścieżki)" node scripts/validate-material-links.js
 stage "Walidacja danych wykładów live" node scripts/validate-live-lectures.js
 stage "Walidacja smoke layoutu mobilnego" node scripts/validate-mobile-layout-smoke.js
