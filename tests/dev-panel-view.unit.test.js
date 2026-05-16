@@ -27,6 +27,18 @@ function createFakeElement(tagName, ownerDocument) {
       this.childNodes.push(child);
       return child;
     },
+    removeChild(child) {
+      const idx = this.childNodes.indexOf(child);
+      if (idx < 0) throw new Error('Child not found');
+      this.childNodes.splice(idx, 1);
+      child.parentNode = null;
+      return child;
+    },
+    replaceChildren(...children) {
+      this.childNodes.forEach((child) => { child.parentNode = null; });
+      this.childNodes = [];
+      children.forEach((child) => this.appendChild(child));
+    },
     remove() {
       if (!this.parentNode) return;
       const idx = this.parentNode.childNodes.indexOf(this);
@@ -121,14 +133,14 @@ test('renderPanel i refreshInfoTable renderują dane przez textContent (znaki sp
   assert.equal(textOf(row.childNodes[1]), '<script>alert("x")</script>&"\'<>');
 });
 
-test('refreshInfoTable czyści poprzednie wiersze i nie parsuje HTML z danych', () => {
+test('refreshInfoTable czyści poprzednie wiersze i renderuje nowy zestaw danych', () => {
   const doc = createFakeDocument();
-  let info = { key: 'first' };
+  let info = { alpha: '1', beta: '2' };
   const view = loadView(doc, () => info);
 
   view.renderPanel({ onDeactivate: () => {} });
   const table = doc.getElementById('dev-info-table');
-  assert.equal(table.childNodes.length, 1);
+  assert.equal(table.childNodes.length, 2);
 
   info = { '<b>new</b>': 'value & value' };
   // renderPanel guard blocks duplicate, so call refresh through button handler.
@@ -137,4 +149,14 @@ test('refreshInfoTable czyści poprzednie wiersze i nie parsuje HTML z danych', 
   assert.equal(table.childNodes.length, 1);
   assert.equal(textOf(table.childNodes[0].childNodes[0]), '<b>new</b>');
   assert.equal(textOf(table.childNodes[0].childNodes[1]), 'value & value');
+
+  info = {};
+  doc.getElementById('dev-panel-refresh').listeners.click();
+  assert.equal(table.childNodes.length, 0);
+
+  info = { gamma: '3' };
+  doc.getElementById('dev-panel-refresh').listeners.click();
+  assert.equal(table.childNodes.length, 1);
+  assert.equal(textOf(table.childNodes[0].childNodes[0]), 'gamma');
+  assert.equal(textOf(table.childNodes[0].childNodes[1]), '3');
 });
