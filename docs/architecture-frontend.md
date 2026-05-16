@@ -136,6 +136,30 @@ sequenceDiagram
 
 **Uwaga praktyczna:** `app-init.js` wywołuje moduły UI przez `window.initX?.()` (optional chaining), więc brak konkretnego globala nie powinien zabić całego startupu — ale spowoduje brak funkcjonalności danego segmentu.
 
+## 2.3 Startup: etapy krytyczne vs niekrytyczne + fallback
+
+Aktualny startup w `src/app-init.js` jest podzielony na etapy:
+
+- **Krytyczne (blokujące dalszy start):**
+  - `ui:tabs` (`window.initPageTabs`)
+  - `ui:pull-panel` (`window.initPullPanel`)
+  - `ui:offline-indicator` (`window.initOfflineIndicator`)
+  - `ui:bootstrap` (`window.initBootstrapUi`)
+- **Niekrytyczne (błąd nie blokuje całej strony):**
+  - `dev-mode` (`window.initDevMode`)
+  - `materials` (`initMaterials`)
+- **Asynchroniczny moduł krytyczny końcowy:**
+  - `wiki` (`await initWiki`)
+
+### Zasady obsługi błędów
+
+1. Każdy etap startupu jest uruchamiany w osobnym `try/catch`.
+2. Błąd jest logowany jawnie przez `console.error` z kontekstem etapu (`[app-init] Startup stage failed: <stage>`).
+3. Dla etapów krytycznych (`ui:*` i `wiki`) renderowany jest **bezpieczny fallback UI** (`#app-service-fallback`) z komunikatem serwisowym i nazwą etapu, który się wyłożył.
+4. Dla etapów niekrytycznych (`dev-mode`, `materials`) aplikacja kontynuuje działanie mimo błędu, ograniczając tylko funkcjonalność uszkodzonego modułu.
+
+Ta strategia ogranicza „single point of failure” i poprawia odporność runtime’u frontendu.
+
 ---
 
 ## 3) Klasyfikacja modułów: renderer / controller / state
