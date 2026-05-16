@@ -120,7 +120,7 @@
   function refreshInfoTable() {
     const table = document.getElementById('dev-info-table');
     if (!table) return;
-    table.innerHTML = '';
+    table.replaceChildren();
     const info = NS.info.getDevInfo();
     Object.entries(info).forEach(function ([key, val]) {
       table.appendChild(createInfoRow(key, val));
