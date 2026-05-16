@@ -67,14 +67,14 @@ function initPageTabs() {
             }
     
             // Top tab bar clicks
+            window.switchTab = switchTab;
+
             document.querySelectorAll('.page-tab-bar .tab-btn').forEach(btn => {
                 btn.addEventListener('click', () => {
                     switchTab(btn.dataset.tab);
                     btn.querySelector('.tab-badge')?.remove();
                     window.scrollTo({ top: 0 });
-                }
-                window.switchTab = switchTab;
-                );
+                });
             });
     
             // Bottom nav clicks
