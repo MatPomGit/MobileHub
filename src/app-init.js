@@ -41,7 +41,8 @@ function renderServiceFallbackUi(stage, error) {
   if (error) {
     const details = document.createElement('details');
     details.style.marginTop = '0.5rem';
-    details.innerHTML = `<summary>Szczegóły techniczne</summary><pre style="white-space: pre-wrap; margin-top: 0.5rem;">${String(error?.message || error)}</pre>`;
+    details.innerHTML = '<summary>Szczegóły techniczne</summary><pre style="white-space: pre-wrap; margin-top: 0.5rem;"></pre>';
+    details.querySelector('pre').textContent = String(error?.message || error);
     fallback.appendChild(details);
   }
 }
