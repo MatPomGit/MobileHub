@@ -1,9 +1,32 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-# Runner agreguje wszystkie walidacje jakości i blokuje merge przy regresji UX/PWA.
-node scripts/validate-scroll-progress.js
-node scripts/validate-live-lectures.js
-node scripts/validate-mobile-layout-smoke.js
-node scripts/validate-material-links.js
-npx playwright test
+stage() {
+  local name="$1"
+  shift
+
+  echo ""
+  echo "▶ [QA] ${name}"
+  if "$@"; then
+    echo "✔ [QA] ${name} — OK"
+  else
+    local exit_code=$?
+    echo "✖ [QA] ${name} — FAILED (exit ${exit_code})"
+    echo "✖ [QA] Przerywam kolejne etapy (fail-fast)."
+    exit "${exit_code}"
+  fi
+}
+
+run_smoke_e2e() {
+  if [[ "${CI:-}" == "true" ]]; then
+    npm run test:e2e:smoke:ci
+  else
+    npm run test:e2e:smoke
+  fi
+}
+
+# Jeden punkt wejścia QA dla local + CI.
+stage "Walidacja danych materiałów (kontrakty + ścieżki)" node scripts/validate-material-links.js
+stage "Walidacja danych wykładów live" node scripts/validate-live-lectures.js
+stage "Walidacja smoke layoutu mobilnego" node scripts/validate-mobile-layout-smoke.js
+stage "Smoke E2E (lokalnie/CI)" run_smoke_e2e
