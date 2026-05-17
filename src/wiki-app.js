@@ -25,7 +25,7 @@ export async function initApp() {
 
 async function waitForMarked(attempts = 0) {
   if (typeof marked === 'undefined') {
-    if (attempts < 20) {
+    if (attempts < 100) {
       setTimeout(() => waitForMarked(attempts + 1), 200);
     }
     return;
