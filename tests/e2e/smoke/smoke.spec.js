@@ -1,6 +1,7 @@
 const { test, expect } = require('@playwright/test');
 
 async function switchToTab(page, tabName) {
+  const panel = page.locator(`#panel-${tabName}`);
   const selectors = [
     `.page-tab-bar .tab-btn[data-tab="${tabName}"]`,
     `.bottom-nav-btn[data-tab="${tabName}"]`,
@@ -11,13 +12,15 @@ async function switchToTab(page, tabName) {
     const target = page.locator(selector).first();
     if (await target.isVisible()) {
       await target.click();
+      await expect(target).toHaveClass(/\bactive\b/);
+      await expect(panel).toHaveClass(/\bactive\b/);
       return;
     }
   }
 
   await page.evaluate((tab) => window.switchTab?.(tab), tabName);
+  await expect(panel).toHaveClass(/\bactive\b/);
 }
-
 test.describe('Smoke suite', () => {
   test('opens URL hash and loads matching wiki article', async ({ page }) => {
     await page.goto('/index.html#android-studio');
@@ -41,12 +44,12 @@ test.describe('Smoke suite', () => {
 
     await switchToTab(page, 'materialy');
 
-    await expect(page.locator('[data-tab="materialy"].active').first()).toBeVisible();
+    await expect(page.locator('#tab-materialy')).toHaveClass(/\bactive\b/);
     await expect(page.locator('#panel-materialy')).toHaveClass(/active/);
 
     await switchToTab(page, 'egzamin');
 
-    await expect(page.locator('[data-tab="egzamin"].active').first()).toBeVisible();
+    await expect(page.locator('#tab-egzamin')).toHaveClass(/\bactive\b/);
     await expect(page.locator('#panel-egzamin')).toHaveClass(/active/);
   });
 
