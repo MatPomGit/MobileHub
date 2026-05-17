@@ -31,18 +31,39 @@ function renderServiceFallbackUi(stage, error) {
   fallback.style.border = '1px solid #dc3545';
   fallback.style.background = '#fff5f5';
   fallback.style.color = '#7f1d1d';
-  fallback.innerHTML = `
-    <h2 style="margin: 0 0 0.5rem;">Serwis chwilowo niedostępny</h2>
-    <p style="margin: 0 0 0.5rem;">Nie udało się uruchomić krytycznego modułu aplikacji.</p>
-    <p style="margin: 0; font-size: 0.875rem;">Etap: <strong>${stage}</strong></p>
-  `;
+
+  const title = document.createElement('h2');
+  title.style.margin = '0 0 0.5rem';
+  title.textContent = 'Serwis chwilowo niedostępny';
+
+  const message = document.createElement('p');
+  message.style.margin = '0 0 0.5rem';
+  message.textContent = 'Nie udało się uruchomić krytycznego modułu aplikacji.';
+
+  const stageInfo = document.createElement('p');
+  stageInfo.style.margin = '0';
+  stageInfo.style.fontSize = '0.875rem';
+  stageInfo.appendChild(document.createTextNode('Etap: '));
+  const stageValue = document.createElement('strong');
+  stageValue.textContent = stage;
+  stageInfo.appendChild(stageValue);
+
+  fallback.appendChild(title);
+  fallback.appendChild(message);
+  fallback.appendChild(stageInfo);
   root.prepend(fallback);
 
   if (error) {
     const details = document.createElement('details');
     details.style.marginTop = '0.5rem';
-    details.innerHTML = '<summary>Szczegóły techniczne</summary><pre style="white-space: pre-wrap; margin-top: 0.5rem;"></pre>';
-    details.querySelector('pre').textContent = String(error?.message || error);
+    const summary = document.createElement('summary');
+    summary.textContent = 'Szczegóły techniczne';
+    const pre = document.createElement('pre');
+    pre.style.whiteSpace = 'pre-wrap';
+    pre.style.marginTop = '0.5rem';
+    pre.textContent = String(error?.message || error);
+    details.appendChild(summary);
+    details.appendChild(pre);
     fallback.appendChild(details);
   }
 }
