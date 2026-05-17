@@ -12,6 +12,7 @@ async function switchToTab(page, tabName) {
     const target = page.locator(selector).first();
     if (await target.isVisible()) {
       await target.click();
+      await expect(target).toHaveClass(/\bactive\b/);
       await expect(panel).toHaveClass(/\bactive\b/);
       return;
     }
