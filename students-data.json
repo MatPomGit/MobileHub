@@ -93,30 +93,7 @@
 			"id": "pam.26.09",
 			"title": "Ben-9 do nauki fiszek",
 			"description": "",
-			"notes": "ben9 to aplikacja Flutter do tworzenia, organizowania, nauki i udostępniania talii fiszek. Aplikacja jest przeznaczona dla użytkowników uczących się przez powtórki: pozwala tworzyć foldery, talie, karty z wieloma definicjami oraz uruchamiać tryb nauki. Projekt rozwiązuje problem lokalnego gromadzenia materiałów edukacyjnych i ich prostego współdzielenia przez eksport JSON, QR oraz serwer pomocniczy. Główne moduły to aplikacja mobilna Flutter, lokalna warstwa danych SQLite/sqflite, ekran importu/udostępniania oraz pomocniczy backend Flask z MongoDB dla prywatnych i publicznych talii. Projekt ma stosunkowo dojrzałą warstwę funkcjonalną, CI/CD i wydania APK/AAB, ale dokumentacja użytkowa i testy są słabe, a architektura aplikacji nie spełnia w pełni wzorca MVVM/MVI/Clean Architecture. Repozytorium pokazuje aktywny rozwój, zamknięte PR-y, automatyczne buildy i release’y, jednak część funkcji jest niedokończona, np. globalne wyszukiwanie w aplikacji jest tylko placeholderem.  
-
-Projekt spełnia większość wymagań funkcjonalnych aplikacji mobilnej: ma więcej niż trzy ekrany, nawigację, lokalną bazę danych, komunikację HTTP, obsługę błędów sieciowych, tryb ciemny, kamerę/QR oraz eksport/import talii. Największe braki dotyczą architektury, testów, dokumentacji oraz pełnego rozdzielenia logiki od UI. Kod zawiera duże klasy ekranów ze stanem lokalnym i logiką operacji biznesowych, co obniża testowalność oraz zgodność z MVVM/MVI/Clean Architecture. 
-
-Działające, stabilne funkcje podstawowe 24/30 
-Aplikacja implementuje podstawowy cykl pracy: tworzenie talii, foldery, fiszki, edycję/usuwanie kart, ulubione, import/eksport i tryb nauki. Widoczne są mechanizmy odświeżania danych, walidacji pól oraz obsługi pustych stanów. Część funkcji jest jednak niepełna: globalne wyszukiwanie w aplikacji jest ekranem „coming soon”, a test dymny pozostał domyślnym testem licznika i prawdopodobnie nie odpowiada aplikacji.  
-
-Jakość kodu i architektura 13/20 
-Projekt ma podstawowy podział na frontend i backend, modele danych oraz klasę DatabaseHelper, ale nie widać konsekwentnego MVVM/MVI/Clean Architecture. Duże ekrany, np. home_screen.dart i deck_details_screen.dart, łączą UI, stan, walidację, logikę bazy danych, obsługę HTTP i dialogi. Użycie Provider dla motywu i języka jest poprawne, ale zarządzanie stanem domenowym pozostaje głównie w StatefulWidget i FutureBuilder.  
-
-Interfejs użytkownika i UX 12/15 
-UI jest rozbudowany: NavigationBar, ekran startowy, ustawienia, import, edycja fiszek, responsywne szerokości i ograniczenia layoutu, tryb ciemny oraz lokalizacja. Widać spójny motyw Material i dbałość o formularze, dialogi oraz komunikaty błędów. Brakuje jednak wyraźnie udokumentowanej dostępności; w kodzie nie wykryto konsekwentnych opisów semantycznych dla elementów interaktywnych, a część tekstów była wcześniej refaktoryzowana dopiero pod l10n.  
-
-Komunikacja sieciowa i dane 12/15 
-Lokalna baza SQLite/sqflite zawiera tabele folders, decks, flashcards i settings, migracje oraz relacje z kluczami obcymi. Aplikacja komunikuje się z serwerem przez HTTP przy udostępnianiu i imporcie talii, obsługuje timeout, brak sieci, błędy HTTP i niepoprawny JSON. Backend Flask zapewnia endpointy /upload, /download, /publish, /public, /search, walidację Pydantic i MongoDB. Brak bezpiecznego przechowywania tokenów nie jest krytyczny, bo projekt nie ma uwierzytelniania, ale twardo wpisany adres http://7o7.cx:35010 i brak HTTPS obniżają ocenę.  
-
-Prezentacja i dokumentacja 5/10 
-README głównej aplikacji jest praktycznie domyślnym README Fluttera i nie opisuje funkcjonalności, architektury ani instrukcji uruchomienia projektu. Backend ma krótką instrukcję uruchomienia, a repozytorium zawiera politykę prywatności, release’y i artefakty APK/AAB. Dokumentacja jest wystarczająca tylko częściowo; brakuje opisu wymagań, konfiguracji mobilnej, zależności środowiskowych i scenariuszy testowych.  
-
-Dodatkowe funkcje i kreatywność  8/10 
-Projekt wykracza poza minimum: kamera/QR przez mobile_scanner, generowanie QR, zdjęcia w fiszkach przez image_picker, wiele tłumaczeń, tryb ciemny, CI/CD, release’y i backend do udostępniania talii. Brakuje powiadomień, uwierzytelniania i rzeczywiście zaimplementowanego globalnego wyszukiwania w aplikacji, mimo że backend ma endpoint wyszukiwania.  
-
-Suma punktów: 74 / 100 
-Ocena na ten moment: 4",
+			"notes": "Najważniejsze braki do poprawy: (1) architektura — rozdzielić UI od logiki biznesowej i dostępu do danych (np. MVVM/Clean, warstwy repository/use-case), bo obecnie duże ekrany mieszają odpowiedzialności; (2) testy — zastąpić domyślny test licznika rzeczywistymi testami jednostkowymi, widgetowymi i integracyjnymi dla kluczowych przepływów (tworzenie/edycja fiszek, import/eksport, nauka, błędy sieci); (3) dokumentacja — przygotować pełne README z architekturą, wymaganiami, konfiguracją środowiska, instrukcją uruchomienia i scenariuszami testów; (4) funkcjonalność — dokończyć globalne wyszukiwanie w aplikacji (obecnie placeholder) i spiąć je z istniejącym endpointem backendu; (5) bezpieczeństwo i wdrożenie — usunąć twardo zakodowany adres serwera, dodać konfigurację per środowisko oraz HTTPS; (6) jakość kodu — zmniejszyć rozmiar ekranów, wydzielić serwisy/komponenty i ujednolicić walidację oraz obsługę błędów. Co studenci powinni zrobić teraz: przygotować plan refaktoryzacji w 2–3 iteracjach, domknąć wyszukiwanie end-to-end, dodać minimalny pakiet testów regresyjnych CI oraz uzupełnić dokumentację użytkową i techniczną przed kolejną oceną.",
 			"icon_url": "assets/ben9-icon.svg",
 			"project_url": "https://ben9.ktty.is/",
 			"repository_url": "https://gitea.7o7.cx/PamTeam/ben9",
