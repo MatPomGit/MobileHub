@@ -33,8 +33,18 @@ test.describe('Smoke suite', () => {
     await page.goto('/index.html');
 
     const searchInput = page.locator('#wikiSearch');
-    await searchInput.fill('Android');
-    await expect(searchInput).toHaveValue('Android');
+    const wikiCategories = page.locator('.wiki-category');
+    const hasCategories = await wikiCategories.first().isVisible({ timeout: 3000 }).catch(() => false);
+    const noMatchQuery = 'zzzzzz';
+
+    if (hasCategories) {
+      await searchInput.fill(noMatchQuery);
+      await expect(page.locator('.wiki-category[style*="display: none"]')).not.toHaveCount(0);
+      await expect(searchInput).toHaveValue(noMatchQuery);
+    } else {
+      await searchInput.fill('Android');
+      await expect(searchInput).toHaveValue('Android');
+    }
   });
 
   test('switches tabs and verifies active state', async ({ page }) => {

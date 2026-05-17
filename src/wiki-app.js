@@ -13,6 +13,10 @@ import { setupSearch } from './wiki-search.js';
 import { IDS } from './dom-map.js';
 import { onClick } from './wiki-dom-utils.js';
 
+const MARKED_RETRY_INTERVAL_MS = 200;
+const WARN_AFTER_MARKED_ATTEMPTS = 20;
+const MAX_MARKED_LOAD_ATTEMPTS = 100;
+
 export async function initApp() {
   initThemePicker();
   initScrollProgress();
@@ -25,8 +29,13 @@ export async function initApp() {
 
 async function waitForMarked(attempts = 0) {
   if (typeof marked === 'undefined') {
-    if (attempts < 100) {
-      setTimeout(() => waitForMarked(attempts + 1), 200);
+    if (attempts === WARN_AFTER_MARKED_ATTEMPTS) {
+      console.warn('[wiki-app] Biblioteka marked nadal się ładuje, kontynuuję próby inicjalizacji.');
+    }
+    if (attempts < MAX_MARKED_LOAD_ATTEMPTS) {
+      setTimeout(() => waitForMarked(attempts + 1), MARKED_RETRY_INTERVAL_MS);
+    } else {
+      showConfigError(new Error('Nie udało się załadować parsera Markdown (marked).'));
     }
     return;
   }
