@@ -83,12 +83,7 @@ test.describe('Smoke suite', () => {
         await pullHandle.click();
       }
 
-      const pullOptionsBtn = page.locator('#pullOptionsBtn');
-      if (await pullOptionsBtn.isVisible()) {
-        await pullOptionsBtn.click();
-      } else {
-        await page.evaluate(() => document.getElementById('pullOptionsBtn')?.click());
-      }
+      await page.locator('#pullOptionsBtn').click({ force: true });
     }
     await expect(devTrigger).toBeVisible();
 
