@@ -37,7 +37,7 @@ function initPageTabs() {
     
                 // Resize iframe once its panel is visible
                 if (tab === 'studenci' || tab === 'zal') {
-                    const iframe = ensureLazyIframeLoaded(tab) || document.getElementById('iframe-' + tab);
+                    const iframe = ensureLazyIframeLoaded(tab);
                     if (iframe) {
                         const resize = () => {
                             try {
