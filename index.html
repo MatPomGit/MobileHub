@@ -139,17 +139,36 @@
     </header>
 
     <!-- HERO -->
-    <section class="hero">
+    <section class="hero" aria-labelledby="hero-title">
+        <div class="hero-bg-mesh" aria-hidden="true"></div>
         <div class="hero-content">
             <div class="hero-badge">
                 <i class="fa-solid fa-book-open"></i>
                 Baza wiedzy
             </div>
-            <h1>Programowanie<br><span>aplikacji mobilnych</span></h1>
+            <h1 id="hero-title">Buduj nowoczesne<br><span>aplikacje mobilne</span></h1>
             <p class="hero-sub">
-                Od natywnego Android/iOS po XR, IoT, informatykę afektywną i robotykę
+                Praktyczna ścieżka: Android/iOS, web-mobile, XR, IoT i AI — od podstaw do projektu semestralnego.
             </p>
+            <div class="hero-ctas">
+                <a class="hero-btn hero-btn-primary" href="#panel-wiki">Zacznij naukę</a>
+                <a class="hero-btn hero-btn-secondary" href="#panel-projekt">Zobacz projekt</a>
+            </div>
         </div>
+        <div class="hero-visual" aria-hidden="true">
+            <div class="hero-device">
+                <div class="hero-device-notch"></div>
+                <div class="hero-device-screen">
+                    <div class="hero-chip"><i class="fa-solid fa-code"></i> Android/iOS</div>
+                    <div class="hero-chip"><i class="fa-solid fa-vr-cardboard"></i> XR + IoT</div>
+                    <div class="hero-chip"><i class="fa-solid fa-brain"></i> AI UX</div>
+                </div>
+            </div>
+        </div>
+        <a class="hero-scroll-hint" href="#panel-wiki" aria-label="Przewiń do sekcji niżej">
+            <span>Przewiń</span>
+            <i class="fa-solid fa-chevron-down"></i>
+        </a>
     </section>
 
     <!-- PAGE TAB BAR -->
