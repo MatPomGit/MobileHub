@@ -22,7 +22,7 @@ Krótka lista kontroli do ręcznego sprawdzenia po zmianach związanych z PWA/Se
 ## Aktualizacja i odświeżanie zasobów
 - [ ] Po publikacji nowej wersji nowy SW jest wykrywany.
 - [ ] Zasoby statyczne odświeżają się zgodnie z przyjętą strategią cache.
-- [ ] Nie ma „utkniętej” starej wersji UI po twardym odświeżeniu i ponownym otwarciu.
+- [ ] Nie ma „utkniętej” starej wersji UI po zwykłym odświeżeniu i ponownym otwarciu.
 
 ## Recovery po powrocie sieci
 - [ ] Po przejściu z `Offline` na `Online` aplikacja odzyskuje połączenie.
