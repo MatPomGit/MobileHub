@@ -158,20 +158,18 @@
     }
   }
 
-  function ensureZalIframeLoaded() {
-    const zalFrame = document.getElementById('iframe-zal');
-    if (!zalFrame) return;
-    const targetSrc = zalFrame.getAttribute('data-src');
-    if (!targetSrc) return;
-    if (zalFrame.getAttribute('src') !== targetSrc) {
-      zalFrame.setAttribute('src', targetSrc);
+  function ensureIframeLoaded(id) {
+    const frame = document.getElementById(id);
+    if (frame && frame.getAttribute('src') === 'about:blank') {
+      const targetSrc = frame.getAttribute('data-src');
+      if (targetSrc) frame.setAttribute('src', targetSrc);
     }
   }
 
   function showDevTabs(showZalTab) {
     document.querySelectorAll('[data-tab="studenci"]').forEach((el) => el.classList.remove('dev-only-tab'));
     document.querySelectorAll('[data-tab="zal"]').forEach((el) => el.classList.toggle('dev-only-tab', !showZalTab));
-    if (showZalTab) ensureZalIframeLoaded();
+    if (showZalTab) ensureIframeLoaded('iframe-zal');
   }
 
   function hideDevTabs() {
