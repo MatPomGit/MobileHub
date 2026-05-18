@@ -72,8 +72,8 @@ function initParticleSection(section) {
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
     const count = useLimitedEffects
-      ? Math.max(6, Math.floor(getParticleCount('section', isMobile) * 0.55))
-      : getParticleCount('section', isMobile);
+      ? Math.max(6, Math.floor(getParticleCount(profile, isMobile) * 0.55))
+      : getParticleCount(profile, isMobile);
     particles = Array.from({ length: count }, () => createParticle(width, height, isMobile));
   }
 
