@@ -110,7 +110,7 @@
 /* Globalne wzorce interakcji: 1) lift (hover/focus), 2) press (active), 3) color fade. */
 :where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button),
 :where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a),
-:where(.info-card, .quick-link-card, .tool-card, .materials-card, .file-item) {
+:where(a.info-card, a.quick-link-card, a.tool-card, a.materials-card, .file-item) {
     transition:
         color var(--motion-duration-fast) var(--motion-ease-standard),
         background-color var(--motion-duration-fast) var(--motion-ease-standard),
