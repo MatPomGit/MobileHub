@@ -16,7 +16,7 @@
                 .from('.hero-badge', { y: 20, opacity: 0, duration: 0.4 }, '-=0.2')
                 .from('.hero h1', { y: 34, opacity: 0, duration: 0.55 }, '-=0.15')
                 .from('.hero-sub', { y: 20, opacity: 0, duration: 0.42 }, '-=0.2')
-                .from('.hero-visual', { y: 20, opacity: 0, scale: 0.96, duration: 0.5 }, '-=0.35')
+                .from('.hero-visual', { y: 20, opacity: 0, scale: 0.96, duration: 0.5 }, '-=0.15')
                 .from('.hero-scroll-hint', { y: 8, opacity: 0, duration: 0.3 }, '-=0.2')
                 .from('.page-tab-bar', { y: 20, opacity: 0, duration: 0.4 }, '-=0.2');
 
