@@ -65,7 +65,7 @@ function initBootstrapUi() {
     
                         const topicsHtml = path.topics.map(topic => `<li>${topic}</li>`).join('');
                         const prerequisitesHtml = path.prerequisites.map(item => `<li>${item}</li>`).join('');
-                        const weeklyHtml = (path.weeklyPlan || []).map(item => `<tr><td>${item.week}</td><td>${item.topic}<br><small><strong>Zależności:</strong> ${item.dependencies}</small></td><td>${item.material}</td><td>${item.lab}</td></tr>`).join('');
+                        const weeklyHtml = (path.weeklyPlan || []).map(item => `<tr><td>${item.week}</td><td>${item.topic}<br><small><strong>Zależności:</strong> ${item.dependencies}</small></td><td><a href="#${item.material}" data-article="${item.material}">${item.material}</a></td></tr>`).join('');
     
                         container.insertAdjacentHTML('beforeend', `
                             <article class="learning-path-card">
@@ -91,7 +91,7 @@ function initBootstrapUi() {
                                     <strong>Widok tygodniowy</strong>
                                     <div style="overflow-x:auto;">
                                         <table class="weekly-roadmap-table">
-                                            <thead><tr><th>Tydzień</th><th>Temat i zależności</th><th>Materiał</th><th>Laboratorium</th></tr></thead>
+                                            <thead><tr><th>Tydzień</th><th>Temat i zależności</th><th>Materiał</th></tr></thead>
                                             <tbody>${weeklyHtml}</tbody>
                                         </table>
                                     </div>

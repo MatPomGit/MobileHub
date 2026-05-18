@@ -102,8 +102,27 @@
                 </div>
                 <div class="header-title">
                     <strong>PAM WIKI</strong>
+                    <span>Programowanie aplikacji mobilnych</span>
                 </div>
             </a>
+            <div class="header-actions">
+                <button class="header-badge" id="header-badge-kia" aria-label="Przełącz tryb dev">DEV MODE</button>
+                <div class="theme-picker" id="themePicker">
+                    <button class="btn-icon" id="themePickerBtn" title="Zmień motyw"
+                        aria-label="Wybierz motyw kolorystyczny" aria-haspopup="true" aria-expanded="false">
+                        <i class="fa-solid fa-palette"></i>
+                    </button>
+                    <div class="theme-picker-dropdown" id="themeDropdown" role="menu">
+                        <div class="theme-picker-label">Motyw</div>
+                        <button class="theme-option" data-theme="light" role="menuitem"><span class="theme-swatch light"></span>Jasny</button>
+                        <button class="theme-option" data-theme="dark" role="menuitem"><span class="theme-swatch dark"></span>Ciemny</button>
+                        <button class="theme-option" data-theme="ocean" role="menuitem"><span class="theme-swatch ocean"></span>Ocean</button>
+                        <button class="theme-option" data-theme="forest" role="menuitem"><span class="theme-swatch forest"></span>Las</button>
+                        <button class="theme-option" data-theme="sunset" role="menuitem"><span class="theme-swatch sunset"></span>Zachód słońca</button>
+                        <button class="theme-option" data-theme="rose" role="menuitem"><span class="theme-swatch rose"></span>Różany</button>
+                    </div>
+                </div>
+            </div>
         </div>
     </header>
 
@@ -568,6 +587,64 @@
 
                 <div class="info-card">
                     <div class="info-card-header">
+                        <i class="fa-solid fa-cube"></i>
+                        <strong>Unreal Engine — C++ + Blueprints (mobile)</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Gameplay Framework (GameMode/GameState/PlayerController), logika hybrydowa C++ + Blueprints, modularne pluginy pod funkcje gameplay i usługi online.</p>
+                    <p><strong>Wymagania:</strong> Unreal Engine 5.4+, Visual Studio 2022 lub Rider, Android SDK/NDK, Xcode (dla iOS).</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repo i wygeneruj pliki projektu IDE (np. przez menu kontekstowe pliku <code>.uproject</code>), aby przygotować środowisko do kompilacji.</li>
+                        <li>Zbuduj moduły C++ z IDE, żeby upewnić się, że wszystkie klasy i pluginy kompilują się poprawnie.</li>
+                        <li>Skonfiguruj <code>Project Settings</code> (platformy mobilne, input touch, rendering profile) pod docelowe urządzenia.</li>
+                        <li>Uzupełnij konfigurację backendu (np. REST/EOS/Firebase) w plikach <code>Config/*.ini</code>, by uruchomić usługi online.</li>
+                        <li>Wykonaj <code>Package Project</code> dla Android/iOS i przetestuj build na urządzeniu fizycznym, aby zweryfikować wydajność oraz sterowanie dotykowe.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>unreal-starter/
+├─ Config/
+├─ Content/
+│  ├─ Blueprints/
+│  ├─ Maps/
+│  └─ UI/
+├─ Source/
+│  ├─ Core/
+│  ├─ Gameplay/
+│  └─ MobileHub/
+└─ Plugins/</code></pre>
+                    <a href="https://github.com/topics/unreal-engine-template" target="_blank" rel="noopener noreferrer" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-python"></i>
+                        <strong>Python — Kivy + Buildozer</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Ekrany oparte o <code>ScreenManager</code>, separacja logiki do warstw services/repositories, konfiguracja UI w plikach <code>.kv</code>.</p>
+                    <p><strong>Wymagania:</strong> Python 3.11+, pip/venv, Kivy 2.3+, Buildozer (Linux) lub BeeWare briefcase jako alternatywa.</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repo i utwórz środowisko wirtualne (<code>python -m venv .venv</code>), by odizolować zależności projektu.</li>
+                        <li>Zainstaluj pakiety: <code>pip install -r requirements.txt</code>, aby odtworzyć komplet bibliotek lokalnie.</li>
+                        <li>Uruchom aplikację desktopowo: <code>python main.py</code>, żeby szybko sprawdzić nawigację i logikę ekranów.</li>
+                        <li>Skonfiguruj <code>buildozer.spec</code> (nazwa pakietu, uprawnienia, wersja SDK), aby przygotować build mobilny.</li>
+                        <li>Zbuduj APK komendą <code>buildozer android debug</code> i przetestuj na urządzeniu, aby potwierdzić zgodność działania na Androidzie.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>python-kivy-starter/
+├─ app/
+│  ├─ screens/
+│  ├─ services/
+│  └─ widgets/
+├─ assets/
+├─ tests/
+├─ main.py
+└─ buildozer.spec</code></pre>
+                    <a href="https://github.com/topics/kivy-template" target="_blank" rel="noopener noreferrer" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
                         <i class="fa-brands fa-ionic"></i>
                         <strong>Ionic — Angular + Capacitor</strong>
                     </div>
@@ -621,6 +698,36 @@
 ├─ iosApp/
 └─ build-logic/</code></pre>
                     <a href="https://github.com/topics/kotlin-multiplatform-template" target="_blank" rel="noopener noreferrer" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-swift"></i>
+                        <strong>SwiftUI — iOS Native (Apple)</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> MVVM + Coordinator, warstwa networking oparta o <code>URLSession</code>, modele i storage w SwiftData/CoreData.</p>
+                    <p><strong>Wymagania:</strong> Xcode 16+, Swift 6+, iOS 17+ SDK, Apple Developer Account (dla testów na fizycznym urządzeniu).</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repo i zainstaluj zależności (np. <code>pod install</code> lub SPM), a następnie otwórz projekt w Xcode.</li>
+                        <li>Ustaw Team i Bundle Identifier w <code>Signing &amp; Capabilities</code>, żeby poprawnie podpisywać aplikację.</li>
+                        <li>Uzupełnij konfigurację środowisk (np. <code>Config/Dev.xcconfig</code>) i endpointy API, aby połączyć aplikację z backendem.</li>
+                        <li>Uruchom testy jednostkowe przez <code>⌘U</code>, żeby zweryfikować logikę ViewModeli i warstwy danych.</li>
+                        <li>Odpal aplikację na symulatorze lub iPhonie, aby sprawdzić wydajność UI, nawigację i integracje natywne.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>swiftui-starter/
+├─ App/
+├─ Features/
+│  ├─ Auth/
+│  └─ Home/
+├─ Core/
+│  ├─ Networking/
+│  ├─ Storage/
+│  └─ DesignSystem/
+├─ Resources/
+└─ Tests/</code></pre>
+                    <a href="https://github.com/topics/swiftui-template" target="_blank" rel="noopener noreferrer" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
                 </div>
             </div>
 
