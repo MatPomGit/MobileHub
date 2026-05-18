@@ -156,6 +156,10 @@
                 <i class="fa-solid fa-file-arrow-down"></i>
                 Materiały
             </button>
+            <button class="tab-btn" data-tab="roadmapa" id="tab-roadmapa">
+                <i class="fa-solid fa-route"></i>
+                Roadmapa semestru
+            </button>
             <button class="tab-btn dev-only-tab" data-tab="studenci" id="tab-studenci">
                 <i class="fa-solid fa-users"></i>
                 Studenci
@@ -316,38 +320,7 @@
                             </div>
                         </div>
 
-                        <section class="learning-paths" id="learningPathsModule" aria-labelledby="learningPathsTitle">
-                            <div class="learning-paths-header">
-                                <h3 id="learningPathsTitle"><i class="fa-solid fa-route"></i>&nbsp; Roadmapa semestru</h3>
-                                <p>Interaktywna mapa tematów z zależnościami, widokiem tygodniowym, terminami i oznaczeniami priorytetów.</p>
-                            </div>
-                            <div class="learning-paths-filters">
-                                <label>
-                                    Technologia
-                                    <select id="learningPathsTechFilter">
-                                        <option value="all">Wszystkie</option>
-                                        <option value="Android">Android</option>
-                                        <option value="iOS">iOS</option>
-                                        <option value="Flutter">Flutter</option>
-                                        <option value="React Native">React Native</option>
-                                        <option value="Unity">Unity</option>
-                                        <option value="Cross-platform">Cross-platform</option>
-                                    </select>
-                                </label>
-                                <label>
-                                    Poziom
-                                    <select id="learningPathsLevelFilter">
-                                        <option value="all">Wszystkie</option>
-                                        <option value="beginner">Początkujący</option>
-                                        <option value="intermediate">Średniozaawansowany</option>
-                                        <option value="advanced">Zaawansowany</option>
-                                    </select>
-                                </label>
-                            </div>
-                            <div class="learning-paths-grid" id="learningPathsGrid"></div>
-                        </section>
-
-                        <div class="info-box">
+                                                <div class="info-box">
                             <i class="fa-solid fa-circle-info"></i>
                             <div>
                                 <strong>Jak korzystać z WIKI?</strong>
@@ -361,6 +334,43 @@
             </main>
         </div>
     </div><!-- /panel-wiki -->
+
+
+    <!-- TAB PANEL: ROADMAPA SEMESTRU -->
+    <div class="tab-panel" id="panel-roadmapa">
+        <div class="info-panel">
+            <section class="learning-paths" id="learningPathsModule" aria-labelledby="learningPathsTitle">
+                <div class="learning-paths-header">
+                    <h3 id="learningPathsTitle"><i class="fa-solid fa-route"></i>&nbsp; Roadmapa semestru</h3>
+                    <p>Interaktywna mapa tematów z zależnościami, widokiem tygodniowym, terminami i oznaczeniami priorytetów.</p>
+                </div>
+                <div class="learning-paths-filters">
+                    <label>
+                        Technologia
+                        <select id="learningPathsTechFilter">
+                            <option value="all">Wszystkie</option>
+                            <option value="Android">Android</option>
+                            <option value="iOS">iOS</option>
+                            <option value="Flutter">Flutter</option>
+                            <option value="React Native">React Native</option>
+                            <option value="Unity">Unity</option>
+                            <option value="Cross-platform">Cross-platform</option>
+                        </select>
+                    </label>
+                    <label>
+                        Poziom
+                        <select id="learningPathsLevelFilter">
+                            <option value="all">Wszystkie</option>
+                            <option value="beginner">Początkujący</option>
+                            <option value="intermediate">Średniozaawansowany</option>
+                            <option value="advanced">Zaawansowany</option>
+                        </select>
+                    </label>
+                </div>
+                <div class="learning-paths-grid" id="learningPathsGrid"></div>
+            </section>
+        </div>
+    </div><!-- /panel-roadmapa -->
 
     <!-- TAB PANEL: PROJEKT ZALICZENIOWY -->
     <div class="tab-panel" id="panel-projekt">
@@ -1284,7 +1294,7 @@
                     aria-label="Informacje o wersji aplikacji">
                     <div class="settings-row-label">
                         <i class="fa-solid fa-circle-info"></i>
-                        <span>Wersja aplikacji</span>
+                        <span>KIA</span>
                     </div>
                     <span class="dev-version-badge"></span>
                 </div>
@@ -1314,6 +1324,10 @@
         <button class="bottom-nav-btn" data-tab="materialy">
             <i class="fa-solid fa-file-arrow-down"></i>
             <span>Materiały</span>
+        </button>
+        <button class="bottom-nav-btn" data-tab="roadmapa">
+            <i class="fa-solid fa-route"></i>
+            <span>Roadmapa</span>
         </button>
         <button class="bottom-nav-btn dev-only-tab" data-tab="studenci">
             <i class="fa-solid fa-users"></i>
