@@ -52,6 +52,7 @@ function initParticleSection(section) {
   let particles = [];
 
   function resizeCanvas() {
+    isMobile = window.matchMedia('(max-width: 768px)').matches;
     const rect = section.getBoundingClientRect();
     const dpr = Math.min(window.devicePixelRatio || 1, 2);
     width = Math.max(1, Math.floor(rect.width));
