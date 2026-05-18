@@ -3,6 +3,7 @@
 import { initWiki } from '../pam-wiki.js';
 import { initMaterials } from '../pam-files.js';
 import { initSectionParticles } from './section-particles.js';
+import { getMotionProfile } from './motion-settings.js';
 
 function logStartupError(stage, error) {
   console.error(`[app-init] Startup stage failed: ${stage}.`, error);
@@ -70,6 +71,8 @@ function renderServiceFallbackUi(stage, error) {
 }
 
 async function runAppInitialization() {
+  window.__MOTION_PROFILE = getMotionProfile();
+
   const criticalStartupStages = [
     ['ui:tabs', () => window.initPageTabs?.()],
     ['ui:pull-panel', () => window.initPullPanel?.()],
@@ -107,6 +110,34 @@ async function runAppInitialization() {
     logStartupError('wiki', error);
     renderServiceFallbackUi('wiki', error);
   }
+
+  try {
+    await initAnimationLibraries();
+  } catch (error) {
+    logStartupError('animations', error);
+  }
+}
+
+function loadScript(src) {
+  return new Promise((resolve, reject) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.defer = true;
+    script.onload = () => resolve();
+    script.onerror = () => reject(new Error(`Failed loading ${src}`));
+    document.head.appendChild(script);
+  });
+}
+
+async function initAnimationLibraries() {
+  if (window.__MOTION_PROFILE === 'none') {
+    return;
+  }
+
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.2/anime.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js');
+  await loadScript('https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js');
+  await loadScript('src/gsap-animations.js');
 }
 
 document.addEventListener('DOMContentLoaded', () => {

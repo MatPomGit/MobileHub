@@ -182,6 +182,37 @@ Ta strategia ogranicza „single point of failure” i poprawia odporność runt
 
 ---
 
+## 2.4 Warstwa animacji: profil ruchu, budżet wydajności i QA
+
+W runtime obowiązuje profil ruchu ustawiany przy starcie w `src/app-init.js` (`window.__MOTION_PROFILE`):
+
+- `none` — pełne wyłączenie animacji dla `prefers-reduced-motion: reduce`.
+- `limited` — ograniczone efekty (np. mniej cząsteczek, mniejsze amplitudy transform).
+- `full` — pełna ścieżka animacji.
+
+### Zasady techniczne
+
+1. Animujemy głównie `transform` i `opacity`, unikając kosztownych zmian layoutu.
+2. Biblioteki animacji (`anime.js`, `gsap`, `ScrollTrigger`) są lazy-loadowane po starcie krytycznych modułów.
+3. Cząsteczki i efekty reaktywne działają w trybie degradacji przy spadku FPS.
+
+### Budżet wydajności
+
+- desktop: target **60 FPS** dla ścieżki `full`,
+- mobile: priorytet stabilności i responsywności inputów (akceptowalny lekko niższy FPS, bez „przycięć”),
+- przy sygnałach słabszego urządzenia (`saveData`, niski `hardwareConcurrency`) aktywowany jest profil `limited`.
+
+### QA checklist (animacje)
+
+- [ ] Płynność animacji (brak mikroprzycięć przy scrollu i otwieraniu paneli).
+- [ ] Czytelność treści podczas animacji (kontrast, brak „przelatywania” tekstu utrudniającego odczyt).
+- [ ] Brak migotania i artefaktów (zwłaszcza na canvasie i przy dynamicznym DOM).
+- [ ] Brak konfliktów z inputami (pointer/touch/scroll nie mogą być blokowane przez efekty).
+- [ ] Nawigacja klawiaturą działa poprawnie niezależnie od animacji.
+- [ ] Czytniki ekranu nie są zakłócane (animacje nie mogą ukrywać semantyki i fokusu).
+
+---
+
 ## 3) Klasyfikacja modułów: renderer / controller / state
 
 | Moduł | Typ główny | Uzasadnienie |
