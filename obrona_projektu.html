@@ -31,11 +31,11 @@
     <h1>Obrona projektu i moduł oceniania</h1>
     <p class="lead">Strona zawiera skrót wymagań projektu, odpowiedzialności ról i kalkulator oceny końcowej dla aplikacji oraz każdego członka zespołu.</p>
 
-    <h2>Wymagania projektu (zwięźle)</h2>
+    <h2>Wymagania dla studentów</h2>
     <div class="grid">
-      <section class="box"><strong>Zakres techniczny</strong><ul><li>Minimum 3 ekrany i nawigacja.</li><li>Warstwowa architektura (MVVM/MVI/Clean).</li><li>Obsługa danych lokalnych i z API.</li><li>Obsługa błędów oraz stanu offline.</li></ul></section>
-      <section class="box"><strong>Jakość i UX</strong><ul><li>Spójny interfejs i czytelny przepływ.</li><li>Podstawowa dostępność i responsywność.</li><li>Repozytorium z historią commitów.</li><li>README z instrukcją uruchomienia.</li></ul></section>
-      <section class="box"><strong>Oddanie i obrona</strong><ul><li>Demo działającej aplikacji.</li><li>Prezentacja architektury i decyzji projektowych.</li><li>Podział prac między role.</li><li>Odpowiedzi na pytania prowadzącego.</li></ul></section>
+      <section class="box"><strong>1) Co musi zawierać aplikacja</strong><ul><li>Minimum 3 ekrany i poprawnie działająca nawigacja.</li><li>Warstwowa architektura (MVVM/MVI/Clean) oraz czytelny podział odpowiedzialności.</li><li>Obsługa danych lokalnych i integracja z minimum jednym API.</li><li>Obsługa błędów, stanów ładowania i sytuacji offline.</li></ul></section>
+      <section class="box"><strong>2) Jak oceniana jest jakość</strong><ul><li>Spójny interfejs, czytelny UX i podstawowa dostępność.</li><li>Stabilność działania (testy scenariuszy, brak krytycznych błędów).</li><li>Czytelny kod, sensowne commity i uporządkowana struktura repozytorium.</li><li>README: cel projektu, instrukcja uruchomienia, podział ról i użyte technologie.</li></ul></section>
+      <section class="box"><strong>3) Wymagania na obronę</strong><ul><li>Krótka prezentacja działającej aplikacji (live demo).</li><li>Uzasadnienie decyzji projektowych i omówienie architektury.</li><li>Każdy student omawia swój wkład oraz odpowiada na pytania.</li><li>Zespół przedstawia podział prac zgodny z historią commitów.</li></ul></section>
     </div>
 
     <h2>Role studentów</h2>
@@ -47,8 +47,8 @@
 
     <h2>Wzór na ocenę</h2>
     <div class="box">
-      <div class="formula">Ocena_końcowa_roli = 0.7 × Ocena_aplikacji + 0.3 × Ocena_roli</div>
-      <p class="lead">Ocena aplikacji jest wspólna dla zespołu, a ocena roli jest indywidualna. Wynik końcowy każdej osoby to suma ważona.</p>
+      <div class="formula">Wynik_końcowy (0–100) = 0.7 × Wynik_aplikacji (0–100) + 0.3 × Wynik_roli (0–100)</div>
+      <p class="lead">Najpierw liczony jest wynik punktowy (0–100), a następnie zamieniany na ocenę: 91–100→5.0, 81–90→4.5, 71–80→4.0, 61–70→3.5, 51–60→3.0, ≤50→2.0.</p>
     </div>
 
     <h2>Moduł oceniania (suwaki)</h2>
@@ -68,9 +68,9 @@
       <div class="summary">
         <div class="stat"><span>Wynik aplikacji</span><strong id="appPts">0 / 100</strong></div>
         <div class="stat"><span>Ocena aplikacji</span><strong id="appGrade">2.0</strong></div>
-        <div class="stat"><span>Lider — ocena końcowa</span><strong id="leaderFinal">2.0</strong></div>
-        <div class="stat"><span>Developer — ocena końcowa</span><strong id="devFinal">2.0</strong></div>
-        <div class="stat"><span>QA/DevOps — ocena końcowa</span><strong id="qaFinal">2.0</strong></div>
+        <div class="stat"><span>Lider — wynik/ocena końcowa</span><strong id="leaderFinal">0.0 / 2.0</strong></div>
+        <div class="stat"><span>Developer — wynik/ocena końcowa</span><strong id="devFinal">0.0 / 2.0</strong></div>
+        <div class="stat"><span>QA/DevOps — wynik/ocena końcowa</span><strong id="qaFinal">0.0 / 2.0</strong></div>
       </div>
     </div>
   </main>
@@ -94,7 +94,10 @@
       });
 
       const appGrade = grade(appTotal);
-      const final = (rolePts)=>((0.7*appGrade)+(0.3*grade(rolePts))).toFixed(1);
+      const final = (rolePts)=>{
+        const finalPts = (0.7*appTotal)+(0.3*rolePts);
+        return `${finalPts.toFixed(1)} / ${grade(finalPts).toFixed(1)}`;
+      };
       document.getElementById('appPts').textContent = `${appTotal} / 100`;
       document.getElementById('appGrade').textContent = appGrade.toFixed(1);
       document.getElementById('leaderFinal').textContent = final(roles.leader);
