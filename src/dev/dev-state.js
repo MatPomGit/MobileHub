@@ -4,6 +4,7 @@
   const NS = (window.__pamDev = window.__pamDev || {});
   const LS_KEY = 'pam-dev-mode';
   const APP_VERSION = (document.querySelector('meta[name="app-version"]') || {}).content || 'unknown';
+  NS.APP_VERSION = APP_VERSION;
   const LS_ACTIVATION_COUNT_KEY = 'pam-dev-mode-activations-v2:' + APP_VERSION;
 
   // Reset licznika przy każdym uruchomieniu strony głównej.
