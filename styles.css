@@ -941,8 +941,14 @@ header {
     background: conic-gradient(from 120deg at 35% 40%, rgba(59, 130, 246, 0.2), rgba(14, 165, 233, 0.16), rgba(168, 85, 247, 0.14), rgba(59, 130, 246, 0.2));
     filter: blur(36px);
     opacity: 0.8;
-    animation: heroMeshDrift 26s ease-in-out infinite alternate;
     z-index: 0;
+    will-change: transform;
+}
+
+@media (prefers-reduced-motion: no-preference) {
+    .hero-bg-mesh {
+        animation: heroMeshDrift 26s ease-in-out infinite alternate;
+    }
 }
 
 .hero-ctas {
