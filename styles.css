@@ -107,6 +107,45 @@
     outline-offset: 2px;
 }
 
+/* Globalne wzorce interakcji: 1) lift (hover/focus), 2) press (active), 3) color fade. */
+:where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button),
+:where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a),
+:where(.info-card, .quick-link-card, .tool-card, .materials-card, .file-item) {
+    transition:
+        color var(--motion-duration-fast) var(--motion-ease-standard),
+        background-color var(--motion-duration-fast) var(--motion-ease-standard),
+        border-color var(--motion-duration-fast) var(--motion-ease-standard),
+        box-shadow var(--motion-duration-base) var(--motion-ease-standard),
+        transform var(--motion-duration-base) var(--motion-ease-emphasized);
+}
+
+@media (hover: hover) and (pointer: fine) {
+    :where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button):hover,
+    :where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a):hover,
+    :where(.info-card, .quick-link-card, .tool-card, .materials-card, .file-item):hover {
+        transform: translate3d(0, -1px, 0) scale(1.01);
+        box-shadow: var(--shadow-lg);
+    }
+}
+
+:where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button):active,
+:where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a):active {
+    transform: translate3d(0, 0, 0) scale(0.98);
+}
+
+:where(button, a, .info-card, .quick-link-card, .tool-card, .materials-card, .file-item):focus-visible {
+    outline: 3px solid color-mix(in srgb, var(--accent2) 82%, white);
+    outline-offset: 3px;
+    box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent-glow) 70%, transparent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    :where(button, a, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button, .info-card, .quick-link-card, .tool-card, .materials-card, .file-item) {
+        transition-duration: 1ms !important;
+        transform: none !important;
+    }
+}
+
 /* ===== CSS VARIABLES ===== */
 :root {
     --bg: #f4f6fb;
@@ -136,7 +175,12 @@
     --radius: 12px;
     --shadow: 0 4px 24px rgba(0, 0, 0, 0.08);
     --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.12);
-    --transition: 0.2s ease;
+    --motion-duration-fast: 120ms;
+    --motion-duration-base: 200ms;
+    --motion-duration-slow: 300ms;
+    --motion-ease-standard: cubic-bezier(0.2, 0, 0, 1);
+    --motion-ease-emphasized: cubic-bezier(0.22, 1, 0.36, 1);
+    --transition: var(--motion-duration-base) var(--motion-ease-standard);
     --font: 'Outfit', sans-serif;
     --mono: 'JetBrains Mono', monospace;
     /* Obniżamy wysokość górnego paska o ~12.5% dla bardziej kompaktowego układu. */
