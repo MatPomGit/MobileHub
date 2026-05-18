@@ -16,7 +16,7 @@ npm run qa
 
 Jeśli E2E Playwright nie startują, doinstaluj przeglądarki:
 ```bash
-npx playwright install
+npx playwright install --with-deps
 ```
 
 ## Definicja gotowości zmiany
