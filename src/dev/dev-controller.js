@@ -63,8 +63,13 @@
       });
     }
 
-    NS.view.setDevVisualState(false);
-    NS.view.hideDevTabs();
+    const isDevActive = NS.state.isActive();
+    NS.view.setDevVisualState(isDevActive);
+    if (isDevActive) {
+      NS.view.showDevTabs(NS.state.getActivationCount() >= 3);
+    } else {
+      NS.view.hideDevTabs();
+    }
 
     NS.controller = { activateDev, deactivateDev, openPanel: () => NS.view.renderPanel({ onDeactivate: deactivateDev }) };
   }
