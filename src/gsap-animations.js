@@ -1,8 +1,9 @@
         (function () {
             'use strict';
 
-            // Respect prefers-reduced-motion accessibility setting
-            if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+            const motionProfile = window.__MOTION_PROFILE || (window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'none' : 'full');
+            if (motionProfile === 'none') return;
+            const reducedEffects = motionProfile === 'limited';
             if (typeof gsap === 'undefined') return;
 
             gsap.registerPlugin(ScrollTrigger);
@@ -27,7 +28,7 @@
             const heroContent = document.querySelector('.hero-content');
             if (heroSection && heroContent) {
                 gsap.to(heroContent, {
-                    y: 28,
+                    y: reducedEffects ? 12 : 28,
                     ease: 'none',
                     scrollTrigger: {
                         trigger: heroSection,
@@ -41,8 +42,8 @@
             const heroMesh = document.querySelector('.hero-bg-mesh');
             if (heroSection && heroMesh) {
                 gsap.to(heroMesh, {
-                    yPercent: 10,
-                    xPercent: 6,
+                    yPercent: reducedEffects ? 4 : 10,
+                    xPercent: reducedEffects ? 2 : 6,
                     ease: 'none',
                     scrollTrigger: {
                         trigger: heroSection,
@@ -137,7 +138,7 @@
             function animateArticleContent(container) {
                 if (!container) return;
 
-                if (window.anime) {
+                if (window.anime && !reducedEffects) {
                     anime.remove(container.querySelectorAll('h1, h2, p, li, .reading-time, .article-toc, .table-wrapper, .code-block-wrapper, blockquote, img'));
                     anime({
                         targets: container.querySelectorAll('h1, h2, p, li, .reading-time, .article-toc, .table-wrapper, .code-block-wrapper, blockquote, img'),

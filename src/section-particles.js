@@ -1,4 +1,5 @@
 'use strict';
+import { getMotionProfile } from './motion-settings.js';
 
 const FPS_SAMPLE_MS = 1200;
 const FPS_DEGRADE_THRESHOLD = 28;
@@ -34,6 +35,12 @@ function initParticleSection(section) {
   }
 
   let isMobile = window.matchMedia('(max-width: 768px)').matches;
+  const motionProfile = getMotionProfile();
+  if (motionProfile === 'none') {
+    return;
+  }
+  const useLimitedEffects = motionProfile === 'limited';
+  const targetFps = isMobile ? 45 : 60;
 
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) {
@@ -64,7 +71,9 @@ function initParticleSection(section) {
     canvas.style.height = height + 'px';
     ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
 
-    const count = getParticleCount(profile, isMobile);
+    const count = useLimitedEffects
+      ? Math.max(6, Math.floor(getParticleCount('section', isMobile) * 0.55))
+      : getParticleCount('section', isMobile);
     particles = Array.from({ length: count }, () => createParticle(width, height, isMobile));
   }
 
@@ -74,7 +83,7 @@ function initParticleSection(section) {
 
     if (now - fpsMark >= FPS_SAMPLE_MS) {
       const fps = (frameCounter * 1000) / (now - fpsMark);
-      fpsDegraded = fps < FPS_DEGRADE_THRESHOLD;
+      fpsDegraded = fps < (useLimitedEffects ? targetFps - 10 : FPS_DEGRADE_THRESHOLD);
       frameCounter = 0;
       fpsMark = now;
     }
