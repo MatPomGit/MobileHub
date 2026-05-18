@@ -559,6 +559,63 @@
 └─ ProjectSettings/</code></pre>
                     <a href="https://github.com/topics/unity-template" target="_blank" rel="noopener" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
                 </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-ionic"></i>
+                        <strong>Ionic — Angular + Capacitor</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Modular Angular (core/shared/features), routing lazy-loaded, integracje natywne przez Capacitor Plugins.</p>
+                    <p><strong>Wymagania:</strong> Node.js 20 LTS, npm 10+, Ionic CLI, Android Studio/Xcode do buildów mobilnych.</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repo i zainstaluj zależności: <code>npm ci</code>, aby odtworzyć dokładny zestaw paczek z lockfile.</li>
+                        <li>Skopiuj <code>src/environments/environment.example.ts</code> do plików środowiskowych i ustaw endpointy API.</li>
+                        <li>Uruchom aplikację webową: <code>ionic serve</code>, aby szybko przetestować widoki i logikę biznesową.</li>
+                        <li>Synchronizuj zmiany: <code>npx cap sync</code>, aby zaktualizować projekty natywne o najnowszą wersję kodu webowego.</li>
+                        <li>Synchronizuj zmiany poleceniem <code>npx cap sync</code> i uruchom build z Android Studio/Xcode dla testów na urządzeniu.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>ionic-starter/
+├─ src/
+│  ├─ app/
+│  │  ├─ core/
+│  │  ├─ shared/
+│  │  └─ features/
+│  ├─ assets/
+│  └─ environments/
+├─ android/
+├─ ios/
+└─ capacitor.config.ts</code></pre>
+                    <a href="https://github.com/topics/ionic-template" target="_blank" rel="noopener noreferrer" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
+
+                <div class="info-card">
+                    <div class="info-card-header">
+                        <i class="fa-brands fa-kotlin"></i>
+                        <strong>Kotlin Multiplatform — Compose Multiplatform</strong>
+                    </div>
+                    <p><strong>Architektura:</strong> Shared domain/data w KMP, osobne moduły UI dla Android/iOS, wspólne use-case'y i repozytoria.</p>
+                    <p><strong>Wymagania:</strong> IntelliJ IDEA/Android Studio, Kotlin 2.0+, JDK 17, Xcode 15+ (dla iOS), Gradle 8+.</p>
+                    <p><strong>Uruchomienie krok po kroku:</strong></p>
+                    <ol>
+                        <li>Sklonuj repo i wykonaj <code>./gradlew tasks</code>, aby pobrać wrapper i zweryfikować poprawną konfigurację pluginów.</li>
+                        <li>Skonfiguruj lokalne zmienne (np. <code>local.properties</code>) i klucze API w modułach shared/mobile.</li>
+                        <li>Uruchom testy logiki współdzielonej: <code>./gradlew :shared:test</code>, aby potwierdzić stabilność warstwy biznesowej.</li>
+                        <li>Zbuduj aplikację Android: <code>./gradlew :androidApp:installDebug</code>, żeby zweryfikować integrację shared + UI.</li>
+                        <li>Uruchom target iOS przez Xcode lub wykonaj testy: <code>./gradlew :shared:iosSimulatorArm64Test</code>, aby sprawdzić zgodność na symulatorze.</li>
+                    </ol>
+                    <p><strong>Struktura katalogów:</strong></p>
+                    <pre><code>kmp-starter/
+├─ shared/
+│  ├─ src/commonMain/
+│  ├─ src/androidMain/
+│  └─ src/iosMain/
+├─ androidApp/
+├─ iosApp/
+└─ build-logic/</code></pre>
+                    <a href="https://github.com/topics/kotlin-multiplatform-template" target="_blank" rel="noopener noreferrer" class="tool-card-btn"><i class="fa-solid fa-download"></i> Użyj tego startera</a>
+                </div>
             </div>
 
             <h3 class="section-title">Checklista po sklonowaniu startera</h3>
