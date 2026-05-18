@@ -65,7 +65,7 @@ function initBootstrapUi() {
     
                         const topicsHtml = path.topics.map(topic => `<li>${topic}</li>`).join('');
                         const prerequisitesHtml = path.prerequisites.map(item => `<li>${item}</li>`).join('');
-                        const weeklyHtml = (path.weeklyPlan || []).map(item => `<tr><td>${item.week}</td><td>${item.topic}<br><small><strong>Zależności:</strong> ${item.dependencies}</small></td><td>${item.material}</td></tr>`).join('');
+                        const weeklyHtml = (path.weeklyPlan || []).map(item => `<tr><td>${item.week}</td><td>${item.topic}<br><small><strong>Zależności:</strong> ${item.dependencies}</small></td><td><a href="#${item.material}" data-article="${item.material}">${item.material}</a></td></tr>`).join('');
     
                         container.insertAdjacentHTML('beforeend', `
                             <article class="learning-path-card">
