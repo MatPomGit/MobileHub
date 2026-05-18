@@ -1639,7 +1639,7 @@ header {
 
 .article-toc li {
     /* Zmniejszamy odstęp między kolejnymi wierszami spisu treści o 50%. */
-    margin: 1.0px 0;
+    margin: 0.5px 0;
 }
 
 .article-toc a {
@@ -3665,7 +3665,7 @@ footer strong {
 
     .article-toc li {
         /* W widoku mobilnym również redukujemy odstęp między wierszami o połowę. */
-        margin: 1.0px 0;
+        margin: 0.5px 0;
     }
 
     .article-toc a {
@@ -3877,7 +3877,7 @@ footer strong {
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: 11px 16px;
+        padding: 5.5px 16px;
         font-size: 13px;
         color: var(--text);
         text-decoration: none;
