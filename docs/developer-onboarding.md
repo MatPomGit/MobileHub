@@ -14,12 +14,7 @@ Ten dokument opisuje szybki onboarding techniczny dla osób rozwijających aplik
    ```
 2. Uruchom aplikację lokalnie:
    ```bash
-   npm run dev
-   ```
-   Jeśli brak skryptu `dev`, uruchom serwer statyczny:
-   ```bash
    npx serve .
-   ```
 
 ## Co warto uruchomić przed commitem
 ```bash
