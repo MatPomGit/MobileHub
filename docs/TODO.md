@@ -22,10 +22,10 @@
 - [ ] Dodać wersjonowanie cache oparte o build hash.
 
 ### P0.2 Podwójne tworzenie paska postępu scrolla
-- **Status:** `todo`
-- **Owner:** `unassigned`
-- [ ] Usunąć duplikację elementu `.scroll-progress` (tylko HTML albo tylko JS).
-- [ ] Dodać test regresyjny potwierdzający istnienie dokładnie jednego paska.
+- **Status:** `done`
+- **Owner:** `codex`
+- [x] Usunąć duplikację elementu `.scroll-progress` (tylko HTML albo tylko JS).
+- [x] Dodać test regresyjny potwierdzający istnienie dokładnie jednego paska.
 
 ### P0.3 Krytyczne luki jakości w sekcji wykładów live
 - **Status:** `todo`
