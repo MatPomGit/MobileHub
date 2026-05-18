@@ -108,7 +108,7 @@
 }
 
 /* Globalne wzorce interakcji: 1) lift (hover/focus), 2) press (active), 3) color fade. */
-:where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button),
+:where(button, .tab-btn, .pull-shortcut, .startup-btn, .btn-icon, .exam-quiz-button),
 :where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a),
 :where(a.info-card, a.quick-link-card, a.tool-card, a.materials-card, .file-item) {
     transition:
@@ -120,7 +120,7 @@
 }
 
 @media (hover: hover) and (pointer: fine) {
-    :where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button):hover,
+    :where(button, .tab-btn, .pull-shortcut, .startup-btn, .btn-icon, .exam-quiz-button):hover,
     :where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a):hover,
     :where(.info-card, .quick-link-card, .tool-card, .materials-card, .file-item):hover {
         transform: translate3d(0, -1px, 0) scale(1.01);
@@ -128,7 +128,7 @@
     }
 }
 
-:where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button):active,
+:where(button, .tab-btn, .pull-shortcut, .startup-btn, .btn-icon, .exam-quiz-button):active,
 :where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a):active,
 :where(.info-card, .quick-link-card, .tool-card, .materials-card, .file-item):active {
     transform: translate3d(0, 0, 0) scale(0.98);
@@ -141,7 +141,7 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-    :where(button, a, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button, .info-card, .quick-link-card, .tool-card, .materials-card, .file-item) {
+    :where(button, a, .tab-btn, .pull-shortcut, .startup-btn, .btn-icon, .exam-quiz-button, .info-card, .quick-link-card, .tool-card, .materials-card, .file-item) {
         transition-duration: 1ms !important;
         transform: none !important;
     }
@@ -897,7 +897,7 @@ header {
 /* ===== HERO ===== */
 .hero {
     background: var(--hero-overlay), url('assets/background_4.jpg') center/cover no-repeat;
-    padding: 16px 24px 10px;
+    padding: 16px 24px 12px;
     text-align: left;
     position: relative;
     overflow: hidden;
@@ -1011,41 +1011,6 @@ header {
     }
 }
 
-.hero-ctas {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-}
-
-.hero-btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 40px;
-    padding: 10px 16px;
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 700;
-    text-decoration: none;
-    transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
-}
-
-.hero-btn-primary {
-    background: linear-gradient(135deg, #22d3ee, #3b82f6);
-    color: #020617;
-    box-shadow: 0 10px 24px rgba(14, 165, 233, 0.28);
-}
-
-.hero-btn-secondary {
-    background: rgba(2, 6, 23, 0.56);
-    color: #f8fafc;
-    border: 1px solid rgba(148, 163, 184, 0.45);
-}
-
-.hero-btn:hover {
-    transform: translateY(-2px);
-}
-
 .hero-visual {
     position: relative;
     display: flex;
@@ -1054,9 +1019,9 @@ header {
 }
 
 .hero-device {
-    width: min(270px, 90%);
+    width: min(220px, 82%);
     border-radius: 26px;
-    padding: 12px;
+    padding: 10px;
     background: linear-gradient(145deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.7));
     border: 1px solid rgba(148, 163, 184, 0.26);
     box-shadow: 0 20px 45px rgba(2, 6, 23, 0.38);
@@ -1066,7 +1031,7 @@ header {
 .hero-device-screen {
     border-radius: 18px;
     background: linear-gradient(180deg, rgba(15, 23, 42, 0.8), rgba(2, 6, 23, 0.92));
-    padding: 20px 14px 14px;
+    padding: 16px 12px 12px;
     display: grid;
     gap: 10px;
 }
@@ -3237,9 +3202,6 @@ footer strong {
         margin-right: auto;
     }
 
-    .hero-ctas {
-        justify-content: center;
-    }
 
     .hero-visual {
         order: -1;
