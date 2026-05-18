@@ -33,14 +33,7 @@ function initParticleSection(section) {
     return;
   }
 
-  const isMobile = window.matchMedia('(max-width: 768px)').matches;
-  const profile = section.dataset.particleProfile || 'hero';
-  const shouldDisableOnMobile = profile !== 'hero';
-
-  if (isMobile && shouldDisableOnMobile) {
-    canvas.style.display = 'none';
-    return;
-  }
+  let isMobile = window.matchMedia('(max-width: 768px)').matches;
 
   const ctx = canvas.getContext('2d', { alpha: true });
   if (!ctx) {
