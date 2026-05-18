@@ -5,6 +5,16 @@ function initPageTabs() {
     window.__pamPageTabsInitialized = true;
 
     // ===== TAB SWITCHING (shared logic) =====
+            function ensureLazyIframeLoaded(tab) {
+                const iframe = document.getElementById('iframe-' + tab);
+                if (!iframe) return null;
+                if (iframe.getAttribute('src') === 'about:blank') {
+                    const targetSrc = iframe.getAttribute('data-src');
+                    if (targetSrc) iframe.setAttribute('src', targetSrc);
+                }
+                return iframe;
+            }
+
             function switchTab(tab) {
                 // Update top tab bar
                 document.querySelectorAll('.page-tab-bar .tab-btn').forEach(b => {
@@ -27,7 +37,7 @@ function initPageTabs() {
     
                 // Resize iframe once its panel is visible
                 if (tab === 'studenci' || tab === 'zal') {
-                    const iframe = document.getElementById('iframe-' + tab);
+                    const iframe = ensureLazyIframeLoaded(tab) || document.getElementById('iframe-' + tab);
                     if (iframe) {
                         const resize = () => {
                             try {
