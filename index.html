@@ -603,7 +603,7 @@
                         <li>Skonfiguruj lokalne zmienne (np. <code>local.properties</code>) i klucze API w modułach shared/mobile.</li>
                         <li>Uruchom testy logiki współdzielonej: <code>./gradlew :shared:test</code>, aby potwierdzić stabilność warstwy biznesowej.</li>
                         <li>Zbuduj aplikację Android: <code>./gradlew :androidApp:installDebug</code>, żeby zweryfikować integrację shared + UI.</li>
-                        <li>Uruchom target iOS przez Xcode lub <code>./gradlew :iosApp:iosSimulatorArm64Test</code>, aby sprawdzić zgodność cross-platform.</li>
+                        <li>Uruchom target iOS przez Xcode lub wykonaj testy: <code>./gradlew :shared:iosSimulatorArm64Test</code>, aby sprawdzić zgodność na symulatorze.</li>
                     </ol>
                     <p><strong>Struktura katalogów:</strong></p>
                     <pre><code>kmp-starter/
