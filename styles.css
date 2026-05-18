@@ -897,7 +897,7 @@ header {
 /* ===== HERO ===== */
 .hero {
     background: var(--hero-overlay), url('assets/background_4.jpg') center/cover no-repeat;
-    padding: 22px 24px 16px;
+    padding: 16px 24px 10px;
     text-align: left;
     position: relative;
     overflow: hidden;
@@ -990,7 +990,7 @@ header {
     font-size: clamp(13px, 1.9vw, 18px);
     color: rgba(248, 250, 252, 0.92);
     max-width: 560px;
-    margin: 0 0 14px;
+    margin: 0;
     line-height: 1.55;
     text-shadow: 0 2px 14px rgba(2, 6, 23, 0.72);
 }
