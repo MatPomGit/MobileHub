@@ -11,6 +11,7 @@ Krótka lista kontroli do ręcznego sprawdzenia po zmianach związanych z PWA/Se
 - [ ] `manifest.json` ładuje się bez błędów.
 - [ ] Service Worker rejestruje się poprawnie i przechodzi do stanu `activated`.
 - [ ] Aplikacja spełnia podstawowe warunki instalowalności (ikona, nazwa, start URL, HTTPS/localhost).
+- [ ] Audyt Lighthouse (kategoria PWA) przechodzi pomyślnie.
 
 ## Scenariusz offline (po wcześniejszym wejściu online)
 - [ ] Wejdź na stronę online i poczekaj na zakończenie cache’owania.
