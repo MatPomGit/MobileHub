@@ -3,7 +3,7 @@
 import { IDS, CLASSES } from './dom-map.js';
 import { onClick, setOpenState } from './wiki-dom-utils.js';
 
-const VALID_THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose', 'aurora'];
+const VALID_THEMES = ['light', 'dark', 'ocean', 'forest', 'sunset', 'rose'];
 
 export function initThemePicker() {
   const saved = localStorage.getItem('pam-theme') || 'light';
