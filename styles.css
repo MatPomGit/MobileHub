@@ -129,7 +129,8 @@
 }
 
 :where(button, .tab-btn, .pull-shortcut, .hero-btn, .startup-btn, .btn-icon, .exam-quiz-button):active,
-:where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a):active {
+:where(a:not(.skip-link), .tool-card-btn, .cat-list li a, .article-toc a):active,
+:where(.info-card, .quick-link-card, .tool-card, .materials-card, .file-item):active {
     transform: translate3d(0, 0, 0) scale(0.98);
 }
 
