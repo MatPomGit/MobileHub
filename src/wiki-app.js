@@ -251,6 +251,20 @@ function generateTableOfContents(container) {
 
   container.querySelector('h1')?.insertAdjacentElement('afterend', toc);
 
+  ul?.addEventListener('wheel', (event) => {
+    const canScroll = ul.scrollHeight > ul.clientHeight;
+    if (!canScroll) return;
+
+    const maxScrollTop = ul.scrollHeight - ul.clientHeight;
+    const nextScrollTop = ul.scrollTop + event.deltaY;
+    const scrollingWithinBounds = nextScrollTop >= 0 && nextScrollTop <= maxScrollTop;
+
+    if (scrollingWithinBounds || (event.deltaY < 0 && ul.scrollTop > 0) || (event.deltaY > 0 && ul.scrollTop < maxScrollTop)) {
+      event.preventDefault();
+      ul.scrollTop = Math.max(0, Math.min(maxScrollTop, nextScrollTop));
+    }
+  }, { passive: false });
+
   onClick(toc, 'a[href^="#heading-"]', (e, link) => {
     e.preventDefault();
     const target = container.querySelector(link.getAttribute('href'));

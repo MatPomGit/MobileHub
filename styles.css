@@ -473,7 +473,7 @@ a:hover {
 header {
     background: var(--header-bg);
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
-    padding: calc(8px + var(--safe-top)) var(--safe-right) 8px var(--safe-left);
+    padding: calc(4px + var(--safe-top)) var(--safe-right) 4px var(--safe-left);
     position: sticky;
     top: 0;
     z-index: var(--z-header);
@@ -483,7 +483,7 @@ header {
 .header-inner {
     max-width: 1400px;
     margin: 0 auto;
-    padding: 0 24px;
+    padding: 0 16px;
     display: flex;
     align-items: center;
     gap: 16px;
@@ -499,8 +499,8 @@ header {
 }
 
 .header-logo {
-    width: 38px;
-    height: 36px;
+    width: 32px;
+    height: 32px;
     background: linear-gradient(135deg, var(--accent), var(--accent2));
     border-radius: 10px;
     display: flex;
@@ -517,7 +517,7 @@ header {
 
 .header-title strong {
     display: block;
-    font-size: 17px;
+    font-size: 15px;
     font-weight: 700;
     letter-spacing: 0.3px;
 }
@@ -1723,6 +1723,9 @@ header {
 .article-toc ul {
     list-style: none;
     padding: 0;
+    max-height: 260px;
+    overflow-y: auto;
+    overscroll-behavior: contain;
 }
 
 .article-toc li {
