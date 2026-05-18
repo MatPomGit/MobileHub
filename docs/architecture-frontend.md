@@ -32,6 +32,26 @@ Ten dokument opisuje runtime frontendu PAM Wiki z perspektywy:
 - `controller`: `src/wiki-app.js`, `src/wiki-router.js`, `src/wiki-search.js`.
 - `pure renderer`: części renderujące/sidebar/UI helpers, które budują DOM na podstawie danych (np. renderer sekcji/sidebar).
 
+#### Mechanizm „zakładka ZAL dopiero za 3. razem”
+
+Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**, a potem dopiero **uruchomienie `zal.html`**.
+
+1. **Aktywacja trybu dev** (`src/dev/dev-state.js`):
+   - każde włączenie trybu dev wykonuje `activate()`,
+   - `activate()` ustawia `pam-dev-mode='1'` i inkrementuje licznik `pam-dev-mode-activations`.
+2. **Decyzja o pokazaniu zakładki ZAL** (`src/dev/dev-controller.js`):
+   - po aktywacji liczony jest `activationCount`,
+   - zakładka ZAL jest odsłaniana dopiero gdy `activationCount >= 3`,
+   - wcześniej widoczna jest tylko zakładka `studenci`.
+3. **Lazy uruchomienie iframe ZAL** (`index.html` + `src/dev/dev-panel-view.js`):
+   - iframe ZAL startuje jako `src="about:blank"` i trzyma docelowy adres w `data-src="zal.html"`,
+   - gdy kontroler pozwoli pokazać ZAL, `showDevTabs(true)` wywołuje `ensureZalIframeLoaded()`,
+   - dopiero wtedy następuje podmiana `src` na `zal.html`, czyli realne uruchomienie modułu.
+4. **Zachowanie po odświeżeniu strony**:
+   - podczas `initDevMode()` odczytywany jest stan `pam-dev-mode` i licznik aktywacji,
+   - jeśli dev mode był aktywny, UI odtwarza zakładki zgodnie z progiem `>= 3`,
+   - dzięki temu aplikacja nie „zapomina” czy ZAL powinien być już dostępny.
+
 ---
 
 ### B. `materials`
