@@ -2,6 +2,7 @@
 
 import { initWiki } from '../pam-wiki.js';
 import { initMaterials } from '../pam-files.js';
+import { initSectionParticles } from './section-particles.js';
 
 function logStartupError(stage, error) {
   console.error(`[app-init] Startup stage failed: ${stage}.`, error);
@@ -89,6 +90,7 @@ async function runAppInitialization() {
   const nonCriticalStartupStages = [
     ['dev-mode', () => window.initDevMode?.()],
     ['materials', () => initMaterials()],
+    ['particles', () => initSectionParticles()],
   ];
 
   for (const [stage, initStage] of nonCriticalStartupStages) {

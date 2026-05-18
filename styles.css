@@ -908,6 +908,21 @@ header {
     align-items: center;
 }
 
+.particle-section {
+    position: relative;
+    overflow: hidden;
+}
+
+.section-particles-canvas {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 1;
+    opacity: 0.75;
+}
+
 .hero::before {
     content: '';
     position: absolute;
@@ -937,7 +952,7 @@ header {
     position: relative;
     max-width: 640px;
     margin: 0;
-    z-index: 2;
+    z-index: 3;
 }
 
 .hero-badge {
@@ -1035,7 +1050,7 @@ header {
     position: relative;
     display: flex;
     justify-content: center;
-    z-index: 2;
+    z-index: 3;
 }
 
 .hero-device {
@@ -2791,6 +2806,12 @@ footer {
     padding: 14px 24px;
     font-size: 11px;
     border-top: 1px solid rgba(255, 255, 255, 0.06);
+    z-index: 0;
+}
+
+footer p {
+    position: relative;
+    z-index: 3;
 }
 
 footer strong {
