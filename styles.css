@@ -1818,7 +1818,7 @@ header {
 
 .learning-paths-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 340px), 1fr));
     gap: 12px;
     margin-top: 16px;
 }
