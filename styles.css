@@ -312,51 +312,6 @@
 }
 
 
-/* Aurora — neon gradient theme */
-[data-theme="aurora"] {
-    /* 60% — tło (ciemne, chłodne) */
-    --bg: #090b1f;
-    --header-bg: #070a17;
-    --code-bg: #0c1022;
-
-    /* 30% — powierzchnie (umiarkowany kontrast) */
-    --surface: #0f142b;
-    --surface2: #151a36;
-    --border: #1f2850;
-
-    /* tekst */
-    --text: #eff6ff;
-    --text-muted: #9fb0cc;
-
-    /* 10% — akcent główny (spójny) */
-    --accent: #8b5cf6;
-
-    /* akcenty wtórne — zdegradowane (rzadkie użycie) */
-    --accent2: #22d3ee;
-    --accent3: #84cc16;
-    /* mniej jaskrawy niż wcześniej */
-    --accent4: #e879f9;
-    /* ograniczyć użycie */
-
-    /* ograniczenie „rozlewania” akcentów */
-    --accent-light: #141938;
-    --accent-glow: rgba(139, 92, 246, 0.15);
-
-    /* hero — mniej agresywny, bardziej tło niż akcent */
-    --hero-overlay: linear-gradient(135deg,
-            rgba(9, 11, 31, 0.92) 0%,
-            rgba(40, 30, 80, 0.65) 50%,
-            rgba(10, 40, 70, 0.75) 100%);
-
-    /* orbsy — wyraźnie przygaszone (de facto dekoracja, nie akcent) */
-    --hero-orb-1: rgba(139, 92, 246, 0.22);
-    --hero-orb-2: rgba(34, 211, 238, 0.16);
-    --hero-orb-3: rgba(132, 204, 22, 0.12);
-
-    /* cienie neutralne */
-    --shadow: 0 4px 24px rgba(0, 0, 0, 0.45);
-    --shadow-lg: 0 8px 40px rgba(0, 0, 0, 0.55);
-}
 
 /* ===== RESET & BASE ===== */
 *,
@@ -893,9 +848,6 @@ header {
     background: linear-gradient(135deg, #fff0f6, #db2777);
 }
 
-.theme-swatch.aurora {
-    background: linear-gradient(135deg, #090b1f, #8b5cf6, #22d3ee);
-}
 
 /* ===== HERO ===== */
 .hero {
