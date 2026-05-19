@@ -67,6 +67,16 @@
     .module h2 { margin: 0 0 12px; font-size: 20px; }
     .module-controls { display: grid; gap: 10px; }
     .module label { font-weight: 600; }
+    .module select,
+    .module button {
+      background: #0b1220;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+      cursor: pointer;
+    }
     .module select {
       background: #0b1220;
       color: #e2e8f0;
@@ -148,6 +158,40 @@
       </article>
     </section>
 
+
+
+    <section id="sessions-panel" class="module tab-panel" aria-label="Sesja testowa ZAL" hidden>
+      <h2>Sesja zaliczeniowa — tryb testowy</h2>
+      <div class="module-controls">
+        <label for="zal-mode">Tryb:</label>
+        <select id="zal-mode"><option value="short">Krótki (25)</option><option value="normal">Normalny (50)</option></select>
+        <button type="button" id="zal-start">Rozpocznij podejście</button>
+      </div>
+      <h3 id="zal-progress">Postęp: 0/0</h3>
+      <p id="zal-question" class="muted">Kliknij „Rozpocznij podejście”.</p>
+      <div id="zal-answers" class="module-controls"></div>
+      <div class="module-controls" style="margin-top:10px;">
+        <button type="button" id="zal-prev">Wstecz</button>
+        <button type="button" id="zal-next">Dalej</button>
+        <button type="button" id="zal-finish">Zakończ podejście</button>
+      </div>
+      <p id="zal-score" class="muted"></p>
+    </section>
+
+    <section id="reports-panel" class="module tab-panel" aria-label="Logi przebiegu" hidden>
+      <h2>Logi podejść i aktywności</h2>
+      <p class="muted">Rejestrowane są zdarzenia: czas odpowiedzi, klawisze, skróty, ruch i kliknięcia myszy.</p>
+      <div class="module-controls" style="margin: 10px 0 14px;">
+        <button type="button" id="zal-load-logs">Wczytaj logi z bazy</button>
+        <button type="button" id="zal-clear-logs">Wyczyść logi z bazy</button>
+      </div>
+      <p id="zal-db-status" class="muted">Baza logów: inicjalizacja...</p>
+      <table class="metrics-table">
+        <thead><tr><th>Czas</th><th>Typ</th><th>Szczegóły</th></tr></thead>
+        <tbody id="zal-log-body"><tr><td colspan="3">Brak logów.</td></tr></tbody>
+      </table>
+    </section>
+
     <section id="topics-panel" class="module tab-panel" aria-label="Zakres tematów testów" hidden>
       <h2>Zakres tematów testów</h2>
       <div class="module-controls">
@@ -174,6 +218,9 @@
       const topicList = document.getElementById('topic-list');
 
       const source = 'quiz-questions.json';
+      const LOG_DB_NAME = 'zalLogsDb';
+      const LOG_DB_VERSION = 1;
+      const LOG_STORE = 'events';
 
       const lectureTopicByCategory = {
         1:  'Wprowadzenie do aplikacji mobilnych',
@@ -208,6 +255,23 @@
           activatePanel(button.dataset.target);
         });
       });
+
+      document.getElementById('zal-start')?.addEventListener('click', startAttempt);
+      document.getElementById('zal-prev')?.addEventListener('click', () => {
+        if (zalState.index === 0) return;
+        zalState.index -= 1;
+        renderQuestion();
+      });
+      document.getElementById('zal-next')?.addEventListener('click', () => {
+        if (zalState.index >= zalState.pool.length - 1) return;
+        zalState.index += 1;
+        renderQuestion();
+      });
+      document.getElementById('zal-finish')?.addEventListener('click', finishAttempt);
+      document.getElementById('zal-load-logs')?.addEventListener('click', loadLogsFromDb);
+      document.getElementById('zal-clear-logs')?.addEventListener('click', clearLogsInDb);
+      setupInteractionLogging();
+      initializeLogDb();
 
       function renderOptions(questions) {
         const categories = [...new Set(
@@ -262,12 +326,184 @@
         updateSummary();
       }
 
+
+      const zalState = { questions: [], pool: [], answers: [], index: 0, attempt: 0, startedAt: 0, questionShownAt: 0 };
+      const zalLogs = [];
+      let logDb = null;
+      const MOUSE_SAMPLE_MS = 300;
+      let lastMouseLogAt = 0;
+
+
+      function setDbStatus(message) {
+        const status = document.getElementById('zal-db-status');
+        if (status) status.textContent = message;
+      }
+
+      function initializeLogDb() {
+        if (!('indexedDB' in window)) {
+          setDbStatus('Baza logów: IndexedDB nie jest wspierane w tej przeglądarce.');
+          return;
+        }
+
+        const request = indexedDB.open(LOG_DB_NAME, LOG_DB_VERSION);
+        request.onupgradeneeded = () => {
+          const db = request.result;
+          if (!db.objectStoreNames.contains(LOG_STORE)) {
+            const store = db.createObjectStore(LOG_STORE, { keyPath: 'id', autoIncrement: true });
+            store.createIndex('ts', 'ts', { unique: false });
+          }
+        };
+        request.onsuccess = () => {
+          logDb = request.result;
+          setDbStatus('Baza logów: gotowa. Możesz zapisywać i odczytywać logi.');
+        };
+        request.onerror = () => {
+          setDbStatus(`Baza logów: błąd inicjalizacji (${request.error?.message || 'unknown'}).`);
+        };
+      }
+
+      function persistLogEntry(entry) {
+        if (!logDb) return;
+        const tx = logDb.transaction(LOG_STORE, 'readwrite');
+        tx.objectStore(LOG_STORE).add(entry);
+      }
+
+      function loadLogsFromDb() {
+        if (!logDb) {
+          setDbStatus('Baza logów: brak połączenia z bazą.');
+          return;
+        }
+        const tx = logDb.transaction(LOG_STORE, 'readonly');
+        const req = tx.objectStore(LOG_STORE).getAll();
+        req.onsuccess = () => {
+          zalLogs.length = 0;
+          (req.result || []).sort((a, b) => (a.id || 0) - (b.id || 0)).forEach((row) => {
+            zalLogs.push({ ts: row.ts, type: row.type, details: row.details });
+          });
+          renderLogs();
+          setDbStatus(`Baza logów: wczytano ${zalLogs.length} rekordów.`);
+        };
+        req.onerror = () => {
+          setDbStatus(`Baza logów: błąd odczytu (${req.error?.message || 'unknown'}).`);
+        };
+      }
+
+      function clearLogsInDb() {
+        if (!logDb) {
+          setDbStatus('Baza logów: brak połączenia z bazą.');
+          return;
+        }
+        const tx = logDb.transaction(LOG_STORE, 'readwrite');
+        const req = tx.objectStore(LOG_STORE).clear();
+        req.onsuccess = () => {
+          zalLogs.length = 0;
+          renderLogs();
+          setDbStatus('Baza logów: rekordy zostały usunięte.');
+        };
+        req.onerror = () => {
+          setDbStatus(`Baza logów: błąd czyszczenia (${req.error?.message || 'unknown'}).`);
+        };
+      }
+
+      function logEvent(type, details) {
+        const entry = { ts: new Date().toISOString(), type, details };
+        zalLogs.push(entry);
+        persistLogEntry(entry);
+        renderLogs();
+      }
+
+      function renderLogs() {
+        const body = document.getElementById('zal-log-body');
+        if (!body) return;
+        body.innerHTML = '';
+        if (!zalLogs.length) {
+          body.innerHTML = '<tr><td colspan="3">Brak logów.</td></tr>';
+          return;
+        }
+        zalLogs.slice(-400).forEach((row) => {
+          const tr = document.createElement('tr');
+          tr.innerHTML = `<td>${row.ts}</td><td>${row.type}</td><td>${row.details}</td>`;
+          body.appendChild(tr);
+        });
+      }
+
+      function setupInteractionLogging() {
+        document.addEventListener('keydown', (event) => {
+          const shortcut = (event.ctrlKey || event.altKey || event.metaKey) && event.key.length === 1;
+          logEvent(shortcut ? 'keyboard.shortcut' : 'keyboard.keydown', `key=${event.key}, ctrl=${event.ctrlKey}, alt=${event.altKey}, shift=${event.shiftKey}, meta=${event.metaKey}`);
+        });
+        document.addEventListener('click', (event) => {
+          const id = event.target && event.target.id ? `#${event.target.id}` : event.target.tagName;
+          logEvent('mouse.click', `target=${id}, x=${event.clientX}, y=${event.clientY}`);
+        });
+        document.addEventListener('mousemove', (event) => {
+          const now = Date.now();
+          if (now - lastMouseLogAt < MOUSE_SAMPLE_MS) return;
+          lastMouseLogAt = now;
+          logEvent('mouse.move', `x=${event.clientX}, y=${event.clientY}`);
+        });
+      }
+
+      function shuffle(items) {
+        const arr = [...items];
+        for (let i = arr.length - 1; i > 0; i -= 1) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [arr[i], arr[j]] = [arr[j], arr[i]];
+        }
+        return arr;
+      }
+
+      function renderQuestion() {
+        const q = zalState.pool[zalState.index];
+        if (!q) return;
+        document.getElementById('zal-progress').textContent = `Postęp: ${zalState.index + 1}/${zalState.pool.length}`;
+        document.getElementById('zal-question').textContent = q.question;
+        const answers = document.getElementById('zal-answers');
+        answers.replaceChildren();
+        q.answers.forEach((ans, idx) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.textContent = `${String.fromCharCode(65 + idx)}. ${ans}`;
+          btn.addEventListener('click', () => {
+            zalState.answers[zalState.index] = idx;
+            const responseMs = Date.now() - zalState.questionShownAt;
+            logEvent('quiz.answer', `attempt=${zalState.attempt}, q=${zalState.index + 1}, selected=${idx}, responseMs=${responseMs}`);
+          });
+          answers.appendChild(btn);
+        });
+        zalState.questionShownAt = Date.now();
+      }
+
+      function startAttempt() {
+        const mode = document.getElementById('zal-mode').value;
+        const size = mode === 'normal' ? 50 : 25;
+        zalState.attempt += 1;
+        zalState.pool = shuffle(zalState.questions).slice(0, Math.min(size, zalState.questions.length));
+        zalState.answers = new Array(zalState.pool.length).fill(null);
+        zalState.index = 0;
+        zalState.startedAt = Date.now();
+        logEvent('quiz.attempt.start', `attempt=${zalState.attempt}, mode=${mode}, size=${zalState.pool.length}`);
+        renderQuestion();
+      }
+
+      function finishAttempt() {
+        const total = zalState.pool.length;
+        if (!total) return;
+        const correct = zalState.pool.reduce((sum, q, i) => sum + Number(zalState.answers[i] === q.correctIndex), 0);
+        const percent = Math.round((correct / total) * 100);
+        document.getElementById('zal-score').textContent = `Wynik: ${correct}/${total} (${percent}%).`;
+        const durationMs = Date.now() - zalState.startedAt;
+        logEvent('quiz.attempt.finish', `attempt=${zalState.attempt}, score=${correct}/${total}, percent=${percent}, durationMs=${durationMs}`);
+      }
+
       fetch(source)
         .then((response) => {
           if (!response.ok) throw new Error(`Błąd HTTP ${response.status}`);
           return response.json();
         })
         .then((questions) => {
+          zalState.questions = questions;
+
           if (!Array.isArray(questions)) throw new Error('Nieprawidłowy format danych pytań.');
           renderOptions(questions);
         })
