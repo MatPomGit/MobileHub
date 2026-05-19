@@ -466,15 +466,20 @@
         const answers = document.getElementById('zal-answers');
         answers.replaceChildren();
         q.answers.forEach((ans, idx) => {
+        q.answers.forEach((ans, idx) => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.textContent = `${String.fromCharCode(65 + idx)}. ${ans}`;
-          btn.addEventListener('click', () => {
+          if (zalState.answers[zalState.index] === idx) btn.style.borderColor = '#60a5fa';
+          btn.addEventListener('click', (e) => {
             zalState.answers[zalState.index] = idx;
+            Array.from(answers.children).forEach(b => b.style.borderColor = '');
+            btn.style.borderColor = '#60a5fa';
             const responseMs = Date.now() - zalState.questionShownAt;
             logEvent('quiz.answer', `attempt=${zalState.attempt}, q=${zalState.index + 1}, selected=${idx}, responseMs=${responseMs}`);
           });
           answers.appendChild(btn);
+        });
         });
         zalState.questionShownAt = Date.now();
       }
