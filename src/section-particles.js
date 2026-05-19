@@ -6,10 +6,10 @@ const FPS_DEGRADE_THRESHOLD = 28;
 
 function getParticleCount(profile, isMobile) {
   if (isMobile) {
-    return profile === 'hero' ? 20 : 14;
+    return profile === 'hero' ? 30 : 22;
   }
 
-  return profile === 'hero' ? 44 : 26;
+  return profile === 'hero' ? 64 : 38;
 }
 
 function getParticleRadius(isMobile) {
