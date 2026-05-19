@@ -422,7 +422,12 @@
         }
         zalLogs.slice(-400).forEach((row) => {
           const tr = document.createElement('tr');
-          tr.innerHTML = `<td>${row.ts}</td><td>${row.type}</td><td>${row.details}</td>`;
+          const tdTs = document.createElement('td'); tdTs.textContent = row.ts;
+          const tdType = document.createElement('td'); tdType.textContent = row.type;
+          const tdDetails = document.createElement('td'); tdDetails.textContent = row.details;
+          tr.appendChild(tdTs);
+          tr.appendChild(tdType);
+          tr.appendChild(tdDetails);
           body.appendChild(tr);
         });
       }
