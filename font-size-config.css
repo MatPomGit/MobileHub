@@ -1,0 +1,56 @@
+:root {
+    --wiki-font-size: 16px;
+    --wiki-font-scale: 1;
+    --wiki-line-height: 1.65;
+    --wiki-heading-line-height: 1.3;
+    --wiki-paragraph-gap: 0.95em;
+    --wiki-list-margin-bottom: 1em;
+    --wiki-heading-margin-top: 1.65em;
+    --wiki-heading-margin-bottom: 0.7em;
+
+    /* Rozmiary kodu w artykułach obniżone o 2 px względem poprzednich ustawień. */
+    --wiki-code-font-size: 12px;
+    --wiki-code-mobile-font-size: 8.5px;
+    --merged-wiki-code-font-size: calc(1em - 2px);
+}
+
+@media (max-width: 768px) {
+    :root {
+        --wiki-font-size: 15.5px;
+        --wiki-line-height: 1.62;
+        --wiki-paragraph-gap: 0.9em;
+        --wiki-heading-margin-top: 1.55em;
+    }
+}
+
+@media (max-width: 412px) {
+    :root {
+        --wiki-font-size: 15.25px;
+        --wiki-line-height: 1.6;
+        --wiki-paragraph-gap: 0.88em;
+    }
+}
+
+@media (max-width: 390px) {
+    :root {
+        --wiki-font-size: 15px;
+        --wiki-line-height: 1.58;
+        --wiki-paragraph-gap: 0.86em;
+    }
+}
+
+@media (max-width: 360px) {
+    :root {
+        --wiki-font-size: 14.75px;
+        --wiki-line-height: 1.56;
+        --wiki-paragraph-gap: 0.84em;
+    }
+}
+
+@media (max-width: 320px) {
+    :root {
+        --wiki-font-size: 14.5px;
+        --wiki-line-height: 1.54;
+        --wiki-paragraph-gap: 0.82em;
+    }
+}

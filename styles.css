@@ -52,7 +52,7 @@
     color: #2a1d6b;
     border-radius: 6px;
     padding: 2px 8px;
-    font-size: 1em;
+    font-size: var(--merged-wiki-code-font-size);
 }
 
 #egzaminMergedWikiCard pre {
@@ -188,16 +188,6 @@
     --header-h: 42px;
     --tabbar-h: 41px;
     --chrome-h: calc(var(--header-h) + var(--tabbar-h));
-    /* Bazowy rozmiar wiki podnosimy do poziomu zgodnego z czytelnością WCAG/mobile. */
-    --wiki-font-size: 16px;
-    --wiki-font-scale: 1;
-    /* Globalny rytm typograficzny wiki (interlinia i odstępy bloków). */
-    --wiki-line-height: 1.65;
-    --wiki-heading-line-height: 1.3;
-    --wiki-paragraph-gap: 0.95em;
-    --wiki-list-margin-bottom: 1em;
-    --wiki-heading-margin-top: 1.65em;
-    --wiki-heading-margin-bottom: 0.7em;
     --safe-top: env(safe-area-inset-top, 0px);
     --safe-right: env(safe-area-inset-right, 0px);
     --safe-bottom: env(safe-area-inset-bottom, 0px);
@@ -208,52 +198,6 @@
     --z-sidebar: 100;
     --z-overlay: 130;
     --z-pull-panel: 140;
-}
-
-/* 768 px: tablet i większe telefony — delikatnie ciaśniejszy układ przy zachowaniu czytelności. */
-@media (max-width: 768px) {
-    :root {
-        --wiki-font-size: 15.5px;
-        --wiki-line-height: 1.62;
-        --wiki-paragraph-gap: 0.9em;
-        --wiki-heading-margin-top: 1.55em;
-    }
-}
-
-/* 412 px: szerokie telefony (np. Plus/Max) — utrzymujemy komfort bez nadmiernej kompresji. */
-@media (max-width: 412px) {
-    :root {
-        --wiki-font-size: 15.25px;
-        --wiki-line-height: 1.6;
-        --wiki-paragraph-gap: 0.88em;
-    }
-}
-
-/* 390 px: typowy nowoczesny mobile — lekkie dociśnięcie pionowe, nadal bez „ściany tekstu”. */
-@media (max-width: 390px) {
-    :root {
-        --wiki-font-size: 15px;
-        --wiki-line-height: 1.58;
-        --wiki-paragraph-gap: 0.86em;
-    }
-}
-
-/* 360 px: klasyczny Android — utrzymujemy minimum czytelności dla ciągłego czytania. */
-@media (max-width: 360px) {
-    :root {
-        --wiki-font-size: 14.75px;
-        --wiki-line-height: 1.56;
-        --wiki-paragraph-gap: 0.84em;
-    }
-}
-
-/* 320 px: najmniejsze ekrany — minimalny bezpieczny rozmiar tekstu, bez agresywnego zagęszczenia. */
-@media (max-width: 320px) {
-    :root {
-        --wiki-font-size: 14.5px;
-        --wiki-line-height: 1.54;
-        --wiki-paragraph-gap: 0.82em;
-    }
 }
 
 [data-theme="dark"] {
@@ -1626,7 +1570,7 @@ header {
     border: 1px solid var(--border);
     padding: 2px 6px;
     border-radius: 4px;
-    font-size: calc(0.82em * var(--wiki-font-scale));
+    font-size: calc(var(--wiki-code-font-size) * var(--wiki-font-scale));
     color: var(--accent2);
 }
 
@@ -1642,7 +1586,7 @@ header {
     padding: 20px;
     overflow-x: auto;
     font-family: var(--mono);
-    font-size: calc(0.82em * var(--wiki-font-scale));
+    font-size: calc(var(--wiki-code-font-size) * var(--wiki-font-scale));
     line-height: 1.25;
     box-shadow: var(--shadow-lg);
     color: #e6edf7;
@@ -2466,7 +2410,7 @@ header {
     color: #2a1d6b;
     border-radius: 6px;
     padding: 2px 8px;
-    font-size: 1em;
+    font-size: var(--merged-wiki-code-font-size);
 }
 
 .tool-card:hover .tool-card-btn {
@@ -3787,7 +3731,7 @@ footer strong {
 
     /* ===== CODE BLOCKS on mobile ===== */
     .code-block-wrapper pre {
-        font-size: calc(10.5px * var(--wiki-font-scale));
+        font-size: calc(var(--wiki-code-mobile-font-size) * var(--wiki-font-scale));
         padding: 14px 12px;
         line-height: 1.4;
     }
