@@ -137,6 +137,27 @@
 
         .hero-stat i { font-size: 15px; }
 
+        .back-home-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            margin-top: 20px;
+            padding: 10px 16px;
+            border-radius: 999px;
+            border: 1px solid rgba(255,255,255,0.35);
+            background: rgba(255,255,255,0.18);
+            color: #fff;
+            font-size: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: transform 0.2s ease, background 0.2s ease;
+        }
+
+        .back-home-link:hover {
+            background: rgba(255,255,255,0.28);
+            transform: translateY(-1px);
+        }
+
         /* ===== INTRO NOTE ===== */
         .intro-note {
             background: var(--blue-light);
@@ -642,6 +663,10 @@
                 <div class="hero-stat"><i class="fa-brands fa-android"></i> Android / Flutter</div>
                 <div class="hero-stat"><i class="fa-solid fa-calendar-check"></i> Semestr letni</div>
             </div>
+            <a class="back-home-link" href="index.html">
+                <i class="fa-solid fa-house"></i>
+                Powrót do strony głównej
+            </a>
         </div>
 
 
