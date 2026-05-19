@@ -34,6 +34,7 @@ function initParticleSection(section) {
     return;
   }
 
+  const profile = section.dataset.particleProfile || 'cta';
   let isMobile = window.matchMedia('(max-width: 768px)').matches;
   const motionProfile = getMotionProfile();
   if (motionProfile === 'none') {
