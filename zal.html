@@ -512,9 +512,8 @@
           return response.json();
         })
         .then((questions) => {
-          zalState.questions = questions;
-
           if (!Array.isArray(questions)) throw new Error('Nieprawidłowy format danych pytań.');
+          zalState.questions = questions;
           renderOptions(questions);
         })
         .catch((error) => {
