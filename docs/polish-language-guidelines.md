@@ -16,6 +16,6 @@ W treściach w języku polskim należy zawsze stosować:
 
 ## Wyjątki
 Powyższe zasady nie dotyczą:
-- kodu programu,
+- kodu źródłowego,
 - tabel,
 - rysunków.
