@@ -158,10 +158,10 @@
       });
 
       const colorForPoints = (pts)=>{
-        if(pts < 50) return '#ef4444';
-        if(pts < 60) return '#eab308';
-        if(pts < 75) return '#3b82f6';
-        return '#22c55e';
+        if(pts < 50) return '#ef4444'; // Ocena 2.0
+        if(pts < 70) return '#eab308'; // Oceny 3.0, 3.5
+        if(pts < 90) return '#3b82f6'; // Oceny 4.0, 4.5
+        return '#22c55e';             // Ocena 5.0
       };
       const setProgress = (key, pts)=>{
         const pct = clamp(pts,100);
