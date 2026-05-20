@@ -1,7 +1,7 @@
 # Wytyczne językowe (język polski)
 
 ## Zakres
-Niniejsze wytyczne dotyczą wszystkich treści przeznaczonych dla użytkownika końcowego tworzonych lub modyfikowanych w folderze `docs` — wszędzie tam, gdzie używany jest język polski.
+Niniejsze wytyczne dotyczą wszystkich treści przeznaczonych dla użytkownika końcowego tworzonych lub modyfikowanych w folderze `docs`, wszędzie tam, gdzie używany jest język polski.
 
 ## Zasada główna
 W treściach w języku polskim należy zawsze stosować:
