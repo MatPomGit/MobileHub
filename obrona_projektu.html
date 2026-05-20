@@ -130,10 +130,8 @@
         const v = clamp(num.value,max);
         range.value = v; num.value = v;
         row.querySelector('.grading-row-title span').textContent = `${v} / ${max}`;
-        if(row.dataset.group==='app' && row.dataset.auto==='true') appTotal = v;
-        else if(row.dataset.group==='app-sub') appSubs += v;
+        if(row.dataset.group==='app-sub') appSubs += v;
         else if(row.dataset.group.endsWith('-sub')) roleSubs[row.dataset.parent] += v;
-        else if(row.dataset.auto==='true') roles[row.dataset.group]=v;
       });
 
       const appParentRow = rows.find((row)=>row.dataset.group==='app' && row.dataset.auto==='true');
