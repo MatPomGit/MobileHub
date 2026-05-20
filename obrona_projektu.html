@@ -15,16 +15,16 @@
     .grid { display:grid; gap:14px; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); }
     ul { margin:8px 0 0; padding-left:20px; }
     .formula { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#0b1220; border:1px solid #334155; border-radius:10px; padding:12px; overflow:auto; }
-    .grading-row { margin-top:8px; display:grid; grid-template-columns:minmax(320px,1.4fr) minmax(250px,1fr); gap:10px; align-items:center; padding:8px 10px; border:1px solid #334155; border-radius:10px; background:#0b1220; }
-    .grading-row-title { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:0; font-size:13px; }
+    .grading-row { margin-top:6px; display:grid; grid-template-columns:minmax(320px,1.4fr) minmax(250px,1fr); gap:8px; align-items:center; padding:5px 8px; border:1px solid #334155; border-radius:10px; background:#0b1220; }
+    .grading-row-title { display:flex; justify-content:space-between; align-items:center; gap:8px; margin:0; font-size:12px; }
     .grading-row-title strong { line-height:1.2; }
     .grading-row-title span { color:#93c5fd; font-weight:700; white-space:nowrap; }
     .grading-inputs { display:grid; grid-template-columns: 1fr 72px; gap:8px; align-items:center; }
-    input[type="range"] { width:100%; height:14px; accent-color:#60a5fa; }
+    input[type="range"] { width:100%; height:12px; accent-color:#60a5fa; }
     .grading-row.is-global { border-color:#2563eb; background:#0f172a; box-shadow:0 0 0 1px rgba(37,99,235,.35) inset; }
     .grading-row.is-global input[type="range"] { accent-color:#f59e0b; }
-    .grading-row:not(.is-global) input[type="range"] { transform:scaleY(0.88); }
-    input[type="number"] { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:8px; padding:6px 8px; }
+    .grading-row:not(.is-global) input[type="range"] { height:8px; }
+    input[type="number"] { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:8px; padding:4px 6px; }
     .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:14px; }
     .stat { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; }
     .stat span { display:block; color:#94a3b8; font-size:12px; }
@@ -128,8 +128,8 @@
     function recalc(){
       let appTotal = 0;
       let appSubs = 0;
-      const roles = { leader:0, frontend:0, backend:0 };
-      const roleSubs = { leader:0, frontend:0, backend:0 };
+      const roles = { leader:0, dev:0, qa:0 };
+      const roleSubs = { leader:0, dev:0, qa:0 };
       rows.forEach((row)=>{
         const max = Number(row.dataset.max);
         const range = row.querySelector('input[type="range"]');
