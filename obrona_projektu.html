@@ -15,20 +15,36 @@
     .grid { display:grid; gap:14px; grid-template-columns: repeat(auto-fit,minmax(250px,1fr)); }
     ul { margin:8px 0 0; padding-left:20px; }
     .formula { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; background:#0b1220; border:1px solid #334155; border-radius:10px; padding:12px; overflow:auto; }
-    .grading-row { margin-top:12px; }
-    .grading-row-title { display:flex; justify-content:space-between; margin-bottom:6px; font-size:14px; }
-    .grading-inputs { display:grid; grid-template-columns: 1fr 86px; gap:10px; align-items:center; }
-    input[type="range"] { width:100%; }
+    .grading-row { margin-top:8px; display:grid; grid-template-columns:minmax(320px,1.4fr) minmax(250px,1fr); gap:10px; align-items:center; padding:8px 10px; border:1px solid #334155; border-radius:10px; background:#0b1220; }
+    .grading-row-title { display:flex; justify-content:space-between; align-items:center; gap:10px; margin:0; font-size:13px; }
+    .grading-row-title strong { line-height:1.2; }
+    .grading-row-title span { color:#93c5fd; font-weight:700; white-space:nowrap; }
+    .grading-inputs { display:grid; grid-template-columns: 1fr 72px; gap:8px; align-items:center; }
+    input[type="range"] { width:100%; height:14px; accent-color:#60a5fa; }
+    .grading-row.is-global { border-color:#2563eb; background:#0f172a; box-shadow:0 0 0 1px rgba(37,99,235,.35) inset; }
+    .grading-row.is-global input[type="range"] { accent-color:#f59e0b; }
+    .grading-row:not(.is-global) input[type="range"] { transform:scaleY(0.88); }
     input[type="number"] { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:8px; padding:6px 8px; }
     .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:14px; }
     .stat { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; }
     .stat span { display:block; color:#94a3b8; font-size:12px; }
     .stat strong { font-size:20px; }
+    .top-actions { margin: 0 0 12px; }
+    .back-btn { display:inline-block; background:#1d4ed8; color:#eff6ff; text-decoration:none; border:1px solid #3b82f6; border-radius:10px; padding:8px 12px; font-weight:600; }
+    .back-btn:hover { background:#2563eb; }
+    .student-progress { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; margin-top:10px; }
+    .student-progress-head { display:flex; justify-content:space-between; align-items:center; margin-bottom:8px; font-size:13px; color:#cbd5e1; }
+    .progress-track { position:relative; height:16px; border-radius:999px; background:linear-gradient(90deg,#7f1d1d 0%, #7f1d1d 50%, #854d0e 60%, #1e3a8a 75%, #166534 100%); overflow:hidden; border:1px solid #475569; }
+    .progress-fill { position:absolute; inset:0 auto 0 0; width:0%; background:var(--fill,#ef4444); transition:width .2s ease, background-color .2s ease; }
+    .progress-threshold { position:absolute; top:0; bottom:0; width:2px; left:50%; background:#e2e8f0; opacity:.95; }
+    .progress-labels { display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:6px; }
+    @media (max-width: 880px){ .grading-row{ grid-template-columns:1fr; } }
   </style>
 </head>
 <body>
   <main>
     <h1>Obrona projektu i moduł oceniania</h1>
+    <div class="top-actions"><a class="back-btn" href="index.html">← Powrót do strony głównej</a></div>
     <p class="lead">Strona zawiera skrót wymagań projektu, odpowiedzialności ról i kalkulator oceny końcowej dla aplikacji oraz każdego członka zespołu.</p>
 
     <h2>Wymagania dla studentów</h2>
@@ -47,42 +63,73 @@
 
     <h2>Wzór na ocenę</h2>
     <div class="box">
-      <div class="formula">Wynik_końcowy (0–100) = 0.7 × Wynik_aplikacji (0–100) + 0.3 × Wynik_roli (0–100)</div>
-      <p class="lead">Najpierw liczony jest wynik punktowy (0–100), a następnie zamieniany na ocenę: 91–100→5.0, 81–90→4.5, 71–80→4.0, 61–70→3.5, 51–60→3.0, ≤50→2.0.</p>
+      <div class="formula">Wynik_końcowy_studenta (0–100) = Globalna_ocena_aplikacji (0–40) + Globalna_ocena_indywidualna_studenta (0–60)</div>
+      <p class="lead">Ocena zespołowa (40%): działanie aplikacji na fizycznym urządzeniu, poprawność integracji mobile–backend, jakość CI i testów, gotowość do publikacji w Google Play.<br>Ocena indywidualna (60%): realizacja checklisty roli, jakość kodu i dokumentacji, aktywność w PR i code review, odpowiedzialność za własny obszar.<br>Końcowy wynik punktowy (0–100) jest zamieniany na ocenę: 91–100→5.0, 81–90→4.5, 71–80→4.0, 61–70→3.5, 51–60→3.0, ≤50→2.0.</p>
     </div>
 
     <h2>Moduł oceniania (suwaki)</h2>
     <div class="box" id="grader">
-      <div class="grading-row" data-group="app" data-label="Działające funkcje" data-max="30"><div class="grading-row-title"><strong>Aplikacja: działające funkcje</strong><span>0 / 30</span></div><div class="grading-inputs"><input type="range" min="0" max="30" value="0"><input type="number" min="0" max="30" value="0"></div></div>
-      <div class="grading-row" data-group="app" data-label="Jakość kodu i architektura" data-max="20"><div class="grading-row-title"><strong>Aplikacja: jakość kodu i architektura</strong><span>0 / 20</span></div><div class="grading-inputs"><input type="range" min="0" max="20" value="0"><input type="number" min="0" max="20" value="0"></div></div>
-      <div class="grading-row" data-group="app" data-label="UI/UX i dokumentacja" data-max="20"><div class="grading-row-title"><strong>Aplikacja: UI/UX i dokumentacja</strong><span>0 / 20</span></div><div class="grading-inputs"><input type="range" min="0" max="20" value="0"><input type="number" min="0" max="20" value="0"></div></div>
-      <div class="grading-row" data-group="app" data-label="Testy i niezawodność" data-max="15"><div class="grading-row-title"><strong>Aplikacja: testy i niezawodność</strong><span>0 / 15</span></div><div class="grading-inputs"><input type="range" min="0" max="15" value="0"><input type="number" min="0" max="15" value="0"></div></div>
-      <div class="grading-row" data-group="app" data-label="Prezentacja" data-max="15"><div class="grading-row-title"><strong>Aplikacja: prezentacja</strong><span>0 / 15</span></div><div class="grading-inputs"><input type="range" min="0" max="15" value="0"><input type="number" min="0" max="15" value="0"></div></div>
+      <div class="grading-row" data-group="app" data-max="40" data-auto="true"><div class="grading-row-title"><strong>Globalny suwak aplikacji (0–40, auto)</strong><span>0 / 40</span></div><div class="grading-inputs"><input type="range" min="0" max="40" value="0" disabled><input type="number" min="0" max="40" value="0" readonly></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Demo na urządzeniu" data-max="5"><div class="grading-row-title"><strong>Aplikacja: działanie na fizycznym smartfonie + demo</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Funkcje natywne" data-max="5"><div class="grading-row-title"><strong>Aplikacja: wykorzystanie funkcji natywnych urządzenia</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Integracja backend" data-max="5"><div class="grading-row-title"><strong>Aplikacja: integracja mobile–backend (auth + dane)</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Przepływ E2E" data-max="5"><div class="grading-row-title"><strong>Aplikacja: działający przepływ end-to-end</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Zarządzanie pracą" data-max="5"><div class="grading-row-title"><strong>Aplikacja: issue, milestone i organizacja sprintów</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Proces PR" data-max="5"><div class="grading-row-title"><strong>Aplikacja: PR i code review w repozytorium</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="CI i testy" data-max="5"><div class="grading-row-title"><strong>Aplikacja: CI/CD, testy jednostkowe i integracyjne API</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
+      <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Publikacja Play" data-max="5"><div class="grading-row-title"><strong>Aplikacja: build podpisany + gotowość/publikacja Google Play</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
 
       <hr style="border-color:#334155; margin:16px 0">
 
-      <div class="grading-row" data-group="leader" data-max="100"><div class="grading-row-title"><strong>Rola Lider/PM (0–100)</strong><span>0 / 100</span></div><div class="grading-inputs"><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></div></div>
-      <div class="grading-row" data-group="dev" data-max="100"><div class="grading-row-title"><strong>Rola Mobile Developer (0–100)</strong><span>0 / 100</span></div><div class="grading-inputs"><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></div></div>
-      <div class="grading-row" data-group="qa" data-max="100"><div class="grading-row-title"><strong>Rola QA/DevOps (0–100)</strong><span>0 / 100</span></div><div class="grading-inputs"><input type="range" min="0" max="100" value="0"><input type="number" min="0" max="100" value="0"></div></div>
+      <div class="grading-row" data-group="leader" data-max="60" data-auto="true"><div class="grading-row-title"><strong>Globalny suwak oceny indywidualnej — Lider/PM (0–60, auto)</strong><span>0 / 60</span></div><div class="grading-inputs"><input type="range" min="0" max="60" value="0" disabled><input type="number" min="0" max="60" value="0" readonly></div></div>
+      <div class="grading-row" data-group="leader-sub" data-parent="leader" data-label="Analiza produktu i backlog" data-max="10"><div class="grading-row-title"><strong>Lider: analiza produktu i backlog (US + uzasadnienie mobile)</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="leader-sub" data-parent="leader" data-label="Prototyp i MVP" data-max="10"><div class="grading-row-title"><strong>Lider: prototyp mobilny i podział MVP/dodatki</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="leader-sub" data-parent="leader" data-label="Listing Google Play" data-max="10"><div class="grading-row-title"><strong>Lider: opis aplikacji do Google Play</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="leader-sub" data-parent="leader" data-label="Materiały promocyjne" data-max="10"><div class="grading-row-title"><strong>Lider: screeny i materiały promocyjne</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="leader-sub" data-parent="leader" data-label="Testy akceptacyjne" data-max="10"><div class="grading-row-title"><strong>Lider: checklista testów akceptacyjnych</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="leader-sub" data-parent="leader" data-label="Dokumentacja wydania" data-max="10"><div class="grading-row-title"><strong>Lider: changelog i instrukcja użytkownika</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+
+      <div class="grading-row" data-group="dev" data-max="60" data-auto="true"><div class="grading-row-title"><strong>Globalny suwak oceny indywidualnej — Frontend Developer (0–60, auto)</strong><span>0 / 60</span></div><div class="grading-inputs"><input type="range" min="0" max="60" value="0" disabled><input type="number" min="0" max="60" value="0" readonly></div></div>
+      <div class="grading-row" data-group="dev-sub" data-parent="dev" data-label="Ekrany i UX" data-max="10"><div class="grading-row-title"><strong>Frontend: implementacja ekranów</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="dev-sub" data-parent="dev" data-label="Funkcje natywne" data-max="10"><div class="grading-row-title"><strong>Frontend: integracja funkcji natywnych urządzenia</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="dev-sub" data-parent="dev" data-label="Uprawnienia i stany" data-max="10"><div class="grading-row-title"><strong>Frontend: uprawnienia oraz loading/error/offline</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="dev-sub" data-parent="dev" data-label="Integracja API" data-max="10"><div class="grading-row-title"><strong>Frontend: API (auth + CRUD)</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="dev-sub" data-parent="dev" data-label="Testy jednostkowe" data-max="10"><div class="grading-row-title"><strong>Frontend: testy jednostkowe</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="dev-sub" data-parent="dev" data-label="Build i publikacja" data-max="10"><div class="grading-row-title"><strong>Frontend: signed build i paczka do Play Console</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+
+      <div class="grading-row" data-group="qa" data-max="60" data-auto="true"><div class="grading-row-title"><strong>Globalny suwak oceny indywidualnej — Backend Developer (0–60, auto)</strong><span>0 / 60</span></div><div class="grading-inputs"><input type="range" min="0" max="60" value="0" disabled><input type="number" min="0" max="60" value="0" readonly></div></div>
+      <div class="grading-row" data-group="qa-sub" data-parent="qa" data-label="Zakres API" data-max="10"><div class="grading-row-title"><strong>Backend: zakres API (endpointy + auth)</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="qa-sub" data-parent="qa" data-label="Bezpieczeństwo" data-max="10"><div class="grading-row-title"><strong>Backend: JWT, hashowanie i zabezpieczenia</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="qa-sub" data-parent="qa" data-label="Model danych" data-max="10"><div class="grading-row-title"><strong>Backend: model bazy danych i migracje</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="qa-sub" data-parent="qa" data-label="Testy integracyjne" data-max="10"><div class="grading-row-title"><strong>Backend: testy integracyjne API</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="qa-sub" data-parent="qa" data-label="CI i deployment" data-max="10"><div class="grading-row-title"><strong>Backend: CI i deployment publiczny</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
+      <div class="grading-row" data-group="qa-sub" data-parent="qa" data-label="Compliance Play" data-max="10"><div class="grading-row-title"><strong>Backend: polityka prywatności i compliance</strong><span>0 / 10</span></div><div class="grading-inputs"><input type="range" min="0" max="10" value="0"><input type="number" min="0" max="10" value="0"></div></div>
 
       <div class="summary">
-        <div class="stat"><span>Wynik aplikacji</span><strong id="appPts">0 / 100</strong></div>
-        <div class="stat"><span>Ocena aplikacji</span><strong id="appGrade">2.0</strong></div>
+        <div class="stat"><span>Ocena zespołowa</span><strong id="appPts">0 / 40</strong></div>
+        <div class="stat"><span>Ocena zespołowa (stopień)</span><strong id="appGrade">2.0</strong></div>
         <div class="stat"><span>Lider — wynik/ocena końcowa</span><strong id="leaderFinal">0.0 / 2.0</strong></div>
-        <div class="stat"><span>Developer — wynik/ocena końcowa</span><strong id="devFinal">0.0 / 2.0</strong></div>
-        <div class="stat"><span>QA/DevOps — wynik/ocena końcowa</span><strong id="qaFinal">0.0 / 2.0</strong></div>
+        <div class="stat"><span>Frontend Developer — wynik/ocena końcowa</span><strong id="devFinal">0.0 / 2.0</strong></div>
+        <div class="stat"><span>Backend Developer — wynik/ocena końcowa</span><strong id="qaFinal">0.0 / 2.0</strong></div>
       </div>
+
+      <div class="student-progress" id="leaderProgressWrap"><div class="student-progress-head"><strong>Lider/PM</strong><span id="leaderProgressText">0.0 / 100 · 2.0</span></div><div class="progress-track"><div class="progress-fill" id="leaderProgressFill"></div><div class="progress-threshold" title="Próg zaliczenia 50%"></div></div><div class="progress-labels"><span>2.0</span><span>3.0</span><span>3.5</span><span>4.0</span><span>4.5</span><span>5.0</span></div></div>
+      <div class="student-progress" id="devProgressWrap"><div class="student-progress-head"><strong>Frontend Developer</strong><span id="devProgressText">0.0 / 100 · 2.0</span></div><div class="progress-track"><div class="progress-fill" id="devProgressFill"></div><div class="progress-threshold" title="Próg zaliczenia 50%"></div></div><div class="progress-labels"><span>2.0</span><span>3.0</span><span>3.5</span><span>4.0</span><span>4.5</span><span>5.0</span></div></div>
+      <div class="student-progress" id="qaProgressWrap"><div class="student-progress-head"><strong>Backend Developer</strong><span id="qaProgressText">0.0 / 100 · 2.0</span></div><div class="progress-track"><div class="progress-fill" id="qaProgressFill"></div><div class="progress-threshold" title="Próg zaliczenia 50%"></div></div><div class="progress-labels"><span>2.0</span><span>3.0</span><span>3.5</span><span>4.0</span><span>4.5</span><span>5.0</span></div></div>
     </div>
   </main>
 
   <script>
     const rows = [...document.querySelectorAll('.grading-row')];
-    const grade = (score) => score>=91?5.0:score>=81?4.5:score>=71?4.0:score>=61?3.5:score>=51?3.0:2.0;
+    rows.forEach((row)=>{ if(row.dataset.auto==='true') row.classList.add('is-global'); });
+    const grade = (score) => score>=90?5.0:score>=80?4.5:score>=70?4.0:score>=60?3.5:score>=50?3.0:2.0;
     const clamp = (v,max)=>Math.max(0,Math.min(max,Number(v)||0));
 
     function recalc(){
       let appTotal = 0;
-      const roles = { leader:0, dev:0, qa:0 };
+      let appSubs = 0;
+      const roles = { leader:0, frontend:0, backend:0 };
+      const roleSubs = { leader:0, frontend:0, backend:0 };
       rows.forEach((row)=>{
         const max = Number(row.dataset.max);
         const range = row.querySelector('input[type="range"]');
@@ -90,19 +137,61 @@
         const v = clamp(num.value,max);
         range.value = v; num.value = v;
         row.querySelector('.grading-row-title span').textContent = `${v} / ${max}`;
-        if(row.dataset.group==='app') appTotal += v; else roles[row.dataset.group]=v;
+        if(row.dataset.group==='app-sub') appSubs += v;
+        else if(row.dataset.group.endsWith('-sub')) roleSubs[row.dataset.parent] += v;
       });
 
-      const appGrade = grade(appTotal);
+      const appParentRow = rows.find((row)=>row.dataset.group==='app' && row.dataset.auto==='true');
+      if(appParentRow){
+        const max = Number(appParentRow.dataset.max);
+        const v = clamp(appSubs,max);
+        const range = appParentRow.querySelector('input[type="range"]');
+        const num = appParentRow.querySelector('input[type="number"]');
+        range.value = v; num.value = v;
+        appParentRow.querySelector('.grading-row-title span').textContent = `${v} / ${max}`;
+        appTotal = v;
+      }
+
+      Object.keys(roleSubs).forEach((roleKey)=>{
+        const parentRow = rows.find((row)=>row.dataset.group===roleKey && row.dataset.auto==='true');
+        if(!parentRow) return;
+        const max = Number(parentRow.dataset.max);
+        const v = clamp(roleSubs[roleKey],max);
+        const range = parentRow.querySelector('input[type="range"]');
+        const num = parentRow.querySelector('input[type="number"]');
+        range.value = v; num.value = v;
+        parentRow.querySelector('.grading-row-title span').textContent = `${v} / ${max}`;
+        roles[roleKey] = v;
+      });
+
+      const colorForPoints = (pts)=>{
+        if(pts < 50) return '#ef4444'; // Ocena 2.0
+        if(pts < 70) return '#eab308'; // Oceny 3.0, 3.5
+        if(pts < 90) return '#3b82f6'; // Oceny 4.0, 4.5
+        return '#22c55e';             // Ocena 5.0
+      };
+      const setProgress = (key, pts)=>{
+        const pct = clamp(pts,100);
+        const fill = document.getElementById(`${key}ProgressFill`);
+        const text = document.getElementById(`${key}ProgressText`);
+        fill.style.width = `${pct}%`;
+        fill.style.backgroundColor = colorForPoints(pts);
+        text.textContent = `${pts.toFixed(1)} / 100 · ${grade(pts).toFixed(1)}`;
+      };
+
+      const appGrade = grade(appTotal * 2.5);
       const final = (rolePts)=>{
-        const finalPts = (0.7*appTotal)+(0.3*rolePts);
+        const finalPts = appTotal + rolePts;
         return `${finalPts.toFixed(1)} / ${grade(finalPts).toFixed(1)}`;
       };
-      document.getElementById('appPts').textContent = `${appTotal} / 100`;
+      document.getElementById('appPts').textContent = `${appTotal} / 40`;
       document.getElementById('appGrade').textContent = appGrade.toFixed(1);
       document.getElementById('leaderFinal').textContent = final(roles.leader);
       document.getElementById('devFinal').textContent = final(roles.dev);
       document.getElementById('qaFinal').textContent = final(roles.qa);
+      setProgress('leader', appTotal + roles.leader);
+      setProgress('dev', appTotal + roles.dev);
+      setProgress('qa', appTotal + roles.qa);
     }
 
     rows.forEach((row)=>{
