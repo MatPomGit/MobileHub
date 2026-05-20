@@ -119,6 +119,44 @@
       background: #0b1220;
       color: #bfdbfe;
     }
+    .status-grid {
+      margin-top: 12px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 8px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.15);
+      flex: 0 0 auto;
+    }
+    .status-dot.active {
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+    }
+    .student-warning {
+      margin-top: 12px;
+      border: 1px solid #7f1d1d;
+      background: rgba(127, 29, 29, 0.25);
+      color: #fecaca;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+    }
+
   </style>
 </head>
 <body>
@@ -176,6 +214,20 @@
         <button type="button" id="zal-finish">Zakończ podejście</button>
       </div>
       <p id="zal-score" class="muted"></p>
+      <p id="zal-security-status" class="muted">Tryb bezpieczeństwa: oczekiwanie.</p>
+      <p id="zal-camera-status" class="muted">Kamera: nieaktywna.</p>
+      <p class="student-warning" id="zal-student-warning">Uwaga: Twoje działania podczas testu są monitorowane. Nie próbuj zmieniać aktywnego okna/karty przeglądarki ani używać skrótów klawiszowych — takie zdarzenia są rejestrowane jako naruszenia.</p>
+      <h3>Status modułów</h3>
+      <div class="status-grid" id="zal-module-statuses" aria-live="polite">
+        <div class="status-item"><span>Wczytywanie testów dla studentów</span><span class="status-dot" id="mod-load-tests" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Zapisywanie wyników</span><span class="status-dot" id="mod-save-results" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Zapisywanie logów</span><span class="status-dot" id="mod-save-logs" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Monitorowanie okna</span><span class="status-dot" id="mod-monitor-window" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Monitorowanie klawiszy</span><span class="status-dot" id="mod-monitor-keys" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Monitorowanie myszy</span><span class="status-dot" id="mod-monitor-mouse" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Monitorowanie twarzy (kamera)</span><span class="status-dot" id="mod-monitor-face" title="nieaktywny"></span></div>
+      </div>
+
     </section>
 
     <section id="reports-panel" class="module tab-panel" aria-label="Logi przebiegu" hidden>
@@ -206,9 +258,14 @@
 
     <section id="proctoring-panel" class="module tab-panel" aria-label="Wytyczne proktoringu modułu testowego" hidden>
       <h2>Proktoring modułu testowego</h2>
-      <p>
-        ---
-      </p>
+      <p class="muted">Tryb proktoringu rozszerzony o dostęp do kamery i plan logowania detekcji twarzy.</p>
+      <h3>Plan logowania detekcji twarzy</h3>
+      <ul>
+        <li>Zdarzenie <code>proctor.face.sample</code>: co 2-5 s zapisywany status twarzy (wykryta/brak/wiele twarzy) i poziom pewności.</li>
+        <li>Zdarzenie <code>proctor.face.alert</code>: natychmiastowy wpis dla incydentów (brak twarzy &gt; N sekund, wiele twarzy, zasłonięcie).</li>
+        <li>Metadane próbki: <code>attempt</code>, <code>sampleTs</code>, <code>faceCount</code>, <code>confidence</code>, <code>reason</code>, <code>deviceIdHash</code>.</li>
+        <li>Prywatność: bez zapisu surowego obrazu; opcjonalnie krótki hash cech zamiast klatki wideo.</li>
+      </ul>
     </section>
   </main>
   <script>
@@ -218,9 +275,13 @@
       const topicList = document.getElementById('topic-list');
 
       const source = 'quiz-questions.json';
+      const EXAM_QUERY_KEY = 'zalExamWindow';
+      const examMode = new URLSearchParams(window.location.search).get(EXAM_QUERY_KEY) === '1';
       const LOG_DB_NAME = 'zalLogsDb';
       const LOG_DB_VERSION = 1;
       const LOG_STORE = 'events';
+      const FACE_SAMPLE_EVENT = 'proctor.face.sample';
+      const FACE_ALERT_EVENT = 'proctor.face.alert';
 
       const lectureTopicByCategory = {
         1:  'Wprowadzenie do aplikacji mobilnych',
@@ -261,6 +322,7 @@
         if (zalState.index === 0) return;
         zalState.index -= 1;
         renderQuestion();
+        refreshModuleStatuses();
       });
       document.getElementById('zal-next')?.addEventListener('click', () => {
         if (zalState.index >= zalState.pool.length - 1) return;
@@ -272,6 +334,7 @@
       document.getElementById('zal-clear-logs')?.addEventListener('click', clearLogsInDb);
       setupInteractionLogging();
       initializeLogDb();
+      setupExamWindowSecurity();
 
       function renderOptions(questions) {
         const categories = [...new Set(
@@ -333,6 +396,7 @@
       const MOUSE_SAMPLE_MS = 300;
       let lastMouseLogAt = 0;
 
+      refreshModuleStatuses();
 
       function setDbStatus(message) {
         const status = document.getElementById('zal-db-status');
@@ -356,6 +420,7 @@
         request.onsuccess = () => {
           logDb = request.result;
           setDbStatus('Baza logów: gotowa. Możesz zapisywać i odczytywać logi.');
+          refreshModuleStatuses();
         };
         request.onerror = () => {
           setDbStatus(`Baza logów: błąd inicjalizacji (${request.error?.message || 'unknown'}).`);
@@ -449,6 +514,168 @@
         });
       }
 
+      function setSecurityStatus(message) {
+        const el = document.getElementById('zal-security-status');
+        if (el) el.textContent = `Tryb bezpieczeństwa: ${message}`;
+      }
+
+      async function tryMaximizeExamWindow() {
+        let moved = false;
+        let resized = false;
+        try {
+          window.moveTo(0, 0);
+          moved = true;
+        } catch (error) { /* noop */ }
+        try {
+          window.resizeTo(window.screen.availWidth, window.screen.availHeight);
+          resized = true;
+        } catch (error) { /* noop */ }
+
+        const requestFs = document.documentElement.requestFullscreen
+          || document.documentElement.webkitRequestFullscreen
+          || document.documentElement.msRequestFullscreen;
+        let fullscreen = false;
+        if (requestFs) {
+          try {
+            await Promise.resolve(requestFs.call(document.documentElement));
+            fullscreen = true;
+          } catch (error) {
+            fullscreen = false;
+          }
+        }
+
+        logEvent('security.window.maximize.attempt', `moved=${moved}, resized=${resized}, fullscreen=${fullscreen}`);
+        if (fullscreen || (window.outerWidth >= window.screen.availWidth - 8 && window.outerHeight >= window.screen.availHeight - 8)) {
+          setSecurityStatus('okno testowe zmaksymalizowane. Monitoring aktywny.');
+        } else {
+          setSecurityStatus('nie udało się w pełni zmaksymalizować okna. Ustaw maksymalny rozmiar ręcznie.');
+        }
+      }
+
+
+      let proctorStream = null;
+
+
+      function setModuleActive(moduleId, isActive) {
+        const dot = document.getElementById(moduleId);
+        if (!dot) return;
+        dot.classList.toggle('active', Boolean(isActive));
+        dot.title = isActive ? 'aktywny' : 'nieaktywny';
+      }
+
+      function refreshModuleStatuses() {
+        setModuleActive('mod-load-tests', zalState.questions.length > 0);
+        setModuleActive('mod-save-results', zalState.pool.length > 0 && zalState.answers.some((a) => a !== null));
+        setModuleActive('mod-save-logs', Boolean(logDb));
+        setModuleActive('mod-monitor-window', examMode);
+        setModuleActive('mod-monitor-keys', true);
+        setModuleActive('mod-monitor-mouse', true);
+        setModuleActive('mod-monitor-face', Boolean(proctorStream && proctorStream.active));
+      }
+
+      function setCameraStatus(message) {
+        const el = document.getElementById('zal-camera-status');
+        if (el) el.textContent = `Kamera: ${message}`;
+      }
+
+      async function requestCameraForExamWindow() {
+        if (!examMode) {
+          setCameraStatus('niedostępna (okno główne).');
+          return;
+        }
+        if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+          setCameraStatus('przeglądarka nie wspiera getUserMedia.');
+          logEvent('proctor.camera.unsupported', 'Brak API mediaDevices.getUserMedia');
+          return;
+        }
+        try {
+          proctorStream = await navigator.mediaDevices.getUserMedia({
+            video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+            audio: false
+          });
+          setCameraStatus('aktywna (dostęp przyznany).');
+          refreshModuleStatuses();
+          logEvent('proctor.camera.granted', `tracks=${proctorStream.getVideoTracks().length}`);
+          scheduleFaceDetectionLogging();
+        } catch (error) {
+          setCameraStatus(`odmowa lub błąd (${error.name || 'unknown'}).`);
+          refreshModuleStatuses();
+          logEvent('proctor.camera.denied', `name=${error.name || 'unknown'}, message=${error.message || 'n/a'}`);
+        }
+      }
+
+      function scheduleFaceDetectionLogging() {
+        if (!examMode) return;
+        setInterval(() => {
+          const hasVideo = Boolean(proctorStream && proctorStream.active);
+          logEvent(FACE_SAMPLE_EVENT, `attempt=${zalState.attempt || 0}, sampleTs=${new Date().toISOString()}, faceCount=unknown, confidence=0, reason=detector_not_integrated, streamActive=${hasVideo}`);
+        }, 5000);
+      }
+
+      function logFaceAlert(reason, faceCount = -1, confidence = 0) {
+        logEvent(FACE_ALERT_EVENT, `attempt=${zalState.attempt || 0}, sampleTs=${new Date().toISOString()}, faceCount=${faceCount}, confidence=${confidence}, reason=${reason}, deviceIdHash=todo`);
+      }
+
+      function setupExamWindowSecurity() {
+        if (!examMode) {
+          setSecurityStatus('nieaktywny (okno główne).');
+          return;
+        }
+
+        setSecurityStatus('aktywny. Trwa maksymalizacja okna i uruchamianie monitoringu.');
+        tryMaximizeExamWindow();
+        requestCameraForExamWindow();
+
+        const initialMetrics = {
+          outerWidth: window.outerWidth,
+          outerHeight: window.outerHeight,
+          screenX: window.screenX,
+          screenY: window.screenY
+        };
+
+const shortcutCombos = new Set([
+  'F11', 'Escape', 'Tab', 'F5'
+]);
+
+        document.addEventListener('keydown', (event) => {
+          const hasModifier = event.ctrlKey || event.altKey || event.metaKey;
+          const riskyShortcut = shortcutCombos.has(event.key) || (hasModifier && event.key.length === 1);
+          if (!riskyShortcut) return;
+          event.preventDefault();
+          logEvent('security.shortcut.blocked', `key=${event.key}, ctrl=${event.ctrlKey}, alt=${event.altKey}, shift=${event.shiftKey}, meta=${event.metaKey}`);
+          setSecurityStatus(`wykryto próbę skrótu klawiszowego (${event.key}).`);
+        });
+
+        window.addEventListener('blur', () => {
+          logEvent('security.window.blur', 'Okno testu utraciło fokus.');
+          logFaceAlert('window_blur');
+          setSecurityStatus('wykryto utratę fokusu okna.');
+        });
+
+        document.addEventListener('visibilitychange', () => {
+          if (document.visibilityState !== 'visible') {
+            logEvent('security.visibility.hidden', `visibilityState=${document.visibilityState}`);
+            setSecurityStatus('karta przestała być widoczna.');
+          }
+        });
+
+        window.addEventListener('resize', () => {
+          logEvent('security.window.resize', `outer=${window.outerWidth}x${window.outerHeight}`);
+          setSecurityStatus('wykryto zmianę rozmiaru okna.');
+        });
+
+        window.addEventListener('beforeunload', () => {
+          if (proctorStream) proctorStream.getTracks().forEach((track) => track.stop());
+        });
+
+        setInterval(() => {
+          if (Math.abs(window.screenX - initialMetrics.screenX) > 5 || Math.abs(window.screenY - initialMetrics.screenY) > 5) {
+            logEvent('security.window.moved', `x=${window.screenX}, y=${window.screenY}`);
+            setSecurityStatus('wykryto przesunięcie okna.');
+          }
+        }, 1000);
+      }
+
       function shuffle(items) {
         const arr = [...items];
         for (let i = arr.length - 1; i > 0; i -= 1) {
@@ -466,25 +693,40 @@
         const answers = document.getElementById('zal-answers');
         answers.replaceChildren();
         q.answers.forEach((ans, idx) => {
-        q.answers.forEach((ans, idx) => {
           const btn = document.createElement('button');
           btn.type = 'button';
           btn.textContent = `${String.fromCharCode(65 + idx)}. ${ans}`;
           if (zalState.answers[zalState.index] === idx) btn.style.borderColor = '#60a5fa';
-          btn.addEventListener('click', (e) => {
+          btn.addEventListener('click', () => {
             zalState.answers[zalState.index] = idx;
-            Array.from(answers.children).forEach(b => b.style.borderColor = '');
+            Array.from(answers.children).forEach((b) => { b.style.borderColor = ''; });
             btn.style.borderColor = '#60a5fa';
             const responseMs = Date.now() - zalState.questionShownAt;
             logEvent('quiz.answer', `attempt=${zalState.attempt}, q=${zalState.index + 1}, selected=${idx}, responseMs=${responseMs}`);
+            refreshModuleStatuses();
           });
           answers.appendChild(btn);
-        });
         });
         zalState.questionShownAt = Date.now();
       }
 
       function startAttempt() {
+        if (!examMode) {
+          const examUrl = `${window.location.pathname}?${EXAM_QUERY_KEY}=1`;
+          const examWindow = window.open(examUrl, 'zalExamWindow', 'popup=yes,width=1280,height=800,left=0,top=0,resizable=yes');
+          if (examWindow) {
+            examWindow.focus();
+            logEvent('quiz.attempt.popup.opened', `url=${examUrl}`);
+            setSecurityStatus('otwarto okno testowe. Uruchom test w nowym oknie.');
+            const warning = document.getElementById('zal-student-warning');
+            if (warning) warning.textContent = 'Test został otwarty w osobnym oknie. W trakcie podejścia nie zmieniaj aktywnego okna/karty i nie używaj skrótów klawiszowych — zdarzenia są logowane.';
+          } else {
+            logEvent('quiz.attempt.popup.blocked', 'Przeglądarka zablokowała otwarcie nowego okna.');
+            setSecurityStatus('nie udało się otworzyć okna testowego (popup blocked).');
+          }
+          return;
+        }
+
         const mode = document.getElementById('zal-mode').value;
         const size = mode === 'normal' ? 50 : 25;
         zalState.attempt += 1;
@@ -502,6 +744,7 @@
         const correct = zalState.pool.reduce((sum, q, i) => sum + Number(zalState.answers[i] === q.correctIndex), 0);
         const percent = Math.round((correct / total) * 100);
         document.getElementById('zal-score').textContent = `Wynik: ${correct}/${total} (${percent}%).`;
+        refreshModuleStatuses();
         const durationMs = Date.now() - zalState.startedAt;
         logEvent('quiz.attempt.finish', `attempt=${zalState.attempt}, score=${correct}/${total}, percent=${percent}, durationMs=${durationMs}`);
       }
@@ -515,6 +758,7 @@
           if (!Array.isArray(questions)) throw new Error('Nieprawidłowy format danych pytań.');
           zalState.questions = questions;
           renderOptions(questions);
+          refreshModuleStatuses();
         })
         .catch((error) => {
           summary.textContent = `Nie udało się wczytać pytań z ${source}: ${error.message}`;
