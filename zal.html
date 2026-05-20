@@ -633,9 +633,9 @@
           screenY: window.screenY
         };
 
-        const shortcutCombos = new Set([
-          'F11', 'Escape', 'Tab', 'F5', 'r', 'n', 't', 'w', 'p', 'l', 'u', 'i', 'j'
-        ]);
+const shortcutCombos = new Set([
+  'F11', 'Escape', 'Tab', 'F5'
+]);
 
         document.addEventListener('keydown', (event) => {
           const hasModifier = event.ctrlKey || event.altKey || event.metaKey;
