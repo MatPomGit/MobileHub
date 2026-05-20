@@ -1,7 +1,7 @@
 # Wytyczne językowe (język polski)
 
 ## Zakres
-Niniejsze wytyczne dotyczą wszystkich treści przeznaczonych dla użytkownika końcowego tworzonych lub modyfikowanych w repozytorium, wszędzie tam, gdzie używany jest język polski.
+Niniejsze wytyczne dotyczą wszystkich treści w języku polskim przeznaczonych dla użytkownika końcowego, tworzonych lub modyfikowanych w repozytorium.
 
 ## Zasada główna
 W treściach w języku polskim należy zawsze stosować:
