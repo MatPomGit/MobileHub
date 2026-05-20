@@ -121,8 +121,8 @@
     function recalc(){
       let appTotal = 0;
       let appSubs = 0;
-      const roles = { leader:0, dev:0, qa:0 };
-      const roleSubs = { leader:0, dev:0, qa:0 };
+      const roles = { leader:0, frontend:0, backend:0 };
+      const roleSubs = { leader:0, frontend:0, backend:0 };
       rows.forEach((row)=>{
         const max = Number(row.dataset.max);
         const range = row.querySelector('input[type="range"]');
