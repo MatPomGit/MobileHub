@@ -33,6 +33,10 @@
       appearance:none;
       cursor:pointer;
     }
+    input[type="range"]:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
     input[type="range"]::-webkit-slider-runnable-track { height:8px; border-radius:999px; background:#334155; }
     input[type="range"]::-moz-range-track { height:8px; border-radius:999px; background:#334155; }
     .grading-row:not(.is-global) input[type="range"]::-webkit-slider-runnable-track { background:#1e3a8a; }
