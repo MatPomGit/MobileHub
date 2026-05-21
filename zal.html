@@ -331,7 +331,11 @@
           const openUrl = button.dataset.openUrl;
           if (openUrl) {
             const sessionWindow = window.open(openUrl, 'zalSessionBuilder', 'popup=yes,width=1440,height=900,left=0,top=0,resizable=yes');
-            if (sessionWindow) sessionWindow.focus();
+            if (sessionWindow) {
+              sessionWindow.focus();
+            } else {
+              alert('Otwarcie okna zostało zablokowane. Proszę zezwolić na wyskakujące okienka dla tej strony.');
+            }
             return;
           }
           activatePanel(button.dataset.target);
