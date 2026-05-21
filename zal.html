@@ -156,6 +156,15 @@
       padding: 10px 12px;
       font-size: 14px;
     }
+    .proctor-vision-wrap {
+      margin-top: 10px;
+      display: grid;
+      gap: 8px;
+    }
+    #zal-face-status {
+      color: #cbd5e1;
+      font-size: 14px;
+    }
 
   </style>
 </head>
@@ -216,6 +225,10 @@
       <p id="zal-score" class="muted"></p>
       <p id="zal-security-status" class="muted">Tryb bezpieczeństwa: oczekiwanie.</p>
       <p id="zal-camera-status" class="muted">Kamera: nieaktywna.</p>
+      <div class="proctor-vision-wrap">
+        <p id="zal-face-status" class="muted">Twarz: detektor nieuruchomiony.</p>
+        <video id="zal-proctor-video" autoplay playsinline muted hidden></video>
+      </div>
       <p class="student-warning" id="zal-student-warning">Uwaga: Twoje działania podczas testu są monitorowane. Nie próbuj zmieniać aktywnego okna/karty przeglądarki ani używać skrótów klawiszowych — takie zdarzenia są rejestrowane jako naruszenia.</p>
       <h3>Status modułów</h3>
       <div class="status-grid" id="zal-module-statuses" aria-live="polite">
@@ -268,8 +281,10 @@
       </ul>
     </section>
   </main>
-  <script>
+  <script type="module">
+    import { FilesetResolver, FaceLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
     (function () {
+
       const select = document.getElementById('topic-range');
       const summary = document.getElementById('topic-summary');
       const topicList = document.getElementById('topic-list');
@@ -604,12 +619,102 @@
         }
       }
 
-      function scheduleFaceDetectionLogging() {
+      let faceLandmarker = null;
+      let faceDetectionLoopId = null;
+      let lastFaceSampleAt = 0;
+      let offscreenSince = 0;
+
+      function setFaceStatus(message) {
+        const el = document.getElementById('zal-face-status');
+        if (el) el.textContent = `Twarz: ${message}`;
+      }
+
+      async function initializeFaceLandmarker() {
+        if (faceLandmarker) return faceLandmarker;
+        try {
+          const vision = await FilesetResolver.forVisionTasks(
+            'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+          );
+          faceLandmarker = await FaceLandmarker.createFromOptions(vision, {
+            baseOptions: {
+              modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+            },
+            runningMode: 'VIDEO',
+            numFaces: 2
+          });
+          setFaceStatus('detektor gotowy.');
+          return faceLandmarker;
+        } catch (error) {
+          setFaceStatus('błąd inicjalizacji detektora.');
+          logEvent('proctor.face.detector.error', `name=${error?.name || 'unknown'}, message=${error?.message || 'n/a'}`);
+          return null;
+        }
+      }
+
+      function assessFacingScreen(landmarks) {
+        const leftEye = landmarks[33];
+        const rightEye = landmarks[263];
+        const noseTip = landmarks[1];
+        if (!leftEye || !rightEye || !noseTip) return { isFacingScreen: false, yawNorm: 0, reason: 'missing_landmarks' };
+
+        const eyesCenterX = (leftEye.x + rightEye.x) / 2;
+        const eyeDistance = Math.max(Math.abs(rightEye.x - leftEye.x), 0.0001);
+        const yawNorm = (noseTip.x - eyesCenterX) / eyeDistance;
+        const isFacingScreen = Math.abs(yawNorm) < 0.35;
+        return { isFacingScreen, yawNorm, reason: isFacingScreen ? 'looking_at_screen' : 'looking_away' };
+      }
+
+      async function scheduleFaceDetectionLogging() {
         if (!examMode) return;
-        setInterval(() => {
-          const hasVideo = Boolean(proctorStream && proctorStream.active);
-          logEvent(FACE_SAMPLE_EVENT, `attempt=${zalState.attempt || 0}, sampleTs=${new Date().toISOString()}, faceCount=unknown, confidence=0, reason=detector_not_integrated, streamActive=${hasVideo}`);
-        }, 5000);
+        const detector = await initializeFaceLandmarker();
+        if (!detector) return;
+
+        const videoEl = document.getElementById('zal-proctor-video');
+        if (!videoEl || !proctorStream) return;
+        videoEl.srcObject = proctorStream;
+
+        const detectFrame = () => {
+          if (!proctorStream || !proctorStream.active || !videoEl.videoWidth) {
+            faceDetectionLoopId = requestAnimationFrame(detectFrame);
+            return;
+          }
+
+          const now = Date.now();
+          const result = detector.detectForVideo(videoEl, now);
+          const faces = result?.faceLandmarks || [];
+
+          let reason = 'face_missing';
+          let confidence = 0;
+          let isFacingScreen = false;
+
+          if (faces.length > 0) {
+            const assessment = assessFacingScreen(faces[0]);
+            isFacingScreen = assessment.isFacingScreen;
+            reason = assessment.reason;
+            confidence = Math.max(0, 1 - Math.min(1, Math.abs(assessment.yawNorm)));
+          }
+
+          if (!isFacingScreen) {
+            if (!offscreenSince) offscreenSince = now;
+            if (now - offscreenSince > 4000) {
+              logFaceAlert(reason, faces.length, confidence.toFixed(2));
+              offscreenSince = now;
+            }
+          } else {
+            offscreenSince = 0;
+          }
+
+          if (now - lastFaceSampleAt > 5000) {
+            lastFaceSampleAt = now;
+            logEvent(FACE_SAMPLE_EVENT, `attempt=${zalState.attempt || 0}, sampleTs=${new Date().toISOString()}, faceCount=${faces.length}, confidence=${confidence.toFixed(2)}, reason=${reason}, isFacingScreen=${isFacingScreen}`);
+            setFaceStatus(isFacingScreen ? 'student patrzy na ekran.' : 'student nie patrzy na ekran.');
+          }
+
+          faceDetectionLoopId = requestAnimationFrame(detectFrame);
+        };
+
+        if (faceDetectionLoopId) cancelAnimationFrame(faceDetectionLoopId);
+        faceDetectionLoopId = requestAnimationFrame(detectFrame);
       }
 
       function logFaceAlert(reason, faceCount = -1, confidence = 0) {
