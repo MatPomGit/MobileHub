@@ -61,10 +61,10 @@
 ## P1 (wysokie) — stabilność i jakość
 
 ### P1.1 Obsługa błędów konfiguracji i artykułów
-- **Status:** `todo`
-- **Owner:** `unassigned`
-- [ ] Retry z backoff dla `pam-wiki-config.json`.
-- [ ] Komunikat użytkownika z akcją „Spróbuj ponownie”.
+- **Status:** `in-progress`
+- **Owner:** `codex`
+- [x] Retry z backoff dla `pam-wiki-config.json`.
+- [x] Komunikat użytkownika z akcją „Spróbuj ponownie”.
 - [ ] Centralne logowanie błędów technicznych.
 - [ ] Walidacja runtime struktury JSON (`articles`, `metadata`, `categories`).
 

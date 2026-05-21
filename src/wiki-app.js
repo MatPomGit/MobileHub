@@ -16,6 +16,7 @@ import { onClick } from './wiki-dom-utils.js';
 const MARKED_RETRY_INTERVAL_MS = 200;
 const WARN_AFTER_MARKED_ATTEMPTS = 20;
 const MAX_MARKED_LOAD_ATTEMPTS = 100;
+let wikiInitialized = false;
 
 export async function initApp() {
   initThemePicker();
@@ -49,6 +50,9 @@ async function waitForMarked(attempts = 0) {
 }
 
 function initWiki() {
+  if (wikiInitialized) return;
+  wikiInitialized = true;
+
   if (typeof marked !== 'undefined') {
     marked.setOptions({ breaks: true, gfm: true });
   }
@@ -62,7 +66,43 @@ function initWiki() {
 function showConfigError(error) {
   const c = document.getElementById(IDS.wikiArticle);
   if (c) {
-    c.innerHTML = `<div class="wiki-error"><p><strong>Błąd konfiguracji wiki.</strong></p><p>${error.message}</p></div>`;
+    const wrapper = document.createElement('div');
+    wrapper.className = 'wiki-error';
+
+    const title = document.createElement('p');
+    const strong = document.createElement('strong');
+    strong.textContent = 'Błąd konfiguracji wiki.';
+    title.appendChild(strong);
+
+    const message = document.createElement('p');
+    message.textContent = error?.message || 'Wystąpił nieoczekiwany błąd.';
+
+    const buttonRow = document.createElement('p');
+    const retryButtonElement = document.createElement('button');
+    retryButtonElement.type = 'button';
+    retryButtonElement.id = 'wiki-config-retry-btn';
+    retryButtonElement.className = 'copy-code-btn';
+    retryButtonElement.textContent = 'Spróbuj ponownie';
+    buttonRow.appendChild(retryButtonElement);
+
+    wrapper.appendChild(title);
+    wrapper.appendChild(message);
+    wrapper.appendChild(buttonRow);
+
+    c.innerHTML = '';
+    c.appendChild(wrapper);
+
+    const retryButton = document.getElementById('wiki-config-retry-btn');
+    retryButton?.addEventListener('click', async () => {
+      retryButton.disabled = true;
+      retryButton.textContent = 'Ponawianie…';
+      try {
+        await loadWikiConfig();
+        initWiki();
+      } catch (retryError) {
+        showConfigError(retryError);
+      }
+    }, { once: true });
   }
 }
 
