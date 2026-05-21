@@ -29,7 +29,9 @@
     .stat { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; }
     .stat span { display:block; color:#94a3b8; font-size:12px; }
     .stat strong { font-size:20px; }
-    .top-actions { margin: 0 0 12px; }
+    .top-actions { margin: 0 0 12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .action-btn { display:inline-block; background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:10px; padding:8px 12px; font-weight:600; cursor:pointer; }
+    .action-btn:hover { background:#1e293b; }
     .back-btn { display:inline-block; background:#1d4ed8; color:#eff6ff; text-decoration:none; border:1px solid #3b82f6; border-radius:10px; padding:8px 12px; font-weight:600; }
     .back-btn:hover { background:#2563eb; }
     .student-progress { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; margin-top:10px; }
@@ -44,7 +46,7 @@
 <body>
   <main>
     <h1>Obrona projektu i moduł oceniania</h1>
-    <div class="top-actions"><a class="back-btn" href="index.html">← Powrót do strony głównej</a></div>
+    <div class="top-actions"><a class="back-btn" href="index.html">← Powrót do strony głównej</a><button class="action-btn" id="exportPdfBtn" type="button">Eksportuj raport do PDF</button></div>
     <p class="lead">Strona zawiera skrót wymagań projektu, odpowiedzialności ról i kalkulator oceny końcowej dla aplikacji oraz każdego członka zespołu.</p>
 
     <h2>Wymagania dla studentów</h2>
@@ -165,10 +167,10 @@
       });
 
       const colorForPoints = (pts)=>{
-        if(pts < 50) return '#ef4444'; // Ocena 2.0
-        if(pts < 70) return '#eab308'; // Oceny 3.0, 3.5
-        if(pts < 90) return '#3b82f6'; // Oceny 4.0, 4.5
-        return '#22c55e';             // Ocena 5.0
+        if(pts < 50) return '#ef4444';
+        if(pts < 70) return '#eab308';
+        if(pts < 90) return '#3b82f6';
+        return '#22c55e';
       };
       const setProgress = (key, pts)=>{
         const pct = clamp(pts,100);
@@ -194,12 +196,66 @@
       setProgress('qa', appTotal + roles.qa);
     }
 
+    function buildReport(){
+      const rowsByGroup = {
+        app: rows.filter((row)=>row.dataset.group==='app-sub'),
+        leader: rows.filter((row)=>row.dataset.group==='leader-sub'),
+        dev: rows.filter((row)=>row.dataset.group==='dev-sub'),
+        qa: rows.filter((row)=>row.dataset.group==='qa-sub')
+      };
+      const appPts = rowsByGroup.app.reduce((sum, r) => sum + (Number(r.querySelector('input[type="number"]')?.value) || 0), 0);
+      const roleTotal = (role)=>{
+        const parent = rows.find((row)=>row.dataset.group===role && row.dataset.auto==='true');
+        return Number(parent?.querySelector('input[type="number"]')?.value || 0);
+      };
+      const roleReport = (role, label)=>{
+        const total = appPts + roleTotal(role);
+        const items = rowsByGroup[role].map((row)=>{
+          const value = row.querySelector('input[type="number"]').value;
+          return `- ${row.dataset.label}: ${value} / ${row.dataset.max}`;
+        }).join('\n');
+        return `${label}
+Wynik końcowy: ${total.toFixed(1)} / 100
+Ocena końcowa: ${grade(total).toFixed(1)}
+${items}`;
+      };
+
+      const appItems = rowsByGroup.app.map((row)=>{
+        const value = row.querySelector('input[type="number"]').value;
+        return `- ${row.dataset.label}: ${value} / ${row.dataset.max}`;
+      }).join('\n');
+
+      return `Raport oceny projektu
+
+Ocena zespołowa: ${appPts} / 40
+Stopień zespołowy: ${grade(appPts*2.5).toFixed(1)}
+${appItems}
+
+${roleReport('leader','Lider/PM')}
+
+${roleReport('dev','Frontend Developer')}
+
+${roleReport('qa','Backend Developer')}`;
+    }
+
+    function exportReportToPdf(){
+      const report = buildReport().replace(/\n/g, '<br>');
+      const win = window.open('', '_blank');
+      if(!win){
+        alert('Nie udało się otworzyć okna eksportu. Sprawdź blokadę wyskakujących okien.');
+        return;
+      }
+      win.document.write(`<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8"><title>Raport oceny projektu</title><style>body{font-family:Arial,sans-serif;line-height:1.4;padding:24px;color:#111;}h1{margin-top:0;}@media print{@page{size:A4;margin:16mm;}}</style></head><body><h1>Raport oceny projektu</h1><p>${report}</p><script>window.onload=()=>window.print();<\/script></body></html>`);
+      win.document.close();
+    }
+
     rows.forEach((row)=>{
       const r = row.querySelector('input[type="range"]');
       const n = row.querySelector('input[type="number"]');
       r.addEventListener('input',()=>{ n.value=r.value; recalc(); });
       n.addEventListener('input', recalc);
     });
+    document.getElementById('exportPdfBtn').addEventListener('click', exportReportToPdf);
     recalc();
   </script>
 </body>
