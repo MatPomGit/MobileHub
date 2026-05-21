@@ -392,6 +392,7 @@
     window.addEventListener('beforeunload', () => {
       if (rafId) cancelAnimationFrame(rafId);
       if (stream) stream.getTracks().forEach((track) => track.stop());
+      if (landmarker) landmarker.close();
       moduleState.cleanup = true;
     });
 
