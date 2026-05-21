@@ -197,13 +197,13 @@
     }
 
     function buildReport(){
-      const appPts = Number(document.getElementById('appPts').textContent.split('/')[0].trim()) || 0;
       const rowsByGroup = {
         app: rows.filter((row)=>row.dataset.group==='app-sub'),
         leader: rows.filter((row)=>row.dataset.group==='leader-sub'),
         dev: rows.filter((row)=>row.dataset.group==='dev-sub'),
         qa: rows.filter((row)=>row.dataset.group==='qa-sub')
       };
+      const appPts = rowsByGroup.app.reduce((sum, r) => sum + (Number(r.querySelector('input[type="number"]')?.value) || 0), 0);
       const roleTotal = (role)=>{
         const parent = rows.find((row)=>row.dataset.group===role && row.dataset.auto==='true');
         return Number(parent?.querySelector('input[type="number"]')?.value || 0);
