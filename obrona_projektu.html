@@ -20,16 +20,64 @@
     .grading-row-title strong { line-height:1.2; }
     .grading-row-title span { color:#93c5fd; font-weight:700; white-space:nowrap; }
     .grading-inputs { display:grid; grid-template-columns: 1fr 72px; gap:8px; align-items:center; }
-    input[type="range"] { width:100%; height:12px; accent-color:#60a5fa; }
+    input[type="range"] {
+      color:#60a5fa;
+      width:100%;
+      margin:0;
+      padding:8px 10px;
+      box-sizing:border-box;
+      height:32px;
+      background:transparent;
+      accent-color:#60a5fa;
+      -webkit-appearance:none;
+      appearance:none;
+      cursor:pointer;
+    }
+    input[type="range"]:focus-visible {
+      outline: 2px solid currentColor;
+      outline-offset: 2px;
+    }
+    input[type="range"]::-webkit-slider-runnable-track { height:8px; border-radius:999px; background:#334155; }
+    input[type="range"]::-moz-range-track { height:8px; border-radius:999px; background:#334155; }
+    .grading-row:not(.is-global) input[type="range"]::-webkit-slider-runnable-track { background:#1e3a8a; }
+    .grading-row:not(.is-global) input[type="range"]::-moz-range-track { background:#1e3a8a; }
+    .grading-row.is-global input[type="range"]::-webkit-slider-runnable-track { background:#92400e; }
+    .grading-row.is-global input[type="range"]::-moz-range-track { background:#92400e; }
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance:none;
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:currentColor;
+      border:5px solid transparent;
+      box-shadow:0 0 0 2px rgba(15,23,42,.95);
+      margin-top:-5px;
+    }
+    input[type="range"]::-moz-range-thumb {
+      width:18px;
+      height:18px;
+      border-radius:50%;
+      background:currentColor;
+      border:5px solid transparent;
+      box-shadow:0 0 0 2px rgba(15,23,42,.95);
+    }
     .grading-row.is-global { border-color:#2563eb; background:#0f172a; box-shadow:0 0 0 1px rgba(37,99,235,.35) inset; }
-    .grading-row.is-global input[type="range"] { accent-color:#f59e0b; }
-    .grading-row:not(.is-global) input[type="range"] { height:8px; }
+    .grading-row[data-parent="leader"], .grading-row[data-group="leader"] { border-color:#7c3aed; background:#1f1636; }
+    .grading-row[data-parent="leader"] .grading-row-title span, .grading-row[data-group="leader"] .grading-row-title span { color:#c4b5fd; }
+    .grading-row[data-parent="dev"], .grading-row[data-group="dev"] { border-color:#0891b2; background:#0f2a34; }
+    .grading-row[data-parent="dev"] .grading-row-title span, .grading-row[data-group="dev"] .grading-row-title span { color:#67e8f9; }
+    .grading-row[data-parent="qa"], .grading-row[data-group="qa"] { border-color:#15803d; background:#122d1e; }
+    .grading-row[data-parent="qa"] .grading-row-title span, .grading-row[data-group="qa"] .grading-row-title span { color:#86efac; }
+    .grading-row.is-global input[type="range"] { accent-color:#f59e0b; color:#f59e0b; }
+    .grading-row:not(.is-global) input[type="range"] { color:#38bdf8; }
     input[type="number"] { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:8px; padding:4px 6px; }
     .summary { display:grid; grid-template-columns:repeat(auto-fit,minmax(160px,1fr)); gap:10px; margin-top:14px; }
     .stat { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; }
     .stat span { display:block; color:#94a3b8; font-size:12px; }
     .stat strong { font-size:20px; }
-    .top-actions { margin: 0 0 12px; }
+    .top-actions { margin: 0 0 12px; display:flex; gap:10px; flex-wrap:wrap; }
+    .action-btn { display:inline-block; background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:10px; padding:8px 12px; font-weight:600; cursor:pointer; }
+    .action-btn:hover { background:#1e293b; }
     .back-btn { display:inline-block; background:#1d4ed8; color:#eff6ff; text-decoration:none; border:1px solid #3b82f6; border-radius:10px; padding:8px 12px; font-weight:600; }
     .back-btn:hover { background:#2563eb; }
     .student-progress { background:#0b1220; border:1px solid #334155; border-radius:10px; padding:10px; margin-top:10px; }
@@ -44,7 +92,7 @@
 <body>
   <main>
     <h1>Obrona projektu i moduł oceniania</h1>
-    <div class="top-actions"><a class="back-btn" href="index.html">← Powrót do strony głównej</a></div>
+    <div class="top-actions"><a class="back-btn" href="index.html">← Powrót do strony głównej</a><button class="action-btn" id="exportPdfBtn" type="button">Eksportuj raport do PDF</button></div>
     <p class="lead">Strona zawiera skrót wymagań projektu, odpowiedzialności ról i kalkulator oceny końcowej dla aplikacji oraz każdego członka zespołu.</p>
 
     <h2>Wymagania dla studentów</h2>
@@ -165,10 +213,10 @@
       });
 
       const colorForPoints = (pts)=>{
-        if(pts < 50) return '#ef4444'; // Ocena 2.0
-        if(pts < 70) return '#eab308'; // Oceny 3.0, 3.5
-        if(pts < 90) return '#3b82f6'; // Oceny 4.0, 4.5
-        return '#22c55e';             // Ocena 5.0
+        if(pts < 50) return '#ef4444';
+        if(pts < 70) return '#eab308';
+        if(pts < 90) return '#3b82f6';
+        return '#22c55e';
       };
       const setProgress = (key, pts)=>{
         const pct = clamp(pts,100);
@@ -194,12 +242,66 @@
       setProgress('qa', appTotal + roles.qa);
     }
 
+    function buildReport(){
+      const rowsByGroup = {
+        app: rows.filter((row)=>row.dataset.group==='app-sub'),
+        leader: rows.filter((row)=>row.dataset.group==='leader-sub'),
+        dev: rows.filter((row)=>row.dataset.group==='dev-sub'),
+        qa: rows.filter((row)=>row.dataset.group==='qa-sub')
+      };
+      const appPts = rowsByGroup.app.reduce((sum, r) => sum + (Number(r.querySelector('input[type="number"]')?.value) || 0), 0);
+      const roleTotal = (role)=>{
+        const parent = rows.find((row)=>row.dataset.group===role && row.dataset.auto==='true');
+        return Number(parent?.querySelector('input[type="number"]')?.value || 0);
+      };
+      const roleReport = (role, label)=>{
+        const total = appPts + roleTotal(role);
+        const items = rowsByGroup[role].map((row)=>{
+          const value = row.querySelector('input[type="number"]').value;
+          return `- ${row.dataset.label}: ${value} / ${row.dataset.max}`;
+        }).join('\n');
+        return `${label}
+Wynik końcowy: ${total.toFixed(1)} / 100
+Ocena końcowa: ${grade(total).toFixed(1)}
+${items}`;
+      };
+
+      const appItems = rowsByGroup.app.map((row)=>{
+        const value = row.querySelector('input[type="number"]').value;
+        return `- ${row.dataset.label}: ${value} / ${row.dataset.max}`;
+      }).join('\n');
+
+      return `Raport oceny projektu
+
+Ocena zespołowa: ${appPts} / 40
+Stopień zespołowy: ${grade(appPts*2.5).toFixed(1)}
+${appItems}
+
+${roleReport('leader','Lider/PM')}
+
+${roleReport('dev','Frontend Developer')}
+
+${roleReport('qa','Backend Developer')}`;
+    }
+
+    function exportReportToPdf(){
+      const report = buildReport().replace(/\n/g, '<br>');
+      const win = window.open('', '_blank');
+      if(!win){
+        alert('Nie udało się otworzyć okna eksportu. Sprawdź blokadę wyskakujących okien.');
+        return;
+      }
+      win.document.write(`<!DOCTYPE html><html lang="pl"><head><meta charset="UTF-8"><title>Raport oceny projektu</title><style>body{font-family:Arial,sans-serif;line-height:1.4;padding:24px;color:#111;}h1{margin-top:0;}@media print{@page{size:A4;margin:16mm;}}</style></head><body><h1>Raport oceny projektu</h1><p>${report}</p><script>window.onload=()=>window.print();<\/script></body></html>`);
+      win.document.close();
+    }
+
     rows.forEach((row)=>{
       const r = row.querySelector('input[type="range"]');
       const n = row.querySelector('input[type="number"]');
       r.addEventListener('input',()=>{ n.value=r.value; recalc(); });
       n.addEventListener('input', recalc);
     });
+    document.getElementById('exportPdfBtn').addEventListener('click', exportReportToPdf);
     recalc();
   </script>
 </body>
