@@ -1,0 +1,410 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ZAL — Tworzenie sesji</title>
+  <style>
+    :root { color-scheme: dark; }
+    body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#0f172a; color:#e2e8f0; }
+    main { max-width:980px; margin:0 auto; padding:24px 20px 56px; }
+    .panel { background:#111827; border:1px solid #334155; border-radius:14px; padding:16px; }
+    .row { display:grid; gap:10px; margin-top:14px; }
+    input, select, button { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:10px; padding:10px 12px; font-size:15px; }
+    .muted { color:#94a3b8; font-size:14px; }
+    .preview-wrap { margin-top: 16px; display: grid; gap: 8px; }
+    .preview-box { width: 280px; max-width: 100%; border: 1px solid #334155; border-radius: 10px; overflow: hidden; background: #020617; }
+    #face-preview { width: 100%; height: auto; display: block; }
+    #face-camera { display: none; }
+    #face-status { margin: 0; }
+    .attention-wrap { width: 280px; max-width:100%; }
+    .attention-row { display:flex; justify-content:space-between; font-size:12px; color:#cbd5e1; margin: 4px 0; }
+    .attention-track { height:8px; background:#1e293b; border:1px solid #334155; border-radius:999px; overflow:hidden; }
+    .attention-fill { height:100%; width:0%; background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e); transition: width .2s linear; }
+    .metrics-mini { width: 280px; max-width: 100%; display:grid; gap:4px; margin-top:6px; }
+    .metric-line { display:flex; justify-content:space-between; font-size:12px; color:#cbd5e1; }
+
+    .status-grid {
+      margin-top: 14px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 8px;
+    }
+    .status-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #0b1220;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      padding: 8px 10px;
+      font-size: 14px;
+    }
+    .status-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239,68,68,0.15);
+      flex: 0 0 auto;
+    }
+    .status-dot.active {
+      background: #22c55e;
+      box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
+    }
+  </style>
+</head>
+<body>
+  <main>
+    <h1>Tworzenie sesji zaliczeniowej</h1>
+    <p class="muted">To jest osobna strona do konfiguracji sesji. Okno próbuje uruchomić się w trybie zmaksymalizowanym.</p>
+    <section class="panel">
+      <div class="row">
+        <label for="session-name">Nazwa sesji</label>
+        <input id="session-name" type="text" placeholder="np. ZAL 2026/06 - grupa A" />
+        <label for="session-mode">Tryb</label>
+        <select id="session-mode"><option>Krótki (25)</option><option>Normalny (50)</option></select>
+        <button type="button">Zapisz szkic sesji</button>
+      </div>
+
+      <div class="preview-wrap" aria-live="polite">
+        <p id="face-status" class="muted">Twarz: inicjalizacja modułu MediaPipe.</p>
+        <div class="preview-box">
+          <canvas id="face-preview" width="320" height="240"></canvas>
+        </div>
+        <div class="attention-wrap">
+          <div class="attention-row"><span>Wskaźnik uwagi</span><span id="attention-value">0.00</span></div>
+          <div class="attention-track"><div id="attention-fill" class="attention-fill"></div></div>
+        </div>
+        <div class="metrics-mini">
+          <div class="metric-line"><span>Dynamika ruchu głowy</span><span id="head-motion-value">0.00</span></div>
+          <div class="metric-line"><span>Odległość od ekranu</span><span id="face-distance-value">0.00</span></div>
+          <div class="metric-line"><span>Mrugnięcia / min</span><span id="blink-rate-value">0.0</span></div>
+        </div>
+        <video id="face-camera" autoplay playsinline muted></video>
+      </div>
+
+      <h2>Stan modułów</h2>
+      <div class="status-grid" id="session-module-statuses" aria-live="polite">
+        <div class="status-item"><span>Maksymalizacja okna</span><span class="status-dot" id="mod-maximize" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Dostęp do kamery</span><span class="status-dot" id="mod-camera" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Inicjalizacja MediaPipe</span><span class="status-dot" id="mod-mediapipe" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Detekcja twarzy</span><span class="status-dot" id="mod-face-detect" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Podgląd twarzy (canvas)</span><span class="status-dot" id="mod-preview" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Zatrzymanie zasobów przy zamknięciu</span><span class="status-dot" id="mod-cleanup" title="nieaktywny"></span></div>
+      </div>
+
+    </section>
+  </main>
+
+  <script type="module">
+    import { FilesetResolver, FaceLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
+
+    const cameraVideo = document.getElementById('face-camera');
+    const previewCanvas = document.getElementById('face-preview');
+    const statusEl = document.getElementById('face-status');
+    const ctx = previewCanvas.getContext('2d');
+    const attentionFill = document.getElementById('attention-fill');
+    const attentionValue = document.getElementById('attention-value');
+    const headMotionValue = document.getElementById('head-motion-value');
+    const faceDistanceValue = document.getElementById('face-distance-value');
+    const blinkRateValue = document.getElementById('blink-rate-value');
+
+    let landmarker = null;
+    let stream = null;
+    let rafId = null;
+    const moduleState = {
+      maximize: false,
+      camera: false,
+      mediapipe: false,
+      faceDetect: false,
+      preview: false,
+      cleanup: false
+    };
+
+    function setModuleActive(moduleId, isActive) {
+      const dot = document.getElementById(moduleId);
+      if (!dot) return;
+      dot.classList.toggle('active', Boolean(isActive));
+      dot.title = isActive ? 'aktywny' : 'nieaktywny';
+    }
+
+    function refreshModuleStatuses() {
+      setModuleActive('mod-maximize', moduleState.maximize);
+      setModuleActive('mod-camera', moduleState.camera);
+      setModuleActive('mod-mediapipe', moduleState.mediapipe);
+      setModuleActive('mod-face-detect', moduleState.faceDetect);
+      setModuleActive('mod-preview', moduleState.preview);
+      setModuleActive('mod-cleanup', moduleState.cleanup);
+    }
+
+
+    const attentionState = {
+      head: 0,
+      eyes: 0,
+      keyboard: 0.5,
+      mouse: 0.5,
+      interaction: 0.5,
+      score: 0
+    };
+    let lastKeyAt = 0;
+    let lastMouseAt = 0;
+    let lastClickAt = 0;
+    let prevNoseX = null;
+    let prevNoseY = null;
+    let prevFrameAt = 0;
+    let prevEarAvg = null;
+    let blinkClosed = false;
+    const blinkTimestamps = [];
+    let headMotionScore = 0;
+    let faceDistanceScore = 0;
+
+    function clamp01(value) {
+      return Math.max(0, Math.min(1, value));
+    }
+
+    function updateAttentionBar() {
+      const total = (
+        attentionState.head * 0.35
+        + attentionState.eyes * 0.25
+        + attentionState.keyboard * 0.15
+        + attentionState.mouse * 0.15
+        + attentionState.interaction * 0.10
+      );
+      attentionState.score = clamp01(total);
+      if (attentionFill) attentionFill.style.width = `${Math.round(attentionState.score * 100)}%`;
+      if (attentionValue) attentionValue.textContent = attentionState.score.toFixed(2);
+    }
+
+    function setupAttentionInteractionTracking() {
+      document.addEventListener('keydown', () => {
+        lastKeyAt = Date.now();
+      });
+      document.addEventListener('mousemove', () => {
+        lastMouseAt = Date.now();
+      });
+      document.addEventListener('click', () => {
+        lastClickAt = Date.now();
+      });
+      setInterval(() => {
+        const now = Date.now();
+        attentionState.keyboard = clamp01(1 - Math.min(1, (now - lastKeyAt) / 12000));
+        attentionState.mouse = clamp01(1 - Math.min(1, (now - lastMouseAt) / 8000));
+        attentionState.interaction = clamp01(1 - Math.min(1, (now - lastClickAt) / 15000));
+        updateAttentionBar();
+      }, 500);
+    }
+
+
+    function eyeAspectRatio(topA, topB, bottomA, bottomB, left, right) {
+      if (!topA || !topB || !bottomA || !bottomB || !left || !right) return null;
+      const vertical = Math.abs(((topA.y + topB.y) / 2) - ((bottomA.y + bottomB.y) / 2));
+      const horizontal = Math.max(Math.abs(right.x - left.x), 0.0001);
+      return vertical / horizontal;
+    }
+
+    function updateExtraMetrics(landmarks) {
+      const leftEyeOuter = landmarks[33];
+      const rightEyeOuter = landmarks[263];
+      const noseTip = landmarks[1];
+      const now = Date.now();
+
+      if (leftEyeOuter && rightEyeOuter) {
+        const eyeDistance = Math.max(Math.abs(rightEyeOuter.x - leftEyeOuter.x), 0.0001);
+        faceDistanceScore = clamp01((eyeDistance - 0.06) / 0.18);
+        if (faceDistanceValue) faceDistanceValue.textContent = faceDistanceScore.toFixed(2);
+      }
+
+      if (noseTip) {
+        if (prevNoseX !== null && prevNoseY !== null && prevFrameAt) {
+          const dt = Math.max(1, now - prevFrameAt);
+          const velocity = Math.hypot(noseTip.x - prevNoseX, noseTip.y - prevNoseY) / dt;
+          headMotionScore = clamp01(1 - (velocity / 0.0025));
+          if (headMotionValue) headMotionValue.textContent = headMotionScore.toFixed(2);
+        }
+        prevNoseX = noseTip.x;
+        prevNoseY = noseTip.y;
+        prevFrameAt = now;
+      }
+
+      const leftEar = eyeAspectRatio(landmarks[159], landmarks[158], landmarks[145], landmarks[144], landmarks[33], landmarks[133]);
+      const rightEar = eyeAspectRatio(landmarks[386], landmarks[385], landmarks[374], landmarks[373], landmarks[362], landmarks[263]);
+      if (leftEar !== null && rightEar !== null) {
+        const earAvg = (leftEar + rightEar) / 2;
+        const closeThreshold = 0.16;
+        const openThreshold = 0.20;
+        if (!blinkClosed && earAvg < closeThreshold && (prevEarAvg === null || prevEarAvg >= closeThreshold)) {
+          blinkClosed = true;
+        }
+        if (blinkClosed && earAvg > openThreshold) {
+          blinkClosed = false;
+          blinkTimestamps.push(now);
+        }
+        prevEarAvg = earAvg;
+      }
+
+      const minuteAgo = now - 60000;
+      while (blinkTimestamps.length && blinkTimestamps[0] < minuteAgo) blinkTimestamps.shift();
+      if (blinkRateValue) blinkRateValue.textContent = String(blinkTimestamps.length.toFixed(1));
+    }
+
+    function setStatus(message) {
+      if (statusEl) statusEl.textContent = `Twarz: ${message}`;
+    }
+
+    function estimateHeadAndEyesScore(landmarks) {
+      const leftEyeOuter = landmarks[33];
+      const rightEyeOuter = landmarks[263];
+      const leftIris = landmarks[468];
+      const rightIris = landmarks[473];
+      const noseTip = landmarks[1];
+      if (!leftEyeOuter || !rightEyeOuter || !noseTip) return { head: 0, eyes: 0 };
+
+      const eyesCenterX = (leftEyeOuter.x + rightEyeOuter.x) / 2;
+      const eyeDistance = Math.max(Math.abs(rightEyeOuter.x - leftEyeOuter.x), 0.0001);
+      const yawNorm = Math.abs((noseTip.x - eyesCenterX) / eyeDistance);
+      const headScore = clamp01(1 - (yawNorm / 0.45));
+
+      let eyesScore = headScore;
+      if (leftIris && rightIris) {
+        const irisCenterX = (leftIris.x + rightIris.x) / 2;
+        const irisOffset = Math.abs((irisCenterX - eyesCenterX) / eyeDistance);
+        eyesScore = clamp01(1 - (irisOffset / 0.35));
+      }
+      return { head: headScore, eyes: eyesScore };
+    }
+
+    function drawLandmarks(landmarks, w, h) {
+      ctx.fillStyle = '#22d3ee';
+      for (const point of landmarks) {
+        const x = point.x * w;
+        const y = point.y * h;
+        ctx.beginPath();
+        ctx.arc(x, y, 1.6, 0, Math.PI * 2);
+        ctx.fill();
+      }
+    }
+
+    async function tryMaximize() {
+      let moved = false;
+      let resized = false;
+      try { window.moveTo(0, 0); moved = true; } catch (e) { /* noop */ }
+      try { window.resizeTo(window.screen.availWidth, window.screen.availHeight); resized = true; } catch (e) { /* noop */ }
+      const requestFs = document.documentElement.requestFullscreen
+        || document.documentElement.webkitRequestFullscreen
+        || document.documentElement.msRequestFullscreen;
+      let fullscreen = false;
+      if (requestFs) {
+        try { await Promise.resolve(requestFs.call(document.documentElement)); fullscreen = true; } catch (e) { /* noop */ }
+      }
+      moduleState.maximize = moved || resized || fullscreen;
+      refreshModuleStatuses();
+    }
+
+    async function setupFaceTracking() {
+      if (!navigator.mediaDevices?.getUserMedia) {
+        setStatus('przeglądarka nie wspiera dostępu do kamery.');
+        return;
+      }
+
+      try {
+        stream = await navigator.mediaDevices.getUserMedia({
+          video: { facingMode: 'user', width: { ideal: 640 }, height: { ideal: 480 } },
+          audio: false
+        });
+        cameraVideo.srcObject = stream;
+        await cameraVideo.play();
+        moduleState.camera = true;
+        updateAttentionBar();
+        refreshModuleStatuses();
+      } catch (error) {
+        setStatus(`brak dostępu do kamery (${error?.name || 'unknown'}).`);
+        moduleState.camera = false;
+        updateAttentionBar();
+        refreshModuleStatuses();
+        return;
+      }
+
+      try {
+        const vision = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
+        landmarker = await FaceLandmarker.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+          },
+          runningMode: 'VIDEO',
+          numFaces: 1
+        });
+        moduleState.mediapipe = true;
+        updateAttentionBar();
+        refreshModuleStatuses();
+      } catch (error) {
+        setStatus('nie udało się uruchomić detektora twarzy.');
+        moduleState.mediapipe = false;
+        updateAttentionBar();
+        refreshModuleStatuses();
+        return;
+      }
+
+      setStatus('detekcja uruchomiona.');
+      const loop = () => {
+        if (!landmarker || !cameraVideo.videoWidth) {
+          rafId = requestAnimationFrame(loop);
+          return;
+        }
+
+        const w = previewCanvas.width;
+        const h = previewCanvas.height;
+        ctx.drawImage(cameraVideo, 0, 0, w, h);
+        moduleState.preview = true;
+
+        const result = landmarker.detectForVideo(cameraVideo, Date.now());
+        const faces = result?.faceLandmarks || [];
+
+        if (faces.length > 0) {
+          drawLandmarks(faces[0], w, h);
+          setStatus('wykryto twarz.');
+          moduleState.faceDetect = true;
+          const scores = estimateHeadAndEyesScore(faces[0]);
+          attentionState.head = scores.head;
+          attentionState.eyes = scores.eyes;
+          updateExtraMetrics(faces[0]);
+          attentionState.head = clamp01((attentionState.head * 0.7) + (headMotionScore * 0.3));
+          attentionState.interaction = clamp01((attentionState.interaction * 0.7) + (faceDistanceScore * 0.3));
+        } else {
+          setStatus('nie wykryto twarzy.');
+          moduleState.faceDetect = false;
+          attentionState.head = 0;
+          attentionState.eyes = 0;
+          if (headMotionValue) headMotionValue.textContent = "0.00";
+          if (faceDistanceValue) faceDistanceValue.textContent = "0.00";
+        }
+
+        updateAttentionBar();
+        refreshModuleStatuses();
+        rafId = requestAnimationFrame(loop);
+      };
+
+      rafId = requestAnimationFrame(loop);
+    }
+
+    window.addEventListener('beforeunload', () => {
+      if (rafId) cancelAnimationFrame(rafId);
+      if (stream) stream.getTracks().forEach((track) => track.stop());
+      if (landmarker) landmarker.close();
+      moduleState.cleanup = true;
+    });
+
+    (async function init() {
+      refreshModuleStatuses();
+      setupAttentionInteractionTracking();
+      updateAttentionBar();
+      await tryMaximize();
+      await setupFaceTracking();
+      moduleState.cleanup = true;
+      refreshModuleStatuses();
+    }());
+  </script>
+</body>
+</html>

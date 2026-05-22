@@ -180,7 +180,7 @@
     <section class="grid" aria-label="Plan funkcjonalny modułu ZAL">
       <p class="muted">Wybierz moduł, aby wyświetlić szczegóły.</p>
       <article class="card">
-        <button type="button" class="tab-btn" data-target="sessions-panel">
+        <button type="button" class="tab-btn" data-open-url="zal_sesje.html">
           <h2>Sesje zaliczeniowe</h2>
         <p class="muted">Tworzenie sesji, harmonogramów, limitów czasowych i zasad podejścia.</p>
         </button>
@@ -328,6 +328,16 @@
 
       tabButtons.forEach((button) => {
         button.addEventListener('click', () => {
+          const openUrl = button.dataset.openUrl;
+          if (openUrl) {
+            const sessionWindow = window.open(openUrl, 'zalSessionBuilder', 'popup=yes,width=1440,height=900,left=0,top=0,resizable=yes');
+            if (sessionWindow) {
+              sessionWindow.focus();
+            } else {
+              alert('Otwarcie okna zostało zablokowane. Proszę zezwolić na wyskakujące okienka dla tej strony.');
+            }
+            return;
+          }
           activatePanel(button.dataset.target);
         });
       });
