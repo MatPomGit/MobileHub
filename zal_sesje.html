@@ -92,6 +92,7 @@
         <div class="status-item"><span>Detekcja twarzy</span><span class="status-dot" id="mod-face-detect" title="nieaktywny"></span></div>
         <div class="status-item"><span>Podgląd twarzy (canvas)</span><span class="status-dot" id="mod-preview" title="nieaktywny"></span></div>
         <div class="status-item"><span>Zatrzymanie zasobów przy zamknięciu</span><span class="status-dot" id="mod-cleanup" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Zapisywanie logów sesji</span><span class="status-dot" id="mod-save-logs" title="nieaktywny"></span></div>
       </div>
 
     </section>
@@ -119,7 +120,8 @@
       mediapipe: false,
       faceDetect: false,
       preview: false,
-      cleanup: false
+      cleanup: false,
+      saveLogs: false
     };
 
     function setModuleActive(moduleId, isActive) {
@@ -136,6 +138,36 @@
       setModuleActive('mod-face-detect', moduleState.faceDetect);
       setModuleActive('mod-preview', moduleState.preview);
       setModuleActive('mod-cleanup', moduleState.cleanup);
+      setModuleActive('mod-save-logs', moduleState.saveLogs);
+    }
+
+
+    const SESSION_LOG_DB_NAME = 'zal_session_logs_db';
+    const SESSION_LOG_STORE = 'events';
+    const SESSION_LOG_DB_VERSION = 1;
+    let sessionLogDb = null;
+
+    function initSessionLogDb() {
+      if (!('indexedDB' in window)) return;
+      const request = indexedDB.open(SESSION_LOG_DB_NAME, SESSION_LOG_DB_VERSION);
+      request.onupgradeneeded = () => {
+        const db = request.result;
+        if (!db.objectStoreNames.contains(SESSION_LOG_STORE)) {
+          const store = db.createObjectStore(SESSION_LOG_STORE, { keyPath: 'id', autoIncrement: true });
+          store.createIndex('ts', 'ts', { unique: false });
+        }
+      };
+      request.onsuccess = () => {
+        sessionLogDb = request.result;
+        moduleState.saveLogs = true;
+        refreshModuleStatuses();
+      };
+    }
+
+    function logSessionEvent(type, details) {
+      if (!sessionLogDb) return;
+      const tx = sessionLogDb.transaction(SESSION_LOG_STORE, 'readwrite');
+      tx.objectStore(SESSION_LOG_STORE).add({ ts: new Date().toISOString(), type, details });
     }
 
 
@@ -179,12 +211,14 @@
     function setupAttentionInteractionTracking() {
       document.addEventListener('keydown', () => {
         lastKeyAt = Date.now();
+        logSessionEvent('keyboard.keydown', 'interaction');
       });
       document.addEventListener('mousemove', () => {
         lastMouseAt = Date.now();
       });
       document.addEventListener('click', () => {
         lastClickAt = Date.now();
+        logSessionEvent('mouse.click', 'interaction');
       });
       setInterval(() => {
         const now = Date.now();
@@ -398,7 +432,8 @@
 
     (async function init() {
       refreshModuleStatuses();
-      setupAttentionInteractionTracking();
+      initSessionLogDb();
+    setupAttentionInteractionTracking();
       updateAttentionBar();
       await tryMaximize();
       await setupFaceTracking();

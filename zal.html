@@ -419,7 +419,12 @@
       const zalLogs = [];
       let logDb = null;
       const MOUSE_SAMPLE_MS = 300;
+      const MAX_IN_MEMORY_LOGS = 1200;
+      const MAX_RENDERED_LOGS = 400;
+      const MAX_LOG_DETAIL_LENGTH = 700;
       let lastMouseLogAt = 0;
+      let logWriteQueue = [];
+      let isFlushingLogQueue = false;
 
       refreshModuleStatuses();
 
@@ -445,6 +450,7 @@
         request.onsuccess = () => {
           logDb = request.result;
           setDbStatus('Baza logów: gotowa. Możesz zapisywać i odczytywać logi.');
+          flushLogQueue();
           refreshModuleStatuses();
         };
         request.onerror = () => {
@@ -452,10 +458,28 @@
         };
       }
 
-      function persistLogEntry(entry) {
-        if (!logDb) return;
+      function enqueueLogEntry(entry) {
+        logWriteQueue.push(entry);
+        flushLogQueue();
+      }
+
+      function flushLogQueue() {
+        if (!logDb || isFlushingLogQueue || !logWriteQueue.length) return;
+        isFlushingLogQueue = true;
+        const batch = logWriteQueue.splice(0, 100);
         const tx = logDb.transaction(LOG_STORE, 'readwrite');
-        tx.objectStore(LOG_STORE).add(entry);
+        const store = tx.objectStore(LOG_STORE);
+        batch.forEach((item) => store.add(item));
+        tx.oncomplete = () => {
+          isFlushingLogQueue = false;
+          if (logWriteQueue.length) flushLogQueue();
+        };
+        tx.onerror = () => {
+          const errorMessage = tx.error?.message || 'unknown';
+          logWriteQueue = batch.concat(logWriteQueue);
+          isFlushingLogQueue = false;
+          setDbStatus(`Baza logów: błąd zapisu (${errorMessage}). Kolejka oczekuje: ${logWriteQueue.length}.`);
+        };
       }
 
       function loadLogsFromDb() {
@@ -487,6 +511,7 @@
         const req = tx.objectStore(LOG_STORE).clear();
         req.onsuccess = () => {
           zalLogs.length = 0;
+          logWriteQueue = [];
           renderLogs();
           setDbStatus('Baza logów: rekordy zostały usunięte.');
         };
@@ -496,9 +521,14 @@
       }
 
       function logEvent(type, details) {
-        const entry = { ts: new Date().toISOString(), type, details };
+        const normalizedType = String(type || 'event.unknown');
+        const normalizedDetails = String(details || '').slice(0, MAX_LOG_DETAIL_LENGTH);
+        const entry = { ts: new Date().toISOString(), type: normalizedType, details: normalizedDetails };
         zalLogs.push(entry);
-        persistLogEntry(entry);
+        if (zalLogs.length > MAX_IN_MEMORY_LOGS) {
+          zalLogs.splice(0, zalLogs.length - MAX_IN_MEMORY_LOGS);
+        }
+        enqueueLogEntry(entry);
         renderLogs();
       }
 
@@ -510,7 +540,7 @@
           body.innerHTML = '<tr><td colspan="3">Brak logów.</td></tr>';
           return;
         }
-        zalLogs.slice(-400).forEach((row) => {
+        zalLogs.slice(-MAX_RENDERED_LOGS).forEach((row) => {
           const tr = document.createElement('tr');
           const tdTs = document.createElement('td'); tdTs.textContent = row.ts;
           const tdType = document.createElement('td'); tdType.textContent = row.type;
