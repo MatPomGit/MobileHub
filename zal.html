@@ -467,7 +467,7 @@
       function flushLogQueue() {
         if (!logDb || isFlushingLogQueue || !logWriteQueue.length) return;
         isFlushingLogQueue = true;
-        const batch = logWriteQueue.splice(0, 100);
+        const batch = logWriteQueue.splice(0, MAX_LOG_BATCH_SIZE);
         const tx = logDb.transaction(LOG_STORE, 'readwrite');
         const store = tx.objectStore(LOG_STORE);
         batch.forEach((item) => store.add(item));
