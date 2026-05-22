@@ -86,7 +86,15 @@
     .progress-fill { position:absolute; inset:0 auto 0 0; width:0%; background:var(--fill,#ef4444); transition:width .2s ease, background-color .2s ease; }
     .progress-threshold { position:absolute; top:0; bottom:0; width:2px; left:50%; background:#e2e8f0; opacity:.95; }
     .progress-labels { display:flex; justify-content:space-between; font-size:10px; color:#94a3b8; margin-top:6px; }
-    @media (max-width: 880px){ .grading-row{ grid-template-columns:1fr; } }
+    .controls-row { display:flex; flex-wrap:wrap; gap:8px; margin:8px 0 4px; }
+    .pill-btn { background:#1e293b; color:#e2e8f0; border:1px solid #475569; border-radius:999px; padding:6px 10px; font-size:12px; cursor:pointer; }
+    .pill-btn:hover { background:#334155; }
+    .grading-row.is-active { box-shadow:0 0 0 2px rgba(56,189,248,.45), 0 10px 20px rgba(2,6,23,.22); transform:translateY(-1px); transition:box-shadow .18s ease, transform .18s ease; }
+    .sticky-summary { position:sticky; bottom:10px; z-index:5; margin-top:14px; padding:10px; border:1px solid #334155; border-radius:12px; background:rgba(2,6,23,.9); backdrop-filter: blur(6px); display:flex; justify-content:space-between; gap:12px; align-items:center; }
+    .sticky-summary strong { font-size:15px; }
+    .sticky-summary span { color:#93c5fd; font-weight:700; }
+    @media (max-width: 880px){ .grading-row{ grid-template-columns:1fr; } .grading-inputs{ grid-template-columns:1fr; } .top-actions{ gap:8px; } }
+    @media (max-width: 640px){ main{ padding:18px 12px 42px; } .action-btn,.back-btn{ width:100%; text-align:center; } .sticky-summary{ flex-direction:column; align-items:flex-start; } }
   </style>
 </head>
 <body>
@@ -116,6 +124,11 @@
     </div>
 
     <h2>Moduł oceniania (suwaki)</h2>
+    <div class="controls-row" aria-label="Szybkie akcje oceniania">
+      <button class="pill-btn" id="fillBalancedBtn" type="button">Ustaw 50%</button>
+      <button class="pill-btn" id="fillMaxBtn" type="button">Ustaw maksimum</button>
+      <button class="pill-btn" id="clearAllBtn" type="button">Wyczyść wszystkie suwaki</button>
+    </div>
     <div class="box" id="grader">
       <div class="grading-row" data-group="app" data-max="40" data-auto="true"><div class="grading-row-title"><strong>Globalny suwak aplikacji (0–40, auto)</strong><span>0 / 40</span></div><div class="grading-inputs"><input type="range" min="0" max="40" value="0" disabled><input type="number" min="0" max="40" value="0" readonly></div></div>
       <div class="grading-row" data-group="app-sub" data-parent="app" data-label="Demo na urządzeniu" data-max="5"><div class="grading-row-title"><strong>Aplikacja: działanie na fizycznym smartfonie + demo</strong><span>0 / 5</span></div><div class="grading-inputs"><input type="range" min="0" max="5" value="0"><input type="number" min="0" max="5" value="0"></div></div>
@@ -164,6 +177,10 @@
       <div class="student-progress" id="leaderProgressWrap"><div class="student-progress-head"><strong>Lider/PM</strong><span id="leaderProgressText">0.0 / 100 · 2.0</span></div><div class="progress-track"><div class="progress-fill" id="leaderProgressFill"></div><div class="progress-threshold" title="Próg zaliczenia 50%"></div></div><div class="progress-labels"><span>2.0</span><span>3.0</span><span>3.5</span><span>4.0</span><span>4.5</span><span>5.0</span></div></div>
       <div class="student-progress" id="devProgressWrap"><div class="student-progress-head"><strong>Frontend Developer</strong><span id="devProgressText">0.0 / 100 · 2.0</span></div><div class="progress-track"><div class="progress-fill" id="devProgressFill"></div><div class="progress-threshold" title="Próg zaliczenia 50%"></div></div><div class="progress-labels"><span>2.0</span><span>3.0</span><span>3.5</span><span>4.0</span><span>4.5</span><span>5.0</span></div></div>
       <div class="student-progress" id="qaProgressWrap"><div class="student-progress-head"><strong>Backend Developer</strong><span id="qaProgressText">0.0 / 100 · 2.0</span></div><div class="progress-track"><div class="progress-fill" id="qaProgressFill"></div><div class="progress-threshold" title="Próg zaliczenia 50%"></div></div><div class="progress-labels"><span>2.0</span><span>3.0</span><span>3.5</span><span>4.0</span><span>4.5</span><span>5.0</span></div></div>
+      <div class="sticky-summary" role="status" aria-live="polite">
+        <strong>Szybki podgląd</strong>
+        <div><span id="quickBestRole">Najlepszy wynik: Lider/PM 0.0</span></div>
+      </div>
     </div>
   </main>
 
@@ -237,9 +254,16 @@
       document.getElementById('leaderFinal').textContent = final(roles.leader);
       document.getElementById('devFinal').textContent = final(roles.dev);
       document.getElementById('qaFinal').textContent = final(roles.qa);
-      setProgress('leader', appTotal + roles.leader);
-      setProgress('dev', appTotal + roles.dev);
-      setProgress('qa', appTotal + roles.qa);
+      const finalScores = {
+        'Lider/PM': appTotal + roles.leader,
+        'Frontend Developer': appTotal + roles.dev,
+        'Backend Developer': appTotal + roles.qa
+      };
+      const bestEntry = Object.entries(finalScores).sort((a,b)=>b[1]-a[1])[0];
+      document.getElementById('quickBestRole').textContent = `Najlepszy wynik: ${bestEntry[0]} ${bestEntry[1].toFixed(1)} / 100`;
+      setProgress('leader', finalScores['Lider/PM']);
+      setProgress('dev', finalScores['Frontend Developer']);
+      setProgress('qa', finalScores['Backend Developer']);
     }
 
     function buildReport(){
@@ -295,13 +319,34 @@ ${roleReport('qa','Backend Developer')}`;
       win.document.close();
     }
 
+    function setAllManualRows(mode){
+      rows.forEach((row)=>{
+        if(row.dataset.auto==='true') return;
+        const max = Number(row.dataset.max || 0);
+        const input = row.querySelector('input[type="number"]');
+        if(mode==='max') input.value = max;
+        else if(mode==='half') input.value = Math.round(max / 2);
+        else input.value = 0;
+      });
+      recalc();
+    }
+
     rows.forEach((row)=>{
       const r = row.querySelector('input[type="range"]');
       const n = row.querySelector('input[type="number"]');
+      const activate = ()=> row.classList.add('is-active');
+      const deactivate = ()=> row.classList.remove('is-active');
       r.addEventListener('input',()=>{ n.value=r.value; recalc(); });
       n.addEventListener('input', recalc);
+      r.addEventListener('focus', activate);
+      n.addEventListener('focus', activate);
+      r.addEventListener('blur', deactivate);
+      n.addEventListener('blur', deactivate);
     });
     document.getElementById('exportPdfBtn').addEventListener('click', exportReportToPdf);
+    document.getElementById('fillMaxBtn').addEventListener('click', ()=> setAllManualRows('max'));
+    document.getElementById('fillBalancedBtn').addEventListener('click', ()=> setAllManualRows('half'));
+    document.getElementById('clearAllBtn').addEventListener('click', ()=> setAllManualRows('clear'));
     recalc();
   </script>
 </body>
