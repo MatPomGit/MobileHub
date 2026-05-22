@@ -254,16 +254,14 @@
       document.getElementById('leaderFinal').textContent = final(roles.leader);
       document.getElementById('devFinal').textContent = final(roles.dev);
       document.getElementById('qaFinal').textContent = final(roles.qa);
-      const finalScores = {
-        'Lider/PM': appTotal + roles.leader,
-        'Frontend Developer': appTotal + roles.dev,
-        'Backend Developer': appTotal + roles.qa
-      };
-      const bestEntry = Object.entries(finalScores).sort((a,b)=>b[1]-a[1])[0];
-      document.getElementById('quickBestRole').textContent = `Najlepszy wynik: ${bestEntry[0]} ${bestEntry[1].toFixed(1)} / 100`;
-      setProgress('leader', finalScores['Lider/PM']);
-      setProgress('dev', finalScores['Frontend Developer']);
-      setProgress('qa', finalScores['Backend Developer']);
+      const scores = [
+        { id: 'leader', name: 'Lider/PM', val: appTotal + roles.leader },
+        { id: 'dev', name: 'Frontend Developer', val: appTotal + roles.dev },
+        { id: 'qa', name: 'Backend Developer', val: appTotal + roles.qa }
+      ];
+      const best = scores.sort((a, b) => b.val - a.val)[0];
+      document.getElementById('quickBestRole').textContent = `Najlepszy wynik: ${best.name} ${best.val.toFixed(1)} / 100`;
+      scores.forEach(s => setProgress(s.id, s.val));
     }
 
     function buildReport(){
