@@ -1,7 +1,7 @@
 'use strict';
 
 import { WikiStore } from './wiki-data.js';
-import { CLASSES, DATA_ATTRS } from './dom-map.js';
+import { CLASSES, DATA_ATTRS, IDS } from './dom-map.js';
 import { onClick } from './wiki-dom-utils.js';
 
 export function buildSidebar(navigateToArticle) {
