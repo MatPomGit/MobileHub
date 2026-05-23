@@ -23,7 +23,7 @@ test('start_url remains reachable offline after first online load', async ({ pag
 
   await context.setOffline(false);
   await expect.poll(async () => page.evaluate(() => navigator.onLine)).toBeTruthy();
-  await page.reload({ waitUntil: 'networkidle' });
+  await page.reload({ waitUntil: 'domcontentloaded' });
 
   await expect(offlineIndicator).toContainText('Online');
   await expect(page.locator('#mainContent')).toBeVisible();
