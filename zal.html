@@ -699,7 +699,7 @@
         const forehead = landmarks[10];
         const chin = landmarks[152];
         if (!leftEye || !rightEye || !noseTip || !forehead || !chin) {
-          return { isFacingScreen: false, yawNorm: 0, pitchNorm: 0, rollNorm: 0, reason: 'missing_landmarks' };
+          return { isFacingScreen: false, yawNorm: 0, pitchNorm: 0, rollNorm: 0, reason: 'missing_landmarks', distanceStrictness: 0, eyeDistance: 0 };
         }
 
         const eyesCenterX = (leftEye.x + rightEye.x) / 2;
