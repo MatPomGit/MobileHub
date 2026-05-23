@@ -292,18 +292,35 @@
       const leftIris = landmarks[468];
       const rightIris = landmarks[473];
       const noseTip = landmarks[1];
-      if (!leftEyeOuter || !rightEyeOuter || !noseTip) return { head: 0, eyes: 0 };
+      const forehead = landmarks[10];
+      const chin = landmarks[152];
+      if (!leftEyeOuter || !rightEyeOuter || !noseTip || !forehead || !chin) return { head: 0, eyes: 0 };
 
       const eyesCenterX = (leftEyeOuter.x + rightEyeOuter.x) / 2;
+      const eyesCenterY = (leftEyeOuter.y + rightEyeOuter.y) / 2;
       const eyeDistance = Math.max(Math.abs(rightEyeOuter.x - leftEyeOuter.x), 0.0001);
+      const faceHeight = Math.max(Math.abs(chin.y - forehead.y), 0.0001);
+      const distanceNorm = clamp01((eyeDistance - 0.07) / 0.17);
+      const distanceStrictness = 1 - distanceNorm;
       const yawNorm = Math.abs((noseTip.x - eyesCenterX) / eyeDistance);
-      const headScore = clamp01(1 - (yawNorm / 0.45));
+      const pitchNorm = Math.abs((noseTip.y - eyesCenterY) / faceHeight - 0.34);
+      const rollNorm = Math.abs((rightEyeOuter.y - leftEyeOuter.y) / eyeDistance);
+
+      const yawLimit = 0.22 - (distanceStrictness * 0.08);
+      const pitchLimit = 0.24 - (distanceStrictness * 0.08);
+      const rollLimit = 0.16 - (distanceStrictness * 0.05);
+      const yawPenalty = clamp01(yawNorm / Math.max(yawLimit, 0.08));
+      const pitchPenalty = clamp01(pitchNorm / Math.max(pitchLimit, 0.08));
+      const rollPenalty = clamp01(rollNorm / Math.max(rollLimit, 0.06));
+      const offscreenPenalty = clamp01(((yawPenalty * 0.65) + (pitchPenalty * 0.2) + (rollPenalty * 0.15)) * (1 + (distanceStrictness * 0.7)));
+      const headScore = clamp01(1 - (offscreenPenalty * 1.35));
 
       let eyesScore = headScore;
       if (leftIris && rightIris) {
         const irisCenterX = (leftIris.x + rightIris.x) / 2;
         const irisOffset = Math.abs((irisCenterX - eyesCenterX) / eyeDistance);
-        eyesScore = clamp01(1 - (irisOffset / 0.35));
+        const irisPenalty = clamp01(irisOffset / 0.25);
+        eyesScore = clamp01(1 - ((irisPenalty * 0.6) + (offscreenPenalty * 0.7)));
       }
       return { head: headScore, eyes: eyesScore };
     }

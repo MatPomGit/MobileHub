@@ -696,13 +696,38 @@
         const leftEye = landmarks[33];
         const rightEye = landmarks[263];
         const noseTip = landmarks[1];
-        if (!leftEye || !rightEye || !noseTip) return { isFacingScreen: false, yawNorm: 0, reason: 'missing_landmarks' };
+        const forehead = landmarks[10];
+        const chin = landmarks[152];
+        if (!leftEye || !rightEye || !noseTip || !forehead || !chin) {
+          return { isFacingScreen: false, yawNorm: 0, pitchNorm: 0, rollNorm: 0, reason: 'missing_landmarks' };
+        }
 
         const eyesCenterX = (leftEye.x + rightEye.x) / 2;
         const eyeDistance = Math.max(Math.abs(rightEye.x - leftEye.x), 0.0001);
         const yawNorm = (noseTip.x - eyesCenterX) / eyeDistance;
-        const isFacingScreen = Math.abs(yawNorm) < 0.35;
-        return { isFacingScreen, yawNorm, reason: isFacingScreen ? 'looking_at_screen' : 'looking_away' };
+        const eyesCenterY = (leftEye.y + rightEye.y) / 2;
+        const faceHeight = Math.max(Math.abs(chin.y - forehead.y), 0.0001);
+        const pitchNorm = (noseTip.y - eyesCenterY) / faceHeight;
+        const rollNorm = Math.abs((rightEye.y - leftEye.y) / eyeDistance);
+        const distanceNorm = Math.max(0, Math.min(1, (eyeDistance - 0.07) / 0.17));
+        const distanceStrictness = 1 - distanceNorm;
+
+        const yawLimit = 0.22 - (distanceStrictness * 0.08);
+        const pitchMin = 0.18 + (distanceStrictness * 0.05);
+        const pitchMax = 0.50 - (distanceStrictness * 0.05);
+        const rollLimit = 0.16 - (distanceStrictness * 0.05);
+        const isFacingScreen = (
+          Math.abs(yawNorm) <= yawLimit
+          && pitchNorm >= pitchMin
+          && pitchNorm <= pitchMax
+          && rollNorm <= rollLimit
+        );
+
+        let reason = 'looking_at_screen';
+        if (Math.abs(yawNorm) > yawLimit) reason = 'head_yaw_offscreen';
+        else if (pitchNorm < pitchMin || pitchNorm > pitchMax) reason = 'head_pitch_offscreen';
+        else if (rollNorm > rollLimit) reason = 'head_roll_offscreen';
+        return { isFacingScreen, yawNorm, pitchNorm, rollNorm, reason, distanceStrictness, eyeDistance };
       }
 
       async function scheduleFaceDetectionLogging() {
@@ -732,7 +757,12 @@
             const assessment = assessFacingScreen(faces[0]);
             isFacingScreen = assessment.isFacingScreen;
             reason = assessment.reason;
-            confidence = Math.max(0, 1 - Math.min(1, Math.abs(assessment.yawNorm)));
+            const yawPenalty = Math.min(1, Math.abs(assessment.yawNorm) / 0.22);
+            const pitchPenalty = Math.min(1, Math.abs(assessment.pitchNorm - 0.34) / 0.24);
+            const rollPenalty = Math.min(1, assessment.rollNorm / 0.16);
+            const distancePenaltyBoost = 1 + (assessment.distanceStrictness * 0.8);
+            const combinedPenalty = ((yawPenalty * 0.6) + (pitchPenalty * 0.25) + (rollPenalty * 0.15)) * distancePenaltyBoost;
+            confidence = Math.max(0, 1 - combinedPenalty);
           }
 
           if (!isFacingScreen) {
