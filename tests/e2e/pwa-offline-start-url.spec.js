@@ -1,5 +1,5 @@
-// Test PWA/offline wykrywa brak cache dla start_url po pierwszym załadowaniu.
-// Blokuje regresję, w której zainstalowana aplikacja nie startuje offline po wcześniejszej wizycie.
+// Test PWA/offline weryfikuje, czy start_url działa bez sieci po pierwszym uruchomieniu online.
+// Blokuje regresję, w której aplikacja otwiera pustą stronę lub błędny fallback zamiast właściwej treści.
 const { test, expect } = require('@playwright/test');
 
 test('start_url remains reachable offline after first online load', async ({ page, context }) => {
@@ -15,14 +15,16 @@ test('start_url remains reachable offline after first online load', async ({ pag
   }).toPass({ timeout: 15000 });
 
   await context.setOffline(true);
-  await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
-  await expect(page.locator('body')).toBeVisible();
+  await page.goto('/index.html', { waitUntil: 'networkidle' });
 
-  const offlineFallback = page.locator('#offlineIndicator');
-  await expect(offlineFallback).toContainText('Tryb offline');
+  const offlineIndicator = page.locator('#offlineIndicator');
+  await expect(offlineIndicator).toContainText('Tryb offline');
+  await expect(page.locator('#mainContent')).toBeVisible();
 
   await context.setOffline(false);
-  await page.reload({ waitUntil: 'domcontentloaded' });
-  await expect(offlineFallback).toContainText('Online');
+  await expect.poll(async () => page.evaluate(() => navigator.onLine)).toBeTruthy();
+  await page.reload({ waitUntil: 'networkidle' });
+
+  await expect(offlineIndicator).toContainText('Online');
   await expect(page.locator('#mainContent')).toBeVisible();
 });
