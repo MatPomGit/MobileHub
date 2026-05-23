@@ -706,7 +706,7 @@
         const eyeDistance = Math.max(Math.abs(rightEye.x - leftEye.x), 0.0001);
         const yawNorm = (noseTip.x - eyesCenterX) / eyeDistance;
         const eyesCenterY = (leftEye.y + rightEye.y) / 2;
-        const faceHeight = Math.max(Math.abs(chin.y - forehead.y), 0.0001);
+        const faceHeight = Math.max(Math.hypot(chin.x - forehead.x, chin.y - forehead.y), 0.0001);
         const pitchNorm = (noseTip.y - eyesCenterY) / faceHeight;
         const rollNorm = Math.abs((rightEye.y - leftEye.y) / eyeDistance);
         const distanceNorm = Math.max(0, Math.min(1, (eyeDistance - 0.07) / 0.17));
