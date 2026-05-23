@@ -15,7 +15,7 @@ test('start_url remains reachable offline after first online load', async ({ pag
   }).toPass({ timeout: 15000 });
 
   await context.setOffline(true);
-  await page.goto('/index.html', { waitUntil: 'networkidle' });
+  await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
 
   const offlineIndicator = page.locator('#offlineIndicator');
   await expect(offlineIndicator).toContainText('Tryb offline');
