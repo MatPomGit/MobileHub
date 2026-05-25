@@ -277,7 +277,7 @@
 
       if (leftEyeOuter && rightEyeOuter) {
         const eyeDistance = Math.max(Math.abs(rightEyeOuter.x - leftEyeOuter.x), 0.0001);
-        const mobileNarrowScreen = window.matchMedia('(max-width: 768px)').matches;
+        const mobileNarrowScreen = window.innerWidth <= 768;
         const nearThreshold = mobileNarrowScreen ? 0.045 : 0.06;
         const farThreshold = mobileNarrowScreen ? 0.19 : 0.24;
         faceDistanceScore = clamp01((eyeDistance - nearThreshold) / Math.max(0.01, (farThreshold - nearThreshold)));
