@@ -52,6 +52,26 @@
       background: #22c55e;
       box-shadow: 0 0 0 3px rgba(34,197,94,0.15);
     }
+    .attention-alert {
+      display: none;
+      align-items: center;
+      gap: 6px;
+      margin-top: 6px;
+      color: #f87171;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .attention-alert.visible {
+      display: inline-flex;
+    }
+    .attention-exclamation {
+      color: #ef4444;
+      font-size: 18px;
+      line-height: 1;
+    }
+    body.attention-warning {
+      box-shadow: inset 0 0 0 4px #ef4444;
+    }
   </style>
 </head>
 <body>
@@ -75,6 +95,10 @@
         <div class="attention-wrap">
           <div class="attention-row"><span>Wskaźnik uwagi</span><span id="attention-value">0.00</span></div>
           <div class="attention-track"><div id="attention-fill" class="attention-fill"></div></div>
+          <div id="attention-alert" class="attention-alert" aria-live="polite">
+            <span class="attention-exclamation" aria-hidden="true">❗</span>
+            <span>Niski poziom uwagi</span>
+          </div>
         </div>
         <div class="metrics-mini">
           <div class="metric-line"><span>Dynamika ruchu głowy</span><span id="head-motion-value">0.00</span></div>
@@ -110,6 +134,7 @@
     const headMotionValue = document.getElementById('head-motion-value');
     const faceDistanceValue = document.getElementById('face-distance-value');
     const blinkRateValue = document.getElementById('blink-rate-value');
+    const attentionAlert = document.getElementById('attention-alert');
 
     let landmarker = null;
     let stream = null;
@@ -195,6 +220,12 @@
       return Math.max(0, Math.min(1, value));
     }
 
+    function updateAttentionWarningState() {
+      const isWarning = attentionState.score < 0.5;
+      document.body.classList.toggle('attention-warning', isWarning);
+      if (attentionAlert) attentionAlert.classList.toggle('visible', isWarning);
+    }
+
     function updateAttentionBar() {
       const total = (
         attentionState.head * 0.35
@@ -206,6 +237,7 @@
       attentionState.score = clamp01(total);
       if (attentionFill) attentionFill.style.width = `${Math.round(attentionState.score * 100)}%`;
       if (attentionValue) attentionValue.textContent = attentionState.score.toFixed(2);
+      updateAttentionWarningState();
     }
 
     function setupAttentionInteractionTracking() {
@@ -245,7 +277,10 @@
 
       if (leftEyeOuter && rightEyeOuter) {
         const eyeDistance = Math.max(Math.abs(rightEyeOuter.x - leftEyeOuter.x), 0.0001);
-        faceDistanceScore = clamp01((eyeDistance - 0.06) / 0.18);
+        const mobileNarrowScreen = window.matchMedia('(max-width: 768px)').matches;
+        const nearThreshold = mobileNarrowScreen ? 0.045 : 0.06;
+        const farThreshold = mobileNarrowScreen ? 0.19 : 0.24;
+        faceDistanceScore = clamp01((eyeDistance - nearThreshold) / Math.max(0.01, (farThreshold - nearThreshold)));
         if (faceDistanceValue) faceDistanceValue.textContent = faceDistanceScore.toFixed(2);
       }
 
