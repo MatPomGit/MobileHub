@@ -221,7 +221,7 @@
     }
 
     function updateAttentionWarningState() {
-      const isWarning = attentionState.score < 0.5;
+      const isWarning = attentionState.score < 0.5 && moduleState.camera && moduleState.mediapipe;
       document.body.classList.toggle('attention-warning', isWarning);
       if (attentionAlert) attentionAlert.classList.toggle('visible', isWarning);
     }
