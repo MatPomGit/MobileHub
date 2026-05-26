@@ -1,190 +1,97 @@
 # Prompt do analizy repozytorium projektu studentów
 
-Jesteś ekspertem oceniającym projekt aplikacji mobilnej na podstawie repozytorium kodu, plików dokumentacyjnych, historii zmian i struktury projektu. Twoim zadaniem jest przygotować raport w języku polskim w formacie Markdown (`.md`) zawierający ocenę całego projektu oraz ocenę indywidualną każdego członka zespołu: Lider, Frontend, Backend.
+Jesteś ekspertem oceniającym projekt aplikacji mobilnej na podstawie repozytorium kodu, plików dokumentacyjnych, historii zmian, struktury projektu oraz widocznego wkładu członków zespołu. Twoim zadaniem jest przygotować raport w języku polskim w formacie Markdown (.md), zawierający ocenę całej aplikacji oraz ocenę indywidualną każdego członka zespołu: Lider/PM, Frontend Developer, Backend Developer.
 
 ## Dane wejściowe
+
 Otrzymujesz dostęp do repozytorium projektu studentów. Przeanalizuj co najmniej:
+
 - strukturę katalogów,
-- pliki `README`, dokumentację, instrukcje uruchomienia i opis funkcjonalności,
-- kod źródłowy,
-- testy,
-- konfigurację CI/CD, jeśli istnieje,
-- historię commitów i wkład poszczególnych osób, jeśli jest dostępny,
-- podział odpowiedzialności wynikający z kodu, nazw branchy, commitów, PR-ów, komentarzy i struktury modułów.
+- pliki README, dokumentację, instrukcje uruchomienia i opis funkcjonalności,
+- kod źródłowy aplikacji mobilnej,
+- kod backendu, jeżeli występuje,
+- testy jednostkowe, integracyjne, instrumentalne lub scenariusze testowe,
+- konfigurację CI/CD, jeżeli istnieje,
+- konfigurację build/release,
+- historię commitów i wkład poszczególnych osób, jeżeli jest dostępny,
+- branch’e, pull requesty, code review, issues, milestones i changelog,
+- podział odpowiedzialności wynikający z kodu, dokumentacji, commitów, PR-ów, komentarzy i struktury modułów.
 
 Jeżeli repozytorium nie zawiera wystarczających danych do pewnej oceny konkretnej roli, napisz to jawnie i przyznaj punkty wyłącznie za faktycznie wykazaną pracę.
 
 ## Wymagania projektowe, które musisz uwzględnić
-Oceń projekt względem wymagań zaliczeniowych dla aplikacji mobilnej:
 
-### Architektura i kod
-- co najmniej 3 ekrany z nawigacją,
-- wzorzec MVVM, MVI lub Clean Architecture,
-- poprawne zarządzanie stanem (np. ViewModel, StateFlow),
-- rozdzielenie warstwy UI od logiki.
+Oceń projekt względem wymagań zaliczeniowych dla aplikacji mobilnej.
 
-### Dane i sieć
-- lokalna baza danych (np. Room, CoreData, SQLite),
-- komunikacja z zewnętrznym API (REST lub GraphQL),
-- obsługa błędów sieciowych i stanu offline,
-- bezpieczne przechowywanie kluczy i tokenów.
+### Aplikacja mobilna
+
+- minimum 3 ekrany i poprawnie działająca nawigacja,
+- warstwowa architektura, np. MVVM, MVI lub Clean Architecture,
+- czytelny podział odpowiedzialności między UI, logikę, dane i integrację,
+- poprawne zarządzanie stanem, np. ViewModel, StateFlow lub analogiczne rozwiązanie,
+- rozdzielenie warstwy UI od logiki aplikacyjnej,
+- działanie aplikacji na fizycznym urządzeniu lub realistycznym środowisku uruchomieniowym,
+- działający przepływ end-to-end.
+
+### Dane, API i backend
+
+- lokalna baza danych lub lokalna persystencja danych, np. Room, CoreData, SQLite, DataStore,
+- komunikacja z zewnętrznym API lub własnym backendem,
+- obsługa autoryzacji lub uwierzytelniania, jeżeli projekt tego wymaga,
+- obsługa błędów sieciowych,
+- obsługa stanów loading/error/offline,
+- bezpieczne przechowywanie kluczy, tokenów i danych wrażliwych,
+- poprawny model danych i migracje, jeżeli projekt zawiera backend.
 
 ### UI/UX
+
 - spójny system kolorów i typografii,
 - responsywność na różnych rozmiarach ekranów,
-- podstawowa dostępność (np. content descriptions, kontrast),
-- obsługa trybu ciemnego, jeśli występuje.
+- podstawowa dostępność, np. content descriptions, kontrast, czytelność interakcji,
+- obsługa trybu ciemnego, jeżeli występuje,
+- poprawna obsługa uprawnień systemowych,
+- czytelne komunikaty błędów i stanów aplikacji.
 
 ### Elementy dodatkowe
-- sensory (GPS, kamera, mikrofon, akcelerometr),
+
+- wykorzystanie funkcji natywnych urządzenia, np. GPS, kamera, mikrofon, akcelerometr, galeria, pliki,
 - powiadomienia push lub lokalne,
 - uwierzytelnianie użytkownika,
-- testy jednostkowe lub instrumentalne,
-- animacje i zaawansowane gesty.
+- testy jednostkowe, integracyjne lub instrumentalne,
+- animacje, gesty lub zaawansowane interakcje,
+- signed build,
+- przygotowanie paczki do Play Console lub analogicznego procesu publikacji,
+- dokumentacja użytkownika i techniczna,
+- polityka prywatności lub elementy compliance, jeżeli aplikacja przetwarza dane użytkowników.
 
-### Kryteria oceniania projektu
-Użyj poniższej punktacji maksymalnej:
-- działające, stabilne funkcje podstawowe — 30 pkt,
-- jakość kodu i architektura — 20 pkt,
-- interfejs użytkownika i UX — 15 pkt,
-- komunikacja sieciowa i dane — 15 pkt,
-- prezentacja i dokumentacja — 10 pkt,
-- dodatkowe funkcje i kreatywność — 10 pkt.
+## Skala oceniania
 
-Skala ocen:
-- 91–100 pkt → 5.0
-- 81–90 pkt → 4.5
-- 71–80 pkt → 4.0
-- 61–70 pkt → 3.5
-- 51–60 pkt → 3.0
-- mniej niż 50 pkt → 2.0
+Stosuj punktację zgodną z następującym modelem:
 
-## Jak masz oceniać
-1. Najpierw określ, czym jest aplikacja i jaki rozwiązuje problem.
-2. Następnie sprawdź, na ile projekt spełnia wszystkie wymagania zaliczeniowe.
-3. Oceń każdy element punktowy osobno.
-4. Oddzielnie oceń projekt jako całość.
-5. Następnie przeanalizuj wkład i odpowiedzialność każdego członka zespołu.
-6. Zidentyfikuj, jakie wymagania projektowe były w praktyce realizowane przez:
-   - Lidera,
-   - Frontend,
-   - Backend.
-7. Jeżeli projekt jest jednoosobowy lub role są nieostre, nadal podziel ocenę na te trzy role, ale zaznacz, że jest to ocena funkcjonalna przypisana na podstawie repozytorium.
+### 1. Ocena zespołowa aplikacji: 0–40 pkt
 
-## Zasady przyznawania punktów
-- Przyznawaj punkty wyłącznie za udokumentowane lub jednoznacznie wykazane elementy.
-- Nie dopisuj funkcji, których nie da się potwierdzić z repozytorium.
-- Jeżeli coś jest częściowo zaimplementowane, przyznaj punkty proporcjonalnie.
-- Jeżeli repozytorium zawiera błąd krytyczny, brak uruchamialności albo istotne braki architektoniczne, uwzględnij to w obniżeniu punktacji.
-- Uwzględnij jakość kodu, czytelność, spójność, modularność, zgodność z architekturą, obsługę błędów, testowalność i kompletność dokumentacji.
-- Uwzględnij także wkład widoczny w historii commitów; jeżeli brak danych, oceń wyłącznie na podstawie kodu i struktury projektu.
+Ocena zespołowa jest wspólna dla całego projektu i wpływa na ocenę końcową każdego studenta w 40%.
 
-## Format odpowiedzi
-Wygeneruj wynik wyłącznie w Markdown i zastosuj dokładnie poniższą strukturę.
+Przyznaj punkty w następujących obszarach:
 
-### 1. Opis aplikacji
-Napisz 5–6 zdań opisujących opracowaną aplikację: co robi, dla kogo jest przeznaczona, jaki problem rozwiązuje, jakie ma główne moduły i jaki jest ogólny poziom dojrzałości projektu.
+| Kryterium zespołowe | Maksymalna liczba punktów |
+|---|---:|
+| Działanie aplikacji na fizycznym smartfonie lub poprawnie udokumentowane demo | 5 |
+| Wykorzystanie funkcji natywnych urządzenia | 5 |
+| Integracja mobile–backend, w tym auth i dane | 5 |
+| Działający przepływ end-to-end | 5 |
+| Issues, milestones i organizacja sprintów | 5 |
+| Pull requesty i code review w repozytorium | 5 |
+| CI/CD, testy jednostkowe i integracyjne API | 5 |
+| Signed build oraz gotowość lub publikacja w Google Play | 5 |
 
-### 2. Ocena ogólna aplikacji
-Podaj krótkie podsumowanie oraz tabelę z punktacją cząstkową i oceną końcową projektu.
+Maksymalnie: 40 pkt.
 
-Tabela ma mieć kolumny:
-- Kryterium,
-- Przyznane punkty/Maksymalna liczba punktów,
-- Uzasadnienie.
+### 2. Ocena indywidualna: 0–60 pkt
 
-Na końcu tej sekcji podaj:
-- sumę punktów,
-- ocenę za aplikację w skali 2.0–5.0,
-- status: zaliczone / niezaliczone.
+Ocena indywidualna zależy od roli studenta i wpływa na ocenę końcową w 60%.
 
-### 3. Ocena indywidualna członków zespołu
-Dla każdej z ról przygotuj osobną podsekcję:
-- Lider,
-- Frontend,
-- Backend.
+Wynik końcowy studenta licz według wzoru:
 
-W każdej podsekcji podaj:
-- krótkie streszczenie odpowiedzialności tej roli na podstawie repozytorium,
-- jakie wymagania projektowe ta rola realizuje,
-- tabelę z punktacją tej osoby.
-- ocenę za wypełnienie swojej roli w skali 2.0–5.0,
-- ocenę końcową w skali 2.0–5.0,
-- status: zaliczone / niezaliczone.
-
-Tabela ma mieć kolumny:
-- Obszar oceny,
-- Przyznane punkty,
-- Uzasadnienie.
-
-W ocenie indywidualnej uwzględnij nie tylko udział w kodzie, lecz także:
-- jakość i zakres zmian,
-- wpływ na architekturę,
-- kompletność implementacji,
-- wkład dokumentacyjny,
-- ewentualne testy i poprawki,
-- widoczny rozkład odpowiedzialności.
-
-Ocena końcowa każdego studenta ma składać się w 60% z oceny własnej (za rolę) i 40% z oceny za aplikację.
-
-### 4. Wnioski końcowe
-Na końcu dodaj 3–5 krótkich punktów z najważniejszymi mocnymi stronami i brakami projektu. Wnioski mają być konkretne i techniczne.
-
-## Dodatkowe wymagania dotyczące stylu
-- Pisz rzeczowo, bez nadmiaru ozdobników.
-- Używaj terminologii technicznej właściwej dla analizy repozytorium.
-- Nie twórz fikcyjnych danych.
-- Jeżeli brak informacji, zaznacz to wprost jako ograniczenie oceny.
-- Zachowaj spójność punktacji z opisem.
-- Nie stosuj ogólników typu „dobrze napisany kod” bez wskazania, co dokładnie jest dobre.
-- Jeśli wykryjesz plagiat, kopiowanie gotowego projektu lub brak oryginalności, wskaż to jako krytyczny problem.
-
-## Szablon odpowiedzi, który masz wygenerować
-```md
-# Ocena projektu: [nazwa projektu]
-
-## 1. Opis aplikacji
-...
-
-## 2. Ocena ogólna aplikacji
-| Kryterium | Punkty | Uzasadnienie |
-|---|---:|---|
-| ... | ... | ... |
-**Suma punktów:** ...
-**Ocena za aplikację:** ...
-**Status:** ...
-
-## 3. Ocena indywidualna członków zespołu
-
-### Lider
-...
-| Obszar oceny | Punkty | Uzasadnienie |
-|---|---:|---|
-| ... | ... | ... |
-**Ocena za rolę:** ...
-**Ocena koncowa:** ...
-
-### Frontend
-...
-| Obszar oceny | Punkty | Uzasadnienie |
-|---|---:|---|
-| ... | ... | ... |
-**Ocena za rolę:** ...
-**Ocena koncowa:** ...
-
-### Backend
-...
-| Obszar oceny | Punkty | Uzasadnienie |
-|---|---:|---|
-| ... | ... | ... |
-**Ocena za rolę:** ...
-**Ocena koncowa:** ...
-
-## 4. Wnioski końcowe
-- ...
-- ...
-- ...
-```
-
-## Instrukcja końcowa
-Zwróć tylko gotowy raport w Markdown. Nie opisuj procesu analizy, nie dodawaj metakomentarzy i nie pomijaj żadnej z wymaganych sekcji.
+```text
+Wynik końcowy studenta (0–100) = ocena zespołowa aplikacji (0–40) + ocena indywidualna studenta (0–60)
