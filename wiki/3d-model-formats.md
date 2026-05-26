@@ -14,6 +14,7 @@ Urządzenia mobilne mają ograniczone zasoby w porównaniu do komputerów stacjo
 - **Łącze sieciowe**: pobieranie dużych modeli to kosztowna operacja
 
 Dlatego modele 3D na mobile muszą być:
+
 - Zoptymalizowane pod kątem liczby poligonów
 - Skompresowane bez istotnej utraty jakości wizualnej
 - Szybko ładowane (format binarny przeważnie lepszy niż tekstowy)
@@ -27,7 +28,7 @@ Dlatego modele 3D na mobile muszą być:
 ### Warianty
 
 | Wariant | Rozszerzenie | Opis |
-|---------|-------------|------|
+|---------|--------------|------|
 | glTF JSON | `.gltf` + `.bin` + tekstury | Tekstowy JSON z zewnętrznymi zasobami |
 | glTF Binary | `.glb` | Wszystko w jednym pliku binarnym |
 
@@ -49,7 +50,7 @@ Wariant GLB łączy wszystkie zasoby (geometria, tekstury, materiały) w jeden p
 
 Format OBJ pochodzi z lat 80. i jest jednym z najszerzej obsługiwanych formatów 3D:
 
-```
+```obj
 # Prosty sześcian (fragment pliku .obj)
 v 1.0 1.0 -1.0
 v 1.0 -1.0 -1.0
@@ -68,11 +69,13 @@ f 1/1/1 2/2/1 3/3/1
 ### Zalety i wady OBJ
 
 **Zalety:**
+
 - Czytelny dla człowieka
 - Obsługiwany przez każde narzędzie 3D
 - Prosty w parsowaniu
 
 **Wady:**
+
 - Brak obsługi animacji
 - Towarzyszący plik `.mtl` dla materiałów
 - Duże pliki - format tekstowy
@@ -103,7 +106,7 @@ FBX (Filmbox) to własnościowy format Autodesk, szeroko stosowany w produkcji g
 - Format ZIP zawierający pliki USD i tekstury
 - Przeglądanie modeli w AR bezpośrednio z przeglądarki Safari
 
-```
+```py
 # Konwersja glTF → USDZ narzędziem Reality Converter (macOS)
 # Lub programowo za pomocą Python USD Tools:
 # python3 usdzconvert model.glb model.usdz
@@ -296,6 +299,7 @@ class ARViewController: UIViewController {
 ### Reality Composer (narzędzie do tworzenia scen AR)
 
 Reality Composer Pro (Xcode) pozwala na:
+
 - Wizualne tworzenie scen AR
 - Dodawanie zachowań (animacje po tapnięciu, fizykę)
 - Eksport do `.reality` lub `.rcproject`
@@ -318,14 +322,15 @@ Reality Composer Pro (Xcode) pozwala na:
 ### Atlasy tekstur
 
 Zamiast wielu małych tekstur - jedna duża tekstura (atlas):
+
 - Mniej przełączeń GPU (draw calls)
 - Lepsza wydajność renderowania
 - Standardowy rozmiar: 1024×1024, 2048×2048 (unikaj 4K na mobile)
 
 ### Kompresja tekstur
 
-| Format | Android | iOS | Opis |
-|--------|---------|-----|------|
+| Format |  Android | iOS | Opis |
+|--------|----------|-----|------|
 | ETC2   | ✅ Tak   | ❌  | Obsługa OpenGL ES 3.0 |
 | ASTC   | ✅ (Snapdragon/Mali) | ✅ (A8+) | Najlepsza jakość/rozmiar |
 | PVRTC  | ❌       | ✅ (stare urządzenia) | Stary format Apple |
@@ -342,7 +347,7 @@ val supportsASTC = extensions?.contains("GL_KHR_texture_compression_astc_ldr") =
 
 ### Blender - eksport glTF/USDZ
 
-```
+```py
 # Blender Python API - eksport do GLB
 import bpy
 

@@ -2,14 +2,14 @@
     --wiki-font-size: 16px;
     --wiki-font-scale: 1;
     --wiki-line-height: 1.65;
-    --wiki-heading-line-height: 1.3;
+    --wiki-heading-line-height: 1.2;
     --wiki-paragraph-gap: 0.95em;
     --wiki-list-margin-bottom: 1em;
     --wiki-heading-margin-top: 1.65em;
     --wiki-heading-margin-bottom: 0.7em;
 
     /* Rozmiary kodu w artykułach obniżone o 2 px względem poprzednich ustawień. */
-    --wiki-code-font-size: 12px;
+    --wiki-code-font-size: 10px;
     --wiki-code-mobile-font-size: 8.5px;
     --merged-wiki-code-font-size: calc(1em - 2px);
 }
