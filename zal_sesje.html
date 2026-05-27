@@ -225,6 +225,7 @@
     const QUIZ_MODE_SIZES = { short: 25, normal: 50 };
     const QUESTION_TIME_LIMIT_SECONDS = 10;
     const monitoringExportLog = [];
+    let lastAttentionLogAt = 0;
     const quizState = {
       questions: [],
       currentIndex: 0,
