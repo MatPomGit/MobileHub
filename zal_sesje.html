@@ -376,6 +376,7 @@
 
     async function startQuizSession() {
       try {
+        monitoringExportLog.length = 0;
         const allQuestions = await loadQuestionBank();
         quizState.mode = inferModeFromSelect();
         const size = QUIZ_MODE_SIZES[quizState.mode] ?? QUIZ_MODE_SIZES.short;
