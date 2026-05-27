@@ -379,7 +379,7 @@
       const overshootPx = 4;
       const screenWidth = window.screen?.availWidth || window.screen?.width || window.innerWidth;
       const screenHeight = window.screen?.availHeight || window.screen?.height || window.innerHeight;
-      const browserTopInset = Math.max(0, window.outerHeight - window.innerHeight);
+      const browserTopInset = (typeof window.outerHeight === 'number' && typeof window.innerHeight === 'number')\n        ? Math.max(0, window.outerHeight - window.innerHeight)\n        : 0;
 
       let moved = false;
       let resized = false;
