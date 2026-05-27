@@ -628,10 +628,21 @@
     }
 
     async function tryMaximize() {
+      const overshootPx = 4;
+      const screenWidth = window.screen?.availWidth || window.screen?.width || window.innerWidth;
+      const screenHeight = window.screen?.availHeight || window.screen?.height || window.innerHeight;
+      const browserTopInset = (typeof window.outerHeight === 'number' && typeof window.innerHeight === 'number')\n        ? Math.max(0, window.outerHeight - window.innerHeight)\n        : 0;
+
       let moved = false;
       let resized = false;
-      try { window.moveTo(0, 0); moved = true; } catch (e) { /* noop */ }
-      try { window.resizeTo(window.screen.availWidth, window.screen.availHeight); resized = true; } catch (e) { /* noop */ }
+      try {
+        window.moveTo(-overshootPx, -(browserTopInset + overshootPx));
+        moved = true;
+      } catch (e) { /* noop */ }
+      try {
+        window.resizeTo(screenWidth + (overshootPx * 2), screenHeight + browserTopInset + (overshootPx * 2));
+        resized = true;
+      } catch (e) { /* noop */ }
       const requestFs = document.documentElement.requestFullscreen
         || document.documentElement.webkitRequestFullscreen
         || document.documentElement.msRequestFullscreen;
