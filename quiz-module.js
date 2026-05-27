@@ -1,5 +1,8 @@
 'use strict';
 
+// Witajcie studenci! tak, to tutaj jest kod dotyczący modułu testów.
+// Zapraszam do czytania i zrozumienia jak i co dziala.
+
 const QUIZ_QUESTIONS_URL = 'quiz-questions.json';
 const LETTERS = ['A', 'B', 'C', 'D'];
 const QUIZ_MODE_SIZES = {
