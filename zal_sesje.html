@@ -804,8 +804,9 @@
       const sessionNameDisplay = document.getElementById("session-name-display");
       if (sessionNameDisplay) sessionNameDisplay.textContent = `Nazwa sesji: ${sessionName}`;
       appendMonitoringRecord("session.access", { accessedAt: isoNow() });
-      const ip = await resolveClientIp();
-      appendMonitoringRecord("session.client", { ip, accessedAt: isoNow() });
+      resolveClientIp().then(ip => {
+        appendMonitoringRecord("session.client", { ip, accessedAt: isoNow() });
+      });
       setupAttentionInteractionTracking();
       updateAttentionBar();
       await tryMaximize();
