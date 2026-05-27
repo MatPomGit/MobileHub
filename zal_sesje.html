@@ -84,7 +84,7 @@
         <input id="session-name" type="text" placeholder="np. ZAL 2026/06 - grupa A" />
         <label for="session-mode">Tryb</label>
         <select id="session-mode"><option>Krótki (25)</option><option>Normalny (50)</option></select>
-        <button type="button">Zapisz szkic sesji</button>
+        <button type="button" id="save-session-draft">Zapisz szkic sesji</button>
       </div>
 
       <div class="preview-wrap" aria-live="polite">
@@ -120,6 +120,21 @@
       </div>
 
     </section>
+
+      <section class="panel" style="margin-top:16px;">
+        <h2>Sesja pytań</h2>
+        <p class="muted" id="quiz-meta">Wybierz tryb i uruchom sesję pytań.</p>
+        <div id="quiz-container">
+          <p id="quiz-question" style="font-weight:600;">Brak aktywnego pytania.</p>
+          <div id="quiz-answers" class="row"></div>
+        </div>
+        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
+          <button type="button" id="start-quiz-btn">Rozpocznij sesję pytań</button>
+          <button type="button" id="next-question-btn" disabled>Następne pytanie</button>
+          <button type="button" id="finish-quiz-btn" disabled>Zakończ sesję i eksportuj</button>
+        </div>
+      </section>
+
   </main>
 
   <script type="module">
@@ -135,6 +150,13 @@
     const faceDistanceValue = document.getElementById('face-distance-value');
     const blinkRateValue = document.getElementById('blink-rate-value');
     const attentionAlert = document.getElementById('attention-alert');
+    const quizMeta = document.getElementById('quiz-meta');
+    const quizQuestion = document.getElementById('quiz-question');
+    const quizAnswers = document.getElementById('quiz-answers');
+    const startQuizBtn = document.getElementById('start-quiz-btn');
+    const nextQuestionBtn = document.getElementById('next-question-btn');
+    const finishQuizBtn = document.getElementById('finish-quiz-btn');
+
 
     let landmarker = null;
     let stream = null;
@@ -190,11 +212,227 @@
     }
 
     function logSessionEvent(type, details) {
+      appendMonitoringRecord(type, { details });
       if (!sessionLogDb) return;
       const tx = sessionLogDb.transaction(SESSION_LOG_STORE, 'readwrite');
       tx.objectStore(SESSION_LOG_STORE).add({ ts: new Date().toISOString(), type, details });
     }
 
+
+
+
+    const QUESTION_BANK_URL = 'quiz-questions.json';
+    const QUIZ_MODE_SIZES = { short: 25, normal: 50 };
+    const QUESTION_TIME_LIMIT_SECONDS = 10;
+    const monitoringExportLog = [];
+    const quizState = {
+      questions: [],
+      currentIndex: 0,
+      answers: [],
+      isActive: false,
+      mode: 'short',
+      sessionStartedAt: null,
+      sessionEndedAt: null,
+      questionStartedAtMs: null,
+      questionTimerId: null,
+      timeLeftSeconds: QUESTION_TIME_LIMIT_SECONDS,
+      answerDurationsMs: [],
+      timedOutQuestions: []
+    };
+
+    function isoNow() {
+      return new Date().toISOString();
+    }
+
+    function appendMonitoringRecord(type, payload = {}) {
+      monitoringExportLog.push({ timestamp: isoNow(), type, payload });
+    }
+
+    function inferModeFromSelect() {
+      const modeSelect = document.getElementById('session-mode');
+      if (!modeSelect) return 'short';
+      return modeSelect.selectedIndex === 1 ? 'normal' : 'short';
+    }
+
+    async function loadQuestionBank() {
+      const response = await fetch(QUESTION_BANK_URL, { cache: 'no-store' });
+      if (!response.ok) throw new Error(`Nie udało się pobrać pytań (${response.status})`);
+      const questions = await response.json();
+      if (!Array.isArray(questions) || questions.length === 0) throw new Error('Brak pytań w bazie.');
+      return questions;
+    }
+
+    function shuffle(items) {
+      const copy = [...items];
+      for (let i = copy.length - 1; i > 0; i -= 1) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [copy[i], copy[j]] = [copy[j], copy[i]];
+      }
+      return copy;
+    }
+
+
+
+    function stopQuestionTimer() {
+      if (quizState.questionTimerId !== null) {
+        clearInterval(quizState.questionTimerId);
+        quizState.questionTimerId = null;
+      }
+    }
+
+    function getQuestionElapsedMs() {
+      if (!quizState.questionStartedAtMs) return 0;
+      return Math.max(0, Date.now() - quizState.questionStartedAtMs);
+    }
+
+    function updateQuestionMetaWithTime() {
+      if (!quizState.isActive) return;
+      quizMeta.textContent = `Pytanie ${quizState.currentIndex + 1} z ${quizState.questions.length}. Pozostały czas: ${quizState.timeLeftSeconds}s`;
+    }
+
+    function handleQuestionTimeout() {
+      if (!quizState.isActive) return;
+      const question = quizState.questions[quizState.currentIndex];
+      const elapsedMs = getQuestionElapsedMs();
+      quizState.timedOutQuestions[quizState.currentIndex] = true;
+      quizState.answerDurationsMs[quizState.currentIndex] = elapsedMs;
+      appendMonitoringRecord('question.timeout', {
+        questionIndex: quizState.currentIndex,
+        questionId: question?.id ?? null,
+        elapsedMs,
+        timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
+      });
+      nextQuestion(true);
+    }
+
+    function startQuestionTimer() {
+      stopQuestionTimer();
+      quizState.questionStartedAtMs = Date.now();
+      quizState.timeLeftSeconds = QUESTION_TIME_LIMIT_SECONDS;
+      updateQuestionMetaWithTime();
+      quizState.questionTimerId = window.setInterval(() => {
+        const elapsedSeconds = Math.floor(getQuestionElapsedMs() / 1000);
+        quizState.timeLeftSeconds = Math.max(0, QUESTION_TIME_LIMIT_SECONDS - elapsedSeconds);
+        updateQuestionMetaWithTime();
+        if (quizState.timeLeftSeconds <= 0) {
+          stopQuestionTimer();
+          handleQuestionTimeout();
+        }
+      }, 200);
+    }
+
+    function renderCurrentQuestion() {
+      if (!quizState.isActive || quizState.currentIndex >= quizState.questions.length) return;
+      const current = quizState.questions[quizState.currentIndex];
+      updateQuestionMetaWithTime();
+      quizQuestion.textContent = current.question;
+      quizAnswers.innerHTML = '';
+      current.answers.forEach((answer, index) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.textContent = `${String.fromCharCode(65 + index)}. ${answer}`;
+        button.addEventListener('click', () => selectAnswer(index));
+        quizAnswers.appendChild(button);
+      });
+      nextQuestionBtn.disabled = quizState.answers[quizState.currentIndex] === null;
+      startQuestionTimer();
+    }
+
+    function selectAnswer(answerIndex) {
+      if (!quizState.isActive) return;
+      const question = quizState.questions[quizState.currentIndex];
+      quizState.answers[quizState.currentIndex] = answerIndex;
+      const elapsedMs = getQuestionElapsedMs();
+      quizState.answerDurationsMs[quizState.currentIndex] = elapsedMs;
+      quizState.timedOutQuestions[quizState.currentIndex] = false;
+      appendMonitoringRecord('question.answer', {
+        questionIndex: quizState.currentIndex,
+        questionId: question.id ?? null,
+        answerIndex,
+        elapsedMs,
+        timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
+      });
+      [...quizAnswers.children].forEach((node, idx) => {
+        node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
+      });
+      nextQuestionBtn.disabled = false;
+    }
+
+    function nextQuestion(triggeredByTimeout = false) {
+      if (!quizState.isActive) return;
+      stopQuestionTimer();
+      if (!triggeredByTimeout && quizState.answers[quizState.currentIndex] === null) return;
+      quizState.currentIndex += 1;
+      if (quizState.currentIndex >= quizState.questions.length) {
+        finishQuizBtn.disabled = false;
+        nextQuestionBtn.disabled = true;
+        quizMeta.textContent = 'Udzielono odpowiedzi na wszystkie pytania lub upłynął czas. Zakończ sesję i wyeksportuj dane.';
+        quizQuestion.textContent = 'Sesja pytań gotowa do zakończenia.';
+        quizAnswers.innerHTML = '';
+        return;
+      }
+      renderCurrentQuestion();
+    }
+
+    async function startQuizSession() {
+      try {
+        const allQuestions = await loadQuestionBank();
+        quizState.mode = inferModeFromSelect();
+        const size = QUIZ_MODE_SIZES[quizState.mode] ?? QUIZ_MODE_SIZES.short;
+        quizState.questions = shuffle(allQuestions).slice(0, Math.min(size, allQuestions.length));
+        quizState.currentIndex = 0;
+        quizState.answers = new Array(quizState.questions.length).fill(null);
+        quizState.answerDurationsMs = new Array(quizState.questions.length).fill(null);
+        quizState.timedOutQuestions = new Array(quizState.questions.length).fill(false);
+        quizState.isActive = true;
+        quizState.sessionStartedAt = isoNow();
+        quizState.sessionEndedAt = null;
+        appendMonitoringRecord('quiz.started', { mode: quizState.mode, totalQuestions: quizState.questions.length });
+        startQuizBtn.disabled = true;
+        finishQuizBtn.disabled = false;
+        renderCurrentQuestion();
+      } catch (error) {
+        quizMeta.textContent = `Błąd uruchomienia sesji: ${error.message}`;
+      }
+    }
+
+    function exportSessionData() {
+      quizState.sessionEndedAt = isoNow();
+      appendMonitoringRecord('quiz.finished', { answered: quizState.answers.filter((a) => a !== null).length });
+      const responseExport = quizState.questions.map((question, index) => ({
+        timestamp: isoNow(),
+        questionIndex: index,
+        questionId: question.id ?? null,
+        question: question.question,
+        selectedAnswerIndex: quizState.answers[index],
+        selectedAnswer: quizState.answers[index] !== null ? question.answers[quizState.answers[index]] : null,
+        correctAnswerIndex: question.correctIndex,
+        elapsedMs: quizState.answerDurationsMs[index],
+        timedOut: Boolean(quizState.timedOutQuestions[index]),
+        timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
+      }));
+      const payload = {
+        sessionName: document.getElementById('session-name')?.value || 'Bez nazwy',
+        mode: quizState.mode,
+        sessionStartedAt: quizState.sessionStartedAt,
+        sessionEndedAt: quizState.sessionEndedAt,
+        monitoring: monitoringExportLog,
+        responses: responseExport
+      };
+      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = `zal_sesja_${Date.now()}.json`;
+      anchor.click();
+      URL.revokeObjectURL(url);
+      quizMeta.textContent = 'Sesja zakończona. Plik JSON z monitoringiem i odpowiedziami został pobrany.';
+      stopQuestionTimer();
+      quizState.isActive = false;
+      startQuizBtn.disabled = false;
+      nextQuestionBtn.disabled = true;
+      finishQuizBtn.disabled = true;
+    }
 
     const attentionState = {
       head: 0,
@@ -237,6 +475,14 @@
       attentionState.score = clamp01(total);
       if (attentionFill) attentionFill.style.width = `${Math.round(attentionState.score * 100)}%`;
       if (attentionValue) attentionValue.textContent = attentionState.score.toFixed(2);
+      appendMonitoringRecord('attention.score', {
+        score: Number(attentionState.score.toFixed(4)),
+        head: Number(attentionState.head.toFixed(4)),
+        eyes: Number(attentionState.eyes.toFixed(4)),
+        keyboard: Number(attentionState.keyboard.toFixed(4)),
+        mouse: Number(attentionState.mouse.toFixed(4)),
+        interaction: Number(attentionState.interaction.toFixed(4))
+      });
       updateAttentionWarningState();
     }
 
@@ -489,6 +735,9 @@
       updateAttentionBar();
       await tryMaximize();
       await setupFaceTracking();
+      startQuizBtn?.addEventListener('click', startQuizSession);
+      nextQuestionBtn?.addEventListener('click', nextQuestion);
+      finishQuizBtn?.addEventListener('click', exportSessionData);
       moduleState.cleanup = true;
       refreshModuleStatuses();
     }());
