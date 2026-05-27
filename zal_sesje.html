@@ -476,14 +476,18 @@
       attentionState.score = clamp01(total);
       if (attentionFill) attentionFill.style.width = `${Math.round(attentionState.score * 100)}%`;
       if (attentionValue) attentionValue.textContent = attentionState.score.toFixed(2);
-      appendMonitoringRecord('attention.score', {
-        score: Number(attentionState.score.toFixed(4)),
-        head: Number(attentionState.head.toFixed(4)),
-        eyes: Number(attentionState.eyes.toFixed(4)),
-        keyboard: Number(attentionState.keyboard.toFixed(4)),
-        mouse: Number(attentionState.mouse.toFixed(4)),
-        interaction: Number(attentionState.interaction.toFixed(4))
-      });
+      const now = Date.now();
+      if (now - lastAttentionLogAt >= 1000) {
+        appendMonitoringRecord('attention.score', {
+          score: Number(attentionState.score.toFixed(4)),
+          head: Number(attentionState.head.toFixed(4)),
+          eyes: Number(attentionState.eyes.toFixed(4)),
+          keyboard: Number(attentionState.keyboard.toFixed(4)),
+          mouse: Number(attentionState.mouse.toFixed(4)),
+          interaction: Number(attentionState.interaction.toFixed(4))
+        });
+        lastAttentionLogAt = now;
+      }
       updateAttentionWarningState();
     }
 
