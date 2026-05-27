@@ -7,7 +7,7 @@
       // (PS. w kodzie są easter eggi)
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>ZAL — Tworzenie sesji</title>
+  <title>ZAL — Sesja zaliczeniowa</title>
   <style>
     :root { color-scheme: dark; }
     body { margin:0; font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif; background:#0f172a; color:#e2e8f0; }
@@ -76,19 +76,37 @@
     body.attention-warning {
       box-shadow: inset 0 0 0 4px #ef4444;
     }
+    body.attention-caution {
+      box-shadow: inset 0 0 0 4px #eab308;
+    }
+    .focus-warning-banner {
+      display:none;
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      margin: 0 0 12px;
+      padding: 10px 12px;
+      border: 1px solid #ef4444;
+      border-radius: 10px;
+      background: rgba(127, 29, 29, 0.9);
+      color: #fee2e2;
+      font-weight: 700;
+      text-align: center;
+    }
+    .focus-warning-banner.visible {
+      display:block;
+    }
   </style>
 </head>
 <body>
   <main>
-    <h1>Tworzenie sesji zaliczeniowej</h1>
-    <p class="muted">To jest osobna strona do konfiguracji sesji. Okno próbuje uruchomić się w trybie zmaksymalizowanym.</p>
+    <p id="focus-warning-banner" class="focus-warning-banner" role="alert" aria-live="assertive">Proszę skupić się na teście</p>
+    <h1>Sesja zaliczeniowa</h1>
+    <p class="muted">To jest moduł aktywnej sesji zaliczeniowej. Przed rozpoczęciem testu zaakceptuj uprawnienia do kamery.</p>
     <section class="panel">
       <div class="row">
-        <label for="session-name">Nazwa sesji</label>
-        <input id="session-name" type="text" placeholder="np. ZAL 2026/06 - grupa A" />
-        <label for="session-mode">Tryb</label>
-        <select id="session-mode"><option>Krótki (25)</option><option>Normalny (50)</option></select>
-        <button type="button" id="save-session-draft">Zapisz szkic sesji</button>
+        <p class="muted" id="session-name-display">Nazwa sesji: automatyczna</p>
+        <p class="muted" id="privacy-info">Prywatność: obraz z kamery jest przetwarzany lokalnie na urządzeniu i nie jest nigdzie wysyłany.</p>
       </div>
 
       <div class="preview-wrap" aria-live="polite">
@@ -127,13 +145,13 @@
 
       <section class="panel" style="margin-top:16px;">
         <h2>Sesja pytań</h2>
-        <p class="muted" id="quiz-meta">Wybierz tryb i uruchom sesję pytań.</p>
+        <p class="muted" id="quiz-meta">Najpierw zaakceptuj uprawnienia do kamery. Przycisk START odblokuje się automatycznie po wykryciu poprawnego obrazu.</p>
         <div id="quiz-container">
           <p id="quiz-question" style="font-weight:600;">Brak aktywnego pytania.</p>
           <div id="quiz-answers" class="row"></div>
         </div>
         <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-          <button type="button" id="start-quiz-btn">Rozpocznij sesję pytań</button>
+          <button type="button" id="start-quiz-btn" disabled>START</button>
           <button type="button" id="next-question-btn" disabled>Następne pytanie</button>
           <button type="button" id="finish-quiz-btn" disabled>Zakończ sesję i eksportuj</button>
         </div>
@@ -154,6 +172,7 @@
     const faceDistanceValue = document.getElementById('face-distance-value');
     const blinkRateValue = document.getElementById('blink-rate-value');
     const attentionAlert = document.getElementById('attention-alert');
+    const focusWarningBanner = document.getElementById('focus-warning-banner');
     const quizMeta = document.getElementById('quiz-meta');
     const quizQuestion = document.getElementById('quiz-question');
     const quizAnswers = document.getElementById('quiz-answers');
@@ -254,9 +273,26 @@
     }
 
     function inferModeFromSelect() {
-      const modeSelect = document.getElementById('session-mode');
-      if (!modeSelect) return 'short';
-      return modeSelect.selectedIndex === 1 ? 'normal' : 'short';
+      const params = new URLSearchParams(window.location.search);
+      const mode = (params.get("mode") || "short").toLowerCase();
+      return mode === "normal" ? "normal" : "short";
+    }
+
+    function buildAutoSessionName() {
+      const now = new Date();
+      const stamp = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, "0")}-${String(now.getDate()).padStart(2, "0")}_${String(now.getHours()).padStart(2, "0")}${String(now.getMinutes()).padStart(2, "0")}`;
+      return `ZAL_${stamp}`;
+    }
+
+    async function resolveClientIp() {
+      try {
+        const response = await fetch("https://api.ipify.org?format=json", { cache: "no-store" });
+        if (!response.ok) return "nieznane";
+        const data = await response.json();
+        return data?.ip || "nieznane";
+      } catch (error) {
+        return "nieznane";
+      }
     }
 
     async function loadQuestionBank() {
@@ -396,6 +432,9 @@
         appendMonitoringRecord('quiz.started', { mode: quizState.mode, totalQuestions: quizState.questions.length });
         startQuizBtn.disabled = true;
         finishQuizBtn.disabled = false;
+        nextQuestionBtn.disabled = true;
+        const previewWrap = document.querySelector(".preview-wrap");
+        if (previewWrap) previewWrap.style.display = "none";
         renderCurrentQuestion();
       } catch (error) {
         quizMeta.textContent = `Błąd uruchomienia sesji: ${error.message}`;
@@ -418,7 +457,7 @@
         timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
       }));
       const payload = {
-        sessionName: document.getElementById('session-name')?.value || 'Bez nazwy',
+        sessionName: window.__sessionName || 'Bez nazwy',
         mode: quizState.mode,
         sessionStartedAt: quizState.sessionStartedAt,
         sessionEndedAt: quizState.sessionEndedAt,
@@ -465,9 +504,13 @@
     }
 
     function updateAttentionWarningState() {
-      const isWarning = attentionState.score < 0.5 && moduleState.camera && moduleState.mediapipe;
+      const isCameraReady = moduleState.camera && moduleState.mediapipe;
+      const isWarning = isCameraReady && attentionState.score < 0.4;
+      const isCaution = isCameraReady && attentionState.score >= 0.4 && attentionState.score < 0.6;
       document.body.classList.toggle('attention-warning', isWarning);
+      document.body.classList.toggle('attention-caution', isCaution);
       if (attentionAlert) attentionAlert.classList.toggle('visible', isWarning);
+      if (focusWarningBanner) focusWarningBanner.classList.toggle('visible', isWarning);
     }
 
     function updateAttentionBar() {
@@ -631,7 +674,9 @@
       const overshootPx = 4;
       const screenWidth = window.screen?.availWidth || window.screen?.width || window.innerWidth;
       const screenHeight = window.screen?.availHeight || window.screen?.height || window.innerHeight;
-      const browserTopInset = (typeof window.outerHeight === 'number' && typeof window.innerHeight === 'number')\n        ? Math.max(0, window.outerHeight - window.innerHeight)\n        : 0;
+      const browserTopInset = (typeof window.outerHeight === "number" && typeof window.innerHeight === "number")
+        ? Math.max(0, window.outerHeight - window.innerHeight)
+        : 0;
 
       let moved = false;
       let resized = false;
@@ -724,6 +769,7 @@
           attentionState.eyes = scores.eyes;
           updateExtraMetrics(faces[0]);
           attentionState.head = clamp01((attentionState.head * 0.7) + (headMotionScore * 0.3));
+          if (startQuizBtn && !quizState.isActive) startQuizBtn.disabled = false;
           attentionState.interaction = clamp01((attentionState.interaction * 0.7) + (faceDistanceScore * 0.3));
         } else {
           setStatus('nie wykryto twarzy.');
@@ -732,6 +778,7 @@
           attentionState.eyes = 0;
           if (headMotionValue) headMotionValue.textContent = "0.00";
           if (faceDistanceValue) faceDistanceValue.textContent = "0.00";
+          if (startQuizBtn && !quizState.isActive) startQuizBtn.disabled = true;
         }
 
         updateAttentionBar();
@@ -752,7 +799,15 @@
     (async function init() {
       refreshModuleStatuses();
       initSessionLogDb();
-    setupAttentionInteractionTracking();
+      const sessionName = buildAutoSessionName();
+      window.__sessionName = sessionName;
+      const sessionNameDisplay = document.getElementById("session-name-display");
+      if (sessionNameDisplay) sessionNameDisplay.textContent = `Nazwa sesji: ${sessionName}`;
+      appendMonitoringRecord("session.access", { accessedAt: isoNow() });
+      resolveClientIp().then(ip => {
+        appendMonitoringRecord("session.client", { ip, accessedAt: isoNow() });
+      });
+      setupAttentionInteractionTracking();
       updateAttentionBar();
       await tryMaximize();
       await setupFaceTracking();
