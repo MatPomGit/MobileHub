@@ -1137,6 +1137,28 @@ const shortcutCombos = new Set([
         if (legacySummary) legacySummary.textContent = 'Aktualnie obsługiwane są pytania zamknięte jednokrotnego wyboru. Użyj wyróżnionej konfiguracji testu powyżej.';
       }
 
+      function shouldNavigateCurrentContextForExam() {
+        const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches;
+        const narrowViewport = window.matchMedia?.('(max-width: 768px)').matches;
+        const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
+        return Boolean(coarsePointer) || Boolean(narrowViewport) || mobileUserAgent;
+      }
+
+      function navigateToExamModule(examUrl) {
+        logEvent('quiz.attempt.mobile.navigate', `url=${examUrl}`);
+        setSecurityStatus('otwieranie modułu egzaminującego w bieżącym oknie.');
+        try {
+          if (window.top && window.top !== window) {
+            window.top.location.href = examUrl;
+            return true;
+          }
+        } catch (error) {
+          logEvent('quiz.attempt.top.navigation.blocked', error?.message || 'Brak dostępu do okna nadrzędnego.');
+        }
+        window.location.href = examUrl;
+        return true;
+      }
+
       function openExamModuleFromConfig() {
         const { length, questionType, range } = getSelectedSessionConfig();
         const available = getQuestionsForSelectedConfig();
@@ -1147,6 +1169,12 @@ const shortcutCombos = new Set([
         });
         if (range !== 'all') params.set('category', range);
         const examUrl = `zal_sesje.html?${params.toString()}`;
+
+        if (shouldNavigateCurrentContextForExam()) {
+          navigateToExamModule(examUrl);
+          return;
+        }
+
         const examWindow = window.open(examUrl, 'zalExamWindow', 'popup=yes,width=1280,height=800,left=0,top=0,resizable=yes');
         if (examWindow) {
           examWindow.focus();
@@ -1156,7 +1184,7 @@ const shortcutCombos = new Set([
           if (warning) warning.textContent = 'Test został otwarty w module egzaminującym. Obraz z kamery pozostaje przetwarzany lokalnie, a zdarzenia sesji będą logowane w eksporcie.';
         } else {
           logEvent('quiz.attempt.popup.blocked', 'Przeglądarka zablokowała otwarcie modułu egzaminującego.');
-          setSecurityStatus('nie udało się otworzyć modułu egzaminującego. Zezwól na wyskakujące okienka.');
+          navigateToExamModule(examUrl);
         }
       }
 
