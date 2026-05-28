@@ -329,7 +329,7 @@
 
     function filterQuestionsByCategory(questions, category) {
       if (!category || category === 'all') return questions;
-      return questions.filter((question) => String(question.category) === String(category));
+      return questions.filter((question) => question && question.category !== undefined && question.category !== null && String(question.category) === String(category));
     }
 
     function describeQuestionType(questionType) {
