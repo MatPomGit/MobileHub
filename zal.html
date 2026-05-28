@@ -1079,7 +1079,13 @@ const shortcutCombos = new Set([
       }
 
       function isSingleChoiceQuestion(question) {
-        return Boolean(question && Array.isArray(question.answers) && typeof question.correctIndex === 'number');
+        return Boolean(
+          question &&
+          Array.isArray(question.answers) &&
+          typeof question.correctIndex === 'number' &&
+          question.correctIndex >= 0 &&
+          question.correctIndex < question.answers.length
+        );
       }
 
       function getSelectedSessionConfig() {
