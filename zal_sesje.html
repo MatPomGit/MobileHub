@@ -426,7 +426,7 @@
           quizAnswers.appendChild(button);
         });
       }
-      nextQuestionBtn.disabled = quizState.answers[quizState.currentIndex] === null || quizState.answers[quizState.currentIndex] === '';
+      const currentAnswer = quizState.answers[quizState.currentIndex];\n      nextQuestionBtn.disabled = currentAnswer === null || (typeof currentAnswer === 'string' ? currentAnswer.trim() === '' : false);
       startQuestionTimer();
     }
 
