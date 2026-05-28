@@ -1140,7 +1140,7 @@ const shortcutCombos = new Set([
       function openExamModuleFromConfig() {
         const { length, questionType, range } = getSelectedSessionConfig();
         const available = getQuestionsForSelectedConfig();
-        if (nextSessionButton?.disabled || available.length === 0 || length > available.length) return;
+        if (nextSessionButton?.disabled || length < 1 || length > available.length) return;
         const params = new URLSearchParams({
           length: String(length),
           questionType
