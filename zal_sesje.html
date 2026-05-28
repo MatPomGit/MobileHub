@@ -14,7 +14,8 @@
     main { max-width:980px; margin:0 auto; padding:24px 20px 56px; }
     .panel { background:#111827; border:1px solid #334155; border-radius:14px; padding:16px; }
     .row { display:grid; gap:10px; margin-top:14px; }
-    input, select, button { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:10px; padding:10px 12px; font-size:15px; }
+    input, select, button, textarea { background:#0b1220; color:#e2e8f0; border:1px solid #475569; border-radius:10px; padding:10px 12px; font-size:15px; }
+    textarea { resize: vertical; min-height: 96px; font-family: inherit; }
     .muted { color:#94a3b8; font-size:14px; }
     .preview-wrap { margin-top: 16px; display: grid; gap: 8px; }
     .preview-box { width: 280px; max-width: 100%; border: 1px solid #334155; border-radius: 10px; overflow: hidden; background: #020617; }
@@ -245,7 +246,8 @@
 
 
     const QUESTION_BANK_URL = 'quiz-questions.json';
-    const QUIZ_MODE_SIZES = { short: 25, normal: 50 };
+    const DEFAULT_QUIZ_LENGTH = 25;
+    const MAX_QUIZ_LENGTH = 150;
     const QUESTION_TIME_LIMIT_SECONDS = 10;
     const monitoringExportLog = [];
     let lastAttentionLogAt = 0;
@@ -255,6 +257,8 @@
       answers: [],
       isActive: false,
       mode: 'short',
+      requestedLength: DEFAULT_QUIZ_LENGTH,
+      questionType: 'single-choice',
       sessionStartedAt: null,
       sessionEndedAt: null,
       questionStartedAtMs: null,
@@ -272,10 +276,44 @@
       monitoringExportLog.push({ timestamp: isoNow(), type, payload });
     }
 
-    function inferModeFromSelect() {
+    function readExamConfig() {
       const params = new URLSearchParams(window.location.search);
-      const mode = (params.get("mode") || "short").toLowerCase();
-      return mode === "normal" ? "normal" : "short";
+      const legacyMode = (params.get('mode') || '').toLowerCase();
+      const lengthParam = Number(params.get('length'));
+      const questionTypeParam = (params.get('questionType') || 'single-choice').toLowerCase();
+      let requestedLength = Number.isFinite(lengthParam) && lengthParam > 0
+        ? Math.floor(lengthParam)
+        : legacyMode === 'normal'
+          ? 50
+          : DEFAULT_QUIZ_LENGTH;
+      requestedLength = Math.max(1, Math.min(MAX_QUIZ_LENGTH, requestedLength));
+      const allowedQuestionTypes = new Set(['all', 'single-choice', 'short-answer']);
+      const questionType = allowedQuestionTypes.has(questionTypeParam) ? questionTypeParam : 'single-choice';
+      return {
+        requestedLength,
+        mode: requestedLength >= 50 ? 'normal' : 'short',
+        questionType
+      };
+    }
+
+    function getQuestionKind(question) {
+      if (!question || typeof question !== 'object') return 'unknown';
+      if (question.type === 'short-answer' || question.type === 'open' || question.expectedAnswer) return 'short-answer';
+      if (Array.isArray(question.answers) && typeof question.correctIndex === 'number') return 'single-choice';
+      return 'unknown';
+    }
+
+    function filterQuestionsByType(questions, questionType) {
+      if (questionType === 'all') {
+        return questions.filter((question) => getQuestionKind(question) !== 'unknown');
+      }
+      return questions.filter((question) => getQuestionKind(question) === questionType);
+    }
+
+    function describeQuestionType(questionType) {
+      if (questionType === 'all') return 'wszystkie obsługiwane rodzaje pytań';
+      if (questionType === 'short-answer') return 'pytania otwarte z krótką odpowiedzią';
+      return 'pytania zamknięte jednokrotnego wyboru';
     }
 
     function buildAutoSessionName() {
@@ -365,17 +403,30 @@
     function renderCurrentQuestion() {
       if (!quizState.isActive || quizState.currentIndex >= quizState.questions.length) return;
       const current = quizState.questions[quizState.currentIndex];
+      const kind = getQuestionKind(current);
       updateQuestionMetaWithTime();
       quizQuestion.textContent = current.question;
       quizAnswers.innerHTML = '';
-      current.answers.forEach((answer, index) => {
-        const button = document.createElement('button');
-        button.type = 'button';
-        button.textContent = `${String.fromCharCode(65 + index)}. ${answer}`;
-        button.addEventListener('click', () => selectAnswer(index));
-        quizAnswers.appendChild(button);
-      });
-      nextQuestionBtn.disabled = quizState.answers[quizState.currentIndex] === null;
+      if (kind === 'short-answer') {
+        const label = document.createElement('label');
+        label.textContent = 'Twoja odpowiedź:';
+        label.setAttribute('for', 'short-answer-input');
+        const input = document.createElement('textarea');
+        input.id = 'short-answer-input';
+        input.rows = 4;
+        input.value = quizState.answers[quizState.currentIndex] || '';
+        input.addEventListener('input', () => selectAnswer(input.value));
+        quizAnswers.append(label, input);
+      } else {
+        current.answers.forEach((answer, index) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.textContent = `${String.fromCharCode(65 + index)}. ${answer}`;
+          button.addEventListener('click', () => selectAnswer(index));
+          quizAnswers.appendChild(button);
+        });
+      }
+      const currentAnswer = quizState.answers[quizState.currentIndex];\n      nextQuestionBtn.disabled = currentAnswer === null || (typeof currentAnswer === 'string' ? currentAnswer.trim() === '' : false);
       startQuestionTimer();
     }
 
@@ -394,15 +445,15 @@
         timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
       });
       [...quizAnswers.children].forEach((node, idx) => {
-        node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
+        if (node.tagName === 'BUTTON') node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
       });
-      nextQuestionBtn.disabled = false;
+      nextQuestionBtn.disabled = answerIndex === null || (typeof answerIndex === 'string' ? answerIndex.trim() === '' : false);
     }
 
     function nextQuestion(triggeredByTimeout = false) {
       if (!quizState.isActive) return;
       stopQuestionTimer();
-      if (!triggeredByTimeout && quizState.answers[quizState.currentIndex] === null) return;
+      const currentAnswer = quizState.answers[quizState.currentIndex];\n      if (!triggeredByTimeout && (currentAnswer === null || (typeof currentAnswer === 'string' ? currentAnswer.trim() === '' : false))) return;
       quizState.currentIndex += 1;
       if (quizState.currentIndex >= quizState.questions.length) {
         finishQuizBtn.disabled = false;
@@ -419,9 +470,15 @@
       try {
         monitoringExportLog.length = 0;
         const allQuestions = await loadQuestionBank();
-        quizState.mode = inferModeFromSelect();
-        const size = QUIZ_MODE_SIZES[quizState.mode] ?? QUIZ_MODE_SIZES.short;
-        quizState.questions = shuffle(allQuestions).slice(0, Math.min(size, allQuestions.length));
+        const examConfig = readExamConfig();
+        quizState.mode = examConfig.mode;
+        quizState.requestedLength = examConfig.requestedLength;
+        quizState.questionType = examConfig.questionType;
+        const filteredQuestions = filterQuestionsByType(allQuestions, quizState.questionType);
+        if (filteredQuestions.length === 0) {
+          throw new Error(`Brak pytań dla wybranego rodzaju: ${describeQuestionType(quizState.questionType)}.`);
+        }
+        quizState.questions = shuffle(filteredQuestions).slice(0, Math.min(quizState.requestedLength, filteredQuestions.length));
         quizState.currentIndex = 0;
         quizState.answers = new Array(quizState.questions.length).fill(null);
         quizState.answerDurationsMs = new Array(quizState.questions.length).fill(null);
@@ -429,7 +486,8 @@
         quizState.isActive = true;
         quizState.sessionStartedAt = isoNow();
         quizState.sessionEndedAt = null;
-        appendMonitoringRecord('quiz.started', { mode: quizState.mode, totalQuestions: quizState.questions.length });
+        appendMonitoringRecord('quiz.started', { mode: quizState.mode, requestedLength: quizState.requestedLength, questionType: quizState.questionType, totalQuestions: quizState.questions.length });
+        quizMeta.textContent = `Sesja: ${quizState.questions.length}/${quizState.requestedLength} pytań. Rodzaj: ${describeQuestionType(quizState.questionType)}.`;
         startQuizBtn.disabled = true;
         finishQuizBtn.disabled = false;
         nextQuestionBtn.disabled = true;
@@ -449,9 +507,10 @@
         questionIndex: index,
         questionId: question.id ?? null,
         question: question.question,
-        selectedAnswerIndex: quizState.answers[index],
-        selectedAnswer: quizState.answers[index] !== null ? question.answers[quizState.answers[index]] : null,
-        correctAnswerIndex: question.correctIndex,
+        questionType: getQuestionKind(question),
+        selectedAnswerIndex: typeof quizState.answers[index] === 'number' ? quizState.answers[index] : null,
+        selectedAnswer: typeof quizState.answers[index] === 'number' && Array.isArray(question.answers) ? question.answers[quizState.answers[index]] : quizState.answers[index],
+        correctAnswerIndex: typeof question.correctIndex === 'number' ? question.correctIndex : null,
         elapsedMs: quizState.answerDurationsMs[index],
         timedOut: Boolean(quizState.timedOutQuestions[index]),
         timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
@@ -459,6 +518,8 @@
       const payload = {
         sessionName: window.__sessionName || 'Bez nazwy',
         mode: quizState.mode,
+        requestedLength: quizState.requestedLength,
+        questionType: quizState.questionType,
         sessionStartedAt: quizState.sessionStartedAt,
         sessionEndedAt: quizState.sessionEndedAt,
         monitoring: monitoringExportLog,
