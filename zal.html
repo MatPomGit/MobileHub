@@ -1138,8 +1138,8 @@ const shortcutCombos = new Set([
       }
 
       function shouldNavigateCurrentContextForExam() {
-        const coarsePointer = window.matchMedia?.('(pointer: coarse)').matches;
-        const narrowViewport = window.matchMedia?.('(max-width: 768px)').matches;
+        const coarsePointer = window.matchMedia?.('(pointer: coarse)')?.matches;
+        const narrowViewport = window.matchMedia?.('(max-width: 768px)')?.matches;
         const mobileUserAgent = /Android|iPhone|iPad|iPod|Mobile/i.test(navigator.userAgent);
         return Boolean(coarsePointer) || Boolean(narrowViewport) || mobileUserAgent;
       }
