@@ -453,7 +453,7 @@
     function nextQuestion(triggeredByTimeout = false) {
       if (!quizState.isActive) return;
       stopQuestionTimer();
-      if (!triggeredByTimeout && (quizState.answers[quizState.currentIndex] === null || quizState.answers[quizState.currentIndex] === '')) return;
+      const currentAnswer = quizState.answers[quizState.currentIndex];\n      if (!triggeredByTimeout && (currentAnswer === null || (typeof currentAnswer === 'string' ? currentAnswer.trim() === '' : false))) return;
       quizState.currentIndex += 1;
       if (quizState.currentIndex >= quizState.questions.length) {
         finishQuizBtn.disabled = false;
