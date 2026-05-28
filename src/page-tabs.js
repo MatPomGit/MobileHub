@@ -16,6 +16,11 @@ function initPageTabs() {
             }
 
             function switchTab(tab) {
+                if (tab === 'zal') {
+                    window.location.href = 'zal.html';
+                    return;
+                }
+
                 // Update top tab bar
                 document.querySelectorAll('.page-tab-bar .tab-btn').forEach(b => {
                     b.classList.toggle('active', b.dataset.tab === tab);
