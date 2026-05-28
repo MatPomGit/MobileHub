@@ -771,9 +771,9 @@
         ? Math.max(0, window.outerHeight - window.innerHeight)
         : 0;
       const targetLeft = screenLeft - overshootPx;
-      const targetTop = screenTop - browserTopInset;
+      const targetTop = screenTop - browserTopInset - overshootPx;
       const targetWidth = screenWidth + (overshootPx * 2);
-      const targetHeight = screenHeight + browserTopInset + overshootPx;
+      const targetHeight = screenHeight + browserTopInset + (overshootPx * 2);
 
       let moved = false;
       let resized = false;
