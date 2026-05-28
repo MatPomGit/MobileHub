@@ -13,11 +13,11 @@ test('zal_sesje.html: mobilny render formularza i statusów', async ({ page }) =
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
 
-  await page.goto('/zal_sesje.html');
+  await page.goto('/zal_sesje.html?length=25&questionType=single-choice');
 
-  await expect(page.locator('h1')).toHaveText('Tworzenie sesji zaliczeniowej');
-  await expect(page.locator('#session-name')).toBeVisible();
-  await expect(page.locator('#session-mode')).toBeVisible();
+  await expect(page.locator('h1')).toHaveText('Sesja zaliczeniowa');
+  await expect(page.locator('#session-name-display')).toBeVisible();
+  await expect(page.locator('#quiz-meta')).toContainText('Najpierw zaakceptuj uprawnienia do kamery');
   await expect(page.locator('#session-module-statuses')).toBeVisible();
 
   const hasHorizontalOverflow = await page.evaluate(() => {

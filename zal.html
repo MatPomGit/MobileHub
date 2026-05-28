@@ -185,7 +185,7 @@
     <section class="grid" aria-label="Plan funkcjonalny modułu ZAL">
       <p class="muted">Wybierz moduł, aby wyświetlić szczegóły.</p>
       <article class="card">
-        <button type="button" class="tab-btn" data-open-url="zal_sesje.html">
+        <button type="button" class="tab-btn" data-target="sessions-panel">
           <h2>Sesje zaliczeniowe</h2>
         <p class="muted">Tworzenie sesji, harmonogramów, limitów czasowych i zasad podejścia.</p>
         </button>
@@ -212,15 +212,26 @@
 
 
 
-    <section id="sessions-panel" class="module tab-panel" aria-label="Sesja testowa ZAL" hidden>
-      <h2>Sesja zaliczeniowa — tryb testowy</h2>
+    <section id="sessions-panel" class="module tab-panel" aria-label="Konfiguracja sesji testowej ZAL" hidden>
+      <h2>Konfiguracja sesji zaliczeniowej</h2>
+      <p class="muted">Wybierz parametry podejścia w zakładce ZAL. Właściwy test zostanie uruchomiony w module egzaminującym <code>zal_sesje.html</code>.</p>
       <div class="module-controls">
-        <label for="zal-mode">Tryb:</label>
-        <select id="zal-mode"><option value="short">Krótki (25)</option><option value="normal">Normalny (50)</option></select>
-        <button type="button" id="zal-start">Rozpocznij podejście</button>
+        <label for="zal-length">Długość testu:</label>
+        <select id="zal-length">
+          <option value="25">Krótki test, 25 pytań</option>
+          <option value="50">Pełne podejście, 50 pytań</option>
+        </select>
+        <label for="zal-question-type">Rodzaj pytań:</label>
+        <select id="zal-question-type">
+          <option value="single-choice">Pytania zamknięte jednokrotnego wyboru</option>
+          <option value="short-answer">Pytania otwarte z krótką odpowiedzią</option>
+          <option value="all">Wszystkie obsługiwane rodzaje pytań</option>
+        </select>
+        <button type="button" id="zal-start">Uruchom moduł egzaminujący</button>
       </div>
+      <p id="zal-config-summary" class="muted">Wybrano krótki test, 25 pytań, pytania zamknięte jednokrotnego wyboru.</p>
       <h3 id="zal-progress">Postęp: 0/0</h3>
-      <p id="zal-question" class="muted">Kliknij „Rozpocznij podejście”.</p>
+      <p id="zal-question" class="muted">Test uruchamia się w osobnym module egzaminującym.</p>
       <div id="zal-answers" class="module-controls"></div>
       <div class="module-controls" style="margin-top:10px;">
         <button type="button" id="zal-prev">Wstecz</button>
@@ -333,21 +344,13 @@
 
       tabButtons.forEach((button) => {
         button.addEventListener('click', () => {
-          const openUrl = button.dataset.openUrl;
-          if (openUrl) {
-            const sessionWindow = window.open(openUrl, 'zalSessionBuilder', 'popup=yes,width=1440,height=900,left=0,top=0,resizable=yes');
-            if (sessionWindow) {
-              sessionWindow.focus();
-            } else {
-              alert('Otwarcie okna zostało zablokowane. Proszę zezwolić na wyskakujące okienka dla tej strony.');
-            }
-            return;
-          }
           activatePanel(button.dataset.target);
         });
       });
 
       document.getElementById('zal-start')?.addEventListener('click', startAttempt);
+      document.getElementById('zal-length')?.addEventListener('change', updateSessionConfigSummary);
+      document.getElementById('zal-question-type')?.addEventListener('change', updateSessionConfigSummary);
       document.getElementById('zal-prev')?.addEventListener('click', () => {
         if (zalState.index === 0) return;
         zalState.index -= 1;
@@ -365,6 +368,7 @@
       setupInteractionLogging();
       initializeLogDb();
       setupExamWindowSecurity();
+      updateSessionConfigSummary();
 
       function renderOptions(questions) {
         const categories = [...new Set(
@@ -891,31 +895,63 @@ const shortcutCombos = new Set([
         zalState.questionShownAt = Date.now();
       }
 
+      function getSelectedSessionConfig() {
+        const lengthSelect = document.getElementById('zal-length');
+        const typeSelect = document.getElementById('zal-question-type');
+        const length = Number(lengthSelect?.value || 25);
+        const questionType = typeSelect?.value || 'single-choice';
+        return {
+          length: Number.isFinite(length) && length > 0 ? length : 25,
+          questionType
+        };
+      }
+
+      function updateSessionConfigSummary() {
+        const summary = document.getElementById('zal-config-summary');
+        if (!summary) return;
+        const { length, questionType } = getSelectedSessionConfig();
+        const typeLabel = questionType === 'all'
+          ? 'wszystkie obsługiwane rodzaje pytań'
+          : questionType === 'short-answer'
+            ? 'pytania otwarte z krótką odpowiedzią'
+            : 'pytania zamknięte jednokrotnego wyboru';
+        summary.textContent = `Wybrano ${length} pytań, ${typeLabel}.`;
+      }
+
+      function openExamModuleFromConfig() {
+        const { length, questionType } = getSelectedSessionConfig();
+        const params = new URLSearchParams({
+          length: String(length),
+          questionType
+        });
+        const examUrl = `zal_sesje.html?${params.toString()}`;
+        const examWindow = window.open(examUrl, 'zalExamWindow', 'popup=yes,width=1280,height=800,left=0,top=0,resizable=yes');
+        if (examWindow) {
+          examWindow.focus();
+          logEvent('quiz.attempt.popup.opened', `url=${examUrl}`);
+          setSecurityStatus('otwarto moduł egzaminujący. Uruchom test w nowym oknie.');
+          const warning = document.getElementById('zal-student-warning');
+          if (warning) warning.textContent = 'Test został otwarty w module egzaminującym. W trakcie podejścia nie zmieniaj aktywnego okna/karty i nie używaj skrótów klawiszowych, ponieważ takie zdarzenia są logowane.';
+        } else {
+          logEvent('quiz.attempt.popup.blocked', 'Przeglądarka zablokowała otwarcie modułu egzaminującego.');
+          setSecurityStatus('nie udało się otworzyć modułu egzaminującego. Zezwól na wyskakujące okienka.');
+        }
+      }
+
       function startAttempt() {
         if (!examMode) {
-          const examUrl = `${window.location.pathname}?${EXAM_QUERY_KEY}=1`;
-          const examWindow = window.open(examUrl, 'zalExamWindow', 'popup=yes,width=1280,height=800,left=0,top=0,resizable=yes');
-          if (examWindow) {
-            examWindow.focus();
-            logEvent('quiz.attempt.popup.opened', `url=${examUrl}`);
-            setSecurityStatus('otwarto okno testowe. Uruchom test w nowym oknie.');
-            const warning = document.getElementById('zal-student-warning');
-            if (warning) warning.textContent = 'Test został otwarty w osobnym oknie. W trakcie podejścia nie zmieniaj aktywnego okna/karty i nie używaj skrótów klawiszowych — zdarzenia są logowane.';
-          } else {
-            logEvent('quiz.attempt.popup.blocked', 'Przeglądarka zablokowała otwarcie nowego okna.');
-            setSecurityStatus('nie udało się otworzyć okna testowego (popup blocked).');
-          }
+          openExamModuleFromConfig();
           return;
         }
 
-        const mode = document.getElementById('zal-mode').value;
-        const size = mode === 'normal' ? 50 : 25;
+        const { length: size, questionType } = getSelectedSessionConfig();
+        const mode = size >= 50 ? 'normal' : 'short';
         zalState.attempt += 1;
         zalState.pool = shuffle(zalState.questions).slice(0, Math.min(size, zalState.questions.length));
         zalState.answers = new Array(zalState.pool.length).fill(null);
         zalState.index = 0;
         zalState.startedAt = Date.now();
-        logEvent('quiz.attempt.start', `attempt=${zalState.attempt}, mode=${mode}, size=${zalState.pool.length}`);
+        logEvent('quiz.attempt.start', `attempt=${zalState.attempt}, mode=${mode}, questionType=${questionType}, size=${zalState.pool.length}`);
         renderQuestion();
       }
 
