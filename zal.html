@@ -171,69 +171,237 @@
       font-size: 14px;
     }
 
+    .hero-card {
+      background: linear-gradient(135deg, rgba(37, 99, 235, 0.18), rgba(14, 165, 233, 0.08));
+      border: 1px solid rgba(96, 165, 250, 0.45);
+      border-radius: 18px;
+      padding: 18px;
+      box-shadow: 0 18px 60px rgba(2, 6, 23, 0.28);
+    }
+    .badge.accent {
+      background: #16a34a;
+      color: #dcfce7;
+    }
+    .grid-intro {
+      grid-column: 1 / -1;
+      margin: 0;
+    }
+    .card {
+      transition: border-color .18s ease, transform .18s ease, background .18s ease;
+    }
+    .card:hover,
+    .card:focus-within {
+      border-color: #60a5fa;
+      transform: translateY(-2px);
+    }
+    .card.is-primary {
+      border-color: #22c55e;
+      background: linear-gradient(135deg, rgba(34, 197, 94, 0.22), rgba(17, 24, 39, 0.96));
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.28), 0 20px 70px rgba(20, 83, 45, 0.2);
+    }
+    .card-kicker {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      margin-bottom: 8px;
+      color: #bbf7d0;
+      font-size: 12px;
+      font-weight: 800;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+    }
+    .card-action {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      margin-top: 12px;
+      background: #22c55e;
+      color: #052e16;
+      border: 0;
+      border-radius: 999px;
+      padding: 10px 14px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .card-action:hover,
+    .card-action:focus-visible {
+      background: #86efac;
+      outline: 3px solid rgba(134, 239, 172, 0.35);
+      outline-offset: 2px;
+    }
+    .test-launcher {
+      margin-top: 20px;
+      background: #0b1220;
+      border: 1px solid #22c55e;
+      border-radius: 18px;
+      padding: 16px;
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.18);
+    }
+    .test-launcher-header {
+      display: grid;
+      gap: 8px;
+    }
+    .test-config-panel {
+      margin: 14px 0 0;
+      padding: 14px;
+      border: 1px solid #334155;
+      border-radius: 14px;
+      background: rgba(15, 23, 42, 0.82);
+    }
+    .test-config-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 12px;
+    }
+    .test-config-field {
+      display: grid;
+      gap: 6px;
+    }
+    .test-config-field label {
+      font-weight: 700;
+      color: #dbeafe;
+    }
+    .test-config-field input,
+    .test-config-field select {
+      background: #020617;
+      color: #e2e8f0;
+      border: 1px solid #475569;
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 15px;
+    }
+    .test-config-field select:disabled {
+      color: #cbd5e1;
+      opacity: 1;
+      border-color: #166534;
+      background: rgba(20, 83, 45, 0.35);
+    }
+    .test-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      margin-top: 14px;
+    }
+    .primary-test-button,
+    .secondary-test-button {
+      border: 1px solid transparent;
+      border-radius: 999px;
+      padding: 11px 16px;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .primary-test-button {
+      background: #22c55e;
+      color: #052e16;
+    }
+    .primary-test-button:disabled {
+      cursor: not-allowed;
+      background: #334155;
+      color: #94a3b8;
+    }
+    .secondary-test-button {
+      background: #1d4ed8;
+      color: #dbeafe;
+      border-color: #60a5fa;
+    }
+    .calibration-status {
+      margin: 10px 0 0;
+      color: #bfdbfe;
+      font-size: 14px;
+    }
+
   </style>
 </head>
 <body>
   <main>
-    <span class="badge">Szablon modułu</span>
-    <h1>ZAL — wejściówki i zaliczenia online</h1>
-    <p class="lead">
-      To jest wstępny szablon nowej sekcji. W kolejnych etapach strona będzie rozwijana
-      jako moduł do realizacji wejściówek i zaliczeń online pod kontrolą proktoringu.
-    </p>
+    <section class="hero-card" aria-labelledby="zal-title">
+      <span class="badge">Moduł zaliczeń</span>
+      <h1 id="zal-title">ZAL — wejściówki i zaliczenia online</h1>
+      <p class="lead">
+        Centrum podejść do testów w czasie monitorowanej sesji. Wybierz zakres, ustaw liczbę pytań
+        i przejdź do osobnego okna sesji zaliczeniowej, w którym działa lokalne przetwarzanie obrazu z kamery.
+      </p>
+    </section>
 
     <section class="grid" aria-label="Plan funkcjonalny modułu ZAL">
-      <p class="muted">Wybierz moduł, aby wyświetlić szczegóły.</p>
+      <p class="muted grid-intro">Wybierz kafelek, aby wyświetlić szczegóły, albo użyj wyróżnionego kafelka testu.</p>
+      <article class="card is-primary">
+        <div class="card-kicker">Najważniejsze przejście</div>
+        <h2>Podejdź do testu</h2>
+        <p class="muted">Otwórz konfigurację zakresu i liczby pytań. Obecnie dostępne są wyłącznie pytania zamknięte jednokrotnego wyboru.</p>
+        <button type="button" class="card-action" id="show-test-config">Podejdź do testu</button>
+      </article>
       <article class="card">
         <button type="button" class="tab-btn" data-target="sessions-panel">
           <h2>Sesje zaliczeniowe</h2>
-        <p class="muted">Tworzenie sesji, harmonogramów, limitów czasowych i zasad podejścia.</p>
-        </button>
-      </article>
-      <article class="card">
-        <button type="button" class="tab-btn" data-target="proctoring-panel">
-          <h2>Proktoring</h2>
-        <p class="muted">Weryfikacja tożsamości, monitoring przebiegu i sygnalizacja naruszeń.</p>
+          <p class="muted">Informacje o uruchamianiu monitorowanej sesji, limitach czasu i zasadach podejścia.</p>
         </button>
       </article>
       <article class="card">
         <button type="button" class="tab-btn" data-target="topics-panel">
           <h2>Bank pytań</h2>
-        <p class="muted">Kategorie pytań, losowanie zestawów i wersjonowanie treści egzaminu.</p>
+          <p class="muted">Podgląd zakresów tematycznych oraz liczby pytań dostępnych w bazie.</p>
+        </button>
+      </article>
+      <article class="card">
+        <button type="button" class="tab-btn" data-target="proctoring-panel">
+          <h2>Proktoring</h2>
+          <p class="muted">Zasady lokalnego monitoringu twarzy, uwagi i aktywności w czasie testu.</p>
         </button>
       </article>
       <article class="card">
         <button type="button" class="tab-btn" data-target="reports-panel">
           <h2>Raporty</h2>
-        <p class="muted">Wyniki, logi zdarzeń, eksport danych i ślad audytowy dla prowadzących.</p>
+          <p class="muted">Logi zdarzeń, eksport danych i ślad audytowy do analizy po sesji.</p>
         </button>
       </article>
     </section>
 
-
+    <section class="test-launcher" aria-labelledby="test-launcher-title">
+      <div class="test-launcher-header">
+        <span class="badge accent">Test</span>
+        <h2 id="test-launcher-title">Konfiguracja podejścia</h2>
+        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań wybierz zakres i liczbę pytań. Przycisk „Dalej” otworzy <code>zal_sesje.html</code> w nowym oknie.</p>
+      </div>
+      <div id="test-config-panel" class="test-config-panel" hidden>
+        <div class="test-config-grid">
+          <div class="test-config-field">
+            <label for="zal-test-range">Zakres testu</label>
+            <select id="zal-test-range" class="topic-range-select">
+              <option value="all">Wszystkie tematy</option>
+            </select>
+          </div>
+          <div class="test-config-field">
+            <label for="zal-test-length">Liczba pytań</label>
+            <input id="zal-test-length" type="number" min="1" max="150" value="25" inputmode="numeric" />
+          </div>
+          <div class="test-config-field">
+            <label for="zal-test-question-type">Rodzaj pytań</label>
+            <select id="zal-test-question-type" disabled>
+              <option value="single-choice" selected>Pytania zamknięte jednokrotnego wyboru</option>
+            </select>
+          </div>
+        </div>
+        <p id="zal-test-config-summary" class="calibration-status">Wczytywanie banku pytań...</p>
+      </div>
+      <div class="test-actions" aria-label="Akcje testu">
+        <button type="button" class="secondary-test-button" id="open-test-config">Podejdź do testu</button>
+        <button type="button" class="primary-test-button" id="zal-open-session-next" disabled>Dalej</button>
+      </div>
+    </section>
 
     <section id="sessions-panel" class="module tab-panel" aria-label="Konfiguracja sesji testowej ZAL" hidden>
-      <h2>Konfiguracja sesji zaliczeniowej</h2>
-      <p class="muted">Wybierz parametry podejścia w zakładce ZAL. Właściwy test zostanie uruchomiony w module egzaminującym <code>zal_sesje.html</code>.</p>
+      <h2>Sesje zaliczeniowe</h2>
+      <p class="muted">Właściwy test uruchamia się w osobnym oknie <code>zal_sesje.html</code>. W tym oknie student przechodzi kalibrację kamery i twarzy, a następnie rozpoczyna monitorowaną sesję pytań.</p>
       <div class="module-controls">
-        <label for="zal-length">Długość testu:</label>
-        <select id="zal-length">
-          <option value="25">Krótki test, 25 pytań</option>
-          <option value="50">Pełne podejście, 50 pytań</option>
-        </select>
-        <label for="zal-question-type">Rodzaj pytań:</label>
-        <select id="zal-question-type">
-          <option value="single-choice">Pytania zamknięte jednokrotnego wyboru</option>
-          <option value="short-answer">Pytania otwarte z krótką odpowiedzią</option>
-          <option value="all">Wszystkie obsługiwane rodzaje pytań</option>
-        </select>
-        <button type="button" id="zal-start">Uruchom moduł egzaminujący</button>
+        <button type="button" id="zal-start">Pokaż konfigurację testu</button>
       </div>
-      <p id="zal-config-summary" class="muted">Wybrano krótki test, 25 pytań, pytania zamknięte jednokrotnego wyboru.</p>
-      <h3 id="zal-progress">Postęp: 0/0</h3>
-      <p id="zal-question" class="muted">Test uruchamia się w osobnym module egzaminującym.</p>
-      <div id="zal-answers" class="module-controls"></div>
-      <div class="module-controls" style="margin-top:10px;">
+      <p id="zal-config-summary" class="muted">Aktualnie obsługiwane są pytania zamknięte jednokrotnego wyboru.</p>
+      <h3 id="zal-progress" hidden>Postęp: 0/0</h3>
+      <p id="zal-question" class="muted" hidden>Test uruchamia się w osobnym module egzaminującym.</p>
+      <div id="zal-answers" class="module-controls" hidden></div>
+      <div class="module-controls" style="margin-top:10px;" hidden>
         <button type="button" id="zal-prev">Wstecz</button>
         <button type="button" id="zal-next">Dalej</button>
         <button type="button" id="zal-finish">Zakończ podejście</button>
@@ -245,7 +413,7 @@
         <p id="zal-face-status" class="muted">Twarz: detektor nieuruchomiony.</p>
         <video id="zal-proctor-video" autoplay playsinline muted hidden></video>
       </div>
-      <p class="student-warning" id="zal-student-warning">Uwaga: Twoje działania podczas testu są monitorowane. Nie próbuj zmieniać aktywnego okna/karty przeglądarki ani używać skrótów klawiszowych — takie zdarzenia są rejestrowane jako naruszenia.</p>
+      <p class="student-warning" id="zal-student-warning">Uwaga: działania w oknie sesji są monitorowane. Obraz z kamery jest przetwarzany lokalnie na urządzeniu studenta.</p>
       <h3>Status modułów</h3>
       <div class="status-grid" id="zal-module-statuses" aria-live="polite">
         <div class="status-item"><span>Wczytywanie testów dla studentów</span><span class="status-dot" id="mod-load-tests" title="nieaktywny"></span></div>
@@ -304,6 +472,11 @@
       const select = document.getElementById('topic-range');
       const summary = document.getElementById('topic-summary');
       const topicList = document.getElementById('topic-list');
+      const testConfigPanel = document.getElementById('test-config-panel');
+      const testRangeSelect = document.getElementById('zal-test-range');
+      const testLengthInput = document.getElementById('zal-test-length');
+      const testConfigSummary = document.getElementById('zal-test-config-summary');
+      const nextSessionButton = document.getElementById('zal-open-session-next');
 
       const source = 'quiz-questions.json';
       const EXAM_QUERY_KEY = 'zalExamWindow';
@@ -348,9 +521,12 @@
         });
       });
 
-      document.getElementById('zal-start')?.addEventListener('click', startAttempt);
-      document.getElementById('zal-length')?.addEventListener('change', updateSessionConfigSummary);
-      document.getElementById('zal-question-type')?.addEventListener('change', updateSessionConfigSummary);
+      document.getElementById('zal-start')?.addEventListener('click', showTestConfigPanel);
+      document.getElementById('show-test-config')?.addEventListener('click', showTestConfigPanel);
+      document.getElementById('open-test-config')?.addEventListener('click', showTestConfigPanel);
+      nextSessionButton?.addEventListener('click', openExamModuleFromConfig);
+      testRangeSelect?.addEventListener('change', updateSessionConfigSummary);
+      testLengthInput?.addEventListener('input', updateSessionConfigSummary);
       document.getElementById('zal-prev')?.addEventListener('click', () => {
         if (zalState.index === 0) return;
         zalState.index -= 1;
@@ -368,7 +544,6 @@
       setupInteractionLogging();
       initializeLogDb();
       setupExamWindowSecurity();
-      updateSessionConfigSummary();
 
       function renderOptions(questions) {
         const categories = [...new Set(
@@ -377,15 +552,22 @@
             .filter((category) => category !== undefined && category !== null)
         )].sort((a, b) => Number(a) - Number(b));
 
-        categories.forEach((category) => {
-          const option = document.createElement('option');
-          option.value = String(category);
-          const lectureTopic = lectureTopicByCategory[Number(category)];
-          option.textContent = lectureTopic
-            ? `Temat ${category} — Wykład ${category}: ${lectureTopic}`
-            : `Temat ${category}`;
+        [select, testRangeSelect].filter(Boolean).forEach((rangeSelect) => {
+          const firstOption = rangeSelect.querySelector('option[value="all"]')?.cloneNode(true) || new Option('Wszystkie tematy', 'all');
+          rangeSelect.replaceChildren(firstOption);
+        });
 
-          select.appendChild(option);
+        categories.forEach((category) => {
+          const lectureTopic = lectureTopicByCategory[Number(category)];
+          const label = lectureTopic
+            ? `Temat ${category}: ${lectureTopic}`
+            : `Temat ${category}`;
+          [select, testRangeSelect].filter(Boolean).forEach((rangeSelect) => {
+            const option = document.createElement('option');
+            option.value = String(category);
+            option.textContent = label;
+            rangeSelect.appendChild(option);
+          });
         });
 
         const updateSummary = () => {
@@ -397,7 +579,7 @@
           const scopeLabel = chosen === 'all'
             ? 'wszystkie tematy'
             : selectedTopicName
-              ? `temat ${chosen} — ${selectedTopicName}`
+              ? `temat ${chosen}: ${selectedTopicName}`
               : `temat ${chosen}`;
           summary.textContent = `Zakres: ${scopeLabel}. Dostępne pytania: ${filtered.length}.`;
           
@@ -437,6 +619,7 @@
       let isFlushingLogQueue = false;
 
       refreshModuleStatuses();
+      updateSessionConfigSummary();
 
       function setDbStatus(message) {
         const status = document.getElementById('zal-db-status');
@@ -895,48 +1078,88 @@ const shortcutCombos = new Set([
         zalState.questionShownAt = Date.now();
       }
 
+      function isSingleChoiceQuestion(question) {
+        return Boolean(
+          question &&
+          Array.isArray(question.answers) &&
+          typeof question.correctIndex === 'number' &&
+          question.correctIndex >= 0 &&
+          question.correctIndex < question.answers.length
+        );
+      }
+
       function getSelectedSessionConfig() {
-        const lengthSelect = document.getElementById('zal-length');
-        const typeSelect = document.getElementById('zal-question-type');
-        const length = Number(lengthSelect?.value || 25);
-        const questionType = typeSelect?.value || 'single-choice';
+        const rawLength = testLengthInput?.value ?? '25';
+        const length = Number(rawLength);
+        const range = testRangeSelect?.value || 'all';
         return {
-          length: Number.isFinite(length) && length > 0 ? length : 25,
-          questionType
+          length: Number.isFinite(length) ? Math.floor(length) : 0,
+          questionType: 'single-choice',
+          range
         };
       }
 
+      function getQuestionsForSelectedConfig() {
+        const { range } = getSelectedSessionConfig();
+        return zalState.questions
+          .filter(isSingleChoiceQuestion)
+          .filter((question) => range === 'all' || String(question.category) === range);
+      }
+
+      function getRangeLabel(range) {
+        if (range === 'all') return 'wszystkie tematy';
+        const lectureTopic = lectureTopicByCategory[Number(range)];
+        return lectureTopic ? `temat ${range}: ${lectureTopic}` : `temat ${range}`;
+      }
+
+      function showTestConfigPanel() {
+        if (testConfigPanel) testConfigPanel.hidden = false;
+        updateSessionConfigSummary();
+        testConfigPanel?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+
       function updateSessionConfigSummary() {
-        const summary = document.getElementById('zal-config-summary');
-        if (!summary) return;
-        const { length, questionType } = getSelectedSessionConfig();
-        const typeLabel = questionType === 'all'
-          ? 'wszystkie obsługiwane rodzaje pytań'
-          : questionType === 'short-answer'
-            ? 'pytania otwarte z krótką odpowiedzią'
-            : 'pytania zamknięte jednokrotnego wyboru';
-        summary.textContent = `Wybrano ${length} pytań, ${typeLabel}.`;
+        const legacySummary = document.getElementById('zal-config-summary');
+        const { length, range } = getSelectedSessionConfig();
+        const available = getQuestionsForSelectedConfig();
+        const configVisible = !testConfigPanel?.hidden;
+        const isReady = configVisible && available.length > 0 && length >= 1 && length <= available.length;
+
+        if (testLengthInput && available.length > 0) {
+          testLengthInput.max = String(available.length);
+        }
+        if (nextSessionButton) nextSessionButton.disabled = !isReady;
+
+        const message = available.length
+          ? `Zakres: ${getRangeLabel(range)}. Dostępne pytania zamknięte: ${available.length}. Wybrano: ${length}. ${isReady ? 'Kalibracja konfiguracji gotowa, możesz przejść dalej.' : 'Dostosuj liczbę pytań, aby odblokować przycisk Dalej.'}`
+          : 'Brak dostępnych pytań zamkniętych dla wybranego zakresu.';
+        if (testConfigSummary) testConfigSummary.textContent = message;
+        if (legacySummary) legacySummary.textContent = 'Aktualnie obsługiwane są pytania zamknięte jednokrotnego wyboru. Użyj wyróżnionej konfiguracji testu powyżej.';
       }
 
       function openExamModuleFromConfig() {
-        const { length, questionType } = getSelectedSessionConfig();
+        const { length, questionType, range } = getSelectedSessionConfig();
+        const available = getQuestionsForSelectedConfig();
+        if (nextSessionButton?.disabled || available.length === 0 || length > available.length) return;
         const params = new URLSearchParams({
           length: String(length),
           questionType
         });
+        if (range !== 'all') params.set('category', range);
         const examUrl = `zal_sesje.html?${params.toString()}`;
         const examWindow = window.open(examUrl, 'zalExamWindow', 'popup=yes,width=1280,height=800,left=0,top=0,resizable=yes');
         if (examWindow) {
           examWindow.focus();
           logEvent('quiz.attempt.popup.opened', `url=${examUrl}`);
-          setSecurityStatus('otwarto moduł egzaminujący. Uruchom test w nowym oknie.');
+          setSecurityStatus('otwarto moduł egzaminujący. Uruchom test w nowym oknie po kalibracji kamery.');
           const warning = document.getElementById('zal-student-warning');
-          if (warning) warning.textContent = 'Test został otwarty w module egzaminującym. W trakcie podejścia nie zmieniaj aktywnego okna/karty i nie używaj skrótów klawiszowych, ponieważ takie zdarzenia są logowane.';
+          if (warning) warning.textContent = 'Test został otwarty w module egzaminującym. Obraz z kamery pozostaje przetwarzany lokalnie, a zdarzenia sesji będą logowane w eksporcie.';
         } else {
           logEvent('quiz.attempt.popup.blocked', 'Przeglądarka zablokowała otwarcie modułu egzaminującego.');
           setSecurityStatus('nie udało się otworzyć modułu egzaminującego. Zezwól na wyskakujące okienka.');
         }
       }
+
 
       function startAttempt() {
         if (!examMode) {
@@ -976,6 +1199,7 @@ const shortcutCombos = new Set([
           zalState.questions = questions;
           renderOptions(questions);
           refreshModuleStatuses();
+          updateSessionConfigSummary();
         })
         .catch((error) => {
           summary.textContent = `Nie udało się wczytać pytań z ${source}: ${error.message}`;

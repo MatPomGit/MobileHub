@@ -210,6 +210,7 @@
       setModuleActive('mod-preview', moduleState.preview);
       setModuleActive('mod-cleanup', moduleState.cleanup);
       setModuleActive('mod-save-logs', moduleState.saveLogs);
+      updateQuizStartAvailability();
     }
 
 
@@ -259,6 +260,7 @@
       mode: 'short',
       requestedLength: DEFAULT_QUIZ_LENGTH,
       questionType: 'single-choice',
+      category: 'all',
       sessionStartedAt: null,
       sessionEndedAt: null,
       questionStartedAtMs: null,
@@ -276,23 +278,37 @@
       monitoringExportLog.push({ timestamp: isoNow(), type, payload });
     }
 
+    function isQuizStartReady() {
+      return moduleState.camera && moduleState.mediapipe && moduleState.faceDetect && !quizState.isActive;
+    }
+
+    function updateQuizStartAvailability() {
+      if (!startQuizBtn) return;
+      startQuizBtn.disabled = !isQuizStartReady();
+    }
+
+    function isAnswerEmpty(answer) {
+      return answer == null || (typeof answer === 'string' && answer.trim() === '');
+    }
+
     function readExamConfig() {
       const params = new URLSearchParams(window.location.search);
       const legacyMode = (params.get('mode') || '').toLowerCase();
       const lengthParam = Number(params.get('length'));
       const questionTypeParam = (params.get('questionType') || 'single-choice').toLowerCase();
+      const categoryParam = (params.get('category') || 'all').toLowerCase();
       let requestedLength = Number.isFinite(lengthParam) && lengthParam > 0
         ? Math.floor(lengthParam)
         : legacyMode === 'normal'
           ? 50
           : DEFAULT_QUIZ_LENGTH;
       requestedLength = Math.max(1, Math.min(MAX_QUIZ_LENGTH, requestedLength));
-      const allowedQuestionTypes = new Set(['all', 'single-choice', 'short-answer']);
-      const questionType = allowedQuestionTypes.has(questionTypeParam) ? questionTypeParam : 'single-choice';
+      const questionType = questionTypeParam === 'single-choice' ? questionTypeParam : 'single-choice';
       return {
         requestedLength,
         mode: requestedLength >= 50 ? 'normal' : 'short',
-        questionType
+        questionType,
+        category: categoryParam === 'all' ? 'all' : categoryParam
       };
     }
 
@@ -308,6 +324,12 @@
         return questions.filter((question) => getQuestionKind(question) !== 'unknown');
       }
       return questions.filter((question) => getQuestionKind(question) === questionType);
+    }
+
+
+    function filterQuestionsByCategory(questions, category) {
+      if (!category || category === 'all') return questions;
+      return questions.filter((question) => question && question.category !== undefined && question.category !== null && String(question.category) === String(category));
     }
 
     function describeQuestionType(questionType) {
@@ -426,7 +448,8 @@
           quizAnswers.appendChild(button);
         });
       }
-      const currentAnswer = quizState.answers[quizState.currentIndex];\n      nextQuestionBtn.disabled = currentAnswer === null || (typeof currentAnswer === 'string' ? currentAnswer.trim() === '' : false);
+      const currentAnswer = quizState.answers[quizState.currentIndex];
+      nextQuestionBtn.disabled = isAnswerEmpty(currentAnswer);
       startQuestionTimer();
     }
 
@@ -447,13 +470,14 @@
       [...quizAnswers.children].forEach((node, idx) => {
         if (node.tagName === 'BUTTON') node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
       });
-      nextQuestionBtn.disabled = answerIndex === null || (typeof answerIndex === 'string' ? answerIndex.trim() === '' : false);
+      nextQuestionBtn.disabled = isAnswerEmpty(answerIndex);
     }
 
     function nextQuestion(triggeredByTimeout = false) {
       if (!quizState.isActive) return;
       stopQuestionTimer();
-      const currentAnswer = quizState.answers[quizState.currentIndex];\n      if (!triggeredByTimeout && (currentAnswer === null || (typeof currentAnswer === 'string' ? currentAnswer.trim() === '' : false))) return;
+      const currentAnswer = quizState.answers[quizState.currentIndex];
+      if (!triggeredByTimeout && isAnswerEmpty(currentAnswer)) return;
       quizState.currentIndex += 1;
       if (quizState.currentIndex >= quizState.questions.length) {
         finishQuizBtn.disabled = false;
@@ -468,15 +492,19 @@
 
     async function startQuizSession() {
       try {
-        monitoringExportLog.length = 0;
+        if (!isQuizStartReady()) {
+          throw new Error('Test można rozpocząć dopiero po uzyskaniu dostępu do kamery i wykryciu twarzy.');
+        }
         const allQuestions = await loadQuestionBank();
         const examConfig = readExamConfig();
         quizState.mode = examConfig.mode;
         quizState.requestedLength = examConfig.requestedLength;
         quizState.questionType = examConfig.questionType;
-        const filteredQuestions = filterQuestionsByType(allQuestions, quizState.questionType);
+        quizState.category = examConfig.category;
+        const scopedQuestions = filterQuestionsByCategory(allQuestions, quizState.category);
+        const filteredQuestions = filterQuestionsByType(scopedQuestions, quizState.questionType);
         if (filteredQuestions.length === 0) {
-          throw new Error(`Brak pytań dla wybranego rodzaju: ${describeQuestionType(quizState.questionType)}.`);
+          throw new Error(`Brak pytań dla wybranego zakresu i rodzaju: ${describeQuestionType(quizState.questionType)}.`);
         }
         quizState.questions = shuffle(filteredQuestions).slice(0, Math.min(quizState.requestedLength, filteredQuestions.length));
         quizState.currentIndex = 0;
@@ -486,8 +514,9 @@
         quizState.isActive = true;
         quizState.sessionStartedAt = isoNow();
         quizState.sessionEndedAt = null;
-        appendMonitoringRecord('quiz.started', { mode: quizState.mode, requestedLength: quizState.requestedLength, questionType: quizState.questionType, totalQuestions: quizState.questions.length });
-        quizMeta.textContent = `Sesja: ${quizState.questions.length}/${quizState.requestedLength} pytań. Rodzaj: ${describeQuestionType(quizState.questionType)}.`;
+        appendMonitoringRecord('quiz.started', { mode: quizState.mode, requestedLength: quizState.requestedLength, questionType: quizState.questionType, category: quizState.category, totalQuestions: quizState.questions.length });
+        const categoryLabel = quizState.category === 'all' ? 'wszystkie tematy' : `temat ${quizState.category}`;
+        quizMeta.textContent = `Sesja: ${quizState.questions.length}/${quizState.requestedLength} pytań. Zakres: ${categoryLabel}. Rodzaj: ${describeQuestionType(quizState.questionType)}.`;
         startQuizBtn.disabled = true;
         finishQuizBtn.disabled = false;
         nextQuestionBtn.disabled = true;
@@ -520,6 +549,7 @@
         mode: quizState.mode,
         requestedLength: quizState.requestedLength,
         questionType: quizState.questionType,
+        category: quizState.category,
         sessionStartedAt: quizState.sessionStartedAt,
         sessionEndedAt: quizState.sessionEndedAt,
         monitoring: monitoringExportLog,
@@ -535,7 +565,7 @@
       quizMeta.textContent = 'Sesja zakończona. Plik JSON z monitoringiem i odpowiedziami został pobrany.';
       stopQuestionTimer();
       quizState.isActive = false;
-      startQuizBtn.disabled = false;
+      updateQuizStartAvailability();
       nextQuestionBtn.disabled = true;
       finishQuizBtn.disabled = true;
     }
@@ -733,30 +763,37 @@
 
     async function tryMaximize() {
       const overshootPx = 4;
+      const screenLeft = window.screen?.availLeft ?? 0;
+      const screenTop = window.screen?.availTop ?? 0;
       const screenWidth = window.screen?.availWidth || window.screen?.width || window.innerWidth;
       const screenHeight = window.screen?.availHeight || window.screen?.height || window.innerHeight;
       const browserTopInset = (typeof window.outerHeight === "number" && typeof window.innerHeight === "number")
         ? Math.max(0, window.outerHeight - window.innerHeight)
         : 0;
+      const targetLeft = screenLeft - overshootPx;
+      const targetTop = screenTop - browserTopInset - overshootPx;
+      const targetWidth = screenWidth + (overshootPx * 2);
+      const targetHeight = screenHeight + browserTopInset + (overshootPx * 2);
 
       let moved = false;
       let resized = false;
       try {
-        window.moveTo(-overshootPx, -(browserTopInset + overshootPx));
+        window.moveTo(targetLeft, targetTop);
         moved = true;
       } catch (e) { /* noop */ }
       try {
-        window.resizeTo(screenWidth + (overshootPx * 2), screenHeight + browserTopInset + (overshootPx * 2));
+        window.resizeTo(targetWidth, targetHeight);
         resized = true;
       } catch (e) { /* noop */ }
-      const requestFs = document.documentElement.requestFullscreen
-        || document.documentElement.webkitRequestFullscreen
-        || document.documentElement.msRequestFullscreen;
-      let fullscreen = false;
-      if (requestFs) {
-        try { await Promise.resolve(requestFs.call(document.documentElement)); fullscreen = true; } catch (e) { /* noop */ }
-      }
-      moduleState.maximize = moved || resized || fullscreen;
+      appendMonitoringRecord('window.maximize.requested', {
+        targetLeft,
+        targetTop,
+        targetWidth,
+        targetHeight,
+        overshootPx,
+        browserTopInset
+      });
+      moduleState.maximize = moved || resized;
       refreshModuleStatuses();
     }
 
@@ -830,7 +867,7 @@
           attentionState.eyes = scores.eyes;
           updateExtraMetrics(faces[0]);
           attentionState.head = clamp01((attentionState.head * 0.7) + (headMotionScore * 0.3));
-          if (startQuizBtn && !quizState.isActive) startQuizBtn.disabled = false;
+          updateQuizStartAvailability();
           attentionState.interaction = clamp01((attentionState.interaction * 0.7) + (faceDistanceScore * 0.3));
         } else {
           setStatus('nie wykryto twarzy.');
@@ -839,7 +876,7 @@
           attentionState.eyes = 0;
           if (headMotionValue) headMotionValue.textContent = "0.00";
           if (faceDistanceValue) faceDistanceValue.textContent = "0.00";
-          if (startQuizBtn && !quizState.isActive) startQuizBtn.disabled = true;
+          updateQuizStartAvailability();
         }
 
         updateAttentionBar();
