@@ -447,7 +447,7 @@
       [...quizAnswers.children].forEach((node, idx) => {
         if (node.tagName === 'BUTTON') node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
       });
-      nextQuestionBtn.disabled = answerIndex === null || answerIndex === '';
+      nextQuestionBtn.disabled = answerIndex === null || (typeof answerIndex === 'string' ? answerIndex.trim() === '' : false);
     }
 
     function nextQuestion(triggeredByTimeout = false) {
