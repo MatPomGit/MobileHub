@@ -1,11 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-  // Witajcie studenci! 
-    // Tak, to tutaj jest kod dotyczący modułu testów.
-    // Zapraszam do czytania i zrozumienia jak i co tutaj działa (i nie działa).
-    // (PS. w kodzie są easter eggi)
-  
+  <!--
+    Witajcie studenci!
+    Tak, to tutaj jest kod dotyczący modułu testów.
+    Zapraszam do czytania i zrozumienia, jak i co tutaj działa (i nie działa).
+    PS. W kodzie są easter eggi.
+  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAL — wejściówki i zaliczenia online</title>
@@ -362,7 +363,7 @@
       <div class="test-launcher-header">
         <span class="badge accent">Test</span>
         <h2 id="test-launcher-title">Konfiguracja podejścia</h2>
-        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań wybierz zakres i liczbę pytań. Przycisk „Dalej” otworzy <code>zal_sesje.html</code> w nowym oknie.</p>
+        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań wybierz zakres i liczbę pytań. Przycisk „Rozpocznij sesję” otworzy <code>zal_sesje.html</code> w nowym oknie.</p>
       </div>
       <div id="test-config-panel" class="test-config-panel" hidden>
         <div class="test-config-grid">
@@ -387,7 +388,7 @@
       </div>
       <div class="test-actions" aria-label="Akcje testu">
         <button type="button" class="secondary-test-button" id="open-test-config">Podejdź do testu</button>
-        <button type="button" class="primary-test-button" id="zal-open-session-next" disabled>Dalej</button>
+        <button type="button" class="primary-test-button" id="zal-open-session-next" disabled>Rozpocznij sesję</button>
       </div>
     </section>
 
@@ -466,7 +467,6 @@
     </section>
   </main>
   <script type="module">
-    import { FilesetResolver, FaceLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
     (function () {
 
       const select = document.getElementById('topic-range');
@@ -853,6 +853,7 @@
       }
 
       let faceLandmarker = null;
+      let mediaPipeVisionModulePromise = null;
       let faceDetectionLoopId = null;
       let lastFaceSampleAt = 0;
       let offscreenSince = 0;
@@ -862,9 +863,17 @@
         if (el) el.textContent = `Twarz: ${message}`;
       }
 
+      function loadMediaPipeVisionModule() {
+        if (!mediaPipeVisionModulePromise) {
+          mediaPipeVisionModulePromise = import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14');
+        }
+        return mediaPipeVisionModulePromise;
+      }
+
       async function initializeFaceLandmarker() {
         if (faceLandmarker) return faceLandmarker;
         try {
+          const { FilesetResolver, FaceLandmarker } = await loadMediaPipeVisionModule();
           const vision = await FilesetResolver.forVisionTasks(
             'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
           );
