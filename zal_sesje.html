@@ -1334,7 +1334,11 @@
         const h = previewCanvas.height;
         ctx.drawImage(cameraVideo, 0, 0, w, h);
         moduleState.preview = true;
-        updateLightingGuidance(estimateFrameLighting(w, h));
+        const now = Date.now();
+        if (now - lastLightingEstimateAt >= 1000) {
+          updateLightingGuidance(estimateFrameLighting(w, h));
+          lastLightingEstimateAt = now;
+        }
 
         const result = landmarker.detectForVideo(cameraVideo, Date.now());
         const faces = result?.faceLandmarks || [];
