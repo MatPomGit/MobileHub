@@ -651,14 +651,14 @@
       if (attentionAlert) attentionAlert.classList.toggle('visible', isWarning);
       if (focusWarningBanner) focusWarningBanner.classList.toggle('visible', isWarning);
       if (isWarning) {
-        captureEvidenceFrame('attention.low', {
+        captureEvidenceFrame('attention.low', () => ({
           score: Number(attentionState.score.toFixed(4)),
           head: Number(attentionState.head.toFixed(4)),
           eyes: Number(attentionState.eyes.toFixed(4)),
           keyboard: Number(attentionState.keyboard.toFixed(4)),
           mouse: Number(attentionState.mouse.toFixed(4)),
           interaction: Number(attentionState.interaction.toFixed(4))
-        });
+        }));
       }
     }
 
