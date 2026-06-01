@@ -28,6 +28,55 @@
     .attention-fill { height:100%; width:0%; background:linear-gradient(90deg,#ef4444,#f59e0b,#22c55e); transition: width .2s linear; }
     .metrics-mini { width: 280px; max-width: 100%; display:grid; gap:4px; margin-top:6px; }
     .metric-line { display:flex; justify-content:space-between; font-size:12px; color:#cbd5e1; }
+    .detection-guidance {
+      width: 280px;
+      max-width: 100%;
+      display: grid;
+      gap: 6px;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      background: #0b1220;
+    }
+    .guidance-title { margin: 0; font-size: 13px; font-weight: 700; color: #e2e8f0; }
+    .guidance-row { display:flex; justify-content:space-between; gap: 10px; font-size:12px; color:#cbd5e1; }
+    .guidance-state { font-weight: 700; text-align: right; }
+    .guidance-state.ok { color: #86efac; }
+    .guidance-state.warn { color: #fde68a; }
+    .guidance-state.danger { color: #fca5a5; }
+    .guidance-hint { margin: 0; font-size:12px; color:#94a3b8; }
+    .cheating-alert {
+      display: none;
+      margin: 0;
+      padding: 8px 10px;
+      border: 1px solid #ef4444;
+      border-radius: 10px;
+      background: rgba(127, 29, 29, 0.55);
+      color: #fee2e2;
+      font-size: 12px;
+      font-weight: 700;
+    }
+    .cheating-alert.visible { display:block; }
+    .emotion-panel {
+      width: 280px;
+      max-width: 100%;
+      display: grid;
+      gap: 8px;
+      margin-top: 8px;
+      padding: 10px;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      background: #0b1220;
+    }
+    .emotion-title { margin: 0; font-size: 13px; font-weight: 700; color: #e2e8f0; }
+    .emotion-axis { display: grid; gap: 4px; }
+    .emotion-axis-label { display:flex; justify-content:space-between; font-size:12px; color:#cbd5e1; }
+    .emotion-track { height:8px; background:#1e293b; border:1px solid #334155; border-radius:999px; overflow:hidden; }
+    .emotion-fill { height:100%; width:50%; transition: width .2s linear; }
+    .emotion-fill.valence { background:linear-gradient(90deg,#ef4444,#facc15,#22c55e); }
+    .emotion-fill.arousal { background:linear-gradient(90deg,#38bdf8,#a78bfa,#f97316); }
+    .emotion-summary { font-size:12px; color:#94a3b8; }
 
     .status-grid {
       margin-top: 14px;
@@ -97,6 +146,73 @@
     .focus-warning-banner.visible {
       display:block;
     }
+    .quiz-start-gate {
+      display: grid;
+      gap: 12px;
+      margin-top: 12px;
+      padding: 14px;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background: #0b1220;
+    }
+    .exam-rules {
+      margin: 0;
+      padding-left: 20px;
+      color: #cbd5e1;
+      font-size: 14px;
+    }
+    .exam-rules li + li { margin-top: 4px; }
+    .rules-accept {
+      display: flex;
+      gap: 8px;
+      align-items: flex-start;
+      color: #e2e8f0;
+      font-size: 14px;
+      line-height: 1.4;
+    }
+    .rules-accept input { margin-top: 2px; }
+    .quiz-workspace {
+      display: none;
+      margin-top: 14px;
+      padding: 16px;
+      min-height: 360px;
+      border: 2px solid #38bdf8;
+      border-radius: 14px;
+      background: #020617;
+      box-shadow: 0 0 0 4px rgba(56, 189, 248, 0.08);
+    }
+    .quiz-workspace.visible {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 14px;
+    }
+    .quiz-area-label {
+      color: #7dd3fc;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+    .quiz-question-area {
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      min-height: 220px;
+    }
+    .quiz-question-text {
+      margin: 0;
+      font-size: 18px;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+    .quiz-actions {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      padding-top: 12px;
+      border-top: 1px solid #334155;
+    }
   </style>
 </head>
 <body>
@@ -128,6 +244,26 @@
           <div class="metric-line"><span>Odległość od ekranu</span><span id="face-distance-value">0.00</span></div>
           <div class="metric-line"><span>Mrugnięcia / min</span><span id="blink-rate-value">0.0</span></div>
         </div>
+        <div class="detection-guidance" aria-live="polite" aria-label="Wytyczne poprawnej detekcji twarzy">
+          <p class="guidance-title">Warunki poprawnej detekcji</p>
+          <div class="guidance-row"><span>Oświetlenie</span><span id="lighting-guidance" class="guidance-state warn">oczekiwanie</span></div>
+          <div class="guidance-row"><span>Odległość twarzy</span><span id="distance-guidance" class="guidance-state warn">oczekiwanie</span></div>
+          <div class="guidance-row"><span>Liczba twarzy</span><span id="face-count-guidance" class="guidance-state warn">oczekiwanie</span></div>
+          <p id="detection-guidance-hint" class="guidance-hint">Ustaw twarz centralnie, patrz w stronę ekranu i zadbaj o równomierne światło z przodu.</p>
+          <p id="cheating-alert" class="cheating-alert" role="alert">Wykryto drugą twarz. Zdarzenie oznaczono jako oszustwo i zapisano w logach.</p>
+        </div>
+        <div class="emotion-panel" aria-label="Pomiar emocji w modelu Valence-Arousal">
+          <p class="emotion-title">Pomiar emocji: Valence-Arousal</p>
+          <div class="emotion-axis">
+            <div class="emotion-axis-label"><span>Valencja</span><span id="valence-value">0.00</span></div>
+            <div class="emotion-track"><div id="valence-fill" class="emotion-fill valence"></div></div>
+          </div>
+          <div class="emotion-axis">
+            <div class="emotion-axis-label"><span>Pobudzenie</span><span id="arousal-value">0.00</span></div>
+            <div class="emotion-track"><div id="arousal-fill" class="emotion-fill arousal"></div></div>
+          </div>
+          <div id="emotion-summary" class="emotion-summary">Oczekiwanie na stabilny odczyt mimiki.</div>
+        </div>
         <video id="face-camera" autoplay playsinline muted></video>
       </div>
 
@@ -137,6 +273,7 @@
         <div class="status-item"><span>Dostęp do kamery</span><span class="status-dot" id="mod-camera" title="nieaktywny"></span></div>
         <div class="status-item"><span>Inicjalizacja MediaPipe</span><span class="status-dot" id="mod-mediapipe" title="nieaktywny"></span></div>
         <div class="status-item"><span>Detekcja twarzy</span><span class="status-dot" id="mod-face-detect" title="nieaktywny"></span></div>
+        <div class="status-item"><span>Pomiar Valence-Arousal</span><span class="status-dot" id="mod-emotion-va" title="nieaktywny"></span></div>
         <div class="status-item"><span>Podgląd twarzy (canvas)</span><span class="status-dot" id="mod-preview" title="nieaktywny"></span></div>
         <div class="status-item"><span>Zatrzymanie zasobów przy zamknięciu</span><span class="status-dot" id="mod-cleanup" title="nieaktywny"></span></div>
         <div class="status-item"><span>Zapisywanie logów sesji</span><span class="status-dot" id="mod-save-logs" title="nieaktywny"></span></div>
@@ -146,15 +283,31 @@
 
       <section class="panel" style="margin-top:16px;">
         <h2>Sesja pytań</h2>
-        <p class="muted" id="quiz-meta">Najpierw zaakceptuj uprawnienia do kamery. Przycisk START odblokuje się automatycznie po wykryciu poprawnego obrazu.</p>
-        <div id="quiz-container">
-          <p id="quiz-question" style="font-weight:600;">Brak aktywnego pytania.</p>
-          <div id="quiz-answers" class="row"></div>
+        <p class="muted" id="quiz-meta">Najpierw zaakceptuj uprawnienia do kamery, zapoznaj się z zasadami i potwierdź je. Przycisk START odblokuje się automatycznie po wykryciu poprawnego obrazu.</p>
+        <div id="quiz-start-gate" class="quiz-start-gate">
+          <ol class="exam-rules" aria-label="Zasady sesji">
+            <li>Podczas testu pozostaw włączoną kamerę i nie zasłaniaj twarzy.</li>
+            <li>Nie przełączaj okien ani kart, jeżeli nie wynika to bezpośrednio z polecenia prowadzącego.</li>
+            <li>Po naciśnięciu START widoczny będzie wyznaczony obszar testu z pytaniami, odpowiedziami i przyciskami nawigacji.</li>
+          </ol>
+          <label class="rules-accept" for="accept-rules-checkbox">
+            <input type="checkbox" id="accept-rules-checkbox" />
+            <span>Akceptuję zasady sesji i chcę rozpocząć test po spełnieniu warunków technicznych.</span>
+          </label>
+          <div>
+            <button type="button" id="start-quiz-btn" disabled>START</button>
+          </div>
         </div>
-        <div style="display:flex; gap:10px; flex-wrap:wrap; margin-top:12px;">
-          <button type="button" id="start-quiz-btn" disabled>START</button>
-          <button type="button" id="next-question-btn" disabled>Następne pytanie</button>
-          <button type="button" id="finish-quiz-btn" disabled>Zakończ sesję i eksportuj</button>
+        <div id="quiz-workspace" class="quiz-workspace" hidden aria-hidden="true">
+          <div class="quiz-area-label">Wyznaczony obszar testu</div>
+          <div id="quiz-container" class="quiz-question-area">
+            <p id="quiz-question" class="quiz-question-text">Brak aktywnego pytania.</p>
+            <div id="quiz-answers" class="row"></div>
+          </div>
+          <div class="quiz-actions" aria-label="Nawigacja testu">
+            <button type="button" id="next-question-btn" disabled>Następne pytanie</button>
+            <button type="button" id="finish-quiz-btn" disabled>Zakończ sesję i eksportuj</button>
+          </div>
         </div>
       </section>
 
@@ -172,9 +325,22 @@
     const headMotionValue = document.getElementById('head-motion-value');
     const faceDistanceValue = document.getElementById('face-distance-value');
     const blinkRateValue = document.getElementById('blink-rate-value');
+    const lightingGuidance = document.getElementById('lighting-guidance');
+    const distanceGuidance = document.getElementById('distance-guidance');
+    const faceCountGuidance = document.getElementById('face-count-guidance');
+    const detectionGuidanceHint = document.getElementById('detection-guidance-hint');
+    const cheatingAlert = document.getElementById('cheating-alert');
+    const valenceValue = document.getElementById('valence-value');
+    const arousalValue = document.getElementById('arousal-value');
+    const valenceFill = document.getElementById('valence-fill');
+    const arousalFill = document.getElementById('arousal-fill');
+    const emotionSummary = document.getElementById('emotion-summary');
     const attentionAlert = document.getElementById('attention-alert');
     const focusWarningBanner = document.getElementById('focus-warning-banner');
     const quizMeta = document.getElementById('quiz-meta');
+    const quizStartGate = document.getElementById('quiz-start-gate');
+    const quizWorkspace = document.getElementById('quiz-workspace');
+    const acceptRulesCheckbox = document.getElementById('accept-rules-checkbox');
     const quizQuestion = document.getElementById('quiz-question');
     const quizAnswers = document.getElementById('quiz-answers');
     const startQuizBtn = document.getElementById('start-quiz-btn');
@@ -190,6 +356,7 @@
       camera: false,
       mediapipe: false,
       faceDetect: false,
+      emotionVa: false,
       preview: false,
       cleanup: false,
       saveLogs: false
@@ -207,6 +374,7 @@
       setModuleActive('mod-camera', moduleState.camera);
       setModuleActive('mod-mediapipe', moduleState.mediapipe);
       setModuleActive('mod-face-detect', moduleState.faceDetect);
+      setModuleActive('mod-emotion-va', moduleState.emotionVa);
       setModuleActive('mod-preview', moduleState.preview);
       setModuleActive('mod-cleanup', moduleState.cleanup);
       setModuleActive('mod-save-logs', moduleState.saveLogs);
@@ -256,6 +424,7 @@
     const MAX_EVIDENCE_CAPTURES = 12;
     let lastAttentionLogAt = 0;
     let lastEvidenceCaptureAt = 0;
+    let lastEmotionLogAt = 0;
     const quizState = {
       questions: [],
       currentIndex: 0,
@@ -319,15 +488,32 @@
         metrics
       });
       return capture;
+    function areRulesAccepted() {
+      return Boolean(acceptRulesCheckbox?.checked);
     }
 
     function isQuizStartReady() {
-      return moduleState.camera && moduleState.mediapipe && moduleState.faceDetect && !quizState.isActive;
+      return moduleState.camera
+        && moduleState.mediapipe
+        && moduleState.faceDetect
+        && detectionConditions.lightingOk
+        && detectionConditions.distanceOk
+        && detectionConditions.faceCountOk
+        && areRulesAccepted()
+        && !quizState.isActive;
     }
 
     function updateQuizStartAvailability() {
       if (!startQuizBtn) return;
       startQuizBtn.disabled = !isQuizStartReady();
+    }
+
+    function setQuizWorkspaceVisible(isVisible) {
+      if (!quizWorkspace) return;
+      quizWorkspace.hidden = !isVisible;
+      quizWorkspace.setAttribute('aria-hidden', String(!isVisible));
+      quizWorkspace.classList.toggle('visible', Boolean(isVisible));
+      if (quizStartGate) quizStartGate.hidden = Boolean(isVisible);
     }
 
     function isAnswerEmpty(answer) {
@@ -535,8 +721,11 @@
 
     async function startQuizSession() {
       try {
+        if (!areRulesAccepted()) {
+          throw new Error('Przed rozpoczęciem testu zaakceptuj zasady sesji.');
+        }
         if (!isQuizStartReady()) {
-          throw new Error('Test można rozpocząć dopiero po uzyskaniu dostępu do kamery i wykryciu twarzy.');
+          throw new Error('Test można rozpocząć dopiero po spełnieniu warunków technicznych: kamera, jedna twarz, odpowiednia odległość i wystarczające oświetlenie.');
         }
         const allQuestions = await loadQuestionBank();
         const examConfig = readExamConfig();
@@ -561,6 +750,7 @@
         const categoryLabel = quizState.category === 'all' ? 'wszystkie tematy' : `temat ${quizState.category}`;
         quizMeta.textContent = `Sesja: ${quizState.questions.length}/${quizState.requestedLength} pytań. Zakres: ${categoryLabel}. Rodzaj: ${describeQuestionType(quizState.questionType)}.`;
         startQuizBtn.disabled = true;
+        setQuizWorkspaceVisible(true);
         finishQuizBtn.disabled = false;
         nextQuestionBtn.disabled = true;
         const previewWrap = document.querySelector(".preview-wrap");
@@ -635,9 +825,297 @@
     let faceDistanceScore = 0;
     let cautionFrameCount = 0;
     const CAUTION_STABLE_FRAME_THRESHOLD = 10;
+    let lastCheatingLogAt = 0;
+    let lastConditionLogAt = 0;
+    let lastLightingEstimateAt = 0;
+    const detectionConditions = {
+      lightingOk: false,
+      distanceOk: false,
+      faceCountOk: false,
+      lightingLabel: 'oczekiwanie',
+      distanceLabel: 'oczekiwanie',
+      faceCountLabel: 'oczekiwanie'
+    };
+    const emotionState = {
+      valence: 0.5,
+      arousal: 0.5,
+      confidence: 0,
+      label: 'neutralny poziom emocji'
+    };
 
     function clamp01(value) {
       return Math.max(0, Math.min(1, value));
+    }
+
+
+    function setGuidanceState(element, text, level) {
+      if (!element) return;
+      element.textContent = text;
+      element.classList.remove('ok', 'warn', 'danger');
+      element.classList.add(level);
+    }
+
+    function logDetectionConditionsIfNeeded() {
+      const now = Date.now();
+      if (now - lastConditionLogAt < 5000) return;
+      appendMonitoringRecord('face.conditions', {
+        lightingOk: detectionConditions.lightingOk,
+        distanceOk: detectionConditions.distanceOk,
+        faceCountOk: detectionConditions.faceCountOk,
+        lighting: detectionConditions.lightingLabel,
+        distance: detectionConditions.distanceLabel,
+        faceCount: detectionConditions.faceCountLabel
+      });
+      lastConditionLogAt = now;
+    }
+
+    function updateDetectionHint() {
+      const hints = [];
+      if (!detectionConditions.lightingOk) hints.push('Zadbaj o równomierne światło z przodu twarzy, bez mocnego podświetlenia z tyłu.');
+      if (!detectionConditions.distanceOk) hints.push('Ustaw twarz w centralnej części kadru, mniej więcej na odległość wyprostowanej ręki od ekranu.');
+      if (!detectionConditions.faceCountOk) hints.push('W kadrze może znajdować się tylko jedna twarz osoby zdającej.');
+      if (detectionGuidanceHint) {
+        detectionGuidanceHint.textContent = hints.length
+          ? hints.join(' ')
+          : 'Warunki obrazu są poprawne. Utrzymuj twarz centralnie i patrz w stronę ekranu.';
+      }
+      logDetectionConditionsIfNeeded();
+      updateQuizStartAvailability();
+    }
+
+    function updateLightingGuidance(frameStats) {
+      if (!frameStats) {
+        detectionConditions.lightingOk = false;
+        detectionConditions.lightingLabel = 'brak odczytu';
+        setGuidanceState(lightingGuidance, 'brak odczytu', 'warn');
+        updateDetectionHint();
+        return;
+      }
+      const { brightness, contrast } = frameStats;
+      if (brightness < 45) {
+        detectionConditions.lightingOk = false;
+        detectionConditions.lightingLabel = 'za ciemno';
+        setGuidanceState(lightingGuidance, 'za ciemno', 'danger');
+      } else if (brightness > 220) {
+        detectionConditions.lightingOk = false;
+        detectionConditions.lightingLabel = 'za jasno';
+        setGuidanceState(lightingGuidance, 'za jasno', 'danger');
+      } else if (contrast < 12) {
+        detectionConditions.lightingOk = false;
+        detectionConditions.lightingLabel = 'niski kontrast';
+        setGuidanceState(lightingGuidance, 'niski kontrast', 'warn');
+      } else {
+        detectionConditions.lightingOk = true;
+        detectionConditions.lightingLabel = 'wystarczające';
+        setGuidanceState(lightingGuidance, 'wystarczające', 'ok');
+      }
+      updateDetectionHint();
+    }
+
+    function estimateFrameLighting(width, height) {
+      try {
+        const step = 8;
+        const data = ctx.getImageData(0, 0, width, height).data;
+        let sum = 0;
+        let sumSquares = 0;
+        let count = 0;
+        for (let y = 0; y < height; y += step) {
+          for (let x = 0; x < width; x += step) {
+            const offset = ((y * width) + x) * 4;
+            const luma = (data[offset] * 0.2126) + (data[offset + 1] * 0.7152) + (data[offset + 2] * 0.0722);
+            sum += luma;
+            sumSquares += luma * luma;
+            count += 1;
+          }
+        }
+        const brightness = count ? sum / count : 0;
+        const variance = count ? Math.max(0, (sumSquares / count) - (brightness * brightness)) : 0;
+        return { brightness, contrast: Math.sqrt(variance) };
+      } catch (error) {
+        return null;
+      }
+    }
+
+    function updateDistanceGuidance(eyeDistance) {
+      if (!Number.isFinite(eyeDistance)) {
+        detectionConditions.distanceOk = false;
+        detectionConditions.distanceLabel = 'brak twarzy';
+        setGuidanceState(distanceGuidance, 'brak twarzy', 'warn');
+        updateDetectionHint();
+        return;
+      }
+      const mobileNarrowScreen = window.innerWidth <= 768;
+      const tooFarThreshold = mobileNarrowScreen ? 0.055 : 0.075;
+      const tooCloseThreshold = mobileNarrowScreen ? 0.24 : 0.28;
+      if (eyeDistance < tooFarThreshold) {
+        detectionConditions.distanceOk = false;
+        detectionConditions.distanceLabel = 'za daleko';
+        setGuidanceState(distanceGuidance, 'za daleko', 'danger');
+      } else if (eyeDistance > tooCloseThreshold) {
+        detectionConditions.distanceOk = false;
+        detectionConditions.distanceLabel = 'za blisko';
+        setGuidanceState(distanceGuidance, 'za blisko', 'danger');
+      } else {
+        detectionConditions.distanceOk = true;
+        detectionConditions.distanceLabel = 'odpowiednia';
+        setGuidanceState(distanceGuidance, 'odpowiednia', 'ok');
+      }
+      updateDetectionHint();
+    }
+
+    function reportSecondFaceDetection(faceCount) {
+      const now = Date.now();
+      if (now - lastCheatingLogAt < 3000) return;
+      logSessionEvent('cheating.second_face_detected', {
+        reason: 'W polu widzenia kamery wykryto więcej niż jedną twarz.',
+        faceCount,
+        quizActive: quizState.isActive,
+        questionIndex: quizState.isActive ? quizState.currentIndex : null,
+        markedAsCheating: true
+      });
+      lastCheatingLogAt = now;
+    }
+
+    function updateFaceCountGuidance(faceCount) {
+      if (faceCount === 1) {
+        detectionConditions.faceCountOk = true;
+        detectionConditions.faceCountLabel = 'jedna twarz';
+        setGuidanceState(faceCountGuidance, 'jedna twarz', 'ok');
+        if (cheatingAlert) cheatingAlert.classList.remove('visible');
+      } else if (faceCount > 1) {
+        detectionConditions.faceCountOk = false;
+        detectionConditions.faceCountLabel = `${faceCount} twarze`;
+        setGuidanceState(faceCountGuidance, `${faceCount} twarze`, 'danger');
+        if (cheatingAlert) cheatingAlert.classList.add('visible');
+        reportSecondFaceDetection(faceCount);
+      } else {
+        detectionConditions.faceCountOk = false;
+        detectionConditions.faceCountLabel = 'brak twarzy';
+        setGuidanceState(faceCountGuidance, 'brak twarzy', 'warn');
+        if (cheatingAlert) cheatingAlert.classList.remove('visible');
+      }
+      updateDetectionHint();
+    }
+
+
+    function getBlendshapeScore(categories, names) {
+      const isLookup = !Array.isArray(categories);
+      let best = 0;
+      for (const name of names) {
+        const score = isLookup ? categories[name] : categories.find((item) => item.categoryName === name)?.score;
+        if (Number.isFinite(score)) best = Math.max(best, score);
+      }
+      return clamp01(best);
+    }
+
+    function describeEmotionQuadrant(valence, arousal) {
+      if (valence >= 0.6 && arousal >= 0.6) return 'pozytywne pobudzenie';
+      if (valence >= 0.6 && arousal < 0.4) return 'spokojny, pozytywny stan';
+      if (valence < 0.4 && arousal >= 0.6) return 'napięcie lub stres';
+      if (valence < 0.4 && arousal < 0.4) return 'obniżony nastrój i niska energia';
+      if (arousal >= 0.6) return 'podwyższone pobudzenie';
+      if (arousal < 0.4) return 'niski poziom pobudzenia';
+      return 'neutralny poziom emocji';
+    }
+
+    function updateEmotionDisplay() {
+      if (valenceValue) valenceValue.textContent = emotionState.valence.toFixed(2);
+      if (arousalValue) arousalValue.textContent = emotionState.arousal.toFixed(2);
+      if (valenceFill) valenceFill.style.width = `${Math.round(emotionState.valence * 100)}%`;
+      if (arousalFill) arousalFill.style.width = `${Math.round(emotionState.arousal * 100)}%`;
+      if (emotionSummary) {
+        const confidenceText = emotionState.confidence > 0.15 ? `pewność ${Math.round(emotionState.confidence * 100)}%` : 'niska pewność odczytu';
+        emotionSummary.textContent = `${emotionState.label}; ${confidenceText}.`;
+      }
+    }
+
+    function resetEmotionMetrics() {
+      moduleState.emotionVa = false;
+      emotionState.valence = 0.5;
+      emotionState.arousal = 0.5;
+      emotionState.confidence = 0;
+      emotionState.label = 'oczekiwanie na stabilny odczyt mimiki';
+      updateEmotionDisplay();
+    }
+
+    function updateEmotionMetrics(faceBlendshape) {
+      const categories = faceBlendshape?.categories || [];
+      if (!categories.length) {
+        resetEmotionMetrics();
+        return;
+      }
+
+      const smile = (
+        getBlendshapeScore(categories, ['mouthSmileLeft'])
+        + getBlendshapeScore(categories, ['mouthSmileRight'])
+      ) / 2;
+      const cheekLift = (
+        getBlendshapeScore(categories, ['cheekSquintLeft'])
+        + getBlendshapeScore(categories, ['cheekSquintRight'])
+      ) / 2;
+      const frown = (
+        getBlendshapeScore(categories, ['mouthFrownLeft'])
+        + getBlendshapeScore(categories, ['mouthFrownRight'])
+      ) / 2;
+      const browDown = (
+        getBlendshapeScore(categories, ['browDownLeft'])
+        + getBlendshapeScore(categories, ['browDownRight'])
+      ) / 2;
+      const eyeWide = (
+        getBlendshapeScore(categories, ['eyeWideLeft'])
+        + getBlendshapeScore(categories, ['eyeWideRight'])
+      ) / 2;
+      const browOuterUp = (
+        getBlendshapeScore(categories, ['browOuterUpLeft'])
+        + getBlendshapeScore(categories, ['browOuterUpRight'])
+      ) / 2;
+      const browInnerUp = getBlendshapeScore(categories, ['browInnerUp']);
+      const jawOpen = getBlendshapeScore(categories, ['jawOpen']);
+      const mouthPress = (
+        getBlendshapeScore(categories, ['mouthPressLeft'])
+        + getBlendshapeScore(categories, ['mouthPressRight'])
+      ) / 2;
+      const mouthStretch = (
+        getBlendshapeScore(categories, ['mouthStretchLeft'])
+        + getBlendshapeScore(categories, ['mouthStretchRight'])
+      ) / 2;
+      const noseSneer = (
+        getBlendshapeScore(categories, ['noseSneerLeft'])
+        + getBlendshapeScore(categories, ['noseSneerRight'])
+      ) / 2;
+
+      const positive = clamp01((smile * 0.7) + (cheekLift * 0.3));
+      const negative = clamp01((frown * 0.35) + (browDown * 0.25) + (mouthPress * 0.2) + (noseSneer * 0.2));
+      const surprise = clamp01((eyeWide * 0.35) + (browOuterUp * 0.25) + (browInnerUp * 0.2) + (jawOpen * 0.2));
+      const activation = clamp01((jawOpen * 0.35) + (mouthStretch * 0.25) + (browDown * 0.2) + (eyeWide * 0.2));
+      const rawValence = clamp01(0.5 + (positive * 0.65) - (negative * 0.65));
+      const rawArousal = clamp01(0.2 + (surprise * 0.45) + (activation * 0.4) + (Math.max(positive, negative) * 0.25));
+      const confidence = clamp01(Math.max(positive, negative, surprise, activation));
+      const smoothing = 0.25;
+
+      emotionState.valence = clamp01((emotionState.valence * (1 - smoothing)) + (rawValence * smoothing));
+      emotionState.arousal = clamp01((emotionState.arousal * (1 - smoothing)) + (rawArousal * smoothing));
+      emotionState.confidence = clamp01((emotionState.confidence * 0.7) + (confidence * 0.3));
+      emotionState.label = describeEmotionQuadrant(emotionState.valence, emotionState.arousal);
+      moduleState.emotionVa = true;
+      updateEmotionDisplay();
+
+      const now = Date.now();
+      if (now - lastEmotionLogAt >= 1000) {
+        appendMonitoringRecord('emotion.valence_arousal', {
+          valence: Number(emotionState.valence.toFixed(4)),
+          arousal: Number(emotionState.arousal.toFixed(4)),
+          confidence: Number(emotionState.confidence.toFixed(4)),
+          label: emotionState.label,
+          signals: {
+            positive: Number(positive.toFixed(4)),
+            negative: Number(negative.toFixed(4)),
+            surprise: Number(surprise.toFixed(4)),
+            activation: Number(activation.toFixed(4))
+          }
+        });
+        lastEmotionLogAt = now;
+      }
     }
 
     function updateAttentionWarningState() {
@@ -729,6 +1207,7 @@
         const nearThreshold = mobileNarrowScreen ? 0.045 : 0.06;
         const farThreshold = mobileNarrowScreen ? 0.19 : 0.24;
         faceDistanceScore = clamp01((eyeDistance - nearThreshold) / Math.max(0.01, (farThreshold - nearThreshold)));
+        updateDistanceGuidance(eyeDistance);
         if (faceDistanceValue) faceDistanceValue.textContent = faceDistanceScore.toFixed(2);
       }
 
@@ -888,7 +1367,8 @@
             modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
           },
           runningMode: 'VIDEO',
-          numFaces: 1
+          numFaces: 2,
+          outputFaceBlendshapes: true
         });
         moduleState.mediapipe = true;
         updateAttentionBar();
@@ -912,9 +1392,16 @@
         const h = previewCanvas.height;
         ctx.drawImage(cameraVideo, 0, 0, w, h);
         moduleState.preview = true;
+        const now = Date.now();
+        if (now - lastLightingEstimateAt >= 1000) {
+          updateLightingGuidance(estimateFrameLighting(w, h));
+          lastLightingEstimateAt = now;
+        }
 
         const result = landmarker.detectForVideo(cameraVideo, Date.now());
         const faces = result?.faceLandmarks || [];
+        const blendshapes = result?.faceBlendshapes || [];
+        updateFaceCountGuidance(faces.length);
 
         if (faces.length > 0) {
           drawLandmarks(faces[0], w, h);
@@ -924,15 +1411,18 @@
           attentionState.head = scores.head;
           attentionState.eyes = scores.eyes;
           updateExtraMetrics(faces[0]);
+          updateEmotionMetrics(blendshapes[0]);
           attentionState.head = clamp01((attentionState.head * 0.7) + (headMotionScore * 0.3));
           updateQuizStartAvailability();
           attentionState.interaction = clamp01((attentionState.interaction * 0.7) + (faceDistanceScore * 0.3));
         } else {
           setStatus('nie wykryto twarzy.');
           moduleState.faceDetect = false;
+          resetEmotionMetrics();
           attentionState.head = 0;
           attentionState.eyes = 0;
           captureEvidenceFrame('face.missing', { faceCount: 0 });
+          updateDistanceGuidance(null);
           if (headMotionValue) headMotionValue.textContent = "0.00";
           if (faceDistanceValue) faceDistanceValue.textContent = "0.00";
           updateQuizStartAvailability();
@@ -965,6 +1455,9 @@
         appendMonitoringRecord("session.client", { ip, accessedAt: isoNow() });
       });
       setupAttentionInteractionTracking();
+      setQuizWorkspaceVisible(false);
+      acceptRulesCheckbox?.addEventListener('change', updateQuizStartAvailability);
+      updateEmotionDisplay();
       updateAttentionBar();
       await tryMaximize();
       await setupFaceTracking();
