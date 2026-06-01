@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
-    // Witajcie studenci! 
-      // Tak, to tutaj jest kod dotyczący modułu testów.
-      // Zapraszam do czytania i zrozumienia jak i co tutaj działa (i nie działa).
-      // (PS. w kodzie są easter eggi)
+  <!--
+    Witajcie studenci!
+    Tak, to tutaj jest kod dotyczący modułu testów.
+    Zapraszam do czytania i zrozumienia, jak i co tutaj działa (i nie działa).
+    PS. W kodzie są easter eggi.
+  -->
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>ZAL — Sesja zaliczeniowa</title>
@@ -314,8 +316,6 @@
   </main>
 
   <script type="module">
-    import { FilesetResolver, FaceLandmarker } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14";
-
     const cameraVideo = document.getElementById('face-camera');
     const previewCanvas = document.getElementById('face-preview');
     const statusEl = document.getElementById('face-status');
@@ -349,6 +349,7 @@
 
 
     let landmarker = null;
+    let mediaPipeVisionModulePromise = null;
     let stream = null;
     let rafId = null;
     const moduleState = {
@@ -488,6 +489,8 @@
         metrics
       });
       return capture;
+    }
+
     function areRulesAccepted() {
       return Boolean(acceptRulesCheckbox?.checked);
     }
@@ -1334,6 +1337,17 @@
       refreshModuleStatuses();
     }
 
+    function loadMediaPipeVisionModule() {
+      if (!mediaPipeVisionModulePromise) {
+        mediaPipeVisionModulePromise = import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14')
+          .catch((err) => {
+            mediaPipeVisionModulePromise = null;
+            throw err;
+          });
+      }
+      return mediaPipeVisionModulePromise;
+    }
+
     async function setupFaceTracking() {
       if (!navigator.mediaDevices?.getUserMedia) {
         setStatus('przeglądarka nie wspiera dostępu do kamery.');
@@ -1358,32 +1372,10 @@
         return;
       }
 
-      try {
-        const vision = await FilesetResolver.forVisionTasks(
-          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
-        );
-        landmarker = await FaceLandmarker.createFromOptions(vision, {
-          baseOptions: {
-            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
-          },
-          runningMode: 'VIDEO',
-          numFaces: 2,
-          outputFaceBlendshapes: true
-        });
-        moduleState.mediapipe = true;
-        updateAttentionBar();
-        refreshModuleStatuses();
-      } catch (error) {
-        setStatus('nie udało się uruchomić detektora twarzy.');
-        moduleState.mediapipe = false;
-        updateAttentionBar();
-        refreshModuleStatuses();
-        return;
-      }
+      setStatus('kamera aktywna, uruchamianie detektora twarzy.');
 
-      setStatus('detekcja uruchomiona.');
       const loop = () => {
-        if (!landmarker || !cameraVideo.videoWidth) {
+        if (!cameraVideo.videoWidth) {
           rafId = requestAnimationFrame(loop);
           return;
         }
@@ -1396,6 +1388,15 @@
         if (now - lastLightingEstimateAt >= 1000) {
           updateLightingGuidance(estimateFrameLighting(w, h));
           lastLightingEstimateAt = now;
+        }
+
+        if (!landmarker) {
+          if (!moduleState.previewRefreshed) {
+            moduleState.previewRefreshed = true;
+            refreshModuleStatuses();
+          }
+          rafId = requestAnimationFrame(loop);
+          return;
         }
 
         const result = landmarker.detectForVideo(cameraVideo, Date.now());
@@ -1434,6 +1435,30 @@
       };
 
       rafId = requestAnimationFrame(loop);
+
+      try {
+        const { FilesetResolver, FaceLandmarker } = await loadMediaPipeVisionModule();
+        const vision = await FilesetResolver.forVisionTasks(
+          'https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm'
+        );
+        landmarker = await FaceLandmarker.createFromOptions(vision, {
+          baseOptions: {
+            modelAssetPath: 'https://storage.googleapis.com/mediapipe-models/face_landmarker/face_landmarker/float16/1/face_landmarker.task'
+          },
+          runningMode: 'VIDEO',
+          numFaces: 2,
+          outputFaceBlendshapes: true
+        });
+        moduleState.mediapipe = true;
+        setStatus('detekcja uruchomiona.');
+        updateAttentionBar();
+        refreshModuleStatuses();
+      } catch (error) {
+        setStatus('nie udało się uruchomić detektora twarzy. Podgląd kamery pozostaje aktywny.');
+        moduleState.mediapipe = false;
+        updateAttentionBar();
+        refreshModuleStatuses();
+      }
     }
 
     window.addEventListener('beforeunload', () => {
@@ -1457,13 +1482,13 @@
       setupAttentionInteractionTracking();
       setQuizWorkspaceVisible(false);
       acceptRulesCheckbox?.addEventListener('change', updateQuizStartAvailability);
+      startQuizBtn?.addEventListener('click', startQuizSession);
+      nextQuestionBtn?.addEventListener('click', nextQuestion);
+      finishQuizBtn?.addEventListener('click', exportSessionData);
       updateEmotionDisplay();
       updateAttentionBar();
       await tryMaximize();
       await setupFaceTracking();
-      startQuizBtn?.addEventListener('click', startQuizSession);
-      nextQuestionBtn?.addEventListener('click', nextQuestion);
-      finishQuizBtn?.addEventListener('click', exportSessionData);
       moduleState.cleanup = true;
       refreshModuleStatuses();
     }());
