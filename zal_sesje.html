@@ -784,9 +784,9 @@
 
     function createSessionLogCsv(logRecords) {
       const sortedRecords = [...logRecords].sort((left, right) => {
-        const leftTime = Date.parse(left.timestamp) || 0;
-        const rightTime = Date.parse(right.timestamp) || 0;
-        return leftTime - rightTime;
+        const leftTime = left.timestamp || '';
+        const rightTime = right.timestamp || '';
+        return leftTime < rightTime ? -1 : leftTime > rightTime ? 1 : 0;
       });
       const originTimestamp = quizState.sessionStartedAt || sortedRecords[0]?.timestamp || isoNow();
       const originTime = Date.parse(originTimestamp) || Date.now();
