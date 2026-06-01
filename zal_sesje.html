@@ -764,11 +764,116 @@
       }
     }
 
+    function readNestedValue(source, path) {
+      return path.reduce((value, key) => (value && value[key] !== undefined ? value[key] : null), source);
+    }
+
+    function firstAvailableValue(source, paths) {
+      for (const path of paths) {
+        const value = readNestedValue(source, path);
+        if (value !== null && value !== undefined) return value;
+      }
+      return null;
+    }
+
+    function escapeCsvValue(value) {
+      if (value === null || value === undefined) return '';
+      const stringValue = typeof value === 'object' ? JSON.stringify(value) : String(value);
+      return `"${stringValue.replace(/"/g, '""')}"`;
+    }
+
+    function createSessionLogCsv(logRecords) {
+      const sortedRecords = [...logRecords].sort((left, right) => {
+        const leftTime = left.timestamp || '';
+        const rightTime = right.timestamp || '';
+        return leftTime < rightTime ? -1 : leftTime > rightTime ? 1 : 0;
+      });
+      const originTimestamp = quizState.sessionStartedAt || sortedRecords[0]?.timestamp || isoNow();
+      const originTime = Date.parse(originTimestamp) || Date.now();
+      const columns = [
+        'timestamp',
+        'elapsed_ms',
+        'elapsed_seconds',
+        'type',
+        'attention_score',
+        'attention_head',
+        'attention_eyes',
+        'attention_keyboard',
+        'attention_mouse',
+        'attention_interaction',
+        'valence',
+        'arousal',
+        'emotion_confidence',
+        'emotion_label',
+        'lighting_ok',
+        'lighting_label',
+        'distance_ok',
+        'distance_label',
+        'face_count_ok',
+        'face_count_label',
+        'face_count',
+        'marked_as_cheating',
+        'question_index',
+        'question_id',
+        'question_elapsed_ms',
+        'time_limit_seconds',
+        'payload_json'
+      ];
+      const rows = sortedRecords.map((record) => {
+        const payload = record.payload || {};
+        const timestamp = record.timestamp || '';
+        const recordTime = Date.parse(timestamp);
+        const elapsedMs = Number.isFinite(recordTime) ? Math.max(0, recordTime - originTime) : '';
+        const row = {
+          timestamp,
+          elapsed_ms: elapsedMs,
+          elapsed_seconds: elapsedMs === '' ? '' : Number((elapsedMs / 1000).toFixed(3)),
+          type: record.type || '',
+          attention_score: firstAvailableValue(payload, [['score'], ['attentionScore'], ['details', 'attentionScore']]),
+          attention_head: firstAvailableValue(payload, [['head'], ['metrics', 'head'], ['details', 'head']]),
+          attention_eyes: firstAvailableValue(payload, [['eyes'], ['metrics', 'eyes'], ['details', 'eyes']]),
+          attention_keyboard: firstAvailableValue(payload, [['keyboard'], ['metrics', 'keyboard'], ['details', 'keyboard']]),
+          attention_mouse: firstAvailableValue(payload, [['mouse'], ['metrics', 'mouse'], ['details', 'mouse']]),
+          attention_interaction: firstAvailableValue(payload, [['interaction'], ['metrics', 'interaction'], ['details', 'interaction']]),
+          valence: firstAvailableValue(payload, [['valence']]),
+          arousal: firstAvailableValue(payload, [['arousal']]),
+          emotion_confidence: firstAvailableValue(payload, [['confidence']]),
+          emotion_label: firstAvailableValue(payload, [['label']]),
+          lighting_ok: firstAvailableValue(payload, [['lightingOk']]),
+          lighting_label: firstAvailableValue(payload, [['lighting']]),
+          distance_ok: firstAvailableValue(payload, [['distanceOk']]),
+          distance_label: firstAvailableValue(payload, [['distance']]),
+          face_count_ok: firstAvailableValue(payload, [['faceCountOk']]),
+          face_count_label: firstAvailableValue(payload, [['faceCount']]),
+          face_count: firstAvailableValue(payload, [['details', 'faceCount']]),
+          marked_as_cheating: firstAvailableValue(payload, [['details', 'markedAsCheating']]),
+          question_index: firstAvailableValue(payload, [['questionIndex'], ['details', 'questionIndex']]),
+          question_id: firstAvailableValue(payload, [['questionId'], ['details', 'questionId']]),
+          question_elapsed_ms: firstAvailableValue(payload, [['elapsedMs']]),
+          time_limit_seconds: firstAvailableValue(payload, [['timeLimitSeconds']]),
+          payload_json: payload
+        };
+        return columns.map((column) => escapeCsvValue(row[column])).join(',');
+      });
+      return [columns.join(','), ...rows].join('\n');
+    }
+
+    function downloadSessionFile(content, filename, mimeType) {
+      const blob = new Blob([content], { type: mimeType });
+      const url = URL.createObjectURL(blob);
+      const anchor = document.createElement('a');
+      anchor.href = url;
+      anchor.download = filename;
+      anchor.click();
+      window.setTimeout(() => URL.revokeObjectURL(url), 0);
+    }
+
     function exportSessionData() {
       quizState.sessionEndedAt = isoNow();
       appendMonitoringRecord('quiz.finished', { answered: quizState.answers.filter((a) => a !== null).length });
+      const responseExportedAt = isoNow();
       const responseExport = quizState.questions.map((question, index) => ({
-        timestamp: isoNow(),
+        timestamp: responseExportedAt,
         questionIndex: index,
         questionId: question.id ?? null,
         question: question.question,
@@ -792,14 +897,10 @@
         evidenceCaptures,
         responses: responseExport
       };
-      const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
-      const url = URL.createObjectURL(blob);
-      const anchor = document.createElement('a');
-      anchor.href = url;
-      anchor.download = `zal_sesja_${Date.now()}.json`;
-      anchor.click();
-      URL.revokeObjectURL(url);
-      quizMeta.textContent = 'Sesja zakończona. Plik JSON z monitoringiem i odpowiedziami został pobrany.';
+      const exportStamp = Date.now();
+      downloadSessionFile(JSON.stringify(payload, null, 2), `zal_sesja_${exportStamp}.json`, 'application/json');
+      downloadSessionFile(createSessionLogCsv(monitoringExportLog), `zal_sesja_${exportStamp}_log.csv`, 'text/csv;charset=utf-8');
+      quizMeta.textContent = 'Sesja zakończona. Pliki JSON oraz CSV z monitoringiem i odpowiedziami zostały pobrane.';
       stopQuestionTimer();
       quizState.isActive = false;
       updateQuizStartAvailability();
