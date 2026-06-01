@@ -127,7 +127,7 @@
       box-shadow: inset 0 0 0 4px #ef4444;
     }
     body.attention-caution {
-      box-shadow: inset 0 0 0 4px #eab308;
+      box-shadow: inset 0 0 0 2px rgba(234, 179, 8, 0.65);
     }
     .focus-warning-banner {
       display:none;
@@ -419,7 +419,11 @@
     const MAX_QUIZ_LENGTH = 150;
     const QUESTION_TIME_LIMIT_SECONDS = 10;
     const monitoringExportLog = [];
+    const evidenceCaptures = [];
+    const EVIDENCE_CAPTURE_COOLDOWN_MS = 10000;
+    const MAX_EVIDENCE_CAPTURES = 12;
     let lastAttentionLogAt = 0;
+    let lastEvidenceCaptureAt = 0;
     let lastEmotionLogAt = 0;
     const quizState = {
       questions: [],
@@ -447,6 +451,43 @@
       monitoringExportLog.push({ timestamp: isoNow(), type, payload });
     }
 
+    function captureEvidenceFrame(reason, metrics = {}) {
+      const now = Date.now();
+      if (!quizState.isActive || !cameraVideo?.videoWidth || !cameraVideo?.videoHeight) return null;
+      if (evidenceCaptures.length >= MAX_EVIDENCE_CAPTURES) return null;
+      if (now - lastEvidenceCaptureAt < EVIDENCE_CAPTURE_COOLDOWN_MS) return null;
+
+      const canvas = document.createElement('canvas');
+      canvas.width = cameraVideo.videoWidth;
+      canvas.height = cameraVideo.videoHeight;
+      const captureCtx = canvas.getContext('2d');
+      if (!captureCtx) return null;
+
+      captureCtx.drawImage(cameraVideo, 0, 0, canvas.width, canvas.height);
+      const capturedAt = isoNow();
+      const capture = {
+        id: `evidence-${capturedAt.replace(/[:.]/g, '-')}-${evidenceCaptures.length + 1}`,
+        capturedAt,
+        reason,
+        questionIndex: quizState.currentIndex,
+        questionId: quizState.questions[quizState.currentIndex]?.id ?? null,
+        attentionScore: Number(attentionState.score.toFixed(4)),
+        metrics,
+        mimeType: 'image/jpeg',
+        imageDataUrl: canvas.toDataURL('image/jpeg', 0.78)
+      };
+      evidenceCaptures.push(capture);
+      lastEvidenceCaptureAt = now;
+      refreshModuleStatuses();
+      appendMonitoringRecord('proctor.evidence.capture', {
+        evidenceId: capture.id,
+        reason,
+        questionIndex: capture.questionIndex,
+        questionId: capture.questionId,
+        attentionScore: capture.attentionScore,
+        metrics
+      });
+      return capture;
     function areRulesAccepted() {
       return Boolean(acceptRulesCheckbox?.checked);
     }
@@ -745,6 +786,7 @@
         sessionStartedAt: quizState.sessionStartedAt,
         sessionEndedAt: quizState.sessionEndedAt,
         monitoring: monitoringExportLog,
+        evidenceCaptures,
         responses: responseExport
       };
       const blob = new Blob([JSON.stringify(payload, null, 2)], { type: 'application/json' });
@@ -781,6 +823,8 @@
     const blinkTimestamps = [];
     let headMotionScore = 0;
     let faceDistanceScore = 0;
+    let cautionFrameCount = 0;
+    const CAUTION_STABLE_FRAME_THRESHOLD = 10;
     let lastCheatingLogAt = 0;
     let lastConditionLogAt = 0;
     let lastLightingEstimateAt = 0;
@@ -1078,10 +1122,22 @@
       const isCameraReady = moduleState.camera && moduleState.mediapipe;
       const isWarning = isCameraReady && attentionState.score < 0.4;
       const isCaution = isCameraReady && attentionState.score >= 0.4 && attentionState.score < 0.6;
+      cautionFrameCount = isCaution && !isWarning ? cautionFrameCount + 1 : 0;
+      const isStableCaution = cautionFrameCount >= CAUTION_STABLE_FRAME_THRESHOLD;
       document.body.classList.toggle('attention-warning', isWarning);
-      document.body.classList.toggle('attention-caution', isCaution);
+      document.body.classList.toggle('attention-caution', isStableCaution);
       if (attentionAlert) attentionAlert.classList.toggle('visible', isWarning);
       if (focusWarningBanner) focusWarningBanner.classList.toggle('visible', isWarning);
+      if (isWarning) {
+        captureEvidenceFrame('attention.low', () => ({
+          score: Number(attentionState.score.toFixed(4)),
+          head: Number(attentionState.head.toFixed(4)),
+          eyes: Number(attentionState.eyes.toFixed(4)),
+          keyboard: Number(attentionState.keyboard.toFixed(4)),
+          mouse: Number(attentionState.mouse.toFixed(4)),
+          interaction: Number(attentionState.interaction.toFixed(4))
+        }));
+      }
     }
 
     function updateAttentionBar() {
@@ -1365,6 +1421,7 @@
           resetEmotionMetrics();
           attentionState.head = 0;
           attentionState.eyes = 0;
+          captureEvidenceFrame('face.missing', { faceCount: 0 });
           updateDistanceGuidance(null);
           if (headMotionValue) headMotionValue.textContent = "0.00";
           if (faceDistanceValue) faceDistanceValue.textContent = "0.00";
