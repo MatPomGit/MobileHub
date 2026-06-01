@@ -865,7 +865,11 @@
 
       function loadMediaPipeVisionModule() {
         if (!mediaPipeVisionModulePromise) {
-          mediaPipeVisionModulePromise = import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14');
+          mediaPipeVisionModulePromise = import('https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14')
+            .catch((err) => {
+              mediaPipeVisionModulePromise = null;
+              throw err;
+            });
         }
         return mediaPipeVisionModulePromise;
       }
