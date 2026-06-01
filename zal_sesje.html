@@ -955,10 +955,11 @@
 
 
     function getBlendshapeScore(categories, names) {
+      const isLookup = !Array.isArray(categories);
       let best = 0;
       for (const name of names) {
-        const category = categories.find((item) => item.categoryName === name);
-        if (category && Number.isFinite(category.score)) best = Math.max(best, category.score);
+        const score = isLookup ? categories[name] : categories.find((item) => item.categoryName === name)?.score;
+        if (Number.isFinite(score)) best = Math.max(best, score);
       }
       return clamp01(best);
     }
