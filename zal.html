@@ -73,6 +73,7 @@
     .module h2 { margin: 0 0 12px; font-size: 20px; }
     .module-controls { display: grid; gap: 10px; }
     .module label { font-weight: 600; }
+    .module input,
     .module select,
     .module button {
       background: #0b1220;
@@ -312,6 +313,61 @@
       font-size: 14px;
     }
 
+    .log-analysis-panel {
+      margin-top: 16px;
+      padding: 14px;
+      border: 1px solid #334155;
+      border-radius: 12px;
+      background: #0b1220;
+    }
+    .log-analysis-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 10px;
+      margin: 12px 0;
+    }
+    .analysis-metric {
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px;
+      background: #020617;
+    }
+    .analysis-metric strong {
+      display: block;
+      margin-top: 4px;
+      color: #bfdbfe;
+      font-size: 22px;
+      line-height: 1.2;
+    }
+    .analysis-charts {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 12px;
+      margin-top: 12px;
+    }
+    .analysis-chart-card {
+      border: 1px solid #334155;
+      border-radius: 12px;
+      padding: 10px;
+      background: #020617;
+      min-width: 0;
+    }
+    .analysis-chart-card h3 {
+      margin-top: 0;
+    }
+    .analysis-chart-card canvas {
+      width: 100%;
+      height: 220px;
+      display: block;
+      border: 1px solid #1e293b;
+      border-radius: 10px;
+      background: #0f172a;
+    }
+    .analysis-question-list {
+      max-height: 260px;
+      overflow: auto;
+    }
+
   </style>
 </head>
 <body>
@@ -363,7 +419,7 @@
       <div class="test-launcher-header">
         <span class="badge accent">Test</span>
         <h2 id="test-launcher-title">Konfiguracja podejścia</h2>
-        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań wybierz zakres i liczbę pytań. Przycisk „Rozpocznij sesję” otworzy <code>zal_sesje.html</code> w nowym oknie.</p>
+        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań wybierz zakres i liczbę pytań. Przycisk „Rozpocznij sesję” otworzy <code>zal_sesje.html</code> w nowym oknie na komputerze albo w bieżącej karcie na urządzeniu mobilnym.</p>
       </div>
       <div id="test-config-panel" class="test-config-panel" hidden>
         <div class="test-config-grid">
@@ -436,6 +492,38 @@
         <button type="button" id="zal-clear-logs">Wyczyść logi z bazy</button>
       </div>
       <p id="zal-db-status" class="muted">Baza logów: inicjalizacja...</p>
+
+      <div class="log-analysis-panel" aria-labelledby="zal-log-analysis-title">
+        <h3 id="zal-log-analysis-title">Analiza logów z pliku</h3>
+        <p class="muted">Wczytaj plik JSON albo CSV wyeksportowany z <code>zal_sesje.html</code>. Moduł pokaże wskaźniki oraz wykresy aktywności w czasie całego testu i w podziale na pytania.</p>
+        <div class="module-controls" style="margin: 10px 0 14px;">
+          <label for="zal-log-file-input">Plik logów sesji</label>
+          <input type="file" id="zal-log-file-input" accept=".json,.csv,application/json,text/csv" />
+        </div>
+        <p id="zal-log-analysis-status" class="muted">Nie wczytano jeszcze pliku logów.</p>
+        <div class="log-analysis-grid" id="zal-log-analysis-metrics" aria-live="polite"></div>
+        <div class="analysis-charts">
+          <div class="analysis-chart-card">
+            <h3>Uwaga w czasie testu</h3>
+            <canvas id="zal-attention-chart" width="640" height="260" aria-label="Wykres poziomu uwagi w czasie"></canvas>
+          </div>
+          <div class="analysis-chart-card">
+            <h3>Interakcje według pytań</h3>
+            <canvas id="zal-interactions-chart" width="640" height="260" aria-label="Wykres liczby interakcji według pytań"></canvas>
+          </div>
+          <div class="analysis-chart-card">
+            <h3>Trajektoria myszy</h3>
+            <canvas id="zal-mouse-chart" width="640" height="260" aria-label="Wykres trajektorii ruchu myszy"></canvas>
+          </div>
+        </div>
+        <h3>Podsumowanie pytań</h3>
+        <div class="analysis-question-list">
+          <table class="metrics-table">
+            <thead><tr><th>Pytanie</th><th>Mysz</th><th>Klawiatura</th><th>Czas odp.</th><th>Wynik</th><th>Śr. uwaga</th></tr></thead>
+            <tbody id="zal-question-analysis-body"><tr><td colspan="6">Brak danych.</td></tr></tbody>
+          </table>
+        </div>
+      </div>
       <table class="metrics-table">
         <thead><tr><th>Czas</th><th>Typ</th><th>Szczegóły</th></tr></thead>
         <tbody id="zal-log-body"><tr><td colspan="3">Brak logów.</td></tr></tbody>
@@ -541,6 +629,7 @@
       document.getElementById('zal-finish')?.addEventListener('click', finishAttempt);
       document.getElementById('zal-load-logs')?.addEventListener('click', loadLogsFromDb);
       document.getElementById('zal-clear-logs')?.addEventListener('click', clearLogsInDb);
+      document.getElementById('zal-log-file-input')?.addEventListener('change', handleLogFileUpload);
       setupInteractionLogging();
       initializeLogDb();
       setupExamWindowSecurity();
@@ -743,6 +832,378 @@
           tr.appendChild(tdDetails);
           body.appendChild(tr);
         });
+      }
+
+
+      function setLogAnalysisStatus(message) {
+        const status = document.getElementById('zal-log-analysis-status');
+        if (status) status.textContent = message;
+      }
+
+      function parseCsvRows(text) {
+        const rows = [];
+        let row = [];
+        let value = '';
+        let inQuotes = false;
+        for (let i = 0; i < text.length; i += 1) {
+          const char = text[i];
+          const next = text[i + 1];
+          if (char === '"') {
+            if (inQuotes && next === '"') {
+              value += '"';
+              i += 1;
+            } else {
+              inQuotes = !inQuotes;
+            }
+          } else if (char === ',' && !inQuotes) {
+            row.push(value);
+            value = '';
+          } else if ((char === '\n' || char === '\r') && !inQuotes) {
+            if (char === '\r' && next === '\n') i += 1;
+            row.push(value);
+            if (row.some((cell) => cell !== '')) rows.push(row);
+            row = [];
+            value = '';
+          } else {
+            value += char;
+          }
+        }
+        row.push(value);
+        if (row.some((cell) => cell !== '')) rows.push(row);
+        return rows;
+      }
+
+      function parseNumericValue(value) {
+        if (value === null || value === undefined || value === '') return null;
+        const parsed = Number(String(value).replace(',', '.'));
+        return Number.isFinite(parsed) ? parsed : null;
+      }
+
+      function parsePayloadJson(value) {
+        if (!value || typeof value !== 'string') return {};
+        try {
+          const parsed = JSON.parse(value);
+          return parsed && typeof parsed === 'object' ? parsed : {};
+        } catch (error) {
+          return {};
+        }
+      }
+
+      function normalizeCsvLog(text) {
+        const rows = parseCsvRows(text);
+        if (rows.length < 2) return { records: [], responses: [] };
+        const headers = rows[0].map((header) => header.trim());
+        const records = rows.slice(1).map((cells) => {
+          const row = Object.fromEntries(headers.map((header, index) => [header, cells[index] ?? '']));
+          const payload = { ...parsePayloadJson(row.payload_json) };
+          headers.forEach((header) => {
+            if (header && row[header] !== '' && header !== 'payload_json') payload[header] = row[header];
+          });
+          return {
+            timestamp: row.timestamp || '',
+            type: row.type || 'event.unknown',
+            payload
+          };
+        });
+        return { records, responses: [] };
+      }
+
+      function normalizeJsonLog(text) {
+        const parsed = JSON.parse(text);
+        if (Array.isArray(parsed)) return { records: parsed, responses: [] };
+        return {
+          records: Array.isArray(parsed.monitoring) ? parsed.monitoring : [],
+          responses: Array.isArray(parsed.responses) ? parsed.responses : []
+        };
+      }
+
+      function getPayloadValue(payload, keys) {
+        for (const key of keys) {
+          if (payload && payload[key] !== undefined && payload[key] !== null && payload[key] !== '') return payload[key];
+        }
+        return null;
+      }
+
+      function getRecordQuestionIndex(record) {
+        const payload = record.payload || {};
+        const raw = getPayloadValue(payload, ['questionIndex', 'question_index']);
+        const parsed = parseNumericValue(raw);
+        return parsed === null ? null : Math.floor(parsed);
+      }
+
+      function getRecordElapsedSeconds(record, originTime) {
+        const payload = record.payload || {};
+        const direct = parseNumericValue(getPayloadValue(payload, [
+          'interaction_test_elapsed_seconds',
+          'mouse_test_elapsed_seconds',
+          'testElapsedSeconds',
+          'elapsed_seconds'
+        ]));
+        if (direct !== null) return direct;
+        const directMs = parseNumericValue(getPayloadValue(payload, [
+          'interaction_test_elapsed_ms',
+          'mouse_test_elapsed_ms',
+          'testElapsedMs',
+          'elapsed_ms'
+        ]));
+        if (directMs !== null) return directMs / 1000;
+        const parsedTs = Date.parse(record.timestamp || '');
+        if (Number.isFinite(parsedTs) && Number.isFinite(originTime)) return Math.max(0, (parsedTs - originTime) / 1000);
+        return null;
+      }
+
+      function isMouseRecord(record) {
+        const kind = getPayloadValue(record.payload || {}, ['interactionKind', 'interaction_kind']);
+        return kind === 'mouse' || String(record.type || '').startsWith('mouse.');
+      }
+
+      function isKeyboardRecord(record) {
+        const kind = getPayloadValue(record.payload || {}, ['interactionKind', 'interaction_kind']);
+        return kind === 'keyboard' || String(record.type || '').startsWith('keyboard.');
+      }
+
+      function analyzeLogRecords(records, responses = []) {
+        const sorted = [...records].sort((left, right) => String(left.timestamp || '').localeCompare(String(right.timestamp || '')));
+        const originTimestamp = sorted.find((record) => record.timestamp)?.timestamp || '';
+        const originTime = Date.parse(originTimestamp);
+        const questions = new Map();
+        const attentionPoints = [];
+        const mousePoints = [];
+        let mouseCount = 0;
+        let keyboardCount = 0;
+        let riskCount = 0;
+
+        responses.forEach((response, index) => {
+          const selected = response.selectedAnswerIndex;
+          const correct = response.correctAnswerIndex;
+          questions.set(index, {
+            index,
+            label: `Pytanie ${index + 1}`,
+            mouse: 0,
+            keyboard: 0,
+            attention: [],
+            responseMs: parseNumericValue(response.elapsedMs),
+            isCorrect: typeof selected === 'number' && typeof correct === 'number' ? selected === correct : null
+          });
+        });
+
+        sorted.forEach((record) => {
+          const payload = record.payload || {};
+          const type = String(record.type || '');
+          const qIndex = getRecordQuestionIndex(record);
+          if (qIndex !== null && !questions.has(qIndex)) {
+            questions.set(qIndex, { index: qIndex, label: `Pytanie ${qIndex + 1}`, mouse: 0, keyboard: 0, attention: [], responseMs: null, isCorrect: null });
+          }
+          const question = qIndex === null ? null : questions.get(qIndex);
+          const elapsed = getRecordElapsedSeconds(record, originTime);
+          const attention = parseNumericValue(getPayloadValue(payload, ['score', 'attention_score']));
+
+          if (attention !== null && elapsed !== null) {
+            attentionPoints.push({ x: elapsed, y: attention });
+            if (question) question.attention.push(attention);
+          }
+          if (isMouseRecord(record)) {
+            mouseCount += 1;
+            if (question) question.mouse += 1;
+            const x = parseNumericValue(getPayloadValue(payload, ['x', 'mouse_x']));
+            const y = parseNumericValue(getPayloadValue(payload, ['y', 'mouse_y']));
+            if (x !== null && y !== null && elapsed !== null) mousePoints.push({ x, y, t: elapsed, questionIndex: qIndex });
+          }
+          if (isKeyboardRecord(record)) {
+            keyboardCount += 1;
+            if (question) question.keyboard += 1;
+          }
+          if (type === 'question.answer' && question) {
+            const responseMs = parseNumericValue(getPayloadValue(payload, ['elapsedMs', 'question_elapsed_ms']));
+            if (responseMs !== null) question.responseMs = responseMs;
+          }
+          if (/cheating|blur|hidden|alert|face\.missing|attention\.low|security/i.test(type)) riskCount += 1;
+        });
+
+        const lastElapsed = sorted.reduce((max, record) => {
+          const elapsed = getRecordElapsedSeconds(record, originTime);
+          return elapsed === null ? max : Math.max(max, elapsed);
+        }, 0);
+        const questionRows = [...questions.values()].sort((a, b) => a.index - b.index).map((item) => ({
+          ...item,
+          avgAttention: item.attention.length ? item.attention.reduce((sum, value) => sum + value, 0) / item.attention.length : null
+        }));
+
+        const scoredRows = questionRows.filter((row) => row.isCorrect !== null);
+        const correctCount = scoredRows.filter((row) => row.isCorrect).length;
+        return { records: sorted, responses, durationSeconds: lastElapsed, questionRows, attentionPoints, mousePoints, mouseCount, keyboardCount, riskCount, scoredRows: scoredRows.length, correctCount };
+      }
+
+      function renderMetricCards(analysis) {
+        const metrics = document.getElementById('zal-log-analysis-metrics');
+        if (!metrics) return;
+        const avgAttentionValues = analysis.questionRows.map((row) => row.avgAttention).filter((value) => value !== null);
+        const avgAttention = avgAttentionValues.length
+          ? avgAttentionValues.reduce((sum, value) => sum + value, 0) / avgAttentionValues.length
+          : null;
+        const cards = [
+          ['Czas testu', `${Math.round(analysis.durationSeconds)} s`],
+          ['Pytania', analysis.questionRows.length],
+          ['Ruchy myszy', analysis.mouseCount],
+          ['Zdarzenia klawiatury', analysis.keyboardCount],
+          ['Zdarzenia ryzyka', analysis.riskCount],
+          ['Wynik', analysis.scoredRows ? `${analysis.correctCount}/${analysis.scoredRows}` : 'brak danych'],
+          ['Średnia uwaga', avgAttention === null ? 'brak danych' : avgAttention.toFixed(2)]
+        ];
+        metrics.replaceChildren(...cards.map(([label, value]) => {
+          const card = document.createElement('div');
+          card.className = 'analysis-metric';
+          const span = document.createElement('span');
+          span.textContent = label;
+          const strong = document.createElement('strong');
+          strong.textContent = String(value);
+          card.append(span, strong);
+          return card;
+        }));
+      }
+
+      function renderQuestionAnalysisTable(rows) {
+        const body = document.getElementById('zal-question-analysis-body');
+        if (!body) return;
+        body.replaceChildren();
+        if (!rows.length) {
+          body.innerHTML = '<tr><td colspan="6">Brak danych pytań.</td></tr>';
+          return;
+        }
+        rows.forEach((row) => {
+          const tr = document.createElement('tr');
+          const responseTime = row.responseMs === null || row.responseMs === undefined ? 'brak danych' : `${Math.round(row.responseMs)} ms`;
+          const correctness = row.isCorrect === null || row.isCorrect === undefined ? 'brak danych' : row.isCorrect ? 'poprawna' : 'błędna';
+          [row.label, row.mouse, row.keyboard, responseTime, correctness, row.avgAttention === null ? 'brak danych' : row.avgAttention.toFixed(2)].forEach((value) => {
+            const td = document.createElement('td');
+            td.textContent = String(value);
+            tr.appendChild(td);
+          });
+          body.appendChild(tr);
+        });
+      }
+
+      function prepareCanvas(canvas) {
+        if (!canvas) return null;
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return null;
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = '#0f172a';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.strokeStyle = '#334155';
+        ctx.lineWidth = 1;
+        ctx.strokeRect(40, 18, canvas.width - 58, canvas.height - 48);
+        return ctx;
+      }
+
+      function drawLineChart(canvasId, points) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = prepareCanvas(canvas);
+        if (!ctx || !canvas) return;
+        if (!points.length) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText('Brak danych do wykresu.', 52, 52);
+          return;
+        }
+        const width = canvas.width - 58;
+        const height = canvas.height - 48;
+        const maxX = Math.max(...points.map((point) => point.x), 1);
+        ctx.strokeStyle = '#38bdf8';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        points.forEach((point, index) => {
+          const x = 40 + (point.x / maxX) * width;
+          const y = 18 + (1 - Math.max(0, Math.min(1, point.y))) * height;
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillText('0 s', 40, canvas.height - 12);
+        ctx.fillText(`${Math.round(maxX)} s`, canvas.width - 78, canvas.height - 12);
+      }
+
+      function drawInteractionBars(canvasId, rows) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = prepareCanvas(canvas);
+        if (!ctx || !canvas) return;
+        if (!rows.length) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText('Brak danych do wykresu.', 52, 52);
+          return;
+        }
+        const chartW = canvas.width - 58;
+        const chartH = canvas.height - 48;
+        const maxValue = Math.max(...rows.map((row) => row.mouse + row.keyboard), 1);
+        const step = chartW / rows.length;
+        rows.forEach((row, index) => {
+          const x = 42 + index * step;
+          const mouseH = (row.mouse / maxValue) * chartH;
+          const keyboardH = (row.keyboard / maxValue) * chartH;
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(x, 18 + chartH - mouseH, Math.max(4, step * 0.35), mouseH);
+          ctx.fillStyle = '#f59e0b';
+          ctx.fillRect(x + Math.max(5, step * 0.38), 18 + chartH - keyboardH, Math.max(4, step * 0.35), keyboardH);
+        });
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillText('mysz', 50, 34);
+        ctx.fillStyle = '#f59e0b';
+        ctx.fillText('klawiatura', 94, 34);
+      }
+
+      function drawMouseTrajectory(canvasId, points) {
+        const canvas = document.getElementById(canvasId);
+        const ctx = prepareCanvas(canvas);
+        if (!ctx || !canvas) return;
+        if (points.length < 2) {
+          ctx.fillStyle = '#94a3b8';
+          ctx.fillText('Brak wystarczających punktów myszy.', 52, 52);
+          return;
+        }
+        const lastQuestion = [...new Set(points.map((point) => point.questionIndex).filter((value) => value !== null))].pop();
+        const scoped = lastQuestion === undefined ? points : points.filter((point) => point.questionIndex === lastQuestion);
+        const minX = Math.min(...scoped.map((point) => point.x));
+        const maxX = Math.max(...scoped.map((point) => point.x));
+        const minY = Math.min(...scoped.map((point) => point.y));
+        const maxY = Math.max(...scoped.map((point) => point.y));
+        const scaleX = Math.max(1, maxX - minX);
+        const scaleY = Math.max(1, maxY - minY);
+        ctx.strokeStyle = '#22c55e';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        scoped.forEach((point, index) => {
+          const x = 40 + ((point.x - minX) / scaleX) * (canvas.width - 58);
+          const y = 18 + ((point.y - minY) / scaleY) * (canvas.height - 48);
+          if (index === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+        ctx.fillStyle = '#cbd5e1';
+        ctx.fillText(lastQuestion === undefined ? 'cały test' : `pytanie ${lastQuestion + 1}`, 52, 34);
+      }
+
+      function renderLogAnalysis(analysis) {
+        renderMetricCards(analysis);
+        renderQuestionAnalysisTable(analysis.questionRows);
+        drawLineChart('zal-attention-chart', analysis.attentionPoints);
+        drawInteractionBars('zal-interactions-chart', analysis.questionRows);
+        drawMouseTrajectory('zal-mouse-chart', analysis.mousePoints);
+      }
+
+      async function handleLogFileUpload(event) {
+        const file = event.target.files?.[0];
+        if (!file) return;
+        try {
+          const text = await file.text();
+          const normalized = file.name.toLowerCase().endsWith('.csv')
+            ? normalizeCsvLog(text)
+            : normalizeJsonLog(text);
+          const analysis = analyzeLogRecords(normalized.records, normalized.responses);
+          renderLogAnalysis(analysis);
+          setLogAnalysisStatus(`Wczytano ${normalized.records.length} rekordów z pliku ${file.name}.`);
+        } catch (error) {
+          setLogAnalysisStatus(`Nie udało się przeanalizować pliku: ${error.message}`);
+        }
       }
 
       function setupInteractionLogging() {
@@ -1133,18 +1594,24 @@ const shortcutCombos = new Set([
 
       function updateSessionConfigSummary() {
         const legacySummary = document.getElementById('zal-config-summary');
-        const { length, range } = getSelectedSessionConfig();
+        let { length, range } = getSelectedSessionConfig();
         const available = getQuestionsForSelectedConfig();
         const configVisible = !testConfigPanel?.hidden;
-        const isReady = configVisible && available.length > 0 && length >= 1 && length <= available.length;
 
-        if (testLengthInput && available.length > 0) {
-          testLengthInput.max = String(available.length);
+        if (testLengthInput) {
+          const maxLength = available.length > 0 ? available.length : 1;
+          testLengthInput.max = String(maxLength);
+          if (available.length > 0 && (length < 1 || length > available.length)) {
+            length = Math.min(Math.max(length || 1, 1), available.length);
+            testLengthInput.value = String(length);
+          }
         }
+
+        const isReady = configVisible && available.length > 0 && length >= 1 && length <= available.length;
         if (nextSessionButton) nextSessionButton.disabled = !isReady;
 
         const message = available.length
-          ? `Zakres: ${getRangeLabel(range)}. Dostępne pytania zamknięte: ${available.length}. Wybrano: ${length}. ${isReady ? 'Kalibracja konfiguracji gotowa, możesz przejść dalej.' : 'Dostosuj liczbę pytań, aby odblokować przycisk Dalej.'}`
+          ? `Zakres: ${getRangeLabel(range)}. Dostępne pytania zamknięte: ${available.length}. Wybrano: ${length}. ${isReady ? 'Konfiguracja jest gotowa. Możesz rozpocząć sesję.' : 'Dostosuj liczbę pytań, aby odblokować przycisk „Rozpocznij sesję”.'}`
           : 'Brak dostępnych pytań zamkniętych dla wybranego zakresu.';
         if (testConfigSummary) testConfigSummary.textContent = message;
         if (legacySummary) legacySummary.textContent = 'Aktualnie obsługiwane są pytania zamknięte jednokrotnego wyboru. Użyj wyróżnionej konfiguracji testu powyżej.';

@@ -17,7 +17,9 @@ test('zal_sesje.html: mobilny render formularza i statusów', async ({ page }) =
 
   await expect(page.locator('h1')).toHaveText('Sesja zaliczeniowa');
   await expect(page.locator('#session-name-display')).toBeVisible();
-  await expect(page.locator('#quiz-meta')).toContainText('Najpierw zaakceptuj uprawnienia do kamery');
+  await expect(page.locator('#quiz-meta')).toContainText('Najpierw uruchom monitoring i kamerę');
+  await expect(page.locator('#start-monitoring-btn')).toBeVisible();
+  await expect(page.locator('#monitoring-start-status')).toContainText('Kliknij „Uruchom monitoring i kamerę”');
   await expect(page.locator('#session-module-statuses')).toBeVisible();
 
   const hasHorizontalOverflow = await page.evaluate(() => {
