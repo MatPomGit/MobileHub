@@ -1087,6 +1087,10 @@
         if (!canvas) return null;
         const ctx = canvas.getContext('2d');
         if (!ctx) return null;
+        if (canvas.clientWidth && canvas.clientHeight) {
+          canvas.width = canvas.clientWidth;
+          canvas.height = canvas.clientHeight;
+        }
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.fillStyle = '#0f172a';
         ctx.fillRect(0, 0, canvas.width, canvas.height);
