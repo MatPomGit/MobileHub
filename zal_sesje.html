@@ -1385,7 +1385,7 @@
       if (!quizState.isActive || !quizState.questionStartedAtMs || quizState.currentIndex >= quizState.questions.length) return {};
       const questionIndex = quizState.currentIndex;
       const question = quizState.questions[questionIndex];
-      const elapsedMs = getQuestionElapsedMs();
+      const elapsedMs = Math.max(0, now - quizState.questionStartedAtMs);
       const sessionStartedAtMs = Date.parse(quizState.sessionStartedAt || '');
       const testElapsedMs = Number.isFinite(sessionStartedAtMs) ? Math.max(0, now - sessionStartedAtMs) : null;
       return {
