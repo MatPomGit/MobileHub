@@ -430,6 +430,8 @@
     const evidenceCaptures = [];
     const EVIDENCE_CAPTURE_COOLDOWN_MS = 10000;
     const MAX_EVIDENCE_CAPTURES = 12;
+    const WINDOW_FOCUS_LOG_COOLDOWN_MS = 1200;
+    const WINDOW_SIZE_TOLERANCE_PX = 96;
     let lastAttentionLogAt = 0;
     let lastEvidenceCaptureAt = 0;
     let lastEmotionLogAt = 0;
@@ -453,13 +455,50 @@
       mousePointCounts: [],
       keyboardEventCounts: []
     };
+    const windowFocusState = {
+      isDocumentVisible: !document.hidden,
+      hasWindowFocus: document.hasFocus(),
+      lastHiddenAtMs: null,
+      lastBlurAtMs: null,
+      lastVisibilityLogAtMs: 0,
+      lastFocusLogAtMs: 0,
+      expectedMaximizedBounds: null
+    };
 
     function isoNow() {
       return new Date().toISOString();
     }
 
+    function getSessionElapsedMs(now = Date.now()) {
+      const sessionStartedAtMs = Date.parse(quizState.sessionStartedAt || '');
+      return Number.isFinite(sessionStartedAtMs) ? Math.max(0, now - sessionStartedAtMs) : null;
+    }
+
+    function getQuestionElapsedMsAt(now = Date.now()) {
+      if (!quizState.questionStartedAtMs) return null;
+      return Math.max(0, now - quizState.questionStartedAtMs);
+    }
+
     function appendMonitoringRecord(type, payload = {}) {
-      monitoringExportLog.push({ timestamp: isoNow(), type, payload });
+      const now = Date.now();
+      const normalizedPayload = { ...payload };
+      if (normalizedPayload.sessionElapsedMs === undefined) {
+        normalizedPayload.sessionElapsedMs = getSessionElapsedMs(now);
+      }
+      if (normalizedPayload.sessionElapsedSeconds === undefined) {
+        normalizedPayload.sessionElapsedSeconds = normalizedPayload.sessionElapsedMs === null
+          ? null
+          : Number((normalizedPayload.sessionElapsedMs / 1000).toFixed(3));
+      }
+      if (quizState.isActive && normalizedPayload.questionElapsedMs === undefined) {
+        normalizedPayload.questionElapsedMs = getQuestionElapsedMsAt(now);
+      }
+      if (quizState.isActive && normalizedPayload.questionElapsedSeconds === undefined) {
+        normalizedPayload.questionElapsedSeconds = normalizedPayload.questionElapsedMs === null
+          ? null
+          : Number((normalizedPayload.questionElapsedMs / 1000).toFixed(3));
+      }
+      monitoringExportLog.push({ timestamp: isoNow(), type, payload: normalizedPayload });
     }
 
     function captureEvidenceFrame(reason, metrics = {}) {
@@ -651,8 +690,7 @@
     }
 
     function getQuestionElapsedMs() {
-      if (!quizState.questionStartedAtMs) return 0;
-      return Math.max(0, Date.now() - quizState.questionStartedAtMs);
+      return getQuestionElapsedMsAt(Date.now()) ?? 0;
     }
 
     function updateQuestionMetaWithTime() {
@@ -906,17 +944,31 @@
         'question_id',
         'question_elapsed_ms',
         'time_limit_seconds',
+        'document_visibility',
+        'document_hidden',
+        'window_has_focus',
+        'window_inner_width',
+        'window_inner_height',
+        'window_outer_width',
+        'window_outer_height',
+        'hidden_duration_ms',
+        'blur_duration_ms',
         'payload_json'
       ];
       const rows = sortedRecords.map((record) => {
         const payload = record.payload || {};
         const timestamp = record.timestamp || '';
         const recordTime = Date.parse(timestamp);
-        const elapsedMs = Number.isFinite(recordTime) ? Math.max(0, recordTime - originTime) : '';
+        const fallbackElapsedMs = Number.isFinite(recordTime) ? Math.max(0, recordTime - originTime) : '';
+        const sessionElapsedMs = firstAvailableValue(payload, [['sessionElapsedMs']]);
+        const elapsedMs = sessionElapsedMs === null || sessionElapsedMs === undefined ? fallbackElapsedMs : sessionElapsedMs;
+        const elapsedSeconds = firstAvailableValue(payload, [['sessionElapsedSeconds']]);
         const row = {
           timestamp,
           elapsed_ms: elapsedMs,
-          elapsed_seconds: elapsedMs === '' ? '' : Number((elapsedMs / 1000).toFixed(3)),
+          elapsed_seconds: elapsedSeconds === null || elapsedSeconds === undefined
+            ? (elapsedMs === '' ? '' : Number((elapsedMs / 1000).toFixed(3)))
+            : elapsedSeconds,
           type: record.type || '',
           attention_score: firstAvailableValue(payload, [['score'], ['attentionScore'], ['details', 'attentionScore']]),
           attention_head: firstAvailableValue(payload, [['head'], ['metrics', 'head'], ['details', 'head']]),
@@ -970,8 +1022,17 @@
           marked_as_cheating: firstAvailableValue(payload, [['details', 'markedAsCheating']]),
           question_index: firstAvailableValue(payload, [['questionIndex'], ['details', 'questionIndex']]),
           question_id: firstAvailableValue(payload, [['questionId'], ['details', 'questionId']]),
-          question_elapsed_ms: firstAvailableValue(payload, [['elapsedMs']]),
+          question_elapsed_ms: firstAvailableValue(payload, [['questionElapsedMs'], ['elapsedMs']]),
           time_limit_seconds: firstAvailableValue(payload, [['timeLimitSeconds']]),
+          document_visibility: firstAvailableValue(payload, [['documentVisibility']]),
+          document_hidden: firstAvailableValue(payload, [['documentHidden']]),
+          window_has_focus: firstAvailableValue(payload, [['hasWindowFocus']]),
+          window_inner_width: firstAvailableValue(payload, [['innerWidth']]),
+          window_inner_height: firstAvailableValue(payload, [['innerHeight']]),
+          window_outer_width: firstAvailableValue(payload, [['outerWidth']]),
+          window_outer_height: firstAvailableValue(payload, [['outerHeight']]),
+          hidden_duration_ms: firstAvailableValue(payload, [['hiddenDurationMs']]),
+          blur_duration_ms: firstAvailableValue(payload, [['blurDurationMs']]),
           payload_json: payload
         };
         return columns.map((column) => escapeCsvValue(row[column])).join(',');
@@ -1361,8 +1422,9 @@
 
     function updateAttentionWarningState() {
       const isCameraReady = moduleState.camera && moduleState.mediapipe;
-      const isWarning = isCameraReady && attentionState.score < 0.4;
-      const isCaution = isCameraReady && attentionState.score >= 0.4 && attentionState.score < 0.6;
+      const hasWindowAttention = !document.hidden && document.hasFocus();
+      const isWarning = (isCameraReady && attentionState.score < 0.4) || !hasWindowAttention;
+      const isCaution = hasWindowAttention && isCameraReady && attentionState.score >= 0.4 && attentionState.score < 0.6;
       cautionFrameCount = isCaution && !isWarning ? cautionFrameCount + 1 : 0;
       const isStableCaution = cautionFrameCount >= CAUTION_STABLE_FRAME_THRESHOLD;
       document.body.classList.toggle('attention-warning', isWarning);
@@ -1370,14 +1432,16 @@
       if (attentionAlert) attentionAlert.classList.toggle('visible', isWarning);
       if (focusWarningBanner) focusWarningBanner.classList.toggle('visible', isWarning);
       if (isWarning) {
-        captureEvidenceFrame('attention.low', () => ({
+        captureEvidenceFrame('attention.low', {
           score: Number(attentionState.score.toFixed(4)),
           head: Number(attentionState.head.toFixed(4)),
           eyes: Number(attentionState.eyes.toFixed(4)),
           keyboard: Number(attentionState.keyboard.toFixed(4)),
           mouse: Number(attentionState.mouse.toFixed(4)),
-          interaction: Number(attentionState.interaction.toFixed(4))
-        }));
+          interaction: Number(attentionState.interaction.toFixed(4)),
+          documentHidden: document.hidden,
+          hasWindowFocus: document.hasFocus()
+        });
       }
     }
 
@@ -1385,9 +1449,8 @@
       if (!quizState.isActive || !quizState.questionStartedAtMs || quizState.currentIndex >= quizState.questions.length) return {};
       const questionIndex = quizState.currentIndex;
       const question = quizState.questions[questionIndex];
-      const elapsedMs = Math.max(0, now - quizState.questionStartedAtMs);
-      const sessionStartedAtMs = Date.parse(quizState.sessionStartedAt || '');
-      const testElapsedMs = Number.isFinite(sessionStartedAtMs) ? Math.max(0, now - sessionStartedAtMs) : null;
+      const elapsedMs = getQuestionElapsedMsAt(now) ?? 0;
+      const testElapsedMs = getSessionElapsedMs(now);
       return {
         questionIndex,
         questionNumber: questionIndex + 1,
@@ -1430,9 +1493,8 @@
       if (!quizState.isActive || !quizState.questionStartedAtMs || quizState.currentIndex >= quizState.questions.length) return null;
       const questionIndex = quizState.currentIndex;
       const question = quizState.questions[questionIndex];
-      const sessionStartedAtMs = Date.parse(quizState.sessionStartedAt || '');
-      const testElapsedMs = Number.isFinite(sessionStartedAtMs) ? Math.max(0, now - sessionStartedAtMs) : null;
-      const elapsedMs = getQuestionElapsedMs();
+      const testElapsedMs = getSessionElapsedMs(now);
+      const elapsedMs = getQuestionElapsedMsAt(now) ?? 0;
       quizState.interactionPointCounts[questionIndex] = (quizState.interactionPointCounts[questionIndex] || 0) + 1;
       interactionSequence += 1;
       return {
@@ -1502,6 +1564,131 @@
       });
     }
 
+    function getWindowStatePayload(now = Date.now()) {
+      const screenWidth = window.screen?.availWidth || window.screen?.width || null;
+      const screenHeight = window.screen?.availHeight || window.screen?.height || null;
+      return {
+        ...getActiveQuestionTelemetryContext(now),
+        documentVisibility: document.visibilityState,
+        documentHidden: document.hidden,
+        hasWindowFocus: document.hasFocus(),
+        innerWidth: window.innerWidth,
+        innerHeight: window.innerHeight,
+        outerWidth: window.outerWidth,
+        outerHeight: window.outerHeight,
+        screenWidth,
+        screenHeight,
+        expectedMaximizedBounds: windowFocusState.expectedMaximizedBounds,
+        quizActive: quizState.isActive
+      };
+    }
+
+    function logWindowStateEvent(type, extra = {}, cooldownKey = null) {
+      const now = Date.now();
+      if (cooldownKey && now - windowFocusState[cooldownKey] < WINDOW_FOCUS_LOG_COOLDOWN_MS) return;
+      if (cooldownKey) windowFocusState[cooldownKey] = now;
+      logSessionEvent(type, {
+        ...getWindowStatePayload(now),
+        ...extra
+      });
+    }
+
+    function updateWindowFocusAttentionState() {
+      const isVisible = !document.hidden;
+      const hasFocus = document.hasFocus();
+      windowFocusState.isDocumentVisible = isVisible;
+      windowFocusState.hasWindowFocus = hasFocus;
+      if (!isVisible || !hasFocus) {
+        attentionState.interaction = 0;
+        attentionState.mouse = Math.min(attentionState.mouse, 0.15);
+        attentionState.keyboard = Math.min(attentionState.keyboard, 0.15);
+      }
+      if (focusWarningBanner) {
+        if (!isVisible) {
+          focusWarningBanner.textContent = 'Proszę wrócić do karty z testem.';
+        } else if (!hasFocus) {
+          focusWarningBanner.textContent = 'Proszę aktywować okno z testem.';
+        } else {
+          focusWarningBanner.textContent = 'Proszę skupić się na teście.';
+        }
+      }
+      updateAttentionBar();
+    }
+
+    function isWindowCloseToExpectedBounds() {
+      const bounds = windowFocusState.expectedMaximizedBounds;
+      if (!bounds) return true;
+      const widthDelta = Math.abs((window.outerWidth || window.innerWidth) - bounds.width);
+      const heightDelta = Math.abs((window.outerHeight || window.innerHeight) - bounds.height);
+      return widthDelta <= WINDOW_SIZE_TOLERANCE_PX && heightDelta <= WINDOW_SIZE_TOLERANCE_PX;
+    }
+
+    function handleWindowVisibilityChange() {
+      const now = Date.now();
+      if (document.hidden) {
+        windowFocusState.lastHiddenAtMs = now;
+        logWindowStateEvent('window.visibility.hidden', {
+          reason: 'Karta testu została ukryta, zminimalizowana albo zastąpiona inną kartą.'
+        }, 'lastVisibilityLogAtMs');
+      } else {
+        const hiddenDurationMs = windowFocusState.lastHiddenAtMs ? Math.max(0, now - windowFocusState.lastHiddenAtMs) : null;
+        logWindowStateEvent('window.visibility.visible', {
+          hiddenDurationMs,
+          hiddenDurationSeconds: hiddenDurationMs === null ? null : Number((hiddenDurationMs / 1000).toFixed(3))
+        }, 'lastVisibilityLogAtMs');
+        windowFocusState.lastHiddenAtMs = null;
+      }
+      updateWindowFocusAttentionState();
+    }
+
+    function handleWindowBlur() {
+      const now = Date.now();
+      windowFocusState.lastBlurAtMs = now;
+      logWindowStateEvent('window.focus.lost', {
+        reason: 'Okno przeglądarki utraciło fokus.'
+      }, 'lastFocusLogAtMs');
+      updateWindowFocusAttentionState();
+    }
+
+    function handleWindowFocus() {
+      const now = Date.now();
+      const blurDurationMs = windowFocusState.lastBlurAtMs ? Math.max(0, now - windowFocusState.lastBlurAtMs) : null;
+      logWindowStateEvent('window.focus.restored', {
+        blurDurationMs,
+        blurDurationSeconds: blurDurationMs === null ? null : Number((blurDurationMs / 1000).toFixed(3))
+      }, 'lastFocusLogAtMs');
+      windowFocusState.lastBlurAtMs = null;
+      updateWindowFocusAttentionState();
+    }
+
+    function handleWindowResize() {
+      const isCloseToExpectedBounds = isWindowCloseToExpectedBounds();
+      moduleState.maximize = isCloseToExpectedBounds;
+      refreshModuleStatuses();
+      if (!isCloseToExpectedBounds) {
+        logWindowStateEvent('window.size.changed', {
+          reason: 'Rozmiar okna odbiega od zapisanego rozmiaru po maksymalizacji.'
+        }, 'lastFocusLogAtMs');
+      }
+    }
+
+    function setupWindowFocusTracking() {
+      document.addEventListener('visibilitychange', handleWindowVisibilityChange);
+      window.addEventListener('blur', handleWindowBlur);
+      window.addEventListener('focus', handleWindowFocus);
+      window.addEventListener('resize', handleWindowResize);
+      window.addEventListener('pagehide', () => {
+        logWindowStateEvent('window.page.hidden', {
+          reason: 'Strona testu została schowana albo opuszczona.'
+        });
+      });
+      window.addEventListener('pageshow', () => {
+        logWindowStateEvent('window.page.shown');
+        updateWindowFocusAttentionState();
+      });
+      updateWindowFocusAttentionState();
+    }
+
     function setupAttentionInteractionTracking() {
       document.addEventListener('keydown', (event) => {
         lastKeyAt = Date.now();
@@ -1520,9 +1707,10 @@
       });
       setInterval(() => {
         const now = Date.now();
-        attentionState.keyboard = clamp01(1 - Math.min(1, (now - lastKeyAt) / 12000));
-        attentionState.mouse = clamp01(1 - Math.min(1, (now - lastMouseAt) / 8000));
-        attentionState.interaction = clamp01(1 - Math.min(1, (now - lastClickAt) / 15000));
+        const hasWindowAttention = !document.hidden && document.hasFocus();
+        attentionState.keyboard = hasWindowAttention ? clamp01(1 - Math.min(1, (now - lastKeyAt) / 12000)) : 0;
+        attentionState.mouse = hasWindowAttention ? clamp01(1 - Math.min(1, (now - lastMouseAt) / 8000)) : 0;
+        attentionState.interaction = hasWindowAttention ? clamp01(1 - Math.min(1, (now - lastClickAt) / 15000)) : 0;
         updateAttentionBar();
       }, 500);
     }
@@ -1662,13 +1850,19 @@
         window.resizeTo(targetWidth, targetHeight);
         resized = true;
       } catch (e) { /* noop */ }
+      windowFocusState.expectedMaximizedBounds = {
+        width: targetWidth,
+        height: targetHeight
+      };
       appendMonitoringRecord('window.maximize.requested', {
         targetLeft,
         targetTop,
         targetWidth,
         targetHeight,
         overshootPx,
-        browserTopInset
+        browserTopInset,
+        moved,
+        resized
       });
       moduleState.maximize = moved || resized;
       refreshModuleStatuses();
@@ -1844,6 +2038,7 @@
         appendMonitoringRecord("session.client", { ip, accessedAt: isoNow() });
       });
       setupAttentionInteractionTracking();
+      setupWindowFocusTracking();
       setQuizWorkspaceVisible(false);
       acceptRulesCheckbox?.addEventListener('change', updateQuizStartAvailability);
       startMonitoringBtn?.addEventListener('click', startMonitoring);
