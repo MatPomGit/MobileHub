@@ -221,11 +221,11 @@
   <main>
     <p id="focus-warning-banner" class="focus-warning-banner" role="alert" aria-live="assertive">Proszę skupić się na teście</p>
     <h1>Sesja zaliczeniowa</h1>
-    <p class="muted">To jest moduł aktywnej sesji zaliczeniowej. Przed rozpoczęciem testu zaakceptuj uprawnienia do kamery.</p>
+    <p class="muted">To jest moduł aktywnej sesji zaliczeniowej. Przed rozpoczęciem testu uruchom monitoring, zaakceptuj dostęp do kamery i potwierdź zasady sesji.</p>
     <section class="panel">
       <div class="row">
         <p class="muted" id="session-name-display">Nazwa sesji: automatyczna</p>
-        <p class="muted" id="privacy-info">Prywatność: obraz z kamery jest przetwarzany lokalnie na urządzeniu i nie jest nigdzie wysyłany.</p>
+        <p class="muted" id="privacy-info">Prywatność: obraz z kamery jest przetwarzany lokalnie na urządzeniu i nie jest nigdzie wysyłany. Eksport CSV zapisuje metadane monitoringu, w tym punkty ruchu myszy oraz zdarzenia klawiatury względem czasu testu i aktualnego pytania.</p>
       </div>
 
       <div class="preview-wrap" aria-live="polite">
@@ -285,7 +285,7 @@
 
       <section class="panel" style="margin-top:16px;">
         <h2>Sesja pytań</h2>
-        <p class="muted" id="quiz-meta">Najpierw zaakceptuj uprawnienia do kamery, zapoznaj się z zasadami i potwierdź je. Przycisk START odblokuje się automatycznie po wykryciu poprawnego obrazu.</p>
+        <p class="muted" id="quiz-meta">Najpierw uruchom monitoring i kamerę, zapoznaj się z zasadami oraz potwierdź je. Przycisk START odblokuje się automatycznie po wykryciu poprawnego obrazu.</p>
         <div id="quiz-start-gate" class="quiz-start-gate">
           <ol class="exam-rules" aria-label="Zasady sesji">
             <li>Podczas testu pozostaw włączoną kamerę i nie zasłaniaj twarzy.</li>
@@ -296,6 +296,10 @@
             <input type="checkbox" id="accept-rules-checkbox" />
             <span>Akceptuję zasady sesji i chcę rozpocząć test po spełnieniu warunków technicznych.</span>
           </label>
+          <div class="row">
+            <button type="button" id="start-monitoring-btn">Uruchom monitoring i kamerę</button>
+            <p class="muted" id="monitoring-start-status">Kamera zostanie uruchomiona dopiero po kliknięciu przycisku i udzieleniu zgody w przeglądarce.</p>
+          </div>
           <div>
             <button type="button" id="start-quiz-btn" disabled>START</button>
           </div>
@@ -343,6 +347,8 @@
     const acceptRulesCheckbox = document.getElementById('accept-rules-checkbox');
     const quizQuestion = document.getElementById('quiz-question');
     const quizAnswers = document.getElementById('quiz-answers');
+    const startMonitoringBtn = document.getElementById('start-monitoring-btn');
+    const monitoringStartStatus = document.getElementById('monitoring-start-status');
     const startQuizBtn = document.getElementById('start-quiz-btn');
     const nextQuestionBtn = document.getElementById('next-question-btn');
     const finishQuizBtn = document.getElementById('finish-quiz-btn');
@@ -419,6 +425,7 @@
     const DEFAULT_QUIZ_LENGTH = 25;
     const MAX_QUIZ_LENGTH = 150;
     const QUESTION_TIME_LIMIT_SECONDS = 10;
+    const MOUSE_MOVE_SAMPLE_MS = 80;
     const monitoringExportLog = [];
     const evidenceCaptures = [];
     const EVIDENCE_CAPTURE_COOLDOWN_MS = 10000;
@@ -441,7 +448,10 @@
       questionTimerId: null,
       timeLeftSeconds: QUESTION_TIME_LIMIT_SECONDS,
       answerDurationsMs: [],
-      timedOutQuestions: []
+      timedOutQuestions: [],
+      interactionPointCounts: [],
+      mousePointCounts: [],
+      keyboardEventCounts: []
     };
 
     function isoNow() {
@@ -641,6 +651,9 @@
     function startQuestionTimer() {
       stopQuestionTimer();
       quizState.questionStartedAtMs = Date.now();
+      quizState.interactionPointCounts[quizState.currentIndex] = 0;
+      quizState.mousePointCounts[quizState.currentIndex] = 0;
+      quizState.keyboardEventCounts[quizState.currentIndex] = 0;
       quizState.timeLeftSeconds = QUESTION_TIME_LIMIT_SECONDS;
       updateQuestionMetaWithTime();
       quizState.questionTimerId = window.setInterval(() => {
@@ -702,7 +715,12 @@
       [...quizAnswers.children].forEach((node, idx) => {
         if (node.tagName === 'BUTTON') node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
       });
-      nextQuestionBtn.disabled = isAnswerEmpty(answerIndex);
+      const isLastQuestion = quizState.currentIndex >= quizState.questions.length - 1;
+      nextQuestionBtn.disabled = isLastQuestion || isAnswerEmpty(answerIndex);
+      finishQuizBtn.disabled = !isLastQuestion || isAnswerEmpty(answerIndex);
+      if (isLastQuestion && !isAnswerEmpty(answerIndex)) {
+        quizMeta.textContent = 'Udzielono odpowiedzi na ostatnie pytanie. Możesz zakończyć sesję i wyeksportować dane.';
+      }
     }
 
     function nextQuestion(triggeredByTimeout = false) {
@@ -746,6 +764,13 @@
         quizState.answers = new Array(quizState.questions.length).fill(null);
         quizState.answerDurationsMs = new Array(quizState.questions.length).fill(null);
         quizState.timedOutQuestions = new Array(quizState.questions.length).fill(false);
+        quizState.interactionPointCounts = new Array(quizState.questions.length).fill(0);
+        quizState.mousePointCounts = new Array(quizState.questions.length).fill(0);
+        quizState.keyboardEventCounts = new Array(quizState.questions.length).fill(0);
+        interactionSequence = 0;
+        mouseMoveSequence = 0;
+        keyboardEventSequence = 0;
+        lastMouseLogAt = 0;
         quizState.isActive = true;
         quizState.sessionStartedAt = isoNow();
         quizState.sessionEndedAt = null;
@@ -754,7 +779,7 @@
         quizMeta.textContent = `Sesja: ${quizState.questions.length}/${quizState.requestedLength} pytań. Zakres: ${categoryLabel}. Rodzaj: ${describeQuestionType(quizState.questionType)}.`;
         startQuizBtn.disabled = true;
         setQuizWorkspaceVisible(true);
-        finishQuizBtn.disabled = false;
+        finishQuizBtn.disabled = true;
         nextQuestionBtn.disabled = true;
         const previewWrap = document.querySelector(".preview-wrap");
         if (previewWrap) previewWrap.style.display = "none";
@@ -801,6 +826,38 @@
         'attention_keyboard',
         'attention_mouse',
         'attention_interaction',
+        'interaction_sequence',
+        'interaction_question_sequence',
+        'interaction_kind',
+        'interaction_action',
+        'interaction_elapsed_ms',
+        'interaction_elapsed_seconds',
+        'interaction_test_elapsed_ms',
+        'interaction_test_elapsed_seconds',
+        'mouse_sequence',
+        'mouse_question_sequence',
+        'mouse_x',
+        'mouse_y',
+        'mouse_page_x',
+        'mouse_page_y',
+        'mouse_screen_x',
+        'mouse_screen_y',
+        'mouse_viewport_width',
+        'mouse_viewport_height',
+        'mouse_elapsed_ms',
+        'mouse_elapsed_seconds',
+        'mouse_test_elapsed_ms',
+        'mouse_test_elapsed_seconds',
+        'keyboard_sequence',
+        'keyboard_question_sequence',
+        'keyboard_key',
+        'keyboard_code',
+        'keyboard_alt',
+        'keyboard_ctrl',
+        'keyboard_shift',
+        'keyboard_meta',
+        'keyboard_repeat',
+        'keyboard_location',
         'valence',
         'arousal',
         'emotion_confidence',
@@ -835,6 +892,38 @@
           attention_keyboard: firstAvailableValue(payload, [['keyboard'], ['metrics', 'keyboard'], ['details', 'keyboard']]),
           attention_mouse: firstAvailableValue(payload, [['mouse'], ['metrics', 'mouse'], ['details', 'mouse']]),
           attention_interaction: firstAvailableValue(payload, [['interaction'], ['metrics', 'interaction'], ['details', 'interaction']]),
+          interaction_sequence: firstAvailableValue(payload, [['interactionSequence']]),
+          interaction_question_sequence: firstAvailableValue(payload, [['interactionQuestionSequence']]),
+          interaction_kind: firstAvailableValue(payload, [['interactionKind']]),
+          interaction_action: firstAvailableValue(payload, [['interactionAction']]),
+          interaction_elapsed_ms: firstAvailableValue(payload, [['elapsedMs']]),
+          interaction_elapsed_seconds: firstAvailableValue(payload, [['elapsedSeconds']]),
+          interaction_test_elapsed_ms: firstAvailableValue(payload, [['testElapsedMs']]),
+          interaction_test_elapsed_seconds: firstAvailableValue(payload, [['testElapsedSeconds']]),
+          mouse_sequence: firstAvailableValue(payload, [['mouseSequence'], ['sequence']]),
+          mouse_question_sequence: firstAvailableValue(payload, [['questionSequence']]),
+          mouse_x: firstAvailableValue(payload, [['x']]),
+          mouse_y: firstAvailableValue(payload, [['y']]),
+          mouse_page_x: firstAvailableValue(payload, [['pageX']]),
+          mouse_page_y: firstAvailableValue(payload, [['pageY']]),
+          mouse_screen_x: firstAvailableValue(payload, [['screenX']]),
+          mouse_screen_y: firstAvailableValue(payload, [['screenY']]),
+          mouse_viewport_width: firstAvailableValue(payload, [['viewportWidth']]),
+          mouse_viewport_height: firstAvailableValue(payload, [['viewportHeight']]),
+          mouse_elapsed_ms: firstAvailableValue(payload, [['elapsedMs']]),
+          mouse_elapsed_seconds: firstAvailableValue(payload, [['elapsedSeconds']]),
+          mouse_test_elapsed_ms: firstAvailableValue(payload, [['testElapsedMs']]),
+          mouse_test_elapsed_seconds: firstAvailableValue(payload, [['testElapsedSeconds']]),
+          keyboard_sequence: firstAvailableValue(payload, [['keyboardSequence']]),
+          keyboard_question_sequence: firstAvailableValue(payload, [['keyboardQuestionSequence']]),
+          keyboard_key: firstAvailableValue(payload, [['key']]),
+          keyboard_code: firstAvailableValue(payload, [['code']]),
+          keyboard_alt: firstAvailableValue(payload, [['altKey']]),
+          keyboard_ctrl: firstAvailableValue(payload, [['ctrlKey']]),
+          keyboard_shift: firstAvailableValue(payload, [['shiftKey']]),
+          keyboard_meta: firstAvailableValue(payload, [['metaKey']]),
+          keyboard_repeat: firstAvailableValue(payload, [['repeat']]),
+          keyboard_location: firstAvailableValue(payload, [['location']]),
           valence: firstAvailableValue(payload, [['valence']]),
           arousal: firstAvailableValue(payload, [['arousal']]),
           emotion_confidence: firstAvailableValue(payload, [['confidence']]),
@@ -918,6 +1007,10 @@
     };
     let lastKeyAt = 0;
     let lastMouseAt = 0;
+    let lastMouseLogAt = 0;
+    let interactionSequence = 0;
+    let mouseMoveSequence = 0;
+    let keyboardEventSequence = 0;
     let lastClickAt = 0;
     let prevNoseX = null;
     let prevNoseY = null;
@@ -1270,17 +1363,97 @@
       updateAttentionWarningState();
     }
 
+    function getActiveInteractionContext(now) {
+      if (!quizState.isActive || !quizState.questionStartedAtMs || quizState.currentIndex >= quizState.questions.length) return null;
+      const questionIndex = quizState.currentIndex;
+      const question = quizState.questions[questionIndex];
+      const sessionStartedAtMs = Date.parse(quizState.sessionStartedAt || '');
+      const testElapsedMs = Number.isFinite(sessionStartedAtMs) ? Math.max(0, now - sessionStartedAtMs) : null;
+      const elapsedMs = getQuestionElapsedMs();
+      quizState.interactionPointCounts[questionIndex] = (quizState.interactionPointCounts[questionIndex] || 0) + 1;
+      interactionSequence += 1;
+      return {
+        interactionSequence,
+        interactionQuestionSequence: quizState.interactionPointCounts[questionIndex],
+        questionIndex,
+        questionNumber: questionIndex + 1,
+        questionId: question?.id ?? null,
+        elapsedMs,
+        elapsedSeconds: Number((elapsedMs / 1000).toFixed(3)),
+        testElapsedMs,
+        testElapsedSeconds: testElapsedMs === null ? null : Number((testElapsedMs / 1000).toFixed(3))
+      };
+    }
+
+    function recordMousePoint(event, action = 'move') {
+      const now = Date.now();
+      if (action === 'move') {
+        if (now - lastMouseLogAt < MOUSE_MOVE_SAMPLE_MS) return;
+        lastMouseLogAt = now;
+      }
+      const context = getActiveInteractionContext(now);
+      if (!context) return;
+
+      const questionIndex = context.questionIndex;
+      quizState.mousePointCounts[questionIndex] = (quizState.mousePointCounts[questionIndex] || 0) + 1;
+      mouseMoveSequence += 1;
+      appendMonitoringRecord(`mouse.${action}`, {
+        ...context,
+        interactionKind: 'mouse',
+        interactionAction: action,
+        mouseSequence: mouseMoveSequence,
+        sequence: mouseMoveSequence,
+        questionSequence: quizState.mousePointCounts[questionIndex],
+        x: Math.round(event.clientX),
+        y: Math.round(event.clientY),
+        pageX: Math.round(event.pageX),
+        pageY: Math.round(event.pageY),
+        screenX: Math.round(event.screenX),
+        screenY: Math.round(event.screenY),
+        viewportWidth: window.innerWidth,
+        viewportHeight: window.innerHeight
+      });
+    }
+
+    function recordKeyboardEvent(event, action) {
+      const context = getActiveInteractionContext(Date.now());
+      if (!context) return;
+
+      const questionIndex = context.questionIndex;
+      quizState.keyboardEventCounts[questionIndex] = (quizState.keyboardEventCounts[questionIndex] || 0) + 1;
+      keyboardEventSequence += 1;
+      appendMonitoringRecord(`keyboard.${action}`, {
+        ...context,
+        interactionKind: 'keyboard',
+        interactionAction: action,
+        keyboardSequence: keyboardEventSequence,
+        keyboardQuestionSequence: quizState.keyboardEventCounts[questionIndex],
+        key: event.key,
+        code: event.code,
+        altKey: event.altKey,
+        ctrlKey: event.ctrlKey,
+        shiftKey: event.shiftKey,
+        metaKey: event.metaKey,
+        repeat: event.repeat,
+        location: event.location
+      });
+    }
+
     function setupAttentionInteractionTracking() {
-      document.addEventListener('keydown', () => {
+      document.addEventListener('keydown', (event) => {
         lastKeyAt = Date.now();
-        logSessionEvent('keyboard.keydown', 'interaction');
+        recordKeyboardEvent(event, 'keydown');
       });
-      document.addEventListener('mousemove', () => {
+      document.addEventListener('keyup', (event) => {
+        recordKeyboardEvent(event, 'keyup');
+      });
+      document.addEventListener('mousemove', (event) => {
         lastMouseAt = Date.now();
+        recordMousePoint(event, 'move');
       });
-      document.addEventListener('click', () => {
+      document.addEventListener('click', (event) => {
         lastClickAt = Date.now();
-        logSessionEvent('mouse.click', 'interaction');
+        recordMousePoint(event, 'click');
       });
       setInterval(() => {
         const now = Date.now();
@@ -1449,9 +1622,34 @@
       return mediaPipeVisionModulePromise;
     }
 
+    function setMonitoringStartStatus(message) {
+      if (monitoringStartStatus) monitoringStartStatus.textContent = message;
+    }
+
+    async function startMonitoring() {
+      if (startMonitoringBtn) startMonitoringBtn.disabled = true;
+      setMonitoringStartStatus('Trwa uruchamianie trybu pełnoekranowego i kamery. Zaakceptuj prośbę przeglądarki.');
+      appendMonitoringRecord('monitoring.start.requested', { requestedAt: isoNow() });
+      await tryMaximize();
+      await setupFaceTracking();
+      if (!moduleState.camera && startMonitoringBtn) startMonitoringBtn.disabled = false;
+      if (!moduleState.camera) {
+        setMonitoringStartStatus('Nie udało się uruchomić kamery. Sprawdź uprawnienia przeglądarki i spróbuj ponownie.');
+      } else if (!moduleState.mediapipe) {
+        setMonitoringStartStatus('Kamera działa, ale detektor twarzy nie został jeszcze uruchomiony. Sprawdź połączenie z siecią albo odśwież stronę.');
+      }
+      moduleState.cleanup = true;
+      refreshModuleStatuses();
+    }
+
     async function setupFaceTracking() {
+      if (stream) {
+        refreshModuleStatuses();
+        return;
+      }
       if (!navigator.mediaDevices?.getUserMedia) {
         setStatus('przeglądarka nie wspiera dostępu do kamery.');
+        setMonitoringStartStatus('Ta przeglądarka nie wspiera dostępu do kamery wymaganej przez sesję.');
         return;
       }
 
@@ -1552,10 +1750,12 @@
         });
         moduleState.mediapipe = true;
         setStatus('detekcja uruchomiona.');
+        setMonitoringStartStatus('Monitoring działa. Spełnij warunki detekcji i naciśnij START.');
         updateAttentionBar();
         refreshModuleStatuses();
       } catch (error) {
         setStatus('nie udało się uruchomić detektora twarzy. Podgląd kamery pozostaje aktywny.');
+        setMonitoringStartStatus('Kamera działa, ale detektor twarzy nie został uruchomiony. Odśwież stronę albo sprawdź połączenie z siecią.');
         moduleState.mediapipe = false;
         updateAttentionBar();
         refreshModuleStatuses();
@@ -1583,13 +1783,13 @@
       setupAttentionInteractionTracking();
       setQuizWorkspaceVisible(false);
       acceptRulesCheckbox?.addEventListener('change', updateQuizStartAvailability);
+      startMonitoringBtn?.addEventListener('click', startMonitoring);
       startQuizBtn?.addEventListener('click', startQuizSession);
       nextQuestionBtn?.addEventListener('click', nextQuestion);
       finishQuizBtn?.addEventListener('click', exportSessionData);
       updateEmotionDisplay();
       updateAttentionBar();
-      await tryMaximize();
-      await setupFaceTracking();
+      setMonitoringStartStatus('Kliknij „Uruchom monitoring i kamerę”, aby rozpocząć kalibrację przed testem.');
       moduleState.cleanup = true;
       refreshModuleStatuses();
     }());
