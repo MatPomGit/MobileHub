@@ -1107,7 +1107,7 @@
         }
         const width = canvas.width - 58;
         const height = canvas.height - 48;
-        const maxX = Math.max(...points.map((point) => point.x), 1);
+        const maxX = points.reduce((max, p) => p.x > max ? p.x : max, 1);
         ctx.strokeStyle = '#38bdf8';
         ctx.lineWidth = 2;
         ctx.beginPath();
