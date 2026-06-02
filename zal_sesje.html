@@ -421,7 +421,7 @@
 
 
 
-    const QUESTION_BANK_URL = 'quiz-questions.json';
+    const QUESTION_BANK_FILE = 'quiz-questions.json';
     const DEFAULT_QUIZ_LENGTH = 25;
     const MAX_QUIZ_LENGTH = 150;
     const QUESTION_TIME_LIMIT_SECONDS = 10;
@@ -538,7 +538,6 @@
       const legacyMode = (params.get('mode') || '').toLowerCase();
       const lengthParam = Number(params.get('length'));
       const questionTypeParam = (params.get('questionType') || 'single-choice').toLowerCase();
-      const categoryParam = (params.get('category') || 'all').toLowerCase();
       let requestedLength = Number.isFinite(lengthParam) && lengthParam > 0
         ? Math.floor(lengthParam)
         : legacyMode === 'normal'
@@ -550,7 +549,7 @@
         requestedLength,
         mode: requestedLength >= 50 ? 'normal' : 'short',
         questionType,
-        category: categoryParam === 'all' ? 'all' : categoryParam
+        category: 'all'
       };
     }
 
@@ -597,12 +596,40 @@
       }
     }
 
-    async function loadQuestionBank() {
-      const response = await fetch(QUESTION_BANK_URL, { cache: 'no-store' });
+    function getQuestionBankUrls() {
+      const urls = [
+        new URL(QUESTION_BANK_FILE, window.location.href).href,
+        new URL(QUESTION_BANK_FILE, document.baseURI).href
+      ];
+      if (window.location.origin && window.location.origin !== 'null') {
+        const directoryPath = window.location.pathname.replace(/[^/]*$/, '');
+        urls.push(new URL(`${directoryPath}${QUESTION_BANK_FILE}`, window.location.origin).href);
+        urls.push(new URL(`/${QUESTION_BANK_FILE}`, window.location.origin).href);
+      }
+      return [...new Set(urls)];
+    }
+
+    async function fetchQuestionBankFrom(url) {
+      const response = await fetch(url, { cache: 'no-store' });
       if (!response.ok) throw new Error(`Nie udało się pobrać pytań (${response.status})`);
       const questions = await response.json();
       if (!Array.isArray(questions) || questions.length === 0) throw new Error('Brak pytań w bazie.');
       return questions;
+    }
+
+    async function loadQuestionBank() {
+      const errors = [];
+      for (const url of getQuestionBankUrls()) {
+        try {
+          return await fetchQuestionBankFrom(url);
+        } catch (error) {
+          errors.push(`${url}: ${error.message}`);
+        }
+      }
+      if (window.location.protocol === 'file:') {
+        throw new Error('Nie można pobrać pliku JSON z dysku lokalnego. Uruchom moduł przez lokalny serwer HTTP.');
+      }
+      throw new Error(errors.join(' | '));
     }
 
     function shuffle(items) {
@@ -757,7 +784,7 @@
         const scopedQuestions = filterQuestionsByCategory(allQuestions, quizState.category);
         const filteredQuestions = filterQuestionsByType(scopedQuestions, quizState.questionType);
         if (filteredQuestions.length === 0) {
-          throw new Error(`Brak pytań dla wybranego zakresu i rodzaju: ${describeQuestionType(quizState.questionType)}.`);
+          throw new Error(`Brak pytań dla wszystkich tematów i rodzaju: ${describeQuestionType(quizState.questionType)}.`);
         }
         quizState.questions = shuffle(filteredQuestions).slice(0, Math.min(quizState.requestedLength, filteredQuestions.length));
         quizState.currentIndex = 0;

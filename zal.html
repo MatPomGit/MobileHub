@@ -419,14 +419,14 @@
       <div class="test-launcher-header">
         <span class="badge accent">Test</span>
         <h2 id="test-launcher-title">Konfiguracja podejścia</h2>
-        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań wybierz zakres i liczbę pytań. Przycisk „Rozpocznij sesję” otworzy <code>zal_sesje.html</code> w nowym oknie na komputerze albo w bieżącej karcie na urządzeniu mobilnym.</p>
+        <p class="muted">Najpierw kliknij „Podejdź do testu”. Po wczytaniu banku pytań ustaw liczbę pytań. Zakres zawsze obejmuje wszystkie tematy. Przycisk „Rozpocznij sesję” otworzy <code>zal_sesje.html</code> w nowym oknie na komputerze albo w bieżącej karcie na urządzeniu mobilnym.</p>
       </div>
       <div id="test-config-panel" class="test-config-panel" hidden>
         <div class="test-config-grid">
           <div class="test-config-field">
             <label for="zal-test-range">Zakres testu</label>
-            <select id="zal-test-range" class="topic-range-select">
-              <option value="all">Wszystkie tematy</option>
+            <select id="zal-test-range" class="topic-range-select" disabled aria-describedby="zal-test-config-summary">
+              <option value="all" selected>Wszystkie tematy</option>
             </select>
           </div>
           <div class="test-config-field">
@@ -566,7 +566,7 @@
       const testConfigSummary = document.getElementById('zal-test-config-summary');
       const nextSessionButton = document.getElementById('zal-open-session-next');
 
-      const source = 'quiz-questions.json';
+      const QUESTION_BANK_FILE = 'quiz-questions.json';
       const EXAM_QUERY_KEY = 'zalExamWindow';
       const examMode = new URLSearchParams(window.location.search).get(EXAM_QUERY_KEY) === '1';
       const LOG_DB_NAME = 'zalLogsDb';
@@ -1580,7 +1580,7 @@ const shortcutCombos = new Set([
       function getSelectedSessionConfig() {
         const rawLength = testLengthInput?.value ?? '25';
         const length = Number(rawLength);
-        const range = testRangeSelect?.value || 'all';
+        const range = 'all';
         return {
           length: Number.isFinite(length) ? Math.floor(length) : 0,
           questionType: 'single-choice',
@@ -1655,14 +1655,14 @@ const shortcutCombos = new Set([
       }
 
       function openExamModuleFromConfig() {
-        const { length, questionType, range } = getSelectedSessionConfig();
+        const { length, questionType } = getSelectedSessionConfig();
         const available = getQuestionsForSelectedConfig();
         if (nextSessionButton?.disabled || length < 1 || length > available.length) return;
         const params = new URLSearchParams({
           length: String(length),
           questionType
         });
-        if (range !== 'all') params.set('category', range);
+        params.set('category', 'all');
         const examUrl = `zal_sesje.html?${params.toString()}`;
 
         if (shouldNavigateCurrentContextForExam()) {
@@ -1712,20 +1712,55 @@ const shortcutCombos = new Set([
         logEvent('quiz.attempt.finish', `attempt=${zalState.attempt}, score=${correct}/${total}, percent=${percent}, durationMs=${durationMs}`);
       }
 
-      fetch(source)
-        .then((response) => {
-          if (!response.ok) throw new Error(`Błąd HTTP ${response.status}`);
-          return response.json();
-        })
-        .then((questions) => {
-          if (!Array.isArray(questions)) throw new Error('Nieprawidłowy format danych pytań.');
+      function getQuestionBankUrls() {
+        const urls = [
+          new URL(QUESTION_BANK_FILE, window.location.href).href,
+          new URL(QUESTION_BANK_FILE, document.baseURI).href
+        ];
+        if (window.location.origin && window.location.origin !== 'null') {
+          const directoryPath = window.location.pathname.replace(/[^/]*$/, '');
+          urls.push(new URL(`${directoryPath}${QUESTION_BANK_FILE}`, window.location.origin).href);
+          urls.push(new URL(`/${QUESTION_BANK_FILE}`, window.location.origin).href);
+        }
+        return [...new Set(urls)];
+      }
+
+      async function fetchQuestionBankFrom(url) {
+        const response = await fetch(url, { cache: 'no-store' });
+        if (!response.ok) throw new Error(`Błąd HTTP ${response.status}`);
+        const questions = await response.json();
+        if (!Array.isArray(questions)) throw new Error('Nieprawidłowy format danych pytań.');
+        return questions;
+      }
+
+      async function loadQuestionBank() {
+        const errors = [];
+        for (const url of getQuestionBankUrls()) {
+          try {
+            const questions = await fetchQuestionBankFrom(url);
+            return { questions, url };
+          } catch (error) {
+            errors.push(`${url}: ${error.message}`);
+          }
+        }
+        if (window.location.protocol === 'file:') {
+          throw new Error('Nie można pobrać pliku JSON z dysku lokalnego. Uruchom moduł przez lokalny serwer HTTP.');
+        }
+        throw new Error(errors.join(' | '));
+      }
+
+      loadQuestionBank()
+        .then(({ questions, url }) => {
           zalState.questions = questions;
           renderOptions(questions);
           refreshModuleStatuses();
           updateSessionConfigSummary();
+          if (summary && select?.value === 'all') {
+            summary.textContent = `Zakres: wszystkie tematy. Dostępne pytania: ${questions.length}. Bank pytań wczytano z ${url}.`;
+          }
         })
         .catch((error) => {
-          summary.textContent = `Nie udało się wczytać pytań z ${source}: ${error.message}`;
+          summary.textContent = `Nie udało się wczytać pliku ${QUESTION_BANK_FILE}: ${error.message}`;
           topicList.replaceChildren();
         });
     }());
