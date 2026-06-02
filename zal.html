@@ -932,6 +932,7 @@
       }
 
       function getResponseElapsedMs(response) {
+        if (!response) return null;
         const elapsedSeconds = parseNumericValue(response.elapsedSeconds);
         if (elapsedSeconds !== null) return elapsedSeconds * 1000;
         return parseNumericValue(response.elapsedMs);
