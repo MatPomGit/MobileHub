@@ -1637,8 +1637,6 @@
         setMonitoringStartStatus('Nie udało się uruchomić kamery. Sprawdź uprawnienia przeglądarki i spróbuj ponownie.');
       } else if (!moduleState.mediapipe) {
         setMonitoringStartStatus('Kamera działa, ale detektor twarzy nie został jeszcze uruchomiony. Sprawdź połączenie z siecią albo odśwież stronę.');
-      } else {
-        setMonitoringStartStatus('Kamera działa. Poczekaj na poprawną detekcję jednej twarzy, właściwe oświetlenie i odległość.');
       }
       moduleState.cleanup = true;
       refreshModuleStatuses();
