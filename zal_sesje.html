@@ -721,7 +721,9 @@
         });
       }
       const currentAnswer = quizState.answers[quizState.currentIndex];
+      nextQuestionBtn.hidden = false;
       nextQuestionBtn.disabled = isAnswerEmpty(currentAnswer);
+      finishQuizBtn.disabled = true;
       startQuestionTimer();
     }
 
@@ -743,6 +745,7 @@
         if (node.tagName === 'BUTTON') node.style.borderColor = idx === answerIndex ? '#22c55e' : '#475569';
       });
       const isLastQuestion = quizState.currentIndex >= quizState.questions.length - 1;
+      nextQuestionBtn.hidden = isLastQuestion;
       nextQuestionBtn.disabled = isLastQuestion || isAnswerEmpty(answerIndex);
       finishQuizBtn.disabled = !isLastQuestion || isAnswerEmpty(answerIndex);
       if (isLastQuestion && !isAnswerEmpty(answerIndex)) {
@@ -758,6 +761,7 @@
       quizState.currentIndex += 1;
       if (quizState.currentIndex >= quizState.questions.length) {
         finishQuizBtn.disabled = false;
+        nextQuestionBtn.hidden = true;
         nextQuestionBtn.disabled = true;
         quizMeta.textContent = 'Udzielono odpowiedzi na wszystkie pytania lub upłynął czas. Zakończ sesję i wyeksportuj dane.';
         quizQuestion.textContent = 'Sesja pytań gotowa do zakończenia.';
@@ -807,6 +811,7 @@
         startQuizBtn.disabled = true;
         setQuizWorkspaceVisible(true);
         finishQuizBtn.disabled = true;
+        nextQuestionBtn.hidden = false;
         nextQuestionBtn.disabled = true;
         const previewWrap = document.querySelector(".preview-wrap");
         if (previewWrap) previewWrap.style.display = "none";
@@ -988,19 +993,30 @@
       quizState.sessionEndedAt = isoNow();
       appendMonitoringRecord('quiz.finished', { answered: quizState.answers.filter((a) => a !== null).length });
       const responseExportedAt = isoNow();
-      const responseExport = quizState.questions.map((question, index) => ({
-        timestamp: responseExportedAt,
-        questionIndex: index,
-        questionId: question.id ?? null,
-        question: question.question,
-        questionType: getQuestionKind(question),
-        selectedAnswerIndex: typeof quizState.answers[index] === 'number' ? quizState.answers[index] : null,
-        selectedAnswer: typeof quizState.answers[index] === 'number' && Array.isArray(question.answers) ? question.answers[quizState.answers[index]] : quizState.answers[index],
-        correctAnswerIndex: typeof question.correctIndex === 'number' ? question.correctIndex : null,
-        elapsedMs: quizState.answerDurationsMs[index],
-        timedOut: Boolean(quizState.timedOutQuestions[index]),
-        timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
-      }));
+      const formatSeconds = (milliseconds) => Number.isFinite(milliseconds) ? Number((milliseconds / 1000).toFixed(3)) : null;
+      const responseExport = quizState.questions.map((question, index) => {
+        const selectedAnswerIndex = typeof quizState.answers[index] === 'number' ? quizState.answers[index] : null;
+        const correctAnswerIndex = typeof question.correctIndex === 'number' ? question.correctIndex : null;
+        const isCorrect = selectedAnswerIndex !== null && correctAnswerIndex !== null ? selectedAnswerIndex === correctAnswerIndex : null;
+        const elapsedMs = quizState.answerDurationsMs[index];
+        return {
+          timestamp: responseExportedAt,
+          questionIndex: index,
+          questionId: question.id ?? null,
+          question: question.question,
+          questionType: getQuestionKind(question),
+          selectedAnswerIndex,
+          selectedAnswer: selectedAnswerIndex !== null && Array.isArray(question.answers) ? question.answers[selectedAnswerIndex] : quizState.answers[index],
+          correctAnswerIndex,
+          correctAnswer: correctAnswerIndex !== null && Array.isArray(question.answers) ? question.answers[correctAnswerIndex] : question.expectedAnswer ?? null,
+          isCorrect,
+          result: isCorrect === null ? null : isCorrect ? 'poprawna' : 'błędna',
+          elapsedMs,
+          elapsedSeconds: formatSeconds(elapsedMs),
+          timedOut: Boolean(quizState.timedOutQuestions[index]),
+          timeLimitSeconds: QUESTION_TIME_LIMIT_SECONDS
+        };
+      });
       const payload = {
         sessionName: window.__sessionName || 'Bez nazwy',
         mode: quizState.mode,
@@ -1020,6 +1036,7 @@
       stopQuestionTimer();
       quizState.isActive = false;
       updateQuizStartAvailability();
+      nextQuestionBtn.hidden = true;
       nextQuestionBtn.disabled = true;
       finishQuizBtn.disabled = true;
     }
@@ -1364,6 +1381,24 @@
       }
     }
 
+    function getActiveQuestionTelemetryContext(now = Date.now()) {
+      if (!quizState.isActive || !quizState.questionStartedAtMs || quizState.currentIndex >= quizState.questions.length) return {};
+      const questionIndex = quizState.currentIndex;
+      const question = quizState.questions[questionIndex];
+      const elapsedMs = getQuestionElapsedMs();
+      const sessionStartedAtMs = Date.parse(quizState.sessionStartedAt || '');
+      const testElapsedMs = Number.isFinite(sessionStartedAtMs) ? Math.max(0, now - sessionStartedAtMs) : null;
+      return {
+        questionIndex,
+        questionNumber: questionIndex + 1,
+        questionId: question?.id ?? null,
+        elapsedMs,
+        elapsedSeconds: Number((elapsedMs / 1000).toFixed(3)),
+        testElapsedMs,
+        testElapsedSeconds: testElapsedMs === null ? null : Number((testElapsedMs / 1000).toFixed(3))
+      };
+    }
+
     function updateAttentionBar() {
       const total = (
         attentionState.head * 0.35
@@ -1378,6 +1413,7 @@
       const now = Date.now();
       if (now - lastAttentionLogAt >= 1000) {
         appendMonitoringRecord('attention.score', {
+          ...getActiveQuestionTelemetryContext(now),
           score: Number(attentionState.score.toFixed(4)),
           head: Number(attentionState.head.toFixed(4)),
           eyes: Number(attentionState.eyes.toFixed(4)),
