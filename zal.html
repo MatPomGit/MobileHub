@@ -1162,10 +1162,18 @@
         }
         const lastQuestion = [...new Set(points.map((point) => point.questionIndex).filter((value) => value !== null))].pop();
         const scoped = lastQuestion === undefined ? points : points.filter((point) => point.questionIndex === lastQuestion);
-        const minX = Math.min(...scoped.map((point) => point.x));
-        const maxX = Math.max(...scoped.map((point) => point.x));
-        const minY = Math.min(...scoped.map((point) => point.y));
-        const maxY = Math.max(...scoped.map((point) => point.y));
+        let minX = Infinity, maxX = -Infinity;
+        let minY = Infinity, maxY = -Infinity;
+        for (const point of scoped) {
+          if (point.x < minX) minX = point.x;
+          if (point.x > maxX) maxX = point.x;
+          if (point.y < minY) minY = point.y;
+          if (point.y > maxY) maxY = point.y;
+        }
+        if (minX === Infinity) minX = 0;
+        if (maxX === -Infinity) maxX = 1;
+        if (minY === Infinity) minY = 0;
+        if (maxY === -Infinity) maxY = 1;
         const scaleX = Math.max(1, maxX - minX);
         const scaleY = Math.max(1, maxY - minY);
         ctx.strokeStyle = '#22c55e';
