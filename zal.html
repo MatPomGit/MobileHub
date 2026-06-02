@@ -931,6 +931,13 @@
         return parsed === null ? null : Math.floor(parsed);
       }
 
+      function getResponseElapsedMs(response) {
+        if (!response) return null;
+        const elapsedSeconds = parseNumericValue(response.elapsedSeconds);
+        if (elapsedSeconds !== null) return elapsedSeconds * 1000;
+        return parseNumericValue(response.elapsedMs);
+      }
+
       function getRecordElapsedSeconds(record, originTime) {
         const payload = record.payload || {};
         const direct = parseNumericValue(getPayloadValue(payload, [
@@ -974,16 +981,20 @@
         let riskCount = 0;
 
         responses.forEach((response, index) => {
-          const selected = response.selectedAnswerIndex;
-          const correct = response.correctAnswerIndex;
-          questions.set(index, {
-            index,
-            label: `Pytanie ${index + 1}`,
+          if (!response || typeof response !== 'object') return;
+          const questionIndex = parseNumericValue(response.questionIndex);
+          const resolvedIndex = questionIndex === null ? index : Math.floor(questionIndex);
+          const selected = parseNumericValue(response.selectedAnswerIndex);
+          const correct = parseNumericValue(response.correctAnswerIndex);
+          const exportedCorrectness = typeof response.isCorrect === 'boolean' ? response.isCorrect : null;
+          questions.set(resolvedIndex, {
+            index: resolvedIndex,
+            label: `Pytanie ${resolvedIndex + 1}`,
             mouse: 0,
             keyboard: 0,
             attention: [],
-            responseMs: parseNumericValue(response.elapsedMs),
-            isCorrect: typeof selected === 'number' && typeof correct === 'number' ? selected === correct : null
+            responseMs: getResponseElapsedMs(response),
+            isCorrect: exportedCorrectness ?? (selected !== null && correct !== null ? selected === correct : null)
           });
         });
 
@@ -1072,7 +1083,7 @@
         }
         rows.forEach((row) => {
           const tr = document.createElement('tr');
-          const responseTime = row.responseMs === null || row.responseMs === undefined ? 'brak danych' : `${Math.round(row.responseMs)} ms`;
+          const responseTime = row.responseMs === null || row.responseMs === undefined ? 'brak danych' : `${(row.responseMs / 1000).toFixed(3)} s`;
           const correctness = row.isCorrect === null || row.isCorrect === undefined ? 'brak danych' : row.isCorrect ? 'poprawna' : 'błędna';
           [row.label, row.mouse, row.keyboard, responseTime, correctness, row.avgAttention === null ? 'brak danych' : row.avgAttention.toFixed(2)].forEach((value) => {
             const td = document.createElement('td');
