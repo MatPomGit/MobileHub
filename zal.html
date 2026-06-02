@@ -981,6 +981,7 @@
         let riskCount = 0;
 
         responses.forEach((response, index) => {
+          if (!response || typeof response !== 'object') return;
           const questionIndex = parseNumericValue(response.questionIndex);
           const resolvedIndex = questionIndex === null ? index : Math.floor(questionIndex);
           const selected = parseNumericValue(response.selectedAnswerIndex);
