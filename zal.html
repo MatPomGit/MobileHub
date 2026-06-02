@@ -1141,9 +1141,12 @@
           const mouseH = (row.mouse / maxValue) * chartH;
           const keyboardH = (row.keyboard / maxValue) * chartH;
           ctx.fillStyle = '#38bdf8';
-          ctx.fillRect(x, 18 + chartH - mouseH, Math.max(4, step * 0.35), mouseH);
+          const barW = Math.max(1, step * 0.35);
+          const barOffset = Math.max(1, step * 0.4);
+          ctx.fillStyle = '#38bdf8';
+          ctx.fillRect(x, 18 + chartH - mouseH, barW, mouseH);
           ctx.fillStyle = '#f59e0b';
-          ctx.fillRect(x + Math.max(5, step * 0.38), 18 + chartH - keyboardH, Math.max(4, step * 0.35), keyboardH);
+          ctx.fillRect(x + barOffset, 18 + chartH - keyboardH, barW, keyboardH);
         });
         ctx.fillStyle = '#cbd5e1';
         ctx.fillText('mysz', 50, 34);
