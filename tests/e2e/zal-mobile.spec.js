@@ -33,3 +33,16 @@ test('zal_sesje.html: mobilny render formularza i statusów', async ({ page }) =
 
   expect(errors).toEqual([]);
 });
+
+test('zal_sesje.html: rejestruje utratę widoczności karty w ostrzeżeniu', async ({ page }) => {
+  await page.goto('/zal_sesje.html?length=25&questionType=single-choice');
+
+  await page.evaluate(() => {
+    Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });
+    Object.defineProperty(document, 'visibilityState', { configurable: true, get: () => 'hidden' });
+    document.dispatchEvent(new Event('visibilitychange'));
+  });
+
+  await expect(page.locator('#focus-warning-banner')).toHaveClass(/\bvisible\b/);
+  await expect(page.locator('#focus-warning-banner')).toHaveText('Proszę wrócić do karty z testem.');
+});
