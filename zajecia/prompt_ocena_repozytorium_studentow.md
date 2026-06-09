@@ -253,6 +253,8 @@ migracje,
 bezpieczeństwo,
 testy backendowe,
 deployment.
+
+
 Wymagania dotyczące raportu
 
 Raport wygeneruj wyłącznie w Markdown.
