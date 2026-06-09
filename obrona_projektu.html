@@ -4,7 +4,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Obrona projektu — PAM</title>
+  <title>Obrona projektu aplikacji</title>
   <style>
     :root {
       color-scheme: dark;
@@ -436,8 +436,29 @@
 <body>
   <main>
     <h1>Obrona projektu i moduł oceniania</h1>
-    <div class="top-actions"><a class="back-btn" href="index.html">← Powrót do strony głównej</a><button
-        class="action-btn" id="exportPdfBtn" type="button">Eksportuj raport do PDF</button></div>
+    <div class="top-actions">
+      <a class="back-btn" href="index.html">
+        ← Powrót do strony głównej
+      </a>
+      <button class="action-btn" id="exportPdfBtn" type="button">
+        Eksportuj raport do PDF
+      </button></div>
+    <div class="evaluation-actions">
+    <button id="btnExportJson">
+        Eksport oceny JSON
+    </button>
+
+    <button id="btnImportJson">
+        Import oceny JSON
+    </button>
+
+    <button id="btnDownloadReport">
+        Pobierz raport
+    </button>
+
+    <input type="file" id="jsonFileInput" accept=".json" style="display:none" >
+      
+</div>
     <p class="lead">Strona zawiera skrót wymagań projektu, odpowiedzialności ról i kalkulator oceny końcowej dla
       aplikacji oraz każdego członka zespołu.</p>
 
@@ -900,6 +921,7 @@ ${roleReport('qa', 'Backend Developer')}`;
       n.addEventListener('blur', deactivate);
     });
     document.getElementById('exportPdfBtn').addEventListener('click', exportReportToPdf);
+    document.getElementById('btnExportJson').addEventListener('click', exportEvaluation);
     document.getElementById('fillMaxBtn').addEventListener('click', () => setAllManualRows('max'));
     document.getElementById('fillBalancedBtn').addEventListener('click', () => setAllManualRows('half'));
     document.getElementById('clearAllBtn').addEventListener('click', () => setAllManualRows('clear'));
