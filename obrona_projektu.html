@@ -896,6 +896,42 @@ ${roleReport('qa', 'Backend Developer')}`;
       win.document.close();
     }
 
+    function exportEvaluation() {
+      const data = buildEvaluationObject();
+      const blob = new Blob(
+        [JSON.stringify(data, null, 2)],
+        { type: 'application/json' }
+      );
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+
+      a.href = url;
+      a.download =`${data.project.name}_evaluation.json`;
+      a.click();
+
+      URL.revokeObjectURL(url);
+    }
+
+      function loadEvaluation(data) {
+          setValue('smartphoneDemo', data.scores.team.smartphoneDemo);
+          setValue('nativeFeatures', data.scores.team.nativeFeatures);
+
+
+          setValue('apiAndAuth', data.scores.backend.apiAndAuth);
+          recalculate();
+      }
+      
+
+      jsonFileInput.addEventListener(
+        'change',
+        async (event) => {
+            const file = event.target.files[0];
+            const text = await file.text();
+            const data = JSON.parse(text);
+            loadEvaluation(data);
+        }
+      );
+
     function setAllManualRows(mode) {
       rows.forEach((row) => {
         if (row.dataset.auto === 'true') return;
@@ -922,6 +958,13 @@ ${roleReport('qa', 'Backend Developer')}`;
     });
     document.getElementById('exportPdfBtn').addEventListener('click', exportReportToPdf);
     document.getElementById('btnExportJson').addEventListener('click', exportEvaluation);
+    document
+    .getElementById('btnImportJson')
+    .addEventListener('click', () => {
+        document
+            .getElementById('jsonFileInput')
+            .click();
+    });
     document.getElementById('fillMaxBtn').addEventListener('click', () => setAllManualRows('max'));
     document.getElementById('fillBalancedBtn').addEventListener('click', () => setAllManualRows('half'));
     document.getElementById('clearAllBtn').addEventListener('click', () => setAllManualRows('clear'));
