@@ -457,4 +457,11 @@ Tabela:
 | Osoba | Wspólna | Indywidualna | Razem | Ocena |
 | ----- | ------: | -----------: | ----: | ----- |
 
-Raport zwróć wyłącznie w Markdown. Staraj się zastępować wypunktowanie elementów akapitem opisowym, w którym wyjaśnisz opisywane uwagi. 
+Raport zwróć wyłącznie w Markdown.
+
+Opis przedstaw w stylu akademickim i recenzenckim, gdzie większość uwag jest zapisana w formie zwartych akapitów analitycznych zamiast krótkich punktów.
+
+Uwagi krótko uzasadniaj. 
+
+Taki styl zwykle ma odpowiadać profesjonalnej ocenie projektów inżynierskich i semestralnych.
+
