@@ -60,7 +60,7 @@ W przypadku braku śladów użycia AI wpisz: „Nie znaleziono znaków wykorzyst
 
 Szacowanie nakładu pracy
 
-Na podstawie historii Git, wielkości zmian, złożoności i dokumentacji oszacuj liczbę przepracowanych godzin oraz podział pracy w zespole. Nie opieraj się wyłącznie na liczbie commitów. Podaj poziom pewności swojego oszacowania. Jeśli studenci korzystali z AI, określ orientacyjną oszczędność czasu. W przypadku braku danych wpisz: „Brak wystarczających danych do wiarygodnego oszacowania nakładu pracy.”
+Na podstawie historii Git, wielkości zmian, złożoności i dokumentacji oszacuj liczbę przepracowanych godzin oraz podział pracy w zespole. Nie opieraj się wyłącznie na liczbie commitów. Podaj poziom pewności swojego oszacowania. Jeśli studenci korzystali z AI, określ orientacyjną oszczędność czasu. W przypadku braku danych wpisz: „Brak wystarczających danych do wiarygodnego oszacowania nakładu pracy.”. Nie zakładaj od razu złej woli studenta, stwierdzaj po prostu czego brakuje.
 
 4. FORMULARZ OCENY I PUNKTACJA
 
@@ -72,7 +72,7 @@ Dowody: Konkretne ścieżki do plików, commity lub PR.
 
 Uzasadnienie: Rzeczowa, techniczna argumentacja.
 
-Konieczne poprawki: Co należy zrobić, aby uzyskać maksymalną ocenę (obowiązkowe!).
+Konieczne poprawki: Co należałoby jeszcze zrobić, aby uzyskać wyższą ocenę (obowiązkowe!) dla każdego studenta.
 
 KRYTERIA:
 
@@ -170,7 +170,7 @@ Język i styl: Oficjalny język polski, styl akademicki, recenzencki i wysoce me
 
 Format: Wyłącznie poprawny dokument Markdown.
 
-Edukacyjny charakter: Wyjaśniaj krótko dlaczego dana praktyka jest zła lub dobra z perspektywy rynkowej standardów IT.
+Edukacyjny charakter: Wyjaśniaj krótko dlaczego dana praktyka jest zła lub dobra z perspektywy rynkowej standardów IT. Dla każdej z ról dodaj krótki akapit wyjaśniający co należałoby poprawić, aby uzyskać wyższą ocenę.
 
 WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 
