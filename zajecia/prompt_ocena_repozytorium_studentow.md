@@ -457,4 +457,4 @@ Tabela:
 | Osoba | Wspólna | Indywidualna | Razem | Ocena |
 | ----- | ------: | -----------: | ----: | ----- |
 
-Raport zwróć wyłącznie w Markdown.
+Raport zwróć wyłącznie w Markdown. Staraj się zastępować wypunktowanie elementów akapitem opisowym, w którym wyjaśnisz opisywane uwagi. 
