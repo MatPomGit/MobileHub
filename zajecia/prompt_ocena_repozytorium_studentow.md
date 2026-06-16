@@ -106,6 +106,7 @@ Przeanalizuj wszystkie dostępne elementy:
 * zarządzanie stanem,
 * funkcje urządzenia,
 * obsługa błędów,
+* obsługa TalkBack,
 * loading/error/offline.
 
 ## Backend
