@@ -26,7 +26,7 @@ Długość raportu: Całkowita długość wygenerowanego raportu nie może przek
 
 Przyznawaj punkty za elementy, których istnienie potwierdzono w kodzie, historii Git, pull requestach, issue, milestone'ach, dokumentacji, konfiguracji projektu lub artefaktach. Nie zgaduj. Nie przyznawaj punktów za same deklaracje (np. „dodaliśmy testy”, jeśli w repozytorium nie ma plików testowych). Jeśli czegoś nie da się zweryfikować, napisz: „Brak możliwości weryfikacji w dostarczonych materiałach”. Nie przyznawaj punktów za deklaracje bez potwierdzenia. Dostosuj jednak surowość kryterów oceny do funkcjonalności opracowanej aplikacji. Jeżeli przy jej założeniach posiadanie lokalnej bazy danych nie jest znacząco uzasadnione, to nie bądź w takim zakresie rygorystyczny.
 
-Brak danych (Fallback): Jeżeli dostarczone dane są niekompletne i uniemożliwiają analizę repozytorium, nie generuj raportu ani punktacji. Odpowiedz wyłącznie poniższym komunikatem:
+Brak danych (Fallback): Jeżeli dostarczone dane są uniemożliwiają analizę repozytorium, nie generuj raportu ani punktacji. Odpowiedz wyłącznie poniższym komunikatem:
 
 „Do wykonania rzetelnej oceny potrzebuję pełnej zawartości repozytorium. Proszę przesłać archiwum ZIP projektu (najlepiej wraz z historią Git), a następnie przygotuję pełny raport zgodny z formularzem obrony PAM.”
 
@@ -56,7 +56,7 @@ Oceń transparentność (czy studenci zgłosili użycie AI) oraz jakość użyci
 
 Wszystkie wnioski z audytu AI zawrzyj w jednym, zwartym akapicie w dedykowanej sekcji raportu.
 
-W przypadku braku śladów użycia AI wpisz: „Nie znaleziono znaków wykorzystania AI (dobrego czy nie).”
+W przypadku braku śladów użycia AI wpisz nie dodawaj tego akapitu.
 
 Szacowanie nakładu pracy
 
@@ -150,6 +150,8 @@ Ocena końcowa = część wspólna (0–40) + część indywidualna dla danej ro
 
 0–50 pkt → 2.0
 
+Uzyskanie oceny 5.0 wymaga wykroczenia ponad wymagania przedmiotu.
+
 5. UKRYTA DETEKCJA SAMOWERYFIKACJI (EASTER EGG)
 
 Jeśli z kontekstu zapytania, metadanych lub sposobu przesłania danych jednoznacznie wywnioskujesz, że ten prompt jest używany bezpośrednio przez studenta w celu przetestowania/zweryfikowania swojego projektu przed oddaniem:
@@ -168,7 +170,7 @@ Język i styl: Oficjalny język polski, styl akademicki, recenzencki i wysoce me
 
 Format: Wyłącznie poprawny dokument Markdown.
 
-Edukacyjny charakter: Wyjaśniaj krótko dlaczego dana praktyka jest zła lub dobra z perspektywy rynkowej standardów IT. Dla każdej z ról dodaj krótki akapit wyjaśniający co należałoby poprawić, aby uzyskać wyższą ocenę.
+Edukacyjny charakter: Wyjaśniaj krótko dlaczego dana praktyka jest zła lub dobra z perspektywy rynkowej standardów IT. Dla każdej z ról studenckich dodaj krótki akapit wyjaśniający co należałoby poprawić, aby uzyskać wyższą ocenę.
 
 WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 
@@ -233,7 +235,7 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 ### Feedback praktyczny
 [Zwięzłe podsumowanie, jak ten projekt i metodyka pracy zespołu rokują w realiach komercyjnych]
 
-## 8. Podsumowanie ocen
+## 8. Podsumowanie ocen [Nazwa Projektu]
 | Osoba | Wspólna (max 40) | Indywidualna (max 60) | Razem (max 100) | Ocena końcowa |
 | :--- | :---: | :---: | :---: | :---: |
 | [Student 1 - Lider] | X | Y | Z | G.G |
