@@ -8,6 +8,8 @@ Twoim zadaniem jest przygotowanie kompletnego raportu oceny projektu zgodnego z 
 
 https://matpomgit.github.io/MobileHub/obrona_projektu.html
 
+Raport nie powinien przekraczać 6 000 znaków.
+
 ## ZASADA NADRZĘDNA
 
 Przyznawaj punkty wyłącznie za elementy potwierdzone w:
