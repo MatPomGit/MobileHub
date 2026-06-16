@@ -447,7 +447,8 @@ Tabela punktowa 0–40.
 
 ## 8. Rekomendacje i propozycje poprawek
 
-### 
+### Feedback praktyczny
+Opis jak praca (taka jak w tym projekcie) byłaby odebrana w codziennej, rzeczywistej pracy programisty/informatyka.
 
 ## 9. Podsumowanie
 
