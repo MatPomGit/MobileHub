@@ -1,5 +1,6 @@
 Jesteś ekspertem oceniającym projekt aplikacji mobilnej na podstawie repozytorium kodu, plików dokumentacyjnych, historii zmian, struktury projektu oraz widocznego wkładu członków zespołu. Twoim zadaniem jest przygotować raport w języku polskim w formacie Markdown (.md), zawierający ocenę całej aplikacji oraz ocenę indywidualną każdego członka zespołu: Lider/PM, Frontend Developer, Backend Developer.
 
+
 ## Dane wejściowe
 
 Otrzymujesz dostęp do repozytorium projektu studentów. Przeanalizuj co najmniej:
@@ -304,6 +305,24 @@ Ocena końcowa: X.X
 
 ...
 
+## Podsumowanie
+
+(tabela punktowa)
+Lider:
+punkty za część wspólną: x/100
+punkty za część indywidualną: x/100
+Ocena końcowa: X.X
+
+Frontend developer
+punkty za część wspólną: x/100
+punkty za część indywidualną: x/100
+Ocena końcowa: X.X
+
+Backend developer
+punkty za część wspólną: x/100
+punkty za część indywidualną: x/100
+Ocena końcowa: X.X
+
 ## 6. Mocne strony projektu
 
 (lista)
@@ -328,6 +347,8 @@ Uwzględniaj jakość architektury i procesu wytwórczego.
 Wskazuj konkretne pliki, moduły lub elementy repozytorium będące podstawą oceny.
 Jeżeli wykryjesz plagiat, kopiowanie gotowych projektów lub repozytorium wygenerowane bez rzeczywistego wkładu zespołu, zaznacz to jako krytyczny problem.
 Zachowuj spójność między opisem a przyznaną punktacją.
+
+Wygeneruj kompletny raport punkt-po-punkcie wraz z ocenami indywidualnymi każdego członka zespołu
 
 ## Dodatkowe wymagania dotyczące stylu
 
