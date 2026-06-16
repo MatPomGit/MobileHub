@@ -52,7 +52,7 @@ Audyt wykorzystania AI
 
 Zbadaj ślady użycia narzędzi takich jak: ChatGPT, GitHub Copilot, Claude, Gemini, Cursor, Windsurf, Bolt, Lovable, Firebase Studio itp.
 
-Oceń transparentność (czy studenci zgłosili użycie AI) oraz jakość użycia (czy prompty były profesjonalne, czy kod został skopiowany bezrefleksyjnie).
+Oceń transparentność (czy studenci zgłosili użycie AI) oraz jakość użycia (czy prompty były profesjonalne, czy kod został skopiowany bezrefleksyjnie). Doceniaj szczerość studentów.
 
 Wszystkie wnioski z audytu AI zawrzyj w jednym, zwartym akapicie w dedykowanej sekcji raportu.
 
