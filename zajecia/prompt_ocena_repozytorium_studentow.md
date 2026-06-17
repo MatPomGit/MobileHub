@@ -50,7 +50,7 @@ Dokumentacja: Plik README, instrukcja uruchomienia (instalacji), instrukcja uży
 
 Audyt wykorzystania AI
 
-Zbadaj ślady użycia narzędzi takich jak: ChatGPT, GitHub Copilot, Claude, Gemini, Cursor, Windsurf, Bolt, Lovable, Firebase Studio itp. Zwracaj uwagę na charakterystyczne dla użycia AI wzorce, takie jak: pozostawione prompty lub odpowiedzi modeli, wzmianki o narzędziach AI, nienaturalnie jednolity styl dokumentacji, powtarzalne schematy opisów, nadmiernie formalny lub podręcznikowy język, częste użycie pauz (—), nietypowa kapitalizacja wyrazów w środku zdań, szablonowe podsumowania, generowane automatycznie komentarze, niespójność poziomu jakości pomiędzy fragmentami projektu, bardzo szybkie pojawienie się dużych partii kodu, kod zawierający charakterystyczne wzorce generowane przez modele językowe oraz artefakty pozostawiane przez narzędzia AI. Traktuj jednak takie cechy jedynie jako poszlaki, a nie dowód. Oceniaj prawdopodobieństwo użycia AI na podstawie łącznej analizy wielu niezależnych sygnałów, a nie pojedynczych cech stylistycznych.
+Zbadaj ślady użycia narzędzi takich jak: ChatGPT, GitHub Copilot, Claude, Gemini, Cursor, Windsurf, Bolt, Lovable, Firebase Studio itp. Zwracaj uwagę na charakterystyczne dla użycia AI wzorce, takie jak: pozostawione prompty lub odpowiedzi modeli, wzmianki o narzędziach AI, nienaturalnie jednolity styl dokumentacji, powtarzalne schematy akapitów i opisów, nadmiernie formalny lub podręcznikowy język, częste użycie pauz (—), nietypowa kapitalizacja wyrazów w środku zdań, szablonowe podsumowania, generowane automatycznie komentarze, niespójność poziomu jakości pomiędzy fragmentami projektu, bardzo szybkie pojawienie się dużych partii kodu, kod zawierający charakterystyczne wzorce generowane przez modele językowe oraz artefakty pozostawiane przez narzędzia AI, brak konkretów przy dużej objętości tekstu. Traktuj jednak takie cechy jedynie jako poszlaki, a nie dowód. Oceniaj prawdopodobieństwo użycia AI na podstawie łącznej analizy wielu niezależnych sygnałów, a nie pojedynczych cech stylistycznych. 
 
 Oceń transparentność (czy studenci zgłosili użycie AI) oraz jakość użycia (czy prompty były profesjonalne, czy kod został skopiowany bezrefleksyjnie). Doceniaj szczerość studentów. Skrytykuj nieumiejętną implementację i używanie tych narzędzi.
 
@@ -174,6 +174,45 @@ Edukacyjny charakter: Wyjaśniaj krótko dlaczego dana praktyka jest zła lub do
 
 Format: Wyłącznie poprawny dokument Markdown.
 
+7. Ocena wskaźnika gęstości informacyjnej tekstu i lania wody
+
+Dla każdej całości opracowanej dokumentacji i materiału tekstowego wyznacz parametr:
+
+WGI (wskaźnik gęstości informacyjnej)
+
+Skala: 0–10
+
+WGI określa, jak dużo rzeczywistej, technicznej i weryfikowalnej informacji znajduje się w tekście w stosunku do jego objętości.
+
+Przy ocenie uwzględnij jednocześnie:
+
+- liczbę konkretów technicznych,
+- nazwy technologii, bibliotek, klas, modułów, endpointów, ekranów i konfiguracji,
+- stopień powiązania opisu z rzeczywistą implementacją,
+- liczbę informacji możliwych do zweryfikowania w repozytorium,
+- ilość ogólników i pustych sformułowań,
+- ilość języka marketingowego,
+- ilość powtórzeń,
+- rozwlekłość tekstu,
+- obecność akapitów niewnoszących nowych informacji,
+- charakterystyczne wzorce tekstów generowanych przez AI,
+- stosunek treści technicznej do opisowej.
+
+Nie próbuj matematycznie wyliczać wskaźnika. Dokonaj eksperckiej oceny całego materiału.
+
+Interpretacja:
+
+10 – niemal każde zdanie wnosi konkretną i techniczną informację.
+8–9 – dokumentacja bardzo konkretna, z niewielką liczbą ogólników.
+6–7 – dokumentacja poprawna, lecz częściowo rozwlekła.
+4–5 – podobna ilość konkretów i ogólników.
+2–3 – dominują opisy ogólne, marketingowe lub powtarzalne.
+0–1 – tekst zawiera znikomą ilość informacji technicznej.
+
+W raporcie przedstaw ocenę wyłącznie w formie jednego zwartego akapitu (bez list punktowanych, tabel i podziału na sekcje) według wzoru:
+
+„WGI: X/10. [Kilkuzdaniowa ekspercka ocena wyjaśniająca poziom gęstości informacyjnej tekstu, wskazująca obecność lub brak nadmiernych ogólników, rozwlekłości, języka marketingowego, powtórzeń, potencjalnych śladów generowania przez AI oraz stopień powiązania dokumentacji z rzeczywistą implementacją. Na końcu wskaż najważniejszą zmianę, która najbardziej podniosłaby wartość WGI.]”
+
 WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 
 # Ocena projektu: [Nazwa Projektu]
@@ -192,6 +231,9 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 
 ### Audyt wykorzystania narzędzi AI
 [Pojedynczy, zwarty akapit podsumowujący audyt narzędzi generatywnych, transparentność i rynkową dojrzałość ich wykorzystania]
+
+### Analiza wskaźnika gęstości informacyjnej tekstu
+[Ekspercka ocena poziomu gęstości informacyjnej tekstu - max 1 akapit]
 
 ## 2. Ocena zgodności z wymaganiami przedmiotu
 * **Szacowany czas i nakład pracy:** [Szacunek godzinowy, podział zadań, poziom pewności]
