@@ -178,25 +178,27 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 
 # Ocena projektu: [Nazwa Projektu]
 
-## 1. Opis projektu
-[Zwięzły, akademicki opis koncepcji i założeń aplikacji - max 1 akapit]
+## 1. Analiza techniczna
+[Link do repozytorium]
 
-## 2. Analiza techniczna
-### Architektura i Kod
+### Opis realizacji projektu
+[Zwięzły, akademicki opis początkowej koncepcji aplikacji, jej założeń i ile z tego faktycznie zostało zrealizowane - max 1 akapit]
+
+### Architektura i jakość kodu
 [Analiza architektury kodu, czystości, technologii mobilnych i backendowych w formie akapitu]
 
-### Praca zespołowa i dokumentacja
-[Ocena historii Git, podziału zadań, jakości dokumentacji oraz gotowości do wdrożenia rynkowego]
+### Praca zespołowa i dokumentacja projektowa
+[Ocena historii Git, podziału zadań, współpracy zespołu, jakości dokumentacji oraz gotowości do wdrożenia rynkowego]
 
 ### Audyt wykorzystania narzędzi AI
 [Pojedynczy, zwarty akapit podsumowujący audyt narzędzi generatywnych, transparentność i rynkową dojrzałość ich wykorzystania]
 
-## 3. Ocena zgodności z wymaganiami przedmiotu
+## 2. Ocena zgodności z wymaganiami przedmiotu
 * **Szacowany czas i nakład pracy:** [Szacunek godzinowy, podział zadań, poziom pewności]
 * **Jakość rynkowa projektu:** [Porównanie ze standardem komercyjnym - krótki akapit]
 
-## 4. Ocena zespołowa (Część Wspólna)
-| Kryterium | Punkty | Dowody i Uzasadnienie | Rekomendacja poprawy |
+## 3. Ocena części wspólnej
+| Kryterium | Punkty | Uzasadnienie | Rekomendacja poprawy |
 | :--- | :---: | :--- | :--- |
 | Działający projekt i demo | X/5 | ... | ... |
 | Funkcje natywne urządzenia | X/5 | ... | ... |
@@ -208,10 +210,10 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 | Signed build / Google Play | X/5 | ... | ... |
 | **SUMA** | **X/40** | | |
 
-## 5. Ocena indywidualna
+## 4. Ocena indywidualna
 
 ### Lider / PM: [Numer indexu / Rola]
-| Kryterium | Punkty | Dowody i Uzasadnienie | Rekomendacja poprawy |
+| Kryterium | Punkty | Uzasadnienie | Rekomendacja poprawy |
 | :--- | :---: | :--- | :--- |
 | Analiza produktu i backlog | X/10 | ... | ... |
 | Prototyp i MVP | X/10 | ... | ... |
@@ -227,17 +229,17 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 ### Backend Developer: [Numer indexu / Rola]
 [Tabela analogiczna do Lidera na podstawie kryteriów Backendu - max 60 pkt]
 
-## 6. Mocne i słabe strony projektu
+## 5. Mocne i słabe strony projektu
 * **Mocne strony:** [Zwięzły akapit]
 * **Kluczowe problemy:** [Zwięzły akapit]
 
-## 7. Rekomendacje, pytania i feedback
+## 6. Rekomendacje, pytania i feedback
 ### Pytania na obronę (max. 6 konkretnych pytań technicznych)
 1. ...
 ### Feedback praktyczny
 [Zwięzłe podsumowanie, jak ten projekt i metodyka pracy zespołu rokują w realiach komercyjnych]
 
-## 8. Podsumowanie ocen [Nazwa Projektu]
+## 7. Podsumowanie ocen [Nazwa Projektu]
 | Osoba | Wspólna (max 40) | Indywidualna (max 60) | Razem (max 100) | Ocena końcowa |
 | :--- | :---: | :---: | :---: | :---: |
 | [Student 1 - Lider] | X | Y | Z | G.G |
