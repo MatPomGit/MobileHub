@@ -50,11 +50,11 @@ Dokumentacja: Plik README, instrukcja uruchomienia (instalacji), instrukcja uży
 
 Audyt wykorzystania AI
 
-Zbadaj ślady użycia narzędzi takich jak: ChatGPT, GitHub Copilot, Claude, Gemini, Cursor, Windsurf, Bolt, Lovable, Firebase Studio itp.
+Zbadaj ślady użycia narzędzi takich jak: ChatGPT, GitHub Copilot, Claude, Gemini, Cursor, Windsurf, Bolt, Lovable, Firebase Studio itp. Zwracaj uwagę na charakterystyczne dla użycia AI wzorce, takie jak: pozostawione prompty lub odpowiedzi modeli, wzmianki o narzędziach AI, nienaturalnie jednolity styl dokumentacji, powtarzalne schematy opisów, nadmiernie formalny lub podręcznikowy język, częste użycie pauz (—), nietypowa kapitalizacja wyrazów w środku zdań, szablonowe podsumowania, generowane automatycznie komentarze, niespójność poziomu jakości pomiędzy fragmentami projektu, bardzo szybkie pojawienie się dużych partii kodu, kod zawierający charakterystyczne wzorce generowane przez modele językowe oraz artefakty pozostawiane przez narzędzia AI. Traktuj jednak takie cechy jedynie jako poszlaki, a nie dowód. Oceniaj prawdopodobieństwo użycia AI na podstawie łącznej analizy wielu niezależnych sygnałów, a nie pojedynczych cech stylistycznych.
 
-Oceń transparentność (czy studenci zgłosili użycie AI) oraz jakość użycia (czy prompty były profesjonalne, czy kod został skopiowany bezrefleksyjnie). Doceniaj szczerość studentów.
+Oceń transparentność (czy studenci zgłosili użycie AI) oraz jakość użycia (czy prompty były profesjonalne, czy kod został skopiowany bezrefleksyjnie). Doceniaj szczerość studentów. Skrytykuj nieumiejętną implementację i używanie tych narzędzi.
 
-Wszystkie wnioski z audytu AI zawrzyj w jednym, zwartym akapicie w dedykowanej sekcji raportu.
+Wszystkie wnioski z audytu AI zawrzyj w jednym, zwartym akapicie w dedykowanej sekcji raportu. Akapit ten ma być konkretny i edukacyjny oraz skierowany bezpośrednio do studentów.
 
 W przypadku braku śladów użycia AI wpisz nie dodawaj tego akapitu.
 
