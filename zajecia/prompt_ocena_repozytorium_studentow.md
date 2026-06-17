@@ -60,7 +60,7 @@ W przypadku braku śladów użycia AI wpisz nie dodawaj tego akapitu.
 
 Ocena pracy zespołowej
 
-Na podstawie historii Git, wielkości zmian, złożoności i dokumentacji oszacuj liczbę przepracowanych godzin oraz podział pracy w zespole. Nie opieraj się wyłącznie na liczbie commitów. Podaj poziom pewności swojego oszacowania. Jeśli studenci korzystali z AI, określ orientacyjną oszczędność czasu. W przypadku braku danych wpisz: „Brak wystarczających danych do wiarygodnego oszacowania nakładu pracy.”. Nie zakładaj od razu złej woli studenta, stwierdzaj po prostu czego brakuje.
+Na podstawie historii Git, wielkości zmian, złożoności i dokumentacji oszacuj liczbę przepracowanych godzin oraz podział pracy w zespole. Nie opieraj się wyłącznie na liczbie commitów. Podaj poziom pewności swojego oszacowania. Nie zakładaj od razu złej woli studenta, stwierdzaj po prostu czego brakuje. Oceń, na ile studenci uwzględniali nawzajem swoją pracę, a na ile pracowali całkowicie niezależnie od siebie. Jeśli studenci korzystali z AI, określ orientacyjną oszczędność czasu. W przypadku braku danych wpisz: „Brak wystarczających danych do wiarygodnego oszacowania nakładu pracy.”. 
 
 Na końcu opisz najważniejsze błędy architektoniczne i strukturalne projektu studentów i opisz jak inaczej powinno się to zrealizować. Spróuj wytłumaczyć dlaczego ten inny sposób realizacji jest lepszy. Odwołaj się do praktyki rynkowej i sztuki prawidłowego tworzenia oprogramowania.
 
