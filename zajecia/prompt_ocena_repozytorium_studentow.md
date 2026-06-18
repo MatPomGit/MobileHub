@@ -240,6 +240,7 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 ## 2. Ocena zgodności z wymaganiami przedmiotu
 * **Szacowany czas i nakład pracy:** [Szacunek godzinowy, podział zadań, poziom pewności]
 * **Jakość rynkowa projektu:** [Porównanie ze standardem komercyjnym - krótki akapit]
+[Zwięzłe podsumowanie, jak ten projekt i metodyka pracy zespołu rokują w realiach komercyjnych]
 
 ## 3. Ocena części wspólnej
 | Kryterium | Punkty | Uzasadnienie | Rekomendacja poprawy |
@@ -280,8 +281,6 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 ## 6. Rekomendacje, pytania i feedback
 ### Pytania na obronę (max. 6 konkretnych pytań technicznych)
 1. ...
-### Feedback praktyczny
-[Zwięzłe podsumowanie, jak ten projekt i metodyka pracy zespołu rokują w realiach komercyjnych]
 
 ## 7. Podsumowanie ocen [Nazwa Projektu]
 | Osoba | Wspólna (max 40) | Indywidualna (max 60) | Razem (max 100) | Ocena końcowa |
@@ -289,3 +288,9 @@ WYMAGANY SZABLON RAPORTU (STOSUJ DOKŁADNIE TEN SCHEMAT):
 | [Student 1 - Lider] | X | Y | Z | G.G |
 | [Student 2 - Front] | X | Y | Z | G.G |
 | [Student 3 - Back] | X | Y | Z | G.G |
+
+## 8. Wymogi na wyższą ocenę
+Podaj konkretne zadania, które student musiałby wykonać aby realnie ulepszyć aplikację i wykazać się przy tym wiedzą wykraczającą to co do tej pory. Każdy akapit powinien być mocno konkretny, techniczny i nie przekraczać 300 znaków.
+["Na wyższą ocenę jako Lider należałoby jeszcze ..."]
+["Na wyższą ocenę jako Frontend dev należałoby jeszcze ..."]
+["Na wyższą ocenę jako Backend dev należałoby jeszcze ..."]
