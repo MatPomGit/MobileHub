@@ -16,7 +16,12 @@ export function renderDownloadMaterials() {
             const a = document.createElement('a');
             a.className = 'file-item';
             a.href = file.href;
-            a.setAttribute('download', '');
+            if (file.type === 'html') {
+                a.target = '_blank';
+                a.rel = 'noopener';
+            } else {
+                a.setAttribute('download', '');
+            }
 
             const fileIconDiv = document.createElement('div');
             fileIconDiv.className = `file-icon ${file.type}`;
@@ -34,7 +39,9 @@ export function renderDownloadMaterials() {
             metaDiv.appendChild(span);
 
             const dlIcon = document.createElement('i');
-            dlIcon.className = 'fa-solid fa-download file-download-icon';
+            dlIcon.className = file.type === 'html'
+                ? 'fa-solid fa-arrow-up-right-from-square file-download-icon'
+                : 'fa-solid fa-download file-download-icon';
 
             a.appendChild(fileIconDiv);
             a.appendChild(metaDiv);
