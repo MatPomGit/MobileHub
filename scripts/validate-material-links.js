@@ -146,7 +146,7 @@ function collectMaterialPaths(config) {
 
 function collectAdditionalPages() {
     const pagesDir = path.join(REPO_ROOT, 'pages');
-    if (!fs.existsSync(pagesDir)) return [];
+    if (!fs.existsSync(pagesDir) || !fs.statSync(pagesDir).isDirectory()) return [];
 
     return fs.readdirSync(pagesDir, { withFileTypes: true })
         .filter(entry => entry.isFile() && entry.name.toLowerCase().endsWith('.html'))
