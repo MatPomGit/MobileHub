@@ -45,8 +45,8 @@
 - [x] Powiązać nazwę pamięci podręcznej z skrótem wersji kompilacji.
 - [x] Uniezależnić dopasowanie ścieżek w `sw.js` od katalogu wdrożenia.
 - [x] Uzupełnić pełny graf lokalnych zależności wymaganych do uruchomienia aplikacji offline.
-- [ ] Dodać komunikat „Nowa wersja jest dostępna” i kontrolowane przeładowanie aplikacji.
-- [ ] Dodać maskowalne ikony do `manifest.json`.
+- [x] Dodać komunikat „Nowa wersja jest dostępna” i kontrolowane przeładowanie aplikacji.
+- [x] Dodać maskowalne ikony do `manifest.json`.
 - [ ] Potwierdzić instalację i działanie offline na Androidzie, iOS oraz w przeglądarce desktopowej.
 
 ### P0.3 Wykłady live zgodne z kontraktem

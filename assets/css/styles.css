@@ -123,6 +123,46 @@
     transform: translateY(0);
 }
 
+.pwa-update-banner {
+    position: fixed;
+    left: 50%;
+    bottom: calc(16px + env(safe-area-inset-bottom));
+    z-index: 101;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    max-width: min(92vw, 520px);
+    padding: 12px 14px;
+    border: 1px solid color-mix(in srgb, var(--accent) 45%, transparent);
+    border-radius: 12px;
+    background: var(--card-bg);
+    color: var(--text);
+    box-shadow: var(--shadow-lg);
+    transform: translateX(-50%);
+}
+
+.pwa-update-banner[hidden] {
+    display: none;
+}
+
+.pwa-update-banner button {
+    min-width: 44px;
+    min-height: 44px;
+    padding: 8px 14px;
+    border: 0;
+    border-radius: 9px;
+    background: var(--accent);
+    color: #fff;
+    font: inherit;
+    font-weight: 700;
+    cursor: pointer;
+}
+
+.pwa-update-banner button:disabled {
+    cursor: wait;
+    opacity: 0.7;
+}
+
 /* Ujednolicony obrys fokusu dla elementów interaktywnych. */
 :where(a, button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
     outline: 3px solid var(--accent2);

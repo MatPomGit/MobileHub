@@ -4,10 +4,13 @@ function initBootstrapUi() {
     if (window.__pamBootstrapUiInitialized) return;
     window.__pamBootstrapUiInitialized = true;
 
-            // Register Service Worker
-            if ('serviceWorker' in navigator) {
-                navigator.serviceWorker.register('sw.js').catch(err => {
-                    console.warn('SW registration failed:', err);
+            // Rejestracja jest współdzielona z modułem kontrolowanej aktualizacji PWA.
+            if ('serviceWorker' in navigator && !window.__pamServiceWorkerRegistrationPromise) {
+                window.__pamServiceWorkerRegistrationPromise =
+                    navigator.serviceWorker.register('sw.js');
+
+                window.__pamServiceWorkerRegistrationPromise.catch((error) => {
+                    console.warn('Nie udało się zarejestrować Service Workera.', error);
                 });
             }
             // ===== LEARNING PATHS MODULE =====

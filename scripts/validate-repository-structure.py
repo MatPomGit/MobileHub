@@ -146,6 +146,22 @@ def validate_json(errors: list[str]) -> None:
             add_error(errors, f"Niepoprawny JSON {relative_path}: {error}")
 
 
+def validate_manifest(errors: list[str]) -> None:
+    try:
+        manifest = json.loads((REPO_ROOT / "manifest.json").read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return
+
+    maskable_sizes = {
+        icon.get("sizes")
+        for icon in manifest.get("icons", [])
+        if "maskable" in icon.get("purpose", "").split()
+    }
+    for required_size in ("192x192", "512x512"):
+        if required_size not in maskable_sizes:
+            add_error(errors, f"Manifest nie zawiera ikony maskowalnej {required_size}.")
+
+
 def repository_path_from_url(url: str, prefix: str) -> str | None:
     parsed = urlparse(url)
     if parsed.scheme not in ("http", "https") or parsed.netloc != "example.test":
@@ -241,6 +257,7 @@ def main() -> int:
     validate_root(errors)
     validate_required_paths(errors)
     validate_json(errors)
+    validate_manifest(errors)
     validate_html_links(errors)
     validate_css_urls(errors)
     validate_js_imports(errors)

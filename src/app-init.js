@@ -78,6 +78,7 @@ async function runAppInitialization() {
     ['ui:pull-panel', () => window.initPullPanel?.()],
     ['ui:offline-indicator', () => window.initOfflineIndicator?.()],
     ['ui:bootstrap', () => window.initBootstrapUi?.()],
+    ['ui:pwa-update', () => window.initPwaUpdateUi?.()],
   ];
 
   for (const [stage, initStage] of criticalStartupStages) {

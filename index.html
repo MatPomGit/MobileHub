@@ -36,6 +36,10 @@
 <body>
     <a class="skip-link" href="#mainContent">Przejdź do głównej treści</a>
     <div class="offline-indicator" id="offlineIndicator" role="status" aria-live="polite">Online</div>
+    <section class="pwa-update-banner" id="pwaUpdateBanner" role="status" aria-live="polite" hidden>
+        <span id="pwaUpdateStatus">Nowa wersja aplikacji jest dostępna.</span>
+        <button id="pwaUpdateAction" type="button">Zaktualizuj</button>
+    </section>
 
     <!-- Scroll progress -->
     <div class="scroll-progress" id="scrollProgress"></div>
@@ -1479,6 +1483,7 @@
     <script src="src/pull-panel.js" defer></script>
     <script src="src/bootstrap-ui.js" defer></script>
     <script src="src/offline-indicator.js" defer></script>
+    <script src="src/pwa-update.js" defer></script>
     <script type="module" src="src/app-init.js"></script>
 
 </body>

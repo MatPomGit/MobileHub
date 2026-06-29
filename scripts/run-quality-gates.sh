@@ -31,4 +31,5 @@ stage "Walidacja postępu scrollowania" node scripts/validate-scroll-progress.js
 stage "Walidacja danych materiałów (kontrakty + ścieżki)" node scripts/validate-material-links.js
 stage "Walidacja danych wykładów live" node scripts/validate-live-lectures.js
 stage "Walidacja smoke layoutu mobilnego" node scripts/validate-mobile-layout-smoke.js
+stage "Testy jednostkowe" node --test tests/*.unit.test.js
 stage "Smoke E2E (lokalnie/CI)" run_smoke_e2e

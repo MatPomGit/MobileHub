@@ -2,6 +2,8 @@
 // otwarcie panelu, przejście do zakładki wiki, wyszukiwanie, otwarcie artykułu i nawigację wstecz.
 const { test, expect } = require('@playwright/test');
 
+test.use({ viewport: { width: 390, height: 844 } });
+
 test('mobile pull panel flow: open, tab, search, open article, back', async ({ page }) => {
   await page.goto('/index.html');
 

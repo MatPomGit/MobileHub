@@ -5,6 +5,8 @@ const { test, expect } = require('@playwright/test');
 test('start_url remains reachable offline after first online load', async ({ page, context }) => {
   await page.goto('/index.html');
 
+  await expect(page.locator('#pwaUpdateBanner')).toBeHidden();
+
   await expect(async () => {
     const swCount = await page.evaluate(async () => {
       if (!('serviceWorker' in navigator)) return 0;

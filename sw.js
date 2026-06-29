@@ -21,6 +21,7 @@ const ASSETS_TO_CACHE = [
     './src/offline-indicator.js',
     './src/page-tabs.js',
     './src/pull-panel.js',
+    './src/pwa-update.js',
     './src/section-particles.js',
     './src/gsap-animations.js',
     './src/wiki-app.js',
@@ -62,6 +63,7 @@ const STALE_WHILE_REVALIDATE_PATHS = new Set([
     '/src/offline-indicator.js',
     '/src/page-tabs.js',
     '/src/pull-panel.js',
+    '/src/pwa-update.js',
     '/src/entries/dev-mode.js',
     '/src/entries/pam-files.js',
     '/src/entries/pam-wiki.js',
@@ -74,7 +76,12 @@ self.addEventListener('install', event => {
     event.waitUntil(
         caches.open(CACHE_NAME).then(cache => cache.addAll(ASSETS_TO_CACHE))
     );
-    self.skipWaiting();
+});
+
+self.addEventListener('message', event => {
+    if (event.data?.type === 'SKIP_WAITING') {
+        self.skipWaiting();
+    }
 });
 
 self.addEventListener('activate', event => {
