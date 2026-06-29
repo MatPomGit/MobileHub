@@ -9,13 +9,13 @@ test.use({
 });
 
 test('zal.html: mobilny przycisk Dalej otwiera sesję w bieżącym oknie', async ({ page }) => {
-  await page.goto('/zal.html');
+  await page.goto('/pages/exams/zal.html');
 
   await page.locator('#open-test-config').click();
   await expect(page.locator('#zal-open-session-next')).toBeEnabled();
 
   await page.locator('#zal-open-session-next').click();
 
-  await expect(page).toHaveURL(/\/zal_sesje\.html\?length=25&questionType=single-choice$/);
+  await expect(page).toHaveURL(/\/pages\/exams\/zal_sesje\.html\?length=25&questionType=single-choice$/);
   await expect(page.locator('h1')).toHaveText('Sesja zaliczeniowa');
 });

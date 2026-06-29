@@ -11,15 +11,15 @@ const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './offline.html',
-    './styles.css',
-    './pam-wiki.js',
-    './quiz-module.js',
+    './assets/css/styles.css',
+    './src/entries/pam-wiki.js',
+    './src/entries/quiz-module.js',
     './src/dev/dev-state.js',
     './src/dev/dev-info.js',
     './src/dev/dev-panel-view.js',
     './src/dev/dev-controller.js',
-    './dev-mode.js',
-    './pam-wiki-config.json',
+    './src/entries/dev-mode.js',
+    './data/pam-wiki-config.json',
     './assets/favicon.ico',
     './assets/ico3.png',
     './assets/icon-192.png',
@@ -28,8 +28,8 @@ const ASSETS_TO_CACHE = [
     './assets/background_4.jpg'
 ];
 
-const NETWORK_FIRST_PATHS = new Set(['/', '/index.html', '/pam-wiki-config.json']);
-const STALE_WHILE_REVALIDATE_PATHS = new Set(['/styles.css', '/pam-wiki.js', '/quiz-module.js', '/dev-mode.js', '/src/dev/dev-state.js', '/src/dev/dev-info.js', '/src/dev/dev-panel-view.js', '/src/dev/dev-controller.js']);
+const NETWORK_FIRST_PATHS = new Set(['/', '/index.html', '/data/pam-wiki-config.json']);
+const STALE_WHILE_REVALIDATE_PATHS = new Set(['/assets/css/styles.css', '/src/entries/pam-wiki.js', '/src/entries/quiz-module.js', '/src/entries/dev-mode.js', '/src/dev/dev-state.js', '/src/dev/dev-info.js', '/src/dev/dev-panel-view.js', '/src/dev/dev-controller.js']);
 
 self.addEventListener('install', event => {
     event.waitUntil(

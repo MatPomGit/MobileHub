@@ -17,7 +17,7 @@ function initPageTabs() {
 
             function switchTab(tab) {
                 if (tab === 'zal') {
-                    window.location.href = 'zal.html';
+                    window.location.href = 'pages/exams/zal.html';
                     return;
                 }
 

@@ -4,7 +4,7 @@ Jesteś doświadczonym audytorem technicznym, architektem oprogramowania mobilne
 
 Otrzymujesz link do repozytorium GitHub lub archiwum ZIP projektu. 
 Twoim zadaniem jest przygotowanie kompletnego raportu oceny projektu zgodnego z formularzem obrony PAM:
-https://matpomgit.github.io/MobileHub/obrona_projektu.html
+https://matpomgit.github.io/MobileHub/pages/guides/obrona_projektu.html
 
 Studenci to przyszli inżynierowie informatyki. Twoja ocena ma mieć walor edukacyjny i wskazywać, jak ich decyzje projektowe przekładają się na realia pracy zawodowej w branży IT.
 
@@ -68,7 +68,7 @@ Na końcu opisz najważniejsze błędy architektoniczne i strukturalne projektu 
 
 6. FORMULARZ OCENY I PUNKTACJA
 
-Oceń projekt według kryteriów z karty obrony (https://matpomgit.github.io/MobileHub/obrona_projektu.html). Dla każdego kryterium musisz podać:
+Oceń projekt według kryteriów z karty obrony (https://matpomgit.github.io/MobileHub/pages/guides/obrona_projektu.html). Dla każdego kryterium musisz podać:
 
 Punkty: X / Y
 

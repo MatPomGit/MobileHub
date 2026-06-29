@@ -14,7 +14,7 @@ const fs = require('fs');
 const path = require('path');
 
 const repoRoot = path.resolve(__dirname, '..');
-const configPath = path.join(repoRoot, 'pam-wiki-config.json');
+const configPath = path.join(repoRoot, 'data/pam-wiki-config.json');
 
 /**
  * Zwraca listę błędów walidacji konfiguracji.

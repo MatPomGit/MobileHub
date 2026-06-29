@@ -840,7 +840,7 @@ header {
 
 /* ===== HERO ===== */
 .hero {
-    background: var(--hero-overlay), url('assets/background_4.jpg') center/cover no-repeat;
+    background: var(--hero-overlay), url('../background_4.jpg') center/cover no-repeat;
     padding: 16px 24px 12px;
     text-align: left;
     position: relative;

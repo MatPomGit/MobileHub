@@ -357,8 +357,8 @@ Ten projekt (`PAM WIKI`) jest przykładem prostej PWA zbudowanej ze statycznych 
 index.html       ← cała aplikacja (SPA)
 manifest.json    ← konfiguracja PWA (short_name: PAM WIKI)
 sw.js            ← Service Worker (Cache-First dla plików statycznych)
-pam-wiki.js      ← logika wiki (fetch artykułów .md, highlight.js)
-pam-files.js     ← lista plików do pobrania
+src/entries/pam-wiki.js  ← logika wiki (fetch artykułów .md, highlight.js)
+src/entries/pam-files.js ← lista plików do pobrania
 assets/
   icon-192.png
   icon-512.png

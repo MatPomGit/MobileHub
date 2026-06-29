@@ -36,6 +36,6 @@ Skrypt: `scripts/validate-material-links.js`.
 
 ## Granice odpowiedzialności modułów
 
-- `pam-files.js` odpowiada wyłącznie za inicjalizację sekcji materiałów (`renderDownloadMaterials`, `renderLiveMaterials`, `initPresentationPreview`).
+- `src/entries/pam-files.js` odpowiada wyłącznie za inicjalizację sekcji materiałów (`renderDownloadMaterials`, `renderLiveMaterials`, `initPresentationPreview`).
 - Wyszukiwarka wiki (`#wikiSearch`, `.wiki-category`) należy do warstwy wiki i jest utrzymywana w `src/wiki-search.js`.
-- Inicjalizacja wyszukiwarki wiki uruchamiana jest przez ścieżkę wiki (`pam-wiki.js`), wywoływaną z `src/app-init.js` przez `initWiki()`.
+- Inicjalizacja wyszukiwarki wiki uruchamiana jest przez ścieżkę wiki (`src/entries/pam-wiki.js`), wywoływaną z `src/app-init.js` przez `initWiki()`.

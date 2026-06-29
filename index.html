@@ -29,8 +29,8 @@
         rel="stylesheet">
     <link rel="icon" type="image/x-icon" href="assets/favicon.ico">
 
-    <link rel="stylesheet" href="font-size-config.css">
-    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="assets/css/font-size-config.css">
+    <link rel="stylesheet" href="assets/css/styles.css">
 </head>
 
 <body>
@@ -176,7 +176,7 @@
                 <i class="fa-solid fa-file-arrow-down"></i>
                 Materiały
             </button>
-            <a class="tab-btn" id="tab-roadmapa" href="pierwsza-aplikacja.html">
+            <a class="tab-btn" id="tab-roadmapa" href="pages/guides/pierwsza-aplikacja.html">
                 <i class="fa-solid fa-route"></i>
                 Pierwsza aplikacja
             </a>
@@ -437,7 +437,7 @@
 
             <h3 class="section-title">Narzędzia do realizacji</h3>
             <div class="cards-grid">
-                <a href="pierwsza-aplikacja.html" class="info-card tool-card" target="_blank" rel="noopener">
+                <a href="pages/guides/pierwsza-aplikacja.html" class="info-card tool-card" target="_blank" rel="noopener">
                     <div class="info-card-header">
                         <i class="fa-solid fa-flag-checkered"></i>
                         <strong>Moja pierwsza aplikacja mobilna</strong>
@@ -446,7 +446,7 @@
                         kluczowe funkcje — od zera do działającego MVP.</p>
                     <span class="tool-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Otwórz przewodnik</span>
                 </a>
-                <a href="projektowanie-aplikacji.html" class="info-card tool-card" target="_blank" rel="noopener">
+                <a href="pages/guides/projektowanie-aplikacji.html" class="info-card tool-card" target="_blank" rel="noopener">
                     <div class="info-card-header">
                         <i class="fa-solid fa-sitemap"></i>
                         <strong>Kreator projektu aplikacji</strong>
@@ -455,7 +455,7 @@
                         BRD/FRD/TRD.</p>
                     <span class="tool-card-btn"><i class="fa-solid fa-arrow-up-right-from-square"></i> Otwórz kreator</span>
                 </a>
-                <a href="obrona_projektu.html" class="info-card tool-card" target="_blank" rel="noopener">
+                <a href="pages/guides/obrona_projektu.html" class="info-card tool-card" target="_blank" rel="noopener">
                     <div class="info-card-header">
                         <i class="fa-solid fa-chalkboard-user"></i>
                         <strong>Obrona projektu i moduł oceniania</strong>
@@ -972,7 +972,7 @@
             <p>Zacznij od modułu testu wiedzy ABCD, aby sprawdzić przygotowanie do egzaminu.</p>
             <!-- Wyraźny przycisk prowadzi bezpośrednio do testu ABCD. -->
             <p>
-                <a class="exam-quiz-button" href="test.html" aria-label="Przejdź do modułu testu wiedzy ABCD">
+                <a class="exam-quiz-button" href="pages/exams/test.html" aria-label="Przejdź do modułu testu wiedzy ABCD">
                     <i class="fa-solid fa-circle-play" aria-hidden="true"></i>
                     <span>Przejdź do testu ABCD</span>
                 </a>
@@ -1250,7 +1250,7 @@
                         <i class="fa-solid fa-book-open" aria-hidden="true"></i>
                         <span>Otwórz „Egzamin teoretyczny” w wiki</span>
                     </a>
-                    <a class="exam-quiz-button" href="test.html" aria-label="Przejdź do modułu testu wiedzy ABCD">
+                    <a class="exam-quiz-button" href="pages/exams/test.html" aria-label="Przejdź do modułu testu wiedzy ABCD">
                         <i class="fa-solid fa-list-check" aria-hidden="true"></i>
                         <span>Przejdź do testu ABCD</span>
                     </a>
@@ -1303,7 +1303,7 @@
 
     <!-- TAB PANEL: STUDENCI (dev mode only) -->
     <div class="tab-panel" id="panel-studenci">
-        <iframe id="iframe-studenci" src="studenci.html"
+        <iframe id="iframe-studenci" src="pages/community/studenci.html"
             style="border:none; width:100%; display:block; min-height:600px;" title="Studenci — zgłoszenia projektów"
             onload="(function(f){try{var h=f.contentWindow.document.body.scrollHeight;f.style.height=(h>400?h+40:800)+'px';}catch(e){f.style.height='800px';}})(this)">
         </iframe>
@@ -1311,7 +1311,7 @@
 
     <!-- TAB PANEL: ZAL (dev mode only) -->
     <div class="tab-panel" id="panel-zal">
-        <iframe id="iframe-zal" data-src="zal.html" src="about:blank"
+        <iframe id="iframe-zal" data-src="pages/exams/zal.html" src="about:blank"
             style="border:none; width:100%; display:block; min-height:600px;" title="ZAL — wejściówki i zaliczenia online">
         </iframe>
     </div><!-- /panel-zal -->
@@ -1433,7 +1433,7 @@
             <i class="fa-solid fa-file-arrow-down"></i>
             <span>Materiały</span>
         </button>
-        <a class="bottom-nav-btn" href="pierwsza-aplikacja.html">
+        <a class="bottom-nav-btn" href="pages/guides/pierwsza-aplikacja.html">
             <i class="fa-solid fa-route"></i>
             <span>Pierwsza aplikacja</span>
         </a>
@@ -1473,7 +1473,7 @@
         <script src="src/dev/dev-info.js" defer></script>
         <script src="src/dev/dev-panel-view.js" defer></script>
         <script src="src/dev/dev-controller.js" defer></script>
-        <script src="dev-mode.js" defer></script>
+        <script src="src/entries/dev-mode.js" defer></script>
     <script src="src/page-tabs.js" defer></script>
     <script src="src/pull-panel.js" defer></script>
     <script src="src/bootstrap-ui.js" defer></script>

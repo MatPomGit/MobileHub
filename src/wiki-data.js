@@ -7,7 +7,7 @@ export const WikiStore = {
   activeArticleId: null
 };
 
-const WIKI_CONFIG_URL = 'pam-wiki-config.json';
+const WIKI_CONFIG_URL = 'data/pam-wiki-config.json';
 const WIKI_CONFIG_RETRY_DELAYS_MS = [250, 500, 1000];
 
 function createRetryableError(message, retryable) {

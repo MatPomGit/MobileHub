@@ -1,7 +1,7 @@
 'use strict';
 
-import { initWiki } from '../pam-wiki.js';
-import { initMaterials } from '../pam-files.js';
+import { initWiki } from './entries/pam-wiki.js';
+import { initMaterials } from './entries/pam-files.js';
 import { initSectionParticles } from './section-particles.js';
 import { getMotionProfile } from './motion-settings.js';
 

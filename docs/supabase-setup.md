@@ -4,7 +4,7 @@
 
 Od teraz aplikacja preferuje tabelę `public.project_teams` jako główne źródło prawdy dla oficjalnych składów zespołów. To eliminuje upychanie `project_id` w polach odziedziczonych po starym formularzu.
 
-Gotowy skrypt tworzący i zasilający tabelę znajduje się w [supabase-project-teams.sql](supabase-project-teams.sql).
+Gotowy skrypt tworzący i zasilający tabelę znajduje się w [supabase-project-teams.sql](../database/supabase-project-teams.sql).
 
 Model tabeli:
 
@@ -25,7 +25,7 @@ Model tabeli:
 - `source` - URL źródła danych
 - `created_at`, `updated_at` - znaczniki czasu
 
-Frontend w [studenci.html](studenci.html) czyta `project_teams` jako główne źródło i przy problemie (np. brak migracji) przełącza się na lokalne `students-data.json`.
+Frontend w [studenci.html](../pages/community/studenci.html) czyta `project_teams` jako główne źródło i przy problemie (np. brak migracji) przełącza się na lokalne [`data/students-data.json`](../data/students-data.json).
 
 ### Migracja istniejącej tabeli
 
@@ -250,8 +250,8 @@ using (true);
 
 ## Konfiguracja frontendu
 
-1. Uruchom skrypt z [supabase-project-teams.sql](supabase-project-teams.sql) w SQL Editorze Supabase.
-2. W [studenci.html](studenci.html) ustaw `SUPABASE_URL` na publiczny URL projektu, np. `https://ndebunrsdtulflzpemwd.supabase.co`.
-3. Ustaw w [studenci.html](studenci.html) `SUPABASE_ANON_KEY` na publiczny klucz publishable/anon.
+1. Uruchom skrypt z [supabase-project-teams.sql](../database/supabase-project-teams.sql) w SQL Editorze Supabase.
+2. W [studenci.html](../pages/community/studenci.html) ustaw `SUPABASE_URL` na publiczny URL projektu, np. `https://ndebunrsdtulflzpemwd.supabase.co`.
+3. Ustaw w [studenci.html](../pages/community/studenci.html) `SUPABASE_ANON_KEY` na publiczny klucz publishable/anon.
 4. Nie używaj `service_role key` po stronie frontendu.
-5. Prywatne metryki z Google Play Console nie powinny być pobierane bezpośrednio z [studenci.html](studenci.html). Importuj je przez bezpieczny backend albo ręczny, autoryzowany eksport do `project_teams`.
+5. Prywatne metryki z Google Play Console nie powinny być pobierane bezpośrednio z [studenci.html](../pages/community/studenci.html). Importuj je przez bezpieczny backend albo ręczny, autoryzowany eksport do `project_teams`.

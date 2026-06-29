@@ -2,6 +2,7 @@
 <html lang="pl">
 
 <head>
+  <base href="../../">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Studenci — PAM WIKI</title>
@@ -1232,14 +1233,14 @@ background: var(--surface);
 
         async function loadProjectDataFromJson() {
             try {
-                const response = await fetch('students-data.json', { cache: 'no-store' });
-                if (!response.ok) throw new Error('Nie udało się odczytać students-data.json');
+                const response = await fetch('data/students-data.json', { cache: 'no-store' });
+                if (!response.ok) throw new Error('Nie udało się odczytać data/students-data.json');
                 const json = await response.json();
                 if (!json || !Array.isArray(json.projects)) throw new Error('Niepoprawny format pliku danych');
                 projectData = { updatedAt: json.updatedAt || '', projects: sortProjects(normalizeProjects(json.projects)) };
                 projectDataSource = TEAM_DATA_SOURCE.json;
             } catch (error) {
-                throw new Error('Nie udało się odczytać ani Supabase, ani students-data.json');
+                throw new Error('Nie udało się odczytać ani Supabase, ani data/students-data.json');
             }
         }
 
@@ -1248,7 +1249,7 @@ background: var(--surface);
                 await loadProjectDataFromTeamsTable();
             } catch (teamsError) {
                 await loadProjectDataFromJson();
-                showAlert('Widok przełączono na lokalny plik students-data.json, bo tabela project_teams nie zwróciła kompletu danych.', 'info');
+                showAlert('Widok przełączono na lokalny plik data/students-data.json, bo tabela project_teams nie zwróciła kompletu danych.', 'info');
             }
         }
 

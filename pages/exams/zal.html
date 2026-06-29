@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="pl">
 <head>
+  <base href="../../">
   <!--
     Witajcie studenci!
     Tak, to tutaj jest kod dotyczący modułu testów.
@@ -566,7 +567,7 @@
       const testConfigSummary = document.getElementById('zal-test-config-summary');
       const nextSessionButton = document.getElementById('zal-open-session-next');
 
-      const QUESTION_BANK_FILE = 'quiz-questions.json';
+      const QUESTION_BANK_FILE = '../../data/quiz-questions.json';
       const EXAM_QUERY_KEY = 'zalExamWindow';
       const examMode = new URLSearchParams(window.location.search).get(EXAM_QUERY_KEY) === '1';
       const LOG_DB_NAME = 'zalLogsDb';
@@ -1674,7 +1675,7 @@ const shortcutCombos = new Set([
           questionType
         });
         params.set('category', 'all');
-        const examUrl = `zal_sesje.html?${params.toString()}`;
+        const examUrl = new URL(`./zal_sesje.html?${params.toString()}`, window.location.href).href;
 
         if (shouldNavigateCurrentContextForExam()) {
           navigateToExamModule(examUrl);

@@ -13,7 +13,7 @@ test('zal_sesje.html: mobilny render formularza i statusów', async ({ page }) =
   const errors = [];
   page.on('pageerror', (error) => errors.push(error.message));
 
-  await page.goto('/zal_sesje.html?length=25&questionType=single-choice');
+  await page.goto('/pages/exams/zal_sesje.html?length=25&questionType=single-choice');
 
   await expect(page.locator('h1')).toHaveText('Sesja zaliczeniowa');
   await expect(page.locator('#session-name-display')).toBeVisible();
@@ -35,7 +35,7 @@ test('zal_sesje.html: mobilny render formularza i statusów', async ({ page }) =
 });
 
 test('zal_sesje.html: rejestruje utratę widoczności karty w ostrzeżeniu', async ({ page }) => {
-  await page.goto('/zal_sesje.html?length=25&questionType=single-choice');
+  await page.goto('/pages/exams/zal_sesje.html?length=25&questionType=single-choice');
 
   await page.evaluate(() => {
     Object.defineProperty(document, 'hidden', { configurable: true, get: () => true });

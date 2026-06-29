@@ -20,7 +20,7 @@ Ten dokument opisuje runtime frontendu PAM Wiki z perspektywy:
 
 **Kluczowe elementy:**
 
-- `pam-wiki.js` — adapter wejściowy modułu wiki (`initWiki` deleguje do `initApp`).
+- `src/entries/pam-wiki.js` — adapter wejściowy modułu wiki (`initWiki` deleguje do `initApp`).
 - `src/wiki-app.js` — orkiestrator wiki (`initApp`), spina dane + UI + router.
 - `src/wiki-data.js` — ładowanie i walidacja konfiguracji wiki do `WikiStore`.
 - `src/wiki-router.js` — routing hash + aktywacja artykułu.
@@ -34,7 +34,7 @@ Ten dokument opisuje runtime frontendu PAM Wiki z perspektywy:
 
 #### Mechanizm „zakładka ZAL dopiero za 3. razem”
 
-Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**, a potem dopiero **uruchomienie `zal.html`**.
+Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**, a potem dopiero **uruchomienie `pages/exams/zal.html`**.
 
 1. **Aktywacja trybu dev** (`src/dev/dev-state.js`):
    - każde włączenie trybu dev wykonuje `activate()`,
@@ -44,9 +44,9 @@ Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**
    - zakładka ZAL jest odsłaniana dopiero gdy `activationCount >= 3`,
    - wcześniej widoczna jest tylko zakładka `studenci`.
 3. **Lazy uruchomienie iframe ZAL** (`index.html` + `src/dev/dev-panel-view.js`):
-   - iframe ZAL startuje jako `src="about:blank"` i trzyma docelowy adres w `data-src="zal.html"`,
+   - iframe ZAL startuje jako `src="about:blank"` i trzyma docelowy adres w `data-src="pages/exams/zal.html"`,
    - gdy kontroler pozwoli pokazać ZAL, `showDevTabs(true)` wywołuje `ensureZalIframeLoaded()`,
-   - dopiero wtedy następuje podmiana `src` na `zal.html`, czyli realne uruchomienie modułu.
+   - dopiero wtedy następuje podmiana `src` na `pages/exams/zal.html`, czyli realne uruchomienie modułu.
 4. **Zachowanie po odświeżeniu strony**:
    - podczas `initDevMode()` odczytywany jest stan `pam-dev-mode` i licznik aktywacji,
    - jeśli dev mode był aktywny, UI odtwarza zakładki zgodnie z progiem `>= 3`,
@@ -60,7 +60,7 @@ Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**
 
 **Kluczowe elementy:**
 
-- `pam-files.js` — adapter wejściowy (`initMaterials`).
+- `src/entries/pam-files.js` — adapter wejściowy (`initMaterials`).
 - `src/materials/materials-data.js` — statyczne dane plików (`FILES_DATA`, `LIVE_MATERIALS_DATA`, mapy ikon).
 - `src/materials/render-download-materials.js` — render listy plików do pobrania.
 - `src/materials/render-live-materials.js` — render listy materiałów live.
@@ -69,7 +69,7 @@ Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**
 **Kategoria architektoniczna:**
 
 - `state`: `src/materials/materials-data.js`.
-- `controller`: `pam-files.js`, `src/materials/presentation-preview-controller.js`.
+- `controller`: `src/entries/pam-files.js`, `src/materials/presentation-preview-controller.js`.
 - `pure renderer`: `src/materials/render-download-materials.js`, `src/materials/render-live-materials.js`, `src/materials/render-helpers.js`.
 
 ---
@@ -80,7 +80,7 @@ Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**
 
 **Kluczowe elementy:**
 
-- `dev-mode.js` — globalna funkcja `window.initDevMode`.
+- `src/entries/dev-mode.js` — globalna funkcja `window.initDevMode`.
 
 **Kategoria architektoniczna:**
 
@@ -116,8 +116,8 @@ Mechanizm jest celowo dwuetapowy: najpierw kontroluje **widoczność zakładki**
 
 ```mermaid
 flowchart TD
-  A[src/app-init.js] --> B[pam-wiki.js]
-  A --> C[pam-files.js]
+  A[src/app-init.js] --> B[src/entries/pam-wiki.js]
+  A --> C[src/entries/pam-files.js]
 
   B --> D[src/wiki-app.js]
   D --> E[src/wiki-data.js]
@@ -225,8 +225,8 @@ W runtime obowiązuje profil ruchu ustawiany przy starcie w `src/app-init.js` (`
 | `src/materials/render-download-materials.js` | **pure renderer** | Renderuje listy plików bez zarządzania przepływem aplikacji. |
 | `src/materials/render-live-materials.js` | **pure renderer** | Renderuje sekcje live. |
 | `src/materials/presentation-preview-controller.js` | **controller** | Steruje podglądem i przełączaniem trybów. |
-| `pam-files.js` | **controller** | Spina renderery i kontroler preview dla materials. |
-| `dev-mode.js` | **controller + state-adapter** | Zarządza aktywacją, panelem i storage. |
+| `src/entries/pam-files.js` | **controller** | Spina renderery i kontroler preview dla materials. |
+| `src/entries/dev-mode.js` | **controller + state-adapter** | Zarządza aktywacją, panelem i storage. |
 | `src/app-init.js` | **controller (root orchestrator)** | Definiuje kolejność startupu całej aplikacji. |
 | `src/bootstrap-ui.js` | **controller + renderer** | Inicjuje SW i tworzy część dynamicznego UI. |
 
@@ -241,12 +241,12 @@ W runtime obowiązuje profil ruchu ustawiany przy starcie w `src/app-init.js` (`
 - **Efekty uboczne:** wywołuje kolejne inicjalizatory UI/materials/wiki; zapisuje stan przez podmoduły.
 - **Krytyczny kontrakt kolejności:** UI shell -> dev-mode -> materials -> wiki.
 
-## `initWiki()` (`pam-wiki.js`)
+## `initWiki()` (`src/entries/pam-wiki.js`)
 
 - **Wejście:** brak.
 - **Wyjście:** `Promise<void>`.
 - **Efekt:** deleguje do `initApp()` z `src/wiki-app.js`.
-- **Wymagania:** obecność kontenerów wiki i poprawny `pam-wiki-config.json`.
+- **Wymagania:** obecność kontenerów wiki i poprawny `data/pam-wiki-config.json`.
 
 ## `initApp()` (`src/wiki-app.js`)
 
@@ -259,7 +259,7 @@ W runtime obowiązuje profil ruchu ustawiany przy starcie w `src/app-init.js` (`
   - podpina eventy UI i wyszukiwania.
 - **Tryb błędu:** błędy fetch/konfiguracji wiki powinny być obsłużone w warstwie UI (komunikat/stan fallback).
 
-## `initMaterials()` (`pam-files.js`)
+## `initMaterials()` (`src/entries/pam-files.js`)
 
 - **Wejście:** brak (korzysta z importowanego `FILES_DATA` i DOM).
 - **Wyjście:** `void`.
@@ -287,7 +287,7 @@ W runtime obowiązuje profil ruchu ustawiany przy starcie w `src/app-init.js` (`
 - **Idempotencja:** zabezpieczenie `window.__pamBootstrapUiInitialized`.
 - **Efekty:** m.in. próba rejestracji Service Workera i inicjalizacja modułów UI bootstrap.
 
-## `initDevMode()` (`dev-mode.js`)
+## `initDevMode()` (`src/entries/dev-mode.js`)
 
 - **Wejście:** brak.
 - **Wyjście:** `void`.

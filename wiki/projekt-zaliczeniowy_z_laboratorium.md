@@ -24,14 +24,14 @@ Przewodnik krok po kroku przez przygotowanie środowiska, strukturę projektu i 
 kluczowe funkcje. Od zera do działającego MVP.
 
 
-Otwórz przewodnik](pierwsza-aplikacja.html)
+Otwórz przewodnik](pages/guides/pierwsza-aplikacja.html)
 
 [**Kreator projektu aplikacji**
 
 Zamień pomysł w plan realizacji: zakres, zadania, roboczogodziny, wycena i baza pod dokumenty
 BRD/FRD/TRD.
 
- Otwórz kreator](projektowanie-aplikacji.html)
+ Otwórz kreator](pages/guides/projektowanie-aplikacji.html)
 
 ### Wymagania techniczne
 
@@ -230,8 +230,8 @@ Każdy zespół prezentuje projekt
 
 ## Zasoby pomocnicze
 
-- [Moja pierwsza aplikacja mobilna](../pierwsza-aplikacja.html)
-- [Kreator projektu aplikacji](../projektowanie-aplikacji.html)
+- [Moja pierwsza aplikacja mobilna](pages/guides/pierwsza-aplikacja.html)
+- [Kreator projektu aplikacji](pages/guides/projektowanie-aplikacji.html)
 - [Android Developers - App Architecture](https://developer.android.com/topic/architecture)
 - [Android Codelabs](https://developer.android.com/codelabs)
 - [SwiftUI Tutorials - Apple](https://developer.apple.com/tutorials/swiftui)
