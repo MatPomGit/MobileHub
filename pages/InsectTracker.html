@@ -1,0 +1,981 @@
+<!doctype html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="description" content="Projekt koncepcyjny szybkiego systemu śledzenia i optycznego oznaczania owadów.">
+<title>InsectTracker — projekt systemu śledzenia owadów</title>
+<style>
+:root{
+  --bg:#06101c;--bg2:#0a1728;--panel:#10233a;--panel2:#142c48;--text:#eff7ff;
+  --muted:#a9bbcf;--line:#294867;--blue:#5aafff;--cyan:#4edbd5;--green:#68d99d;
+  --orange:#ffb45f;--red:#ff7272;--white:#fff;--r:20px;--shadow:0 22px 70px rgba(0,0,0,.28)
+}
+*{box-sizing:border-box}html{scroll-behavior:smooth}
+body{margin:0;font-family:Inter,Segoe UI,Arial,sans-serif;color:var(--text);
+background:radial-gradient(circle at 14% 0,rgba(90,175,255,.16),transparent 28%),
+radial-gradient(circle at 90% 12%,rgba(78,219,213,.09),transparent 22%),
+linear-gradient(180deg,var(--bg),var(--bg2));line-height:1.65}
+a{color:inherit;text-decoration:none}img{display:block;max-width:100%}
+.wrap{width:min(1220px,calc(100% - 40px));margin:auto}
+nav{position:sticky;top:0;z-index:20;background:rgba(6,16,28,.82);backdrop-filter:blur(15px);border-bottom:1px solid #ffffff15}
+.nav{min-height:70px;display:flex;align-items:center;justify-content:space-between;gap:18px}
+.brand{display:flex;align-items:center;gap:11px;font-weight:800}.logo{width:36px;height:36px;border-radius:11px;display:grid;place-items:center;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#03101b}
+.links{display:flex;gap:20px;color:var(--muted);font-size:.92rem}.links a:hover{color:var(--text)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:13px 18px;border:1px solid var(--line);border-radius:13px;font-weight:750;background:#ffffff05}
+.btn:hover{border-color:var(--blue);transform:translateY(-1px)}.primary{border:0;background:linear-gradient(135deg,var(--blue),var(--cyan));color:#04111c}
+.hero{padding:94px 0 68px}.hero-grid{display:grid;grid-template-columns:1.13fr .87fr;gap:54px;align-items:center}
+.eyebrow,.kicker{font-size:.78rem;font-weight:800;text-transform:uppercase;letter-spacing:.1em}
+.eyebrow{display:inline-block;color:#c6e7ff;padding:7px 11px;border-radius:999px;border:1px solid #5aafff55;background:#5aafff17}
+.kicker{color:var(--cyan)}h1{font-size:clamp(2.8rem,6vw,5.5rem);line-height:1.01;letter-spacing:-.058em;margin:20px 0}
+h1 span{background:linear-gradient(90deg,var(--blue),var(--cyan));-webkit-background-clip:text;color:transparent}
+h2{font-size:clamp(2rem,4vw,3.35rem);line-height:1.1;letter-spacing:-.04em;margin:7px 0 14px}
+h3{margin:4px 0 10px}.lead{font-size:1.16rem;color:var(--muted);max-width:760px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}
+.panel,.card{border:1px solid var(--line);background:linear-gradient(180deg,rgba(20,44,72,.88),rgba(12,28,47,.92));border-radius:var(--r);box-shadow:var(--shadow)}
+.panel{padding:24px}.signal{display:grid;gap:13px}.row{display:grid;grid-template-columns:42px 1fr auto;gap:13px;align-items:center;padding:14px;border:1px solid #ffffff12;border-radius:14px;background:#ffffff05}
+.icon{width:42px;height:42px;border-radius:12px;display:grid;place-items:center;background:#5aafff1d;font-size:1.15rem}
+.row small,.muted,.card p,.card li{color:var(--muted)}.metric{color:var(--cyan);font-family:Consolas,monospace}
+section{padding:76px 0}.head{max-width:820px;margin-bottom:34px}.head p{margin:0;color:var(--muted)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px}.grid3{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}.grid4{display:grid;grid-template-columns:repeat(4,1fr);gap:15px}
+.card{padding:25px}.stat{text-align:center}.stat b{display:block;font-size:1.9rem;letter-spacing:-.03em}.stat span{color:var(--muted);font-size:.9rem}
+.tag{display:inline-block;padding:5px 9px;border-radius:999px;font-size:.75rem;font-weight:800;background:#5aafff1d;color:#add8ff}.tag.g{background:#68d99d1b;color:#aaf0c7}.tag.o{background:#ffb45f1b;color:#ffd3a3}
+.imagebox{padding:12px;background:#f6f8fb;border-radius:24px;border:1px solid var(--line);box-shadow:var(--shadow);margin-top:24px}.imagebox img{border-radius:14px}
+.svgbox{padding:20px;border-radius:22px;border:1px solid var(--line);background:linear-gradient(180deg,#0c1b2e,#091522);overflow:auto}
+.svgbox svg{display:block;width:100%;height:auto;min-width:760px}
+.flow{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}.step{position:relative;text-align:center;padding:20px 12px;border:1px solid var(--line);border-radius:16px;background:#ffffff05}
+.step:not(:last-child):after{content:"→";position:absolute;right:-20px;top:50%;transform:translateY(-50%);color:var(--blue);font-size:1.45rem;font-weight:900}
+.step span{display:block;color:var(--muted);font-size:.87rem}
+.table{overflow:auto;border:1px solid var(--line);border-radius:17px}table{width:100%;border-collapse:collapse;min-width:700px}th,td{padding:15px;border-bottom:1px solid var(--line);text-align:left;vertical-align:top}
+th{background:#5aafff12;color:#d7ebff;font-size:.88rem}td{color:var(--muted)}
+pre{margin:0;overflow:auto;padding:20px;border-radius:16px;background:#050e19;border:1px solid var(--line);color:#d3ebff;line-height:1.72;font:13px/1.72 Consolas,monospace}
+.timeline{display:grid;grid-template-columns:2fr 1fr 1fr 1fr;border:1px solid var(--line);border-radius:15px;overflow:hidden}.timeline div{padding:18px 14px;text-align:center;border-right:1px solid var(--line)}.timeline div:last-child{border-right:0}
+.t1{background:#5aafff18}.t2{background:#68d99d17}.t3{background:#ffb45f17}.t4{background:#ff727217}
+.timeline b{display:block}.timeline span{color:var(--muted);font-size:.88rem}
+.callout{padding:20px;border-left:4px solid var(--cyan);background:#4edbd511;border-radius:12px}.warning{border-left-color:var(--orange);background:#ffb45f12}
+.checks{display:grid;gap:11px}.check{display:grid;grid-template-columns:28px 1fr;gap:10px;align-items:start}.check i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;background:#68d99d20;color:var(--green);font-style:normal;font-weight:900}
+.phase{display:grid;grid-template-columns:90px 1fr;gap:18px;padding:18px 0;border-bottom:1px solid var(--line)}.phase:last-child{border-bottom:0}.phase b{color:var(--blue)}
+.download{display:grid;grid-template-columns:1fr auto;gap:22px;align-items:center;padding:32px;border:1px solid #4edbd355;border-radius:23px;background:linear-gradient(135deg,#4edbd316,#5aafff12)}
+footer{padding:44px 0;border-top:1px solid #ffffff14;color:var(--muted)}.footer{display:flex;justify-content:space-between;gap:18px;flex-wrap:wrap}
+.small{font-size:.88rem}.formula{font:600 1.2rem Consolas,monospace;color:#dff3ff}
+@media(max-width:950px){.hero-grid,.grid2{grid-template-columns:1fr}.grid3,.grid4{grid-template-columns:1fr 1fr}.flow{grid-template-columns:1fr}.step:not(:last-child):after{content:"↓";right:auto;left:50%;top:auto;bottom:-27px}.links{display:none}}
+@media(max-width:620px){.wrap{width:min(100% - 24px,1220px)}.grid3,.grid4{grid-template-columns:1fr}.timeline{grid-template-columns:1fr}.timeline div{border-right:0;border-bottom:1px solid var(--line)}.timeline div:last-child{border-bottom:0}.download{grid-template-columns:1fr}h1{font-size:2.75rem}}
+</style>
+</head>
+<body>
+<nav><div class="wrap nav">
+<a class="brand" href="#top"><span class="logo">IT</span>InsectTracker</a>
+<div class="links"><a href="#problem">Problem</a><a href="#architektura">Schematy</a><a href="#warianty">Warianty</a><a href="#algorytm">Algorytm</a><a href="#walidacja">Walidacja</a><a href="#budowa">Budowa</a><a href="#komponenty">Komponenty</a><a href="#przyklady-kodu">Kod</a></div>
+<a class="btn" href="#pobierz">Pakiet projektu</a>
+</div></nav>
+
+<header class="hero" id="top"><div class="wrap hero-grid">
+<div>
+<span class="eyebrow">Projekt koncepcyjny · system czasu rzeczywistego</span>
+<h1>Śledzenie i <span>optyczne oznaczanie</span> owadów</h1>
+<p class="lead">Stanowisko badawcze do wykrywania małych, szybko poruszających się obiektów, predykcji ich trajektorii oraz skierowania bezpiecznego wskaźnika optycznego w przewidywane położenie celu.</p>
+<div class="actions"><a class="btn primary" href="#architektura">Poznaj architekturę</a><a class="btn" href="files/insect_laser_tracker.zip" download>Pobierz kod demonstracyjny</a></div>
+</div>
+<div class="panel">
+<div class="signal">
+<div class="row"><div class="icon">◉</div><div><b>Pomiar</b><small>kamera global shutter, event camera lub PSD</small></div><span class="metric">120–1000 Hz</span></div>
+<div class="row"><div class="icon">⌁</div><div><b>Estymacja stanu</b><small>położenie, prędkość i niepewność</small></div><span class="metric">1–3 ms</span></div>
+<div class="row"><div class="icon">↗</div><div><b>Predykcja</b><small>kompensacja opóźnienia toru</small></div><span class="metric">&lt; 10 ms</span></div>
+<div class="row"><div class="icon">✦</div><div><b>Wskazanie optyczne</b><small>laser wyłącznie jako znacznik celu</small></div><span class="metric">klasa 1/2</span></div>
+</div></div>
+</div></header>
+
+<main>
+<section id="problem"><div class="wrap">
+<div class="head"><div class="kicker">Problem badawczy</div><h2>Mały obiekt, wysoka dynamika i bardzo krótki budżet czasu</h2>
+<p>Muchy zmieniają prędkość i kierunek gwałtownie. Skuteczność układu zależy nie tylko od trafnej detekcji, lecz przede wszystkim od sumy opóźnień kamery, obliczeń, transmisji i napędu wiązki.</p></div>
+<div class="grid4">
+<div class="card stat"><b>1–2 m/s</b><span>typowy lot</span></div>
+<div class="card stat"><b>3–5 m/s</b><span>szybki zryw</span></div>
+<div class="card stat"><b>&lt; 10 ms</b><span>docelowa latencja</span></div>
+<div class="card stat"><b>5–50 mm</b><span>błąd przy 5–10 ms</span></div>
+</div>
+<div class="grid2" style="margin-top:22px">
+<div class="card"><h3>Podstawowa zależność</h3><p class="formula">Δs = v · Δt</p><p>Przy prędkości 3 m/s opóźnienie 10 ms powoduje przesunięcie celu o około 30 mm. Bez predykcji punkt wskazania pozostaje za rzeczywistym położeniem owada.</p></div>
+<div class="card"><h3>Źródła niepewności</h3><ul><li>rozmycie ruchu i ograniczona rozdzielczość sensora,</li><li>nieregularna trajektoria i nagłe przyspieszenia,</li><li>opóźnienie ekspozycji, buforowania i transmisji,</li><li>błąd kalibracji kamera–napęd–wiązka,</li><li>czas ustalania położenia galvo, MEMS lub serw.</li></ul></div>
+</div>
+<div class="imagebox"><img src="files/tracking_dynamics.png" alt="Problematyka śledzenia owadów i wymagania dynamiczne" onerror="this.parentElement.style.display='none'"></div>
+</div></section>
+
+<section id="architektura"><div class="wrap">
+<div class="head"><div class="kicker">Schemat sprzętowy</div><h2>Dwuwarstwowa architektura: percepcja i sterowanie czasu rzeczywistego</h2>
+<p>Komputer wizyjny realizuje kosztowną analizę obrazu, natomiast mikrokontroler odpowiada za deterministyczne sterowanie napędem, watchdog i logikę bezpieczeństwa.</p></div>
+<div class="svgbox">
+<svg viewBox="0 0 1180 470" role="img" aria-label="Schemat blokowy architektury sprzętowej">
+<defs><marker id="arr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#5aafff"/></marker></defs>
+<rect x="25" y="48" width="205" height="110" rx="18" fill="#132c48" stroke="#5aafff" stroke-width="2"/>
+<text x="127" y="82" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Sensor</text>
+<text x="127" y="112" text-anchor="middle" fill="#a9bbcf" font-size="15">global shutter / event camera</text>
+<text x="127" y="136" text-anchor="middle" fill="#4edbd5" font-size="14">120–1000 Hz</text>
+
+<rect x="315" y="30" width="255" height="145" rx="18" fill="#132c48" stroke="#4edbd5" stroke-width="2"/>
+<text x="442" y="66" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Komputer wizyjny</text>
+<text x="442" y="98" text-anchor="middle" fill="#a9bbcf" font-size="15">detekcja · tracking · predykcja</text>
+<text x="442" y="124" text-anchor="middle" fill="#a9bbcf" font-size="15">OpenCV / CUDA / FPGA</text>
+<text x="442" y="151" text-anchor="middle" fill="#4edbd5" font-size="14">znacznik czasu + stan celu</text>
+
+<rect x="665" y="30" width="230" height="145" rx="18" fill="#132c48" stroke="#68d99d" stroke-width="2"/>
+<text x="780" y="66" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Sterownik RT</text>
+<text x="780" y="98" text-anchor="middle" fill="#a9bbcf" font-size="15">STM32 / RP2040 / FPGA</text>
+<text x="780" y="124" text-anchor="middle" fill="#a9bbcf" font-size="15">interpolacja · watchdog</text>
+<text x="780" y="151" text-anchor="middle" fill="#68d99d" font-size="14">pętla 1–10 kHz</text>
+
+<rect x="975" y="30" width="180" height="145" rx="18" fill="#132c48" stroke="#ffb45f" stroke-width="2"/>
+<text x="1065" y="66" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Napęd wiązki</text>
+<text x="1065" y="98" text-anchor="middle" fill="#a9bbcf" font-size="15">galvo / MEMS / pan–tilt</text>
+<text x="1065" y="124" text-anchor="middle" fill="#a9bbcf" font-size="15">DAC lub PWM</text>
+<text x="1065" y="151" text-anchor="middle" fill="#ffb45f" font-size="14">ustalenie 1–5 ms</text>
+
+<line x1="230" y1="103" x2="315" y2="103" stroke="#5aafff" stroke-width="3" marker-end="url(#arr)"/>
+<line x1="570" y1="103" x2="665" y2="103" stroke="#5aafff" stroke-width="3" marker-end="url(#arr)"/>
+<line x1="895" y1="103" x2="975" y2="103" stroke="#5aafff" stroke-width="3" marker-end="url(#arr)"/>
+
+<rect x="385" y="260" width="260" height="120" rx="18" fill="#10233a" stroke="#ff7272" stroke-width="2"/>
+<text x="515" y="296" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Łańcuch bezpieczeństwa</text>
+<text x="515" y="326" text-anchor="middle" fill="#a9bbcf" font-size="15">E‑STOP · osłona · klucz · timeout</text>
+<text x="515" y="353" text-anchor="middle" fill="#ff8c8c" font-size="14">niezależne od aplikacji PC</text>
+
+<rect x="760" y="260" width="250" height="120" rx="18" fill="#10233a" stroke="#ffb45f" stroke-width="2"/>
+<text x="885" y="296" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Moduł wskaźnika</text>
+<text x="885" y="326" text-anchor="middle" fill="#a9bbcf" font-size="15">certyfikowany moduł optyczny</text>
+<text x="885" y="353" text-anchor="middle" fill="#ffb45f" font-size="14">krótki impuls / ENABLE</text>
+
+<line x1="780" y1="175" x2="780" y2="235" stroke="#68d99d" stroke-width="3"/>
+<line x1="780" y1="235" x2="885" y2="260" stroke="#68d99d" stroke-width="3" marker-end="url(#arr)"/>
+<line x1="645" y1="320" x2="760" y2="320" stroke="#ff7272" stroke-width="3" marker-end="url(#arr)"/>
+<line x1="1010" y1="320" x2="1090" y2="320" stroke="#ffb45f" stroke-width="3" marker-end="url(#arr)"/>
+<circle cx="1110" cy="320" r="13" fill="#ff7272"/>
+<text x="1110" y="355" text-anchor="middle" fill="#a9bbcf" font-size="14">plamka celu</text>
+</svg></div>
+
+<div class="grid2" style="margin-top:22px">
+<div class="card"><h3>Interfejsy danych</h3><ul><li>kamera → komputer: CSI‑2, USB3 Vision, GigE Vision lub PCIe,</li><li>komputer → sterownik: USB CDC, UART, Ethernet UDP lub SPI,</li><li>sterownik → galvo: dwukanałowy DAC i wzmacniacz wyjściowy,</li><li>sterownik → serwa: PWM lub magistrala cyfrowa,</li><li>interlock → moduł lasera: sprzętowe odcięcie linii ENABLE.</li></ul></div>
+<div class="card"><h3>Zasada separacji funkcji</h3><p>System operacyjny i aplikacja mogą wykrywać oraz przewidywać cel, ale nie powinny być jedynym mechanizmem bezpieczeństwa. Mikrokontroler musi przejść automatycznie do stanu <code>SAFE_OFF</code> po utracie komunikacji lub interlocku.</p></div>
+</div>
+</div></section>
+
+<section id="algorytm"><div class="wrap">
+<div class="head"><div class="kicker">Schemat algorytmiczny</div><h2>Pętla śledzenia z predykcją i kontrolą jakości estymacji</h2></div>
+<div class="svgbox">
+<svg viewBox="0 0 1180 520" role="img" aria-label="Schemat blokowy algorytmu śledzenia">
+<defs><marker id="arr2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L10,3 L0,6 Z" fill="#5aafff"/></marker></defs>
+<g font-family="Arial">
+<rect x="35" y="60" width="170" height="82" rx="16" fill="#132c48" stroke="#5aafff" stroke-width="2"/><text x="120" y="94" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Akwizycja</text><text x="120" y="120" text-anchor="middle" fill="#a9bbcf" font-size="14">klatka / zdarzenia</text>
+<rect x="260" y="60" width="180" height="82" rx="16" fill="#132c48" stroke="#5aafff" stroke-width="2"/><text x="350" y="94" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Preprocessing</text><text x="350" y="120" text-anchor="middle" fill="#a9bbcf" font-size="14">ROI · filtracja · tło</text>
+<rect x="500" y="60" width="180" height="82" rx="16" fill="#132c48" stroke="#4edbd5" stroke-width="2"/><text x="590" y="94" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Detekcja</text><text x="590" y="120" text-anchor="middle" fill="#a9bbcf" font-size="14">centroid · cechy · score</text>
+<rect x="740" y="60" width="180" height="82" rx="16" fill="#132c48" stroke="#68d99d" stroke-width="2"/><text x="830" y="94" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Asocjacja</text><text x="830" y="120" text-anchor="middle" fill="#a9bbcf" font-size="14">gating · nearest neighbour</text>
+<rect x="975" y="60" width="170" height="82" rx="16" fill="#132c48" stroke="#68d99d" stroke-width="2"/><text x="1060" y="94" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Filtr stanu</text><text x="1060" y="120" text-anchor="middle" fill="#a9bbcf" font-size="14">Kalman / α‑β / IMM</text>
+<line x1="205" y1="101" x2="260" y2="101" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/><line x1="440" y1="101" x2="500" y2="101" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/><line x1="680" y1="101" x2="740" y2="101" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/><line x1="920" y1="101" x2="975" y2="101" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/>
+
+<rect x="865" y="245" width="210" height="88" rx="16" fill="#10233a" stroke="#ffb45f" stroke-width="2"/><text x="970" y="280" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Predykcja do t + Δt</text><text x="970" y="308" text-anchor="middle" fill="#a9bbcf" font-size="14">kompensacja pełnej latencji</text>
+<rect x="580" y="245" width="210" height="88" rx="16" fill="#10233a" stroke="#5aafff" stroke-width="2"/><text x="685" y="280" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Transformacja</text><text x="685" y="308" text-anchor="middle" fill="#a9bbcf" font-size="14">piksele → kąty / napięcia</text>
+<rect x="285" y="245" width="220" height="88" rx="16" fill="#10233a" stroke="#68d99d" stroke-width="2"/><text x="395" y="280" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Kontrola jakości</text><text x="395" y="308" text-anchor="middle" fill="#a9bbcf" font-size="14">score · kowariancja · strefa</text>
+<rect x="35" y="245" width="180" height="88" rx="16" fill="#10233a" stroke="#ff7272" stroke-width="2"/><text x="125" y="280" text-anchor="middle" fill="#fff" font-size="18" font-weight="700">Decyzja</text><text x="125" y="308" text-anchor="middle" fill="#a9bbcf" font-size="14">AIM / PULSE / SAFE_OFF</text>
+
+<line x1="1060" y1="142" x2="1060" y2="205" stroke="#68d99d" stroke-width="3"/><line x1="1060" y1="205" x2="970" y2="245" stroke="#68d99d" stroke-width="3" marker-end="url(#arr2)"/>
+<line x1="865" y1="289" x2="790" y2="289" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/><line x1="580" y1="289" x2="505" y2="289" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/><line x1="285" y1="289" x2="215" y2="289" stroke="#5aafff" stroke-width="3" marker-end="url(#arr2)"/>
+
+<path d="M125 333 L125 420 L1060 420 L1060 142" fill="none" stroke="#4edbd5" stroke-width="2" stroke-dasharray="8 7" marker-end="url(#arr2)"/>
+<text x="590" y="448" text-anchor="middle" fill="#4edbd5" font-size="15">sprzężenie zwrotne: błąd położenia, utrata celu, aktualizacja opóźnienia</text>
+</g></svg></div>
+
+<div class="grid2" style="margin-top:22px">
+<div class="card"><h3>Model stanu</h3><pre>x = [px, py, vx, vy]ᵀ
+x(k+1) = F(Δt) x(k) + w(k)
+z(k) = H x(k) + v(k)
+
+p̂(t+L) = p(t) + v(t)L</pre><p>Wersja podstawowa zakłada stałą prędkość. Dla częstych zmian kierunku można zastosować model stałego przyspieszenia lub filtr IMM łączący kilka modeli ruchu.</p></div>
+<div class="card"><h3>Kryteria poprawnego śledzenia</h3><div class="checks">
+<div class="check"><i>✓</i><div>obiekt obecny w co najmniej 3–5 kolejnych pomiarach,</div></div>
+<div class="check"><i>✓</i><div>odległość innowacji poniżej progu bramkowania,</div></div>
+<div class="check"><i>✓</i><div>kowariancja pozycji mniejsza od dopuszczalnej,</div></div>
+<div class="check"><i>✓</i><div>punkt predykcji znajduje się w bezpiecznej strefie,</div></div>
+<div class="check"><i>✓</i><div>interlock, watchdog i pozycja napędu są poprawne.</div></div>
+</div></div>
+</div>
+</div></section>
+
+<section id="latencja"><div class="wrap">
+<div class="head"><div class="kicker">Budżet czasu</div><h2>Każdy etap musi być mierzony znacznikiem czasu</h2><p>Nominalna szybkość kamery nie wystarcza. Należy mierzyć opóźnienie „sensor-to-photon”, od ekspozycji do pojawienia się plamki w punkcie docelowym.</p></div>
+<div class="timeline">
+<div class="t1"><b>Akwizycja</b><span>2–6 ms</span></div>
+<div class="t2"><b>Obliczenia</b><span>1–3 ms</span></div>
+<div class="t3"><b>Transmisja</b><span>0,2–2 ms</span></div>
+<div class="t4"><b>Napęd</b><span>1–5 ms</span></div>
+</div>
+<div class="grid3" style="margin-top:20px">
+<div class="card"><h3>Cel podstawowy</h3><p><b>&lt; 15 ms</b> dla demonstratora laboratoryjnego śledzącego owady siedzące i wolniejszy lot.</p></div>
+<div class="card"><h3>Cel zaawansowany</h3><p><b>&lt; 10 ms</b> dla aktywnego śledzenia szybkich przelotów w ograniczonej objętości.</p></div>
+<div class="card"><h3>Cel eksperymentalny</h3><p><b>&lt; 3–5 ms</b> z event camera, FPGA i galvo/MEMS, przy małym polu roboczym.</p></div>
+</div>
+</div></section>
+
+<section id="warianty"><div class="wrap">
+<div class="head"><div class="kicker">Porównanie wariantów</div><h2>Architektura zależy od wymaganej dynamiki i pola roboczego</h2></div>
+<div class="table"><table>
+<thead><tr><th>Wariant</th><th>Sensor</th><th>Napęd</th><th>Latencja</th><th>Zalety</th><th>Ograniczenia</th></tr></thead>
+<tbody>
+<tr><td><b>A. Uniwersalny</b></td><td>kamera global shutter 120–240 fps</td><td>galvo lub szybkie serwa</td><td>8–20 ms</td><td>pełny obraz, proste debugowanie, umiarkowany koszt</td><td>opóźnienie klatkowe, rozmycie przy długiej ekspozycji</td></tr>
+<tr><td><b>B. Wysokodynamiczny</b></td><td>event camera</td><td>galvo</td><td>1–8 ms</td><td>bardzo mała latencja, wysoki zakres dynamiczny</td><td>koszt, trudniejsza rekonstrukcja i walidacja</td></tr>
+<tr><td><b>C. Lokalny MEMS</b></td><td>PSD/QD + skaner</td><td>lustro MEMS</td><td>&lt; 1–5 ms</td><td>kompaktowość i najwyższa szybkość lokalna</td><td>małe pole widzenia i złożona kalibracja optyczna</td></tr>
+</tbody></table></div>
+<div class="imagebox"><img src="files/system_variants.png" alt="Porównanie wariantów systemu" onerror="this.parentElement.style.display='none'"></div>
+</div></section>
+
+<section id="kalibracja"><div class="wrap">
+<div class="head"><div class="kicker">Kalibracja</div><h2>Wspólna geometria kamery, napędu i płaszczyzny roboczej</h2></div>
+<div class="grid3">
+<div class="card"><span class="tag">Etap 1</span><h3>Kalibracja kamery</h3><p>Wyznaczenie parametrów wewnętrznych, dystorsji i czasu ekspozycji. Dla obszaru 3D potrzebny jest model głębi lub co najmniej założona płaszczyzna robocza.</p></div>
+<div class="card"><span class="tag g">Etap 2</span><h3>Mapowanie punktu</h3><p>Zebranie par <code>(x,y) → (u,v)</code>, gdzie współrzędne obrazu odpowiadają napięciom galvo albo kątom osi. Dopasowanie homografii lub modelu wielomianowego.</p></div>
+<div class="card"><span class="tag o">Etap 3</span><h3>Kompensacja dynamiczna</h3><p>Pomiar czasu ustalania napędu i błędu zależnego od kierunku ruchu. Wprowadzenie feed-forward, histerezy i ograniczeń przyspieszenia.</p></div>
+</div>
+<div class="callout" style="margin-top:20px"><b>Praktyczna procedura:</b> umieścić matową planszę kalibracyjną w polu roboczym, skierować plamkę na siatkę punktów, wykryć jej położenie kamerą i wyznaczyć transformację minimalizującą średni błąd reprojekcji.</div>
+</div></section>
+
+<section id="walidacja"><div class="wrap">
+<div class="head"><div class="kicker">Plan walidacji</div><h2>Najpierw cele kontrolowane, dopiero później swobodnie latające owady</h2></div>
+<div class="grid2">
+<div class="card">
+<div class="phase"><b>Faza 1</b><div><strong>Test statyczny.</strong><br><span class="muted">Plansza punktowa, pomiar dokładności i powtarzalności wskazania.</span></div></div>
+<div class="phase"><b>Faza 2</b><div><strong>Cel na prowadnicy.</strong><br><span class="muted">Znana prędkość liniowa 0,1–2 m/s, pomiar opóźnienia i błędu.</span></div></div>
+<div class="phase"><b>Faza 3</b><div><strong>Cel wahadłowy lub wirujący.</strong><br><span class="muted">Ruch krzywoliniowy, przyspieszenia i zmienna prędkość kątowa.</span></div></div>
+<div class="phase"><b>Faza 4</b><div><strong>Obiekt biologiczny.</strong><br><span class="muted">Ocena recall, czasu utrzymania śladu i błędu punktu predykcji.</span></div></div>
+</div>
+<div class="card"><h3>Metryki projektu</h3><div class="table"><table>
+<thead><tr><th>Metryka</th><th>Znaczenie</th><th>Cel demonstratora</th></tr></thead>
+<tbody>
+<tr><td>latencja sensor-to-photon</td><td>pełne opóźnienie układu</td><td>&lt; 15 ms</td></tr>
+<tr><td>RMSE punktu wskazania</td><td>średni błąd przestrzenny</td><td>&lt; 10 mm w ROI</td></tr>
+<tr><td>track retention</td><td>czas ciągłego utrzymania śladu</td><td>&gt; 80%</td></tr>
+<tr><td>false activation rate</td><td>błędne impulsy wskaźnika</td><td>&lt; 1%</td></tr>
+<tr><td>safe-off time</td><td>czas wyłączenia po błędzie</td><td>&lt; 20 ms</td></tr>
+</tbody></table></div></div>
+</div>
+</div></section>
+
+
+<section id="budowa"><div class="wrap">
+<div class="head">
+  <div class="kicker">Instrukcja wykonawcza</div>
+  <h2>Budowa systemu krok po kroku</h2>
+  <p>Poniższa procedura prowadzi od przygotowania stanowiska do pierwszego kontrolowanego testu śledzenia. Kolejne etapy należy wykonywać sekwencyjnie i zatwierdzać pomiarami.</p>
+</div>
+
+<div class="callout warning">
+  <b>Zakres projektu:</b> system służy wyłącznie do detekcji, śledzenia i optycznego oznaczania celu. Nie obejmuje układu rażenia. Prace z laserem należy prowadzić w zamkniętej strefie testowej, z pochłaniaczem wiązki, interlockiem i fizycznym E‑STOP.
+</div>
+
+<div class="grid2" style="margin-top:22px">
+  <div class="card">
+    <span class="tag">Krok 1</span>
+    <h3>Wybór architektury</h3>
+    <p>Przed zakupem komponentów należy określić wymaganą dynamikę i pole robocze.</p>
+    <ul>
+      <li><b>Global shutter + galvo:</b> wariant rekomendowany do pierwszego prototypu.</li>
+      <li><b>Event camera + galvo:</b> wariant do bardzo szybkich trajektorii i małej latencji.</li>
+      <li><b>MEMS + PSD/QD:</b> wariant eksperymentalny, przeznaczony do małego pola pracy.</li>
+    </ul>
+    <p><b>Kryterium przejścia:</b> wybrany sensor, napęd i zakres przestrzeni roboczej są wzajemnie zgodne.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag g">Krok 2</span>
+    <h3>Przygotowanie stanowiska</h3>
+    <ul>
+      <li>zbuduj zamkniętą komorę lub wyznacz osłonięty obszar testowy,</li>
+      <li>umieść matowe, ciemne tło i pochłaniacz wiązki,</li>
+      <li>zamocuj kamerę i napęd na sztywnej wspólnej ramie,</li>
+      <li>ogranicz mechanicznie zakres osi,</li>
+      <li>dodaj E‑STOP i czujnik zamknięcia osłony.</li>
+    </ul>
+    <p><b>Kryterium przejścia:</b> wiązka w żadnym położeniu nie opuszcza bezpiecznej strefy.</p>
+  </div>
+</div>
+
+<div class="svgbox" style="margin-top:22px">
+<svg viewBox="0 0 1180 520" role="img" aria-label="Schemat połączeń elektrycznych systemu">
+<defs>
+  <marker id="warr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+    <path d="M0,0 L10,3 L0,6 Z" fill="#5aafff"/>
+  </marker>
+  <marker id="sarr" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+    <path d="M0,0 L10,3 L0,6 Z" fill="#ff7272"/>
+  </marker>
+</defs>
+
+<rect x="30" y="45" width="220" height="110" rx="18" fill="#132c48" stroke="#5aafff" stroke-width="2"/>
+<text x="140" y="82" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Kamera / sensor</text>
+<text x="140" y="112" text-anchor="middle" fill="#a9bbcf" font-size="15">USB3 / CSI‑2 / GigE</text>
+<text x="140" y="137" text-anchor="middle" fill="#4edbd5" font-size="14">zasilanie + dane</text>
+
+<rect x="335" y="45" width="240" height="110" rx="18" fill="#132c48" stroke="#4edbd5" stroke-width="2"/>
+<text x="455" y="82" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Komputer wizyjny</text>
+<text x="455" y="112" text-anchor="middle" fill="#a9bbcf" font-size="15">Raspberry Pi / mini‑PC</text>
+<text x="455" y="137" text-anchor="middle" fill="#4edbd5" font-size="14">OpenCV + tracker</text>
+
+<rect x="660" y="45" width="220" height="110" rx="18" fill="#132c48" stroke="#68d99d" stroke-width="2"/>
+<text x="770" y="82" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Mikrokontroler</text>
+<text x="770" y="112" text-anchor="middle" fill="#a9bbcf" font-size="15">STM32 / RP2040</text>
+<text x="770" y="137" text-anchor="middle" fill="#68d99d" font-size="14">watchdog + sterowanie</text>
+
+<rect x="970" y="45" width="180" height="110" rx="18" fill="#132c48" stroke="#ffb45f" stroke-width="2"/>
+<text x="1060" y="82" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Napęd</text>
+<text x="1060" y="112" text-anchor="middle" fill="#a9bbcf" font-size="15">galvo / serwa</text>
+<text x="1060" y="137" text-anchor="middle" fill="#ffb45f" font-size="14">DAC / PWM</text>
+
+<line x1="250" y1="100" x2="335" y2="100" stroke="#5aafff" stroke-width="3" marker-end="url(#warr)"/>
+<line x1="575" y1="100" x2="660" y2="100" stroke="#5aafff" stroke-width="3" marker-end="url(#warr)"/>
+<line x1="880" y1="100" x2="970" y2="100" stroke="#5aafff" stroke-width="3" marker-end="url(#warr)"/>
+
+<rect x="115" y="285" width="250" height="120" rx="18" fill="#10233a" stroke="#ff7272" stroke-width="2"/>
+<text x="240" y="320" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Łańcuch bezpieczeństwa</text>
+<text x="240" y="350" text-anchor="middle" fill="#a9bbcf" font-size="15">E‑STOP · osłona · klucz</text>
+<text x="240" y="378" text-anchor="middle" fill="#ff8c8c" font-size="14">styki NC</text>
+
+<rect x="465" y="285" width="230" height="120" rx="18" fill="#10233a" stroke="#ffb45f" stroke-width="2"/>
+<text x="580" y="320" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Moduł lasera</text>
+<text x="580" y="350" text-anchor="middle" fill="#a9bbcf" font-size="15">klasa 1 / właściwie obudowana 2</text>
+<text x="580" y="378" text-anchor="middle" fill="#ffb45f" font-size="14">wejście ENABLE</text>
+
+<rect x="810" y="285" width="240" height="120" rx="18" fill="#10233a" stroke="#5aafff" stroke-width="2"/>
+<text x="930" y="320" text-anchor="middle" fill="#fff" font-size="20" font-weight="700">Zasilanie</text>
+<text x="930" y="350" text-anchor="middle" fill="#a9bbcf" font-size="15">12 V + 5 V + 6 V</text>
+<text x="930" y="378" text-anchor="middle" fill="#5aafff" font-size="14">oddzielne gałęzie</text>
+
+<line x1="770" y1="155" x2="770" y2="240" stroke="#68d99d" stroke-width="3"/>
+<line x1="770" y1="240" x2="695" y2="285" stroke="#68d99d" stroke-width="3" marker-end="url(#warr)"/>
+<line x1="365" y1="345" x2="465" y2="345" stroke="#ff7272" stroke-width="3" marker-end="url(#sarr)"/>
+<line x1="810" y1="345" x2="695" y2="345" stroke="#5aafff" stroke-width="3" marker-end="url(#warr)"/>
+<line x1="930" y1="285" x2="930" y2="205" stroke="#5aafff" stroke-width="3"/>
+<line x1="930" y1="205" x2="1060" y2="155" stroke="#5aafff" stroke-width="3" marker-end="url(#warr)"/>
+
+<text x="590" y="470" text-anchor="middle" fill="#a9bbcf" font-size="15">
+Masy sygnałowe wspólne; zasilanie kamery, napędu i lasera prowadzone oddzielnymi gałęziami
+</text>
+</svg>
+</div>
+
+<div class="grid2" style="margin-top:22px">
+  <div class="card">
+    <span class="tag o">Krok 3</span>
+    <h3>Montaż mechaniczny</h3>
+    <ol>
+      <li>Zamocuj kamerę tak, aby obejmowała całą strefę roboczą.</li>
+      <li>Umieść napęd możliwie blisko osi optycznej kamery.</li>
+      <li>Zamocuj moduł wskaźnika na uchwycie bez luzów.</li>
+      <li>Dodaj ograniczniki osi i możliwość regulacji zerowej.</li>
+      <li>Sprawdź, czy przewody nie ograniczają ruchu.</li>
+    </ol>
+    <p><b>Wskazówka:</b> sztywność ramy ma większe znaczenie niż dokładność pojedynczego serwa. Ugięcie konstrukcji bezpośrednio pogarsza kalibrację.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag">Krok 4</span>
+    <h3>Połączenia elektryczne</h3>
+    <ol>
+      <li>Podłącz kamerę do komputera wizyjnego.</li>
+      <li>Połącz komputer z mikrokontrolerem przez USB/UART.</li>
+      <li>Podłącz napęd do dedykowanego zasilacza.</li>
+      <li>Podłącz sygnał ENABLE lasera przez sprzętowy interlock.</li>
+      <li>Połącz E‑STOP i czujnik osłony jako styki normalnie zamknięte.</li>
+      <li>Dodaj bezpieczniki i pomiar napięć.</li>
+    </ol>
+    <p><b>Kryterium przejścia:</b> odłączenie dowolnego elementu bezpieczeństwa wyłącza laser bez udziału aplikacji PC.</p>
+  </div>
+</div>
+
+<div class="grid2" style="margin-top:22px">
+  <div class="card">
+    <span class="tag g">Krok 5</span>
+    <h3>Instalacja oprogramowania</h3>
+    <pre>python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+
+python tracker.py --config config.yaml</pre>
+    <p>W systemie Windows aktywacja środowiska odbywa się poleceniem:</p>
+    <pre>.venv\Scripts\activate</pre>
+    <p>Na pierwszym uruchomieniu pozostaw <code>control.enabled: false</code>.</p>
+  </div>
+
+  <div class="card">
+    <span class="tag o">Krok 6</span>
+    <h3>Test kamery i detektora</h3>
+    <ol>
+      <li>ustaw krótką ekspozycję,</li>
+      <li>sprawdź rzeczywiste FPS,</li>
+      <li>dobierz próg powierzchni obiektu,</li>
+      <li>sprawdź maskę ruchu i liczbę fałszywych detekcji,</li>
+      <li>wyłącz automatyczne buforowanie, jeśli sterownik kamery na to pozwala.</li>
+    </ol>
+    <p><b>Kryterium przejścia:</b> obiekt testowy jest wykrywany stabilnie przez co najmniej 80% czasu przejścia przez ROI.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:22px">
+  <span class="tag">Krok 7</span>
+  <h3>Kalibracja mapowania obrazu na napęd</h3>
+  <div class="grid2">
+    <div>
+      <ol>
+        <li>Umieść matową planszę z siatką punktów w płaszczyźnie roboczej.</li>
+        <li>Ustaw napęd w znanych położeniach.</li>
+        <li>Zarejestruj położenie plamki w obrazie.</li>
+        <li>Zbuduj zbiór par <code>(x,y) ↔ (pan,tilt)</code> lub <code>(u,v)</code> dla galvo.</li>
+        <li>Dopasuj homografię albo model wielomianowy.</li>
+        <li>Policz RMSE kalibracji.</li>
+      </ol>
+    </div>
+    <div>
+      <pre># idea kalibracji
+samples = [
+  (x_img, y_img, pan, tilt),
+  ...
+]
+
+model_pan  = fit_polynomial(x_img, y_img, pan)
+model_tilt = fit_polynomial(x_img, y_img, tilt)
+
+rmse = evaluate(samples)</pre>
+    </div>
+  </div>
+  <p><b>Cel:</b> RMSE poniżej 10 mm w głównym obszarze ROI lub poniżej 2–3 pikseli po reprojekcji.</p>
+</div>
+
+<div class="grid3" style="margin-top:22px">
+  <div class="card">
+    <span class="tag g">Krok 8</span>
+    <h3>Uruchomienie sterowania</h3>
+    <p>Włącz komunikację z mikrokontrolerem bez aktywnego lasera. Najpierw sprawdź tylko ruch napędu i zgodność kierunków osi.</p>
+  </div>
+  <div class="card">
+    <span class="tag o">Krok 9</span>
+    <h3>Pomiar opóźnienia</h3>
+    <p>Zmierz czas od znacznika ekspozycji do osiągnięcia pozycji przez napęd. Wartość ta staje się parametrem predykcji <code>lead_time_ms</code>.</p>
+  </div>
+  <div class="card">
+    <span class="tag">Krok 10</span>
+    <h3>Test znacznika</h3>
+    <p>Aktywuj laser tylko na nieruchomej planszy, z minimalnym czasem impulsu i działającym interlockiem.</p>
+  </div>
+</div>
+
+<div class="card" style="margin-top:22px">
+  <h3>Sekwencja pierwszego bezpiecznego uruchomienia</h3>
+  <div class="phase"><b>1</b><div><strong>Stan SAFE_OFF.</strong><br><span class="muted">Napęd aktywny, laser odłączony lub wyłączony sprzętowo.</span></div></div>
+  <div class="phase"><b>2</b><div><strong>Test ruchu.</strong><br><span class="muted">Sprawdzenie zakresów osi i ograniczników.</span></div></div>
+  <div class="phase"><b>3</b><div><strong>Test interlocku.</strong><br><span class="muted">Otwarcie osłony i E‑STOP muszą wymuszać wyłączenie.</span></div></div>
+  <div class="phase"><b>4</b><div><strong>Test statycznej plamki.</strong><br><span class="muted">Krótki impuls na planszę kalibracyjną.</span></div></div>
+  <div class="phase"><b>5</b><div><strong>Cel na prowadnicy.</strong><br><span class="muted">Znana prędkość, pomiar błędu i latencji.</span></div></div>
+  <div class="phase"><b>6</b><div><strong>Test dynamiczny.</strong><br><span class="muted">Dopiero po spełnieniu kryteriów dokładności i bezpieczeństwa.</span></div></div>
+</div>
+
+<div class="grid2" style="margin-top:22px">
+  <div class="card">
+    <h3>Lista kontrolna przed testem</h3>
+    <div class="checks">
+      <div class="check"><i>✓</i><div>osłona zamknięta i interlock aktywny,</div></div>
+      <div class="check"><i>✓</i><div>E‑STOP sprawdzony,</div></div>
+      <div class="check"><i>✓</i><div>pochłaniacz wiązki znajduje się w całym zakresie ruchu,</div></div>
+      <div class="check"><i>✓</i><div>limity osi zapisane w firmware,</div></div>
+      <div class="check"><i>✓</i><div>watchdog wyłącza laser po utracie komunikacji,</div></div>
+      <div class="check"><i>✓</i><div>kalibracja ma zaakceptowany RMSE,</div></div>
+      <div class="check"><i>✓</i><div>logowanie znaczników czasu jest aktywne.</div></div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h3>Typowe problemy i diagnostyka</h3>
+    <div class="table"><table>
+      <thead><tr><th>Objaw</th><th>Możliwa przyczyna</th><th>Działanie</th></tr></thead>
+      <tbody>
+        <tr><td>ślad drży</td><td>szum detekcji, zbyt mały proces noise</td><td>zwiększ filtrację lub dostrój Kalman</td></tr>
+        <tr><td>wiązka pozostaje za celem</td><td>zaniżone lead_time</td><td>zmierz pełną latencję i zwiększ predykcję</td></tr>
+        <tr><td>duży błąd na brzegach ROI</td><td>mapowanie liniowe</td><td>zastosuj model wielomianowy lub homografię</td></tr>
+        <tr><td>fałszywe detekcje</td><td>refleksy lub ruch tła</td><td>zmień oświetlenie, ROI i progi powierzchni</td></tr>
+        <tr><td>reset mikrokontrolera</td><td>zakłócenia od napędu</td><td>oddziel zasilania, dodaj filtrację i kondensatory</td></tr>
+      </tbody>
+    </table></div>
+  </div>
+</div>
+
+<div class="callout" style="margin-top:22px">
+  <b>Kryterium zakończenia budowy:</b> system utrzymuje cel testowy, osiąga założoną latencję, nie przekracza strefy roboczej, a każdy błąd komunikacji lub bezpieczeństwa powoduje natychmiastowe przejście do <code>SAFE_OFF</code>.
+</div>
+</div></section>
+
+
+<section id="komponenty"><div class="wrap">
+<div class="head">
+  <div class="kicker">Komponenty i zakupy</div>
+  <h2>Przykładowy zestaw elektroniczny do wariantu global shutter + pan–tilt lub galvo</h2>
+  <p>Linki prowadzą do stron producentów lub renomowanych dystrybutorów. Dostępność i ceny mogą się zmieniać, dlatego przed zakupem należy ponownie sprawdzić zgodność napięć, interfejsów i wymagań mechanicznych.</p>
+</div>
+
+<div class="table"><table>
+<thead><tr><th>Blok</th><th>Przykładowy element</th><th>Rola</th><th>Połączenie</th><th>Odnośnik</th></tr></thead>
+<tbody>
+<tr>
+  <td>Komputer wizyjny</td>
+  <td>Raspberry Pi 5</td>
+  <td>Detekcja, tracking, predykcja i komunikacja</td>
+  <td>kamera przez CSI; STM32 przez USB/UART</td>
+  <td><a class="btn" href="https://www.raspberrypi.com/products/raspberry-pi-5/" target="_blank" rel="noopener">Produkt</a></td>
+</tr>
+<tr>
+  <td>Kamera</td>
+  <td>Raspberry Pi Global Shutter Camera</td>
+  <td>Rejestracja szybkiego ruchu bez artefaktów rolling shutter</td>
+  <td>złącze CSI; w Pi 5 wymagany właściwy kabel kamery</td>
+  <td><a class="btn" href="https://www.raspberrypi.com/products/raspberry-pi-global-shutter-camera/" target="_blank" rel="noopener">Produkt</a></td>
+</tr>
+<tr>
+  <td>Sterownik czasu rzeczywistego</td>
+  <td>NUCLEO‑G431RB</td>
+  <td>Watchdog, sterowanie osiami, interlock i telemetria</td>
+  <td>USB CDC lub UART 3,3 V</td>
+  <td><a class="btn" href="https://www.st.com/en/evaluation-tools/nucleo-g431rb.html" target="_blank" rel="noopener">Producent</a> <a class="btn" href="https://www.digikey.pl/pl/products/detail/stmicroelectronics/NUCLEO-G431RB/10231584" target="_blank" rel="noopener">DigiKey</a></td>
+</tr>
+<tr>
+  <td>Sterownik serw</td>
+  <td>Adafruit PCA9685</td>
+  <td>16 kanałów PWM dla napędu pan–tilt</td>
+  <td>I²C: SDA, SCL, 3,3 V logiki; osobne zasilanie serw</td>
+  <td><a class="btn" href="https://www.adafruit.com/product/815" target="_blank" rel="noopener">Produkt</a> <a class="btn" href="https://learn.adafruit.com/16-channel-pwm-servo-driver" target="_blank" rel="noopener">Instrukcja</a></td>
+</tr>
+<tr>
+  <td>Pomiar zasilania</td>
+  <td>Adafruit INA219</td>
+  <td>Pomiar prądu i napięcia gałęzi napędu</td>
+  <td>I²C; rezystor pomiarowy w dodatniej gałęzi</td>
+  <td><a class="btn" href="https://www.adafruit.com/product/904" target="_blank" rel="noopener">Produkt</a></td>
+</tr>
+<tr>
+  <td>DAC dla galvo</td>
+  <td>TI DAC8562</td>
+  <td>Dwa precyzyjne kanały analogowe do zadawania X/Y</td>
+  <td>SPI z STM32; wyjścia przez stopień dopasowujący</td>
+  <td><a class="btn" href="https://www.ti.com/product/DAC8562" target="_blank" rel="noopener">Produkt</a></td>
+</tr>
+<tr>
+  <td>Zasilanie SBC</td>
+  <td>Oficjalny zasilacz USB‑C Raspberry Pi 27 W</td>
+  <td>Stabilne zasilanie Raspberry Pi 5</td>
+  <td>bezpośrednio USB‑C</td>
+  <td><a class="btn" href="https://www.raspberrypi.com/products/27w-power-supply/" target="_blank" rel="noopener">Produkt</a></td>
+</tr>
+<tr>
+  <td>Zasilanie serw</td>
+  <td>Przetwornica 12 V → 6 V, co najmniej 5–10 A</td>
+  <td>Niezależne zasilanie napędu</td>
+  <td>V+ PCA9685/serwa; masa wspólna z logiką</td>
+  <td><span class="muted">dobór do prądu zablokowanych serw</span></td>
+</tr>
+<tr>
+  <td>Bezpieczeństwo</td>
+  <td>E‑STOP NC + krańcówka osłony NC + przekaźnik bezpieczeństwa</td>
+  <td>Sprzętowe odcięcie ENABLE wskaźnika</td>
+  <td>szeregowy łańcuch styków normalnie zamkniętych</td>
+  <td><span class="muted">komponenty przemysłowe z dokumentacją</span></td>
+</tr>
+<tr>
+  <td>Wskaźnik optyczny</td>
+  <td>Certyfikowany moduł klasy 1 lub odpowiednio obudowany produkt klasy 2</td>
+  <td>Wyłącznie optyczne oznaczenie celu</td>
+  <td>zasilanie przez sprzętowy interlock i linię ENABLE</td>
+  <td><span class="muted">dobór po ocenie bezpieczeństwa stanowiska</span></td>
+</tr>
+</tbody></table></div>
+
+<div class="callout" style="margin-top:20px">
+  <b>Wariant minimalny:</b> Raspberry Pi 5 + Global Shutter Camera + NUCLEO‑G431RB + dwa szybkie serwa. PCA9685 jest przydatny dla wielu serw, ale przy dwóch osiach STM32 może generować PWM bezpośrednio.
+</div>
+</div></section>
+
+<section id="polaczenia"><div class="wrap">
+<div class="head">
+  <div class="kicker">Połączenia praktyczne</div>
+  <h2>Jak podłączyć poszczególne moduły</h2>
+</div>
+
+<div class="grid2">
+<div class="card">
+<h3>Raspberry Pi 5 ↔ Global Shutter Camera</h3>
+<ol>
+<li>Wyłącz zasilanie Raspberry Pi.</li>
+<li>Wsuń właściwy kabel CSI do złącza CAM/DISP.</li>
+<li>Drugą stronę podłącz do kamery, zachowując orientację styków.</li>
+<li>Po uruchomieniu sprawdź kamerę poleceniem <code>rpicam-hello</code>.</li>
+<li>Dla krótkiej ekspozycji zapewnij intensywne, równomierne oświetlenie.</li>
+</ol>
+<pre>rpicam-hello --timeout 0
+rpicam-vid --width 1280 --height 720 \
+  --framerate 120 --shutter 500 \
+  --codec yuv420 -o test.yuv</pre>
+</div>
+
+<div class="card">
+<h3>Raspberry Pi ↔ PCA9685 ↔ serwa</h3>
+<pre>Raspberry Pi        PCA9685
+3V3   ------------> VCC
+GND   ------------> GND
+GPIO2 / SDA ------> SDA
+GPIO3 / SCL ------> SCL
+
+Zasilacz 6 V + ----> V+
+Zasilacz 6 V - ----> GND
+Serwo PAN --------> kanał 0
+Serwo TILT -------> kanał 1</pre>
+<p><b>Nie zasilaj serw z pinu 5 V Raspberry Pi.</b> Masa zasilacza serw musi być wspólna z masą logiki, ale przewody prądowe powinny być prowadzone osobno.</p>
+</div>
+
+<div class="card">
+<h3>Raspberry Pi ↔ NUCLEO‑G431RB</h3>
+<p>Najprostsze połączenie wykorzystuje port USB ST‑LINK/Virtual COM Port. Alternatywnie można użyć UART 3,3 V.</p>
+<pre>Raspberry Pi / USB ---- NUCLEO USB
+lub:
+GPIO14 TX -----------> RX STM32
+GPIO15 RX <----------- TX STM32
+GND -----------------> GND</pre>
+<p>Nie podawaj sygnału 5 V na wejścia STM32. Protokół powinien zawierać numer sekwencji, timeout i komendę <code>SAFE_OFF</code>.</p>
+</div>
+
+<div class="card">
+<h3>STM32 ↔ PCA9685</h3>
+<pre>STM32               PCA9685
+3V3  --------------> VCC
+GND  --------------> GND
+I2C_SDA ------------> SDA
+I2C_SCL ------------> SCL
+OE -----------------> opcjonalny pin awaryjny</pre>
+<p>Wejście <code>OE</code> można wykorzystać do natychmiastowego wyłączenia wszystkich kanałów PWM. W stanie błędu powinno być wymuszane sprzętowo.</p>
+</div>
+
+<div class="card">
+<h3>STM32 ↔ DAC8562 ↔ sterownik galvo</h3>
+<pre>STM32               DAC8562
+3V3/5V ------------> DVDD zgodnie z modułem
+GND ----------------> GND
+SPI_SCK ------------> SCLK
+SPI_MOSI -----------> DIN
+GPIO_CS ------------> SYNC
+GPIO_LDAC ----------> LDAC
+
+VOUTA ---> wzmacniacz/dopasowanie ---> GALVO X
+VOUTB ---> wzmacniacz/dopasowanie ---> GALVO Y</pre>
+<p>Wejścia galvo często wymagają zakresu bipolarnego, np. ±5 V lub ±10 V. Sam DAC8562 nie powinien być łączony z takim wejściem bez stopnia analogowego i sprawdzenia dokumentacji konkretnego sterownika.</p>
+</div>
+
+<div class="card">
+<h3>Łańcuch interlocku</h3>
+<pre>+V ENABLE
+   |
+[klucz NC]
+   |
+[E-STOP NC]
+   |
+[osłona NC]
+   |
+[watchdog / przekaźnik]
+   |
+ENABLE modułu wskaźnika</pre>
+<p>Otwarcie dowolnego styku musi wyłączać moduł. Program może jedynie dodać kolejny warunek logiczny; nie powinien omijać tego łańcucha.</p>
+</div>
+</div>
+</div></section>
+
+<section id="przyklady-kodu"><div class="wrap">
+<div class="head">
+  <div class="kicker">Przykłady kodu</div>
+  <h2>Fragmenty programu dla kolejnych bloków systemu</h2>
+  <p>Przykłady mają charakter referencyjny. Parametry progów, ekspozycji i predykcji wymagają dostrojenia na rzeczywistym stanowisku.</p>
+</div>
+
+<div class="grid2">
+<div class="card">
+<h3>1. Otwarcie kamery z małym buforem</h3>
+<pre>import cv2
+
+cap = cv2.VideoCapture(0, cv2.CAP_V4L2)
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 1280)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT, 720)
+cap.set(cv2.CAP_PROP_FPS, 120)
+cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
+
+if not cap.isOpened():
+    raise RuntimeError("Nie można otworzyć kamery")
+
+while True:
+    ok, frame = cap.read()
+    if not ok:
+        break</pre>
+</div>
+
+<div class="card">
+<h3>2. Detekcja małego obiektu ruchem</h3>
+<pre>bg = cv2.createBackgroundSubtractorMOG2(
+    history=150,
+    varThreshold=20,
+    detectShadows=False
+)
+
+gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+gray = cv2.GaussianBlur(gray, (3, 3), 0)
+mask = bg.apply(gray, learningRate=0.002)
+
+_, mask = cv2.threshold(mask, 180, 255,
+                        cv2.THRESH_BINARY)
+
+contours, _ = cv2.findContours(
+    mask, cv2.RETR_EXTERNAL,
+    cv2.CHAIN_APPROX_SIMPLE
+)
+
+candidates = [
+    c for c in contours
+    if 3 <= cv2.contourArea(c) <= 300
+]</pre>
+</div>
+
+<div class="card">
+<h3>3. Wyznaczenie centroidu</h3>
+<pre>def centroid(contour):
+    m = cv2.moments(contour)
+    if abs(m["m00"]) < 1e-9:
+        return None
+
+    x = m["m10"] / m["m00"]
+    y = m["m01"] / m["m00"]
+    return float(x), float(y)
+
+points = [
+    centroid(c) for c in candidates
+]
+points = [p for p in points if p is not None]</pre>
+</div>
+
+<div class="card">
+<h3>4. Filtr Kalmana i predykcja</h3>
+<pre>import numpy as np
+import cv2
+
+kf = cv2.KalmanFilter(4, 2)
+kf.measurementMatrix = np.array([
+    [1, 0, 0, 0],
+    [0, 1, 0, 0]
+], np.float32)
+
+def set_dt(dt):
+    kf.transitionMatrix = np.array([
+        [1, 0, dt, 0],
+        [0, 1, 0, dt],
+        [0, 0, 1,  0],
+        [0, 0, 0,  1]
+    ], np.float32)
+
+def predict_ahead(state, lead_s):
+    x, y, vx, vy = state.reshape(-1)
+    return x + vx * lead_s, y + vy * lead_s</pre>
+</div>
+
+<div class="card">
+<h3>5. Bramkowanie najbliższej detekcji</h3>
+<pre>import math
+
+def associate(predicted, detections, max_jump=120):
+    if not detections:
+        return None
+
+    px, py = predicted
+    best = min(
+        detections,
+        key=lambda p:
+            (p[0] - px)**2 + (p[1] - py)**2
+    )
+
+    distance = math.hypot(
+        best[0] - px,
+        best[1] - py
+    )
+    return best if distance <= max_jump else None</pre>
+</div>
+
+<div class="card">
+<h3>6. Mapowanie obrazu na kąty pan–tilt</h3>
+<pre>def image_to_angles(x, y, width, height,
+                    pan_min=15, pan_max=165,
+                    tilt_min=20, tilt_max=160):
+    nx = min(max(x / (width - 1), 0), 1)
+    ny = min(max(y / (height - 1), 0), 1)
+
+    pan = pan_min + nx * (pan_max - pan_min)
+    tilt = tilt_max - ny * (tilt_max - tilt_min)
+    return pan, tilt</pre>
+</div>
+
+<div class="card">
+<h3>7. Komunikacja szeregowa z mikrokontrolerem</h3>
+<pre>import serial
+
+port = serial.Serial(
+    "/dev/ttyACM0",
+    baudrate=115200,
+    timeout=0.02
+)
+
+def aim(pan, tilt):
+    command = f"AIM,{pan:.2f},{tilt:.2f}\n"
+    port.write(command.encode("ascii"))
+
+def safe_off():
+    port.write(b"SAFE_OFF\n")</pre>
+</div>
+
+<div class="card">
+<h3>8. Sterowanie PCA9685 w Pythonie</h3>
+<pre>from adafruit_servokit import ServoKit
+
+kit = ServoKit(channels=16)
+kit.servo[0].set_pulse_width_range(500, 2500)
+kit.servo[1].set_pulse_width_range(500, 2500)
+
+def set_pan_tilt(pan, tilt):
+    kit.servo[0].angle = pan
+    kit.servo[1].angle = tilt</pre>
+<p>Przed użyciem ustaw zakres impulsów zgodnie z dokumentacją konkretnych serw i ogranicz kąty mechanicznie.</p>
+</div>
+
+<div class="card">
+<h3>9. Logika bezpiecznej aktywacji</h3>
+<pre>def allow_marker(track, predicted, system):
+    return (
+        track.frames >= 5
+        and track.position_covariance < 25.0
+        and system.inside_safe_zone(predicted)
+        and system.cover_closed
+        and not system.estop_pressed
+        and system.actuator_ready
+    )
+
+if allow_marker(track, predicted, system):
+    controller.marker_pulse(25)
+else:
+    controller.safe_off()</pre>
+</div>
+
+<div class="card">
+<h3>10. Logowanie latencji</h3>
+<pre>import csv
+import time
+
+with open("latency.csv", "a", newline="") as f:
+    writer = csv.writer(f)
+
+    t_capture = time.perf_counter_ns()
+    # detekcja i predykcja
+    t_command = time.perf_counter_ns()
+
+    writer.writerow([
+        frame_id,
+        t_capture,
+        t_command,
+        (t_command - t_capture) / 1e6,
+        predicted_x,
+        predicted_y
+    ])</pre>
+</div>
+
+<div class="card">
+<h3>11. Firmware: watchdog i SAFE_OFF</h3>
+<pre>constexpr uint32_t WATCHDOG_MS = 150;
+uint32_t lastCommandMs = 0;
+
+void safeOff() {
+  digitalWrite(LASER_EN_PIN, LOW);
+  digitalWrite(PWM_OE_PIN, HIGH);
+}
+
+void loop() {
+  if (!interlockOk()) {
+    safeOff();
+  }
+
+  if (millis() - lastCommandMs > WATCHDOG_MS) {
+    safeOff();
+  }
+
+  readAndProcessSerial();
+}</pre>
+</div>
+
+<div class="card">
+<h3>12. Sterowanie DAC8562 — pseudokod STM32</h3>
+<pre>void Galvo_Set(uint16_t x, uint16_t y) {
+    HAL_GPIO_WritePin(SYNC_GPIO_Port,
+                      SYNC_Pin, GPIO_PIN_RESET);
+
+    DAC8562_WriteChannel(CHANNEL_A, x);
+    DAC8562_WriteChannel(CHANNEL_B, y);
+
+    HAL_GPIO_WritePin(SYNC_GPIO_Port,
+                      SYNC_Pin, GPIO_PIN_SET);
+
+    Pulse_LDAC();
+}</pre>
+<p>Rzeczywista ramka SPI zależy od konfiguracji DAC8562 i powinna być zaimplementowana zgodnie z dokumentacją układu.</p>
+</div>
+</div>
+
+<div class="callout" style="margin-top:20px">
+  <b>Zalecana kolejność uruchamiania kodu:</b> kamera → detekcja → tracking bez napędu → napęd bez wskaźnika → kalibracja → test interlocku → krótki impuls na planszę → test celu kontrolowanego.
+</div>
+</div></section>
+
+<section id="oprogramowanie"><div class="wrap">
+<div class="head"><div class="kicker">Oprogramowanie referencyjne</div><h2>Python + OpenCV oraz firmware sterownika</h2></div>
+<div class="grid2">
+<div class="card"><h3>Pipeline aplikacji</h3><pre>frame, timestamp = camera.read()
+
+detections = detector(frame)
+track = associator.update(detections)
+state = kalman.correct(track)
+
+target = predict(state, total_latency)
+command = calibration.map(target)
+
+if safety.valid(track, target):
+    controller.aim(command)
+else:
+    controller.safe_off()</pre></div>
+<div class="card"><h3>Protokół sterowania</h3><pre>AIM,pan,tilt
+LASER,25
+SAFE_OFF
+STATUS?</pre><p>Wersja produkcyjna powinna rozszerzyć protokół o numer sekwencji, znacznik czasu, sumę kontrolną, potwierdzenie wykonania i telemetrię pozycji napędu.</p></div>
+</div>
+</div></section>
+
+<section id="bezpieczenstwo"><div class="wrap">
+<div class="callout warning"><b>Bezpieczeństwo funkcjonalne:</b> Moc lasera powinna być bezpieczna dla oczu i niezależna od poziomu światła. Fizyczny E‑STOP, interlock osłony i sprzętowe odcięcie zasilania nie mogą zależeć wyłącznie od programu komputerowego.</div>
+<div class="grid3" style="margin-top:20px">
+<div class="card"><h3>Stan bezpieczny</h3><p>Brak komunikacji, utrata celu, przekroczenie strefy lub błąd napędu zawsze prowadzą do <code>SAFE_OFF</code>.</p></div>
+<div class="card"><h3>Ograniczenie przestrzeni</h3><p>Zakres osi powinien być ograniczony mechanicznie, programowo i przez stały pochłaniacz wiązki.</p></div>
+<div class="card"><h3>Rejestracja</h3><p>Należy zapisywać znaczniki czasu, pozycję celu, komendy napędu, stan interlocku oraz przyczynę każdego wyłączenia.</p></div>
+</div>
+</div></section>
+
+<section id="pobierz"><div class="wrap">
+<div class="download"><div><div class="kicker">Materiały projektu</div><h2 style="font-size:2rem;margin:4px 0">Kod demonstracyjny i konfiguracja</h2><p class="muted">Pakiet zawiera tracker OpenCV, filtr Kalmana, konfigurację YAML, firmware Arduino oraz instrukcję uruchomienia.</p></div>
+<a class="btn primary" href="files/insect_laser_tracker.zip" download>Pobierz ZIP</a></div>
+</div></section>
+<section id="Instrukcja"><div class="wrap">
+<div class="download"><div><div class="kicker">Materiały projektu</div><h2 style="font-size:2rem;margin:4px 0">Instrukcja</h2><p class="muted">Dokładny opis tekstu, diagramy i przykłady kodu.</p></div>
+<a class="btn primary" href="files/insect_laser_tracker.pdf" download>Pobierz dokładną instrukcję</a></div>
+</div></section>
+</main>
+
+<footer><div class="wrap footer"><div>InsectTracker — projekt koncepcyjny systemu śledzenia optycznego</div><div>Wersja alfa · 2026</div></div></footer>
+</body></html>
