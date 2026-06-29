@@ -158,7 +158,8 @@ function validateAdditionalPagesAreLinked(config) {
     const linkedHtmlPages = new Set();
 
     for (const group of config.FILES_DATA || []) {
-        for (const file of group.files || []) {
+        const files = Array.isArray(group.files) ? group.files : [];
+        for (const file of files) {
             if (file.type === 'html' && isNonEmptyString(file.href)) {
                 linkedHtmlPages.add(file.href);
             }
