@@ -61,5 +61,5 @@ export const LIVE_MATERIALS_DATA = [
 export const FILE_ICON_MAP = {
     pdf:  { cls: 'fa-solid fa-file-pdf',        label: 'PDF' },
     pptx: { cls: 'fa-solid fa-file-powerpoint', label: 'PPTX' },
-    html: { cls: 'fa-solid fa-up-right-from-square', label: 'Strona HTML' },
+    html: { cls: 'fa-solid fa-file-code', label: 'Strona HTML' },
 };
