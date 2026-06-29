@@ -28,6 +28,14 @@ export const FILES_DATA = [
             { href: 'zajecia/laby/tematyprojektow.pdf',  type: 'pdf', label: 'Tematy projektów' },
         ],
     },
+    {
+        section: 'Dodatkowe strony',
+        icon: 'fa-solid fa-window-restore',
+        files: [
+            { href: 'pages/3dgs.html',           type: 'html', label: '3DGS Viewer – szkielet podglądu' },
+            { href: 'pages/InsectTracker.html',  type: 'html', label: 'InsectTracker – system śledzenia owadów' },
+        ],
+    },
 ];
 
 export const LIVE_MATERIALS_DATA = [
@@ -53,4 +61,5 @@ export const LIVE_MATERIALS_DATA = [
 export const FILE_ICON_MAP = {
     pdf:  { cls: 'fa-solid fa-file-pdf',        label: 'PDF' },
     pptx: { cls: 'fa-solid fa-file-powerpoint', label: 'PPTX' },
+    html: { cls: 'fa-solid fa-file-code', label: 'Strona HTML' },
 };

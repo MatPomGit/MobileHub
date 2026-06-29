@@ -144,6 +144,31 @@ function collectMaterialPaths(config) {
     return collected;
 }
 
+function collectAdditionalPages() {
+    const pagesDir = path.join(REPO_ROOT, 'pages');
+    if (!fs.existsSync(pagesDir) || !fs.statSync(pagesDir).isDirectory()) return [];
+
+    return fs.readdirSync(pagesDir, { withFileTypes: true })
+        .filter(entry => entry.isFile() && entry.name.toLowerCase().endsWith('.html'))
+        .map(entry => path.posix.join('pages', entry.name))
+        .sort((a, b) => a.localeCompare(b, 'pl'));
+}
+
+function validateAdditionalPagesAreLinked(config) {
+    const linkedHtmlPages = new Set();
+
+    for (const group of config.FILES_DATA || []) {
+        const files = Array.isArray(group.files) ? group.files : [];
+        for (const file of files) {
+            if (file.type === 'html' && isNonEmptyString(file.href)) {
+                linkedHtmlPages.add(file.href);
+            }
+        }
+    }
+
+    return collectAdditionalPages().filter(pagePath => !linkedHtmlPages.has(pagePath));
+}
+
 function validatePaths(paths) {
     return paths.filter(entry => {
         if (isExternalLink(entry.value)) {
@@ -161,8 +186,9 @@ function main() {
     const shapeErrors = validateShape(config);
     const paths = collectMaterialPaths(config);
     const missingPaths = validatePaths(paths);
+    const unlinkedAdditionalPages = validateAdditionalPagesAreLinked(config);
 
-    if (shapeErrors.length > 0 || missingPaths.length > 0) {
+    if (shapeErrors.length > 0 || missingPaths.length > 0 || unlinkedAdditionalPages.length > 0) {
         console.error('❌ Walidacja danych materiałów nie powiodła się.');
 
         if (shapeErrors.length > 0) {
@@ -179,10 +205,17 @@ function main() {
             }
         }
 
+        if (unlinkedAdditionalPages.length > 0) {
+            console.error('\nNiepodpięte strony dodatkowe z katalogu pages/:');
+            for (const pagePath of unlinkedAdditionalPages) {
+                console.error(`  - ${pagePath}`);
+            }
+        }
+
         process.exit(1);
     }
 
-    console.log(`✅ Walidacja zakończona sukcesem (shape + ścieżki). Sprawdzono ${paths.length} ścieżek.`);
+    console.log(`✅ Walidacja zakończona sukcesem (shape + ścieżki + strony dodatkowe). Sprawdzono ${paths.length} ścieżek.`);
 }
 
 main();
