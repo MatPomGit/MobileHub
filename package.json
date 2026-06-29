@@ -3,9 +3,12 @@
   "private": true,
   "scripts": {
     "qa": "bash scripts/run-quality-gates.sh",
+    "validate:structure": "python3 scripts/validate-repository-structure.py",
     "validate:all": "npm run qa",
     "validate:live": "node scripts/validate-live-lectures.js",
     "validate:materials": "node scripts/validate-material-links.js",
+    "test:e2e": "playwright test",
+    "test:e2e:reorganization": "playwright test tests/e2e/repository-reorganization.spec.js",
     "test:e2e:smoke": "playwright test tests/e2e/smoke",
     "test:e2e:smoke:ci": "playwright test tests/e2e/smoke --reporter=github,line --forbid-only",
     "audit:precommit": "bash scripts/pre-commit-audit.sh"

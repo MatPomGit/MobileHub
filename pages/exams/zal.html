@@ -575,6 +575,7 @@
       const LOG_STORE = 'events';
       const FACE_SAMPLE_EVENT = 'proctor.face.sample';
       const FACE_ALERT_EVENT = 'proctor.face.alert';
+      let proctorStream = null;
 
       const lectureTopicByCategory = {
         1:  'Wprowadzenie do aplikacji mobilnych',
@@ -1288,8 +1289,6 @@
         }
       }
 
-
-      let proctorStream = null;
 
 
       function setModuleActive(moduleId, isActive) {

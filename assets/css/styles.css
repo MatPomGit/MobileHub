@@ -101,6 +101,28 @@
     top: 12px;
 }
 
+.offline-indicator {
+    position: fixed;
+    right: calc(12px + env(safe-area-inset-right));
+    bottom: calc(12px + env(safe-area-inset-bottom));
+    z-index: 100;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: #7f1d1d;
+    color: #fff;
+    font-size: 0.8rem;
+    font-weight: 700;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(8px);
+    transition: opacity 0.2s ease, transform 0.2s ease;
+}
+
+.offline-indicator.is-offline {
+    opacity: 1;
+    transform: translateY(0);
+}
+
 /* Ujednolicony obrys fokusu dla elementów interaktywnych. */
 :where(a, button, input, select, textarea, [role="button"], [tabindex]):focus-visible {
     outline: 3px solid var(--accent2);

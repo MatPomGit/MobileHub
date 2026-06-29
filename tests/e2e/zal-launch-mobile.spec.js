@@ -16,6 +16,6 @@ test('zal.html: mobilny przycisk Dalej otwiera sesję w bieżącym oknie', async
 
   await page.locator('#zal-open-session-next').click();
 
-  await expect(page).toHaveURL(/\/pages\/exams\/zal_sesje\.html\?length=25&questionType=single-choice$/);
+  await expect(page).toHaveURL(/\/pages\/exams\/zal_sesje\.html\?length=25&questionType=single-choice&category=all$/);
   await expect(page.locator('h1')).toHaveText('Sesja zaliczeniowa');
 });

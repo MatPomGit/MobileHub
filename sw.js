@@ -11,25 +11,64 @@ const ASSETS_TO_CACHE = [
     './',
     './index.html',
     './offline.html',
+    './manifest.json',
+    './assets/css/font-size-config.css',
     './assets/css/styles.css',
-    './src/entries/pam-wiki.js',
-    './src/entries/quiz-module.js',
+    './src/app-init.js',
+    './src/bootstrap-ui.js',
+    './src/dom-map.js',
+    './src/motion-settings.js',
+    './src/offline-indicator.js',
+    './src/page-tabs.js',
+    './src/pull-panel.js',
+    './src/section-particles.js',
+    './src/gsap-animations.js',
+    './src/wiki-app.js',
+    './src/wiki-data.js',
+    './src/wiki-dom-utils.js',
+    './src/wiki-router.js',
+    './src/wiki-search.js',
+    './src/wiki-sidebar.js',
+    './src/wiki-ui.js',
     './src/dev/dev-state.js',
     './src/dev/dev-info.js',
     './src/dev/dev-panel-view.js',
     './src/dev/dev-controller.js',
     './src/entries/dev-mode.js',
+    './src/entries/pam-files.js',
+    './src/entries/pam-wiki.js',
+    './src/entries/quiz-module.js',
+    './src/materials/materials-data.js',
+    './src/materials/presentation-preview-controller.js',
+    './src/materials/render-download-materials.js',
+    './src/materials/render-helpers.js',
+    './src/materials/render-live-materials.js',
     './data/pam-wiki-config.json',
+    './data/quiz-questions.json',
     './assets/favicon.ico',
     './assets/ico3.png',
     './assets/icon-192.png',
     './assets/icon-512.png',
-    // Tło ekranu głównego dodane do precache, aby było dostępne natychmiast także offline.
+    // Tło ekranu głównego jest dostępne natychmiast także offline.
     './assets/background_4.jpg'
 ];
 
 const NETWORK_FIRST_PATHS = new Set(['/', '/index.html', '/data/pam-wiki-config.json']);
-const STALE_WHILE_REVALIDATE_PATHS = new Set(['/assets/css/styles.css', '/src/entries/pam-wiki.js', '/src/entries/quiz-module.js', '/src/entries/dev-mode.js', '/src/dev/dev-state.js', '/src/dev/dev-info.js', '/src/dev/dev-panel-view.js', '/src/dev/dev-controller.js']);
+const STALE_WHILE_REVALIDATE_PATHS = new Set([
+    '/assets/css/font-size-config.css',
+    '/assets/css/styles.css',
+    '/src/app-init.js',
+    '/src/bootstrap-ui.js',
+    '/src/offline-indicator.js',
+    '/src/page-tabs.js',
+    '/src/pull-panel.js',
+    '/src/entries/dev-mode.js',
+    '/src/entries/pam-files.js',
+    '/src/entries/pam-wiki.js',
+    '/src/entries/quiz-module.js'
+]);
+
+const SW_SCOPE_PATH = new URL(self.registration.scope).pathname;
 
 self.addEventListener('install', event => {
     event.waitUntil(
@@ -85,8 +124,15 @@ function isCacheableResponse(response) {
     return response && response.ok && response.type === 'basic';
 }
 
-function toPathname(url) {
-    return new URL(url).pathname;
+function toScopePath(url) {
+    const pathname = new URL(url).pathname;
+
+    if (!pathname.startsWith(SW_SCOPE_PATH)) {
+        return null;
+    }
+
+    const relativePath = pathname.slice(SW_SCOPE_PATH.length);
+    return relativePath ? '/' + relativePath : '/';
 }
 
 async function trimOpaqueAssetsCache(cache) {
@@ -188,23 +234,26 @@ self.addEventListener('fetch', event => {
         return;
     }
 
-    const pathname = toPathname(event.request.url);
+    const scopePath = toScopePath(event.request.url);
+    if (scopePath === null) {
+        return;
+    }
 
-    // HTML startowy i config muszą być maksymalnie aktualne, dlatego strategia NetworkFirst.
-    if (NETWORK_FIRST_PATHS.has(pathname)) {
+    // HTML startowy i konfiguracja muszą być maksymalnie aktualne.
+    if (NETWORK_FIRST_PATHS.has(scopePath)) {
         event.respondWith(networkFirst(event.request));
         return;
     }
 
     // Pliki JS/CSS zmieniają się częściej, ale mogą działać z cache podczas słabszej sieci.
-    if (STALE_WHILE_REVALIDATE_PATHS.has(pathname)) {
+    if (STALE_WHILE_REVALIDATE_PATHS.has(scopePath)) {
         event.respondWith(staleWhileRevalidate(event.request));
         return;
     }
 
     // Statyczne obrazy i ikony z assets/ są wersjonowane buildem i rzadko się zmieniają,
     // więc CacheFirst minimalizuje transfer i przyspiesza render.
-    if (pathname.startsWith('/assets/') && /\.(png|jpg|jpeg|gif|webp|svg|ico)$/i.test(pathname)) {
+    if (scopePath.startsWith('/assets/') && /\.(png|jpg|jpeg|gif|webp|svg|ico)$/i.test(scopePath)) {
         event.respondWith(cacheFirstForAssets(event.request));
     }
 });

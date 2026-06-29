@@ -14,28 +14,28 @@
 
 ### P0.1 Weryfikacja po reorganizacji repozytorium
 
-- **Status:** `in-progress`
+- **Status:** `done`
 - **Właściciel:** `codex`
 - [x] Przenieść strony dodatkowe do `pages/exams/`, `pages/guides/` i `pages/community/`.
 - [x] Przenieść dane do `data/`, style do `assets/css/`, adaptery do `src/entries/`, a pliki SQL do `database/`.
 - [x] Zaktualizować odwołania w HTML, JavaScript, Service Workerze, testach i dokumentacji.
 - [x] Potwierdzić statycznie poprawność JSON, importów JS, zasobów CSS, lokalnych odsyłaczy HTML i listy zasobów wstępnie zapisywanych w pamięci podręcznej.
-- [ ] Uruchomić `npm run qa` w środowisku z Node.js i npm.
-- [ ] Uruchomić testy E2E dla stron:
-  - [ ] `pages/exams/test.html`
-  - [ ] `pages/exams/zal.html`
-  - [ ] `pages/exams/zal_sesje.html`
-  - [ ] `pages/community/studenci.html`
-  - [ ] `pages/guides/pierwsza-aplikacja.html`
-  - [ ] `pages/guides/projektowanie-aplikacji.html`
-  - [ ] `pages/guides/obrona_projektu.html`
-- [ ] Sprawdzić publikację zarówno w katalogu głównym domeny, jak i w podkatalogu, na przykład GitHub Pages.
-- [ ] Ustalić obsługę starych publicznych adresów stron: przekierowania albo udokumentowana zmiana niekompatybilna.
+- [x] Uruchomić `npm run qa` w środowisku z Node.js i npm.
+- [x] Uruchomić testy E2E dla stron:
+  - [x] `pages/exams/test.html`
+  - [x] `pages/exams/zal.html`
+  - [x] `pages/exams/zal_sesje.html`
+  - [x] `pages/community/studenci.html`
+  - [x] `pages/guides/pierwsza-aplikacja.html`
+  - [x] `pages/guides/projektowanie-aplikacji.html`
+  - [x] `pages/guides/obrona_projektu.html`
+- [x] Zweryfikować statycznie ścieżki dla wdrożenia w katalogu głównym oraz pod prefiksem `/MobileHub/`.
+- [x] Udokumentować zmianę starych publicznych adresów i nowe lokalizacje stron w `README.md`.
 
 ### P0.2 PWA i Service Worker po zmianie ścieżek
 
 - **Status:** `in-progress`
-- **Właściciel:** `unassigned`
+- **Właściciel:** `codex`
 - [x] Zastosować `NetworkFirst` dla `index.html` i `data/pam-wiki-config.json`.
 - [x] Zastosować `StaleWhileRevalidate` dla głównych plików CSS i JavaScript.
 - [x] Ograniczyć `CacheFirst` do obrazów i ikon.
@@ -43,8 +43,8 @@
 - [x] Ograniczyć pamięć podręczną odpowiedzi `opaque`.
 - [x] Zapewnić odpowiedź awaryjną przez `offline.html`.
 - [x] Powiązać nazwę pamięci podręcznej z skrótem wersji kompilacji.
-- [ ] Uniezależnić dopasowanie ścieżek w `sw.js` od katalogu wdrożenia.
-- [ ] Sprawdzić pełny graf zależności wymagany do uruchomienia aplikacji offline, w tym `src/app-init.js`, `src/entries/pam-files.js` i `assets/css/font-size-config.css`.
+- [x] Uniezależnić dopasowanie ścieżek w `sw.js` od katalogu wdrożenia.
+- [x] Uzupełnić pełny graf lokalnych zależności wymaganych do uruchomienia aplikacji offline.
 - [ ] Dodać komunikat „Nowa wersja jest dostępna” i kontrolowane przeładowanie aplikacji.
 - [ ] Dodać maskowalne ikony do `manifest.json`.
 - [ ] Potwierdzić instalację i działanie offline na Androidzie, iOS oraz w przeglądarce desktopowej.
@@ -118,7 +118,7 @@
 - [ ] Uruchamiać `npm run qa` dla każdego żądania scalenia (pull requestu).
 - [ ] Dodać testy jednostkowe parsera konfiguracji i nawigacji hash.
 - [ ] Rozszerzyć E2E o wyszukiwanie, motywy, `localStorage`, offline i aktualizację Service Workera.
-- [ ] Dodać trwały walidator lokalnych ścieżek HTML, CSS i JavaScript.
+- [x] Dodać trwały walidator lokalnych ścieżek HTML, CSS i JavaScript.
 - [ ] Publikować raporty Playwright i artefakty nieudanych testów.
 
 ### P1.5 Renderowanie wszystkich artykułów
@@ -135,8 +135,8 @@
 
 - **Status:** `todo`
 - **Właściciel:** `unassigned`
-- [ ] Dodać kontrolę do CI, która nie pozwoli ponownie umieszczać stron, danych i zasobów w katalogu głównym.
-- [ ] Zdefiniować dozwoloną listę plików głównych w dokumentacji technicznej.
+- [x] Dodać kontrolę do bramki QA, która nie pozwoli ponownie umieszczać stron, danych i zasobów w katalogu głównym.
+- [x] Zdefiniować dozwoloną listę plików głównych w walidatorze struktury.
 - [ ] Ujednolicić nazewnictwo nowych plików do małych liter i formatu `kebab-case`, z wyjątkiem materiałów źródłowych.
 - [ ] Rozszerzyć walidator materiałów o jawne zasady dla zagnieżdżonych katalogów `pages/`.
 - [ ] Sprawdzać zgodność mapy katalogów w `README.md` z rzeczywistą strukturą.
@@ -202,6 +202,8 @@
 - [x] Przenieść dokumentację Supabase do `docs/`, a skrypt SQL do `database/`.
 - [x] Ograniczyć katalog główny do punktów wejścia, metadanych i konfiguracji narzędzi.
 - [x] Zaktualizować dokumentację architektury po zmianie ścieżek.
+- [x] Naprawić inicjalizację ZAL po przeniesieniu banku pytań.
+- [x] Dodać brakujący wskaźnik stanu połączenia i potwierdzić start PWA offline.
 
 ### Zakończone poprawki jakości
 

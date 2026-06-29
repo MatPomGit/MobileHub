@@ -14,6 +14,15 @@ test('start_url remains reachable offline after first online load', async ({ pag
     expect(swCount).toBeGreaterThan(0);
   }).toPass({ timeout: 15000 });
 
+  await page.evaluate(async () => {
+    await navigator.serviceWorker.ready;
+    if (navigator.serviceWorker.controller) return;
+
+    await new Promise((resolve) => {
+      navigator.serviceWorker.addEventListener('controllerchange', resolve, { once: true });
+    });
+  });
+
   await context.setOffline(true);
   await page.goto('/index.html', { waitUntil: 'domcontentloaded' });
 
