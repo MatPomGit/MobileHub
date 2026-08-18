@@ -1,0 +1,1340 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Kompendium i Przewodnik Radiologii Stomatologicznej</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        :root {
+            --primary-color: #0f172a;
+            --secondary-color: #1e40af;
+            --accent-color: #2563eb;
+            --bg-color: #f8fafc;
+            --card-bg: #ffffff;
+            --text-main: #334155;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --warning-bg: #fffbeb;
+            --warning-border: #fef3c7;
+            --success-color: #16a34a;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-main);
+            line-height: 1.6;
+        }
+
+        /* Top Navigation Bar */
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1rem 2rem;
+            position: sticky;
+            top: 0;
+            z-index: 1000;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.25rem;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+
+        nav a {
+            color: #93c5fd;
+            text-decoration: none;
+            margin-left: 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: color 0.2s;
+        }
+
+        nav a:hover {
+            color: white;
+        }
+
+        /* Hero Banner */
+        .hero {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            color: white;
+            padding: 3rem 2rem;
+            text-align: center;
+        }
+
+        .hero h2 {
+            font-size: 2.2rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .hero p {
+            color: #bfdbfe;
+            max-width: 800px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+        }
+
+        /* Main Container */
+        .container {
+            max-width: 1200px;
+            margin: 2rem auto;
+            padding: 0 1.5rem;
+        }
+
+        /* Grid Layouts */
+        .grid-2 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        /* Cards & Panels */
+        .card {
+            background: var(--card-bg);
+            border-radius: 8px;
+            border: 1px solid var(--border-color);
+            padding: 1.5rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .card h3 {
+            color: var(--secondary-color);
+            margin-bottom: 1rem;
+            font-size: 1.2rem;
+            border-bottom: 2px solid #f1f5f9;
+            padding-bottom: 0.5rem;
+        }
+
+        /* Tables */
+        .table-responsive {
+            overflow-x: auto;
+            margin-bottom: 1.5rem;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            background: var(--card-bg);
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 0.75rem 1rem;
+            text-align: left;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        th {
+            background-color: #f1f5f9;
+            color: var(--primary-color);
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background-color: #f8fafc;
+        }
+
+        /* Interactive Tools */
+        .interactive-box {
+            background-color: #eff6ff;
+            border: 1px solid #bfdbfe;
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .calc-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-size: 0.85rem;
+            font-weight: 600;
+            margin-bottom: 0.3rem;
+        }
+
+        .form-group input, .form-group select {
+            padding: 0.5rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 4px;
+            font-size: 0.9rem;
+        }
+
+        .result-display {
+            background: white;
+            padding: 1rem;
+            border-radius: 6px;
+            font-weight: bold;
+            text-align: center;
+            font-size: 1.1rem;
+            color: var(--secondary-color);
+            border: 1px solid #93c5fd;
+        }
+
+        /* Badge and Status Indicators */
+        .badge {
+            display: inline-block;
+            padding: 0.25rem 0.5rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-low { background-color: #dcfce7; color: #166534; }
+        .badge-mid { background-color: #fef9c3; color: #854d0e; }
+        .badge-high { background-color: #fee2e2; color: #991b1b; }
+
+        /* Search Filter Input */
+        .search-bar {
+            width: 100%;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border: 1px solid #cbd5e1;
+            border-radius: 6px;
+            margin-bottom: 1.5rem;
+        }
+
+        /* Quick List Styling */
+        ul.styled-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        ul.styled-list li {
+            position: relative;
+            padding-left: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        ul.styled-list li::before {
+            content: "•";
+            color: var(--accent-color);
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: absolute;
+            left: 0;
+            top: -2px;
+        }
+
+
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+            gap: 1rem;
+            margin: 1rem 0 2rem;
+        }
+
+        .kpi-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem 1.15rem;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+
+        .kpi-label {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.25rem;
+        }
+
+        .kpi-value {
+            display: block;
+            color: var(--primary-color);
+            font-size: 1.45rem;
+            line-height: 1.2;
+            font-weight: 750;
+        }
+
+        .kpi-note {
+            display: block;
+            color: var(--text-muted);
+            font-size: 0.78rem;
+            margin-top: 0.35rem;
+        }
+
+        .chart-note {
+            color: var(--text-muted);
+            font-size: 0.82rem;
+            margin-top: 0.75rem;
+        }
+
+        .comparison-strip {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .comparison-item {
+            background: #f8fafc;
+            border: 1px solid var(--border-color);
+            border-radius: 6px;
+            padding: 0.85rem;
+            font-size: 0.86rem;
+        }
+
+        .comparison-item strong {
+            display: block;
+            color: var(--secondary-color);
+            margin-bottom: 0.25rem;
+        }
+
+        .section-intro {
+            max-width: 980px;
+            margin: 0 0 1.25rem 0;
+            color: var(--text-muted);
+            font-size: 0.96rem;
+        }
+
+        .source-links {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.55rem;
+            margin-top: 1rem;
+        }
+
+        .source-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.35rem;
+            padding: 0.38rem 0.65rem;
+            border: 1px solid #bfdbfe;
+            border-radius: 999px;
+            background: #eff6ff;
+            color: #1d4ed8;
+            text-decoration: none;
+            font-size: 0.78rem;
+            font-weight: 600;
+            transition: transform 0.15s, box-shadow 0.15s, background 0.15s;
+        }
+
+        .source-link:hover {
+            background: #dbeafe;
+            box-shadow: 0 3px 8px rgba(15, 23, 42, 0.10);
+            transform: translateY(-1px);
+        }
+
+        .interpretation-box {
+            background: #f8fafc;
+            border-left: 4px solid var(--accent-color);
+            border-radius: 0 7px 7px 0;
+            padding: 0.9rem 1rem;
+            margin-top: 1rem;
+            font-size: 0.88rem;
+            color: #475569;
+        }
+
+        .interpretation-box strong { color: var(--primary-color); }
+
+        .workflow {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 0.75rem;
+            align-items: stretch;
+            margin-top: 1rem;
+        }
+
+        .workflow-step {
+            position: relative;
+            padding: 1rem;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+            font-size: 0.86rem;
+        }
+
+        .workflow-step span {
+            display: block;
+            font-size: 0.74rem;
+            font-weight: 700;
+            color: var(--accent-color);
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+            margin-bottom: 0.35rem;
+        }
+
+        .reference-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .reference-card {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            background: #fff;
+            padding: 1rem;
+        }
+
+        .reference-card h4 {
+            margin: 0 0 0.4rem 0;
+            color: var(--primary-color);
+            font-size: 0.98rem;
+        }
+
+        .reference-card p {
+            font-size: 0.84rem;
+            color: var(--text-muted);
+            margin-bottom: 0.65rem;
+        }
+
+        .reference-card a {
+            color: var(--accent-color);
+            font-size: 0.82rem;
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        .reference-card a:hover { text-decoration: underline; }
+
+        .evidence-note {
+            margin-top: 1.25rem;
+            padding: 1rem 1.15rem;
+            border: 1px solid #fde68a;
+            border-radius: 8px;
+            background: #fffbeb;
+            color: #78350f;
+            font-size: 0.87rem;
+        }
+
+
+        .decision-panel {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .decision-result {
+            margin-top: 1rem;
+            padding: 1rem 1.15rem;
+            border-radius: 8px;
+            border: 1px solid #bfdbfe;
+            background: #eff6ff;
+        }
+
+        .decision-result strong { color: var(--secondary-color); }
+
+        .checklist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+            gap: 1rem;
+        }
+
+        .check-card {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .check-card h4 {
+            margin-bottom: 0.65rem;
+            color: var(--primary-color);
+        }
+
+        .check-card ul {
+            margin: 0;
+            padding-left: 1.15rem;
+            font-size: 0.88rem;
+        }
+
+        .check-card li { margin-bottom: 0.38rem; }
+
+        .glossary-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 0.8rem;
+        }
+
+        .glossary-item {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.9rem 1rem;
+            font-size: 0.86rem;
+        }
+
+        .glossary-item strong {
+            display: block;
+            color: var(--secondary-color);
+            margin-bottom: 0.22rem;
+        }
+
+        details.learning-box {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            padding: 0.85rem 1rem;
+        }
+
+        details.learning-box + details.learning-box { margin-top: 0.65rem; }
+
+        details.learning-box summary {
+            cursor: pointer;
+            font-weight: 700;
+            color: var(--primary-color);
+        }
+
+        details.learning-box p,
+        details.learning-box ul {
+            margin-top: 0.65rem;
+            font-size: 0.88rem;
+        }
+
+        .dose-legend {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 0.75rem;
+            margin-top: 1rem;
+        }
+
+        .dose-legend-item {
+            padding: 0.8rem;
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            font-size: 0.84rem;
+        }
+
+        .dose-legend-item strong {
+            display: block;
+            margin-bottom: 0.2rem;
+            color: var(--primary-color);
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: var(--text-muted);
+            text-align: center;
+            padding: 2rem;
+            margin-top: 4rem;
+            font-size: 0.85rem;
+        }
+
+        @media (max-width: 768px) {
+            .grid-2, .grid-3, .workflow { grid-template-columns: 1fr; }
+            header { flex-direction: column; gap: 1rem; }
+            nav a { margin: 0 0.5rem; }
+        }
+
+
+        /* Didactic module */
+        .didactic-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(260px,1fr)); gap:1rem; margin:1.25rem 0; }
+        .memory-card { background:#f8fafc; border:1px solid var(--border-color); border-left:4px solid var(--accent-color); border-radius:8px; padding:1rem; }
+        .memory-card h4 { color:var(--primary-color); margin-bottom:.4rem; }
+        .memory-card p { font-size:.92rem; }
+        .case-card { border:1px solid var(--border-color); border-radius:8px; padding:1rem; background:white; margin-bottom:1rem; }
+        .case-card .case-question { font-weight:700; color:var(--secondary-color); margin:.6rem 0; }
+        .answer-box { margin-top:.75rem; padding:.85rem 1rem; background:#eff6ff; border-radius:6px; border:1px solid #bfdbfe; }
+        .exam-trap { background:#fff7ed; border:1px solid #fed7aa; border-left:4px solid #f97316; border-radius:8px; padding:1rem; }
+        .quiz-question { padding:1rem 0; border-bottom:1px solid var(--border-color); }
+        .quiz-question:last-child { border-bottom:0; }
+        .quiz-question p { font-weight:700; margin-bottom:.55rem; }
+        .quiz-question label { display:block; margin:.35rem 0; cursor:pointer; }
+        .quiz-feedback { margin-top:.6rem; font-size:.9rem; font-weight:600; }
+        .quiz-actions { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1rem; }
+        .btn { border:0; border-radius:6px; padding:.65rem 1rem; font-weight:700; cursor:pointer; background:var(--accent-color); color:white; }
+        .btn.secondary { background:#e2e8f0; color:var(--primary-color); }
+        .score-box { margin-top:1rem; padding:1rem; border-radius:8px; background:#f1f5f9; font-weight:700; display:none; }
+        .learning-objectives { display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:.8rem; margin-top:1rem; }
+        .learning-objectives div { padding:.9rem; border-radius:8px; background:#f8fafc; border:1px solid var(--border-color); }
+
+        .curiosity-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(300px,1fr)); gap:1rem; margin-top:1rem; }
+        .curiosity-card { background:#fff; border:1px solid var(--border-color); border-radius:10px; padding:1.1rem; box-shadow:0 1px 3px rgba(0,0,0,.04); }
+        .curiosity-card h3 { margin:0 0 .55rem; color:var(--secondary-color); font-size:1.05rem; }
+        .curiosity-card p { font-size:.92rem; }
+        .curiosity-tag { display:inline-block; margin-bottom:.55rem; padding:.2rem .5rem; border-radius:999px; background:#eef2ff; color:#3730a3; font-size:.72rem; font-weight:700; text-transform:uppercase; letter-spacing:.03em; }
+        .curiosity-card a { display:inline-block; margin-top:.65rem; font-size:.86rem; font-weight:700; color:var(--accent-color); text-decoration:none; }
+        .curiosity-card a:hover { text-decoration:underline; }
+        .curiosity-highlight { margin-top:1rem; padding:1rem 1.1rem; border-left:4px solid #7c3aed; background:#f5f3ff; border-radius:0 8px 8px 0; }
+        .myth-note { font-size:.84rem; color:var(--text-muted); margin-top:.5rem; }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Radiologia Stomatologiczna | Przewodnik Specjalisty</h1>
+        <nav>
+            <a href="#technologie">Technologie</a>
+            <a href="#wykresy">Wykresy & Analiza</a>
+            <a href="#kalkulator">Kalkulator Dawki</a>
+            <a href="#artefakty">Artefakty</a>
+            <a href="#standardy">Standardy & Opis</a>
+            <a href="#narzedzia">Narzędzia</a>
+            <a href="#dydaktyka">Dydaktyka</a>
+            <a href="#ciekawostki">Ciekawostki</a>
+            <a href="#zrodla">Źródła</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <h2>Przewodnik Diagnostyczny i Standardy Obrazowania 3D/2D</h2>
+        <p>Aplikacyjny portal referencyjny przeznaczony dla lekarzy stomatologów, radiologów i techników medycznych. Integracja danych klinicznych, fizyki promieniowania oraz wytycznych ALARA.</p>
+    </section>
+
+    <div class="container">
+
+        <input type="text" id="searchInput" class="search-bar" placeholder="🔍 Wyszukaj zagadnienie (np. CBCT, próchnica, artefakty, dawka, ALARA, prostownik)..." onkeyup="filterContent()">
+
+        <section id="technologie">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-color);">1. Przegląd i Parametryzacja Technologii Obrazowania</h2>
+            <div class="grid-3">
+                <div class="card searchable">
+                    <h3>Radiografia Cyfrowa 2D (PSP vs CMOS)</h3>
+                    <p><strong>Systemy PSP:</strong> Płyty fosforowe oferują wysoki zakres dynamiki i elastyczność zbliżoną do tradycyjnej błony. Wymagają procesu skanowania optycznego.</p>
+                    <p><strong>Czujniki CMOS:</strong> Bezpośrednia cyfryzacja, natychmiastowy podgląd. Wyższa rozdzielczość przestrzenna (do >20 pl/mm), ale sztywna budowa.</p>
+                    <p style="margin-top:0.5rem;"><span class="badge badge-low">Niska Dawka</span> <strong>1–8 µSv</strong></p>
+                    <div class="interpretation-box"><strong>Znaczenie kliniczne:</strong> RTG wewnątrzustne pozostaje metodą pierwszego wyboru, gdy pytanie diagnostyczne dotyczy niewielkiego obszaru i wymagana jest wysoka rozdzielczość detalu. Cyfrowy receptor ułatwia archiwizację, pomiary i porównywanie kolejnych badań.</div>
+                    <div class="source-links"><a class="source-link" href="https://www.iaea.org/resources/rpop/health-professionals/dentistry" target="_blank" rel="noopener">IAEA: dental radiology ↗</a><a class="source-link" href="https://www.fda.gov/radiation-emitting-products/medical-x-ray-imaging/ada-fda-guide-patient-selection-dental-radiographs" target="_blank" rel="noopener">FDA/ADA: dobór badań ↗</a></div>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Pantomografia (OPG) i Cefalometria</h3>
+                    <p><strong>OPG:</strong> Obrazowanie warstwowe zakrzywionych płaszczyzn anatomicznych. Kluczowe w ocenie ogólnej, ekstrakcjach zębów mądrości i planowaniu wstępnym.</p>
+                    <p><strong>Cefalometria:</strong> Odległościowe zdjęcia 2D w projekcjach bocznej i AP. Niezbędne w diagnostyce ortodontycznej i analizie cefalometrycznej.</p>
+                    <p style="margin-top:0.5rem;"><span class="badge badge-low">Dawka Niska/Średnia</span> <strong>2–30 µSv</strong></p>
+                    <div class="interpretation-box"><strong>Znaczenie kliniczne:</strong> OPG daje szeroki obraz przeglądowy, ale zniekształcenia geometryczne i nakładanie struktur ograniczają precyzyjne pomiary. Cefalometria jest wyspecjalizowanym badaniem 2D wykorzystywanym głównie w ortodoncji.</div>
+                    <div class="source-links"><a class="source-link" href="https://energy.ec.europa.eu/topics/nuclear-energy/radiation-protection/scientific-seminars-and-publications/radiation-protection-series-publications_en" target="_blank" rel="noopener">EC: Radiation Protection 136 ↗</a></div>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Tomografia Stożkowa (CBCT)</h3>
+                    <p><strong>Skanowanie 3D:</strong> Wiązka stożkowa i detektor panelowy (FPD). Pozwala na rekonstrukcję wolumetryczną izotropowych wokseli (od 0,075 mm).</p>
+                    <p><strong>Polu widzenia (FOV):</strong> Wybór ma kluczowe znaczenie: Small (5x5 cm) dla endodoncji, Medium (8x8 cm) dla implantologii, Large (>15 cm) dla chirurgii szczękowej.</p>
+                    <p style="margin-top:0.5rem;"><span class="badge badge-mid">Umiarkowana Dawka</span> <strong>20–150 µSv</strong></p>
+                    <div class="interpretation-box"><strong>Znaczenie kliniczne:</strong> CBCT należy dobierać do konkretnego pytania diagnostycznego. Najmniejsze pole FOV, które obejmuje wymagany obszar, ogranicza ekspozycję i zwykle pozwala uzyskać lepszą rozdzielczość przestrzenną.</div>
+                    <div class="source-links"><a class="source-link" href="https://www.aae.org/specialty/clinical-resources/cone-beam-computed-tomography/" target="_blank" rel="noopener">AAE: CBCT w endodoncji ↗</a><a class="source-link" href="https://www.fda.gov/radiation-emitting-products/medical-x-ray-imaging/dental-cone-beam-computed-tomography" target="_blank" rel="noopener">FDA: Dental CBCT ↗</a></div>
+                </div>
+            </div>
+        </section>
+
+        <section id="wykresy" style="margin-top: 3rem;">
+            <h2 style="margin-bottom: 1rem; color: var(--primary-color);">2. Analiza Porównawcza: dawka, rozdzielczość i skala ekspozycji</h2>
+            <p class="section-intro">Wykresy należy interpretować jako narzędzia porównawcze, a nie jako uniwersalne wartości dla każdego aparatu. Rzeczywista dawka zależy od konstrukcji urządzenia, protokołu, pola FOV, rozdzielczości, parametrów ekspozycji i budowy pacjenta. W praktyce wybór modalności powinien zaczynać się od pytania klinicznego, a następnie prowadzić do najmniejszej ekspozycji zapewniającej wystarczającą informację diagnostyczną.</p>
+
+            <div class="kpi-grid">
+                <div class="kpi-card">
+                    <span class="kpi-label">Najniższa dawka RTG</span>
+                    <span class="kpi-value">1–8 µSv</span>
+                    <span class="kpi-note">RTG wewnątrzustne 2D</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Typowy zakres CBCT</span>
+                    <span class="kpi-value">20–150 µSv</span>
+                    <span class="kpi-note">zależnie od FOV i protokołu</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Roczne tło naturalne</span>
+                    <span class="kpi-value">≈ 2400 µSv</span>
+                    <span class="kpi-note">punkt odniesienia dla porównań</span>
+                </div>
+                <div class="kpi-card">
+                    <span class="kpi-label">Obrazowanie bez RTG</span>
+                    <span class="kpi-value">0 µSv</span>
+                    <span class="kpi-note">skaner wewnątrzustny</span>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card">
+                    <h3>Średnia efektywna dawka według techniki</h3>
+                    <canvas id="doseChart" style="max-height: 320px;"></canvas>
+                    <p class="chart-note">Skala logarytmiczna pozwala jednocześnie porównać badania stomatologiczne i MDCT.</p><div class="interpretation-box"><strong>Interpretacja:</strong> różnica pomiędzy typowym RTG wewnątrzustnym a badaniem MDCT obejmuje kilka rzędów wielkości. CBCT zajmuje pozycję pośrednią, oferując informację 3D przy znacznie mniejszej ekspozycji niż klasyczna tomografia wielorzędowa głowy.</div>
+                </div>
+                <div class="card">
+                    <h3>Zakres dawek: minimum–maksimum</h3>
+                    <canvas id="doseRangeChart" style="max-height: 320px;"></canvas>
+                    <p class="chart-note">Przedział pokazuje zmienność zależną m.in. od protokołu i pola obrazowania.</p><div class="interpretation-box"><strong>Interpretacja:</strong> szerokie przedziały dla CBCT pokazują, dlaczego sama nazwa techniki nie wystarcza do oszacowania ekspozycji. Istotne są parametry konkretnego protokołu, szczególnie FOV i tryb niskodawkowy.</div>
+                </div>
+                <div class="card">
+                    <h3>Ekwiwalent naturalnego tła promieniowania</h3>
+                    <canvas id="backgroundDaysChart" style="max-height: 320px;"></canvas>
+                    <p class="chart-note">Wartości przeliczone z rocznego tła 2400 µSv na orientacyjną liczbę dni ekspozycji naturalnej.</p><div class="interpretation-box"><strong>Interpretacja:</strong> ekwiwalent tła naturalnego jest komunikacyjnym punktem odniesienia. Nie oznacza biologicznej równoważności ekspozycji, ponieważ rozkład dawki w czasie i napromieniane tkanki są inne.</div>
+                </div>
+                <div class="card">
+                    <h3>Rozdzielczość przestrzenna i możliwości obrazowania</h3>
+                    <canvas id="resolutionChart" style="max-height: 320px;"></canvas>
+                    <p class="chart-note">Wykres radarowy ma charakter porównawczy i pokazuje profil zastosowania, nie bezwzględną jakość diagnostyczną.</p><div class="interpretation-box"><strong>Interpretacja:</strong> nie istnieje modalność najlepsza we wszystkich kryteriach. RTG 2D dominuje w detalu małego obszaru i niskiej dawce, CBCT w geometrii 3D tkanek twardych, a MDCT w ocenie tkanek miękkich i rozległych urazów.</div>
+                </div>
+                <div class="card">
+                    <h3>Dawka a nominalna rozdzielczość przestrzenna</h3>
+                    <canvas id="doseResolutionChart" style="max-height: 320px;"></canvas>
+                    <p class="chart-note">Niższa wartość na osi rozdzielczości oznacza drobniejszy szczegół. Punkt RTG 2D jest przybliżeniem wynikającym z 20–30 pl/mm.</p><div class="interpretation-box"><strong>Interpretacja:</strong> wysoka rozdzielczość przestrzenna nie jest równoznaczna z najwyższą użytecznością kliniczną. Wybór zależy również od kontrastu, geometrii 3D, obecności artefaktów oraz rodzaju ocenianej tkanki.</div>
+                </div>
+                <div class="card">
+                    <h3>Ile badań odpowiada 1% rocznego tła?</h3>
+                    <canvas id="onePercentChart" style="max-height: 320px;"></canvas>
+                    <p class="chart-note">Wartości obliczone dla przyjętych średnich dawek i 1% tła równego 24 µSv.</p><div class="interpretation-box"><strong>Interpretacja:</strong> wskaźnik służy wyłącznie do intuicyjnego porównania skali ekspozycji. Nie powinien być używany jako próg bezpieczeństwa ani jako kryterium uzasadnienia badania.</div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 1.5rem;">
+                <h3>Szybkie porównanie modalności</h3>
+                <div class="comparison-strip">
+                    <div class="comparison-item"><strong>RTG 2D</strong>Najmniejsza dawka jonizująca i bardzo wysoka rozdzielczość dla małego obszaru.</div>
+                    <div class="comparison-item"><strong>OPG</strong>Szeroki przegląd obu łuków zębowych kosztem nakładania struktur.</div>
+                    <div class="comparison-item"><strong>CBCT</strong>Obrazowanie 3D i pomiary geometryczne przy dawce wyższej niż w 2D.</div>
+                    <div class="comparison-item"><strong>MDCT</strong>Znacznie wyższa dawka, ale lepsza ocena dużych urazów i tkanek miękkich.</div>
+                    <div class="comparison-item"><strong>Skaner IOS</strong>Brak promieniowania, bardzo wysoka dokładność powierzchni, bez informacji o strukturach wewnętrznych.</div>
+                </div>
+            </div>
+        </section>
+
+        <section id="dobor" style="margin-top: 3rem;">
+            <h2>3. Dobór techniki do pytania klinicznego</h2>
+            <p class="section-intro">Obrazowanie powinno odpowiadać na konkretne pytanie kliniczne. Rozszerzanie badania z 2D do 3D ma sens wtedy, gdy dodatkowa informacja przestrzenna może zmienić rozpoznanie, plan leczenia lub ocenę ryzyka zabiegu.</p>
+            <div class="grid-3">
+                <div class="card searchable"><h3>Próchnica, przyzębie, endodoncja podstawowa</h3><p><strong>Pierwsza linia:</strong> RTG wewnątrzustne. Zapewnia bardzo dobry detal w ograniczonym polu przy niewielkiej dawce.</p><p><strong>Rozszerzenie:</strong> CBCT małego FOV, gdy anatomia kanałów, resorpcja, złamanie lub zmiana okołowierzchołkowa pozostają niejednoznaczne w 2D.</p></div>
+                <div class="card searchable"><h3>Zęby zatrzymane, implantologia, chirurgia</h3><p><strong>Przegląd:</strong> OPG pozwala ocenić cały układ zębowy i sąsiednie struktury.</p><p><strong>Planowanie przestrzenne:</strong> CBCT umożliwia pomiar kości i ocenę relacji do kanału żuchwy, zatoki szczękowej oraz sąsiednich korzeni.</p></div>
+                <div class="card searchable"><h3>Urazy rozległe i tkanki miękkie</h3><p><strong>CBCT:</strong> bardzo dobre odwzorowanie struktur kostnych twarzoczaszki.</p><p><strong>MDCT:</strong> preferowane, gdy kluczowa jest ocena tkanek miękkich, struktur śródczaszkowych, naczyń lub rozległego urazu.</p></div>
+            </div>
+            <div class="source-links"><a class="source-link" href="https://www.iaea.org/resources/rpop/health-professionals/dentistry/patients" target="_blank" rel="noopener">IAEA: uzasadnienie ekspozycji ↗</a><a class="source-link" href="https://www.aae.org/specialty/clinical-resources/cone-beam-computed-tomography/" target="_blank" rel="noopener">AAE: selektywne użycie CBCT ↗</a></div>
+        </section>
+
+        <section id="workflow" style="margin-top: 3rem;">
+            <h2>4. Cyfrowy workflow obrazowania</h2>
+            <p class="section-intro">W nowoczesnej pracowni wynik badania nie kończy się na wygenerowaniu obrazu. Dane są identyfikowane, rekonstruowane, interpretowane, raportowane i archiwizowane. Standard DICOM zapewnia interoperacyjność obrazów i metadanych pomiędzy aparaturą, stacjami opisowymi oraz systemami PACS.</p>
+            <div class="workflow">
+                <div class="workflow-step"><span>01. Zlecenie</span>Uzasadnienie badania i określenie pytania klinicznego.</div>
+                <div class="workflow-step"><span>02. Akwizycja</span>Dobór modalności, FOV i protokołu ekspozycji.</div>
+                <div class="workflow-step"><span>03. Rekonstrukcja</span>MPR, rekonstrukcja 3D, ewentualna segmentacja i redukcja artefaktów.</div>
+                <div class="workflow-step"><span>04. Interpretacja</span>Systematyczna ocena całego dostępnego obrazu i sporządzenie wniosków.</div>
+                <div class="workflow-step"><span>05. PACS/DICOM</span>Archiwizacja obrazu, metadanych i raportu oraz możliwość późniejszego porównania.</div>
+            </div>
+            <div class="source-links"><a class="source-link" href="https://www.dicomstandard.org/" target="_blank" rel="noopener">DICOM Standard ↗</a><a class="source-link" href="https://www.dicomstandard.org/current" target="_blank" rel="noopener">Aktualna edycja DICOM ↗</a></div>
+        </section>
+
+        <section id="kalkulator" style="margin-top: 3rem;">
+            <h2>5. Interaktywny Estymator Skumulowanej Dawki Pacjenta</h2>
+            <div class="interactive-box">
+                <p style="margin-bottom: 1rem; font-size: 0.95rem;">Narzędzie pomocnicze do szacowania rocznego narażenia pacjenta na promieniowanie jonizujące w celach diagnostyki stomatologicznej i porównania z tłem naturalnym (~2400 µSv/rok w Polsce).</p>
+                
+                <div class="calc-inputs">
+                    <div class="form-group">
+                        <label for="numRtg">Zdjęcia wewnątrzustne (RTG 2D):</label>
+                        <input type="number" id="numRtg" value="0" min="0" onchange="calculateDose()">
+                    </div>
+                    <div class="form-group">
+                        <label for="numOpg">Pantomogramy (OPG):</label>
+                        <input type="number" id="numOpg" value="0" min="0" onchange="calculateDose()">
+                    </div>
+                    <div class="form-group">
+                        <label for="numCbctSmall">CBCT (Małe FOV - np. 5x5):</label>
+                        <input type="number" id="numCbctSmall" value="0" min="0" onchange="calculateDose()">
+                    </div>
+                    <div class="form-group">
+                        <label for="numCbctLarge">CBCT (Duże FOV - Szczękowe):</label>
+                        <input type="number" id="numCbctLarge" value="0" min="0" onchange="calculateDose()">
+                    </div>
+                </div>
+
+                <div class="result-display" id="doseResult">
+                    Szacowana dawka całkowita: 0 µSv (0.00% rocznego tła naturalnego)
+                </div>
+            </div>
+        </section>
+
+        <section id="artefakty" style="margin-top: 3rem;">
+            <h2>6. Artefakty w Obrazowaniu CBCT oraz RTG Cyfrowym</h2>
+            <div class="table-responsive">
+                <table class="searchable">
+                    <thead>
+                        <tr>
+                            <th>Rodzaj Artefaktu</th>
+                            <th>Przyczyna Powstawania</th>
+                            <th>Wygląd na Obrazie</th>
+                            <th>Metody Redukcji / Zapobiegania</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Utwardzanie wiązki (Beam Hardening)</strong></td>
+                            <td>Absorpcja niskoenergetycznych fotonów przez obiekty o gęstości metalu (implanty, wkłady).</td>
+                            <td>Ciemne pasma (smugi) pomiędzy gęstymi obiektami, jaśniejsze obwódki wokół nich.</td>
+                            <td>Włączenie algorytmów MAR (Metal Artifact Reduction), zmiana kąta i pozycji pacjenta.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Artefakty Ruchu (Motion Artifacts)</strong></td>
+                            <td>Przemieszczenie pacjenta (przełykanie, ruch głowy) podczas skanowania rotacyjnego.</td>
+                            <td>Podwójne kontury, rozmycie ostrości, skoki w rekonstrukcji 3D.</td>
+                            <td>Stabilizacja głowy (pozycjonery, podbródek), skrócenie czasu skanowania (Quick Scan).</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Artefakt Pierścieniowy (Ring)</strong></td>
+                            <td>Brak kalibracji lub uszkodzenie pojedynczych pikseli detektora.</td>
+                            <td>Concentriczne pierścienie widoczne na przekrojach osiowych (Axial).</td>
+                            <td>Ponowna kalibracja detektora (flat-field calibration) przez serwisanta.</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Cień Cielesny (Ghost Image)</strong></td>
+                            <td>Gęste struktury anatomiczne lub przedmioty (kolczyki, kręgosłup) poza warstwą obrazowania OPG.</td>
+                            <td>Powiększone, zniekształcone i uniesione cienie po przeciwnej stronie obrazu.</td>
+                            <td>Usunięcie biżuterii, aparatów słuchowych oraz prawidłowe wyprostowanie kręgosłupa pacjenta.</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="standardy" style="margin-top: 3rem;">
+            <h2>7. Wytyczne Kliniczne, ALARA i Procedura Opisu</h2>
+            <div class="grid-2">
+                <div class="card searchable">
+                    <h3>Zasada ALARA i ALADA w Stomatologii</h3>
+                    <p>Zasady <strong>ALARA</strong> (As Low As Reasonably Achievable) oraz <strong>ALADA</strong> (As Low As Diagnostically Acceptable) obligują do redukcji dawek ekspozycji bez utraty wartości diagnostycznej:</p>
+                    <ul class="styled-list" style="margin-top: 0.5rem;">
+                        <li>Stosowanie kolimacji prostokątnej w RTG wewnątrzustnym (redukcja dawki o ~50-60%).</li>
+                        <li>Dostosowanie pola widzenia (FOV) w CBCT do obszaru zainteresowania klinicznego.</li>
+                        <li>Stosowanie tarczy ochronnej na tarczycę (zwłaszcza u dzieci).</li>
+                        <li>Korzystanie z trybów Low Dose w diagnostyce kontrolnej i ortodontycznej.</li>
+                    </ul>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Struktura Prawidłowego Opisu Radiologicznego (DICOM)</h3>
+                    <ol style="padding-left: 1.2rem; font-size:0.9rem;">
+                        <li><strong>Identyfikacja i Metadane:</strong> Imię, nazwisko, data urodzenia, data i rodzaj badania, nazwa aparatu.</li>
+                        <li><strong>Wskazanie Kliniczne:</strong> Przyczyna wykonania badania (np. ocena ilościowa kości przed implantacją).</li>
+                        <li><strong>Ocena Jakościowa:</strong> Prawidłowość ekspozycji, pozycjonowanie, obecność artefaktów.</li>
+                        <li><strong>Opis Szczegółowy:</strong> Ocena uzębienia, przyzębia, kości szczęk, struktur TMJ, zatok obocznych nosa.</li>
+                        <li><strong>Wnioski / Synteza:</strong> Zwięzła konkluzja i ewentualne zalecenia dalszych badań.</li>
+                    </ol>
+                </div>
+
+                <div class="card searchable">
+                    <h3>AI jako system wspomagania decyzji</h3>
+                    <p>Algorytmy uczenia maszynowego mogą wspomagać wykrywanie zmian, segmentację struktur, pomiary cefalometryczne i analizę CBCT. Wynik AI powinien być traktowany jako dodatkowa warstwa informacji, a nie jako autonomiczny opis badania.</p>
+                    <div class="interpretation-box"><strong>Praktyczna zasada:</strong> klinicysta powinien znać ograniczenia modelu, weryfikować wynik na obrazie źródłowym i dokumentować ostateczną interpretację w kontekście danych klinicznych.</div>
+                    <div class="source-links"><a class="source-link" href="https://pubmed.ncbi.nlm.nih.gov/32315260/" target="_blank" rel="noopener">Schwendicke et al. 2020 ↗</a></div>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Jakość obrazu i artefakty</h3>
+                    <p>Ocena techniczna powinna poprzedzać interpretację kliniczną. Ruch pacjenta, metal, niewłaściwe pozycjonowanie i błędy detektora mogą tworzyć struktury imitujące patologię lub zasłaniać istotne szczegóły.</p>
+                    <div class="interpretation-box"><strong>Raport:</strong> obecność artefaktów należy odnotować szczególnie wtedy, gdy mogą ograniczać wiarygodność oceny określonego obszaru.</div>
+                    <div class="source-links"><a class="source-link" href="https://www.aae.org/specialty/cone-beam-ct-interpretation/" target="_blank" rel="noopener">AAE: interpretacja CBCT ↗</a></div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="narzedzia" style="margin-top: 3rem;">
+            <h2>8. Narzędzia praktyczne i dydaktyczne</h2>
+            <p class="section-intro">Ta część porządkuje wiedzę potrzebną przy codziennej analizie badań: od decyzji o doborze techniki, przez kontrolę jakości obrazu, po interpretację i raportowanie. Moduły mają charakter pomocniczy i nie zastępują wskazań klinicznych ani lokalnych procedur.</p>
+
+            <div class="card searchable">
+                <h3>Interaktywny dobór badania</h3>
+                <p>Wybierz dominujący problem kliniczny i rodzaj informacji, której potrzebujesz. Wynik wskazuje modalność pierwszego wyboru oraz typową sytuację, w której warto rozszerzyć diagnostykę.</p>
+                <div class="decision-panel">
+                    <div class="form-group">
+                        <label for="clinicalQuestion">Pytanie kliniczne</label>
+                        <select id="clinicalQuestion" onchange="recommendImaging()">
+                            <option value="caries">Próchnica / przyzębie</option>
+                            <option value="endo">Endodoncja</option>
+                            <option value="impacted">Ząb zatrzymany / chirurgia</option>
+                            <option value="implant">Implantologia</option>
+                            <option value="ortho">Ortodoncja</option>
+                            <option value="trauma">Uraz twarzoczaszki</option>
+                            <option value="soft">Tkanki miękkie / zmiana rozległa</option>
+                            <option value="prostho">Protetyka / model powierzchni</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="need3d">Czy informacja przestrzenna 3D jest krytyczna?</label>
+                        <select id="need3d" onchange="recommendImaging()">
+                            <option value="no">Nie / jeszcze nie wiadomo</option>
+                            <option value="yes">Tak</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="imagingRecommendation" class="decision-result"></div>
+            </div>
+
+            <div class="grid-2" style="margin-top:1.5rem;">
+                <div class="card searchable">
+                    <h3>Checklista jakości obrazu przed interpretacją</h3>
+                    <div class="checklist-grid">
+                        <div class="check-card"><h4>1. Identyfikacja</h4><ul><li>Zgodność danych pacjenta.</li><li>Rodzaj i data badania.</li><li>Poprawny obszar anatomiczny.</li></ul></div>
+                        <div class="check-card"><h4>2. Jakość techniczna</h4><ul><li>Ostrość i brak istotnego poruszenia.</li><li>Brak niedopuszczalnego prześwietlenia lub niedoświetlenia.</li><li>Prawidłowe pozycjonowanie i centrowanie.</li></ul></div>
+                        <div class="check-card"><h4>3. Zakres</h4><ul><li>Cała anatomia konieczna do odpowiedzi na pytanie kliniczne.</li><li>W CBCT właściwe FOV.</li><li>Brak istotnej struktury poza polem obrazowania.</li></ul></div>
+                        <div class="check-card"><h4>4. Artefakty</h4><ul><li>Metal, ruch, beam hardening, ring.</li><li>Ghost images i nakładanie struktur w OPG.</li><li>Ocena, czy artefakt może imitować patologię.</li></ul></div>
+                    </div>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Kiedy rozważyć CBCT?</h3>
+                    <details class="learning-box" open><summary>CBCT zwykle wnosi wartość, gdy...</summary><ul><li>relacje anatomiczne w 2D są niejednoznaczne,</li><li>potrzebny jest rzeczywisty pomiar 3D,</li><li>należy zlokalizować kanał nerwowy, korzeń, resorpcję lub złamanie,</li><li>wynik może zmienić plan implantologiczny, endodontyczny lub chirurgiczny.</li></ul></details>
+                    <details class="learning-box"><summary>CBCT nie powinno być wykonywane rutynowo tylko dlatego, że jest dostępne</summary><p>Badanie 3D ma sens wtedy, gdy dodatkowa informacja przestrzenna odpowiada na konkretne pytanie kliniczne. Dobór FOV i protokołu powinien być możliwie oszczędny.</p></details>
+                    <details class="learning-box"><summary>Kiedy zamiast CBCT potrzebne jest MDCT?</summary><p>Gdy głównym problemem są tkanki miękkie, struktury śródczaszkowe, naczynia lub rozległy uraz wymagający szerszej oceny niż typowa diagnostyka stomatologiczna.</p></details>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card searchable">
+                    <h3>Legenda skali dawek</h3>
+                    <p class="section-intro">Porównania do naturalnego tła pomagają komunikować skalę ekspozycji, ale nie stanowią progu bezpieczeństwa. Decyzja o badaniu zależy od uzasadnienia klinicznego i optymalizacji protokołu.</p>
+                    <div class="dose-legend">
+                        <div class="dose-legend-item"><strong>RTG wewnątrzustne</strong>Typowo około 1–8 µSv.</div>
+                        <div class="dose-legend-item"><strong>Cefalometria</strong>Typowo około 2–3 µSv.</div>
+                        <div class="dose-legend-item"><strong>OPG</strong>Typowo około 4–30 µSv.</div>
+                        <div class="dose-legend-item"><strong>CBCT</strong>Silnie zależne od FOV i protokołu, orientacyjnie dziesiątki do ponad 100 µSv.</div>
+                        <div class="dose-legend-item"><strong>MDCT głowy</strong>Rząd kilku mSv, czyli kilku tysięcy µSv.</div>
+                        <div class="dose-legend-item"><strong>Skaner wewnątrzustny</strong>0 µSv, technika optyczna.</div>
+                    </div>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Najczęstsze pułapki interpretacyjne</h3>
+                    <details class="learning-box" open><summary>Artefakt może imitować patologię</summary><p>Smugi metaliczne, podwójne kontury, ghost images i zniekształcenia pozycjonowania powinny być rozpoznane przed opisem zmian chorobowych.</p></details>
+                    <details class="learning-box"><summary>Obraz 2D ukrywa relacje przestrzenne</summary><p>Nakładanie struktur może uniemożliwić ocenę przebiegu korzeni, położenia zęba zatrzymanego lub relacji do kanału nerwu zębodołowego.</p></details>
+                    <details class="learning-box"><summary>Wysoka rozdzielczość nie oznacza automatycznie lepszego badania</summary><p>Modalność należy dobierać do tkanki i pytania klinicznego. MDCT lepiej różnicuje tkanki miękkie, CBCT kość, a RTG wewnątrzustne daje bardzo dobry detal małego obszaru przy niewielkiej dawce.</p></details>
+                    <details class="learning-box"><summary>Opis powinien obejmować cały dostępny obraz</summary><p>Nie należy ograniczać interpretacji wyłącznie do zęba będącego przyczyną skierowania. W raporcie trzeba odnotować istotne nieprawidłowości widoczne w dostępnym polu.</p></details>
+                </div>
+            </div>
+
+            <div class="card searchable">
+                <h3>Mini-słownik radiologii stomatologicznej</h3>
+                <div class="glossary-grid">
+                    <div class="glossary-item"><strong>FOV</strong>Field of View, czyli pole obrazowania. W CBCT jego wielkość silnie wpływa na zakres badania i dawkę.</div>
+                    <div class="glossary-item"><strong>Voxel</strong>Trójwymiarowy odpowiednik piksela. Mniejszy voxel zwykle umożliwia odwzorowanie drobniejszych struktur, kosztem większych wymagań danych i często dawki.</div>
+                    <div class="glossary-item"><strong>MPR</strong>Multiplanar Reconstruction, rekonstrukcja wielopłaszczyznowa przekrojów osiowych, strzałkowych i czołowych.</div>
+                    <div class="glossary-item"><strong>DICOM</strong>Standard zapisu, wymiany i prezentacji obrazów medycznych wraz z metadanymi.</div>
+                    <div class="glossary-item"><strong>PACS</strong>System archiwizacji i dystrybucji obrazów medycznych.</div>
+                    <div class="glossary-item"><strong>ALARA / ALADA</strong>Zasady minimalizacji ekspozycji przy zachowaniu użytecznej diagnostycznie jakości obrazu.</div>
+                    <div class="glossary-item"><strong>DRL</strong>Diagnostic Reference Level, poziom referencyjny stosowany do optymalizacji praktyki, a nie indywidualny limit dawki pacjenta.</div>
+                    <div class="glossary-item"><strong>MAR</strong>Metal Artifact Reduction, algorytmy ograniczające artefakty powodowane przez metal.</div>
+                    <div class="glossary-item"><strong>PSP</strong>Photostimulable Phosphor Plate, elastyczna płyta fosforowa stosowana w radiografii cyfrowej.</div>
+                    <div class="glossary-item"><strong>STL</strong>Format siatki powierzchniowej używany m.in. dla modeli zębów ze skanerów wewnątrzustnych.</div>
+                </div>
+            </div>
+        </section>
+
+
+        <section id="dydaktyka" style="margin-top: 3rem;">
+            <h2>9. Moduł dydaktyczny</h2>
+            <p class="section-intro">Sekcja przeznaczona do szybkiego powtarzania materiału przed zajęciami, kolokwium lub analizą przypadku. Koncentruje się na rozumieniu doboru modalności, ocenie jakości obrazu i interpretacji podstawowych cech radiologicznych.</p>
+
+            <div class="card searchable">
+                <h3>Cele uczenia się</h3>
+                <div class="learning-objectives">
+                    <div><strong>Dobór badania</strong><br>Rozróżnić sytuacje, w których wystarcza RTG 2D lub OPG, od tych wymagających informacji 3D.</div>
+                    <div><strong>Ocena jakości</strong><br>Sprawdzić identyfikację, pozycjonowanie, zakres anatomiczny, ekspozycję i artefakty przed opisem.</div>
+                    <div><strong>Interpretacja</strong><br>Rozpoznawać podstawowe przejaśnienia, zagęszczenia, zaburzenia ozębnej, blaszki zbitej i kości.</div>
+                    <div><strong>Bezpieczeństwo</strong><br>Uzasadnić ekspozycję, dobrać najmniejsze użyteczne FOV i stosować zasadę optymalizacji dawki.</div>
+                </div>
+            </div>
+
+            <div class="card searchable">
+                <h3>Najważniejsze fakty do zapamiętania</h3>
+                <div class="didactic-grid">
+                    <div class="memory-card"><h4>RTG wewnątrzustne</h4><p>Najlepsze do drobnych szczegółów zęba i tkanek okołowierzchołkowych. Typowa dawka jest bardzo mała, ale obraz pozostaje dwuwymiarowy.</p></div>
+                    <div class="memory-card"><h4>OPG</h4><p>Daje szeroki obraz obu łuków i struktur przyległych. Jest badaniem przeglądowym, lecz obarczonym powiększeniem, nakładaniem struktur i artefaktami warstwowymi.</p></div>
+                    <div class="memory-card"><h4>CBCT</h4><p>Zapewnia rzeczywistą informację przestrzenną i wysoką rozdzielczość struktur twardych. Nie powinno być badaniem rutynowym bez konkretnego pytania klinicznego.</p></div>
+                    <div class="memory-card"><h4>MDCT</h4><p>Przewyższa CBCT w obrazowaniu tkanek miękkich i rozległych urazów, ale zwykle wiąże się z większą ekspozycją.</p></div>
+                    <div class="memory-card"><h4>Skan wewnątrzustny</h4><p>Nie wykorzystuje promieniowania jonizującego. Odwzorowuje powierzchnie i modele 3D, lecz nie zastępuje RTG w ocenie kości i zmian głębokich.</p></div>
+                    <div class="memory-card"><h4>DICOM i PACS</h4><p>DICOM standaryzuje dane obrazowe i metadane, a PACS służy do ich przechowywania, udostępniania i archiwizacji.</p></div>
+                </div>
+            </div>
+
+            <div class="grid-2">
+                <div class="card searchable">
+                    <h3>Myślenie kliniczne: „dlaczego ta metoda?”</h3>
+                    <div class="case-card">
+                        <strong>Próchnica styczna lub zmiana okołowierzchołkowa</strong>
+                        <div class="case-question">Co wybrać jako badanie pierwszego rzutu?</div>
+                        <details><summary>Pokaż odpowiedź</summary><div class="answer-box">Zwykle RTG wewnątrzustne, ponieważ oferuje bardzo dobrą rozdzielczość lokalną przy małej dawce. CBCT rozważa się dopiero wtedy, gdy obraz 2D nie odpowiada na konkretne pytanie kliniczne.</div></details>
+                    </div>
+                    <div class="case-card">
+                        <strong>Zatrzymana ósemka i niejasna relacja do kanału żuchwy</strong>
+                        <div class="case-question">Kiedy OPG może nie wystarczyć?</div>
+                        <details><summary>Pokaż odpowiedź</summary><div class="answer-box">Gdy trzeba określić przestrzenną relację korzeni do kanału nerwu. Wtedy CBCT może dostarczyć informacji 3D istotnej dla planowania zabiegu.</div></details>
+                    </div>
+                    <div class="case-card">
+                        <strong>Rozległy uraz twarzoczaszki z podejrzeniem uszkodzeń tkanek miękkich</strong>
+                        <div class="case-question">CBCT czy MDCT?</div>
+                        <details><summary>Pokaż odpowiedź</summary><div class="answer-box">MDCT, jeśli potrzebna jest szeroka ocena urazu i tkanek miękkich. CBCT jest zoptymalizowane głównie dla struktur twardych stomatologicznych.</div></details>
+                    </div>
+                </div>
+
+                <div class="card searchable">
+                    <h3>Typowe pułapki egzaminacyjne</h3>
+                    <div class="exam-trap"><strong>1. „Więcej wymiarów = zawsze lepsze badanie”.</strong><br>Nie. Lepsza jest modalność, która odpowiada na konkretne pytanie kliniczne przy uzasadnionej ekspozycji.</div>
+                    <div class="exam-trap" style="margin-top:.8rem;"><strong>2. „OPG pozwala na dokładne pomiary implantologiczne”.</strong><br>Nie w każdym przypadku. Obraz panoramiczny jest podatny na powiększenie i zniekształcenia geometryczne.</div>
+                    <div class="exam-trap" style="margin-top:.8rem;"><strong>3. „CBCT dobrze pokazuje tkanki miękkie”.</strong><br>Nie. Jego główną zaletą jest szczegółowe obrazowanie struktur twardych.</div>
+                    <div class="exam-trap" style="margin-top:.8rem;"><strong>4. „Artefakt jest tylko problemem technicznym”.</strong><br>Nie. Artefakt może imitować patologię lub ją maskować, dlatego ocena jakości poprzedza interpretację.</div>
+                </div>
+            </div>
+
+            <div class="card searchable">
+                <h3>Systematyczna interpretacja obrazu</h3>
+                <ol style="padding-left:1.3rem;">
+                    <li><strong>Sprawdź badanie:</strong> pacjent, data, rodzaj projekcji i zakres.</li>
+                    <li><strong>Oceń jakość:</strong> ostrość, ekspozycja, pozycjonowanie i artefakty.</li>
+                    <li><strong>Przeglądaj konsekwentnie:</strong> korony, korzenie, ozębna, blaszka zbita, kość, zatoki i struktury przyległe.</li>
+                    <li><strong>Opisz zmianę:</strong> lokalizacja, wielkość, granice, kształt, radiolucencja/radiopakość i wpływ na sąsiednie struktury.</li>
+                    <li><strong>Oddziel obserwację od rozpoznania:</strong> najpierw cechy obrazu, następnie najbardziej prawdopodobna interpretacja i różnicowanie.</li>
+                    <li><strong>Zakończ wnioskiem:</strong> zwięzła synteza oraz ewentualna potrzeba dalszej diagnostyki.</li>
+                </ol>
+            </div>
+
+            <div class="card searchable">
+                <h3>Mini-test sprawdzający</h3>
+                <div id="quizBox">
+                    <div class="quiz-question" data-answer="b"><p>1. Która technika najlepiej dostarcza informacji przestrzennej o relacji korzeni do kanału nerwu?</p><label><input type="radio" name="q1" value="a"> OPG</label><label><input type="radio" name="q1" value="b"> CBCT</label><label><input type="radio" name="q1" value="c"> Skan wewnątrzustny</label><div class="quiz-feedback" id="f1"></div></div>
+                    <div class="quiz-question" data-answer="c"><p>2. Która modalność najlepiej obrazuje tkanki miękkie spośród poniższych?</p><label><input type="radio" name="q2" value="a"> RTG wewnątrzustne</label><label><input type="radio" name="q2" value="b"> CBCT</label><label><input type="radio" name="q2" value="c"> MDCT</label><div class="quiz-feedback" id="f2"></div></div>
+                    <div class="quiz-question" data-answer="a"><p>3. Co należy wykonać przed szczegółową interpretacją obrazu?</p><label><input type="radio" name="q3" value="a"> Ocenić jakość techniczną i identyfikację badania</label><label><input type="radio" name="q3" value="b"> Od razu szukać patologii</label><label><input type="radio" name="q3" value="c"> Porównać jedynie dawkę</label><div class="quiz-feedback" id="f3"></div></div>
+                    <div class="quiz-question" data-answer="b"><p>4. Dlaczego OPG nie jest idealne do precyzyjnych pomiarów 3D?</p><label><input type="radio" name="q4" value="a"> Ma zbyt małą dawkę</label><label><input type="radio" name="q4" value="b"> Jest obrazem 2D z powiększeniem i zniekształceniami</label><label><input type="radio" name="q4" value="c"> Nie obejmuje żuchwy</label><div class="quiz-feedback" id="f4"></div></div>
+                    <div class="quiz-question" data-answer="c"><p>5. Które stwierdzenie o skanerze wewnątrzustnym jest prawidłowe?</p><label><input type="radio" name="q5" value="a"> Zastępuje CBCT w ocenie kości</label><label><input type="radio" name="q5" value="b"> Wykorzystuje promieniowanie RTG o bardzo małej dawce</label><label><input type="radio" name="q5" value="c"> Rejestruje powierzchnię bez promieniowania jonizującego</label><div class="quiz-feedback" id="f5"></div></div>
+                </div>
+                <div class="quiz-actions"><button class="btn" type="button" onclick="gradeQuiz()">Sprawdź odpowiedzi</button><button class="btn secondary" type="button" onclick="resetQuiz()">Wyczyść test</button></div>
+                <div id="quizScore" class="score-box"></div>
+            </div>
+        </section>
+
+
+        <section id="ciekawostki" style="margin-top: 3rem;">
+            <h2>10. Ciekawostki dla zaawansowanych</h2>
+            <p class="section-intro">Poniższe informacje wykraczają poza podstawowe kompendium. Zostały dodane na podstawie zewnętrznych wytycznych i literatury naukowej, aby pokazać mniej oczywiste konsekwencje techniczne i diagnostyczne obrazowania stomatologicznego.</p>
+
+            <div class="curiosity-grid">
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">CBCT • incidental findings</span>
+                    <h3>Badanie wykonane „dla jednego zęba” może ujawnić znacznie więcej</h3>
+                    <p>Znaleziska przypadkowe w CBCT są częste. W jednym badaniu przynajmniej jedno takie znalezisko wystąpiło u 66% pacjentów. W przeglądach systematycznych wiele zmian lokalizowano poza uzębieniem i wyrostkiem zębodołowym, m.in. w zatokach, drogach oddechowych, stawach i odcinku szyjnym.</p>
+                    <p class="myth-note"><strong>Wniosek praktyczny:</strong> zakres odpowiedzialności interpretacyjnej nie kończy się na pierwotnym regionie zainteresowania.</p>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/23524545/" target="_blank" rel="noopener">PubMed: Drage i wsp. ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">FOV • dawka</span>
+                    <h3>„CBCT” nie oznacza jednej dawki</h3>
+                    <p>Różnice między protokołami są bardzo duże. FDI podaje szeroki zakres efektywnej dawki CBCT, od około 11 do 1073 µSv, podczas gdy IAEA wskazuje wartości medianowe około ≤50 µSv dla małych i średnich objętości oraz około 100 µSv dla dużych objętości.</p>
+                    <p class="myth-note"><strong>Wniosek praktyczny:</strong> nazwa modalności bez informacji o FOV, protokole i aparacie mówi niewiele o rzeczywistej ekspozycji.</p>
+                    <a href="https://www.iaea.org/resources/rpop/health-professionals/dentistry/radiation-doses" target="_blank" rel="noopener">IAEA: radiation doses ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">Voxel • rozdzielczość</span>
+                    <h3>Mniejszy FOV może dawać nie tylko mniejszą dawkę, ale też lepszą rozdzielczość</h3>
+                    <p>W systemach ograniczonego pola widzenia często stosuje się mniejsze woksele, np. rzędu 0,1–0,2 mm zamiast 0,3–0,4 mm dla większych wolumenów. To częściowo tłumaczy, dlaczego małe FOV jest szczególnie użyteczne w endodoncji.</p>
+                    <p class="myth-note"><strong>Pułapka:</strong> mniejszy voxel nie gwarantuje automatycznie lepszego obrazu, bo rośnie znaczenie szumu i parametrów ekspozycji.</p>
+                    <a href="https://www.aae.org/specialty/wp-content/uploads/sites/2/2018/05/COL042Spring2018CBCTinDiagnosis.pdf" target="_blank" rel="noopener">AAE: CBCT in diagnosis ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">Artefakty • endodoncja</span>
+                    <h3>Materiały endodontyczne mogą tworzyć obraz, który przypomina patologię</h3>
+                    <p>Gutaperka, wkłady, implanty i inne materiały o wysokiej gęstości mogą powodować beam hardening, smugi i lokalne zaburzenia rekonstrukcji. W efekcie linia przypominająca złamanie korzenia może być artefaktem, a rzeczywista zmiana może zostać zamaskowana.</p>
+                    <p class="myth-note"><strong>Wniosek praktyczny:</strong> interpretacja CBCT po leczeniu endodontycznym wymaga szczególnej ostrożności i korelacji z obrazami 2D oraz objawami klinicznymi.</p>
+                    <a href="https://www.aae.org/specialty/cbct-imaging-for-endodontics-the-good-the-bad-and-the-ugly/" target="_blank" rel="noopener">AAE: limitations of CBCT ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">Optymalizacja</span>
+                    <h3>Duże FOV nie jest cechą, którą każdy aparat musi oferować</h3>
+                    <p>IAEA wskazuje, że system CBCT stosowany w stomatologii powinien co najmniej umożliwiać małe pole widzenia, nie większe niż około 6 × 6 cm, natomiast posiadanie dużego FOV nie jest konieczne dla każdego zastosowania.</p>
+                    <p class="myth-note"><strong>Wniosek praktyczny:</strong> „większy zakres” nie jest synonimem „lepszego aparatu”. W wielu zastosowaniach większe FOV oznacza jedynie większy zakres ekspozycji i więcej struktur do interpretacji.</p>
+                    <a href="https://www.iaea.org/resources/rpop/health-professionals/dentistry/optimization" target="_blank" rel="noopener">IAEA: optimization ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">AI • segmentacja</span>
+                    <h3>Najbardziej dojrzałym zastosowaniem AI w endodontycznym CBCT nie jest „diagnoza”, lecz segmentacja</h3>
+                    <p>Współczesne algorytmy potrafią automatycznie wydzielać ząb, komorę, miazgę i kanały w danych 3D. To zastosowanie jest bardziej technicznie dojrzałe niż autonomiczne stawianie rozpoznań klinicznych i może znacząco skracać czas ręcznej segmentacji.</p>
+                    <p class="myth-note"><strong>Wniosek praktyczny:</strong> największa korzyść AI może leżeć w automatyzacji czasochłonnych etapów analizy, a nie w zastępowaniu interpretacji lekarza.</p>
+                    <a href="https://www.aae.org/specialty/smarter-radiographs-ai-applications-in-2d-and-3d-endodontic-imaging/" target="_blank" rel="noopener">AAE: AI in endodontic imaging ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">Znaleziska naczyniowe</span>
+                    <h3>CBCT może przypadkowo ujawnić zwapnienia tętnic szyjnych</h3>
+                    <p>W przeglądzie systematycznym dotyczącym znalezisk przypadkowych opisywano zwapnienia w rejonie tętnic szyjnych z częstością około 5,7–11,6% w części analizowanych badań. Nie jest to rozpoznanie choroby naczyniowej, ale może stanowić wskazówkę wymagającą właściwej interpretacji klinicznej.</p>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/31216179/" target="_blank" rel="noopener">PubMed: systematic review ↗</a>
+                </article>
+
+                <article class="curiosity-card searchable">
+                    <span class="curiosity-tag">Radiologia • odpowiedzialność</span>
+                    <h3>Im większy wolumen, tym większy „dług interpretacyjny”</h3>
+                    <p>Duże pole widzenia zwiększa nie tylko dawkę, lecz także liczbę struktur, które mogą zawierać nieoczekiwane zmiany. Przeglądy znalezisk przypadkowych podkreślają potrzebę systematycznej oceny całego dostępnego obrazu, a nie wyłącznie regionu, który był powodem skierowania.</p>
+                    <p class="myth-note"><strong>Konsekwencja dydaktyczna:</strong> wybór FOV jest jednocześnie decyzją fizyczną, diagnostyczną i organizacyjną.</p>
+                    <a href="https://pubmed.ncbi.nlm.nih.gov/23372132/" target="_blank" rel="noopener">PubMed: frequency and nature of incidental findings ↗</a>
+                </article>
+            </div>
+
+            <div class="curiosity-highlight searchable"><strong>Najważniejsza meta-ciekawostka:</strong> w obrazowaniu stomatologicznym parametry techniczne nie są niezależne. Zmiana FOV, wielkości voxela, czasu ekspozycji, kV/mAs i algorytmu rekonstrukcji wpływa jednocześnie na dawkę, szum, artefakty, rozdzielczość i zakres odpowiedzialności interpretacyjnej. Dlatego nie istnieje jeden „najlepszy” protokół CBCT. Istnieje protokół najlepiej dopasowany do konkretnego pytania klinicznego.</div>
+        </section>
+
+        <section id="zrodla" style="margin-top: 3rem;">
+            <h2>11. Źródła, wytyczne i materiały referencyjne</h2>
+            <p class="section-intro">Poniższe odnośniki prowadzą przede wszystkim do dokumentów instytucjonalnych, standardów i publikacji recenzowanych. Wartości dawek podawane na stronie są wartościami orientacyjnymi. Przy zastosowaniu klinicznym należy korzystać z parametrów konkretnego aparatu, lokalnych procedur oraz aktualnie obowiązujących przepisów.</p>
+            <div class="reference-grid">
+                <div class="reference-card searchable"><h4>IAEA: Radiation Protection in Dental Radiology</h4><p>Aktualne materiały dotyczące uzasadniania badań, optymalizacji ekspozycji, ochrony pacjenta i personelu.</p><a href="https://www.iaea.org/publications/14720/radiation-protection-in-dental-radiology" target="_blank" rel="noopener">Otwórz Safety Reports Series No. 108 ↗</a></div>
+                <div class="reference-card searchable"><h4>European Commission: Radiation Protection 136</h4><p>Europejskie wytyczne dotyczące bezpiecznego stosowania radiografii w praktyce stomatologicznej.</p><a href="https://energy.ec.europa.eu/topics/nuclear-energy/radiation-protection/scientific-seminars-and-publications/radiation-protection-series-publications_en" target="_blank" rel="noopener">Otwórz serię Radiation Protection ↗</a></div>
+                <div class="reference-card searchable"><h4>Polska: procedury radiologiczne</h4><p>Tekst jednolity rozporządzenia dotyczącego wzorcowych i szczegółowych medycznych procedur radiologicznych wraz z późniejszymi zmianami.</p><a href="https://eli.gov.pl/api/acts/DU/2024/267/text.html" target="_blank" rel="noopener">ELI, tekst jednolity ↗</a></div>
+                <div class="reference-card searchable"><h4>Polska: Prawo atomowe</h4><p>Podstawowy akt prawny regulujący działalność związaną z narażeniem na promieniowanie jonizujące, w tym ekspozycje medyczne.</p><a href="https://eli.gov.pl/search?keywords=atomowe+prawo" target="_blank" rel="noopener">ELI, aktualne akty ↗</a></div>
+                <div class="reference-card searchable"><h4>FDA/ADA: dobór badań RTG</h4><p>Zalecenia dotyczące selekcji pacjentów do badań radiograficznych oraz ograniczania niepotrzebnej ekspozycji.</p><a href="https://www.fda.gov/radiation-emitting-products/medical-x-ray-imaging/ada-fda-guide-patient-selection-dental-radiographs" target="_blank" rel="noopener">Otwórz wytyczne ↗</a></div>
+                <div class="reference-card searchable"><h4>AAE: Cone Beam Computed Tomography</h4><p>Materiały kliniczne dotyczące wskazań i interpretacji CBCT w endodoncji, w tym aktualizowane stanowiska eksperckie.</p><a href="https://www.aae.org/specialty/clinical-resources/cone-beam-computed-tomography/" target="_blank" rel="noopener">Otwórz materiały AAE ↗</a></div>
+                <div class="reference-card searchable"><h4>DICOM Standard</h4><p>Oficjalny standard wymiany, zapisu, przetwarzania i prezentacji obrazów medycznych oraz związanych z nimi informacji.</p><a href="https://www.dicomstandard.org/" target="_blank" rel="noopener">Otwórz DICOM Standard ↗</a></div>
+                <div class="reference-card searchable"><h4>Schwendicke, Samek & Krois, 2020</h4><p>Przegląd możliwości i ograniczeń sztucznej inteligencji w stomatologii, Journal of Dental Research, DOI 10.1177/0022034520915714.</p><a href="https://pubmed.ncbi.nlm.nih.gov/32315260/" target="_blank" rel="noopener">PubMed ↗</a></div>
+                <div class="reference-card searchable"><h4>UK: IR(ME)R 2017</h4><p>Brytyjskie przepisy dotyczące medycznych ekspozycji na promieniowanie jonizujące, wraz z aktualnym przewodnikiem interpretacyjnym.</p><a href="https://www.gov.uk/government/publications/ionising-radiation-medical-exposure-regulations-2017-guidance" target="_blank" rel="noopener">GOV.UK ↗</a></div>
+            </div>
+            <div class="evidence-note"><strong>Uwaga o aktualności:</strong> regulacje i szczegółowe zalecenia ochrony radiologicznej są aktualizowane. W Polsce rozporządzenie z 2021 r. było później zmieniane, dlatego do zastosowań formalnych należy sprawdzać obowiązujący tekst w ELI. Podobnie zalecenia dotyczące CBCT i środków ochronnych mogą różnić się między krajami i zmieniać wraz z aktualizacją stanowisk towarzystw naukowych.</div>
+        </section>
+
+    </div>
+
+    <footer>
+        <p>© 2026 Kompendium Radiologii Stomatologicznej. Przewodnik przeznaczony do użytku profesjonalnego.</p>
+        <p>Systemy obrazowania cyfrowego | Ochrona Radiologiczna | Zgodność ze standardami DICOM / PACS / RODO</p>
+    </footer>
+
+    <script>
+        // INIT CHARTS
+        document.addEventListener("DOMContentLoaded", function() {
+            const naturalBackground = 2400;
+            const doseLabels = ['RTG 2D', 'Cefalo', 'OPG', 'CBCT małe FOV', 'CBCT duże FOV', 'MDCT'];
+            const meanDoses = [3, 2.5, 17, 45, 120, 2500];
+
+            new Chart(document.getElementById('doseChart'), {
+                type: 'bar',
+                data: {
+                    labels: doseLabels,
+                    datasets: [{
+                        label: 'Średnia dawka efektywna (µSv)',
+                        data: meanDoses,
+                        backgroundColor: ['#22c55e','#22c55e','#eab308','#f97316','#ef4444','#991b1b'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { type: 'logarithmic', title: { display: true, text: 'Dawka (µSv), skala logarytmiczna' } } }
+                }
+            });
+
+            new Chart(document.getElementById('doseRangeChart'), {
+                type: 'bar',
+                data: {
+                    labels: ['RTG 2D', 'Cefalo', 'OPG', 'CBCT', 'MDCT'],
+                    datasets: [{
+                        label: 'Zakres dawki (µSv)',
+                        data: [[1,8],[2,3],[4,30],[20,150],[1000,4000]],
+                        backgroundColor: ['#22c55e','#22c55e','#eab308','#f97316','#991b1b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { type: 'logarithmic', min: 1, title: { display: true, text: 'Zakres dawki (µSv), skala logarytmiczna' } } }
+                }
+            });
+
+            const days = meanDoses.map(v => +(v / naturalBackground * 365).toFixed(2));
+            new Chart(document.getElementById('backgroundDaysChart'), {
+                type: 'bar',
+                data: {
+                    labels: doseLabels,
+                    datasets: [{ label: 'Dni naturalnego tła', data: days, backgroundColor: '#2563eb' }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { title: { display: true, text: 'Ekwiwalent dni naturalnego tła' } } }
+                }
+            });
+
+            new Chart(document.getElementById('resolutionChart'), {
+                type: 'radar',
+                data: {
+                    labels: ['Drobny szczegół', 'Niska dawka', 'Odporność na metal', 'Tkanki miękkie', 'Informacja 3D'],
+                    datasets: [
+                        { label: 'CBCT 3D', data: [8,5,4,2,10], borderColor: '#2563eb', backgroundColor: 'rgba(37,99,235,0.16)' },
+                        { label: 'RTG cyfrowe 2D', data: [10,9,8,1,2], borderColor: '#16a34a', backgroundColor: 'rgba(22,163,74,0.14)' },
+                        { label: 'MDCT', data: [5,1,5,10,10], borderColor: '#7c3aed', backgroundColor: 'rgba(124,58,237,0.10)' }
+                    ]
+                },
+                options: { responsive: true, scales: { r: { suggestedMin: 0, suggestedMax: 10, ticks: { stepSize: 2 } } } }
+            });
+
+            new Chart(document.getElementById('doseResolutionChart'), {
+                type: 'scatter',
+                data: {
+                    datasets: [{
+                        label: 'Techniki RTG',
+                        data: [
+                            {x:3, y:21, label:'RTG 2D'},
+                            {x:17, y:200, label:'OPG'},
+                            {x:85, y:238, label:'CBCT'},
+                            {x:2500, y:750, label:'MDCT'}
+                        ],
+                        backgroundColor: '#2563eb',
+                        pointRadius: 6
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    parsing: false,
+                    plugins: {
+                        tooltip: { callbacks: { label: ctx => `${ctx.raw.label}: ${ctx.raw.x} µSv, ~${ctx.raw.y} µm` } },
+                        legend: { display: false }
+                    },
+                    scales: {
+                        x: { type:'logarithmic', title:{display:true,text:'Średnia dawka (µSv), skala logarytmiczna'} },
+                        y: { type:'logarithmic', title:{display:true,text:'Nominalny rozmiar szczegółu / voxela (µm)'} }
+                    }
+                }
+            });
+
+            const onePercentDose = naturalBackground * 0.01;
+            const exams = meanDoses.slice(0,5).map(v => +(onePercentDose / v).toFixed(1));
+            new Chart(document.getElementById('onePercentChart'), {
+                type: 'bar',
+                data: {
+                    labels: doseLabels.slice(0,5),
+                    datasets: [{ label: 'Liczba badań do 1% tła', data: exams, backgroundColor: '#0f766e' }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, title: { display: true, text: 'Orientacyjna liczba badań' } } }
+                }
+            });
+        });
+
+
+        function recommendImaging() {
+            const question = document.getElementById('clinicalQuestion').value;
+            const need3d = document.getElementById('need3d').value === 'yes';
+            const result = document.getElementById('imagingRecommendation');
+            const recommendations = {
+                caries: ['RTG wewnątrzustne', 'Najlepszy punkt wyjścia dla próchnicy i oceny przyzębia. CBCT nie jest badaniem rutynowym w tym wskazaniu.'],
+                endo: [need3d ? 'CBCT małego FOV' : 'RTG wewnątrzustne', need3d ? 'Rozważ 3D przy złożonej anatomii kanałów, resorpcji, podejrzeniu złamania lub niejednoznacznym obrazie 2D.' : 'Zacznij od obrazu 2D. CBCT małego FOV rozważ, gdy wynik 3D może zmienić postępowanie.'],
+                impacted: [need3d ? 'CBCT' : 'OPG', need3d ? 'CBCT pozwala określić relacje przestrzenne zęba zatrzymanego do korzeni, kanałów i struktur sąsiednich.' : 'OPG daje szeroki obraz przeglądowy; do planowania zabiegu może być potrzebne CBCT.'],
+                implant: ['CBCT', 'Do oceny objętości kości, wymiarów oraz relacji do kanału żuchwy i zatoki szczękowej. Dobierz możliwie małe FOV odpowiadające planowanemu obszarowi.'],
+                ortho: [need3d ? 'CBCT selektywnie' : 'Cefalometria + OPG', need3d ? 'CBCT rozważ tylko wtedy, gdy informacja 3D ma znaczenie dla planu leczenia.' : 'Cefalometria i OPG zwykle dostarczają podstawowej informacji ortodontycznej przy małej dawce.'],
+                trauma: [need3d ? 'CBCT lub MDCT' : 'OPG / RTG zależnie od urazu', 'CBCT dobrze obrazuje kość. Przy rozległym urazie, podejrzeniu zmian śródczaszkowych lub potrzebie oceny tkanek miękkich preferowane jest MDCT.'],
+                soft: ['MDCT', 'Lepszy wybór, gdy zasadniczym celem jest ocena tkanek miękkich, naczyń, struktur śródczaszkowych lub rozległej patologii.'],
+                prostho: ['Skaner wewnątrzustny', 'Dla cyfrowego modelu powierzchni zębów i tkanek miękkich bez promieniowania. Nie zastępuje RTG/CBCT w ocenie kości i struktur wewnętrznych.']
+            };
+            const [modality, explanation] = recommendations[question];
+            result.innerHTML = `<strong>Najbardziej prawdopodobny wybór:</strong> ${modality}<br><span>${explanation}</span>`;
+        }
+
+        // KALKULATOR DAWKI
+        function calculateDose() {
+            const rtg = parseInt(document.getElementById('numRtg').value) || 0;
+            const opg = parseInt(document.getElementById('numOpg').value) || 0;
+            const cbctS = parseInt(document.getElementById('numCbctSmall').value) || 0;
+            const cbctL = parseInt(document.getElementById('numCbctLarge').value) || 0;
+
+            // Wagi w uSv
+            const totalDose = (rtg * 3) + (opg * 15) + (cbctS * 45) + (cbctL * 120);
+            const naturalBackground = 2400; // uSv w Polsce rocznie
+            const percentage = ((totalDose / naturalBackground) * 100).toFixed(1);
+
+            const resultDiv = document.getElementById('doseResult');
+            resultDiv.innerHTML = `Szacowana dawka całkowita: <strong>${totalDose} µSv</strong> (${percentage}% rocznego tła naturalnego)`;
+            
+            if(totalDose > 300) {
+                resultDiv.style.borderColor = '#ef4444';
+                resultDiv.style.color = '#991b1b';
+            } else {
+                resultDiv.style.borderColor = '#93c5fd';
+                resultDiv.style.color = '#1e40af';
+            }
+        }
+
+        recommendImaging();
+
+        // WYSZUKIWARKA / FILTRUJĄCA
+
+
+        function gradeQuiz() {
+            const questions = document.querySelectorAll('#quizBox .quiz-question');
+            let score = 0;
+            questions.forEach((q, idx) => {
+                const selected = q.querySelector('input[type="radio"]:checked');
+                const feedback = q.querySelector('.quiz-feedback');
+                if (!selected) {
+                    feedback.textContent = 'Brak odpowiedzi.';
+                    feedback.style.color = '#854d0e';
+                    return;
+                }
+                if (selected.value === q.dataset.answer) {
+                    score++;
+                    feedback.textContent = 'Poprawnie.';
+                    feedback.style.color = '#166534';
+                } else {
+                    feedback.textContent = 'Niepoprawnie. Sprawdź ponownie odpowiedni fragment kompendium.';
+                    feedback.style.color = '#991b1b';
+                }
+            });
+            const box = document.getElementById('quizScore');
+            box.style.display = 'block';
+            const pct = Math.round(score / questions.length * 100);
+            box.textContent = `Wynik: ${score}/${questions.length} (${pct}%). ${pct >= 80 ? 'Materiał opanowany na dobrym poziomie.' : 'Warto wrócić do sekcji doboru techniki i interpretacji.'}`;
+        }
+
+        function resetQuiz() {
+            document.querySelectorAll('#quizBox input[type="radio"]').forEach(el => el.checked = false);
+            document.querySelectorAll('#quizBox .quiz-feedback').forEach(el => el.textContent = '');
+            const box = document.getElementById('quizScore');
+            box.style.display = 'none';
+            box.textContent = '';
+        }
+
+        function filterContent() {
+            const input = document.getElementById('searchInput').value.toLowerCase();
+            const searchableElements = document.querySelectorAll('.searchable');
+
+            searchableElements.forEach(el => {
+                const text = el.innerText.toLowerCase();
+                if (text.includes(input)) {
+                    el.style.display = "";
+                } else {
+                    el.style.display = "none";
+                }
+            });
+        }
+    </script>
+</body>
+</html>
