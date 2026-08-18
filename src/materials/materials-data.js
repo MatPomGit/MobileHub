@@ -34,6 +34,8 @@ export const FILES_DATA = [
         files: [
             { href: 'pages/3dgs.html',           type: 'html', label: '3DGS Viewer – szkielet podglądu' },
             { href: 'pages/InsectTracker.html',  type: 'html', label: 'InsectTracker – system śledzenia owadów' },
+            { href: 'pages/radiology.html',      type: 'html', label: 'Radiologia stomatologiczna' },
+
         ],
     },
 ];
